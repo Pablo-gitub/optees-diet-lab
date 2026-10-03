@@ -1,0 +1,24 @@
+{
+  "generated_at_utc": "2026-10-03T11:40:30.777557+00:00",
+  "source": "CREA Tabelle di composizione degli alimenti, aggiornamento 2019",
+  "attribution": "CREA Centro di ricerca Alimenti e Nutrizione; website L. Marletta e E. Camilli",
+  "index_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/ricerca-per-ordine-alfabetico",
+  "method": "Derived from public HTML sheets; not an official CSV/JSON export",
+  "foods_in_index": 832,
+  "requested": 832,
+  "imported": 832,
+  "complete": true,
+  "errors": [],
+  "missing_or_symbolic_macros": {
+    "kcal_100g": 0,
+    "protein_g_100g": 14,
+    "fat_g_100g": 27,
+    "carbs_available_g_100g": 21,
+    "fiber_g_100g": 30
+  },
+  "foods_with_numeric_essential_macros": 777,
+  "sha256": {
+    "foods.csv": "f9052b7d93b143c008bcb26ea3c7ad58fa89c65a75d37d7612ddc6a792456f0e",
+    "foods.json": "53a96ce94fc3237c7cef6f761d0c68766b7e52d4d5925dc37d650bfa7ff17507"
+  }
+}

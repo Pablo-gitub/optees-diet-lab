@@ -1,0 +1,6 @@
+__pycache__/
+.venv/
+.env
+dataset/crea/raw/
+data/personal/
+*.sqlite*
