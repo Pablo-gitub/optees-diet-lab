@@ -17,14 +17,16 @@ from associate_recipe_images import (
     load_images_index,
     save_images_index,
     associate_images,
-    DISCLAIMER
+    DISCLAIMER,
 )
 
 
 class RecipeImagesTests(unittest.TestCase):
     def test_clean_title_for_search(self):
         """Test search query cleanup removes bracketed notes, symbols, and extra spaces."""
-        self.assertEqual(clean_title_for_search("Pasta al pomodoro · ricetta dimostrativa"), "Pasta al pomodoro ricetta dimostrativa")
+        self.assertEqual(
+            clean_title_for_search("Pasta al pomodoro · ricetta dimostrativa"), "Pasta al pomodoro ricetta dimostrativa"
+        )
         self.assertEqual(clean_title_for_search("Spaghetti carbonara (classic Italian)"), "Spaghetti carbonara")
         self.assertEqual(clean_title_for_search("Dish [with notes] - special"), "Dish special")
 
@@ -62,10 +64,10 @@ class RecipeImagesTests(unittest.TestCase):
                         'Artist': {'value': '<a href="https://example.com/user">Foodie</a>'},
                         'LicenseShortName': {'value': 'CC BY-SA 4.0'},
                         'LicenseUrl': {'value': 'https://creativecommons.org/licenses/by-sa/4.0/'},
-                        'Credit': {'value': 'Foodie Photography'}
-                    }
+                        'Credit': {'value': 'Foodie Photography'},
+                    },
                 }
-            ]
+            ],
         }
         res = parse_imageinfo(mock_page, "Spaghetti carbonara", "unitools:carbonara", "Spaghetti carbonara")
         self.assertIsNotNone(res)
@@ -83,14 +85,14 @@ class RecipeImagesTests(unittest.TestCase):
         # Non-photo mime type (SVG)
         svg_page = {
             'title': 'File:Cooking_icon.svg',
-            'imageinfo': [{'mime': 'image/svg+xml', 'url': 'https://example.com/icon.svg'}]
+            'imageinfo': [{'mime': 'image/svg+xml', 'url': 'https://example.com/icon.svg'}],
         }
         self.assertIsNone(parse_imageinfo(svg_page, "Dish", "rec:1", "Dish"))
 
         # Icon in title
         icon_page = {
             'title': 'File:Recipe icon food.jpg',
-            'imageinfo': [{'mime': 'image/jpeg', 'url': 'https://example.com/icon.jpg'}]
+            'imageinfo': [{'mime': 'image/jpeg', 'url': 'https://example.com/icon.jpg'}],
         }
         self.assertIsNone(parse_imageinfo(icon_page, "Dish", "rec:1", "Dish"))
 
@@ -101,10 +103,7 @@ class RecipeImagesTests(unittest.TestCase):
             mock_output.unlink()
 
         res = associate_images(
-            recipes_db_path=ROOT / 'dataset/recipes/catalog.sqlite',
-            images_path=mock_output,
-            online=False,
-            sample=3
+            recipes_db_path=ROOT / 'dataset/recipes/catalog.sqlite', images_path=mock_output, online=False, sample=3
         )
         self.assertEqual(res['updated'], 0)
         self.assertEqual(res['total_examined'], 3)

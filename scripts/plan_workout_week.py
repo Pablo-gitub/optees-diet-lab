@@ -1,4 +1,5 @@
 """Weekly MILP demo, shared service entry point for CLI and future web UI."""
+
 import argparse
 import asyncio
 import hashlib
@@ -12,19 +13,27 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def formulate(config, catalog, mode):
     days = list(config['days'])
-    numbers = [*config['days'].values(), config['weekly_minutes_max'],
-               config['sessions_min'], config['sessions_max'], config['strength_sessions_min'],
-               config['strength_sessions_max'], config['cardio_minutes_min'], config['strength_gap_days']]
+    numbers = [
+        *config['days'].values(),
+        config['weekly_minutes_max'],
+        config['sessions_min'],
+        config['sessions_max'],
+        config['strength_sessions_min'],
+        config['strength_sessions_max'],
+        config['cardio_minutes_min'],
+        config['strength_gap_days'],
+    ]
     if any(isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v) or v < 0 for v in numbers):
         raise ValueError('Time and session limits must be finite nonnegative numbers')
     if len(days) != 7 or config['sessions_min'] > config['sessions_max']:
         raise ValueError('Seven ordered days and consistent session bounds required')
-    if any(not isinstance(v, (int, float)) or isinstance(v, bool) or not math.isfinite(v) or v <= 0
-           for v in config['muscle_targets_proxy'].values()):
+    if any(
+        not isinstance(v, (int, float)) or isinstance(v, bool) or not math.isfinite(v) or v <= 0
+        for v in config['muscle_targets_proxy'].values()
+    ):
         raise ValueError('Muscle proxy targets must be finite and positive')
     templates = catalog['templates']
-    slots = [(day, t) for day in days for t in templates
-             if t['duration_minutes_assumed'] <= config['days'][day]]
+    slots = [(day, t) for day in days for t in templates if t['duration_minutes_assumed'] <= config['days'][day]]
     if not slots:
         raise ValueError('No available slots')
     n = len(slots)
@@ -51,11 +60,13 @@ def formulate(config, catalog, mode):
     if int(gap) != gap:
         raise ValueError('Recovery gap must be an integer')
     for i, day in enumerate(days):
-        window = days[i:i + int(gap) + 1]
+        window = days[i : i + int(gap) + 1]
         add([int(d in window and s) for (d, _), s in zip(slots, strength)], '<=', 1)
     for k, muscle in enumerate(muscles):
-        row = [-t['score_vector']['muscle_coverage_proxy'].get(muscle, 0) /
-               config['muscle_targets_proxy'][muscle] for _, t in slots] + [0] * len(muscles)
+        row = [
+            -t['score_vector']['muscle_coverage_proxy'].get(muscle, 0) / config['muscle_targets_proxy'][muscle]
+            for _, t in slots
+        ] + [0] * len(muscles)
         row[n + k] = 1
         add(row, '<=', 0)
     if mode == 'time':
@@ -64,14 +75,20 @@ def formulate(config, catalog, mode):
     else:
         objective = [0] * n + [1] * len(muscles)
         sense = 'max'
-    return {'version': '1', 'variables': variables, 'constraints': constraints,
-            'objective': {'sense': sense, 'coefficients': objective}, 'solver': {'time_limit': 15}}, slots
+    return {
+        'version': '1',
+        'variables': variables,
+        'constraints': constraints,
+        'objective': {'sense': sense, 'coefficients': objective},
+        'solver': {'time_limit': 15},
+    }, slots
 
 
 async def run(config_path, catalog_path, output):
     from mcp import ClientSession, StdioServerParameters
     from mcp.client.stdio import stdio_client
     from optees_command import optees_command
+
     config = json.loads(config_path.read_text())
     catalog = json.loads(catalog_path.read_text())
     results = []
@@ -113,18 +130,38 @@ async def run(config_path, catalog_path, output):
                         raise ValueError('Solution failed independent validation')
                     values = {v['name']: v['value'] for v in envelope['result']['variables']}
                     selected = [(d, t) for i, (d, t) in enumerate(slots) if values[f's{i}'] > 0.5]
-                    summary['sessions'] = [{'day': d, 'template_id': t['id'],
-                                            'minutes': t['duration_minutes_assumed']} for d, t in selected]
+                    summary['sessions'] = [
+                        {'day': d, 'template_id': t['id'], 'minutes': t['duration_minutes_assumed']}
+                        for d, t in selected
+                    ]
                     summary['weekly_minutes'] = sum(t['duration_minutes_assumed'] for _, t in selected)
                     summary['coverage_target_fraction'] = {
-                        muscle: min(1, sum(t['score_vector']['muscle_coverage_proxy'].get(muscle, 0)
-                                           for _, t in selected) / target)
-                        for muscle, target in config['muscle_targets_proxy'].items()}
-                results.append({'mode': mode, 'summary': summary, 'problem': problem, 'slots': [
-                    {'day': d, 'template_id': t['id'], 'minutes': t['duration_minutes_assumed']}
-                    for d, t in slots], 'validation': validation, 'result': result})
-    record = {'demo': config.get('demo', False), 'config': config,
-              'catalog_sha256': hashlib.sha256(catalog_path.read_bytes()).hexdigest(), 'runs': results}
+                        muscle: min(
+                            1,
+                            sum(t['score_vector']['muscle_coverage_proxy'].get(muscle, 0) for _, t in selected)
+                            / target,
+                        )
+                        for muscle, target in config['muscle_targets_proxy'].items()
+                    }
+                results.append(
+                    {
+                        'mode': mode,
+                        'summary': summary,
+                        'problem': problem,
+                        'slots': [
+                            {'day': d, 'template_id': t['id'], 'minutes': t['duration_minutes_assumed']}
+                            for d, t in slots
+                        ],
+                        'validation': validation,
+                        'result': result,
+                    }
+                )
+    record = {
+        'demo': config.get('demo', False),
+        'config': config,
+        'catalog_sha256': hashlib.sha256(catalog_path.read_bytes()).hexdigest(),
+        'runs': results,
+    }
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(record, ensure_ascii=False, indent=2) + '\n')
     print(f'Saved {len(results)} runs to {output}')

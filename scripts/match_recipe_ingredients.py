@@ -32,8 +32,7 @@ def fold(text: str) -> str:
     if not text:
         return ''
     return ''.join(
-        c for c in unicodedata.normalize('NFKD', str(text).casefold())
-        if not unicodedata.combining(c)
+        c for c in unicodedata.normalize('NFKD', str(text).casefold()) if not unicodedata.combining(c)
     ).strip()
 
 
@@ -171,68 +170,82 @@ def match_crea_candidates(canonical: dict, qualifiers: dict, crea_foods: dict) -
         target_id = cooked_alt['id']
         food = crea_foods.get(target_id)
         if food:
-            candidates.append({
-                'source': 'CREA',
-                'id': target_id,
-                'name': food['name'],
-                'match_type': 'exact',
-                'confidence': 'high',
-                'state': 'cotto / bollito',
-                'reason': f"Corrispondenza esatta per stato cotto ({food['name']})",
-                'nutrients': {k: float(food[k]) for k in NUTRIENTS if food.get(k)}
-            })
+            candidates.append(
+                {
+                    'source': 'CREA',
+                    'id': target_id,
+                    'name': food['name'],
+                    'match_type': 'exact',
+                    'confidence': 'high',
+                    'state': 'cotto / bollito',
+                    'reason': f"Corrispondenza esatta per stato cotto ({food['name']})",
+                    'nutrients': {k: float(food[k]) for k in NUTRIENTS if food.get(k)},
+                }
+            )
     # If ingredient is raw or unspecified, evaluate primary
     elif primary:
         target_id = primary['id']
         food = crea_foods.get(target_id)
         if food:
             # Check if there is an ambiguity: food is raw by default, but cooking_state is ambiguous
-            is_ambiguous = (cooking_state == 'unspecified' and cooked_alt is not None)
-            candidates.append({
-                'source': 'CREA',
-                'id': target_id,
-                'name': food['name'],
-                'match_type': primary.get('match_type', 'exact'),
-                'confidence': 'low' if is_ambiguous else ('high' if primary.get('match_type') == 'exact' else 'medium'),
-                'state': canonical.get('state', 'crudo / prima della cottura'),
-                'reason': primary.get('reason', 'Corrispondenza da catalogo CREA'),
-                'is_ambiguous': is_ambiguous,
-                'nutrients': {k: float(food[k]) for k in NUTRIENTS if food.get(k)}
-            })
+            is_ambiguous = cooking_state == 'unspecified' and cooked_alt is not None
+            candidates.append(
+                {
+                    'source': 'CREA',
+                    'id': target_id,
+                    'name': food['name'],
+                    'match_type': primary.get('match_type', 'exact'),
+                    'confidence': 'low'
+                    if is_ambiguous
+                    else ('high' if primary.get('match_type') == 'exact' else 'medium'),
+                    'state': canonical.get('state', 'crudo / prima della cottura'),
+                    'reason': primary.get('reason', 'Corrispondenza da catalogo CREA'),
+                    'is_ambiguous': is_ambiguous,
+                    'nutrients': {k: float(food[k]) for k in NUTRIENTS if food.get(k)},
+                }
+            )
             if is_ambiguous and cooked_alt:
                 alt_food = crea_foods.get(cooked_alt['id'])
                 if alt_food:
-                    candidates.append({
-                        'source': 'CREA',
-                        'id': cooked_alt['id'],
-                        'name': alt_food['name'],
-                        'match_type': 'cooked_alternate',
-                        'confidence': 'low',
-                        'state': 'cotto / bollito',
-                        'reason': f"Possibile alternativa cotta ({alt_food['name']}) - stato non specificato nella ricetta",
-                        'is_ambiguous': True,
-                        'nutrients': {k: float(alt_food[k]) for k in NUTRIENTS if alt_food.get(k)}
-                    })
+                    candidates.append(
+                        {
+                            'source': 'CREA',
+                            'id': cooked_alt['id'],
+                            'name': alt_food['name'],
+                            'match_type': 'cooked_alternate',
+                            'confidence': 'low',
+                            'state': 'cotto / bollito',
+                            'reason': f"Possibile alternativa cotta ({alt_food['name']}) - stato non specificato nella ricetta",
+                            'is_ambiguous': True,
+                            'nutrients': {k: float(alt_food[k]) for k in NUTRIENTS if alt_food.get(k)},
+                        }
+                    )
 
     if canonical.get('flags', {}).get('proxy_only'):
         for candidate in candidates:
-            candidate.update(match_type='proxy', confidence='medium', reason='Taglio o composizione non equivalente: proxy da verificare per ricetta.')
+            candidate.update(
+                match_type='proxy',
+                confidence='medium',
+                reason='Taglio o composizione non equivalente: proxy da verificare per ricetta.',
+            )
 
     # Add proxies if available
     for proxy in cm.get('proxies', []):
         p_id = proxy['id']
         food = crea_foods.get(p_id)
         if food and all(c['id'] != p_id for c in candidates):
-            candidates.append({
-                'source': 'CREA',
-                'id': p_id,
-                'name': food['name'],
-                'match_type': proxy.get('match_type', 'proxy'),
-                'confidence': 'medium',
-                'state': food['name'],
-                'reason': proxy.get('reason', 'Proxy nutrizionale / culinario documentato'),
-                'nutrients': {k: float(food[k]) for k in NUTRIENTS if food.get(k)}
-            })
+            candidates.append(
+                {
+                    'source': 'CREA',
+                    'id': p_id,
+                    'name': food['name'],
+                    'match_type': proxy.get('match_type', 'proxy'),
+                    'confidence': 'medium',
+                    'state': food['name'],
+                    'reason': proxy.get('reason', 'Proxy nutrizionale / culinario documentato'),
+                    'nutrients': {k: float(food[k]) for k in NUTRIENTS if food.get(k)},
+                }
+            )
 
     return candidates
 
@@ -245,22 +258,23 @@ def search_off_candidates(canonical: dict, qualifiers: dict, db_off: sqlite3.Con
     for brand_c in canonical.get('off_brand_candidates', []):
         barcode = brand_c['barcode']
         row = db_off.execute(
-            "SELECT barcode, name, brands, numeric_candidate, payload FROM products WHERE barcode=?",
-            (barcode,)
+            "SELECT barcode, name, brands, numeric_candidate, payload FROM products WHERE barcode=?", (barcode,)
         ).fetchone()
         if row:
             p = json.loads(row[4])
             if p.get('numeric_candidate') == 1 and p.get('nutrient_basis') == 'per_100_g':
-                candidates.append({
-                    'source': 'Open Food Facts',
-                    'id': barcode,
-                    'name': f"{row[1]} · {row[2]}",
-                    'brands': row[2],
-                    'match_type': brand_c.get('match_type', 'brand_candidate'),
-                    'confidence': 'high' if brand_c.get('match_type') == 'brand_candidate' else 'medium',
-                    'reason': brand_c.get('reason', 'Candidato di marca verificato'),
-                    'nutrients': {k: p.get(k) for k in NUTRIENTS}
-                })
+                candidates.append(
+                    {
+                        'source': 'Open Food Facts',
+                        'id': barcode,
+                        'name': f"{row[1]} · {row[2]}",
+                        'brands': row[2],
+                        'match_type': brand_c.get('match_type', 'brand_candidate'),
+                        'confidence': 'high' if brand_c.get('match_type') == 'brand_candidate' else 'medium',
+                        'reason': brand_c.get('reason', 'Candidato di marca verificato'),
+                        'nutrients': {k: p.get(k) for k in NUTRIENTS},
+                    }
+                )
 
     return candidates
 
@@ -297,7 +311,11 @@ def evaluate_quantity(ing: dict, canonical: dict, dictionary: dict) -> tuple:
             if canonical and canonical.get('special_source') == 'water':
                 return q_num * 1.0, 'resolved', 'Conversione ml -> g per acqua (densità 1.0 g/ml)'
             elif density and density > 0:
-                return q_num * density, 'proposed_conversion', f'Conversione ml -> g con densità documentata {density} g/ml (richiede conferma)'
+                return (
+                    q_num * density,
+                    'proposed_conversion',
+                    f'Conversione ml -> g con densità documentata {density} g/ml (richiede conferma)',
+                )
             else:
                 return None, 'needs_review', 'Quantità in ml senza densità accertata'
         except (ValueError, TypeError):
@@ -341,34 +359,54 @@ def approval_compatible(ing, canonical, qualifiers, approval, crea_foods, specif
     """A shared approval cannot override evidence from the actual occurrence."""
     if approval.get('reviewed') is not True or approval.get('state_checked') is not True:
         return False
-    text = fold(' '.join(str(x or '') for x in [ing.get('name'), ing.get('note'), (ing.get('source_nutrition_reference') or {}).get('description')]))
+    text = fold(
+        ' '.join(
+            str(x or '')
+            for x in [
+                ing.get('name'),
+                ing.get('note'),
+                (ing.get('source_nutrition_reference') or {}).get('description'),
+            ]
+        )
+    )
     if re.search(r'\b(frying|fry|fried|deep frying|discarded|powder|powdered|dehydrated)\b', text):
         return False
-    if re.search(r'\b(and|or)\b', fold(ing.get('name',''))):
+    if re.search(r'\b(and|or)\b', fold(ing.get('name', ''))):
         return False
     if any(v == 'multiple' for v in qualifiers.values()):
         return False
     if approval['source'] == 'CREA':
-        food=crea_foods.get(approval['id'])
+        food = crea_foods.get(approval['id'])
         if not food or any(not food.get(n) for n in NUTRIENTS):
             return False
-        food_name=fold(food['name'])
-        cooked=qualifiers.get('cooking_state') == 'cooked'
-        if cooked and not re.search(r'\b(cotto|cotte|cotti|cotta|bollito|bollite)\b',food_name):
+        food_name = fold(food['name'])
+        cooked = qualifiers.get('cooking_state') == 'cooked'
+        if cooked and not re.search(r'\b(cotto|cotte|cotti|cotta|bollito|bollite)\b', food_name):
             return False
-        if qualifiers.get('cooking_state') == 'raw' and re.search(r'\b(cotto|cotte|cotti|cotta|bollito|bollite)\b',food_name):
+        if qualifiers.get('cooking_state') == 'raw' and re.search(
+            r'\b(cotto|cotte|cotti|cotta|bollito|bollite)\b', food_name
+        ):
             return False
-        if qualifiers.get('processing_state') == 'dry' and re.search(r'\b(fresco|freschi|fresche|fresca)\b',food_name):
+        if qualifiers.get('processing_state') == 'dry' and re.search(r'\b(fresco|freschi|fresche|fresca)\b', food_name):
             return False
-        if qualifiers.get('grain_type') == 'whole' and food.get('category') == 'Cereali e derivati' and 'integrale' not in food_name:
+        if (
+            qualifiers.get('grain_type') == 'whole'
+            and food.get('category') == 'Cereali e derivati'
+            and 'integrale' not in food_name
+        ):
             return False
-        if not specific and qualifiers.get('processing_state') == 'canned' and not any(x in food_name for x in ['scatola','conserv','salamoia']):
+        if (
+            not specific
+            and qualifiers.get('processing_state') == 'canned'
+            and not any(x in food_name for x in ['scatola', 'conserv', 'salamoia'])
+        ):
             return False
     return True
 
 
-def process_ingredient(ing: dict, recipe: dict, dictionary: dict, approved_data: dict,
-                       crea_foods: dict, db_off: sqlite3.Connection) -> dict:
+def process_ingredient(
+    ing: dict, recipe: dict, dictionary: dict, approved_data: dict, crea_foods: dict, db_off: sqlite3.Connection
+) -> dict:
     """Process a single ingredient occurrence."""
     rec_id = recipe['id']
     ing_key = str(ing['key'])
@@ -384,7 +422,9 @@ def process_ingredient(ing: dict, recipe: dict, dictionary: dict, approved_data:
 
     # 1. Check Recipe Override in approved mappings
     rec_overrides = approved_data.get('recipe_overrides', {}).get(rec_id, {})
-    if ing_key in rec_overrides and approval_compatible(ing, canonical, qualifiers, rec_overrides[ing_key], crea_foods, specific=True):
+    if ing_key in rec_overrides and approval_compatible(
+        ing, canonical, qualifiers, rec_overrides[ing_key], crea_foods, specific=True
+    ):
         appr = rec_overrides[ing_key]
         return {
             'ingredient_key': ing_key,
@@ -402,13 +442,18 @@ def process_ingredient(ing: dict, recipe: dict, dictionary: dict, approved_data:
                 'label': appr.get('label', ''),
                 'reviewed': True,
                 'state_checked': True,
-                'reason': 'Revisione specifica approvata per la ricetta'
+                'reason': 'Revisione specifica approvata per la ricetta',
             },
             'candidates': [appr],
             'grams': appr.get('grams_override', grams),
-            'quantity_status': 'resolved' if isinstance(appr.get('grams_override'), (int,float)) and not isinstance(appr.get('grams_override'),bool) and math.isfinite(appr['grams_override']) and appr['grams_override']>0 else qty_status,
+            'quantity_status': 'resolved'
+            if isinstance(appr.get('grams_override'), (int, float))
+            and not isinstance(appr.get('grams_override'), bool)
+            and math.isfinite(appr['grams_override'])
+            and appr['grams_override'] > 0
+            else qty_status,
             'quantity_note': qty_note,
-            'note': 'Approvato da override specifico di ricetta'
+            'note': 'Approvato da override specifico di ricetta',
         }
 
     # 2. Check Canonical Approval
@@ -433,13 +478,13 @@ def process_ingredient(ing: dict, recipe: dict, dictionary: dict, approved_data:
                     'label': appr.get('label', ''),
                     'reviewed': True,
                     'state_checked': True,
-                    'reason': appr.get('note', 'Regola canonica approvata riutilizzata')
+                    'reason': appr.get('note', 'Regola canonica approvata riutilizzata'),
                 },
                 'candidates': [appr],
                 'grams': grams,
                 'quantity_status': qty_status,
                 'quantity_note': qty_note,
-                'note': f"Approvato tramite regola canonica riutilizzabile: {cid}"
+                'note': f"Approvato tramite regola canonica riutilizzabile: {cid}",
             }
 
     # 3. Special Source: Water
@@ -452,7 +497,7 @@ def process_ingredient(ing: dict, recipe: dict, dictionary: dict, approved_data:
             'confidence': 'high',
             'reason': 'Fonte speciale acqua potabile documentata',
             'reviewed': False,
-            'state_checked': False
+            'state_checked': False,
         }
         return {
             'ingredient_key': ing_key,
@@ -469,7 +514,7 @@ def process_ingredient(ing: dict, recipe: dict, dictionary: dict, approved_data:
             'grams': grams,
             'quantity_status': qty_status,
             'quantity_note': qty_note,
-            'note': 'Proposta esatta per acqua (fonte water)'
+            'note': 'Proposta esatta per acqua (fonte water)',
         }
 
     # 4. Handle Composite / Unabsorbed Oil Flags
@@ -489,7 +534,7 @@ def process_ingredient(ing: dict, recipe: dict, dictionary: dict, approved_data:
             'grams': grams,
             'quantity_status': qty_status,
             'quantity_note': qty_note,
-            'note': 'Ingrediente composito (es. sale e pepe): richiede separazione o revisione'
+            'note': 'Ingrediente composito (es. sale e pepe): richiede separazione o revisione',
         }
 
     if canonical and canonical.get('flags', {}).get('unabsorbed_oil'):
@@ -508,7 +553,7 @@ def process_ingredient(ing: dict, recipe: dict, dictionary: dict, approved_data:
             'grams': grams,
             'quantity_status': qty_status,
             'quantity_note': qty_note,
-            'note': 'Olio per friggere: assorbimento effettivo non inferibile, richiede revisione manuale'
+            'note': 'Olio per friggere: assorbimento effettivo non inferibile, richiede revisione manuale',
         }
 
     if canonical and canonical.get('flags', {}).get('requires_dilution'):
@@ -527,7 +572,7 @@ def process_ingredient(ing: dict, recipe: dict, dictionary: dict, approved_data:
             'grams': grams,
             'quantity_status': qty_status,
             'quantity_note': qty_note,
-            'note': 'Brodo liquido pronto: non equiparabile a dado concentrato senza diluizione, richiede revisione manuale'
+            'note': 'Brodo liquido pronto: non equiparabile a dado concentrato senza diluizione, richiede revisione manuale',
         }
 
     # 5. Search CREA candidates
@@ -555,7 +600,7 @@ def process_ingredient(ing: dict, recipe: dict, dictionary: dict, approved_data:
             'grams': grams,
             'quantity_status': qty_status,
             'quantity_note': qty_note,
-            'note': 'Ingrediente non censito nel dizionario canonico'
+            'note': 'Ingrediente non censito nel dizionario canonico',
         }
 
     if any(c.get('is_ambiguous') for c in all_cands):
@@ -574,7 +619,7 @@ def process_ingredient(ing: dict, recipe: dict, dictionary: dict, approved_data:
             'grams': grams,
             'quantity_status': qty_status,
             'quantity_note': qty_note,
-            'note': 'Ambiguità di stato rilevata (es. crudo vs cotto / alternative multiple)'
+            'note': 'Ambiguità di stato rilevata (es. crudo vs cotto / alternative multiple)',
         }
 
     if any(c['match_type'] == 'exact' for c in all_cands):
@@ -594,7 +639,7 @@ def process_ingredient(ing: dict, recipe: dict, dictionary: dict, approved_data:
             'grams': grams,
             'quantity_status': qty_status,
             'quantity_note': qty_note,
-            'note': exact_cand['reason']
+            'note': exact_cand['reason'],
         }
 
     if any(c['match_type'] in ['proxy', 'brand_candidate'] for c in all_cands):
@@ -614,7 +659,7 @@ def process_ingredient(ing: dict, recipe: dict, dictionary: dict, approved_data:
             'grams': grams,
             'quantity_status': qty_status,
             'quantity_note': qty_note,
-            'note': proxy_cand['reason']
+            'note': proxy_cand['reason'],
         }
 
     return {
@@ -632,13 +677,19 @@ def process_ingredient(ing: dict, recipe: dict, dictionary: dict, approved_data:
         'grams': grams,
         'quantity_status': qty_status,
         'quantity_note': qty_note,
-        'note': 'Nessun alimento CREA o OFF compatibile individuato'
+        'note': 'Nessun alimento CREA o OFF compatibile individuato',
     }
 
 
-def process_recipes(recipes_db_path: Path, crea_path: Path, off_db_path: Path,
-                    dict_path: Path, approved_path: Path, limit: int = None,
-                    cuisine_filter: str = None) -> list:
+def process_recipes(
+    recipes_db_path: Path,
+    crea_path: Path,
+    off_db_path: Path,
+    dict_path: Path,
+    approved_path: Path,
+    limit: int = None,
+    cuisine_filter: str = None,
+) -> list:
     """Stream and process recipes from SQLite database."""
     crea_foods = load_crea(crea_path)
     dictionary = load_dictionary(dict_path)
@@ -663,26 +714,34 @@ def process_recipes(recipes_db_path: Path, crea_path: Path, off_db_path: Path,
                 res = process_ingredient(ing, recipe, dictionary, approved_data, crea_foods, db_off)
                 ingredients_results.append(res)
 
-            all_approved = bool(ingredients_results) and all(i['match_status'] == 'approved' for i in ingredients_results)
-            all_proposed = bool(ingredients_results) and all(i['match_status'] in ['approved', 'proposed_exact', 'proposed_proxy'] for i in ingredients_results)
-            all_quantities_resolved = bool(ingredients_results) and all(i['quantity_status'] == 'resolved' and i['grams'] is not None for i in ingredients_results)
+            all_approved = bool(ingredients_results) and all(
+                i['match_status'] == 'approved' for i in ingredients_results
+            )
+            all_proposed = bool(ingredients_results) and all(
+                i['match_status'] in ['approved', 'proposed_exact', 'proposed_proxy'] for i in ingredients_results
+            )
+            all_quantities_resolved = bool(ingredients_results) and all(
+                i['quantity_status'] == 'resolved' and i['grams'] is not None for i in ingredients_results
+            )
             solver_ready = all_approved and all_quantities_resolved
 
-            processed.append({
-                'id': recipe['id'],
-                'source': recipe['source'],
-                'title': recipe['title'],
-                'cuisine': recipe.get('cuisine'),
-                'servings': recipe.get('servings'),
-                'source_url': recipe.get('source_url'),
-                'license': recipe.get('license'),
-                'attribution': recipe.get('attribution'),
-                'ingredients': ingredients_results,
-                'all_approved': all_approved,
-                'all_proposed': all_proposed,
-                'all_quantities_resolved': all_quantities_resolved,
-                'solver_ready': solver_ready
-            })
+            processed.append(
+                {
+                    'id': recipe['id'],
+                    'source': recipe['source'],
+                    'title': recipe['title'],
+                    'cuisine': recipe.get('cuisine'),
+                    'servings': recipe.get('servings'),
+                    'source_url': recipe.get('source_url'),
+                    'license': recipe.get('license'),
+                    'attribution': recipe.get('attribution'),
+                    'ingredients': ingredients_results,
+                    'all_approved': all_approved,
+                    'all_proposed': all_proposed,
+                    'all_quantities_resolved': all_quantities_resolved,
+                    'solver_ready': solver_ready,
+                }
+            )
 
     if db_off:
         db_off.close()
@@ -691,16 +750,18 @@ def process_recipes(recipes_db_path: Path, crea_path: Path, off_db_path: Path,
 
 def build_review_queue(processed_recipes: list) -> list:
     """Organize pending and completed ingredient reviews grouped by canonical ingredient."""
-    groups = collections.defaultdict(lambda: {
-        'canonical_id': None,
-        'canonical_name': None,
-        'occurrences': 0,
-        'recipes': [],
-        'candidates': [],
-        'statuses': set(),
-        'ambiguities': [],
-        'raw_names': set()
-    })
+    groups = collections.defaultdict(
+        lambda: {
+            'canonical_id': None,
+            'canonical_name': None,
+            'occurrences': 0,
+            'recipes': [],
+            'candidates': [],
+            'statuses': set(),
+            'ambiguities': [],
+            'raw_names': set(),
+        }
+    )
 
     for rec in processed_recipes:
         for ing in rec['ingredients']:
@@ -711,46 +772,54 @@ def build_review_queue(processed_recipes: list) -> list:
             g['occurrences'] += 1
             g['statuses'].add(ing['match_status'])
             g['raw_names'].add(ing['original_name'])
-            g['recipes'].append({
-                'recipe_id': rec['id'],
-                'recipe_title': rec['title'],
-                'ingredient_key': ing['ingredient_key'],
-                'original_name': ing['original_name'],
-                'grams': ing['grams'],
-                'quantity_status': ing['quantity_status']
-            })
+            g['recipes'].append(
+                {
+                    'recipe_id': rec['id'],
+                    'recipe_title': rec['title'],
+                    'ingredient_key': ing['ingredient_key'],
+                    'original_name': ing['original_name'],
+                    'grams': ing['grams'],
+                    'quantity_status': ing['quantity_status'],
+                }
+            )
             if ing['candidates']:
                 for c in ing['candidates']:
                     c_key = f"{c['source']}:{c['id']}"
                     if not any(f"{x['source']}:{x['id']}" == c_key for x in g['candidates']):
                         g['candidates'].append(c)
             if ing['match_status'] == 'ambiguous':
-                g['ambiguities'].append({
-                    'recipe_id': rec['id'],
-                    'original_name': ing['original_name'],
-                    'note': ing['note']
-                })
+                g['ambiguities'].append(
+                    {'recipe_id': rec['id'], 'original_name': ing['original_name'], 'note': ing['note']}
+                )
 
     queue = []
     for cid, g in groups.items():
-        primary_status = 'approved' if 'approved' in g['statuses'] and len(g['statuses']) == 1 else (
-            'ambiguous' if 'ambiguous' in g['statuses'] else (
-                'missing' if 'missing' in g['statuses'] else (
-                    'proposed_exact' if 'proposed_exact' in g['statuses'] else 'proposed_proxy'
+        primary_status = (
+            'approved'
+            if 'approved' in g['statuses'] and len(g['statuses']) == 1
+            else (
+                'ambiguous'
+                if 'ambiguous' in g['statuses']
+                else (
+                    'missing'
+                    if 'missing' in g['statuses']
+                    else ('proposed_exact' if 'proposed_exact' in g['statuses'] else 'proposed_proxy')
                 )
             )
         )
-        queue.append({
-            'canonical_id': cid,
-            'canonical_name': g['canonical_name'],
-            'occurrences': g['occurrences'],
-            'recipes_count': len(g['recipes']),
-            'primary_status': primary_status,
-            'raw_names': sorted(list(g['raw_names'])),
-            'candidates': g['candidates'],
-            'sample_recipes': g['recipes'][:5],
-            'ambiguity_count': len(g['ambiguities'])
-        })
+        queue.append(
+            {
+                'canonical_id': cid,
+                'canonical_name': g['canonical_name'],
+                'occurrences': g['occurrences'],
+                'recipes_count': len(g['recipes']),
+                'primary_status': primary_status,
+                'raw_names': sorted(list(g['raw_names'])),
+                'candidates': g['candidates'],
+                'sample_recipes': g['recipes'][:5],
+                'ambiguity_count': len(g['ambiguities']),
+            }
+        )
 
     queue.sort(key=lambda x: (-x['occurrences'], x['canonical_name']))
     return queue
@@ -786,7 +855,7 @@ def build_report(processed_recipes: list, review_queue: list) -> dict:
         'recipes_all_associations_proposed': recipes_all_proposed,
         'recipes_all_quantities_resolved': recipes_all_quantities_resolved,
         'recipes_solver_ready': recipes_solver_ready,
-        'recipes_pending_review': total_recipes - recipes_solver_ready
+        'recipes_pending_review': total_recipes - recipes_solver_ready,
     }
 
 
@@ -838,26 +907,28 @@ def export_solver_recipes(processed_recipes: list, output_path: Path):
             'license': r.get('license'),
             'attribution': r.get('attribution'),
             'reference_note': f"Ricetta approvata offline con tutte le associazioni controllate e pesi verificati. Servings: {servings}.",
-            'ingredients': []
+            'ingredients': [],
         }
         for ing in r['ingredients']:
             grams = float(ing['grams'])
             cand = ing['selected_candidate']
-            recipe_entry['ingredients'].append({
-                'key': ing['ingredient_key'],
-                'name': ing['original_name'],
-                'grams_per_reference_portion': round(grams / servings, 2),
-                'state': cand.get('state', ing.get('qualifiers', {}).get('cooking_state', 'unspecified')),
-                'candidates': [
-                    {
-                        'source': cand['source'],
-                        'id': cand['id'],
-                        'reviewed': True,
-                        'state_checked': True,
-                        'label': cand.get('label') or cand.get('name', '')
-                    }
-                ]
-            })
+            recipe_entry['ingredients'].append(
+                {
+                    'key': ing['ingredient_key'],
+                    'name': ing['original_name'],
+                    'grams_per_reference_portion': round(grams / servings, 2),
+                    'state': cand.get('state', ing.get('qualifiers', {}).get('cooking_state', 'unspecified')),
+                    'candidates': [
+                        {
+                            'source': cand['source'],
+                            'id': cand['id'],
+                            'reviewed': True,
+                            'state_checked': True,
+                            'label': cand.get('label') or cand.get('name', ''),
+                        }
+                    ],
+                }
+            )
         exported_data['recipes'].append(recipe_entry)
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -879,7 +950,7 @@ def export_recipe_mappings(processed_recipes: list, output_dir: Path):
                     'id': cand['id'],
                     'reviewed': ing['reviewed'] and ing.get('quantity_status') == 'resolved',
                     'state_checked': ing['state_checked'],
-                    'grams_override': ing.get('grams')
+                    'grams_override': ing.get('grams'),
                 }
         safe_id = r['id'].replace(':', '_').replace('/', '_')
         target_file = output_dir / f"{safe_id}.json"
@@ -888,8 +959,15 @@ def export_recipe_mappings(processed_recipes: list, output_dir: Path):
     print(f"Esportati {count} file mapping ricette in: {output_dir}")
 
 
-def approve_canonical(canonical_id: str, source: str, food_id: str, label: str,
-                      approved_path: Path, note: str = None, approved_by: str = None):
+def approve_canonical(
+    canonical_id: str,
+    source: str,
+    food_id: str,
+    label: str,
+    approved_path: Path,
+    note: str = None,
+    approved_by: str = None,
+):
     """Record an approved mapping for a canonical ingredient, propagating across all recipes."""
     approved_data = load_approved_mappings(approved_path)
     canonical_approvals = approved_data.setdefault('canonical_approvals', {})
@@ -902,10 +980,12 @@ def approve_canonical(canonical_id: str, source: str, food_id: str, label: str,
         'reviewed': True,
         'state_checked': True,
         'approved_by': approved_by or 'baseline_rule',
-        'note': note or f"Approvazione per {canonical_id} -> {source}:{food_id}"
+        'note': note or f"Approvazione per {canonical_id} -> {source}:{food_id}",
     }
     save_approved_mappings(approved_data, approved_path)
-    print(f"Approvazione salvata per '{canonical_id}': {source}:{food_id} ({label}) [by: {approved_by or 'baseline_rule'}]")
+    print(
+        f"Approvazione salvata per '{canonical_id}': {source}:{food_id} ({label}) [by: {approved_by or 'baseline_rule'}]"
+    )
 
 
 def main():
@@ -921,11 +1001,19 @@ def main():
     parser.add_argument('--report', action='store_true', default=True, help='Stampa rapporto statistico')
     parser.add_argument('--report-file', type=Path, help='Salva rapporto in formato JSON')
     parser.add_argument('--review-queue', type=Path, help='Salva coda di revisione organizzata per ingrediente')
-    parser.add_argument('--export-solver', type=Path, help='Esporta ricette con associazioni approvate nel formato per solver')
-    parser.add_argument('--export-mappings', type=Path, help='Esporta file mapping ricette per calculate_recipe_nutrients.py')
+    parser.add_argument(
+        '--export-solver', type=Path, help='Esporta ricette con associazioni approvate nel formato per solver'
+    )
+    parser.add_argument(
+        '--export-mappings', type=Path, help='Esporta file mapping ricette per calculate_recipe_nutrients.py'
+    )
 
-    parser.add_argument('--approve', nargs=3, metavar=('CANONICAL_ID', 'SOURCE', 'FOOD_ID'),
-                        help='Registra una revisione approvata per un ingrediente canonico')
+    parser.add_argument(
+        '--approve',
+        nargs=3,
+        metavar=('CANONICAL_ID', 'SOURCE', 'FOOD_ID'),
+        help='Registra una revisione approvata per un ingrediente canonico',
+    )
     parser.add_argument('--approve-label', type=str, default='', help='Etichetta per l\'alimento approvato')
     parser.add_argument('--approve-by', type=str, default='baseline_rule', help='Autore o fonte dell\'approvazione')
     parser.add_argument('--approve-note', type=str, default=None, help='Nota o motivazione dell\'approvazione')
@@ -935,7 +1023,9 @@ def main():
     # Handle approval command
     if args.approve:
         cid, src, fid = args.approve
-        approve_canonical(cid, src, fid, args.approve_label, args.approved_file, note=args.approve_note, approved_by=args.approve_by)
+        approve_canonical(
+            cid, src, fid, args.approve_label, args.approved_file, note=args.approve_note, approved_by=args.approve_by
+        )
         return
 
     # Process recipes
@@ -946,7 +1036,7 @@ def main():
         dict_path=args.dict_file,
         approved_path=args.approved_file,
         limit=args.sample,
-        cuisine_filter=args.cuisine
+        cuisine_filter=args.cuisine,
     )
 
     review_queue = build_review_queue(processed)

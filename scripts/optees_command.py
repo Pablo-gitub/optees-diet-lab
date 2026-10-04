@@ -1,4 +1,5 @@
 """Locate the Optees MCP server without machine-specific paths in configs."""
+
 import os
 import shutil
 import sys

@@ -5,10 +5,12 @@ from unittest.mock import patch
 from pathlib import Path
 import numpy as np
 from scipy.optimize import milp, Bounds, LinearConstraint
+
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location('diet', ROOT / 'scripts/plan_diet_day.py')
 diet = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(diet)
+
 
 class DietTests(unittest.TestCase):
     def setUp(self):
@@ -20,17 +22,19 @@ class DietTests(unittest.TestCase):
         rows = problem['constraints']
         lower = [r['rhs'] if r['relation'] in ['>=', '='] else -np.inf for r in rows]
         upper = [r['rhs'] if r['relation'] in ['<=', '='] else np.inf for r in rows]
-        result = milp(np.array(problem['objective']['coefficients']),
-                      integrality=[v['integrality'] != 'C' for v in problem['variables']],
-                      bounds=Bounds([v['lb'] for v in problem['variables']], [v['ub'] for v in problem['variables']]),
-                      constraints=LinearConstraint([r['coefficients'] for r in rows], lower, upper))
+        result = milp(
+            np.array(problem['objective']['coefficients']),
+            integrality=[v['integrality'] != 'C' for v in problem['variables']],
+            bounds=Bounds([v['lb'] for v in problem['variables']], [v['ub'] for v in problem['variables']]),
+            constraints=LinearConstraint([r['coefficients'] for r in rows], lower, upper),
+        )
         return result, choices, slots
 
     def test_training_schedule_and_allowed_groups(self):
         result, choices, slots = self.solve()
         self.assertTrue(result.success)
         self.assertEqual(slots, {'lunch': 'A', 'dinner': 'O'})
-        chosen = [c for c in choices if result.x[c['y']] > .5]
+        chosen = [c for c in choices if result.x[c['y']] > 0.5]
         for meal in slots:
             for group in range(4):
                 self.assertEqual(sum(c['meal'] == meal and c['group'] == group for c in chosen), 1)
@@ -46,7 +50,10 @@ class DietTests(unittest.TestCase):
     def test_unimplemented_alternative_blocks_day(self):
         schedule = {'weeks': [[{'lunch': 'B oppure UNKNOWN', 'dinner': 'C'}]]}
         rules = diet.load_rules(self.config)
-        with patch.object(diet, 'load_rules', return_value=rules), patch.object(diet.json, 'loads', return_value=schedule):
+        with (
+            patch.object(diet, 'load_rules', return_value=rules),
+            patch.object(diet.json, 'loads', return_value=schedule),
+        ):
             with self.assertRaisesRegex(ValueError, 'not yet verified'):
                 diet.formulate(self.config, self.foods)
 
@@ -55,10 +62,12 @@ class DietTests(unittest.TestCase):
         result, choices, slots = self.solve()
         self.assertTrue(result.success)
         for meal in slots:
-            active = {(c['combination'], c['branch_index']) for c in choices if c['meal'] == meal and result.x[c['y']] > .5}
+            active = {
+                (c['combination'], c['branch_index']) for c in choices if c['meal'] == meal and result.x[c['y']] > 0.5
+            }
             self.assertEqual(len(active), 1)
         for c in choices:
-            if result.x[c['y']] < .5:
+            if result.x[c['y']] < 0.5:
                 self.assertAlmostEqual(result.x[c['q']], 0)
 
     def test_local_feasibility_does_not_imply_global_feasibility(self):
@@ -88,6 +97,7 @@ class DietTests(unittest.TestCase):
         self.config['main_meals_targets']['kcal_100g']['target'] = float('nan')
         with self.assertRaises(ValueError):
             diet.formulate(self.config, self.foods)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -22,7 +22,9 @@ DEFAULT_IMAGES = ROOT / 'config/recipe-images.json'
 COMMONS_API = 'https://commons.wikimedia.org/w/api.php'
 USER_AGENT = 'OpteesDietRecipeImageBot/1.0 (educational case study; mailto:info@example.com)'
 
-DISCLAIMER = 'Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica.'
+DISCLAIMER = (
+    'Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica.'
+)
 
 
 def clean_title_for_search(title: str) -> str:
@@ -75,12 +77,16 @@ def parse_imageinfo(page: dict, search_term: str, recipe_id: str, recipe_title: 
         author = extmeta.get('Credit', {}).get('value', 'Wikimedia Commons contributor')
         author, _ = strip_html(author)
 
-    license_short = extmeta.get('LicenseShortName', {}).get('value') or extmeta.get('UsageTerms', {}).get('value') or 'CC-BY-SA'
+    license_short = (
+        extmeta.get('LicenseShortName', {}).get('value') or extmeta.get('UsageTerms', {}).get('value') or 'CC-BY-SA'
+    )
     license_url = extmeta.get('LicenseUrl', {}).get('value')
     if not license_url and 'cc' in license_short.lower():
         license_url = 'https://creativecommons.org/licenses/'
 
-    source_page = info.get('descriptionurl', f"https://commons.wikimedia.org/wiki/{urllib.parse.quote(title.replace(' ', '_'))}")
+    source_page = info.get(
+        'descriptionurl', f"https://commons.wikimedia.org/wiki/{urllib.parse.quote(title.replace(' ', '_'))}"
+    )
     image_url = info.get('url')
     thumb_url = info.get('thumburl') or image_url
 
@@ -98,7 +104,7 @@ def parse_imageinfo(page: dict, search_term: str, recipe_id: str, recipe_title: 
         'source': 'Wikimedia Commons',
         'source_page': source_page,
         'illustrative': True,
-        'disclaimer': DISCLAIMER
+        'disclaimer': DISCLAIMER,
     }
 
 
@@ -113,7 +119,7 @@ def query_commons_api(search_term: str, timeout: int = 10) -> list:
         'prop': 'imageinfo',
         'iiprop': 'url|size|extmetadata|mime',
         'iiurlwidth': '640',
-        'format': 'json'
+        'format': 'json',
     }
     url = f"{COMMONS_API}?{urllib.parse.urlencode(params)}"
     req = urllib.request.Request(url, headers={'User-Agent': USER_AGENT})
@@ -141,9 +147,16 @@ def save_images_index(data: dict, images_path: Path):
     images_path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
 
-def associate_images(recipes_db_path: Path, images_path: Path, online: bool = False,
-                     sample: int = None, cuisine: str = None, recipe_id: str = None,
-                     force: bool = False, dry_run: bool = False) -> dict:
+def associate_images(
+    recipes_db_path: Path,
+    images_path: Path,
+    online: bool = False,
+    sample: int = None,
+    cuisine: str = None,
+    recipe_id: str = None,
+    force: bool = False,
+    dry_run: bool = False,
+) -> dict:
     """Associate illustrative images to recipes."""
     index = load_images_index(images_path)
     images_map = index.setdefault('images', {})
@@ -204,7 +217,7 @@ def associate_images(recipes_db_path: Path, images_path: Path, online: bool = Fa
         'total_examined': len(rows),
         'updated': updated,
         'skipped_existing': skipped,
-        'total_in_index': len(images_map)
+        'total_in_index': len(images_map),
     }
 
 
@@ -229,7 +242,7 @@ def main():
         cuisine=args.cuisine,
         recipe_id=args.recipe_id,
         force=args.force,
-        dry_run=args.dry_run
+        dry_run=args.dry_run,
     )
 
     print("Riepilogo:")

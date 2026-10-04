@@ -1,4 +1,5 @@
 """Import public CREA food sheets, retaining original values and provenance."""
+
 import argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import csv
@@ -48,7 +49,7 @@ def fetch(path, filename, offline):
         except Exception:
             if attempt == 2:
                 raise
-            time.sleep(2 ** attempt)
+            time.sleep(2**attempt)
 
 
 def parse_food(html, code):
@@ -77,20 +78,33 @@ def parse_food(html, code):
         if len(cells) != 9:
             raise ValueError(f'Unexpected nutrient row: {len(cells)} cells')
         values = [c.get_text(' ', strip=True) for c in cells]
-        nutrients.append({
-            'group': group, 'name': values[0], 'unit': values[1],
-            'value_100g_raw': values[2], 'value_100g': number(values[2]),
-            'min_raw': values[3], 'max_raw': values[4],
-            'value_serving_raw': values[5], 'value_serving': number(values[5]),
-            'origin': values[6], 'method': values[7],
-            'references': [x['data-content'] for x in cells[8].select('[data-content]')],
-        })
+        nutrients.append(
+            {
+                'group': group,
+                'name': values[0],
+                'unit': values[1],
+                'value_100g_raw': values[2],
+                'value_100g': number(values[2]),
+                'min_raw': values[3],
+                'max_raw': values[4],
+                'value_serving_raw': values[5],
+                'value_serving': number(values[5]),
+                'origin': values[6],
+                'method': values[7],
+                'references': [x['data-content'] for x in cells[8].select('[data-content]')],
+            }
+        )
     if not nutrients or title is None:
         raise ValueError('Missing title or nutrients')
-    food = {'source': 'CREA', 'source_id': code, 'name': title.get_text(' ', strip=True),
-            'source_url': BASE + '/tabelle-nutrizionali/' + code,
-            'metadata': metadata, 'nutrients': nutrients,
-            'raw_sha256': hashlib.sha256(html.encode()).hexdigest()}
+    food = {
+        'source': 'CREA',
+        'source_id': code,
+        'name': title.get_text(' ', strip=True),
+        'source_url': BASE + '/tabelle-nutrizionali/' + code,
+        'metadata': metadata,
+        'nutrients': nutrients,
+        'raw_sha256': hashlib.sha256(html.encode()).hexdigest(),
+    }
     by_name = {n['name']: n for n in nutrients}
     for field, label in MACROS.items():
         food[field] = by_name.get(label, {}).get('value_100g')
@@ -115,7 +129,7 @@ def main():
             links[match[1]] = a['href']
     if not links:
         raise RuntimeError('No food links found')
-    selected = list(links.items())[:args.limit]
+    selected = list(links.items())[: args.limit]
     foods, errors = [], []
 
     def load(item):
@@ -139,9 +153,11 @@ def main():
         writer.writeheader()
         for food in foods:
             row = {k: food[k] for k in fields if k in food}
-            row.update(category=food['metadata'].get('Categoria'),
-                       serving_raw=food['metadata'].get('Porzione'),
-                       edible_portion_raw=food['metadata'].get('Parte Edibile'))
+            row.update(
+                category=food['metadata'].get('Categoria'),
+                serving_raw=food['metadata'].get('Porzione'),
+                edible_portion_raw=food['metadata'].get('Parte Edibile'),
+            )
             writer.writerow(row)
     missing = {k: sum(f[k] is None for f in foods) for k in MACROS}
     essential = ('kcal_100g', 'protein_g_100g', 'fat_g_100g', 'carbs_available_g_100g')
@@ -151,14 +167,22 @@ def main():
         'attribution': 'CREA Centro di ricerca Alimenti e Nutrizione; website L. Marletta e E. Camilli',
         'index_url': BASE + '/tabelle-nutrizionali/ricerca-per-ordine-alfabetico',
         'method': 'Derived from public HTML sheets; not an official CSV/JSON export',
-        'foods_in_index': len(links), 'requested': len(selected), 'imported': len(foods),
-        'complete': not errors and len(foods) == len(links), 'errors': errors,
+        'foods_in_index': len(links),
+        'requested': len(selected),
+        'imported': len(foods),
+        'complete': not errors and len(foods) == len(links),
+        'errors': errors,
         'missing_or_symbolic_macros': missing,
         'foods_with_numeric_essential_macros': sum(all(f[k] is not None for k in essential) for f in foods),
         'sha256': {n: hashlib.sha256((ROOT / n).read_bytes()).hexdigest() for n in ('foods.csv', 'foods.json')},
     }
     (ROOT / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    print(json.dumps({k: manifest[k] for k in ('foods_in_index', 'imported', 'complete', 'missing_or_symbolic_macros')}, ensure_ascii=False))
+    print(
+        json.dumps(
+            {k: manifest[k] for k in ('foods_in_index', 'imported', 'complete', 'missing_or_symbolic_macros')},
+            ensure_ascii=False,
+        )
+    )
     if any(missing[k] for k in essential):
         print('Some macro values are symbolic or missing: inspect original values before optimization.')
     if errors:
