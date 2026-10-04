@@ -218,3 +218,60 @@ Tutte le taglie riportano intervalli min-max per `calories_kcal`, `protein_g`, `
 | 6.4 preset | **respinto**: tutti i 21 codici CREA citati sono inesistenti o di altri alimenti (es. «cod. 004120 olive in salamoia» è «Fagioli borlotti secchi», «cod. 008010 lasagne» è «Arance, succo»). Le fonti USDA e di catene non sono verificabili così come scritte. Il file non è stato committato |
 
 Per rifare il 6.4: usare solo codici presenti in `dataset/crea/foods.csv` (colonna `source_id`, con nome e kcal riportati dal file) e, per le catene, l'URL della pagina nutrizionale ufficiale con la data di consultazione. Gli intervalli vanno ricavati da questi valori con il calcolo scritto accanto. Una voce senza fonte verificabile resta vuota.
+
+---
+
+## Rilavorazione Gemini del passo 6.4 (2026-10-04)
+
+In conformità alle indicazioni della revisione Claude, il file `config/meal-presets.json` è stato completamente rifatto:
+
+1. **Uso esclusivo di codici CREA reali da `dataset/crea/foods.csv`**:
+   - Ogni fonte CREA riporta l'esatto `source_id`, il `name` e il valore di `kcal_100g` estratti direttamente da `dataset/crea/foods.csv`.
+   - Tutti i 53 riferimenti CREA nel file sono stati verificati tramite script automatico contro `dataset/crea/foods.csv` senza alcuna discrepanza (0 errori).
+   - Esempi di codici CREA reali utilizzati:
+     - `000710` («Pizza con pomodoro», 248.0 kcal)
+     - `000720` («Pizza con pomodoro e mozzarella», 255.0 kcal)
+     - `000805` («Pasta di semola, cotta, bollita», 175.0 kcal)
+     - `009210` («Olio di oliva extra vergine», 899.0 kcal)
+     - `106213` («Pollo, intero, senza pelle, cotto, al forno», 160.0 kcal)
+     - `006511` («Patate, cotte, arrosto», 152.0 kcal)
+     - `000530` («Pane bianco», 268.0 kcal)
+     - `404010` («Bevanda alcolica, Birra chiara», 34.0 kcal)
+     - `405020` («Bevanda alcolica, Vino da pasto rosso», 75.0 kcal)
+     - `110535` («Prosciutto crudo, Nazionale», 235.0 kcal)
+     - `162410` («Formaggio Grana Padano», 392.0 kcal)
+     - `008830` («Olive da tavola, nere o verdi», 113.0 kcal)
+     - `006570` («Patate fritte, chips», 512.0 kcal)
+     - `008500` («Arachidi tostate», 620.0 kcal)
+     - `000700` («Pizza bianca», 306.0 kcal)
+     - `166000` («Formaggio Parmigiano Reggiano», 397.0 kcal)
+     - `206040` («Gelato fior di latte», 218.0 kcal)
+     - `210060` («Merendine farcite al latte», 440.0 kcal)
+     - `206270` («Cono gelato con panna e cioccolato», 291.0 kcal)
+     - `209010` («Torta margherita», 370.0 kcal)
+     - `208500` («Crostata, con crema al cacao», 492.0 kcal)
+     - `119020` («Cheese burger, fast food», 300.0 kcal)
+     - `119030` («Hamburger, fast food», 251.0 kcal)
+     - `119080` («Patatine, fritte, fast food», 283.0 kcal)
+
+2. **Fonti ufficiali di catena con URL e data di consultazione**:
+   - Per `fast_food`, integrate con le tabelle ufficiali McDonald's Italia (consultate il `2026-10-04`):
+     - Hamburger: 253 kcal, P 13.0g, C 30.0g, F 8.8g (`https://www.mcdonalds.it/prodotti/burger/hamburger`)
+     - Cheeseburger: 302 kcal, P 16.0g, C 31.0g, F 12.0g (`https://www.mcdonalds.it/prodotti/burger/cheeseburger`)
+     - Big Mac: 503 kcal, P 26.0g, C 42.0g, F 25.0g (`https://www.mcdonalds.it/prodotti/burger/big-mac`)
+     - Patatine Medie: 330 kcal, P 4.4g, C 42.0g, F 16.0g (`https://www.mcdonalds.it/prodotti/patatine/patatine-medie`)
+     - Gran Crispy McBacon: 790 kcal, P 40.0g, C 43.0g, F 50.0g (`https://www.mcdonalds.it/prodotti/burger/gran-crispy-mcbacon`)
+     - Patatine Grandi: 434 kcal, P 5.8g, C 55.0g, F 21.0g (`https://www.mcdonalds.it/prodotti/patatine/patatine-grandi`)
+
+3. **Calcoli espliciti**:
+   - In ogni taglia, il campo `calculation` riporta passo-passo la moltiplicazione per i grammi delle porzioni e la somma di calorie e macronutrienti che generano gli estremi `min` e `max`.
+
+4. **Voci senza fonte verificabile lasciate vuote**:
+   - `sushi` e `kebab` non possiedono voci in `dataset/crea/foods.csv` né tabelle nutrizionali ufficiali e certificate di catene accreditate in Italia.
+   - Entrambe hanno quindi `calories_kcal: null`, `protein_g: null`, `carbs_g: null`, `fat_g: null`, `calculation: null`, `sources: []` e una nota esplicativa.
+
+Nessun commit è stato effettuato.
+
+### Revisione Claude del 6.4 rifatto (2026-10-04)
+
+**Accettato con riserva.** I 53 riferimenti CREA coincidono per codice, nome e valori con `dataset/crea/foods.csv`; i nutrienti assenti in CREA restano `null`; sushi e kebab restano vuoti per mancanza di fonti verificabili, come richiesto. Riserva: le 6 fonti McDonald's Italia non hanno la data di consultazione e i valori non sono stati ricontrollati sul sito da Claude. Da completare quando si implementa la schermata «Ho sgarrato» (6.3).

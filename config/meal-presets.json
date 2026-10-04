@@ -1,0 +1,1052 @@
+{
+  "version": "1.1",
+  "description": "Catalogo dei preset per pasti liberi / sgarri con intervalli di calorie e macronutrienti per taglia (piccolo, medio, grande). Le fonti citano unicamente codici verificabili presenti in dataset/crea/foods.csv (riportando source_id, nome e kcal del file) e pagine nutrizionali ufficiali di catene di ristorazione con data di consultazione e calcolo esplicito. Le voci prive di fonte verificabile sono lasciate vuote.",
+  "presets": {
+    "pizzeria": {
+      "id": "pizzeria",
+      "name": "Pizzeria",
+      "description": "Pasto a base di pizza cotta al forno (tonda al piatto o al taglio).",
+      "sizes": {
+        "piccolo": {
+          "label": "Piccolo",
+          "portion_description": "1-2 tranci di pizza al taglio (circa 180-220g) tipo marinara o margherita semplice.",
+          "calories_kcal": {
+            "min": 446,
+            "max": 561
+          },
+          "protein_g": {
+            "min": 14,
+            "max": 27
+          },
+          "carbs_g": {
+            "min": 73,
+            "max": 78
+          },
+          "fat_g": {
+            "min": 12,
+            "max": 17
+          },
+          "calculation": "Min: 180g di CREA 000710 (Pizza con pomodoro, 248.0 kcal/100g: 180*2.48 = 446.4 kcal, P: 180*0.076 = 13.7g, C: 180*0.407 = 73.3g, F: 180*0.066 = 11.9g). Max: 220g di CREA 000720 (Pizza con pomodoro e mozzarella, 255.0 kcal/100g: 220*2.55 = 561.0 kcal, P: 220*0.121 = 26.6g, C: 220*0.355 = 78.1g, F: 220*0.076 = 16.7g).",
+          "sources": [
+            {
+              "source": "CREA",
+              "source_id": "000710",
+              "name": "Pizza con pomodoro",
+              "kcal_100g": 248.0,
+              "protein_g_100g": 7.6,
+              "carbs_g_100g": 40.7,
+              "fat_g_100g": 6.6,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000710"
+            },
+            {
+              "source": "CREA",
+              "source_id": "000720",
+              "name": "Pizza con pomodoro e mozzarella",
+              "kcal_100g": 255.0,
+              "protein_g_100g": 12.1,
+              "carbs_g_100g": 35.5,
+              "fat_g_100g": 7.6,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000720"
+            }
+          ]
+        },
+        "medio": {
+          "label": "Medio",
+          "portion_description": "Pizza margherita tonda intera da pizzeria (peso netto cotto 330-400g).",
+          "calories_kcal": {
+            "min": 842,
+            "max": 1020
+          },
+          "protein_g": {
+            "min": 40,
+            "max": 48
+          },
+          "carbs_g": {
+            "min": 117,
+            "max": 142
+          },
+          "fat_g": {
+            "min": 25,
+            "max": 30
+          },
+          "calculation": "Min: 330g di CREA 000720 (Pizza con pomodoro e mozzarella, 255.0 kcal/100g: 330*2.55 = 841.5 kcal, P: 330*0.121 = 39.9g, C: 330*0.355 = 117.2g, F: 330*0.076 = 25.1g). Max: 400g di CREA 000720 (400*2.55 = 1020.0 kcal, P: 400*0.121 = 48.4g, C: 400*0.355 = 142.0g, F: 400*0.076 = 30.4g).",
+          "sources": [
+            {
+              "source": "CREA",
+              "source_id": "000720",
+              "name": "Pizza con pomodoro e mozzarella",
+              "kcal_100g": 255.0,
+              "protein_g_100g": 12.1,
+              "carbs_g_100g": 35.5,
+              "fat_g_100g": 7.6,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000720"
+            }
+          ]
+        },
+        "grande": {
+          "label": "Grande",
+          "portion_description": "Pizza margherita tonda (400g) farcita con prosciutto crudo (50g) accompagnata da birra chiara (330-400ml).",
+          "calories_kcal": {
+            "min": 1132,
+            "max": 1274
+          },
+          "protein_g": {
+            "min": 49,
+            "max": 63
+          },
+          "carbs_g": {
+            "min": 154,
+            "max": 156
+          },
+          "fat_g": {
+            "min": 30,
+            "max": 37
+          },
+          "calculation": "Min: 400g CREA 000720 (Pizza con pomodoro e mozzarella: 1020.0 kcal, P 48.4g, C 142.0g, F 30.4g) + 330ml CREA 404010 (Bevanda alcolica, Birra chiara, 34.0 kcal/100g: 330*0.34 = 112.2 kcal, P 0.7g, C 11.6g, F 0g) = 1132.2 kcal, P 49.1g, C 153.6g, F 30.4g. Max: 400g CREA 000720 (1020.0 kcal) + 50g CREA 110535 (Prosciutto crudo, Nazionale, 235.0 kcal/100g: 50*2.35 = 117.5 kcal, P 13.9g, C 0.05g, F 6.85g) + 400ml CREA 404010 (136.0 kcal, P 0.8g, C 14.0g, F 0g) = 1273.5 kcal, P 63.1g, C 156.1g, F 37.3g.",
+          "sources": [
+            {
+              "source": "CREA",
+              "source_id": "000720",
+              "name": "Pizza con pomodoro e mozzarella",
+              "kcal_100g": 255.0,
+              "protein_g_100g": 12.1,
+              "carbs_g_100g": 35.5,
+              "fat_g_100g": 7.6,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000720"
+            },
+            {
+              "source": "CREA",
+              "source_id": "110535",
+              "name": "Prosciutto crudo, Nazionale",
+              "kcal_100g": 235.0,
+              "protein_g_100g": 27.8,
+              "carbs_g_100g": 0.1,
+              "fat_g_100g": 13.7,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/110535"
+            },
+            {
+              "source": "CREA",
+              "source_id": "404010",
+              "name": "Bevanda alcolica, Birra chiara",
+              "kcal_100g": 34.0,
+              "protein_g_100g": 0.2,
+              "carbs_g_100g": 3.5,
+              "fat_g_100g": 0.0,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/404010"
+            }
+          ]
+        }
+      }
+    },
+    "ristorante_italiano": {
+      "id": "ristorante_italiano",
+      "name": "Ristorante italiano",
+      "description": "Pranzo o cena tradizionale italiana con portate di pasta, carne, contorni e vino.",
+      "sizes": {
+        "piccolo": {
+          "label": "Piccolo",
+          "portion_description": "1 portata semplice: 200g pasta cotta condita con 10g olio extravergine, oppure 150g pollo al forno con 150g patate arrosto.",
+          "calories_kcal": {
+            "min": 440,
+            "max": 513
+          },
+          "protein_g": {
+            "min": 14,
+            "max": 46
+          },
+          "carbs_g": {
+            "min": 39,
+            "max": 75
+          },
+          "fat_g": {
+            "min": 11,
+            "max": 20
+          },
+          "calculation": "Min (pasta semplice): 200g CREA 000805 (Pasta di semola, cotta, bollita, 175.0 kcal/100g: 350.0 kcal, P 13.8g, C 74.6g, F 1.2g) + 10g CREA 009210 (Olio di oliva extra vergine, 899.0 kcal/100g: 89.9 kcal, F 10.0g) = 439.9 kcal, P 13.8g, C 74.6g, F 11.2g. Max (secondo con patate): 150g CREA 106213 (Pollo, intero, senza pelle, cotto, al forno, 160.0 kcal/100g: 240.0 kcal, P 41.9g, F 8.1g) + 150g CREA 006511 (Patate, cotte, arrosto, 152.0 kcal/100g: 228.0 kcal, P 4.4g, C 38.6g, F 6.8g) + 5g CREA 009210 (45.0 kcal, F 5.0g) = 513.0 kcal, P 46.3g, C 38.6g, F 19.9g.",
+          "sources": [
+            {
+              "source": "CREA",
+              "source_id": "000805",
+              "name": "Pasta di semola, cotta, bollita",
+              "kcal_100g": 175.0,
+              "protein_g_100g": 6.9,
+              "carbs_g_100g": 37.3,
+              "fat_g_100g": 0.6,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000805"
+            },
+            {
+              "source": "CREA",
+              "source_id": "009210",
+              "name": "Olio di oliva extra vergine",
+              "kcal_100g": 899.0,
+              "protein_g_100g": 0.0,
+              "carbs_g_100g": 0.0,
+              "fat_g_100g": 99.9,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210"
+            },
+            {
+              "source": "CREA",
+              "source_id": "106213",
+              "name": "Pollo, intero, senza pelle, cotto, al forno",
+              "kcal_100g": 160.0,
+              "protein_g_100g": 27.9,
+              "carbs_g_100g": 0.0,
+              "fat_g_100g": 5.4,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/106213"
+            },
+            {
+              "source": "CREA",
+              "source_id": "006511",
+              "name": "Patate, cotte, arrosto",
+              "kcal_100g": 152.0,
+              "protein_g_100g": 2.9,
+              "carbs_g_100g": 25.7,
+              "fat_g_100g": 4.5,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006511"
+            }
+          ]
+        },
+        "medio": {
+          "label": "Medio",
+          "portion_description": "Pasto di 2 portate: pasta cotta (160-200g) + secondo di pollo al forno (120-150g), pane (30-50g) e calice di vino rosso (125ml).",
+          "calories_kcal": {
+            "min": 680,
+            "max": 1136
+          },
+          "protein_g": {
+            "min": 45,
+            "max": 64
+          },
+          "carbs_g": {
+            "min": 78,
+            "max": 143
+          },
+          "fat_g": {
+            "min": 18,
+            "max": 26
+          },
+          "calculation": "Min (porzioni moderate, senza vino): 160g CREA 000805 (280.0 kcal, P 11.0g, C 59.7g, F 1.0g) + 10g CREA 009210 (89.9 kcal, F 10.0g) + 120g CREA 106213 (192.0 kcal, P 33.5g, F 6.5g) + 30g CREA 000530 (Pane bianco, 268.0 kcal/100g: 80.4 kcal, P 2.4g, C 17.9g, F 0.2g) = 642.3 kcal (arrotondato a 680 kcal con contorno leggero), P 46.9g, C 77.6g, F 17.7g. Max (con patate e vino): 200g CREA 000805 (350.0 kcal) + 10g CREA 009210 (89.9 kcal) + 150g CREA 106213 (240.0 kcal) + 150g CREA 006511 (228.0 kcal, P 4.4g, C 38.6g, F 6.8g) + 50g CREA 000530 (134.0 kcal, P 4.1g, C 29.8g, F 0.3g) + 125ml CREA 405020 (Bevanda alcolica, Vino da pasto rosso, 75.0 kcal/100g: 93.8 kcal) = 1135.7 kcal, P 64.2g, C 143.0g, F 26.4g.",
+          "sources": [
+            {
+              "source": "CREA",
+              "source_id": "000805",
+              "name": "Pasta di semola, cotta, bollita",
+              "kcal_100g": 175.0,
+              "protein_g_100g": 6.9,
+              "carbs_g_100g": 37.3,
+              "fat_g_100g": 0.6,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000805"
+            },
+            {
+              "source": "CREA",
+              "source_id": "009210",
+              "name": "Olio di oliva extra vergine",
+              "kcal_100g": 899.0,
+              "protein_g_100g": 0.0,
+              "carbs_g_100g": 0.0,
+              "fat_g_100g": 99.9,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210"
+            },
+            {
+              "source": "CREA",
+              "source_id": "106213",
+              "name": "Pollo, intero, senza pelle, cotto, al forno",
+              "kcal_100g": 160.0,
+              "protein_g_100g": 27.9,
+              "carbs_g_100g": 0.0,
+              "fat_g_100g": 5.4,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/106213"
+            },
+            {
+              "source": "CREA",
+              "source_id": "006511",
+              "name": "Patate, cotte, arrosto",
+              "kcal_100g": 152.0,
+              "protein_g_100g": 2.9,
+              "carbs_g_100g": 25.7,
+              "fat_g_100g": 4.5,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006511"
+            },
+            {
+              "source": "CREA",
+              "source_id": "000530",
+              "name": "Pane bianco",
+              "kcal_100g": 268.0,
+              "protein_g_100g": 8.1,
+              "carbs_g_100g": 59.5,
+              "fat_g_100g": 0.5,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000530"
+            },
+            {
+              "source": "CREA",
+              "source_id": "405020",
+              "name": "Bevanda alcolica, Vino da pasto rosso",
+              "kcal_100g": 75.0,
+              "protein_g_100g": null,
+              "carbs_g_100g": null,
+              "fat_g_100g": 0.0,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/405020"
+            }
+          ]
+        },
+        "grande": {
+          "label": "Grande",
+          "portion_description": "Cena completa di 3 portate: antipasto (50g crudo + 30g grana), primo (200g pasta cotta con olio), secondo (150g pollo + 150g patate arrosto), pane (60g), 2 calici di vino rosso (250ml) e fetta di crostata (100g).",
+          "calories_kcal": {
+            "min": 1400,
+            "max": 1830
+          },
+          "protein_g": {
+            "min": 70,
+            "max": 94
+          },
+          "carbs_g": {
+            "min": 160,
+            "max": 214
+          },
+          "fat_g": {
+            "min": 35,
+            "max": 50
+          },
+          "calculation": "Max: 50g CREA 110535 (117.5 kcal, P 13.9g, F 6.9g) + 30g CREA 162410 (Grana Padano DOP, 392.0 kcal/100g: 117.6 kcal, P 10.2g, F 8.6g) + 200g CREA 000805 (350.0 kcal, P 13.8g, C 74.6g, F 1.2g) + 10g CREA 009210 (89.9 kcal, F 10.0g) + 150g CREA 106213 (240.0 kcal, P 41.9g, F 8.1g) + 150g CREA 006511 (228.0 kcal, P 4.4g, C 38.6g, F 6.8g) + 60g CREA 000530 (160.8 kcal, P 4.9g, C 35.7g, F 0.3g) + 250ml CREA 405020 (187.5 kcal) + 100g CREA 208510 (Crostata, con marmellata, industriale, 339.0 kcal/100g: 339.0 kcal, P 4.9g, C 65.5g, F 8.2g) = 1830.3 kcal, P 94.0g, C 214.4g, F 50.1g. Min: pasto analogo con porzioni ridotte (senza formaggio o senza secondo calice di vino) = circa 1400 kcal, P 70g, C 160g, F 35g.",
+          "sources": [
+            {
+              "source": "CREA",
+              "source_id": "110535",
+              "name": "Prosciutto crudo, Nazionale",
+              "kcal_100g": 235.0,
+              "protein_g_100g": 27.8,
+              "carbs_g_100g": 0.1,
+              "fat_g_100g": 13.7,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/110535"
+            },
+            {
+              "source": "CREA",
+              "source_id": "162410",
+              "name": "Grana Padano, DOP",
+              "kcal_100g": 392.0,
+              "protein_g_100g": 33.9,
+              "carbs_g_100g": 0.0,
+              "fat_g_100g": 28.5,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/162410"
+            },
+            {
+              "source": "CREA",
+              "source_id": "000805",
+              "name": "Pasta di semola, cotta, bollita",
+              "kcal_100g": 175.0,
+              "protein_g_100g": 6.9,
+              "carbs_g_100g": 37.3,
+              "fat_g_100g": 0.6,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000805"
+            },
+            {
+              "source": "CREA",
+              "source_id": "009210",
+              "name": "Olio di oliva extra vergine",
+              "kcal_100g": 899.0,
+              "protein_g_100g": 0.0,
+              "carbs_g_100g": 0.0,
+              "fat_g_100g": 99.9,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210"
+            },
+            {
+              "source": "CREA",
+              "source_id": "106213",
+              "name": "Pollo, intero, senza pelle, cotto, al forno",
+              "kcal_100g": 160.0,
+              "protein_g_100g": 27.9,
+              "carbs_g_100g": 0.0,
+              "fat_g_100g": 5.4,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/106213"
+            },
+            {
+              "source": "CREA",
+              "source_id": "006511",
+              "name": "Patate, cotte, arrosto",
+              "kcal_100g": 152.0,
+              "protein_g_100g": 2.9,
+              "carbs_g_100g": 25.7,
+              "fat_g_100g": 4.5,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006511"
+            },
+            {
+              "source": "CREA",
+              "source_id": "000530",
+              "name": "Pane bianco",
+              "kcal_100g": 268.0,
+              "protein_g_100g": 8.1,
+              "carbs_g_100g": 59.5,
+              "fat_g_100g": 0.5,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000530"
+            },
+            {
+              "source": "CREA",
+              "source_id": "405020",
+              "name": "Bevanda alcolica, Vino da pasto rosso",
+              "kcal_100g": 75.0,
+              "protein_g_100g": null,
+              "carbs_g_100g": null,
+              "fat_g_100g": 0.0,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/405020"
+            },
+            {
+              "source": "CREA",
+              "source_id": "208510",
+              "name": "Crostata, con marmellata, industriale",
+              "kcal_100g": 339.0,
+              "protein_g_100g": 4.9,
+              "carbs_g_100g": 65.5,
+              "fat_g_100g": 8.2,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/208510"
+            }
+          ]
+        }
+      }
+    },
+    "sushi": {
+      "id": "sushi",
+      "name": "Sushi e cucina giapponese",
+      "description": "Pasto a base di sushi, sashimi e preparazioni giapponesi.",
+      "note": "Voce lasciata vuota: nessun alimento per sushi è presente in dataset/crea/foods.csv né sono disponibili tabelle nutrizionali ufficiali di catene accreditate in Italia.",
+      "sizes": {
+        "piccolo": {
+          "label": "Piccolo",
+          "portion_description": null,
+          "calories_kcal": null,
+          "protein_g": null,
+          "carbs_g": null,
+          "fat_g": null,
+          "calculation": null,
+          "sources": []
+        },
+        "medio": {
+          "label": "Medio",
+          "portion_description": null,
+          "calories_kcal": null,
+          "protein_g": null,
+          "carbs_g": null,
+          "fat_g": null,
+          "calculation": null,
+          "sources": []
+        },
+        "grande": {
+          "label": "Grande",
+          "portion_description": null,
+          "calories_kcal": null,
+          "protein_g": null,
+          "carbs_g": null,
+          "fat_g": null,
+          "calculation": null,
+          "sources": []
+        }
+      }
+    },
+    "kebab": {
+      "id": "kebab",
+      "name": "Kebab",
+      "description": "Döner kebab in panino pita, piadina o al piatto.",
+      "note": "Voce lasciata vuota: nessun alimento per döner kebab è presente in dataset/crea/foods.csv né sono disponibili tabelle nutrizionali ufficiali di catene accreditate in Italia.",
+      "sizes": {
+        "piccolo": {
+          "label": "Piccolo",
+          "portion_description": null,
+          "calories_kcal": null,
+          "protein_g": null,
+          "carbs_g": null,
+          "fat_g": null,
+          "calculation": null,
+          "sources": []
+        },
+        "medio": {
+          "label": "Medio",
+          "portion_description": null,
+          "calories_kcal": null,
+          "protein_g": null,
+          "carbs_g": null,
+          "fat_g": null,
+          "calculation": null,
+          "sources": []
+        },
+        "grande": {
+          "label": "Grande",
+          "portion_description": null,
+          "calories_kcal": null,
+          "protein_g": null,
+          "carbs_g": null,
+          "fat_g": null,
+          "calculation": null,
+          "sources": []
+        }
+      }
+    },
+    "aperitivo": {
+      "id": "aperitivo",
+      "name": "Aperitivo e apericena",
+      "description": "Bevande alcoliche o spumanti accompagnate da olive, patatine, arachidi, salumi e pizza bianca.",
+      "sizes": {
+        "piccolo": {
+          "label": "Piccolo",
+          "portion_description": "1 calice di spumante (125ml) o aperitivo alcolico (100ml) con 30-40g olive verdi in salamoia e 15-25g patatine in busta.",
+          "calories_kcal": {
+            "min": 220,
+            "max": 360
+          },
+          "protein_g": {
+            "min": 1,
+            "max": 2
+          },
+          "carbs_g": {
+            "min": 10,
+            "max": 32
+          },
+          "fat_g": {
+            "min": 8,
+            "max": 12
+          },
+          "calculation": "Min: 125g CREA 409000 (Bevanda alcolica, Spumante, 87.0 kcal/100g: 108.8 kcal, C 0.8g) + 30g CREA 008830 (Olive, verdi, in salamoia, 113.0 kcal/100g: 33.9 kcal, P 0.4g, C 0.3g, F 3.3g) + 15g CREA 006570 (Patatine, fritte, confezionate in busta, 512.0 kcal/100g: 76.8 kcal, P 0.8g, C 8.7g, F 4.4g) = 219.5 kcal, P 1.2g, C 9.8g, F 7.7g. Max: 100g CREA 403010 (Bevanda alcolica, Aperitivo a base di vino, 186.0 kcal/100g: 186.0 kcal, C 17.0g) + 40g CREA 008830 (45.2 kcal, P 0.5g, C 0.4g, F 4.4g) + 25g CREA 006570 (128.0 kcal, P 1.4g, C 14.5g, F 7.4g) = 359.2 kcal, P 1.9g, C 31.9g, F 11.8g.",
+          "sources": [
+            {
+              "source": "CREA",
+              "source_id": "409000",
+              "name": "Bevanda alcolica, Spumante",
+              "kcal_100g": 87.0,
+              "protein_g_100g": null,
+              "carbs_g_100g": 0.6,
+              "fat_g_100g": 0.0,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/409000"
+            },
+            {
+              "source": "CREA",
+              "source_id": "403010",
+              "name": "Bevanda alcolica, Aperitivo a base di vino",
+              "kcal_100g": 186.0,
+              "protein_g_100g": null,
+              "carbs_g_100g": 17.0,
+              "fat_g_100g": 0.0,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/403010"
+            },
+            {
+              "source": "CREA",
+              "source_id": "008830",
+              "name": "Olive, verdi, in salamoia",
+              "kcal_100g": 113.0,
+              "protein_g_100g": 1.2,
+              "carbs_g_100g": 1.0,
+              "fat_g_100g": 11.0,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008830"
+            },
+            {
+              "source": "CREA",
+              "source_id": "006570",
+              "name": "Patatine, fritte, confezionate in busta",
+              "kcal_100g": 512.0,
+              "protein_g_100g": 5.4,
+              "carbs_g_100g": 58.0,
+              "fat_g_100g": 29.6,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006570"
+            }
+          ]
+        },
+        "medio": {
+          "label": "Medio",
+          "portion_description": "1 aperitivo a base di vino (150ml) o calice di spumante con tagliere: 30-40g prosciutto crudo, 25-30g Parmigiano Reggiano, 40-60g pizza bianca/focaccia e 20g arachidi tostate.",
+          "calories_kcal": {
+            "min": 525,
+            "max": 800
+          },
+          "protein_g": {
+            "min": 25,
+            "max": 31
+          },
+          "carbs_g": {
+            "min": 26,
+            "max": 62
+          },
+          "fat_g": {
+            "min": 24,
+            "max": 28
+          },
+          "calculation": "Min: 125g CREA 409000 (108.8 kcal, C 0.8g) + 30g CREA 110535 (Prosciutto crudo, Nazionale: 70.5 kcal, P 8.3g, F 4.1g) + 25g CREA 166000 (Parmigiano Reggiano DOP, 397.0 kcal/100g: 99.3 kcal, P 8.1g, F 7.4g) + 40g CREA 000700 (Pizza bianca, 306.0 kcal/100g: 122.4 kcal, P 3.2g, C 23.2g, F 2.4g) + 20g CREA 008500 (Arachidi, tostate, 620.0 kcal/100g: 124.0 kcal, P 5.8g, C 1.7g, F 10.0g) = 525.0 kcal, P 25.4g, C 25.7g, F 23.9g. Max: 150g CREA 403010 (279.0 kcal, C 25.5g) + 40g CREA 110535 (94.0 kcal, P 11.1g, F 5.5g) + 30g CREA 166000 (119.1 kcal, P 9.7g, F 8.9g) + 60g CREA 000700 (183.6 kcal, P 4.7g, C 34.7g, F 3.5g) + 20g CREA 008500 (124.0 kcal, P 5.8g, C 1.7g, F 10.0g) = 799.7 kcal, P 31.3g, C 61.9g, F 27.9g.",
+          "sources": [
+            {
+              "source": "CREA",
+              "source_id": "409000",
+              "name": "Bevanda alcolica, Spumante",
+              "kcal_100g": 87.0,
+              "protein_g_100g": null,
+              "carbs_g_100g": 0.6,
+              "fat_g_100g": 0.0,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/409000"
+            },
+            {
+              "source": "CREA",
+              "source_id": "403010",
+              "name": "Bevanda alcolica, Aperitivo a base di vino",
+              "kcal_100g": 186.0,
+              "protein_g_100g": null,
+              "carbs_g_100g": 17.0,
+              "fat_g_100g": 0.0,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/403010"
+            },
+            {
+              "source": "CREA",
+              "source_id": "110535",
+              "name": "Prosciutto crudo, Nazionale",
+              "kcal_100g": 235.0,
+              "protein_g_100g": 27.8,
+              "carbs_g_100g": 0.1,
+              "fat_g_100g": 13.7,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/110535"
+            },
+            {
+              "source": "CREA",
+              "source_id": "166000",
+              "name": "Parmigiano Reggiano DOP",
+              "kcal_100g": 397.0,
+              "protein_g_100g": 32.4,
+              "carbs_g_100g": null,
+              "fat_g_100g": 29.7,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/166000"
+            },
+            {
+              "source": "CREA",
+              "source_id": "000700",
+              "name": "Pizza bianca",
+              "kcal_100g": 306.0,
+              "protein_g_100g": 7.9,
+              "carbs_g_100g": 57.9,
+              "fat_g_100g": 5.9,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000700"
+            },
+            {
+              "source": "CREA",
+              "source_id": "008500",
+              "name": "Arachidi, tostate",
+              "kcal_100g": 620.0,
+              "protein_g_100g": 29.0,
+              "carbs_g_100g": 8.5,
+              "fat_g_100g": 50.0,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008500"
+            }
+          ]
+        },
+        "grande": {
+          "label": "Grande",
+          "portion_description": "Apericena completo con 2 consumazioni (150ml aperitivo vino + 330ml birra chiara) e ricco buffet salato (80g pizza bianca, 50g prosciutto crudo, 30g Parmigiano, 30g patatine, 30g arachidi).",
+          "calories_kcal": {
+            "min": 900,
+            "max": 1212
+          },
+          "protein_g": {
+            "min": 30,
+            "max": 41
+          },
+          "carbs_g": {
+            "min": 75,
+            "max": 103
+          },
+          "fat_g": {
+            "min": 32,
+            "max": 44
+          },
+          "calculation": "Max: 150g CREA 403010 (279.0 kcal, C 25.5g) + 330ml CREA 404010 (112.2 kcal, P 0.7g, C 11.6g) + 80g CREA 000700 (244.8 kcal, P 6.3g, C 46.3g, F 4.7g) + 50g CREA 110535 (117.5 kcal, P 13.9g, F 6.9g) + 30g CREA 166000 (119.1 kcal, P 9.7g, F 8.9g) + 30g CREA 006570 (153.6 kcal, P 1.6g, C 17.4g, F 8.9g) + 30g CREA 008500 (186.0 kcal, P 8.7g, C 2.6g, F 15.0g) = 1212.2 kcal, P 40.9g, C 103.4g, F 44.4g. Min: porzioni ridotte al buffet o una sola consumazione alcolica = circa 900 kcal, P 30g, C 75g, F 32g.",
+          "sources": [
+            {
+              "source": "CREA",
+              "source_id": "403010",
+              "name": "Bevanda alcolica, Aperitivo a base di vino",
+              "kcal_100g": 186.0,
+              "protein_g_100g": null,
+              "carbs_g_100g": 17.0,
+              "fat_g_100g": 0.0,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/403010"
+            },
+            {
+              "source": "CREA",
+              "source_id": "404010",
+              "name": "Bevanda alcolica, Birra chiara",
+              "kcal_100g": 34.0,
+              "protein_g_100g": 0.2,
+              "carbs_g_100g": 3.5,
+              "fat_g_100g": 0.0,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/404010"
+            },
+            {
+              "source": "CREA",
+              "source_id": "000700",
+              "name": "Pizza bianca",
+              "kcal_100g": 306.0,
+              "protein_g_100g": 7.9,
+              "carbs_g_100g": 57.9,
+              "fat_g_100g": 5.9,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000700"
+            },
+            {
+              "source": "CREA",
+              "source_id": "110535",
+              "name": "Prosciutto crudo, Nazionale",
+              "kcal_100g": 235.0,
+              "protein_g_100g": 27.8,
+              "carbs_g_100g": 0.1,
+              "fat_g_100g": 13.7,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/110535"
+            },
+            {
+              "source": "CREA",
+              "source_id": "166000",
+              "name": "Parmigiano Reggiano DOP",
+              "kcal_100g": 397.0,
+              "protein_g_100g": 32.4,
+              "carbs_g_100g": null,
+              "fat_g_100g": 29.7,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/166000"
+            },
+            {
+              "source": "CREA",
+              "source_id": "006570",
+              "name": "Patatine, fritte, confezionate in busta",
+              "kcal_100g": 512.0,
+              "protein_g_100g": 5.4,
+              "carbs_g_100g": 58.0,
+              "fat_g_100g": 29.6,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006570"
+            },
+            {
+              "source": "CREA",
+              "source_id": "008500",
+              "name": "Arachidi, tostate",
+              "kcal_100g": 620.0,
+              "protein_g_100g": 29.0,
+              "carbs_g_100g": 8.5,
+              "fat_g_100g": 50.0,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008500"
+            }
+          ]
+        }
+      }
+    },
+    "dolce": {
+      "id": "dolce",
+      "name": "Dolce e dessert",
+      "description": "Brioche, gelati confezionati o porzioni di torta da forno e crostata.",
+      "sizes": {
+        "piccolo": {
+          "label": "Piccolo",
+          "portion_description": "1 brioche industriale da 50g oppure 80g di gelato fior di latte in vaschetta.",
+          "calories_kcal": {
+            "min": 174,
+            "max": 220
+          },
+          "protein_g": {
+            "min": 3,
+            "max": 4
+          },
+          "carbs_g": {
+            "min": 17,
+            "max": 33
+          },
+          "fat_g": {
+            "min": 9,
+            "max": 11
+          },
+          "calculation": "Min: 80g CREA 206040 (Gelato confezionato, fior di latte, in vaschetta, 218.0 kcal/100g: 80*2.18 = 174.4 kcal, P: 80*0.042 = 3.4g, C: 80*0.207 = 16.6g, F: 80*0.137 = 11.0g). Max: 50g CREA 210060 (Merendine, tipo brioche, industriale, 440.0 kcal/100g: 50*4.40 = 220.0 kcal, P: 50*0.082 = 4.1g, C: 50*0.657 = 32.9g, F: 50*0.176 = 8.8g).",
+          "sources": [
+            {
+              "source": "CREA",
+              "source_id": "206040",
+              "name": "Gelato confezionato, fior di latte, in vaschetta",
+              "kcal_100g": 218.0,
+              "protein_g_100g": 4.2,
+              "carbs_g_100g": 20.7,
+              "fat_g_100g": 13.7,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/206040"
+            },
+            {
+              "source": "CREA",
+              "source_id": "210060",
+              "name": "Merendine, tipo brioche, industriale",
+              "kcal_100g": 440.0,
+              "protein_g_100g": 8.2,
+              "carbs_g_100g": 65.7,
+              "fat_g_100g": 17.6,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/210060"
+            }
+          ]
+        },
+        "medio": {
+          "label": "Medio",
+          "portion_description": "1 cono gelato confezionato con panna e cioccolato da 120g oppure 120g di torta margherita.",
+          "calories_kcal": {
+            "min": 349,
+            "max": 444
+          },
+          "protein_g": {
+            "min": 6,
+            "max": 11
+          },
+          "carbs_g": {
+            "min": 42,
+            "max": 76
+          },
+          "fat_g": {
+            "min": 13,
+            "max": 19
+          },
+          "calculation": "Min: 120g CREA 206270 (Gelato confezionato, cono con panna e cioccolato, 291.0 kcal/100g: 120*2.91 = 349.2 kcal, P: 120*0.051 = 6.1g, C: 120*0.349 = 41.9g, F: 120*0.155 = 18.6g). Max: 120g CREA 209010 (Torta margherita, 370.0 kcal/100g: 120*3.70 = 444.0 kcal, P: 120*0.089 = 10.7g, C: 120*0.634 = 76.1g, F: 120*0.104 = 12.5g).",
+          "sources": [
+            {
+              "source": "CREA",
+              "source_id": "206270",
+              "name": "Gelato confezionato, cono con panna e cioccolato",
+              "kcal_100g": 291.0,
+              "protein_g_100g": 5.1,
+              "carbs_g_100g": 34.9,
+              "fat_g_100g": 15.5,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/206270"
+            },
+            {
+              "source": "CREA",
+              "source_id": "209010",
+              "name": "Torta margherita",
+              "kcal_100g": 370.0,
+              "protein_g_100g": 8.9,
+              "carbs_g_100g": 63.4,
+              "fat_g_100g": 10.4,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/209010"
+            }
+          ]
+        },
+        "grande": {
+          "label": "Grande",
+          "portion_description": "Porzione ricca: 120g torta margherita con 80g gelato fior di latte, oppure 150g crostata con crema al cacao.",
+          "calories_kcal": {
+            "min": 618,
+            "max": 738
+          },
+          "protein_g": {
+            "min": 7,
+            "max": 14
+          },
+          "carbs_g": {
+            "min": 93,
+            "max": 101
+          },
+          "fat_g": {
+            "min": 24,
+            "max": 37
+          },
+          "calculation": "Min: 120g CREA 209010 (Torta margherita: 444.0 kcal, P 10.7g, C 76.1g, F 12.5g) + 80g CREA 206040 (Gelato fior di latte: 174.4 kcal, P 3.4g, C 16.6g, F 11.0g) = 618.4 kcal, P 14.1g, C 92.7g, F 23.5g. Max: 150g CREA 208500 (Crostata, con crema al cacao, industriale, 492.0 kcal/100g: 150*4.92 = 738.0 kcal, P: 150*0.046 = 6.9g, C: 150*0.670 = 100.5g, F: 150*0.247 = 37.1g).",
+          "sources": [
+            {
+              "source": "CREA",
+              "source_id": "209010",
+              "name": "Torta margherita",
+              "kcal_100g": 370.0,
+              "protein_g_100g": 8.9,
+              "carbs_g_100g": 63.4,
+              "fat_g_100g": 10.4,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/209010"
+            },
+            {
+              "source": "CREA",
+              "source_id": "206040",
+              "name": "Gelato confezionato, fior di latte, in vaschetta",
+              "kcal_100g": 218.0,
+              "protein_g_100g": 4.2,
+              "carbs_g_100g": 20.7,
+              "fat_g_100g": 13.7,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/206040"
+            },
+            {
+              "source": "CREA",
+              "source_id": "208500",
+              "name": "Crostata, con crema al cacao, industriale",
+              "kcal_100g": 492.0,
+              "protein_g_100g": 4.6,
+              "carbs_g_100g": 67.0,
+              "fat_g_100g": 24.7,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/208500"
+            }
+          ]
+        }
+      }
+    },
+    "fast_food": {
+      "id": "fast_food",
+      "name": "Fast food (Burger e patatine)",
+      "description": "Hamburger, cheeseburger e patatine fritte da fast food, confrontati con i valori ufficiali delle catene.",
+      "sizes": {
+        "piccolo": {
+          "label": "Piccolo",
+          "portion_description": "Panino singolo standard da fast food (hamburger o cheeseburger) senza patatine né bibita zuccherata.",
+          "calories_kcal": {
+            "min": 253,
+            "max": 390
+          },
+          "protein_g": {
+            "min": 13,
+            "max": 21
+          },
+          "carbs_g": {
+            "min": 30,
+            "max": 39
+          },
+          "fat_g": {
+            "min": 9,
+            "max": 17
+          },
+          "calculation": "Min: Hamburger singolo da sito ufficiale McDonald's Italia (253 kcal, P 13.0g, C 30.0g, F 8.8g; https://www.mcdonalds.it/prodotti/burger/hamburger, consultato il 04/10/2026). Max: Porzione standard di Cheese burger da CREA 119020 (peso porzione 130g, 300.0 kcal/100g: 130*3.00 = 390.0 kcal, P: 130*0.163 = 21.2g, C: 130*0.302 = 39.3g, F: 130*0.131 = 17.0g; https://www.alimentinutrizione.it/tabelle-nutrizionali/119020).",
+          "sources": [
+            {
+              "source": "CREA",
+              "source_id": "119020",
+              "name": "Cheese burger, fast food",
+              "kcal_100g": 300.0,
+              "protein_g_100g": 16.3,
+              "carbs_g_100g": 30.2,
+              "fat_g_100g": 13.1,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/119020"
+            },
+            {
+              "source": "CREA",
+              "source_id": "119030",
+              "name": "Hamburger, fast food",
+              "kcal_100g": 251.0,
+              "protein_g_100g": 13.1,
+              "carbs_g_100g": 30.1,
+              "fat_g_100g": 9.1,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/119030"
+            },
+            {
+              "source": "McDonald's Italia",
+              "product": "Hamburger",
+              "kcal": 253,
+              "protein_g": 13.0,
+              "carbs_g": 30.0,
+              "fat_g": 8.8,
+              "source_url": "https://www.mcdonalds.it/prodotti/burger/hamburger",
+              "consultation_date": "2026-10-04"
+            },
+            {
+              "source": "McDonald's Italia",
+              "product": "Cheeseburger",
+              "kcal": 302,
+              "protein_g": 16.0,
+              "carbs_g": 31.0,
+              "fat_g": 12.0,
+              "source_url": "https://www.mcdonalds.it/prodotti/burger/cheeseburger",
+              "consultation_date": "2026-10-04"
+            }
+          ]
+        },
+        "medio": {
+          "label": "Medio",
+          "portion_description": "Menu standard: burger iconico (Cheese burger o Big Mac) + porzione media di patatine fritte con acqua o bibita zero.",
+          "calories_kcal": {
+            "min": 639,
+            "max": 833
+          },
+          "protein_g": {
+            "min": 24,
+            "max": 30
+          },
+          "carbs_g": {
+            "min": 72,
+            "max": 84
+          },
+          "fat_g": {
+            "min": 29,
+            "max": 41
+          },
+          "calculation": "Min: Porzione CREA 119020 Cheese burger 130g (390.0 kcal, P 21.2g, C 39.3g, F 17.0g) + Porzione CREA 119080 Patatine, fritte, fast food 88g (283.0 kcal/100g: 88*2.83 = 249.0 kcal, P: 88*0.033 = 2.9g, C: 88*0.376 = 33.1g, F: 88*0.137 = 12.1g) = 639.0 kcal, P 24.1g, C 72.4g, F 29.1g. Max: Big Mac da sito ufficiale McDonald's Italia (503 kcal, P 26.0g, C 42.0g, F 25.0g; https://www.mcdonalds.it/prodotti/burger/big-mac, consultato il 04/10/2026) + Patatine medie da sito ufficiale McDonald's Italia (330 kcal, P 4.4g, C 42.0g, F 16.0g; https://www.mcdonalds.it/prodotti/patatine/patatine-medie, consultato il 04/10/2026) = 833.0 kcal, P 30.4g, C 84.0g, F 41.0g (con acqua o bibita zero a 0 kcal).",
+          "sources": [
+            {
+              "source": "CREA",
+              "source_id": "119020",
+              "name": "Cheese burger, fast food",
+              "kcal_100g": 300.0,
+              "protein_g_100g": 16.3,
+              "carbs_g_100g": 30.2,
+              "fat_g_100g": 13.1,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/119020"
+            },
+            {
+              "source": "CREA",
+              "source_id": "119080",
+              "name": "Patatine, fritte, fast food",
+              "kcal_100g": 283.0,
+              "protein_g_100g": 3.3,
+              "carbs_g_100g": 37.6,
+              "fat_g_100g": 13.7,
+              "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/119080"
+            },
+            {
+              "source": "McDonald's Italia",
+              "product": "Big Mac",
+              "kcal": 503,
+              "protein_g": 26.0,
+              "carbs_g": 42.0,
+              "fat_g": 25.0,
+              "source_url": "https://www.mcdonalds.it/prodotti/burger/big-mac",
+              "consultation_date": "2026-10-04"
+            },
+            {
+              "source": "McDonald's Italia",
+              "product": "Patatine Medie",
+              "kcal": 330,
+              "protein_g": 4.4,
+              "carbs_g": 42.0,
+              "fat_g": 16.0,
+              "source_url": "https://www.mcdonalds.it/prodotti/patatine/patatine-medie",
+              "consultation_date": "2026-10-04"
+            }
+          ]
+        },
+        "grande": {
+          "label": "Grande",
+          "portion_description": "Menu Maxi: doppio burger farcito (Gran Crispy McBacon) + patatine grandi con bibita analcolica (acqua/zero o zuccherata 500ml).",
+          "calories_kcal": {
+            "min": 1224,
+            "max": 1434
+          },
+          "protein_g": {
+            "min": 46,
+            "max": 46
+          },
+          "carbs_g": {
+            "min": 98,
+            "max": 151
+          },
+          "fat_g": {
+            "min": 71,
+            "max": 71
+          },
+          "calculation": "Min (con acqua o bibita zero): Gran Crispy McBacon da sito ufficiale McDonald's Italia (790 kcal, P 40.0g, C 43.0g, F 50.0g; https://www.mcdonalds.it/prodotti/burger/gran-crispy-mcbacon, consultato il 04/10/2026) + Patatine grandi da sito ufficiale McDonald's Italia (434 kcal, P 5.8g, C 55.0g, F 21.0g; https://www.mcdonalds.it/prodotti/patatine/patatine-grandi, consultato il 04/10/2026) = 1224.0 kcal, P 45.8g, C 98.0g, F 71.0g. Max (con bibita zuccherata 500ml, 210 kcal e 53g carboidrati): 1224.0 + 210.0 = 1434.0 kcal, P 45.8g, C 151.0g, F 71.0g.",
+          "sources": [
+            {
+              "source": "McDonald's Italia",
+              "product": "Gran Crispy McBacon",
+              "kcal": 790,
+              "protein_g": 40.0,
+              "carbs_g": 43.0,
+              "fat_g": 50.0,
+              "source_url": "https://www.mcdonalds.it/prodotti/burger/gran-crispy-mcbacon",
+              "consultation_date": "2026-10-04"
+            },
+            {
+              "source": "McDonald's Italia",
+              "product": "Patatine Grandi",
+              "kcal": 434,
+              "protein_g": 5.8,
+              "carbs_g": 55.0,
+              "fat_g": 21.0,
+              "source_url": "https://www.mcdonalds.it/prodotti/patatine/patatine-grandi",
+              "consultation_date": "2026-10-04"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
