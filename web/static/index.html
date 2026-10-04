@@ -9,6 +9,7 @@
     <script src="/static/app.js" defer></script>
     <script src="/static/today.js" defer></script>
     <script src="/static/workout.js" defer></script>
+    <script src="/static/progress.js" defer></script>
   </head>
   <body>
     <section id="login" class="login">
@@ -167,9 +168,9 @@
                       <option value="250">Surplus leggero · +250 kcal al giorno</option>
                       <option value="custom">Altro valore…</option>
                     </select>
-                    <label id="joint-balance-custom-wrap" class="inline-label" hidden>kcal al giorno<input id="joint-balance-custom" type="number" step="50" min="-1500" max="1500" /></label>
+                    <label id="joint-balance-custom-wrap" class="inline-label" hidden>kcal al giorno<input id="joint-balance-custom" type="number" step="50" min="-1000" max="1000" /></label>
                   </div>
-                  <p class="muted small">Serve a valutare quanto ogni settimana regge se consumi più o meno del solito (dati Apple Salute). Senza bilancio questa valutazione non viene fatta.</p>
+                  <p class="muted small">Serve a valutare quanto ogni settimana regge se consumi più o meno del solito (dati Apple Salute) e alla ricalibrazione del lunedì. Senza bilancio queste valutazioni non vengono fatte.</p>
                 </div>
               </div>
               <p class="hint"><span id="week-hint">Optees propone 7 giorni completi rispettando la dieta, le porzioni e le ripetizioni. I pasti già registrati restano bloccati.</span></p>
@@ -457,6 +458,41 @@
 
         <section id="progress" hidden>
           <div class="stat-tiles" id="progress-tiles"></div>
+          <div class="panel checkin-panel">
+            <div class="section-head"><h2>Check-in del lunedì</h2><span id="checkin-date" class="muted"></span></div>
+            <p class="muted small">
+              Pesati a digiuno, nelle stesse condizioni. Se usi Apple Salute, importa i dati dopo la pesata e prima del check-in:
+              servono anche i consumi di domenica.
+            </p>
+            <form id="checkin-form" class="checkin-form">
+              <label>Peso (kg)<input id="checkin-weight" type="number" step="0.1" min="30" max="300" inputmode="decimal" required /></label>
+              <button class="primary">Fai il check-in</button>
+            </form>
+            <div id="checkin-result"></div>
+          </div>
+          <div class="panel">
+            <div class="section-head chart-head">
+              <h2>Peso reale e atteso</h2>
+              <div class="segmented small-seg" role="tablist" aria-label="Periodo">
+                <button type="button" class="seg" data-progress-weeks="4">4 sett.</button>
+                <button type="button" class="seg active" data-progress-weeks="8">8 sett.</button>
+                <button type="button" class="seg" data-progress-weeks="12">12 sett.</button>
+              </div>
+            </div>
+            <div id="weight-chart" class="weight-chart"></div>
+            <div class="chart-legend">
+              <span><i class="lg-dot"></i>pesate</span><span><i class="lg-line"></i>andamento filtrato</span><span><i class="lg-band"></i>atteso dal piano (scenari Salute)</span>
+            </div>
+            <p id="weight-chart-note" class="muted small"></p>
+          </div>
+          <div class="panel">
+            <h2>Settimane</h2>
+            <div id="progress-weeks" class="progress-weeks"></div>
+          </div>
+          <div id="recal-history-panel" class="panel" hidden>
+            <h2>Ricalibrazioni</h2>
+            <div id="recal-history"></div>
+          </div>
           <div class="panel">
             <h2>Registra una misura</h2>
             <p class="muted">La pesata del lunedì, a digiuno e nelle stesse condizioni, è la più utile per il confronto settimanale.</p>

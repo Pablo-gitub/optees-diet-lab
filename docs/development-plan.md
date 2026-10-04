@@ -39,7 +39,7 @@ Il lavoro di Gemini viene sempre **rivisto** da Claude (dati e media) o da Codex
 | T6 | Codex | 3.1 · 3.3 | **fatto** — `18ab5c6`, `dd599f5` |
 | T7 | Claude | 3.2 → **M1** | Gemini: 3.4 · **fatto** — `fcacbf2`, Gemini 6.4 `ce54515`, 3.4 `804caae`; **M1 raggiunto** |
 | T8 | Codex | 4.1 · 4.2 | **fatto** — W1–W3 `652da35`, `a8c411a`, `ee2fa5b` |
-| T9 | Claude | 4.3 · 5.3 (UI su dati demo) | 4.3 **fatto** — `c732350`; 5.3 da fare dopo 5.1/5.2 (Codex: B6–B7) |
+| T9 | Claude | 4.3 · 5.3 (UI su dati demo) | **fatto** — 4.3 `c732350`; 5.3 (vedi riga 5.3); Gemini 5.4 rivisto `21c128a` |
 | T10 | Codex | 5.1 · 5.2 | **fatto** — B6 `72f9660`, B7 `882f5cf`, 5.1 `dc4df6b`, `824daba`; Gemini 5.4 separato |
 | T11 | Claude | revisione 5.x · 6.3 (UI sgarro) | Gemini: 6.4 |
 | T12 | Codex | 6.1 · 6.2 → **M2** | — |
@@ -120,7 +120,7 @@ Consegna preparata per i passi 0.3–0.5: [prompt per Gemini](gemini-handoff-pha
 |---|---|---|---|---|---|
 | 5.1 | Trend del peso (media mobile esponenziale, poi filtro di Kalman semplice); aderenza dieta/allenamento; confronto atteso vs osservato separando «piano non seguito» da «risposta diversa dal previsto» | Codex | M | test su serie sintetiche con rumore | **fatto** — `dc4df6b`; 209 test unittest verdi; EMA/Kalman, copertura, aderenza, confronto e check-in; [consegna backend](backend-handoff-progress.md) |
 | 5.2 | Proposta di ricalibrazione: dispendio personale stimato con limiti di sicurezza fissi (variazione massima settimanale, minimi nutrizionali); l'utente approva | Codex | M | nessuna modifica automatica dei target; limiti mai superati | **fatto** — `824daba`; 221 test unittest verdi; proposte motivate, limiti fissi, decisioni CSRF atomiche e conflitti 409; [consegna frontend 5.3](backend-handoff-progress.md) |
-| 5.3 | UI **Progressi**: inserimento peso del lunedì, grafico reale vs atteso, aderenza, proposta di ricalibrazione con motivazione | Claude | M | verifica visiva; grafici leggibili in chiaro e scuro | da fare |
+| 5.3 | UI **Progressi**: inserimento peso del lunedì, grafico reale vs atteso, aderenza, proposta di ricalibrazione con motivazione | Claude | M | verifica visiva; grafici leggibili in chiaro e scuro | **fatto** — check-in del lunedì con analisi della settimana; grafico SVG pesate + andamento filtrato + peso atteso per settimana (fasce, mai collegate); settimane con aderenza dieta/allenamento e confronto in chiaro; proposta di ricalibrazione con prima/dopo, motivazione, consumo stimato con intervallo, limiti e Approva/Non ora; cronologia. Piano: bilancio e obiettivi per tipo di giornata salvati nel profilo. Verificato su dati sintetici (proposta +90 kcal limitata da +466, approvazione 1800→1890), telefono e tema scuro |
 | 5.4 | Guida all'aggiornamento periodico dell'export Apple Salute/Withings e controllo della copertura | Gemini | S | `docs/apple-health-import.md` aggiornato | **fatto** — guida di Gemini rivista da Claude: importazione il lunedì mattina dopo la pesata (non la domenica), soglie verificate nel codice |
 
 ### Fase 6 — Apprendimento e ribilanciamento → **M2**

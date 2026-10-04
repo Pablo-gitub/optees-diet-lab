@@ -63,3 +63,14 @@ In **Piano → Settimana** l'opzione «Pianifica anche l'allenamento» chiama `P
 B6 risolto: default condivisi da GET profilo e owner_profile, senza scritture implicite nel profilo. Test su profilo appena creato e su nuove abitudini personali mai salvate.
 
 B7 risolto: explore preferisce una scheda diversa da varied tra i candidati distinti ancora sul fronte; se non esiste, explanation dichiara l’esplorazione soltanto alimentare. Test della preferenza e del fallback.
+
+## 5.3 — Progressi (Claude, 2026-10-05)
+
+La pagina usa `GET /api/stats/progress`, `POST /api/progress/check-in`, `GET /api/progress/recalibrations` e le decisioni approve/reject (contratto in [backend-handoff-progress.md](backend-handoff-progress.md)). Dopo un'approvazione la UI sostituisce il profilo in memoria con quello restituito e dimentica i target salvati nel browser. In Piano, bilancio e obiettivi per tipo di giornata della settimana congiunta sono salvati nel profilo (`PUT /api/profile` completo), così la ricalibrazione li trova e la pagina li riprende dopo un'approvazione.
+
+### Osservazioni per Codex
+
+| # | Osservazione | Proposta |
+|---|---|---|
+| B9 | L'andamento filtrato resta molto sopra le pesate recenti: con pesate quotidiane in calo di ~0,3 kg/settimana la linea mostra −0,1 kg in 7 giorni. EMA (emivita 7 giorni) seguita da Kalman sul risultato EMA smussa due volte e introduce un forte ritardo | applicare il Kalman alle mediane giornaliere (non all'EMA), oppure esporre l'EMA da sola come andamento; verificare il ritardo con un test su una discesa lineare nota |
+| B10 | Il lunedì i riquadri «della settimana» di `GET /api/stats/summary` (aderenza, kcal medie, allenamenti) sono tutti «dati insufficienti», proprio il giorno del check-in | quando la settimana corrente non ha giorni trascorsi, riportare l'ultima settimana conclusa con `week_start` esplicito |

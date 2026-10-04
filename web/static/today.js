@@ -446,6 +446,10 @@ function sparkline(points) {
 function statTile(label, stat, format) {
   const tile = element('div', undefined, 'stat-tile');
   tile.append(element('span', label, 'stat-label'));
+  if (stat && stat.status !== 'available' && stat.value != null && stat.unit) {
+    tile.append(element('strong', stat.value.toLocaleString('it-IT', { maximumFractionDigits: 1 }) + ' ' + stat.unit, 'stat-value'), element('span', stat.reason || 'Dato non recente', 'stat-note'));
+    return tile;
+  }
   if (!stat || stat.status !== 'available') {
     tile.append(element('strong', '—', 'stat-value muted'), element('span', 'Dati insufficienti', 'stat-note'));
     if (stat?.reason) tile.title = stat.reason;
@@ -459,7 +463,7 @@ function statTile(label, stat, format) {
 function renderStats(target, stats) {
   target.replaceChildren(
     statTile('Peso', stats.weight, (s) => [s.value.toLocaleString('it-IT', { maximumFractionDigits: 1 }) + ' ' + (s.unit || 'kg'), s.trend_7d != null ? (s.trend_7d > 0 ? '+' : '') + s.trend_7d.toLocaleString('it-IT', { maximumFractionDigits: 1 }) + ' kg in 7 giorni' : 'ultima misura ' + shortDate(s.date)]),
-    statTile('Aderenza della settimana', stats.adherence_week, (s) => [Math.round(s.diet * 100) + '%', 'dieta · palestra ' + Math.round((s.training || 0) * 100) + '%']),
+    statTile('Aderenza della settimana', stats.adherence_week, (s) => [s.diet != null ? Math.round(s.diet * 100) + '%' : '—', 'dieta · palestra ' + (s.training != null ? Math.round(s.training * 100) + '%' : '—')]),
     statTile('Kcal medie', stats.kcal_average, (s) => [fmt0(s.eaten_avg), 'su ' + fmt0(s.target) + ' · ' + s.days + ' giorni']),
     statTile('Allenamenti', stats.workouts, (s) => [s.done + '/' + s.planned, 'questa settimana']),
   );
@@ -493,12 +497,11 @@ function preparePlanning() {
       }),
     );
     select.addEventListener('change', () => availabilityInputs($('joint-availability'), select.value));
-    const saved = jointSaved();
-    $('week-joint').checked = !!saved.enabled;
-    const balance = saved.balance !== undefined ? saved.balance : profile.energy_balance_target_kcal;
-    setBalance(balance);
+    $('week-joint').checked = !!jointSaved().enabled;
     planningReady = true;
   }
+  // Balance and day-type targets live in the profile (used by the Monday recalibration too).
+  setBalance(profile.energy_balance_target_kcal !== undefined ? profile.energy_balance_target_kcal : jointSaved().balance);
   renderJointTargets();
   availabilityInputs($('joint-availability'), select.value);
   syncJointMode();
@@ -538,7 +541,7 @@ function readBalance() {
   if (v === '') return null;
   const n = Number(v === 'custom' ? $('joint-balance-custom').value : v);
   if ($('joint-balance-custom').value === '' && v === 'custom') throw Error('Indica il bilancio calorico in kcal al giorno');
-  if (!Number.isFinite(n) || n < -1500 || n > 1500) throw Error('Bilancio calorico fra −1500 e +1500 kcal al giorno');
+  if (!Number.isFinite(n) || n < -1000 || n > 1000) throw Error('Bilancio calorico fra −1000 e +1000 kcal al giorno');
   return n;
 }
 $('joint-balance').onchange = () => {
@@ -555,7 +558,7 @@ function syncJointMode() {
   $('joint-options').hidden = !on;
   $('week-mode-label').hidden = on;
   $('week-hint').textContent = on
-    ? 'Optees combina più schede di allenamento con la dieta di 7 giorni e verifica ogni combinazione. Pasti e allenamenti già registrati restano bloccati. Il calcolo può richiedere un paio di minuti.'
+    ? 'Optees combina più schede di allenamento con la dieta di 7 giorni e verifica ogni combinazione. Pasti e allenamenti già registrati restano bloccati. Obiettivi e bilancio scelti vengono salvati nel profilo. Il calcolo può richiedere un paio di minuti.'
     : 'Optees propone 7 giorni completi rispettando la dieta, le porzioni e le ripetizioni. I pasti già registrati restano bloccati.';
   $('joint-modes-note').textContent = profile?.personal_diets
     ? 'Nei giorni di riposo vale la dieta sedentaria, in quelli di allenamento la dieta palestra. Qui scegli gli obiettivi dell’intera giornata, colazione e spuntini compresi.'
@@ -563,7 +566,8 @@ function syncJointMode() {
 }
 function renderJointTargets() {
   const base = profile.daily_meals?.targets || {};
-  const saved = jointSaved().targets || {};
+  // Older browsers kept targets locally: use them only until the profile has its own.
+  const saved = profile.day_type_targets || jointSaved().targets || {};
   const grid = $('joint-targets');
   grid.classList.toggle('show-ranges', $('joint-ranges').checked);
   const cells = [element('span'), element('strong', 'Riposo', 'tg-head'), element('strong', '🏋 Allenamento', 'tg-head')];
@@ -808,10 +812,29 @@ function weekPlanCard(p, set, scale) {
   return card;
 }
 
-function jointRequest() {
+// PUT /api/profile replaces the whole profile: resend every field with the patch.
+async function saveProfilePatch(patch) {
+  const p = profile;
+  await api('profile', 'PUT', {
+    display_name: p.display_name,
+    mode: p.mode,
+    preference_note: p.preference_note,
+    targets: p.targets,
+    meal_targets: p.meal_targets,
+    excluded_crea_ids: p.excluded_crea_ids,
+    targets_demo: p.targets_demo,
+    daily_meals: p.daily_meals,
+    preferred_cuisines: p.preferred_cuisines,
+    ...patch,
+  });
+  Object.assign(profile, patch);
+}
+async function jointRequest() {
   const day_targets = readJointTargets();
   const energy_balance_target_kcal = readBalance();
-  jointSave({ targets: day_targets, balance: energy_balance_target_kcal });
+  if (JSON.stringify(day_targets) !== JSON.stringify(profile.day_type_targets) || energy_balance_target_kcal !== profile.energy_balance_target_kcal)
+    await saveProfilePatch({ day_type_targets: day_targets, energy_balance_target_kcal });
+  jointSave({ targets: undefined, balance: undefined });
   return {
     week_start: $('week-start').value,
     day_targets,
@@ -825,7 +848,7 @@ $('week-generate').onclick = async () => {
   const joint = $('week-joint').checked;
   let body;
   try {
-    body = joint ? jointRequest() : { week_start: $('week-start').value, mode: $('week-mode').value };
+    body = joint ? await jointRequest() : { week_start: $('week-start').value, mode: $('week-mode').value };
   } catch (e) {
     return message(e.message);
   }
@@ -871,36 +894,6 @@ $('week-generate').onclick = async () => {
   } finally {
     box.hidden = true;
     button.disabled = false;
-  }
-};
-
-// ---------- Progressi ----------
-const measureUnits = { weight: 'kg', waist: 'cm', body_fat: '%', height: 'cm' };
-const measureNames = { weight: 'Peso', waist: 'Vita', body_fat: 'Grasso corporeo', height: 'Altezza' };
-async function loadProgress() {
-  if (!$('measure-date').value) $('measure-date').value = isoDate(new Date());
-  const [stats, measures] = await Promise.all([api('stats/summary'), api('measurements')]);
-  renderStats($('progress-tiles'), stats);
-  const list = $('measure-list');
-  list.replaceChildren();
-  if (!measures.length) return list.append(element('p', 'Nessuna misura registrata.', 'muted'));
-  list.append(
-    healthTable(
-      ['Data', 'Misura', 'Valore', 'Fonte'],
-      measures.slice(0, 12).map((m) => [shortDate(m.date), measureNames[m.kind] || m.kind, Number(m.value).toLocaleString('it-IT', { maximumFractionDigits: 1 }) + ' ' + (m.unit || ''), m.source === 'manual' ? 'inserita da te' : m.source === 'apple_health' ? 'Apple Salute' : m.source]),
-    ),
-  );
-}
-$('measure-form').onsubmit = async (e) => {
-  e.preventDefault();
-  const kind = $('measure-kind').value;
-  try {
-    await api('measurements', 'POST', { date: $('measure-date').value, kind, value: Number($('measure-value').value), unit: measureUnits[kind] });
-    $('measure-value').value = '';
-    message('Misura salvata');
-    await loadProgress();
-  } catch (err) {
-    message(err.message);
   }
 };
 
