@@ -1,0 +1,28 @@
+{
+  "recipe_id": "demo:pasta-pomodoro",
+  "flexibility": 0.1,
+  "scale_min": 0.5,
+  "scale_max": 1.8,
+  "targets": {
+    "kcal": {
+      "min": 350,
+      "target": 450,
+      "max": 650
+    },
+    "protein_g": {
+      "min": 8,
+      "target": 15,
+      "max": 30
+    },
+    "fat_g": {
+      "min": 5,
+      "target": 12,
+      "max": 25
+    },
+    "carbs_g": {
+      "min": 40,
+      "target": 65,
+      "max": 95
+    }
+  }
+}

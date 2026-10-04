@@ -1,0 +1,13 @@
+{
+  "demo": true,
+  "days": {"lun": 40, "mar": 25, "mer": 40, "gio": 0, "ven": 40, "sab": 25, "dom": 0},
+  "weekly_minutes_max": 110,
+  "sessions_min": 3,
+  "sessions_max": 4,
+  "strength_sessions_min": 1,
+  "strength_sessions_max": 2,
+  "cardio_minutes_min": 40,
+  "strength_gap_days": 1,
+  "muscle_targets_proxy": {"pectoralis_major": 4, "latissimus_dorsi": 4, "quadriceps": 4},
+  "optees_command": "/home/paolo/anaconda3/envs/optees/bin/optees-mcp"
+}

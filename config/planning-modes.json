@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "default_mode": "sedentary",
+  "modes": [
+    {
+      "id": "sedentary",
+      "label": "Dieta sedentaria",
+      "description": "Programma di 14 giorni della versione sedentaria più recente.",
+      "diet_source_role": "sedentary_fortnight",
+      "enforce_diet_combinations": true
+    },
+    {
+      "id": "training",
+      "label": "Dieta palestra",
+      "description": "Programma di 14 giorni della dieta per il periodo con palestra.",
+      "diet_source_role": "training_fortnight",
+      "enforce_diet_combinations": true
+    },
+    {
+      "id": "free",
+      "label": "Algoritmo libero",
+      "description": "Genera alternative senza gli abbinamenti dei programmi alimentari.",
+      "diet_source_role": null,
+      "enforce_diet_combinations": false
+    }
+  ],
+  "shared_constraints": [
+    "nutritional_targets",
+    "personal_exclusions",
+    "portion_bounds",
+    "time_availability"
+  ],
+  "selection_changes_saved_plan": false,
+  "food_map_policy": "Separate explicit setting; never automatically enforce report scores as exclusions.",
+  "implementation_status": "All timetable letters have modeled subsets; 28-day audit supports local and global constraints; full branches and web UI pending."
+}

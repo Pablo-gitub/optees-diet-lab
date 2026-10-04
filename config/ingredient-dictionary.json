@@ -1,0 +1,3159 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-10-04",
+  "qualifiers": {
+    "cooking_state": {
+      "raw": [
+        "raw",
+        "fresh",
+        "crudo",
+        "cruda",
+        "crudi",
+        "crude",
+        "fresco",
+        "fresca",
+        "freschi",
+        "fresche"
+      ],
+      "cooked": [
+        "cooked",
+        "cotto",
+        "cotta",
+        "cotti",
+        "cotte",
+        "boiled",
+        "bollito",
+        "bollita",
+        "bolliti",
+        "bollite",
+        "steamed",
+        "roasted",
+        "arrosto",
+        "baked",
+        "al forno",
+        "grilled",
+        "ai ferri",
+        "fried",
+        "fritto",
+        "fritta",
+        "fritti",
+        "fritte",
+        "pan-fried",
+        "sautéed",
+        "sauteed"
+      ]
+    },
+    "processing_state": {
+      "dry": [
+        "dry",
+        "dried",
+        "secco",
+        "secca",
+        "secchi",
+        "secche"
+      ],
+      "fresh": [
+        "fresh",
+        "fresco",
+        "fresca",
+        "freschi",
+        "fresche"
+      ],
+      "canned": [
+        "canned",
+        "tinned",
+        "in scatola",
+        "scatola",
+        "pelati",
+        "scatolame",
+        "from a jar",
+        "in a jar",
+        "vasetto"
+      ],
+      "drained": [
+        "drained",
+        "scolato",
+        "scolata",
+        "scolati",
+        "scolate",
+        "sgocciolato",
+        "sgocciolata",
+        "sgocciolati",
+        "sgocciolate"
+      ],
+      "frozen": [
+        "frozen",
+        "surgelato",
+        "surgelati",
+        "surgelata",
+        "surgelate"
+      ]
+    },
+    "grain_type": {
+      "whole": [
+        "whole",
+        "wholegrain",
+        "wholemeal",
+        "whole wheat",
+        "integrale",
+        "integrali"
+      ],
+      "refined": [
+        "white",
+        "plain",
+        "semola",
+        "tipo 00",
+        "tipo 0",
+        "raffinato",
+        "bianco",
+        "bianca",
+        "brillato"
+      ]
+    },
+    "sweetness": {
+      "sweetened": [
+        "sweetened",
+        "zuccherato",
+        "zuccherata",
+        "con zucchero",
+        "alla frutta"
+      ],
+      "unsweetened": [
+        "unsweetened",
+        "senza zucchero",
+        "al naturale",
+        "plain",
+        "naturale"
+      ]
+    },
+    "fat_level": {
+      "skimmed": [
+        "skimmed",
+        "scremato",
+        "scremata",
+        "0%",
+        "nonfat",
+        "senza grassi"
+      ],
+      "semi_skimmed": [
+        "semi-skimmed",
+        "parzialmente scremato",
+        "parzialmente scremata",
+        "low-fat",
+        "low fat",
+        "reduced fat",
+        "magro"
+      ],
+      "whole": [
+        "whole",
+        "intero",
+        "intera",
+        "full-fat",
+        "normale"
+      ]
+    }
+  },
+  "standard_conversions": {
+    "piece_egg": {
+      "unit": "piece",
+      "grams": 50.0,
+      "provenance": "CREA 181100 peso medio uovo sgusciato ~50g",
+      "requires_review": true
+    },
+    "piece_egg_yolk": {
+      "unit": "piece",
+      "grams": 18.0,
+      "provenance": "CREA 183010 tuorlo medio ~18g",
+      "requires_review": true
+    },
+    "piece_egg_white": {
+      "unit": "piece",
+      "grams": 32.0,
+      "provenance": "CREA 182010 albume medio ~32g",
+      "requires_review": true
+    },
+    "clove_garlic": {
+      "unit": "clove",
+      "grams": 4.0,
+      "provenance": "Spicchio aglio medio CREA 005000 ~4g",
+      "requires_review": true
+    },
+    "tbsp_olive_oil": {
+      "unit": "tbsp",
+      "grams": 10.0,
+      "provenance": "Cucchiaio olio extravergine 10g (CREA porzioni standard)",
+      "requires_review": true
+    },
+    "tsp_olive_oil": {
+      "unit": "tsp",
+      "grams": 5.0,
+      "provenance": "Cucchiaino olio 5g",
+      "requires_review": true
+    },
+    "piece_onion": {
+      "unit": "piece",
+      "grams": 100.0,
+      "provenance": "Cipolla media mondata 100g (CREA)",
+      "requires_review": true
+    },
+    "density_water": {
+      "density_g_per_ml": 1.0,
+      "provenance": "Densità fisica acqua a 20°C: 1.00 g/ml",
+      "requires_review": false
+    },
+    "density_olive_oil": {
+      "density_g_per_ml": 0.916,
+      "provenance": "Densità fisica olio di oliva: 0.916 g/ml",
+      "requires_review": false
+    },
+    "density_milk": {
+      "density_g_per_ml": 1.03,
+      "provenance": "Densità fisica latte vaccino standard: 1.03 g/ml",
+      "requires_review": false
+    }
+  },
+  "canonical_ingredients": {
+    "olio_oliva_extravergine": {
+      "id": "olio_oliva_extravergine",
+      "display_name_it": "Olio di oliva extra vergine",
+      "display_name_en": "Extra virgin olive oil",
+      "category": "Oli e grassi",
+      "state": "olio aggiunto, interamente consumato",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "olive oil",
+        "extra virgin olive oil",
+        "evoo",
+        "virgin olive oil"
+      ],
+      "synonyms_it": [
+        "olio extravergine di oliva",
+        "olio di oliva extra vergine",
+        "olio evo",
+        "olio d oliva"
+      ],
+      "usda_ids": [
+        "171413"
+      ],
+      "unitools_ids": [
+        "oil",
+        "oliveoil"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "009210",
+          "name": "Olio di oliva extra vergine",
+          "match_type": "exact",
+          "reason": "Corrispondenza esatta CREA 009210"
+        }
+      },
+      "density_g_per_ml": 0.916,
+      "off_brand_candidates": [
+        {
+          "barcode": "8005510000870",
+          "brand": "Monini",
+          "name": "Bios Olio Extra Vergine Di Oliva",
+          "match_type": "brand_candidate",
+          "reason": "Olio EVO 100% Monini in OFF, numeric_candidate=1"
+        }
+      ]
+    },
+    "olio_vegetale_neutro": {
+      "id": "olio_vegetale_neutro",
+      "display_name_it": "Oli vegetali",
+      "display_name_en": "Vegetable oil",
+      "category": "Oli e grassi",
+      "state": "olio aggiunto, interamente consumato",
+      "synonyms_en": [
+        "vegetable oil",
+        "neutral oil",
+        "canola oil",
+        "rapeseed oil",
+        "rapeseed or other neutral oil",
+        "sunflower oil",
+        "corn oil"
+      ],
+      "synonyms_it": [
+        "olio vegetale",
+        "olio di semi",
+        "olio di girasole",
+        "olio di colza",
+        "olio di mais"
+      ],
+      "usda_ids": [
+        "172336",
+        "171424"
+      ],
+      "unitools_ids": [
+        "oil"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "009799",
+          "name": "Oli vegetali",
+          "match_type": "exact",
+          "reason": "Oli vegetali generici CREA 009799"
+        },
+        "proxies": [
+          {
+            "id": "009650",
+            "name": "Olio di girasole",
+            "match_type": "proxy",
+            "reason": "Olio di girasole CREA 009650 come proxy olio neutro"
+          },
+          {
+            "id": "009630",
+            "name": "Olio di colza",
+            "match_type": "proxy",
+            "reason": "Olio di colza CREA 009630 per canola oil"
+          }
+        ]
+      },
+      "density_g_per_ml": 0.92
+    },
+    "burro": {
+      "id": "burro",
+      "display_name_it": "Burro",
+      "display_name_en": "Butter",
+      "category": "Oli e grassi",
+      "state": "burro pronto al consumo / cottura",
+      "synonyms_en": [
+        "butter",
+        "unsalted butter",
+        "salted butter"
+      ],
+      "synonyms_it": [
+        "burro"
+      ],
+      "usda_ids": [
+        "173410",
+        "173428"
+      ],
+      "unitools_ids": [
+        "butter"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "190010",
+          "name": "Burro",
+          "match_type": "exact",
+          "reason": "Burro vaccino CREA 190010"
+        }
+      }
+    },
+    "ghee": {
+      "id": "ghee",
+      "display_name_it": "Ghee / Burro chiarificato",
+      "display_name_en": "Ghee",
+      "category": "Oli e grassi",
+      "state": "grasso anidro da burro",
+      "synonyms_en": [
+        "ghee",
+        "clarified butter"
+      ],
+      "synonyms_it": [
+        "ghee",
+        "burro chiarificato"
+      ],
+      "usda_ids": [],
+      "unitools_ids": [
+        "ghee"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "190010",
+          "name": "Burro",
+          "match_type": "proxy",
+          "reason": "Burro CREA 190010 usato come proxy culinario del ghee"
+        }
+      }
+    },
+    "olio_frittura": {
+      "id": "olio_frittura",
+      "display_name_it": "Olio per friggere",
+      "display_name_en": "Oil for frying",
+      "category": "Oli e grassi",
+      "state": "olio di frittura a consumo parziale (assorbimento non documentato)",
+      "synonyms_en": [
+        "oil for frying",
+        "frying oil",
+        "deep frying oil"
+      ],
+      "synonyms_it": [
+        "olio per friggere",
+        "olio da frittura"
+      ],
+      "usda_ids": [],
+      "unitools_ids": [
+        "oil"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "009799",
+          "name": "Oli vegetali",
+          "match_type": "proxy",
+          "reason": "Oli vegetali; attenzione: assorbimento effettivo non determinabile automaticamente"
+        }
+      },
+      "flags": {
+        "unabsorbed_oil": true,
+        "requires_explicit_review": true
+      }
+    },
+    "cipolla_cruda": {
+      "id": "cipolla_cruda",
+      "display_name_it": "Cipolle, crude",
+      "display_name_en": "Onion, raw",
+      "category": "Verdure e ortaggi",
+      "state": "crudo, parte edibile",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "onion",
+        "onions",
+        "yellow onion",
+        "yellow onions",
+        "white onion",
+        "white onions",
+        "red onion",
+        "red onions",
+        "brown onion"
+      ],
+      "synonyms_it": [
+        "cipolla",
+        "cipolle",
+        "cipolla rossa",
+        "cipolla dorata",
+        "cipolla bianca"
+      ],
+      "usda_ids": [
+        "170000",
+        "170003"
+      ],
+      "unitools_ids": [
+        "onion"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "005300",
+          "name": "Cipolle, crude",
+          "match_type": "exact",
+          "reason": "Cipolle crude CREA 005300"
+        },
+        "cooked_alternate": {
+          "id": "005305",
+          "name": "Cipolle, cotte, bollite",
+          "match_type": "cooked_alternate",
+          "reason": "Alternativa cotta/bollita CREA 005305"
+        }
+      }
+    },
+    "aglio": {
+      "id": "aglio",
+      "display_name_it": "Aglio",
+      "display_name_en": "Garlic",
+      "category": "Verdure e ortaggi",
+      "state": "crudo, parte edibile",
+      "synonyms_en": [
+        "garlic",
+        "garlic clove",
+        "garlic cloves"
+      ],
+      "synonyms_it": [
+        "aglio",
+        "spicchio di aglio",
+        "spicchi di aglio"
+      ],
+      "usda_ids": [
+        "169230"
+      ],
+      "unitools_ids": [
+        "garlic"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "005000",
+          "name": "Aglio",
+          "match_type": "exact",
+          "reason": "Aglio crudo CREA 005000"
+        }
+      }
+    },
+    "pomodori_freschi": {
+      "id": "pomodori_freschi",
+      "display_name_it": "Pomodori, maturi, freschi",
+      "display_name_en": "Tomatoes, fresh",
+      "category": "Verdure e ortaggi",
+      "state": "fresco, parte edibile",
+      "expected_qualifiers": {
+        "cooking_state": "raw",
+        "processing_state": "fresh"
+      },
+      "synonyms_en": [
+        "tomato",
+        "tomatoes",
+        "fresh tomato",
+        "fresh tomatoes",
+        "ripe tomatoes",
+        "cherry tomatoes",
+        "plum tomatoes"
+      ],
+      "synonyms_it": [
+        "pomodoro",
+        "pomodori",
+        "pomodori freschi",
+        "pomodorini",
+        "pomodoro maturo"
+      ],
+      "usda_ids": [
+        "170457",
+        "170458"
+      ],
+      "unitools_ids": [
+        "tomato"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "006610",
+          "name": "Pomodori, maturi, freschi",
+          "match_type": "exact",
+          "reason": "Pomodori freschi maturi CREA 006610"
+        },
+        "proxies": [
+          {
+            "id": "006650",
+            "name": "Pomodorini ciliegino, freschi",
+            "match_type": "proxy",
+            "reason": "Pomodorini ciliegino freschi CREA 006650"
+          }
+        ]
+      }
+    },
+    "pomodori_passata": {
+      "id": "pomodori_passata",
+      "display_name_it": "Pomodori, passata",
+      "display_name_en": "Tomato passata",
+      "category": "Verdure e ortaggi",
+      "state": "passata, peso prima della cottura",
+      "expected_qualifiers": {
+        "processing_state": "canned"
+      },
+      "synonyms_en": [
+        "passata",
+        "tomato passata",
+        "sieved tomatoes",
+        "pureed tomatoes",
+        "tomato puree"
+      ],
+      "synonyms_it": [
+        "passata di pomodoro",
+        "passata",
+        "polpa di pomodoro passata"
+      ],
+      "usda_ids": [
+        "170495"
+      ],
+      "unitools_ids": [
+        "passata",
+        "tomato",
+        "tomatopaste"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "006670",
+          "name": "Pomodori, passata",
+          "match_type": "exact",
+          "reason": "Passata di pomodoro CREA 006670"
+        }
+      },
+      "off_brand_candidates": [
+        {
+          "barcode": "8005110001840",
+          "brand": "Mutti",
+          "name": "Passata Pugliese - La Vigorosa",
+          "match_type": "brand_candidate",
+          "reason": "Passata Mutti 100% pomodoro e sale in OFF, numeric_candidate=1"
+        }
+      ]
+    },
+    "pomodori_pelati_scatola": {
+      "id": "pomodori_pelati_scatola",
+      "display_name_it": "Pomodori, pelati in scatola",
+      "display_name_en": "Canned chopped tomatoes",
+      "category": "Verdure e ortaggi",
+      "state": "in scatola con succo, pronto al consumo/cottura",
+      "expected_qualifiers": {
+        "processing_state": "canned"
+      },
+      "synonyms_en": [
+        "chopped tomatoes",
+        "canned tomatoes",
+        "tinned tomatoes",
+        "peeled tomatoes",
+        "canned plum tomatoes"
+      ],
+      "synonyms_it": [
+        "pomodori pelati",
+        "pelati in scatola",
+        "polpa di pomodoro in scatola",
+        "pomodori a pezzetti in scatola"
+      ],
+      "usda_ids": [
+        "170051"
+      ],
+      "unitools_ids": [
+        "tomato",
+        "tomatopaste"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "006680",
+          "name": "Pomodori, pelati in scatola",
+          "match_type": "exact",
+          "reason": "Pomodori pelati in scatola CREA 006680"
+        }
+      }
+    },
+    "pomodoro_concentrato": {
+      "id": "pomodoro_concentrato",
+      "display_name_it": "Pomodori, conserva / concentrato",
+      "display_name_en": "Tomato paste",
+      "category": "Verdure e ortaggi",
+      "state": "concentrato di pomodoro",
+      "synonyms_en": [
+        "tomato paste",
+        "double concentrated tomato paste",
+        "tomato concentrate"
+      ],
+      "synonyms_it": [
+        "concentrato di pomodoro",
+        "doppio concentrato di pomodoro",
+        "conserva di pomodoro"
+      ],
+      "usda_ids": [
+        "170459"
+      ],
+      "unitools_ids": [
+        "tomatopaste"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "006670",
+          "name": "Pomodori, passata",
+          "match_type": "proxy",
+          "reason": "Passata CREA come proxy (concentrazione calorica diversa: richiede verifica)"
+        }
+      }
+    },
+    "patate_crude": {
+      "id": "patate_crude",
+      "display_name_it": "Patate, crude",
+      "display_name_en": "Potatoes, raw",
+      "category": "Verdure e ortaggi",
+      "state": "crudo, parte edibile mondata",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "potatoes",
+        "potato",
+        "raw potatoes",
+        "baking potato"
+      ],
+      "synonyms_it": [
+        "patate",
+        "patata",
+        "patate crude"
+      ],
+      "usda_ids": [
+        "170026"
+      ],
+      "unitools_ids": [
+        "potato"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "006500",
+          "name": "Patate, crude",
+          "match_type": "exact",
+          "reason": "Patate crude CREA 006500"
+        },
+        "cooked_alternate": {
+          "id": "006515",
+          "name": "Patate, senza buccia, cotte, bollite",
+          "match_type": "cooked_alternate",
+          "reason": "Patate bollite CREA 006515"
+        }
+      }
+    },
+    "carote_crude": {
+      "id": "carote_crude",
+      "display_name_it": "Carote, crude",
+      "display_name_en": "Carrots, raw",
+      "category": "Verdure e ortaggi",
+      "state": "crudo, parte edibile",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "carrot",
+        "carrots",
+        "raw carrots"
+      ],
+      "synonyms_it": [
+        "carote",
+        "carota",
+        "carote crude"
+      ],
+      "usda_ids": [
+        "170393"
+      ],
+      "unitools_ids": [
+        "carrot"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "005150",
+          "name": "Carote, crude",
+          "match_type": "exact",
+          "reason": "Carote crude CREA 005150"
+        },
+        "cooked_alternate": {
+          "id": "005155",
+          "name": "Carote, cotte, bollite",
+          "match_type": "cooked_alternate",
+          "reason": "Carote bollite CREA 005155"
+        }
+      }
+    },
+    "spinaci_crudi": {
+      "id": "spinaci_crudi",
+      "display_name_it": "Spinaci, crudi",
+      "display_name_en": "Spinach, raw",
+      "category": "Verdure e ortaggi",
+      "state": "crudo, parte edibile",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "spinach",
+        "baby spinach",
+        "fresh spinach"
+      ],
+      "synonyms_it": [
+        "spinaci",
+        "spinaci crudi",
+        "spinacino"
+      ],
+      "usda_ids": [
+        "168462"
+      ],
+      "unitools_ids": [
+        "spinach"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "005700",
+          "name": "Spinaci, crudi",
+          "match_type": "exact",
+          "reason": "Spinaci crudi CREA 005700"
+        },
+        "cooked_alternate": {
+          "id": "005705",
+          "name": "Spinaci, cotti, bolliti",
+          "match_type": "cooked_alternate",
+          "reason": "Spinaci bolliti CREA 005705"
+        }
+      }
+    },
+    "zucchine_crude": {
+      "id": "zucchine_crude",
+      "display_name_it": "Zucchine, crude",
+      "display_name_en": "Zucchini / Courgette, raw",
+      "category": "Verdure e ortaggi",
+      "state": "crudo, parte edibile",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "courgette",
+        "courgettes",
+        "zucchini",
+        "baby courgettes"
+      ],
+      "synonyms_it": [
+        "zucchine",
+        "zucchina",
+        "zucchine crude"
+      ],
+      "usda_ids": [
+        "169291"
+      ],
+      "unitools_ids": [
+        "zucchini",
+        "courgette"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "005730",
+          "name": "Zucchine, crude",
+          "match_type": "exact",
+          "reason": "Zucchine crude CREA 005730"
+        },
+        "cooked_alternate": {
+          "id": "005735",
+          "name": "Zucchine, cotte, bollite",
+          "match_type": "cooked_alternate",
+          "reason": "Zucchine bollite CREA 005735"
+        }
+      }
+    },
+    "peperoni_crudi": {
+      "id": "peperoni_crudi",
+      "display_name_it": "Peperoni, crudi",
+      "display_name_en": "Bell peppers, raw",
+      "category": "Verdure e ortaggi",
+      "state": "crudo, parte edibile",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "bell pepper",
+        "bell peppers",
+        "red pepper",
+        "red peppers",
+        "green pepper",
+        "yellow pepper",
+        "sweet pepper"
+      ],
+      "synonyms_it": [
+        "peperone",
+        "peperoni",
+        "peperone rosso",
+        "peperone giallo",
+        "peperoni crudi"
+      ],
+      "usda_ids": [
+        "170108",
+        "170427"
+      ],
+      "unitools_ids": [
+        "pepper",
+        "bellpepper"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "005600",
+          "name": "Peperoni, crudi",
+          "match_type": "exact",
+          "reason": "Peperoni crudi CREA 005600"
+        },
+        "cooked_alternate": {
+          "id": "005606",
+          "name": "Peperoni, cotti, in padella",
+          "match_type": "cooked_alternate",
+          "reason": "Peperoni in padella CREA 005606"
+        }
+      }
+    },
+    "cetrioli_freschi": {
+      "id": "cetrioli_freschi",
+      "display_name_it": "Cetrioli, freschi",
+      "display_name_en": "Cucumber, fresh",
+      "category": "Verdure e ortaggi",
+      "state": "fresco, parte edibile",
+      "synonyms_en": [
+        "cucumber",
+        "cucumbers",
+        "english cucumber"
+      ],
+      "synonyms_it": [
+        "cetriolo",
+        "cetrioli",
+        "cetrioli freschi"
+      ],
+      "usda_ids": [
+        "168409"
+      ],
+      "unitools_ids": [
+        "cucumber"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "005220",
+          "name": "Cetrioli, freschi",
+          "match_type": "exact",
+          "reason": "Cetrioli freschi CREA 005220"
+        }
+      }
+    },
+    "funghi_prataioli_crudi": {
+      "id": "funghi_prataioli_crudi",
+      "display_name_it": "Funghi coltivati, prataioli, crudi",
+      "display_name_en": "Mushrooms, raw",
+      "category": "Verdure e ortaggi",
+      "state": "crudo, parte edibile",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "mushrooms",
+        "white mushrooms",
+        "button mushrooms",
+        "cremini mushrooms",
+        "champignon"
+      ],
+      "synonyms_it": [
+        "funghi",
+        "funghi champignon",
+        "prataioli",
+        "funghi prataioli"
+      ],
+      "usda_ids": [
+        "169251"
+      ],
+      "unitools_ids": [
+        "mushroom"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "006000",
+          "name": "Funghi coltivati, prataioli, crudi",
+          "match_type": "exact",
+          "reason": "Funghi prataioli crudi CREA 006000"
+        },
+        "cooked_alternate": {
+          "id": "006006",
+          "name": "Funghi coltivati, prataioli, cotti, in padella",
+          "match_type": "cooked_alternate",
+          "reason": "Funghi in padella CREA 006006"
+        }
+      }
+    },
+    "prezzemolo_fresco": {
+      "id": "prezzemolo_fresco",
+      "display_name_it": "Prezzemolo, fresco",
+      "display_name_en": "Parsley, fresh",
+      "category": "Verdure e ortaggi",
+      "state": "fresco, parte edibile",
+      "synonyms_en": [
+        "parsley",
+        "fresh parsley",
+        "flat-leaf parsley",
+        "curly parsley"
+      ],
+      "synonyms_it": [
+        "prezzemolo",
+        "prezzemolo fresco"
+      ],
+      "usda_ids": [
+        "170416"
+      ],
+      "unitools_ids": [
+        "parsley"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "006840",
+          "name": "Prezzemolo, fresco",
+          "match_type": "exact",
+          "reason": "Prezzemolo fresco CREA 006840"
+        }
+      }
+    },
+    "basilico_fresco": {
+      "id": "basilico_fresco",
+      "display_name_it": "Basilico, fresco",
+      "display_name_en": "Basil, fresh",
+      "category": "Verdure e ortaggi",
+      "state": "fresco, parte edibile",
+      "synonyms_en": [
+        "basil",
+        "fresh basil",
+        "sweet basil"
+      ],
+      "synonyms_it": [
+        "basilico",
+        "basilico fresco"
+      ],
+      "usda_ids": [
+        "172232"
+      ],
+      "unitools_ids": [
+        "basil"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "006800",
+          "name": "Basilico, fresco",
+          "match_type": "exact",
+          "reason": "Basilico fresco CREA 006800"
+        }
+      }
+    },
+    "rosmarino_fresco": {
+      "id": "rosmarino_fresco",
+      "display_name_it": "Rosmarino, fresco",
+      "display_name_en": "Rosemary, fresh",
+      "category": "Verdure e ortaggi",
+      "state": "fresco, parte edibile",
+      "synonyms_en": [
+        "rosemary",
+        "fresh rosemary",
+        "fresh rosemary leaves"
+      ],
+      "synonyms_it": [
+        "rosmarino",
+        "rosmarino fresco"
+      ],
+      "usda_ids": [
+        "173469"
+      ],
+      "unitools_ids": [
+        "rosemary"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "006850",
+          "name": "Rosmarino, fresco",
+          "match_type": "exact",
+          "reason": "Rosmarino fresco CREA 006850"
+        }
+      }
+    },
+    "erba_cipollina": {
+      "id": "erba_cipollina",
+      "display_name_it": "Erba cipollina",
+      "display_name_en": "Chives",
+      "category": "Verdure e ortaggi",
+      "state": "fresco, parte edibile",
+      "synonyms_en": [
+        "chives",
+        "fresh chives"
+      ],
+      "synonyms_it": [
+        "erba cipollina"
+      ],
+      "usda_ids": [
+        "169994"
+      ],
+      "unitools_ids": [
+        "chives"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "005300",
+          "name": "Cipolle, crude",
+          "match_type": "proxy",
+          "reason": "Cipolle crude CREA 005300 come proxy botanico/nutrizionale per erba cipollina"
+        }
+      }
+    },
+    "coriandolo_fresco": {
+      "id": "coriandolo_fresco",
+      "display_name_it": "Coriandolo / Cilantro fresco",
+      "display_name_en": "Coriander / Cilantro, fresh",
+      "category": "Verdure e ortaggi",
+      "state": "fresco, parte edibile",
+      "synonyms_en": [
+        "coriander",
+        "cilantro",
+        "fresh coriander",
+        "fresh cilantro"
+      ],
+      "synonyms_it": [
+        "coriandolo",
+        "coriandolo fresco"
+      ],
+      "usda_ids": [
+        "169997"
+      ],
+      "unitools_ids": [
+        "cilantro",
+        "coriander"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "006840",
+          "name": "Prezzemolo, fresco",
+          "match_type": "proxy",
+          "reason": "Prezzemolo fresco CREA 006840 come proxy aromatico/nutrizionale"
+        }
+      }
+    },
+    "ceci_secchi": {
+      "id": "ceci_secchi",
+      "display_name_it": "Ceci, secchi",
+      "display_name_en": "Chickpeas, dry",
+      "category": "Legumi",
+      "state": "secco, prima dell ammollo e cottura",
+      "expected_qualifiers": {
+        "processing_state": "dry",
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "dry chickpeas",
+        "dried chickpeas",
+        "garbanzo beans dry"
+      ],
+      "synonyms_it": [
+        "ceci secchi"
+      ],
+      "usda_ids": [
+        "173756"
+      ],
+      "unitools_ids": [
+        "chickpeas"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "004000",
+          "name": "Ceci, secchi",
+          "match_type": "exact",
+          "reason": "Ceci secchi CREA 004000"
+        }
+      }
+    },
+    "ceci_scatola": {
+      "id": "ceci_scatola",
+      "display_name_it": "Ceci, in scatola, scolati",
+      "display_name_en": "Chickpeas, canned / drained",
+      "category": "Legumi",
+      "state": "in scatola, scolati, pronti al consumo",
+      "expected_qualifiers": {
+        "processing_state": "canned",
+        "cooking_state": "cooked"
+      },
+      "synonyms_en": [
+        "chickpeas",
+        "canned chickpeas",
+        "tinned chickpeas",
+        "cooked chickpeas",
+        "garbanzo beans"
+      ],
+      "synonyms_it": [
+        "ceci in scatola",
+        "ceci lessati",
+        "ceci cotti"
+      ],
+      "usda_ids": [
+        "173757"
+      ],
+      "unitools_ids": [
+        "chickpeas"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "004010",
+          "name": "Ceci, in scatola, scolati",
+          "match_type": "exact",
+          "reason": "Ceci in scatola scolati CREA 004010"
+        }
+      }
+    },
+    "fagioli_cannellini_secchi": {
+      "id": "fagioli_cannellini_secchi",
+      "display_name_it": "Fagioli, Cannellini, secchi",
+      "display_name_en": "White beans / Cannellini, dry",
+      "category": "Legumi",
+      "state": "secco, prima dell ammollo e cottura",
+      "expected_qualifiers": {
+        "processing_state": "dry",
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "dry white beans",
+        "dried cannellini beans",
+        "dried haricot beans"
+      ],
+      "synonyms_it": [
+        "fagioli cannellini secchi",
+        "fagioli bianchi secchi"
+      ],
+      "usda_ids": [
+        "175203"
+      ],
+      "unitools_ids": [
+        "beans"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "004200",
+          "name": "Fagioli, Cannellini, secchi",
+          "match_type": "exact",
+          "reason": "Fagioli cannellini secchi CREA 004200"
+        }
+      }
+    },
+    "fagioli_cannellini_scatola": {
+      "id": "fagioli_cannellini_scatola",
+      "display_name_it": "Fagioli, Cannellini in scatola, scolati",
+      "display_name_en": "White beans, canned / drained",
+      "category": "Legumi",
+      "state": "in scatola, scolati, pronti al consumo",
+      "expected_qualifiers": {
+        "processing_state": "canned",
+        "cooking_state": "cooked"
+      },
+      "synonyms_en": [
+        "white beans",
+        "canned white beans",
+        "cannellini beans",
+        "butter beans",
+        "canned cannellini"
+      ],
+      "synonyms_it": [
+        "fagioli cannellini in scatola",
+        "fagioli bianchi in scatola",
+        "fagioli cannellini lessati"
+      ],
+      "usda_ids": [
+        "175204"
+      ],
+      "unitools_ids": [
+        "beans"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "004210",
+          "name": "Fagioli, Cannellini in scatola, scolati",
+          "match_type": "exact",
+          "reason": "Fagioli cannellini in scatola scolati CREA 004210"
+        }
+      }
+    },
+    "fagioli_borlotti_scatola": {
+      "id": "fagioli_borlotti_scatola",
+      "display_name_it": "Fagioli, Borlotti, in scatola, scolati",
+      "display_name_en": "Borlotti beans, canned / drained",
+      "category": "Legumi",
+      "state": "in scatola, scolati, pronti al consumo",
+      "expected_qualifiers": {
+        "processing_state": "canned",
+        "cooking_state": "cooked"
+      },
+      "synonyms_en": [
+        "borlotti beans",
+        "canned borlotti beans",
+        "pinto beans",
+        "canned pinto beans"
+      ],
+      "synonyms_it": [
+        "fagioli borlotti",
+        "borlotti in scatola",
+        "borlotti lessati"
+      ],
+      "usda_ids": [
+        "175200"
+      ],
+      "unitools_ids": [
+        "beans"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "004130",
+          "name": "Fagioli, Borlotti, in scatola, scolati",
+          "match_type": "exact",
+          "reason": "Fagioli borlotti in scatola scolati CREA 004130"
+        }
+      }
+    },
+    "lenticchie_secche": {
+      "id": "lenticchie_secche",
+      "display_name_it": "Lenticchie, secche",
+      "display_name_en": "Lentils, dry",
+      "category": "Legumi",
+      "state": "secco, prima della cottura",
+      "expected_qualifiers": {
+        "processing_state": "dry",
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "lentils",
+        "dry lentils",
+        "dried lentils",
+        "brown lentils",
+        "green lentils"
+      ],
+      "synonyms_it": [
+        "lenticchie",
+        "lenticchie secche"
+      ],
+      "usda_ids": [
+        "172420"
+      ],
+      "unitools_ids": [
+        "lentils"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "004500",
+          "name": "Lenticchie, secche",
+          "match_type": "exact",
+          "reason": "Lenticchie secche CREA 004500"
+        }
+      }
+    },
+    "lenticchie_cotte_scatola": {
+      "id": "lenticchie_cotte_scatola",
+      "display_name_it": "Lenticchie, in scatola, scolate",
+      "display_name_en": "Lentils, canned / cooked",
+      "category": "Legumi",
+      "state": "in scatola, scolate, pronte al consumo",
+      "expected_qualifiers": {
+        "processing_state": "canned",
+        "cooking_state": "cooked"
+      },
+      "synonyms_en": [
+        "cooked lentils",
+        "canned lentils",
+        "tinned lentils"
+      ],
+      "synonyms_it": [
+        "lenticchie in scatola",
+        "lenticchie lesse",
+        "lenticchie cotte"
+      ],
+      "usda_ids": [
+        "172421"
+      ],
+      "unitools_ids": [
+        "lentils"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "004510",
+          "name": "Lenticchie, in scatola, scolate",
+          "match_type": "exact",
+          "reason": "Lenticchie in scatola scolate CREA 004510"
+        }
+      }
+    },
+    "piselli_surgelati": {
+      "id": "piselli_surgelati",
+      "display_name_it": "Piselli, surgelati",
+      "display_name_en": "Peas, frozen",
+      "category": "Legumi",
+      "state": "surgelato, prima della cottura",
+      "expected_qualifiers": {
+        "processing_state": "frozen"
+      },
+      "synonyms_en": [
+        "frozen peas",
+        "green peas frozen",
+        "peas"
+      ],
+      "synonyms_it": [
+        "piselli surgelati",
+        "pisellini primavera"
+      ],
+      "usda_ids": [
+        "170016"
+      ],
+      "unitools_ids": [
+        "peas"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "004730",
+          "name": "Piselli, surgelati",
+          "match_type": "exact",
+          "reason": "Piselli surgelati CREA 004730"
+        },
+        "proxies": [
+          {
+            "id": "004720",
+            "name": "Piselli, in scatola, scolati",
+            "match_type": "proxy",
+            "reason": "Piselli in scatola CREA 004720"
+          }
+        ]
+      }
+    },
+    "pasta_semola_secca": {
+      "id": "pasta_semola_secca",
+      "display_name_it": "Pasta di semola",
+      "display_name_en": "Pasta / Spaghetti, dry",
+      "category": "Cereali e derivati",
+      "state": "secca, prima della cottura",
+      "expected_qualifiers": {
+        "processing_state": "dry",
+        "cooking_state": "raw",
+        "grain_type": "refined"
+      },
+      "synonyms_en": [
+        "pasta",
+        "spaghetti",
+        "penne",
+        "rigatoni",
+        "fusilli",
+        "dry pasta",
+        "macaroni",
+        "linguine"
+      ],
+      "synonyms_it": [
+        "pasta",
+        "pasta di semola",
+        "spaghetti",
+        "penne",
+        "fusilli",
+        "rigatoni",
+        "pasta secca"
+      ],
+      "usda_ids": [
+        "168928",
+        "169736"
+      ],
+      "unitools_ids": [
+        "spaghetti",
+        "pasta",
+        "penne",
+        "macaroni",
+        "noodles"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "000800",
+          "name": "Pasta di semola",
+          "match_type": "exact",
+          "reason": "Pasta di semola cruda CREA 000800"
+        },
+        "cooked_alternate": {
+          "id": "000805",
+          "name": "Pasta di semola, cotta, bollita",
+          "match_type": "cooked_alternate",
+          "reason": "Pasta bollita CREA 000805"
+        }
+      },
+      "off_brand_candidates": [
+        {
+          "barcode": "8001250012227",
+          "brand": "De Cecco",
+          "name": "Spaghetti n.12",
+          "match_type": "brand_candidate",
+          "reason": "Spaghetti De Cecco in OFF, numeric_candidate=1"
+        }
+      ]
+    },
+    "pasta_integrale_secca": {
+      "id": "pasta_integrale_secca",
+      "display_name_it": "Pasta di semola, integrale",
+      "display_name_en": "Wholemeal pasta, dry",
+      "category": "Cereali e derivati",
+      "state": "secca, prima della cottura",
+      "expected_qualifiers": {
+        "processing_state": "dry",
+        "cooking_state": "raw",
+        "grain_type": "whole"
+      },
+      "synonyms_en": [
+        "wholemeal pasta",
+        "whole wheat pasta",
+        "whole grain pasta",
+        "wholemeal spaghetti"
+      ],
+      "synonyms_it": [
+        "pasta integrale",
+        "spaghetti integrali",
+        "pasta di semola integrale"
+      ],
+      "usda_ids": [
+        "168936"
+      ],
+      "unitools_ids": [
+        "pasta"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "000850",
+          "name": "Pasta di semola, integrale",
+          "match_type": "exact",
+          "reason": "Pasta integrale cruda CREA 000850"
+        },
+        "cooked_alternate": {
+          "id": "000855",
+          "name": "Pasta di semola, integrale, cotta, bollita",
+          "match_type": "cooked_alternate",
+          "reason": "Pasta integrale cotta CREA 000855"
+        }
+      },
+      "off_brand_candidates": [
+        {
+          "barcode": "8004690611517",
+          "brand": "La Molisana",
+          "name": "Spaghetto quadrato. - Integrale · La Molisana",
+          "match_type": "brand_candidate",
+          "reason": "Spaghetto integrale La Molisana verificato nel solver demo"
+        }
+      ]
+    },
+    "riso_brillato_crudo": {
+      "id": "riso_brillato_crudo",
+      "display_name_it": "Riso, brillato (crudo)",
+      "display_name_en": "White rice, raw",
+      "category": "Cereali e derivati",
+      "state": "crudo, prima della cottura",
+      "expected_qualifiers": {
+        "cooking_state": "raw",
+        "grain_type": "refined"
+      },
+      "synonyms_en": [
+        "rice",
+        "white rice",
+        "long grain rice",
+        "basmati rice",
+        "jasmine rice",
+        "arborio rice",
+        "carnaroli rice"
+      ],
+      "synonyms_it": [
+        "riso",
+        "riso bianco",
+        "riso basmati",
+        "riso carnaroli",
+        "riso arborio",
+        "riso crudo"
+      ],
+      "usda_ids": [
+        "168877",
+        "168878"
+      ],
+      "unitools_ids": [
+        "rice"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "000100",
+          "name": "Riso, brillato",
+          "match_type": "exact",
+          "reason": "Riso brillato crudo CREA 000100"
+        },
+        "proxies": [
+          {
+            "id": "000130",
+            "name": "Riso Basmati, crudo",
+            "match_type": "proxy",
+            "reason": "Riso Basmati crudo CREA 000130"
+          }
+        ],
+        "cooked_alternate": {
+          "id": "000105",
+          "name": "Riso, brillato, cotto, bollito",
+          "match_type": "cooked_alternate",
+          "reason": "Riso cotto bollito CREA 000105"
+        }
+      }
+    },
+    "riso_cotto": {
+      "id": "riso_cotto",
+      "display_name_it": "Riso, brillato, cotto, bollito",
+      "display_name_en": "Cooked white rice",
+      "category": "Cereali e derivati",
+      "state": "cotto, bollito, pronto al consumo",
+      "expected_qualifiers": {
+        "cooking_state": "cooked",
+        "grain_type": "refined"
+      },
+      "synonyms_en": [
+        "cooked rice",
+        "cooked white rice",
+        "boiled rice",
+        "steamed rice"
+      ],
+      "synonyms_it": [
+        "riso cotto",
+        "riso bollito",
+        "riso leso"
+      ],
+      "usda_ids": [
+        "168879"
+      ],
+      "unitools_ids": [
+        "rice"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "000105",
+          "name": "Riso, brillato, cotto, bollito",
+          "match_type": "exact",
+          "reason": "Riso bollito CREA 000105"
+        }
+      }
+    },
+    "riso_integrale_crudo": {
+      "id": "riso_integrale_crudo",
+      "display_name_it": "Riso, integrale (crudo)",
+      "display_name_en": "Brown rice, raw",
+      "category": "Cereali e derivati",
+      "state": "crudo, prima della cottura",
+      "expected_qualifiers": {
+        "cooking_state": "raw",
+        "grain_type": "whole"
+      },
+      "synonyms_en": [
+        "brown rice",
+        "wholegrain rice",
+        "whole grain rice"
+      ],
+      "synonyms_it": [
+        "riso integrale",
+        "riso integrale crudo"
+      ],
+      "usda_ids": [
+        "168884"
+      ],
+      "unitools_ids": [
+        "rice"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "000110",
+          "name": "Riso, integrale",
+          "match_type": "exact",
+          "reason": "Riso integrale crudo CREA 000110"
+        },
+        "cooked_alternate": {
+          "id": "000115",
+          "name": "Riso, integrale, cotto, bollito",
+          "match_type": "cooked_alternate",
+          "reason": "Riso integrale bollito CREA 000115"
+        }
+      }
+    },
+    "farina_grano_00": {
+      "id": "farina_grano_00",
+      "display_name_it": "Farina di frumento, tipo 00",
+      "display_name_en": "Wheat flour / Plain flour",
+      "category": "Cereali e derivati",
+      "state": "farina secca raffinata",
+      "expected_qualifiers": {
+        "grain_type": "refined"
+      },
+      "synonyms_en": [
+        "flour",
+        "plain flour",
+        "all-purpose flour",
+        "white flour",
+        "wheat flour"
+      ],
+      "synonyms_it": [
+        "farina",
+        "farina 00",
+        "farina di frumento",
+        "farina bianca",
+        "farina tipo 00"
+      ],
+      "usda_ids": [
+        "169761"
+      ],
+      "unitools_ids": [
+        "flour"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "000220",
+          "name": "Farina di frumento, tipo 00",
+          "match_type": "exact",
+          "reason": "Farina di frumento tipo 00 CREA 000220"
+        },
+        "proxies": [
+          {
+            "id": "000230",
+            "name": "Farina di frumento, tipo 0",
+            "match_type": "proxy",
+            "reason": "Farina tipo 0 CREA 000230"
+          }
+        ]
+      }
+    },
+    "farina_grano_integrale": {
+      "id": "farina_grano_integrale",
+      "display_name_it": "Farina di frumento, integrale",
+      "display_name_en": "Wholemeal flour",
+      "category": "Cereali e derivati",
+      "state": "farina secca integrale",
+      "expected_qualifiers": {
+        "grain_type": "whole"
+      },
+      "synonyms_en": [
+        "wholemeal flour",
+        "whole wheat flour",
+        "wholegrain flour"
+      ],
+      "synonyms_it": [
+        "farina integrale",
+        "farina di frumento integrale"
+      ],
+      "usda_ids": [
+        "169762"
+      ],
+      "unitools_ids": [
+        "flour"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "000240",
+          "name": "Farina di frumento, integrale",
+          "match_type": "exact",
+          "reason": "Farina integrale CREA 000240"
+        }
+      }
+    },
+    "avena_fiocchi": {
+      "id": "avena_fiocchi",
+      "display_name_it": "Fiocchi d avena",
+      "display_name_en": "Rolled oats",
+      "category": "Cereali e derivati",
+      "state": "fiocchi secchi pronti al consumo/cottura",
+      "synonyms_en": [
+        "rolled oats",
+        "oats",
+        "oatmeal",
+        "porridge oats"
+      ],
+      "synonyms_it": [
+        "fiocchi d avena",
+        "avena",
+        "fiocchi di avena"
+      ],
+      "usda_ids": [
+        "173904"
+      ],
+      "unitools_ids": [
+        "oats"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "003030",
+          "name": "Fiocchi d'avena",
+          "match_type": "exact",
+          "reason": "Fiocchi di avena CREA 003030"
+        }
+      }
+    },
+    "pane_bianco": {
+      "id": "pane_bianco",
+      "display_name_it": "Pane bianco",
+      "display_name_en": "White bread",
+      "category": "Cereali e derivati",
+      "state": "pane pronto al consumo",
+      "expected_qualifiers": {
+        "grain_type": "refined"
+      },
+      "synonyms_en": [
+        "white bread",
+        "bread rolls",
+        "bread roll",
+        "baguette",
+        "french bread",
+        "ciabatta"
+      ],
+      "synonyms_it": [
+        "pane bianco",
+        "panino",
+        "panini",
+        "baguette",
+        "ciabatta"
+      ],
+      "usda_ids": [
+        "172675"
+      ],
+      "unitools_ids": [
+        "bread"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "000530",
+          "name": "Pane bianco",
+          "match_type": "exact",
+          "reason": "Pane bianco CREA 000530"
+        }
+      }
+    },
+    "pane_integrale": {
+      "id": "pane_integrale",
+      "display_name_it": "Pane di tipo integrale",
+      "display_name_en": "Wholemeal bread",
+      "category": "Cereali e derivati",
+      "state": "pane integrale pronto al consumo",
+      "expected_qualifiers": {
+        "grain_type": "whole"
+      },
+      "synonyms_en": [
+        "wholemeal bread",
+        "whole wheat bread",
+        "wholegrain bread"
+      ],
+      "synonyms_it": [
+        "pane integrale",
+        "pane di tipo integrale"
+      ],
+      "usda_ids": [
+        "172688"
+      ],
+      "unitools_ids": [
+        "bread"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "000550",
+          "name": "Pane di tipo integrale",
+          "match_type": "exact",
+          "reason": "Pane integrale CREA 000550"
+        }
+      }
+    },
+    "pollo_petto_crudo": {
+      "id": "pollo_petto_crudo",
+      "display_name_it": "Pollo, petto, crudo",
+      "display_name_en": "Chicken breast, raw",
+      "category": "Carni fresche",
+      "state": "crudo, parte edibile senza pelle",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "chicken breast",
+        "chicken breasts",
+        "raw chicken breast",
+        "skinless boneless chicken breast",
+        "chicken fillets"
+      ],
+      "synonyms_it": [
+        "petto di pollo",
+        "pollo petto",
+        "fette di petto di pollo"
+      ],
+      "usda_ids": [
+        "171077",
+        "171477"
+      ],
+      "unitools_ids": [
+        "chicken",
+        "chickenbreast"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "106500",
+          "name": "Pollo, petto, crudo",
+          "match_type": "exact",
+          "reason": "Pollo petto crudo CREA 106500"
+        },
+        "cooked_alternate": {
+          "id": "106506",
+          "name": "Pollo, petto, cotto, in padella",
+          "match_type": "cooked_alternate",
+          "reason": "Pollo petto cotto CREA 106506"
+        }
+      }
+    },
+    "uovo_gallina_intero": {
+      "id": "uovo_gallina_intero",
+      "display_name_it": "Uova di gallina, intero",
+      "display_name_en": "Egg, whole, raw",
+      "category": "Uova",
+      "state": "uovo fresco intero, sgusciato",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "eggs",
+        "egg",
+        "whole eggs",
+        "fresh eggs"
+      ],
+      "synonyms_it": [
+        "uova",
+        "uovo",
+        "uovo intero",
+        "uova fresche"
+      ],
+      "usda_ids": [
+        "171287"
+      ],
+      "unitools_ids": [
+        "egg",
+        "eggs"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "181100",
+          "name": "Uova di gallina, intero",
+          "match_type": "exact",
+          "reason": "Uovo intero crudo CREA 181100"
+        },
+        "cooked_alternate": {
+          "id": "181105",
+          "name": "Uova di gallina, intero, cotto, alla coque o sodo",
+          "match_type": "cooked_alternate",
+          "reason": "Uovo sodo CREA 181105"
+        }
+      }
+    },
+    "uovo_tuorlo": {
+      "id": "uovo_tuorlo",
+      "display_name_it": "Uova di gallina, tuorlo",
+      "display_name_en": "Egg yolks",
+      "category": "Uova",
+      "state": "tuorlo fresco crudo",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "egg yolks",
+        "egg yolk",
+        "yolks",
+        "yolk"
+      ],
+      "synonyms_it": [
+        "tuorlo",
+        "tuorli",
+        "rosso d uovo"
+      ],
+      "usda_ids": [
+        "172186"
+      ],
+      "unitools_ids": [
+        "yolks",
+        "yolk"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "183010",
+          "name": "Uova di gallina, tuorlo",
+          "match_type": "exact",
+          "reason": "Tuorlo d uovo crudo CREA 183010"
+        }
+      }
+    },
+    "uovo_albume": {
+      "id": "uovo_albume",
+      "display_name_it": "Uova di gallina, albume",
+      "display_name_en": "Egg whites",
+      "category": "Uova",
+      "state": "albume fresco crudo",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "egg whites",
+        "egg white",
+        "whites",
+        "white of egg"
+      ],
+      "synonyms_it": [
+        "albume",
+        "albumi",
+        "bianco d uovo"
+      ],
+      "usda_ids": [
+        "172183"
+      ],
+      "unitools_ids": [
+        "eggwhite",
+        "eggwhites"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "182010",
+          "name": "Uova di gallina, albume",
+          "match_type": "exact",
+          "reason": "Albume d uovo crudo CREA 182010"
+        }
+      }
+    },
+    "manzo_magro_crudo": {
+      "id": "manzo_magro_crudo",
+      "display_name_it": "Bovino adulto o vitellone, fesa, crudo",
+      "display_name_en": "Beef / Minced beef, lean, raw",
+      "category": "Carni fresche",
+      "state": "carne bovina magra cruda",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "beef",
+        "minced beef",
+        "ground beef",
+        "lean beef",
+        "beef steak"
+      ],
+      "synonyms_it": [
+        "manzo",
+        "macinato di manzo",
+        "carne bovina",
+        "fettina di manzo"
+      ],
+      "usda_ids": [
+        "174032",
+        "174036"
+      ],
+      "unitools_ids": [
+        "beef",
+        "mincedbeef"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "101160",
+          "name": "Bovino adulto o vitellone, fesa, crudo",
+          "match_type": "exact",
+          "reason": "Vitellone fesa crudo CREA 101160"
+        }
+      }
+    },
+    "maiale_lombo_crudo": {
+      "id": "maiale_lombo_crudo",
+      "display_name_it": "Maiale, lombo, crudo",
+      "display_name_en": "Pork loin / Minced pork, raw",
+      "category": "Carni fresche",
+      "state": "carne suina cruda",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "pork",
+        "pork loin",
+        "minced pork",
+        "ground pork",
+        "pork chops"
+      ],
+      "synonyms_it": [
+        "maiale",
+        "lonza di maiale",
+        "macinato di maiale",
+        "arista"
+      ],
+      "usda_ids": [
+        "168248"
+      ],
+      "unitools_ids": [
+        "pork"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "105210",
+          "name": "Maiale, lombo, crudo",
+          "match_type": "exact",
+          "reason": "Maiale lombo crudo CREA 105210"
+        }
+      }
+    },
+    "pancetta_affettata": {
+      "id": "pancetta_affettata",
+      "display_name_it": "Pancetta tesa",
+      "display_name_en": "Bacon / Pancetta / Guanciale proxy",
+      "category": "Carni trasformate e conservate",
+      "state": "salume stagionato da cuocere / pronto",
+      "synonyms_en": [
+        "bacon",
+        "smoked bacon",
+        "pancetta",
+        "guanciale",
+        "streaky bacon"
+      ],
+      "synonyms_it": [
+        "pancetta",
+        "guanciale",
+        "bacon"
+      ],
+      "usda_ids": [
+        "168277"
+      ],
+      "unitools_ids": [
+        "bacon",
+        "guanciale",
+        "pancetta"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "110310",
+          "name": "Pancetta tesa",
+          "match_type": "proxy",
+          "reason": "Pancetta tesa CREA 110310 come proxy di guanciale e bacon"
+        }
+      }
+    },
+    "prosciutto_cotto": {
+      "id": "prosciutto_cotto",
+      "display_name_it": "Prosciutto cotto",
+      "display_name_en": "Ham, cooked",
+      "category": "Carni trasformate e conservate",
+      "state": "salume cotto affettato",
+      "expected_qualifiers": {
+        "cooking_state": "cooked"
+      },
+      "synonyms_en": [
+        "ham",
+        "cooked ham"
+      ],
+      "synonyms_it": [
+        "prosciutto cotto"
+      ],
+      "usda_ids": [
+        "168341"
+      ],
+      "unitools_ids": [
+        "ham"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "110400",
+          "name": "Prosciutto cotto",
+          "match_type": "exact",
+          "reason": "Prosciutto cotto CREA 110400"
+        }
+      }
+    },
+    "prosciutto_crudo": {
+      "id": "prosciutto_crudo",
+      "display_name_it": "Prosciutto crudo DOP, di Parma",
+      "display_name_en": "Prosciutto crudo",
+      "category": "Carni trasformate e conservate",
+      "state": "salume crudo stagionato affettato",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "prosciutto",
+        "parma ham",
+        "cured ham"
+      ],
+      "synonyms_it": [
+        "prosciutto crudo",
+        "prosciutto di parma"
+      ],
+      "usda_ids": [
+        "175172"
+      ],
+      "unitools_ids": [
+        "prosciutto"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "110510",
+          "name": "Prosciutto crudo DOP, di Parma",
+          "match_type": "exact",
+          "reason": "Prosciutto crudo Parma CREA 110510"
+        }
+      }
+    },
+    "salmone_fresco_crudo": {
+      "id": "salmone_fresco_crudo",
+      "display_name_it": "Salmone",
+      "display_name_en": "Salmon, raw",
+      "category": "Prodotti della pesca",
+      "state": "pesce fresco crudo",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "salmon",
+        "salmon fillets",
+        "fresh salmon"
+      ],
+      "synonyms_it": [
+        "salmone",
+        "trancio di salmone",
+        "salmone fresco"
+      ],
+      "usda_ids": [
+        "173686"
+      ],
+      "unitools_ids": [
+        "salmon"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "122400",
+          "name": "Salmone",
+          "match_type": "exact",
+          "reason": "Salmone fresco CREA 122400"
+        }
+      }
+    },
+    "tonno_scatola_naturale": {
+      "id": "tonno_scatola_naturale",
+      "display_name_it": "Tonno in salamoia, sgocciolato",
+      "display_name_en": "Tuna canned in brine / water, drained",
+      "category": "Prodotti della pesca",
+      "state": "conservato in salamoia, sgocciolato",
+      "expected_qualifiers": {
+        "processing_state": "drained"
+      },
+      "synonyms_en": [
+        "tuna in water",
+        "tinned tuna in spring water",
+        "canned tuna in brine",
+        "tuna in brine"
+      ],
+      "synonyms_it": [
+        "tonno al naturale",
+        "tonno in scatola al naturale"
+      ],
+      "usda_ids": [
+        "171986"
+      ],
+      "unitools_ids": [
+        "tuna"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "123550",
+          "name": "Tonno in salamoia, sgocciolato",
+          "match_type": "exact",
+          "reason": "Tonno in salamoia sgocciolato CREA 123550"
+        }
+      }
+    },
+    "tonno_scatola_olio": {
+      "id": "tonno_scatola_olio",
+      "display_name_it": "Tonno sott olio, sgocciolato",
+      "display_name_en": "Tuna canned in oil, drained",
+      "category": "Prodotti della pesca",
+      "state": "conservato sott olio, sgocciolato",
+      "expected_qualifiers": {
+        "processing_state": "drained"
+      },
+      "synonyms_en": [
+        "tuna in oil",
+        "tinned tuna in oil",
+        "canned tuna in olive oil",
+        "tinned tuna",
+        "canned tuna"
+      ],
+      "synonyms_it": [
+        "tonno sott olio",
+        "tonno in scatola",
+        "tonno all olio di oliva"
+      ],
+      "usda_ids": [
+        "175159"
+      ],
+      "unitools_ids": [
+        "tuna"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "123610",
+          "name": "Tonno sott'olio, sgocciolato",
+          "match_type": "exact",
+          "reason": "Tonno sott olio sgocciolato CREA 123610"
+        }
+      }
+    },
+    "latte_vacca_parz_scremato": {
+      "id": "latte_vacca_parz_scremato",
+      "display_name_it": "Latte di vacca, pastorizzato, parzialmente scremato",
+      "display_name_en": "Semi-skimmed milk",
+      "category": "Latte e yogurt",
+      "state": "liquido pronto al consumo",
+      "expected_qualifiers": {
+        "fat_level": "semi_skimmed"
+      },
+      "synonyms_en": [
+        "milk",
+        "semi-skimmed milk",
+        "semi skimmed milk",
+        "2% milk",
+        "low fat milk"
+      ],
+      "synonyms_it": [
+        "latte",
+        "latte parzialmente scremato",
+        "latte p.s."
+      ],
+      "usda_ids": [
+        "171267"
+      ],
+      "unitools_ids": [
+        "milk"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "135020",
+          "name": "Latte di vacca, pastorizzato, parzialmente scremato",
+          "match_type": "exact",
+          "reason": "Latte vaccino parzialmente scremato CREA 135020"
+        }
+      },
+      "density_g_per_ml": 1.03
+    },
+    "latte_vacca_intero": {
+      "id": "latte_vacca_intero",
+      "display_name_it": "Latte di vacca, pastorizzato, intero",
+      "display_name_en": "Whole milk",
+      "category": "Latte e yogurt",
+      "state": "liquido pronto al consumo",
+      "expected_qualifiers": {
+        "fat_level": "whole"
+      },
+      "synonyms_en": [
+        "whole milk",
+        "full cream milk",
+        "homogenized milk"
+      ],
+      "synonyms_it": [
+        "latte intero",
+        "latte di vacca intero"
+      ],
+      "usda_ids": [
+        "171265"
+      ],
+      "unitools_ids": [
+        "milk"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "135010",
+          "name": "Latte di vacca, pastorizzato, intero",
+          "match_type": "exact",
+          "reason": "Latte vaccino intero CREA 135010"
+        }
+      },
+      "density_g_per_ml": 1.03
+    },
+    "mozzarella_vacca": {
+      "id": "mozzarella_vacca",
+      "display_name_it": "Mozzarella di vacca",
+      "display_name_en": "Mozzarella",
+      "category": "Formaggi e latticini",
+      "state": "mozzarella pronta al consumo",
+      "synonyms_en": [
+        "mozzarella",
+        "fresh mozzarella",
+        "mozzarella cheese"
+      ],
+      "synonyms_it": [
+        "mozzarella",
+        "fior di latte",
+        "mozzarella di vacca"
+      ],
+      "usda_ids": [
+        "170845"
+      ],
+      "unitools_ids": [
+        "mozzarella"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "164820",
+          "name": "Mozzarella di vacca",
+          "match_type": "exact",
+          "reason": "Mozzarella di vacca CREA 164820"
+        }
+      }
+    },
+    "grana_padano": {
+      "id": "grana_padano",
+      "display_name_it": "Grana Padano, DOP",
+      "display_name_en": "Parmesan / Grana Padano",
+      "category": "Formaggi e latticini",
+      "state": "formaggio stagionato grattugiato / scaglie",
+      "synonyms_en": [
+        "parmesan",
+        "parmigiano",
+        "grana padano",
+        "parmesan cheese",
+        "grated parmesan"
+      ],
+      "synonyms_it": [
+        "parmigiano",
+        "grana",
+        "grana padano",
+        "parmigiano reggiano"
+      ],
+      "usda_ids": [
+        "170849"
+      ],
+      "unitools_ids": [
+        "parmesan"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "162410",
+          "name": "Grana Padano, DOP",
+          "match_type": "exact",
+          "reason": "Grana Padano DOP CREA 162410"
+        }
+      }
+    },
+    "ricotta_vacca": {
+      "id": "ricotta_vacca",
+      "display_name_it": "Ricotta di vacca",
+      "display_name_en": "Ricotta cheese",
+      "category": "Formaggi e latticini",
+      "state": "latticino fresco pronto al consumo",
+      "synonyms_en": [
+        "ricotta",
+        "ricotta cheese"
+      ],
+      "synonyms_it": [
+        "ricotta",
+        "ricotta vaccina",
+        "ricotta di vacca"
+      ],
+      "usda_ids": [
+        "170851"
+      ],
+      "unitools_ids": [
+        "ricotta"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "166820",
+          "name": "Ricotta di vacca",
+          "match_type": "exact",
+          "reason": "Ricotta di vacca CREA 166820"
+        }
+      }
+    },
+    "feta": {
+      "id": "feta",
+      "display_name_it": "Feta",
+      "display_name_en": "Feta cheese",
+      "category": "Formaggi e latticini",
+      "state": "formaggio in salamoia sbriciolato",
+      "synonyms_en": [
+        "feta",
+        "feta cheese"
+      ],
+      "synonyms_it": [
+        "feta",
+        "formaggio feta"
+      ],
+      "usda_ids": [
+        "173420"
+      ],
+      "unitools_ids": [
+        "feta"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "162000",
+          "name": "Feta",
+          "match_type": "exact",
+          "reason": "Feta greca CREA 162000"
+        }
+      }
+    },
+    "yogurt_intero": {
+      "id": "yogurt_intero",
+      "display_name_it": "Yogurt, da latte intero",
+      "display_name_en": "Plain yoghurt, whole",
+      "category": "Latte e yogurt",
+      "state": "yogurt bianco intero non zuccherato",
+      "expected_qualifiers": {
+        "fat_level": "whole",
+        "sweetness": "unsweetened"
+      },
+      "synonyms_en": [
+        "plain yoghurt",
+        "plain yogurt",
+        "natural yogurt",
+        "whole milk yogurt"
+      ],
+      "synonyms_it": [
+        "yogurt bianco",
+        "yogurt intero",
+        "yogurt naturale"
+      ],
+      "usda_ids": [
+        "170886"
+      ],
+      "unitools_ids": [
+        "yogurt",
+        "yoghurt"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "150010",
+          "name": "Yogurt, da latte intero",
+          "match_type": "exact",
+          "reason": "Yogurt da latte intero CREA 150010"
+        }
+      }
+    },
+    "yogurt_greco": {
+      "id": "yogurt_greco",
+      "display_name_it": "Yogurt greco, da latte intero",
+      "display_name_en": "Greek yoghurt",
+      "category": "Latte e yogurt",
+      "state": "yogurt colato denso",
+      "synonyms_en": [
+        "greek yoghurt",
+        "greek yogurt",
+        "thick yoghurt"
+      ],
+      "synonyms_it": [
+        "yogurt greco"
+      ],
+      "usda_ids": [
+        "170903"
+      ],
+      "unitools_ids": [
+        "greekyogurt"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "150020",
+          "name": "Yogurt greco, da latte intero",
+          "match_type": "exact",
+          "reason": "Yogurt greco CREA 150020"
+        }
+      }
+    },
+    "yogurt_greco_0": {
+      "id": "yogurt_greco_0",
+      "display_name_it": "Yogurt greco, 0% lipidi",
+      "display_name_en": "Greek yoghurt 0% / plain skyr",
+      "category": "Latte e yogurt",
+      "state": "yogurt greco magro 0%",
+      "expected_qualifiers": {
+        "fat_level": "skimmed"
+      },
+      "synonyms_en": [
+        "plain skyr",
+        "skyr",
+        "greek yogurt 0%",
+        "fat free greek yogurt",
+        "0% yoghurt"
+      ],
+      "synonyms_it": [
+        "yogurt greco 0%",
+        "skyr"
+      ],
+      "usda_ids": [
+        "170894"
+      ],
+      "unitools_ids": [
+        "skyr"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "150030",
+          "name": "Yogurt greco, 0% lipidi",
+          "match_type": "exact",
+          "reason": "Yogurt greco 0% grassi CREA 150030"
+        }
+      }
+    },
+    "mele_fresche": {
+      "id": "mele_fresche",
+      "display_name_it": "Mele, fresche, con buccia",
+      "display_name_en": "Apples, fresh",
+      "category": "Frutta",
+      "state": "fresco, parte edibile con buccia",
+      "synonyms_en": [
+        "apples",
+        "apple",
+        "eating apple"
+      ],
+      "synonyms_it": [
+        "mela",
+        "mele"
+      ],
+      "usda_ids": [
+        "171688"
+      ],
+      "unitools_ids": [
+        "apple"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "007120",
+          "name": "Mele, fresche, con buccia",
+          "match_type": "exact",
+          "reason": "Mele fresche con buccia CREA 007120"
+        }
+      }
+    },
+    "pere_fresche": {
+      "id": "pere_fresche",
+      "display_name_it": "Pere, fresche",
+      "display_name_en": "Pears, fresh",
+      "category": "Frutta",
+      "state": "fresco, parte edibile",
+      "synonyms_en": [
+        "pears",
+        "pear"
+      ],
+      "synonyms_it": [
+        "pera",
+        "pere"
+      ],
+      "usda_ids": [
+        "169118"
+      ],
+      "unitools_ids": [
+        "pear"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "007260",
+          "name": "Pere, fresche, senza buccia",
+          "match_type": "exact",
+          "reason": "Pere fresche CREA 007260"
+        }
+      }
+    },
+    "fragole_fresche": {
+      "id": "fragole_fresche",
+      "display_name_it": "Fragole, fresche",
+      "display_name_en": "Strawberries, fresh",
+      "category": "Frutta",
+      "state": "fresco, parte edibile",
+      "synonyms_en": [
+        "strawberries",
+        "strawberry"
+      ],
+      "synonyms_it": [
+        "fragole",
+        "fragola"
+      ],
+      "usda_ids": [
+        "167762"
+      ],
+      "unitools_ids": [
+        "strawberry"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "007730",
+          "name": "Fragole, fresche",
+          "match_type": "exact",
+          "reason": "Fragole fresche CREA 007730"
+        }
+      }
+    },
+    "succo_limone": {
+      "id": "succo_limone",
+      "display_name_it": "Limoni, succo",
+      "display_name_en": "Lemon juice",
+      "category": "Frutta",
+      "state": "succo spremuto",
+      "synonyms_en": [
+        "lemon juice",
+        "fresh lemon juice",
+        "lemon",
+        "lemons"
+      ],
+      "synonyms_it": [
+        "succo di limone",
+        "limone",
+        "spremuta di limone"
+      ],
+      "usda_ids": [
+        "167747"
+      ],
+      "unitools_ids": [
+        "lemon",
+        "lemonjuice"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "008040",
+          "name": "Limoni, succo",
+          "match_type": "exact",
+          "reason": "Succo di limone CREA 008040"
+        }
+      },
+      "density_g_per_ml": 1.03
+    },
+    "olive_nere": {
+      "id": "olive_nere",
+      "display_name_it": "Olive, nere",
+      "display_name_en": "Black olives",
+      "category": "Frutta",
+      "state": "olive nere denocciolate, parte edibile",
+      "synonyms_en": [
+        "black olives",
+        "kalamata olives",
+        "ripe olives"
+      ],
+      "synonyms_it": [
+        "olive nere",
+        "olive taggiasche nere"
+      ],
+      "usda_ids": [
+        "173766"
+      ],
+      "unitools_ids": [
+        "olives"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "008810",
+          "name": "Olive, nere",
+          "match_type": "exact",
+          "reason": "Olive nere CREA 008810"
+        }
+      }
+    },
+    "mandorle_secche": {
+      "id": "mandorle_secche",
+      "display_name_it": "Mandorle dolci, secche",
+      "display_name_en": "Almonds",
+      "category": "Frutta secca a guscio e semi oleaginosi",
+      "state": "secco sgusciato",
+      "synonyms_en": [
+        "almonds",
+        "flaked almonds",
+        "blanched almonds"
+      ],
+      "synonyms_it": [
+        "mandorle",
+        "mandorle pelate",
+        "mandorle a lamelle"
+      ],
+      "usda_ids": [
+        "170567"
+      ],
+      "unitools_ids": [
+        "almonds"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "008540",
+          "name": "Mandorle dolci, secche",
+          "match_type": "exact",
+          "reason": "Mandorle secche CREA 008540"
+        }
+      }
+    },
+    "noci": {
+      "id": "noci",
+      "display_name_it": "Noci, secche",
+      "display_name_en": "Walnuts",
+      "category": "Frutta secca a guscio e semi oleaginosi",
+      "state": "secco sgusciato",
+      "synonyms_en": [
+        "walnuts",
+        "walnut halves",
+        "chopped walnuts"
+      ],
+      "synonyms_it": [
+        "noci",
+        "gherigli di noce"
+      ],
+      "usda_ids": [
+        "170187"
+      ],
+      "unitools_ids": [
+        "walnuts"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "008570",
+          "name": "Noci, secche",
+          "match_type": "exact",
+          "reason": "Noci secche CREA 008570"
+        }
+      }
+    },
+    "acqua": {
+      "id": "acqua",
+      "display_name_it": "Acqua pura",
+      "display_name_en": "Water",
+      "category": "Bevande",
+      "state": "acqua potabile naturale",
+      "synonyms_en": [
+        "water",
+        "warm water",
+        "cold water",
+        "tap water"
+      ],
+      "synonyms_it": [
+        "acqua",
+        "acqua tiepida",
+        "acqua fredda"
+      ],
+      "usda_ids": [
+        "173909"
+      ],
+      "unitools_ids": [
+        "water"
+      ],
+      "special_source": "water",
+      "density_g_per_ml": 1.0,
+      "crea_matches": {}
+    },
+    "sale": {
+      "id": "sale",
+      "display_name_it": "Sale da cucina",
+      "display_name_en": "Salt",
+      "category": "Prodotti vari",
+      "state": "sale da cucina / marino",
+      "synonyms_en": [
+        "salt",
+        "fine sea salt",
+        "sea salt",
+        "table salt",
+        "coarse salt",
+        "kosher salt"
+      ],
+      "synonyms_it": [
+        "sale",
+        "sale fino",
+        "sale grosso",
+        "sale marino"
+      ],
+      "usda_ids": [
+        "173468"
+      ],
+      "unitools_ids": [
+        "salt"
+      ],
+      "crea_matches": {},
+      "off_brand_candidates": [
+        {
+          "barcode": "0000720656334",
+          "brand": "Selex",
+          "name": "Sale Marino Grosso Iodato",
+          "match_type": "brand_candidate",
+          "reason": "Sale iodato Selex in OFF, numeric_candidate=1"
+        }
+      ]
+    },
+    "sale_e_pepe": {
+      "id": "sale_e_pepe",
+      "display_name_it": "Sale e pepe (ingrediente composto)",
+      "display_name_en": "Salt and pepper",
+      "category": "Prodotti vari",
+      "state": "miscela composita sale + pepe (richiede revisione o split)",
+      "synonyms_en": [
+        "salt and pepper",
+        "salt and black pepper",
+        "salt and freshly ground black pepper"
+      ],
+      "synonyms_it": [
+        "sale e pepe"
+      ],
+      "usda_ids": [],
+      "unitools_ids": [
+        "salt"
+      ],
+      "crea_matches": {},
+      "flags": {
+        "composite": true,
+        "requires_explicit_review": true
+      }
+    },
+    "pepe_nero": {
+      "id": "pepe_nero",
+      "display_name_it": "Pepe nero",
+      "display_name_en": "Black pepper",
+      "category": "Verdure e ortaggi",
+      "state": "spezia essiccata macinata",
+      "synonyms_en": [
+        "black pepper",
+        "ground black pepper",
+        "freshly ground black pepper",
+        "pepper"
+      ],
+      "synonyms_it": [
+        "pepe nero",
+        "pepe",
+        "pepe macinato"
+      ],
+      "usda_ids": [
+        "170931"
+      ],
+      "unitools_ids": [
+        "blackpepper",
+        "pepper"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "006820",
+          "name": "Pepe nero",
+          "match_type": "exact",
+          "reason": "Pepe nero CREA 006820"
+        }
+      }
+    },
+    "peperoncino_fresco": {
+      "id": "peperoncino_fresco",
+      "display_name_it": "Peperoncini piccanti, freschi",
+      "display_name_en": "Chilli, fresh",
+      "category": "Verdure e ortaggi",
+      "state": "fresco piccante",
+      "synonyms_en": [
+        "chilli",
+        "chili",
+        "red chilli",
+        "fresh chilli",
+        "red chili pepper"
+      ],
+      "synonyms_it": [
+        "peperoncino",
+        "peperoncino piccante",
+        "peperoncino fresco"
+      ],
+      "usda_ids": [
+        "170438"
+      ],
+      "unitools_ids": [
+        "chili",
+        "chillies"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "006830",
+          "name": "Peperoncini piccanti, freschi",
+          "match_type": "exact",
+          "reason": "Peperoncini piccanti freschi CREA 006830"
+        }
+      }
+    },
+    "zucchero": {
+      "id": "zucchero",
+      "display_name_it": "Zucchero, saccarosio",
+      "display_name_en": "Sugar",
+      "category": "Dolci",
+      "state": "zucchero semolato bianco",
+      "synonyms_en": [
+        "sugar",
+        "white sugar",
+        "granulated sugar",
+        "caster sugar"
+      ],
+      "synonyms_it": [
+        "zucchero",
+        "zucchero semolato",
+        "zucchero bianco"
+      ],
+      "usda_ids": [
+        "169655"
+      ],
+      "unitools_ids": [
+        "sugar"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "201500",
+          "name": "Zucchero, saccarosio",
+          "match_type": "exact",
+          "reason": "Zucchero saccarosio CREA 201500"
+        }
+      }
+    },
+    "miele": {
+      "id": "miele",
+      "display_name_it": "Miele",
+      "display_name_en": "Honey",
+      "category": "Dolci",
+      "state": "miele fluido",
+      "synonyms_en": [
+        "honey",
+        "runny honey",
+        "clear honey"
+      ],
+      "synonyms_it": [
+        "miele",
+        "miele millefiori"
+      ],
+      "usda_ids": [
+        "169640"
+      ],
+      "unitools_ids": [
+        "honey"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "210010",
+          "name": "Miele",
+          "match_type": "exact",
+          "reason": "Miele CREA 210010"
+        }
+      }
+    },
+    "salsa_soia": {
+      "id": "salsa_soia",
+      "display_name_it": "Soia, salsa",
+      "display_name_en": "Soy sauce",
+      "category": "Prodotti vari",
+      "state": "salsa fermentata di soia",
+      "synonyms_en": [
+        "soy sauce",
+        "light soy sauce",
+        "dark soy sauce",
+        "soya sauce"
+      ],
+      "synonyms_it": [
+        "salsa di soia",
+        "salsa soia"
+      ],
+      "usda_ids": [
+        "174277"
+      ],
+      "unitools_ids": [
+        "soysauce"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "509020",
+          "name": "Soia, salsa",
+          "match_type": "exact",
+          "reason": "Soia salsa CREA 509020"
+        }
+      },
+      "density_g_per_ml": 1.15
+    },
+    "lievito_birra": {
+      "id": "lievito_birra",
+      "display_name_it": "Lievito di birra, compresso",
+      "display_name_en": "Yeast",
+      "category": "Prodotti vari",
+      "state": "lievito per panificazione",
+      "synonyms_en": [
+        "yeast",
+        "dry yeast",
+        "active dry yeast",
+        "instant yeast",
+        "fresh yeast"
+      ],
+      "synonyms_it": [
+        "lievito di birra",
+        "lievito secco",
+        "lievito di birra secco"
+      ],
+      "usda_ids": [
+        "171295"
+      ],
+      "unitools_ids": [
+        "yeast"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "503100",
+          "name": "Lievito di birra, compresso",
+          "match_type": "exact",
+          "reason": "Lievito di birra CREA 503100"
+        }
+      }
+    },
+    "vino_bianco": {
+      "id": "vino_bianco",
+      "display_name_it": "Bevanda alcolica, Vino da pasto bianco",
+      "display_name_en": "White wine",
+      "category": "Bevande alcoliche",
+      "state": "vino bianco da tavola / cottura",
+      "synonyms_en": [
+        "white wine",
+        "dry white wine",
+        "cooking white wine"
+      ],
+      "synonyms_it": [
+        "vino bianco",
+        "vino bianco secco"
+      ],
+      "usda_ids": [
+        "174837"
+      ],
+      "unitools_ids": [
+        "whitewine"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "405010",
+          "name": "Bevanda alcolica, Vino da pasto bianco",
+          "match_type": "exact",
+          "reason": "Vino bianco da pasto CREA 405010"
+        }
+      },
+      "density_g_per_ml": 0.99
+    },
+    "vino_rosso": {
+      "id": "vino_rosso",
+      "display_name_it": "Bevanda alcolica, Vino da pasto rosso",
+      "display_name_en": "Red wine",
+      "category": "Bevande alcoliche",
+      "state": "vino rosso da tavola / cottura",
+      "synonyms_en": [
+        "red wine",
+        "dry red wine"
+      ],
+      "synonyms_it": [
+        "vino rosso",
+        "vino rosso secco"
+      ],
+      "usda_ids": [
+        "174835"
+      ],
+      "unitools_ids": [
+        "redwine"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "405020",
+          "name": "Bevanda alcolica, Vino da pasto rosso",
+          "match_type": "exact",
+          "reason": "Vino rosso da pasto CREA 405020"
+        }
+      },
+      "density_g_per_ml": 0.99
+    },
+    "brodo_vegetale": {
+      "id": "brodo_vegetale",
+      "display_name_it": "Brodo vegetale",
+      "display_name_en": "Vegetable stock",
+      "category": "Prodotti vari",
+      "state": "brodo vegetale pronto (liquido)",
+      "synonyms_en": [
+        "vegetable stock",
+        "vegetable broth"
+      ],
+      "synonyms_it": [
+        "brodo vegetale"
+      ],
+      "usda_ids": [
+        "171583"
+      ],
+      "unitools_ids": [
+        "vegetablestock"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "503010",
+          "name": "Dadi da brodo",
+          "match_type": "proxy",
+          "reason": "Dadi da brodo CREA 503010 come proxy per brodo concentrato (richiede densità/diluizione)"
+        }
+      },
+      "density_g_per_ml": 1.0
+    },
+    "brodo_pollo": {
+      "id": "brodo_pollo",
+      "display_name_it": "Brodo di pollo",
+      "display_name_en": "Chicken stock",
+      "category": "Prodotti vari",
+      "state": "brodo di carne pronto (liquido)",
+      "synonyms_en": [
+        "chicken stock",
+        "chicken broth"
+      ],
+      "synonyms_it": [
+        "brodo di pollo",
+        "brodo di carne"
+      ],
+      "usda_ids": [
+        "174536"
+      ],
+      "unitools_ids": [
+        "chickenstock"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "503010",
+          "name": "Dadi da brodo",
+          "match_type": "proxy",
+          "reason": "Dadi da brodo CREA 503010 come proxy (richiede densità/diluizione)"
+        }
+      },
+      "density_g_per_ml": 1.0
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "version": "1.0",
+  "description": "Associazioni tra ricette e immagini illustrative da Wikimedia Commons con attribuzione di licenza e autore. Ingredienti e porzioni reali possono differire.",
+  "images": {
+    "demo:pasta-pomodoro": {
+      "recipe_id": "demo:pasta-pomodoro",
+      "recipe_title": "Pasta al pomodoro · ricetta dimostrativa",
+      "search_term": "Pasta al pomodoro",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Spaghetti_al_pomodoro.jpg",
+      "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Spaghetti_al_pomodoro.jpg/640px-Spaghetti_al_pomodoro.jpg",
+      "title": "File:Spaghetti al pomodoro.jpg",
+      "author": "F Ceragioli",
+      "author_url": "https://commons.wikimedia.org/wiki/User:F_Ceragioli",
+      "license": "CC BY-SA 3.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Spaghetti_al_pomodoro.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
+    "unitools:spaghetti-carbonara": {
+      "recipe_id": "unitools:spaghetti-carbonara",
+      "recipe_title": "Spaghetti carbonara",
+      "search_term": "Spaghetti alla carbonara",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/3/33/Espaguetis_carbonara.jpg",
+      "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Espaguetis_carbonara.jpg/640px-Espaguetis_carbonara.jpg",
+      "title": "File:Espaguetis carbonara.jpg",
+      "author": "User:El coleccionista de instantes",
+      "author_url": "https://www.flickr.com/people/40434444@N00",
+      "license": "CC BY-SA 2.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Espaguetis_carbonara.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
+    "foodose:R315": {
+      "recipe_id": "foodose:R315",
+      "recipe_title": "Panino con mozzarella, pomodoro, olive e basilico",
+      "search_term": "Caprese sandwich panino",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/5/50/Panino_Caprese.jpg",
+      "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Panino_Caprese.jpg/640px-Panino_Caprese.jpg",
+      "title": "File:Panino Caprese.jpg",
+      "author": "Luca Nebuloni",
+      "author_url": "https://www.flickr.com/people/13072210@N00",
+      "license": "CC BY 2.0",
+      "license_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Panino_Caprese.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
+    "unitools:risotto-alla-milanese": {
+      "recipe_id": "unitools:risotto-alla-milanese",
+      "recipe_title": "Risotto alla milanese",
+      "search_term": "Risotto alla milanese",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/1/12/Ossobuco_con_risotto_alla_milanese.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/12/Ossobuco_con_risotto_alla_milanese.jpg/960px-Ossobuco_con_risotto_alla_milanese.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Ossobuco con risotto alla milanese.jpg",
+      "author": "pier",
+      "author_url": "//commons.wikimedia.org/w/index.php?title=User:Brazeone&amp;action=edit&amp;redlink=1",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Ossobuco_con_risotto_alla_milanese.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "source": "foodose",
+  "recipes": 333,
+  "cuisines": {
+    "American": 32,
+    "Northern European": 18,
+    "French": 36,
+    "Mediterranean": 25,
+    "British": 46,
+    "Italian": 72,
+    "Greek": 15,
+    "Eastern European": 12,
+    "Middle Eastern": 25,
+    "Mexican": 11,
+    "East Asian": 12,
+    "Spanish": 10,
+    "Moroccan": 1,
+    "Cuban": 1,
+    "Swiss": 2,
+    "West African": 1,
+    "Indian": 1,
+    "Modern European": 3,
+    "Southeast Asian": 4,
+    "North Indian": 4,
+    "German": 1,
+    "South Indian": 1
+  },
+  "all_ingredient_masses_known": 300,
+  "source_files": {
+    "foodose/raw/recipes.csv": {
+      "url": "https://www.foodose.co/glp1-recipes/nutrition-data/recipes.csv",
+      "sha256": "37774018f19e1025e7462bb210d231a97703115a259205d11b37ebb9c91d0032"
+    },
+    "foodose/raw/ingredients.csv": {
+      "url": "https://www.foodose.co/glp1-recipes/nutrition-data/ingredients.csv",
+      "sha256": "3c059354f7130cc3ee680771b28a390a77d4d71bfb95e4fe136d5b825c1a2c72"
+    }
+  },
+  "normalized_sha256": "43e70eabfbaa0095bcee3aba598fba1709e805085719ef4f828ec1b2a2f4768d",
+  "license": "CC BY 4.0",
+  "imported_at": "2026-10-04T00:56:38.461218+00:00",
+  "solver_eligible": 0
+}

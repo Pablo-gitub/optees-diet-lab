@@ -12,7 +12,9 @@ Il budget iniziale di 10 ore è stato ampliato, senza fissare ancora un nuovo li
 
 - Repository locale inizializzato; nessun remote configurato.
 - Importatore CREA da schede ufficiali, con cache e provenienza.
-- Solver, modello personale, Pareto e bandit non ancora implementati.
+- Pianificatori MILP via Optees e interfaccia locale con profili separati.
+- Cataloghi di prodotti italiani e ricette dal mondo consultabili offline.
+- Pareto e bandit non ancora implementati.
 
 ## Importazione CREA
 
@@ -25,3 +27,27 @@ La cache evita di riscaricare le schede già ottenute. `--limit 5` importa un ca
 
 Output e attribuzione: [dataset/crea/README.md](dataset/crea/README.md).
 Architettura prevista: [docs/design.md](docs/design.md).
+Roadmap, interfaccia e fasi di sviluppo: [docs/roadmap.md](docs/roadmap.md).
+Primo pianificatore settimanale via MCP: [docs/weekly-planner.md](docs/weekly-planner.md).
+
+## Interfaccia locale
+
+Avviare `./scripts/start_web.sh` e aprire http://127.0.0.1:8765.
+Per la rete domestica: `DIET_WEB_HOST=0.0.0.0 ./scripts/start_web.sh`.
+Credenziali iniziali Paolo in `data/personal/web_access.txt`, escluso da Git.
+I nuovi profili partono senza dati personali di Paolo. Dettagli e limiti in
+[docs/web-interface.md](docs/web-interface.md).
+
+## Prodotti di marca
+
+Catalogo italiano Open Food Facts separato da CREA, importabile con
+`python scripts/import_open_food_facts.py` e indicizzabile con
+`python scripts/build_branded_catalog.py`. Ricerca offline:
+`python scripts/build_branded_catalog.py --search 'La Molisana'`.
+Fonte, licenza e controlli qualità in [dataset/open_food_facts/README.md](dataset/open_food_facts/README.md).
+
+## Ricette dal mondo
+
+Importare con `python scripts/import_recipes.py --download`; rigenerare dagli originali locali omettendo `--download`. La pagina Ricette permette ricerca e filtro della cucina; nel profilo si salvano le cucine preferite. Fonti, licenze e stato del ricalcolo nutrienti in [dataset/recipes/README.md](dataset/recipes/README.md). Le ricette non sono ancora integrate nel solver.
+
+Il [solver delle ricette](docs/recipe-solver.md) sceglie prodotti e quantità con proporzioni flessibili; attualmente due composizioni con mapping esplicito, senza integrazione automatica nei piani delle diete.

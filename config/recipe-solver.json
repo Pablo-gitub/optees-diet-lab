@@ -1,0 +1,182 @@
+{
+  "recipes": [
+    {
+      "id": "demo:pasta-pomodoro",
+      "title": "Pasta al pomodoro · ricetta dimostrativa",
+      "cuisine_id": "italian",
+      "source": "Local demo",
+      "reference_note": "Composizione locale esplicita, non ricetta importata né dieta prescritta. Variante integrale ammessa. Revisione delle associazioni basata sui nomi, ingredienti e stato del catalogo, non su verifica della confezione attuale.",
+      "ingredients": [
+        {
+          "key": "pasta",
+          "name": "Pasta secca",
+          "grams_per_reference_portion": 80,
+          "state": "secca, prima della cottura",
+          "candidates": [
+            {
+              "source": "CREA",
+              "id": "000800",
+              "reviewed": true,
+              "state_checked": true,
+              "label": "Pasta di semola"
+            },
+            {
+              "source": "Open Food Facts",
+              "id": "8004690611517",
+              "reviewed": true,
+              "state_checked": true,
+              "label": "Spaghetto quadrato. - Integrale · La Molisana"
+            }
+          ]
+        },
+        {
+          "key": "tomato",
+          "name": "Passata di pomodoro",
+          "grams_per_reference_portion": 150,
+          "state": "passata, peso prima della cottura",
+          "candidates": [
+            {
+              "source": "CREA",
+              "id": "006670",
+              "reviewed": true,
+              "state_checked": true,
+              "label": "Pomodori, passata"
+            }
+          ]
+        },
+        {
+          "key": "oil",
+          "name": "Olio extravergine di oliva",
+          "grams_per_reference_portion": 10,
+          "state": "olio aggiunto, interamente consumato",
+          "candidates": [
+            {
+              "source": "CREA",
+              "id": "009210",
+              "reviewed": true,
+              "state_checked": true,
+              "label": "Olio di oliva extra vergine"
+            }
+          ]
+        },
+        {
+          "key": "basil",
+          "name": "Basilico fresco",
+          "grams_per_reference_portion": 5,
+          "state": "fresco, parte edibile",
+          "candidates": [
+            {
+              "source": "CREA",
+              "id": "006800",
+              "reviewed": true,
+              "state_checked": true,
+              "label": "Basilico, fresco"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "foodose:R315",
+      "title": "Panino con mozzarella, pomodoro, olive e basilico",
+      "cuisine_id": "italian",
+      "source": "foodose",
+      "source_url": "https://www.foodose.co/glp1-recipes/mozzarella-tomato-olive-bread-roll-basil",
+      "license": "CC BY 4.0",
+      "attribution": "foodose; underlying nutrition references: USDA FoodData Central",
+      "reference_note": "Adattamento foodose R315: pane generico CREA come proxy del panino; pomodoro maturo e mozzarella vaccina. Pesi della parte edibile. Nessuna verifica di una marca o delle diete personali.",
+      "ingredients": [
+        {
+          "key": "1",
+          "name": "tomatoes",
+          "grams_per_reference_portion": 100.0,
+          "state": "fresco, parte edibile",
+          "candidates": [
+            {
+              "source": "CREA",
+              "id": "006610",
+              "reviewed": true,
+              "state_checked": true,
+              "label": "Pomodori, maturi, freschi"
+            }
+          ]
+        },
+        {
+          "key": "2",
+          "name": "mozzarella",
+          "grams_per_reference_portion": 62.5,
+          "state": "mozzarella pronta al consumo",
+          "candidates": [
+            {
+              "source": "CREA",
+              "id": "164820",
+              "reviewed": true,
+              "state_checked": true,
+              "label": "Mozzarella di vacca"
+            }
+          ]
+        },
+        {
+          "key": "3",
+          "name": "bread rolls",
+          "grams_per_reference_portion": 80.0,
+          "state": "pane pronto al consumo",
+          "candidates": [
+            {
+              "source": "CREA",
+              "id": "000530",
+              "reviewed": true,
+              "state_checked": true,
+              "label": "Pane bianco"
+            }
+          ]
+        },
+        {
+          "key": "4",
+          "name": "black olives",
+          "grams_per_reference_portion": 25.0,
+          "state": "olive nere denocciolate, parte edibile",
+          "candidates": [
+            {
+              "source": "CREA",
+              "id": "008810",
+              "reviewed": true,
+              "state_checked": true,
+              "label": "Olive, nere"
+            }
+          ]
+        },
+        {
+          "key": "5",
+          "name": "fresh basil",
+          "grams_per_reference_portion": 5.0,
+          "state": "fresco, parte edibile",
+          "candidates": [
+            {
+              "source": "CREA",
+              "id": "006800",
+              "reviewed": true,
+              "state_checked": true,
+              "label": "Basilico, fresco"
+            }
+          ]
+        },
+        {
+          "key": "6",
+          "name": "olive oil",
+          "grams_per_reference_portion": 4.55,
+          "state": "olio interamente consumato",
+          "candidates": [
+            {
+              "source": "CREA",
+              "id": "009210",
+              "reviewed": true,
+              "state_checked": true,
+              "label": "Olio di oliva extra vergine"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

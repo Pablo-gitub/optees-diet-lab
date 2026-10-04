@@ -1,0 +1,17 @@
+{
+  "source": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/",
+  "retrieved_at_utc": "2026-10-03T16:36:10.106990+00:00",
+  "files": {
+    "exercises.json": {
+      "sha256": "5bb747e3fc658f095a60dcbf6d53c96627acdcc6ffb6fffde86f7e26995d40bf",
+      "bytes": 1005327,
+      "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/exercises.json"
+    },
+    "LICENSE.md": {
+      "sha256": "6b0382b16279f26ff69014300541967a356a666eb0b91b422f6862f6b7dad17e",
+      "bytes": 1211,
+      "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/LICENSE.md"
+    }
+  },
+  "count": 876
+}

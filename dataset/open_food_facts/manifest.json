@@ -1,0 +1,176 @@
+{
+  "source": "Open Food Facts contributors",
+  "source_url": "https://static.openfoodfacts.org/data/en.openfoodfacts.org.products.csv.gz",
+  "license": "ODbL 1.0 (database); DbCL 1.0 (contents)",
+  "downloaded_at": "2026-10-04T00:51:45.739032+00:00",
+  "source_headers": {
+    "Last-Modified": "Sat, 03 Oct 2026 12:17:02 GMT",
+    "ETag": "\"8d6629ac4d18f33e1ddec4cd9856f19d-77\"",
+    "Content-Length": "1275171186"
+  },
+  "source_compressed_sha256": "f72687ee8bc6522054fe69dbfda6b91902c16af1ec2e043cde27bc6c29ad8176",
+  "source_compressed_bytes": 1275171186,
+  "selection": "countries_tags contains exact en:italy; deduplication by barcode; all brands",
+  "scanned_rows": 4532767,
+  "products": 266320,
+  "numeric_candidates": 57324,
+  "solver_eligible": 0,
+  "requested_brands": {
+    "Conad": 2822,
+    "Coop": 3176,
+    "Esselunga": 2180,
+    "La Molisana": 124,
+    "Muller": 189,
+    "Garofalo": 178,
+    "De Cecco": 207,
+    "Misura": 214,
+    "Barilla": 499,
+    "Mulino Bianco": 327,
+    "Kelloggs": 147,
+    "Rummo": 86,
+    "Granarolo": 524,
+    "Parmalat": 475,
+    "Granoro": 130
+  },
+  "top_brand_tags": [
+    [
+      "xx:carrefour",
+      3420
+    ],
+    [
+      "xx:eurospin",
+      3281
+    ],
+    [
+      "xx:coop",
+      3177
+    ],
+    [
+      "xx:conad",
+      2822
+    ],
+    [
+      "xx:despar",
+      2327
+    ],
+    [
+      "xx:esselunga",
+      2180
+    ],
+    [
+      "xx:selex",
+      2137
+    ],
+    [
+      "xx:unes",
+      2009
+    ],
+    [
+      "xx:penny",
+      1975
+    ],
+    [
+      "xx:spar",
+      1958
+    ],
+    [
+      "xx:maxidi",
+      1789
+    ],
+    [
+      "xx:md",
+      1724
+    ],
+    [
+      "xx:lidl",
+      1703
+    ],
+    [
+      "xx:todis",
+      1633
+    ],
+    [
+      "xx:pam-panorama",
+      1620
+    ],
+    [
+      "xx:primia",
+      1394
+    ],
+    [
+      "xx:deco",
+      1393
+    ],
+    [
+      "xx:consilia",
+      1338
+    ],
+    [
+      "xx:bennet",
+      1272
+    ],
+    [
+      "xx:crai",
+      1183
+    ],
+    [
+      "xx:iper",
+      1021
+    ],
+    [
+      "xx:dico",
+      968
+    ],
+    [
+      "xx:ard-discount",
+      915
+    ],
+    [
+      "xx:italy-d",
+      850
+    ],
+    [
+      "xx:nestle",
+      752
+    ],
+    [
+      "xx:il-viaggiator-goloso",
+      740
+    ],
+    [
+      "xx:sigma",
+      678
+    ],
+    [
+      "xx:probios",
+      634
+    ],
+    [
+      "xx:prix",
+      629
+    ],
+    [
+      "xx:dolciando",
+      620
+    ]
+  ],
+  "quality_flags": {
+    "missing_core_nutrients": 50553,
+    "mass_volume_basis_unresolved": 198789,
+    "missing_name": 9726,
+    "source_quality_errors": 10713,
+    "implausible_energy": 302,
+    "inconsistent_sugars_g_100g": 60,
+    "implausible_macro_sum": 102,
+    "implausible_saturated_fat_g_100g": 7,
+    "implausible_fiber_g_100g": 7,
+    "inconsistent_saturated_fat_g_100g": 43,
+    "energy_converted_from_kJ": 38,
+    "implausible_fat_g_100g": 22,
+    "implausible_salt_g_100g": 22,
+    "implausible_carbs_available_g_100g": 26,
+    "implausible_sugars_g_100g": 14,
+    "implausible_protein_g_100g": 13
+  },
+  "normalized_sha256": "4efca47055a55f99d6697879b4052a2569f58bd216b155cf5a74b72b3978d95d"
+}

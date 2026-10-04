@@ -1,0 +1,91 @@
+import importlib.util
+import json
+import os
+import tempfile
+import unittest
+from pathlib import Path
+from fastapi.testclient import TestClient
+
+ROOT=Path(__file__).resolve().parents[1]
+class WebTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.temp=tempfile.TemporaryDirectory()
+        os.environ['DIET_WEB_DB']=str(Path(cls.temp.name)/'test.sqlite')
+        spec=importlib.util.spec_from_file_location('test_web_app', ROOT/'web/app.py')
+        cls.module=importlib.util.module_from_spec(spec);spec.loader.exec_module(cls.module)
+        del os.environ['DIET_WEB_DB']
+    @classmethod
+    def tearDownClass(cls):cls.temp.cleanup()
+    def account(self,name):
+        client=TestClient(self.module.app)
+        client.post('/api/register',json={'username':name,'password':'long-test-password'})
+        reply=client.post('/api/login',json={'username':name,'password':'long-test-password'})
+        self.assertEqual(reply.status_code,200)
+        return client,{'x-csrf-token':reply.json()['csrf']}
+    def test_recipe_solver_auth_validation_and_history_isolation(self):
+        first,h1=self.account('recipefirst');second,h2=self.account('recipesecond')
+        self.assertEqual(TestClient(self.module.app).get('/api/recipe-solver').status_code,401)
+        options=first.get('/api/recipe-solver').json()
+        self.assertEqual(len(options['recipes']),2)
+        config=options['defaults']
+        self.assertEqual(first.post('/api/recipe-optimize',json=config).status_code,403)
+        self.assertEqual(first.post('/api/recipe-optimize',json=dict(config,recipe_id='foodose:unmapped'),headers=h1).status_code,400)
+        self.assertEqual(first.post('/api/recipe-optimize',json=dict(config,flexibility=.3),headers=h1).status_code,400)
+        self.assertEqual(first.post('/api/recipe-optimize',json=dict(config,disabled_products=['CREA:fake']),headers=h1).status_code,400)
+        with self.module.connect() as db:
+            user=db.execute('SELECT id FROM users WHERE username=?',('recipefirst',)).fetchone()['id']
+            db.execute('INSERT INTO recipe_runs(user_id,created,payload) VALUES(?,?,?)',(user,0,json.dumps({'title':'first only'})))
+        self.assertEqual(second.get('/api/recipe-runs').json(),[])
+        self.assertEqual(first.get('/api/recipe-runs').json()[0]['result']['title'],'first only')
+
+    def test_new_profile_has_no_paolo_data_or_diets(self):
+        client,headers=self.account('amico')
+        profile=client.get('/api/profile').json()['profile']
+        self.assertEqual(profile['mode'],'free')
+        self.assertFalse(profile['personal_diets'])
+        self.assertNotIn('food_preferences',profile)
+        self.assertEqual(profile['preference_note'],'')
+        profile['mode']='training';profile['personal_diets']=True
+        self.assertEqual(client.put('/api/profile',json=profile,headers=headers).status_code,400)
+    def test_authentication_csrf_and_origin(self):
+        client,headers=self.account('security')
+        self.assertEqual(TestClient(self.module.app).get('/api/plans').status_code,401)
+        self.assertEqual(client.post('/api/logout').status_code,403)
+        self.assertEqual(client.post('/api/logout',headers={**headers,'origin':'http://other-host'}).status_code,403)
+        self.assertEqual(client.post('/api/logout',headers=headers).status_code,200)
+        self.assertEqual(client.get('/api/profile').status_code,401)
+    def test_plans_and_configuration_are_isolated(self):
+        first,h1=self.account('first');second,h2=self.account('second')
+        with self.module.connect() as db:
+            user=db.execute('SELECT id FROM users WHERE username=?',('first',)).fetchone()['id']
+            payload={'status':'optimal','day_index':0,'mode':'free','secret':'first-only'}
+            cursor=db.execute('INSERT INTO plans(user_id,created,payload) VALUES(?,?,?)',(user,0,json.dumps(payload)))
+            plan_id=cursor.lastrowid
+        self.assertEqual(second.get('/api/plans').json(),[])
+        self.assertEqual(second.post(f'/api/plans/{plan_id}/select',headers=h2).status_code,404)
+        self.assertEqual(first.post(f'/api/plans/{plan_id}/select',headers=h1).status_code,200)
+        profile=first.get('/api/profile').json()['profile'];profile['preference_note']='<script>personal</script>'
+        self.assertEqual(first.put('/api/profile',json=profile,headers=h1).status_code,200)
+        self.assertEqual(second.get('/api/profile').json()['profile']['preference_note'],'')
+    def test_cuisine_preferences_are_personal_and_catalog_filters(self):
+        first,h1=self.account('cuisineone');second,h2=self.account('cuisinetwo')
+        profile=first.get('/api/profile').json()['profile'];profile['preferred_cuisines']=['italian','chinese']
+        self.assertEqual(first.put('/api/profile',json=profile,headers=h1).status_code,200)
+        self.assertEqual(second.get('/api/profile').json()['profile']['preferred_cuisines'],[])
+        self.assertEqual(first.get('/api/recipes?preferred=true').json()['total'],87)
+        self.assertEqual(second.get('/api/recipes?preferred=true').json()['total'],0)
+        china=first.get('/api/recipes?cuisine=chinese').json()
+        self.assertEqual(china['total'],6)
+        self.assertTrue(all(r['cuisine']=='Chinese' for r in china['recipes']))
+        self.assertEqual(first.get('/api/recipes?q=%25').json()['total'],0)
+        self.assertEqual(first.get('/api/recipes?offset=-1').status_code,400)
+        profile['preferred_cuisines']=['unknown']
+        self.assertEqual(first.put('/api/profile',json=profile,headers=h1).status_code,400)
+
+    def test_personal_files_are_not_served(self):
+        client=TestClient(self.module.app)
+        self.assertEqual(client.get('/data/personal/web_access.txt').status_code,404)
+        self.assertEqual(client.get('/static/../app.py').status_code,404)
+
+if __name__=='__main__':unittest.main()

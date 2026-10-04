@@ -1,0 +1,22 @@
+{
+  "source": "https://raw.githubusercontent.com/RepDB/exercise-dataset/main/",
+  "retrieved_at_utc": "2026-10-03T16:36:09.303264+00:00",
+  "files": {
+    "raw/exercises.json": {
+      "sha256": "b651511287cd7e9261158598bf0263c56c19d2403ad8b57f68426c9c99d17421",
+      "bytes": 2131341,
+      "url": "https://raw.githubusercontent.com/RepDB/exercise-dataset/main/exercises.json"
+    },
+    "raw/LICENSE-DATA.md": {
+      "sha256": "aefa9845c43a82630047e1b69c1929b885e09308be557d0d04047432dd6f6edb",
+      "bytes": 3735,
+      "url": "https://raw.githubusercontent.com/RepDB/exercise-dataset/main/LICENSE-DATA.md"
+    },
+    "raw/ATTRIBUTION.md": {
+      "sha256": "7e8ef61cf67c0aa7b0b5b51f6fb0499f2531d45b626c5d7f500f18942de6740c",
+      "bytes": 688,
+      "url": "https://raw.githubusercontent.com/RepDB/exercise-dataset/main/ATTRIBUTION.md"
+    }
+  },
+  "count": 609
+}

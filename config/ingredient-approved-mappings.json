@@ -1,0 +1,152 @@
+{
+  "version": "1.0",
+  "description": "Associazioni approvate da revisione esplicita. Solo gli elementi qui presenti possono avere reviewed=true e state_checked=true.",
+  "canonical_approvals": {
+    "olio_oliva_extravergine": {
+      "source": "CREA",
+      "id": "009210",
+      "label": "Olio di oliva extra vergine",
+      "state": "olio aggiunto, interamente consumato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "baseline_rule",
+      "note": "Olio extravergine di oliva CREA 009210; stato crudo / consumo intero verificato."
+    },
+    "pomodori_passata": {
+      "source": "CREA",
+      "id": "006670",
+      "label": "Pomodori, passata",
+      "state": "passata, peso prima della cottura",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "baseline_rule",
+      "note": "Pomodori passata CREA 006670 verificata da demo:pasta-pomodoro."
+    },
+    "basilico_fresco": {
+      "source": "CREA",
+      "id": "006800",
+      "label": "Basilico, fresco",
+      "state": "fresco, parte edibile",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "baseline_rule",
+      "note": "Basilico fresco CREA 006800 verificato da demo:pasta-pomodoro e foodose:R315."
+    },
+    "pasta_semola_secca": {
+      "source": "CREA",
+      "id": "000800",
+      "label": "Pasta di semola",
+      "state": "secca, prima della cottura",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "baseline_rule",
+      "note": "Pasta di semola secca CREA 000800 verificata da demo:pasta-pomodoro."
+    },
+    "pomodori_freschi": {
+      "source": "CREA",
+      "id": "006610",
+      "label": "Pomodori, maturi, freschi",
+      "state": "fresco, parte edibile",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "baseline_rule",
+      "note": "Pomodori freschi CREA 006610 verificati da foodose:R315."
+    },
+    "mozzarella_vacca": {
+      "source": "CREA",
+      "id": "164820",
+      "label": "Mozzarella di vacca",
+      "state": "mozzarella pronta al consumo",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "baseline_rule",
+      "note": "Mozzarella di vacca CREA 164820 verificata da foodose:R315."
+    },
+    "pane_bianco": {
+      "source": "CREA",
+      "id": "000530",
+      "label": "Pane bianco",
+      "state": "pane pronto al consumo",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "baseline_rule",
+      "note": "Pane bianco CREA 000530 verificato da foodose:R315 come proxy del panino."
+    },
+    "olive_nere": {
+      "source": "CREA",
+      "id": "008810",
+      "label": "Olive, nere",
+      "state": "olive nere denocciolate, parte edibile",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "baseline_rule",
+      "note": "Olive nere CREA 008810 verificate da foodose:R315."
+    },
+    "acqua": {
+      "source": "water",
+      "id": "water",
+      "label": "Acqua pura",
+      "state": "acqua potabile",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "baseline_rule",
+      "note": "Acqua pura (fonte speciale water) con nutrienti nulli documentata dal motore."
+    },
+    "aglio": {
+      "source": "CREA",
+      "id": "005000",
+      "label": "Aglio",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "user_review",
+      "note": "Approvazione manuale per aglio -> CREA:005000"
+    }
+  },
+  "recipe_overrides": {
+    "foodose:R315": {
+      "1": {
+        "source": "CREA",
+        "id": "006610",
+        "reviewed": true,
+        "state_checked": true,
+        "label": "Pomodori, maturi, freschi"
+      },
+      "2": {
+        "source": "CREA",
+        "id": "164820",
+        "reviewed": true,
+        "state_checked": true,
+        "label": "Mozzarella di vacca"
+      },
+      "3": {
+        "source": "CREA",
+        "id": "000530",
+        "reviewed": true,
+        "state_checked": true,
+        "label": "Pane bianco"
+      },
+      "4": {
+        "source": "CREA",
+        "id": "008810",
+        "reviewed": true,
+        "state_checked": true,
+        "label": "Olive, nere"
+      },
+      "5": {
+        "source": "CREA",
+        "id": "006800",
+        "reviewed": true,
+        "state_checked": true,
+        "label": "Basilico, fresco"
+      },
+      "6": {
+        "source": "CREA",
+        "id": "009210",
+        "reviewed": true,
+        "state_checked": true,
+        "label": "Olio di oliva extra vergine"
+      }
+    }
+  }
+}

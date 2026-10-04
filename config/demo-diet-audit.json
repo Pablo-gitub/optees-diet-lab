@@ -1,0 +1,14 @@
+{
+  "demo": true,
+  "scope": "lunch_and_dinner_only",
+  "meal_targets": {
+    "lunch": {
+      "kcal_100g": {"min": 200, "max": 900},
+      "protein_g_100g": {"min": 5, "max": 80}
+    },
+    "dinner": {
+      "kcal_100g": {"min": 200, "max": 900},
+      "protein_g_100g": {"min": 5, "max": 80}
+    }
+  }
+}
