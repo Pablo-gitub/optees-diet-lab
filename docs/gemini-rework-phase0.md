@@ -338,10 +338,52 @@ Tutti i **20 video YouTube** registrati in `config/exercise-media.json` sono sta
 
 ### 4. File modificati
 
-- Modificato unicamente: [`config/exercise-media.json`](file:///home/paolo/Projects/local_work/optees_diet_case_of_studi/config/exercise-media.json) (correzione foto e thumbnail per `plank`).
+- Modificato unicamente: [`config/exercise-media.json`](../config/exercise-media.json) (correzione foto e thumbnail per `plank`).
 - Nessun file di codice, API o database personale è stato alterato.
 - Nessun git commit effettuato.
 
 ### Revisione Claude del 3.4 (2026-10-04)
 
 **Accettato.** Verificate a vista le due foto del plank: `0.jpg` ritrae l'atleta in ginocchio, `1.jpg` il plank sugli avambracci; la correzione in `config/exercise-media.json` è giusta. Le osservazioni 2 e 3 sono state risolte nella UI: le didascalie «inizio/fine movimento» compaiono solo per gli esercizi a ripetizioni (per gli altri «foto 1 di 2»), e il catalogo ha il tasto **Guarda** per un'anteprima che non registra nulla. Con il 3.4 si chiude **M1**.
+
+---
+
+## Passo 5.4 — Guida all'aggiornamento periodico dei dati Apple Salute/Withings e controllo di copertura (2026-10-04)
+
+In conformità al piano di sviluppo (`docs/development-plan.md`, passo 5.4), è stato aggiornato il documento [`docs/apple-health-import.md`](apple-health-import.md) con una guida operativa completa, redatta in italiano, per l'aggiornamento periodico dei dati sanitari e la verifica dei requisiti algoritmici.
+
+### 1. Rispetto delle regole sui dati personali
+- Nessun dato personale o cartella riservata (`sanitary_data_export/`, `data/personal/`, `private_docs/`) è stata aperta, letta, analizzata o indicizzata.
+- Tutte le logiche, le soglie, i flussi di gestione errori e i criteri di copertura sono stati ricavati per via analitica esclusivamente dal codice sorgente:
+  - `scripts/apple_health.py`
+  - `scripts/import_apple_health.py`
+  - `scripts/joint_energy.py`
+  - `scripts/health_inputs.py`
+  - `web/app.py` (endpoint `/api/health` e `/api/health/import`)
+  - `web/static/app.js` e `web/static/index.html`
+
+### 2. Sintesi delle affermazioni verificate nel codice sorgente
+
+| Ambito verificato | Affermazione tecnica documentata | File e funzione | Righe esatte di codice |
+|---|---|---|---|
+| **Atomicità dell'import** | Scrittura iniziale su DB temporaneo `health.importing.sqlite`; in caso di eccezione `BaseException` il file temporaneo viene eliminato con `unlink()` e i file precedenti (`health.sqlite`, `summary.json`) restano intatti. Promozione con `os.replace` atomico solo a completamento. | `scripts/apple_health.py`<br>`import_zip()` | Righe 170–172, 226–227, 229–232 |
+| **Giorno usabile per baseline** | Data precedente a oggi (`date < today`), copertura energia a riposo $\ge 20/24$ della durata del giorno (con correzione UTC per ora legale/solare), ed energia attiva $> 0$ secondi. | `scripts/apple_health.py`<br>`summarize()` | Righe 102–106 |
+| **Soglia baseline non-workout** | Finestra di 28 giorni precedenti l'ancora (`anchor`); validità richiede almeno 7 giorni usabili (`valid_days >= 7`) e anzianità $\le 14$ giorni (`staleness_days <= 14`). Se non rispettata, `status = 'insufficient_or_stale'` e `joint_energy` restituisce `status='unavailable'`. | `scripts/apple_health.py`: 110–116<br>`scripts/joint_energy.py`: 34–41, 45–46<br>`scripts/health_inputs.py`: 17–19, 30–33 | `scripts/apple_health.py`: 110–116<br>`scripts/joint_energy.py`: 34–41, 45–46<br>`scripts/health_inputs.py`: 17–19, 30–33 |
+| **Esclusione giorni con anomalie** | Giorni con allenamenti privi di calorie finite (`not finite(active_kcal)`), con sessioni sovrapposte nel tempo, o con calorie rimosse $> \text{attive} + 0.01$ vengono contrassegnati in `bad` ed esclusi dalla baseline (`excluded_days`). | `scripts/joint_energy.py`<br>`non_workout_baseline()` | Righe 23–38 |
+| **Modelli energetici attività** | Richieste almeno 3 osservazioni (`observations >= 3`) negli ultimi 90 giorni (`age_days <= 90`); calcolo dei quantili P20, P50, P80 su max 20 osservazioni recenti. Se non soddisfatto, `status = 'insufficient_or_stale'`. | `scripts/apple_health.py`: 139–145<br>`scripts/health_inputs.py`: 20–23<br>`scripts/joint_energy.py`: 49–52 | `scripts/apple_health.py`: 139–145<br>`scripts/health_inputs.py`: 20–23<br>`scripts/joint_energy.py`: 49–52 |
+| **Mappatura attività sessioni** | Mappate solo 5 sessioni cardio stazionarie (`continuous_stationary-bike`, `interval_bike`, `continuous_rowing-machine`, `continuous_incline-treadmill-walk`, `continuous_elliptical-trainer`). Sessioni non mappate generano `status='unavailable'` con `missing_session_id`. | `scripts/joint_energy.py`<br>`ACTIVITIES`, `day_scenarios()` | Righe 7–13, 47–51 |
+| **Misura del peso e freschezza** | Rilevazione dell'ultima pesata; se assente o antecedente a 90 giorni fa (`age_days > 90`), il flag `body_profile_needs_review` diventa `True`. Frazione HealthKit di massa grassa normalizzata in punti percentuali ($0..1 \to 0..100$). | `scripts/apple_health.py`: 41, 119–121, 148<br>`scripts/health_inputs.py`: 16, 34 | `scripts/apple_health.py`: 41, 119–121, 148<br>`scripts/health_inputs.py`: 16, 34 |
+| **Rilevazione anomalie operative** | • Più di un file ZIP: HTTP 400 (`web/app.py:438-439`)<br>• Importazione in corso o lock attivo: HTTP 409 (`web/app.py:436-437`)<br>• Dati obsoleti: refresh dinamico senza alterare i target nutrizionali (`health_inputs.py:12-35`) | `web/app.py`<br>`health_import()` | Righe 435–451 |
+
+### 3. File aggiornati
+- Modificato: [`docs/apple-health-import.md`](apple-health-import.md) (riscrittura completa e dettagliata).
+- Aggiornato: [`docs/gemini-rework-phase0.md`](gemini-rework-phase0.md) (questo rapporto).
+- Nessun commit Git effettuato.
+
+
+### Revisione Claude del 5.4 (2026-10-05)
+
+**Accettato con correzioni.** Soglie e righe citate verificate nel codice (20/24 di copertura, 7 giorni utili su 28, anzianità ≤ 14 giorni, ≥ 3 osservazioni entro 90 giorni, ricostruzione al 50%, importazione atomica, `--force`, messaggi della UI). Correzioni di Claude:
+- **Frequenza:** la domenica sera era sbagliata. L'importazione esclude il giorno corrente e la ricalibrazione richiede il consumo Salute di tutte le quattordici giornate fino alla domenica: l'ordine corretto è pesata → importazione il lunedì mattina → check-in.
+- Una conseguenza imprecisa (i piani congiunti non «ricadono» sui target del profilo: vengono generati senza robustezza).
+- Link assoluti `file:///` sostituiti con link relativi; ripristinate le regole dell'analisi rimosse nella riscrittura e il collegamento agli algoritmi, aggiornato a 4.x e 5.x.

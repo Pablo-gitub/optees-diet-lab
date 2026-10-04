@@ -121,7 +121,7 @@ Consegna preparata per i passi 0.3–0.5: [prompt per Gemini](gemini-handoff-pha
 | 5.1 | Trend del peso (media mobile esponenziale, poi filtro di Kalman semplice); aderenza dieta/allenamento; confronto atteso vs osservato separando «piano non seguito» da «risposta diversa dal previsto» | Codex | M | test su serie sintetiche con rumore | **fatto** — `dc4df6b`; 209 test unittest verdi; EMA/Kalman, copertura, aderenza, confronto e check-in; [consegna backend](backend-handoff-progress.md) |
 | 5.2 | Proposta di ricalibrazione: dispendio personale stimato con limiti di sicurezza fissi (variazione massima settimanale, minimi nutrizionali); l'utente approva | Codex | M | nessuna modifica automatica dei target; limiti mai superati | **fatto** — `824daba`; 221 test unittest verdi; proposte motivate, limiti fissi, decisioni CSRF atomiche e conflitti 409; [consegna frontend 5.3](backend-handoff-progress.md) |
 | 5.3 | UI **Progressi**: inserimento peso del lunedì, grafico reale vs atteso, aderenza, proposta di ricalibrazione con motivazione | Claude | M | verifica visiva; grafici leggibili in chiaro e scuro | da fare |
-| 5.4 | Guida all'aggiornamento periodico dell'export Apple Salute/Withings e controllo della copertura | Gemini | S | `docs/apple-health-import.md` aggiornato | da fare |
+| 5.4 | Guida all'aggiornamento periodico dell'export Apple Salute/Withings e controllo della copertura | Gemini | S | `docs/apple-health-import.md` aggiornato | **fatto** — guida di Gemini rivista da Claude: importazione il lunedì mattina dopo la pesata (non la domenica), soglie verificate nel codice |
 
 ### Fase 6 — Apprendimento e ribilanciamento → **M2**
 
