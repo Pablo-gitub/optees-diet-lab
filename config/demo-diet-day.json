@@ -5,7 +5,7 @@
   "excluded_crea_ids": [],
   "portion_bounds_g": {},
   "main_meals_targets": {
-    "kcal_100g": {"min": 800, "target": 1100, "max": 1400},
+    "kcal_100g": {"min": 800, "target": 1135, "max": 1400},
     "protein_g_100g": {"min": 35, "target": 65, "max": 110},
     "fat_g_100g": {"min": 15, "target": 35, "max": 60},
     "carbs_available_g_100g": {"min": 90, "target": 140, "max": 200}

@@ -5,7 +5,7 @@ DAILY_TARGETS={
  'kcal_100g':dict(min=1400,target=1800,max=2400),
  'protein_g_100g':dict(min=45,target=80,max=140),
  'fat_g_100g':dict(min=25,target=60,max=90),
- 'carbs_available_g_100g':dict(min=90,target=180,max=300),
+ 'carbs_available_g_100g':dict(min=90,target=235,max=300),
 }
 
 def defaults(personal=False):

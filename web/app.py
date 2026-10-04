@@ -21,6 +21,7 @@ from plan_recipe import templates as recipe_templates, formulate_recipe, optimiz
 from recipe_diet_compatibility import meal_options
 from optees_command import optees_command
 from daily_meals import defaults as daily_defaults, validate as validate_daily
+from target_validation import profile_target_warnings
 from multiobjective_day import solve_strategy, nondominated, choose_arm, STRATEGIES
 from health_inputs import load_report as load_health_report, algorithm_inputs as health_algorithm_inputs
 from mcp import ClientSession, StdioServerParameters
@@ -218,7 +219,7 @@ def profile(request: Request):
     data = json.loads(user['profile'])
     data.setdefault('preferred_cuisines', [])
     data.setdefault('daily_meals',daily_defaults(bool(data.get('food_preferences'))))
-    return {'profile': data, 'csrf': user['csrf']}
+    return {'profile': data, 'csrf': user['csrf'], 'warnings': profile_target_warnings(data)}
 
 
 @app.put('/api/profile')
@@ -254,11 +255,12 @@ async def update_profile(request: Request):
         raise HTTPException(400, 'Esclusioni non valide')
     try:
         formulate(make_config(old, 0), load_foods())
+        warnings = profile_target_warnings(old)
     except (ValueError, KeyError, TypeError) as e:
         raise HTTPException(400, str(e))
     with connect() as db:
         db.execute('UPDATE users SET profile=? WHERE id=?', (json.dumps(old), user['id']))
-    return {'ok': True}
+    return {'ok': True, 'warnings': warnings}
 
 
 def make_config(profile, day):

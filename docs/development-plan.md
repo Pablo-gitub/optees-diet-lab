@@ -54,7 +54,7 @@ Dimensioni indicative: **S** < 2 h, **M** 2–5 h, **L** > 5 h di lavoro dell'op
 
 | # | Passo | Chi | Dim. | Fatto quando | Stato |
 |---|---|---|---|---|---|
-| 0.1 | Committare il lavoro Salute in sospeso (`health_inputs.py`, test, `apple-health-import.md`, tabella in `app.js`, roadmap) | Codex | S | working tree pulito, test verdi | da fare |
+| 0.1 | Committare il lavoro Salute in sospeso (`health_inputs.py`, test, `apple-health-import.md`, tabella in `app.js`, roadmap) | Codex | S | working tree pulito, test verdi | **fatto** — `4bfcb73`, 121 test verdi |
 | 0.2 | Target demo coerenti: kcal ≈ 4P+4C+9G (±10%) in `config/demo-diet-day.json` e nei default giornalieri; controllo di coerenza in validazione profilo (S0 di orchestration.md) | Codex | S | test sul controllo; target demo coerenti | da fare |
 | 0.3 | **Media esercizi da Free Exercise DB.** Mappare gli esercizi usati nei protocolli (`config/workout-protocols.json`) agli id di `dataset/free_exercise_db/exercises.json`; scaricare solo le loro 2 immagini (pubblico dominio) in `web/static/media/exercises/<id>/`; sostituire le immagini Commons errate in `config/exercise-media.json`; tenere al massimo 2 video YouTube per esercizio, da canali di istruzione riconoscibili, scartando shorts e titoli clickbait | Gemini | M | ogni esercizio dei protocolli ha immagini locali corrette, verificate a vista; nessuna immagine di un esercizio diverso | da fare |
 | 0.4 | **Foto ricette.** Estendere `config/recipe-images.json` almeno alle ricette italiane (81) e alle 25 composizioni del solver: Wikimedia Commons, licenza libera, foto del **piatto giusto** (non «ossobuco con risotto» per il risotto), attribuzione completa | Gemini | M | copertura ≥ 100 ricette, ogni foto controllata a vista | da fare |

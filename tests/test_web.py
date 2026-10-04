@@ -198,6 +198,17 @@ class WebTests(unittest.TestCase):
         with self.module.connect() as db:
             self.assertIsNone(db.execute('SELECT 1 FROM users WHERE username=?', ('blocked',)).fetchone())
 
+    def test_inconsistent_targets_are_saved_with_warning(self):
+        client, headers = self.account('targetwarning')
+        profile = client.get('/api/profile').json()['profile']
+        profile['targets']['kcal_100g']['target'] = 1400
+        response = client.put('/api/profile', json=profile, headers=headers)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['warnings'][0]['code'], 'targets_inconsistent')
+        saved = client.get('/api/profile').json()
+        self.assertEqual(saved['profile']['targets'], profile['targets'])
+        self.assertEqual(saved['warnings'][0]['scope'], 'main_meals')
+
     def test_profile_update_without_targets_keeps_existing(self):
         client, headers = self.account('notargets')
         profile = client.get('/api/profile').json()['profile']

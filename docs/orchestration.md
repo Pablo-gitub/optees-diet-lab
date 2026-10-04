@@ -48,6 +48,8 @@ S0 controllo ingresso
 
 ### S0 — Controllo dell'ingresso
 
+Passo 0.2 implementato: `target_validation.profile_target_warnings()` controlla i target attivi (giornata completa se abilitata, altrimenti pasti principali). GET e PUT `/api/profile` restituiscono `warnings` a livello principale; un avviso non altera i target e non impedisce il salvataggio. I nuovi default demo sono coerenti; i profili già salvati non vengono migrati automaticamente. La visualizzazione nel profilo appartiene alla successiva integrazione UI; S0 della nuova catena dovrà riutilizzare lo stesso controllo.
+
 - **Coerenza energetica dei target.** Calcolare `E_macro = 4·P + 4·C + 9·G` sui bersagli. Se `|E_macro − kcal_target| / kcal_target > 0.10` aggiungere il warning `targets_inconsistent` con i due valori. Non blocca il calcolo, ma la UI lo mostra nel profilo e nel risultato. Gli attuali target demo (80/180/60 g → 1.580 kcal contro 1.800) falliscono questo controllo e vanno corretti (passo 0.2).
 - Validazione già esistente di `formulate()`; nessun rilassamento.
 
