@@ -1,0 +1,444 @@
+{
+  "version": "1.0",
+  "description": "Indice multimediale illustrativo per gli esercizi: immagini da Wikimedia Commons e video YouTube con autore, licenza e disclaimer.",
+  "exercises": {
+    "push-up": {
+      "exercise_id": "push-up",
+      "exercise_name": "Push-Up",
+      "disclaimer": "Immagine e video a solo scopo illustrativo: l'esecuzione corretta, l'attrezzatura e i carichi devono essere adattati alle proprie capacità e condizioni individuali.",
+      "illustrative_image": {
+        "exercise_id": "push-up",
+        "exercise_name": "Push-Up",
+        "search_term": "Push Up",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/4/47/Handstand_pushup.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/Handstand_pushup.jpg/960px-Handstand_pushup.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "title": "File:Handstand pushup.jpg",
+        "author": "U.S. Air Force photo by Senior Airman Stephanie Rubi",
+        "author_url": null,
+        "license": "Public domain",
+        "license_url": null,
+        "source": "Wikimedia Commons",
+        "source_page": "https://commons.wikimedia.org/wiki/File:Handstand_pushup.jpg",
+        "illustrative": true,
+        "disclaimer": "Immagine e video a solo scopo illustrativo: l'esecuzione corretta, l'attrezzatura e i carichi devono essere adattati alle proprie capacità e condizioni individuali."
+      },
+      "youtube_videos": [
+        {
+          "video_id": "c-lBErfxszs",
+          "title": "Il push-up perfetto",
+          "channel": "Davis Diley",
+          "duration": "0:31",
+          "url": "https://www.youtube.com/watch?v=c-lBErfxszs",
+          "thumbnail_url": "https://i.ytimg.com/vi/c-lBErfxszs/hqdefault.jpg"
+        },
+        {
+          "video_id": "IODxDxX7oi4",
+          "title": "Il piegamento perfetto | Fallo bene!",
+          "channel": "Calisthenicmovement",
+          "duration": "3:38",
+          "url": "https://www.youtube.com/watch?v=IODxDxX7oi4",
+          "thumbnail_url": "https://i.ytimg.com/vi/IODxDxX7oi4/hqdefault.jpg"
+        },
+        {
+          "video_id": "pKZ-lkKKMws",
+          "title": "The Only Push Up Guide You Will Ever Need",
+          "channel": "Stozfit",
+          "duration": "0:15",
+          "url": "https://www.youtube.com/watch?v=pKZ-lkKKMws",
+          "thumbnail_url": "https://i.ytimg.com/vi/pKZ-lkKKMws/hqdefault.jpg"
+        }
+      ]
+    },
+    "bodyweight-squat": {
+      "exercise_id": "bodyweight-squat",
+      "exercise_name": "Bodyweight Squat",
+      "disclaimer": "Immagine e video a solo scopo illustrativo: l'esecuzione corretta, l'attrezzatura e i carichi devono essere adattati alle proprie capacità e condizioni individuali.",
+      "illustrative_image": {
+        "exercise_id": "bodyweight-squat",
+        "exercise_name": "Bodyweight Squat",
+        "search_term": "Bodyweight Squat",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Christina_Kaun_squat_thrust.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/Christina_Kaun_squat_thrust.jpg/960px-Christina_Kaun_squat_thrust.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "title": "File:Christina Kaun squat thrust.jpg",
+        "author": "(U.S. Air Force photo by Airman 1st Class Joshua Green)",
+        "author_url": null,
+        "license": "Public domain",
+        "license_url": null,
+        "source": "Wikimedia Commons",
+        "source_page": "https://commons.wikimedia.org/wiki/File:Christina_Kaun_squat_thrust.jpg",
+        "illustrative": true,
+        "disclaimer": "Immagine e video a solo scopo illustrativo: l'esecuzione corretta, l'attrezzatura e i carichi devono essere adattati alle proprie capacità e condizioni individuali."
+      },
+      "youtube_videos": [
+        {
+          "video_id": "n_xLyzPEX7A",
+          "title": "Come eseguire lo squat a corpo libero con tecnica e forma perfette. #allenamentoacorpo #squat #sq...",
+          "channel": "Chris Gates Fitness",
+          "duration": "0:21",
+          "url": "https://www.youtube.com/watch?v=n_xLyzPEX7A",
+          "thumbnail_url": "https://i.ytimg.com/vi/n_xLyzPEX7A/hqdefault.jpg"
+        },
+        {
+          "video_id": "-5LhNSMBrEs",
+          "title": "Bodyweight Squats",
+          "channel": "Geoff Sa Joe",
+          "duration": "0:09",
+          "url": "https://www.youtube.com/watch?v=-5LhNSMBrEs",
+          "thumbnail_url": "https://i.ytimg.com/vi/-5LhNSMBrEs/hqdefault.jpg"
+        },
+        {
+          "video_id": "P-yaD24bUE8",
+          "title": "Tutorial squat a corpo libero - Forma e tecnica corrette",
+          "channel": "Runna",
+          "duration": "0:47",
+          "url": "https://www.youtube.com/watch?v=P-yaD24bUE8",
+          "thumbnail_url": "https://i.ytimg.com/vi/P-yaD24bUE8/hqdefault.jpg"
+        }
+      ]
+    },
+    "dumbbell-deadlift": {
+      "exercise_id": "dumbbell-deadlift",
+      "exercise_name": "Dumbbell Deadlift",
+      "disclaimer": "Immagine e video a solo scopo illustrativo: l'esecuzione corretta, l'attrezzatura e i carichi devono essere adattati alle proprie capacità e condizioni individuali.",
+      "youtube_videos": [
+        {
+          "video_id": "YQgs03p3UxE",
+          "title": "Perfect Dumbbell Deadlift Form for Beginners (5-Step Checklist)",
+          "channel": "Live Lean TV",
+          "duration": "1:14",
+          "url": "https://www.youtube.com/watch?v=YQgs03p3UxE",
+          "thumbnail_url": "https://i.ytimg.com/vi/YQgs03p3UxE/hqdefault.jpg"
+        },
+        {
+          "video_id": "XcPDvQlwPKg",
+          "title": "This Dumbbell Deadlift Trick Changes Everything!",
+          "channel": "Colossus Fitness",
+          "duration": "0:15",
+          "url": "https://www.youtube.com/watch?v=XcPDvQlwPKg",
+          "thumbnail_url": "https://i.ytimg.com/vi/XcPDvQlwPKg/hqdefault.jpg"
+        },
+        {
+          "video_id": "CBOhr6H7BEY",
+          "title": "RDL Tips",
+          "channel": "ArielYu_Fit",
+          "duration": "0:21",
+          "url": "https://www.youtube.com/watch?v=CBOhr6H7BEY",
+          "thumbnail_url": "https://i.ytimg.com/vi/CBOhr6H7BEY/hqdefault.jpg"
+        }
+      ]
+    },
+    "dumbbell-floor-press": {
+      "exercise_id": "dumbbell-floor-press",
+      "exercise_name": "Dumbbell Floor Press",
+      "disclaimer": "Immagine e video a solo scopo illustrativo: l'esecuzione corretta, l'attrezzatura e i carichi devono essere adattati alle proprie capacità e condizioni individuali.",
+      "illustrative_image": {
+        "exercise_id": "dumbbell-floor-press",
+        "exercise_name": "Dumbbell Floor Press",
+        "search_term": "Dumbbell Floor Press",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/0/0d/Gymnasium_manual_-_and_prescription_of_exercise_%281905%29_%2814596107658%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0d/Gymnasium_manual_-_and_prescription_of_exercise_%281905%29_%2814596107658%29.jpg/960px-Gymnasium_manual_-_and_prescription_of_exercise_%281905%29_%2814596107658%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "title": "File:Gymnasium manual - and prescription of exercise (1905) (14596107658).jpg",
+        "author": "Bolster, William W",
+        "author_url": null,
+        "license": "No restrictions",
+        "license_url": "https://www.flickr.com/commons/usage/",
+        "source": "Wikimedia Commons",
+        "source_page": "https://commons.wikimedia.org/wiki/File:Gymnasium_manual_-_and_prescription_of_exercise_(1905)_(14596107658).jpg",
+        "illustrative": true,
+        "disclaimer": "Immagine e video a solo scopo illustrativo: l'esecuzione corretta, l'attrezzatura e i carichi devono essere adattati alle proprie capacità e condizioni individuali."
+      },
+      "youtube_videos": [
+        {
+          "video_id": "TvPviMnKg6s",
+          "title": "Correct Dumbbell Floor Press Form - Floor bench press #fitness #benchpress",
+          "channel": "PRO+ Sports Medicine Education",
+          "duration": "0:07",
+          "url": "https://www.youtube.com/watch?v=TvPviMnKg6s",
+          "thumbnail_url": "https://i.ytimg.com/vi/TvPviMnKg6s/hqdefault.jpg"
+        },
+        {
+          "video_id": "k8fvMnz42-g",
+          "title": "Dumbbell Floor Press - Tutorial sull'esercizio",
+          "channel": "Kevin Connolly",
+          "duration": "0:29",
+          "url": "https://www.youtube.com/watch?v=k8fvMnz42-g",
+          "thumbnail_url": "https://i.ytimg.com/vi/k8fvMnz42-g/hqdefault.jpg"
+        },
+        {
+          "video_id": "UBmpZ7l5Nlk",
+          "title": "Floor press con manubri",
+          "channel": "Kraken Exercise Library",
+          "duration": "0:39",
+          "url": "https://www.youtube.com/watch?v=UBmpZ7l5Nlk",
+          "thumbnail_url": "https://i.ytimg.com/vi/UBmpZ7l5Nlk/hqdefault.jpg"
+        }
+      ]
+    },
+    "elliptical-trainer": {
+      "exercise_id": "elliptical-trainer",
+      "exercise_name": "Elliptical Trainer",
+      "disclaimer": "Immagine e video a solo scopo illustrativo: l'esecuzione corretta, l'attrezzatura e i carichi devono essere adattati alle proprie capacità e condizioni individuali.",
+      "illustrative_image": {
+        "exercise_id": "elliptical-trainer",
+        "exercise_name": "Elliptical Trainer",
+        "search_term": "Elliptical Trainer",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/b3/Banwol_Lake_Park_Exercise_equipment_20240722.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b3/Banwol_Lake_Park_Exercise_equipment_20240722.jpg/960px-Banwol_Lake_Park_Exercise_equipment_20240722.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "title": "File:Banwol Lake Park Exercise equipment 20240722.jpg",
+        "author": "LandAndTree",
+        "author_url": "https://commons.wikimedia.org/wiki/User:LandAndTree",
+        "license": "CC0",
+        "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "source": "Wikimedia Commons",
+        "source_page": "https://commons.wikimedia.org/wiki/File:Banwol_Lake_Park_Exercise_equipment_20240722.jpg",
+        "illustrative": true,
+        "disclaimer": "Immagine e video a solo scopo illustrativo: l'esecuzione corretta, l'attrezzatura e i carichi devono essere adattati alle proprie capacità e condizioni individuali."
+      },
+      "youtube_videos": [
+        {
+          "video_id": "YWfswVvOaiI",
+          "title": "Elliptical Instruction 101: Technique and Tips",
+          "channel": "Sunny Health & Fitness",
+          "duration": "2:02",
+          "url": "https://www.youtube.com/watch?v=YWfswVvOaiI",
+          "thumbnail_url": "https://i.ytimg.com/vi/YWfswVvOaiI/hqdefault.jpg"
+        },
+        {
+          "video_id": "gpxUeHJ-Ps0",
+          "title": "Proper elliptical technique",
+          "channel": "EverFit Strategies",
+          "duration": "3:56",
+          "url": "https://www.youtube.com/watch?v=gpxUeHJ-Ps0",
+          "thumbnail_url": "https://i.ytimg.com/vi/gpxUeHJ-Ps0/hqdefault.jpg"
+        },
+        {
+          "video_id": "EesEvYohy5o",
+          "title": "Stai usando l'ellittica nel modo sbagliato | Spiega il fisioterapista",
+          "channel": "Rehab and Revive",
+          "duration": "4:52",
+          "url": "https://www.youtube.com/watch?v=EesEvYohy5o",
+          "thumbnail_url": "https://i.ytimg.com/vi/EesEvYohy5o/hqdefault.jpg"
+        }
+      ]
+    },
+    "incline-treadmill-walk": {
+      "exercise_id": "incline-treadmill-walk",
+      "exercise_name": "Incline Treadmill Walk",
+      "disclaimer": "Immagine e video a solo scopo illustrativo: l'esecuzione corretta, l'attrezzatura e i carichi devono essere adattati alle proprie capacità e condizioni individuali.",
+      "youtube_videos": [
+        {
+          "video_id": "HwXYMPGjlUg",
+          "title": "How to Walk Correctly on an Incline Treadmill 🔥 | Quick Gym Tip #cardiotips #cardio #treadmill #gym",
+          "channel": "Shubham Gupta",
+          "duration": "0:11",
+          "url": "https://www.youtube.com/watch?v=HwXYMPGjlUg",
+          "thumbnail_url": "https://i.ytimg.com/vi/HwXYMPGjlUg/hqdefault.jpg"
+        },
+        {
+          "video_id": "NAsObfFJXvE",
+          "title": "Come fare: camminata sul tapis roulant inclinato (allenamento 12-3-30)",
+          "channel": "Live Lean TV Daily Exercises",
+          "duration": "1:53",
+          "url": "https://www.youtube.com/watch?v=NAsObfFJXvE",
+          "thumbnail_url": "https://i.ytimg.com/vi/NAsObfFJXvE/hqdefault.jpg"
+        },
+        {
+          "video_id": "rMxxdKTlB18",
+          "title": "High INCLINE Treadmill WALKING: Most Effective Method for Fat Loss | Burn More Fat & Build Strength!",
+          "channel": "Ilium Films Fitness",
+          "duration": "2:29",
+          "url": "https://www.youtube.com/watch?v=rMxxdKTlB18",
+          "thumbnail_url": "https://i.ytimg.com/vi/rMxxdKTlB18/hqdefault.jpg"
+        }
+      ]
+    },
+    "inverted-row": {
+      "exercise_id": "inverted-row",
+      "exercise_name": "Inverted Row",
+      "disclaimer": "Immagine e video a solo scopo illustrativo: l'esecuzione corretta, l'attrezzatura e i carichi devono essere adattati alle proprie capacità e condizioni individuali.",
+      "illustrative_image": {
+        "exercise_id": "inverted-row",
+        "exercise_name": "Inverted Row",
+        "search_term": "Inverted Row",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/8/81/Inverted_row.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/81/Inverted_row.jpg/960px-Inverted_row.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "title": "File:Inverted row.jpg",
+        "author": "Colossus Fitness",
+        "author_url": null,
+        "license": "CC BY 3.0",
+        "license_url": "https://creativecommons.org/licenses/by/3.0",
+        "source": "Wikimedia Commons",
+        "source_page": "https://commons.wikimedia.org/wiki/File:Inverted_row.jpg",
+        "illustrative": true,
+        "disclaimer": "Immagine e video a solo scopo illustrativo: l'esecuzione corretta, l'attrezzatura e i carichi devono essere adattati alle proprie capacità e condizioni individuali."
+      },
+      "youtube_videos": [
+        {
+          "video_id": "hXTc1mDnZCw",
+          "title": "Inverted Row Guide | Form Tips, Muscles Worked, and Mistakes",
+          "channel": "BarBend",
+          "duration": "8:06",
+          "url": "https://www.youtube.com/watch?v=hXTc1mDnZCw",
+          "thumbnail_url": "https://i.ytimg.com/vi/hXTc1mDnZCw/hqdefault.jpg"
+        },
+        {
+          "video_id": "GdyhjXlxE-U",
+          "title": "How To PROPERLY Inverted Row For Muscle Gain",
+          "channel": "Colossus Fitness",
+          "duration": "2:46",
+          "url": "https://www.youtube.com/watch?v=GdyhjXlxE-U",
+          "thumbnail_url": "https://i.ytimg.com/vi/GdyhjXlxE-U/hqdefault.jpg"
+        },
+        {
+          "video_id": "9fItzuh9Iok",
+          "title": "Righe invertite",
+          "channel": "The Active Life",
+          "duration": "0:33",
+          "url": "https://www.youtube.com/watch?v=9fItzuh9Iok",
+          "thumbnail_url": "https://i.ytimg.com/vi/9fItzuh9Iok/hqdefault.jpg"
+        }
+      ]
+    },
+    "plank": {
+      "exercise_id": "plank",
+      "exercise_name": "Plank",
+      "disclaimer": "Immagine e video a solo scopo illustrativo: l'esecuzione corretta, l'attrezzatura e i carichi devono essere adattati alle proprie capacità e condizioni individuali.",
+      "illustrative_image": {
+        "exercise_id": "plank",
+        "exercise_name": "Plank",
+        "search_term": "Plank",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/7/79/A_U.S._Coast_Guard_recruit%2C_assigned_to_Company_Oscar_188%2C_performs_a_plank_during_incentive_training_at_Coast_Guard_Training_Center_Cape_May_in_Cape_May%2C_N.J.%2C_July_31%2C_2013_130731-G-WA946-943.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/79/A_U.S._Coast_Guard_recruit%2C_assigned_to_Company_Oscar_188%2C_performs_a_plank_during_incentive_training_at_Coast_Guard_Training_Center_Cape_May_in_Cape_May%2C_N.J.%2C_July_31%2C_2013_130731-G-WA946-943.jpg/960px-thumbnail.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "title": "File:A U.S. Coast Guard recruit, assigned to Company Oscar 188, performs a plank during incentive training at Coast Guard Training Center Cape May in Cape May, N.J., July 31, 2013 130731-G-WA946-943.jpg",
+        "author": "Chief Warrant Officer Donnie Brzuska",
+        "author_url": null,
+        "license": "Public domain",
+        "license_url": null,
+        "source": "Wikimedia Commons",
+        "source_page": "https://commons.wikimedia.org/wiki/File:A_U.S._Coast_Guard_recruit,_assigned_to_Company_Oscar_188,_performs_a_plank_during_incentive_training_at_Coast_Guard_Training_Center_Cape_May_in_Cape_May,_N.J.,_July_31,_2013_130731-G-WA946-943.jpg",
+        "illustrative": true,
+        "disclaimer": "Immagine e video a solo scopo illustrativo: l'esecuzione corretta, l'attrezzatura e i carichi devono essere adattati alle proprie capacità e condizioni individuali."
+      },
+      "youtube_videos": [
+        {
+          "video_id": "v25dawSzRTM",
+          "title": "NEVER Do Planks Like This (3 Fixes You Must Make)",
+          "channel": "Jeremy Ethier",
+          "duration": "0:29",
+          "url": "https://www.youtube.com/watch?v=v25dawSzRTM",
+          "thumbnail_url": "https://i.ytimg.com/vi/v25dawSzRTM/hqdefault.jpg"
+        },
+        {
+          "video_id": "xe2MXatLTUw",
+          "title": "✅ The PERFECT Plank",
+          "channel": "Andrew Kwong (DeltaBolic)",
+          "duration": "0:10",
+          "url": "https://www.youtube.com/watch?v=xe2MXatLTUw",
+          "thumbnail_url": "https://i.ytimg.com/vi/xe2MXatLTUw/hqdefault.jpg"
+        },
+        {
+          "video_id": "6LqqeBtFn9M",
+          "title": "How to do the perfect PLANK: technique and common mistakes",
+          "channel": "Get Exercise Confident",
+          "duration": "2:45",
+          "url": "https://www.youtube.com/watch?v=6LqqeBtFn9M",
+          "thumbnail_url": "https://i.ytimg.com/vi/6LqqeBtFn9M/hqdefault.jpg"
+        }
+      ]
+    },
+    "rowing-machine": {
+      "exercise_id": "rowing-machine",
+      "exercise_name": "Rowing Machine",
+      "disclaimer": "Immagine e video a solo scopo illustrativo: l'esecuzione corretta, l'attrezzatura e i carichi devono essere adattati alle proprie capacità e condizioni individuali.",
+      "illustrative_image": {
+        "exercise_id": "rowing-machine",
+        "exercise_name": "Rowing Machine",
+        "search_term": "Rowing Machine",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/0/0d/Concept_2_Indoor_Rowers.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0d/Concept_2_Indoor_Rowers.JPG/960px-Concept_2_Indoor_Rowers.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "title": "File:Concept 2 Indoor Rowers.JPG",
+        "author": "Wikimedia Commons contributor",
+        "author_url": null,
+        "license": "Public domain",
+        "license_url": null,
+        "source": "Wikimedia Commons",
+        "source_page": "https://commons.wikimedia.org/wiki/File:Concept_2_Indoor_Rowers.JPG",
+        "illustrative": true,
+        "disclaimer": "Immagine e video a solo scopo illustrativo: l'esecuzione corretta, l'attrezzatura e i carichi devono essere adattati alle proprie capacità e condizioni individuali."
+      },
+      "youtube_videos": [
+        {
+          "video_id": "ZN0J6qKCIrI",
+          "title": "La guida ufficiale alla tecnica di voga 2026 (REMATATA PERFETTA!)",
+          "channel": "Training Tall e Just Row with Austin",
+          "duration": "6:12",
+          "url": "https://www.youtube.com/watch?v=ZN0J6qKCIrI",
+          "thumbnail_url": "https://i.ytimg.com/vi/ZN0J6qKCIrI/hqdefault.jpg"
+        },
+        {
+          "video_id": "fku76wrnTRI",
+          "title": "✅RIGHT vs ❌WRONG - Rowing Machine #cardio #cardioworkout #rowing #rowingworkout #cardiofitness",
+          "channel": "Katja Believe",
+          "duration": "0:11",
+          "url": "https://www.youtube.com/watch?v=fku76wrnTRI",
+          "thumbnail_url": "https://i.ytimg.com/vi/fku76wrnTRI/hqdefault.jpg"
+        },
+        {
+          "video_id": "4zWu1yuJ0_g",
+          "title": "Correct Rowing Machine Technique, Improve Your Rowing  | Concept2",
+          "channel": "concept2usa",
+          "duration": "1:54",
+          "url": "https://www.youtube.com/watch?v=4zWu1yuJ0_g",
+          "thumbnail_url": "https://i.ytimg.com/vi/4zWu1yuJ0_g/hqdefault.jpg"
+        }
+      ]
+    },
+    "stationary-bike": {
+      "exercise_id": "stationary-bike",
+      "exercise_name": "Stationary Bike",
+      "disclaimer": "Immagine e video a solo scopo illustrativo: l'esecuzione corretta, l'attrezzatura e i carichi devono essere adattati alle proprie capacità e condizioni individuali.",
+      "illustrative_image": {
+        "exercise_id": "stationary-bike",
+        "exercise_name": "Stationary Bike",
+        "search_term": "Stationary Bike",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/3/38/Boclair_exercise_bikes.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/3/38/Boclair_exercise_bikes.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+        "title": "File:Boclair exercise bikes.JPG",
+        "author": "OrangeM16",
+        "author_url": "https://commons.wikimedia.org/w/index.php?title=User:OrangeM16&action=edit&redlink=1",
+        "license": "CC BY-SA 3.0",
+        "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+        "source": "Wikimedia Commons",
+        "source_page": "https://commons.wikimedia.org/wiki/File:Boclair_exercise_bikes.JPG",
+        "illustrative": true,
+        "disclaimer": "Immagine e video a solo scopo illustrativo: l'esecuzione corretta, l'attrezzatura e i carichi devono essere adattati alle proprie capacità e condizioni individuali."
+      },
+      "youtube_videos": [
+        {
+          "video_id": "dieOsJlsvpM",
+          "title": "How to use spin bike for beginners.#indoorcycling #spinclass #spinbike #workouttips",
+          "channel": "mobifitness global",
+          "duration": "0:20",
+          "url": "https://www.youtube.com/watch?v=dieOsJlsvpM",
+          "thumbnail_url": "https://i.ytimg.com/vi/dieOsJlsvpM/hqdefault.jpg"
+        },
+        {
+          "video_id": "gWosN1CY4bg",
+          "title": "Zero Healthcare™ Fitness Tips At Home | How To Use A Spin Bike Correctly",
+          "channel": "Zero Healthcare_Official",
+          "duration": "1:31",
+          "url": "https://www.youtube.com/watch?v=gWosN1CY4bg",
+          "thumbnail_url": "https://i.ytimg.com/vi/gWosN1CY4bg/hqdefault.jpg"
+        },
+        {
+          "video_id": "rEqRmKAQ5xM",
+          "title": "Allenamento di 20 minuti su cyclette per principianti",
+          "channel": "Kaleigh Cohen Cycling",
+          "duration": "20:07",
+          "url": "https://www.youtube.com/watch?v=rEqRmKAQ5xM",
+          "thumbnail_url": "https://i.ytimg.com/vi/rEqRmKAQ5xM/hqdefault.jpg"
+        }
+      ]
+    }
+  }
+}

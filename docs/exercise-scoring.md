@@ -29,3 +29,14 @@ Selezionare gli esercizi compatibili, conservando prerequisiti multipli (panca, 
 ## Aggiornamento v2
 
 Il modello sopra descrive il prototipo iniziale. Ora il catalogo genera 11 bozze di sessione complete, da otto protocolli, con tempi comprensivi di lavoro e recuperi e dieci prerequisiti di esercizi controllati. Dettagli, provenienza e limiti: [Protocolli e sessioni](workout-protocols.md).
+
+## Supporti multimediali illustrativi: immagini Wikimedia Commons e video YouTube
+
+Per facilitare la consultazione degli esercizi e la comprensione della tecnica esecutiva, è disponibile lo script `scripts/associate_exercise_media.py` e il relativo catalogo versionabile `config/exercise-media.json`.
+
+Caratteristiche:
+- **Design offline-first**: di default lo script opera in locale senza effettuare chiamate di rete. Richiede il flag esplicito `--online` per interrogare gli endpoint esterni di Wikimedia Commons o YouTube.
+- **Immagini da Wikimedia Commons**: ricerca automatica per nome dell'esercizio normalizzato, estrazione dei metadati di attribuzione (autore, pagina sorgente, link thumbnail e originale) e verifica delle licenze libere (Creative Commons, CC0, Pubblico Dominio). Esclude loghi, icone e diagrammi non fotografici.
+- **Proposte video YouTube**: ricerca pubblica di tutorial di esecuzione per l'esercizio, con estrazione di ID video, titolo, canale, durata e miniature.
+- **Disclaimer illustrativo esplicito**: ogni scheda esercizio include l'avvertenza che immagini e video hanno scopo puramente illustrativo e che carichi, tecnica ed esecuzione devono essere adattati alle condizioni e abilità individuali.
+- **Test di unità**: verificati con `tests/test_exercise_media.py`.
