@@ -86,7 +86,17 @@ def formulate(config, foods):
             raise ValueError('day_index must be 0..13')
         record = json.loads(path.read_text())['weeks'][day // 7][day % 7]
         slots = {key: record[key] for key in ['lunch', 'dinner']}
+    def fixed_meal(meal):
+        for item in config['locked_meals'][meal]:
+            food_id=item['food_id'];food=foods[food_id];grams=item['grams']
+            if isinstance(grams,bool) or not isinstance(grams,int) or not 1<=grams<=3000:raise ValueError('Quantità bloccata non valida')
+            values=[float(food[n])/100 for n in NUTRIENTS]
+            if any(not math.isfinite(v) or v<0 for v in values):raise ValueError('Nutrienti bloccati non validi')
+            y=var(f'locked_y{len(choices)}',1,1,'B');q=var(f'locked_q{len(choices)}',grams,grams)
+            choices.append(dict(meal=meal,combination='locked',branch_index=0,group=0,food_id=food_id,y=y,q=q,nutrients=values,source=item['source'],reference_id=item['reference_id'],units=item.get('units'),locked=True))
     for meal, expression in slots.items():
+        if meal in config.get('locked_meals',{}):
+            fixed_meal(meal);continue
         letters = expression.split(' oppure ')
         unsupported = [letter for letter in letters if mode != 'free' and letter not in rules[mode]]
         if unsupported:
@@ -159,7 +169,10 @@ def formulate(config, foods):
     if config.get('daily_meals',{}).get('enabled'):
         from daily_meals import add_choices
         preference_cost=add_choices(config,foods,var,add,choices)
+        for meal in ('breakfast','morning_snack','afternoon_snack'):
+            if meal in config.get('locked_meals',{}):fixed_meal(meal)
         slots.update(breakfast='personalized_habits',morning_snack='personalized_habits',afternoon_snack='personalized_habits' if config['daily_meals']['afternoon_fruit'] else 'not_planned')
+    for choice in choices:choice['diversity_eligible']=choice['meal']==config['alternative_slot'] if config.get('alternative_slot') else choice['meal'] in ('lunch','dinner')
     for meal, targets in config.get('meal_targets', {}).items():
         if meal not in slots:
             raise ValueError('Unknown meal in meal_targets')
@@ -252,7 +265,9 @@ async def optimize_day(session,problem):
         active['constraints'].append(dict(coefficients=preference,relation='<=',rhs=penalty+1e-7))
         active['objective']['coefficients']=nutrient_objective
         result=await solve_problem(session,active)
-        if result['mathematical_status'] not in ['optimal','feasible']:result=first
+        if result['mathematical_status'] not in ['optimal','feasible']:
+            result=first
+            result['mathematical_status']='feasible'  # Only the preference optimum was certified.
         else:values_verified(active,result)
         result['preference_penalty']=penalty
         return result
@@ -312,6 +327,10 @@ def decode_result(config, problem, choices, slots, foods, result):
                     crea_id=None if c['food_id'].startswith('personal:') else c['food_id'],
                     food_id=c['food_id'],
                     source=c.get('source','CREA'),
+                    reference_id=c.get('reference_id'),
+                    locked=c.get('locked',False),
+                    diversity_eligible=c.get('diversity_eligible',False),
+                    principal_protein=c.get('principal_protein',False),
                     units=c.get('units'),
                     food=food['name'],
                     grams=grams,

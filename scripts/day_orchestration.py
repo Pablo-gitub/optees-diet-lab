@@ -13,11 +13,11 @@ SAFE = ['demo','scope','slots','status','selections','nutrients','nutrients_by_m
 
 
 def active_choices(choices):
-    return [c for c in choices if c['meal'] in ('lunch','dinner')]
+    return [c for c in choices if c.get('diversity_eligible',c['meal'] in ('lunch','dinner')) and not c.get('locked')]
 
 
 def selection_keys(plan):
-    return {(s['meal'],s['food_id']) for s in plan['selections'] if s['meal'] in ('lunch','dinner')}
+    return {(s['meal'],s['food_id']) for s in plan['selections'] if s.get('diversity_eligible',s['meal'] in ('lunch','dinner')) and not s.get('locked')}
 
 
 def distance(a,b):

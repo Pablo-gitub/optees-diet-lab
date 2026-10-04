@@ -46,6 +46,7 @@ def add_choices(config,foods,var,add,choices):
  foods.update({'personal:'+k:v for k,v in local.items()})
  preferences=prefs.get('preferences',{});cost={}
  for meal in ['breakfast','morning_snack','afternoon_snack']:
+  if meal in config.get('locked_meals',{}):continue
   if meal=='afternoon_snack' and not settings['afternoon_fruit']:continue
   requested=preferences.get(meal,{}).get('preferred_product_id')
   options=[]

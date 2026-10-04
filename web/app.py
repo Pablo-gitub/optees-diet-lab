@@ -374,6 +374,7 @@ def select_plan(plan_id: int, request: Request):
         if not row:
             raise HTTPException(404, 'Piano non trovato')
         payload = json.loads(row['payload'])
+        if 'days' in payload:raise HTTPException(400,'Usa applica piano per una settimana')
         if payload['status'] not in ['optimal', 'feasible']:
             raise HTTPException(400, 'Piano senza soluzione')
         db.execute(
@@ -597,6 +598,7 @@ def search_foods(request:Request,q:str,limit:int=20):
 async def mutate_diary(request,action,entry_id=None):
     user=identity(request,True)
     data={} if action=='delete' else await request.json()
+    if not isinstance(data,dict):raise diary.DomainError('Corpo della richiesta non valido')
     with connect() as db:return diary.diary_mutation(db,user['id'],owner_profile(user),action,data,entry_id)
 
 
@@ -617,6 +619,7 @@ async def reset_meal(request:Request):return await mutate_diary(request,'reset')
 @app.post('/api/measurements')
 async def manual_measurement(request:Request):
     user=identity(request,True);data=await request.json()
+    if not isinstance(data,dict):raise diary.DomainError('Corpo della richiesta non valido')
     with connect() as db:
         date=diary.add_measurement(db,user['id'],data)
         result=diary.day_view(db,user['id'],owner_profile(user),date)
@@ -653,10 +656,14 @@ def read_plan_set(set_id:int,request:Request):
 @app.post('/api/plan-sets/{set_id}/apply')
 async def apply_plan_set(set_id:int,request:Request):
     user=identity(request,True);data=await request.json()
+    if not isinstance(data,dict):raise diary.DomainError('Corpo della richiesta non valido')
     plan_set=read_plan_set(set_id,request)
     plan=next((p for p in plan_set['plans'] if p.get('id')==data.get('plan_id')),None)
     if not plan:raise diary.DomainError('Alternativa non trovata','not_found',404)
-    with connect() as db:return diary.apply_plan(db,user['id'],owner_profile(user),plan_set,plan,data)
+    with connect() as db:
+        result=diary.apply_plan(db,user['id'],owner_profile(user),plan_set,plan,data)
+        if result['applied_slots']:db.execute('UPDATE plans SET selected=1 WHERE id=? AND user_id=?',(plan['id'],user['id']))
+        return result
 
 
 planning_tasks={}
@@ -676,16 +683,39 @@ async def planning_job(job_id,user_id,profile,data,kind):
             with connect() as db:db.execute("UPDATE job SET state='running',progress=.1 WHERE id=?",(job_id,))
             with connect() as db:
                 if kind=='meal':configuration=generate_meal_alternatives(db,user_id,profile,data,make_config)
-                else:configuration=None
+                else:
+                    configuration=None
+                    import datetime as dt
+                    start=dt.date.fromisoformat(data['week_start']);locks={(x.get('date'),x.get('slot')):x for x in data.get('locked',[])}
+                    for offset in range(7):
+                        date=(start+dt.timedelta(days=offset)).isoformat()
+                        view=diary.day_view(db,user_id,profile,date)
+                        for meal in view['meals']:
+                            source=meal['eaten'] if meal['eaten'] is not None else meal['planned'] if meal['planned'] and meal['planned']['locked'] else None
+                            if source is not None:locks[date,meal['slot']]=dict(date=date,slot=meal['slot'],items=[{k:item[k] for k in ('food','grams','units') if k in item} for item in source['items']])
+                    data=dict(data,locked=list(locks.values()))
             async with stdio_client(StdioServerParameters(command=optees_command())) as (read,write):
                 async with ClientSession(read,write) as session:
                     await session.initialize()
-                    if kind=='week':result=await generate_week(session,profile,data,make_config,load_foods())
+                    if kind=='week':
+                        context=context_key(make_config(profile,data.get('day_index',0)))
+                        with connect() as db:
+                            trials=db.execute('SELECT p.payload,f.rating FROM plan_feedback f JOIN plans p ON p.id=f.plan_id AND p.user_id=f.user_id WHERE f.user_id=?',(user_id,)).fetchall()
+                            recent=db.execute('SELECT payload FROM plans WHERE user_id=? AND selected=1 AND created>=?',(user_id,time.time()-7*86400)).fetchall()
+                        observations=[];history=set()
+                        for row in trials:
+                            p=json.loads(row['payload'])
+                            if p.get('optimization',{}).get('context')==context:observations.extend((a,(row['rating']-1)/4) for a in p.get('arms',[]))
+                        for row in recent:
+                            p=json.loads(row['payload'])
+                            for day in p.get('days',[p]):history.update(s['food_id'] for s in day.get('selections',[]))
+                        result=await generate_week(session,profile,data,make_config,load_foods(),history,observations)
                     else:result=await configuration(session)
             with connect() as db:
                 set_id=db.execute('INSERT INTO plan_set(user_id,created,payload,input) VALUES(?,?,?,?)',(user_id,time.time(),'{}',json.dumps(dict(profile=profile,request=data,kind=kind)))).lastrowid
                 result['run_id']=str(set_id)
-                for i,p in enumerate(result['plans'],1):p['id']=i
+                for p in result['plans']:
+                    p['id']=db.execute('INSERT INTO plans(user_id,created,payload) VALUES(?,?,?)',(user_id,time.time(),json.dumps(p))).lastrowid
                 db.execute('UPDATE plan_set SET payload=? WHERE id=?',(json.dumps(result),set_id))
                 db.execute("UPDATE job SET state='done',progress=1,result_ref=? WHERE id=?",(set_id,job_id))
     except Exception as exc:
@@ -697,6 +727,7 @@ async def planning_job(job_id,user_id,profile,data,kind):
 
 async def enqueue_planning(request,kind):
     user=identity(request,True);profile=owner_profile(user);data=await request.json()
+    if not isinstance(data,dict):raise diary.DomainError('Corpo della richiesta non valido')
     if kind=='week':
         diary.valid_date(data.get('week_start'))
         mode=data.get('mode',profile['mode'])

@@ -32,6 +32,9 @@ def migrate(db):
     INSERT OR IGNORE INTO schema_migration VALUES(1,strftime('%s','now'));
     ''')
 
+    columns={r[1] for r in db.execute('PRAGMA table_info(planned_meal)')}
+    if 'day_index' not in columns:db.execute('ALTER TABLE planned_meal ADD COLUMN day_index INTEGER DEFAULT 0')
+
 def local_today():return dt.datetime.now(ZoneInfo('Europe/Rome')).date()
 
 def valid_date(value,consumed=False):
@@ -129,7 +132,7 @@ def day_view(db,user,profile,date):
         if p:planned_count+=1;all_planned.extend(planned_items)
         if st!='unknown':logged+=bool(p);all_eaten.extend(eaten_items)
         actions=['edit','reset'] if st!='unknown' else ['edit','skip']+(['confirm','alternatives'] if p and not p['locked'] else ['confirm'] if p else [])
-        meals.append(dict(slot=slot,state=st,planned=dict(planned_meal_id=p['id'],role=p['role'],status=p['status'],locked=bool(p['locked']),items=planned_items,**totals(planned_items)) if p else None,eaten=dict(items=eaten_items,**totals(eaten_items)) if st!='unknown' else None,actions=actions))
+        meals.append(dict(slot=slot,state=st,planned=dict(planned_meal_id=p['id'],role=p['role'],day_index=p['day_index'],status=p['status'],locked=bool(p['locked']),items=planned_items,**totals(planned_items)) if p else None,eaten=dict(items=eaten_items,**totals(eaten_items)) if st!='unknown' else None,actions=actions))
     targets=json.loads(week['targets']) if week else (profile.get('daily_meals',{}).get('targets') if profile.get('daily_meals',{}).get('enabled') else profile['targets'])
     any_logged=any(m['state']!='unknown' for m in meals)
     return dict(date=date,day_type='unknown',mode=week['mode'] if week else profile['mode'],week_plan_id=week['id'] if week else None,targets={k.replace('_100g',''):v for k,v in targets.items()},totals=dict(planned=totals(all_planned) if planned_count else None,eaten=totals(all_eaten) if any_logged else None,coverage=dict(logged_slots=logged,planned_slots=planned_count)),meals=meals,workout=None,warnings=[])
@@ -175,7 +178,10 @@ def week_view(db,user,profile,start):
     return dict(week_start=start,plan_status=week['status'] if week else None,days=days,budget=dict(kcal_target=sum(v['targets']['kcal']['target'] for v in views),kcal_planned=sum_known(planned_values),kcal_eaten=sum_known(eaten_values) if eaten_values else None,kcal_remaining_planned=sum_known(remaining) if week else None,complete_days=sum(v['totals']['coverage']['planned_slots']>0 and v['totals']['coverage']['logged_slots']==v['totals']['coverage']['planned_slots'] for v in views)),workouts=dict(planned=0,done=0))
 
 def apply_plan(db,user,profile,plan_set,plan,data):
-    scope=data.get('scope');start=plan_set.get('week_start',data.get('date'));valid_date(start)
+    scope=data.get('scope')
+    if isinstance(data.get('plan_id'),bool) or not isinstance(data.get('plan_id'),int):raise DomainError('Identificativo piano non valido')
+    if plan_set.get('slot') and (scope!='meal' or data.get('date')!=plan_set.get('date') or data.get('slot')!=plan_set['slot']):raise DomainError('Alternativa riferita a un altro pasto')
+    start=plan_set.get('week_start',data.get('date'));valid_date(start)
     if scope not in ('week','day','meal'):raise DomainError('Ambito non valido')
     dates=[(dt.date.fromisoformat(start)+dt.timedelta(days=i)).isoformat() for i in range(7)] if scope=='week' else [valid_date(data.get('date'))]
     if scope=='meal':valid_slot(data.get('slot'))
@@ -200,12 +206,12 @@ def apply_plan(db,user,profile,plan_set,plan,data):
             if not selections:continue
             items=[]
             for s in selections:
-                source=s.get('source','CREA');identifier=s['food_id']
+                source=s.get('source','CREA');identifier=s.get('reference_id') or s['food_id']
                 if identifier.startswith('personal:'):source='user_label';identifier=identifier.split(':',1)[1]
                 elif identifier.startswith('recipe:'):source='recipe';identifier=identifier.split(':',1)[1]
                 item=dict(food=dict(source=source,id=identifier),grams=s['grams'],units=s.get('units'))
                 quantity(item,resolve_food(item['food'],profile));items.append(item)
-            db.execute("INSERT INTO planned_meal(week_plan_id,date,slot,items,role,status,locked) VALUES(?,?,?,?,?,'chosen',?) ON CONFLICT(week_plan_id,date,slot) DO UPDATE SET items=excluded.items,role=excluded.role,status='chosen'",(id,date,slot,json.dumps(items),plan.get('role','best'),int(slot in day.get('locked_slots',[]))));applied.append(dict(date=date,slot=slot))
+            db.execute("INSERT INTO planned_meal(week_plan_id,date,slot,items,role,status,locked,day_index) VALUES(?,?,?,?,?,'chosen',?,?) ON CONFLICT(week_plan_id,date,slot) DO UPDATE SET items=excluded.items,role=excluded.role,status='chosen',day_index=excluded.day_index",(id,date,slot,json.dumps(items),plan.get('role','best'),int(slot in day.get('locked_slots',[])),day.get('day_index',0)));applied.append(dict(date=date,slot=slot))
     result=day_view(db,user,profile,dates[0]);result.update(skipped_slots=skipped,applied_slots=applied);return result
 
 def search_foods(db,user,profile,q,limit):

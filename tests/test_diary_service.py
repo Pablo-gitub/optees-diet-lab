@@ -77,3 +77,57 @@ class DiaryTests(unittest.TestCase):
         with self.app.connect() as db:self.app.diary.migrate(db);self.app.diary.migrate(db)
         view=self.client.get('/api/week',params=dict(start=self.date)).json();self.assertEqual(len(view['days']),7);self.assertIsNone(view['budget']['kcal_eaten']);self.assertIsNone(view['days'][1]['kcal_planned'])
         self.post('/api/diary/confirm');view=self.client.get('/api/week',params=dict(start=self.date)).json();self.assertEqual(view['budget']['complete_days'],1)
+
+    def test_job_lifecycle_and_automatic_diary_locks(self):
+        import asyncio
+        import time
+        from contextlib import asynccontextmanager
+        from unittest.mock import patch
+        self.post('/api/diary/confirm')
+        observed=[]
+        @asynccontextmanager
+        async def stream(*args):yield (None,None)
+        class Session:
+            def __init__(self,*args):pass
+            async def __aenter__(self):return self
+            async def __aexit__(self,*args):pass
+            async def initialize(self):pass
+        async def generate(session,profile,data,*args):
+            observed.append(data)
+            return dict(spec_version='orchestration-v2',week_start=data['week_start'],mode='free',plans=[],status='infeasible',warnings=[])
+        with TestClient(self.app.app) as client,patch.object(self.app,'stdio_client',stream),patch.object(self.app,'ClientSession',Session),patch('week_orchestration.generate_week',side_effect=generate):
+            client.cookies.update(self.client.cookies)
+            self.assertEqual(client.post('/api/plans/week',json=dict(week_start=self.date)).status_code,403)
+            response=client.post('/api/plans/week',json=dict(week_start=self.date),headers=self.headers)
+            self.assertEqual(response.status_code,202);job=response.json()['job_id']
+            for _ in range(100):
+                value=client.get('/api/jobs/'+job).json()
+                if value['state'] in ('done','failed'):break
+                time.sleep(.01)
+            self.assertEqual(value['state'],'done');set_id=value['result']['plan_set_id']
+            self.assertEqual(client.get('/api/plan-sets/'+str(set_id)).json()['status'],'infeasible')
+        self.assertEqual(observed[0]['locked'][0]['items'][0]['grams'],80)
+        outsider=TestClient(self.app.app)
+        name='jobother'+str(id(self));outsider.post('/api/register',json=dict(username=name,password='other-password-123'));outsider.post('/api/login',json=dict(username=name,password='other-password-123'))
+        self.assertEqual(outsider.get('/api/jobs/'+job).status_code,404)
+        self.assertEqual(outsider.get('/api/plan-sets/'+str(set_id)).status_code,404)
+
+    def test_personal_label_units_and_recipe_runs_are_owner_scoped(self):
+        from test_daily_meals import preference_fixture
+        profile=dict(self.profile,food_preferences=preference_fixture())
+        with self.app.connect() as db:
+            db.execute('UPDATE users SET profile=? WHERE id=?',(json.dumps(profile),self.user))
+            recipe=dict(title='Ricetta sintetica',status='optimal',selections=[dict(grams=100)],nutrients=dict(kcal=200,protein_g=10,fat_g=5,carbs_g=30))
+            recipe_id=db.execute('INSERT INTO recipe_runs(user_id,created,payload) VALUES(?,0,?)',(self.user,json.dumps(recipe))).lastrowid
+        result=self.client.post('/api/diary/entries',json=dict(date=self.date,slot='breakfast',food=dict(source='user_label',id='bar'),units=2),headers=self.headers)
+        self.assertEqual(result.status_code,200);self.assertEqual(result.json()['meals'][0]['eaten']['items'][0]['grams'],70)
+        result=self.client.post('/api/diary/entries',json=dict(date=self.date,slot='morning_snack',food=dict(source='recipe',id='run:'+str(recipe_id)),grams=50),headers=self.headers)
+        self.assertEqual(result.status_code,200);self.assertEqual(result.json()['meals'][1]['eaten']['kcal'],100)
+        outsider=TestClient(self.app.app);name='recipediary'+str(id(self));outsider.post('/api/register',json=dict(username=name,password='other-password-123'));outsider.post('/api/login',json=dict(username=name,password='other-password-123'));headers={'X-CSRF-Token':outsider.get('/api/profile').json()['csrf']}
+        self.assertEqual(outsider.post('/api/diary/entries',json=dict(date=self.date,slot='lunch',food=dict(source='recipe',id='run:'+str(recipe_id)),grams=50),headers=headers).status_code,400)
+        self.assertEqual(self.client.patch('/api/diary/entries/1',json=dict(grams=100)).status_code,403)
+
+    def test_measurement_and_apply_and_meal_jobs_require_csrf(self):
+        for path in ['/api/measurements','/api/plan-sets/1/apply','/api/plans/meal-alternatives','/api/diary/reset','/api/diary/skip','/api/diary/entries']:
+            self.assertEqual(self.client.post(path,json={}).status_code,403)
+        self.assertEqual(self.client.delete('/api/diary/entries/1').status_code,403)
