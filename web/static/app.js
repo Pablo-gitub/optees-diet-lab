@@ -111,6 +111,7 @@ async function load() {
   $('login').hidden = true;
   $('workspace').hidden = false;
   $('user-name').textContent = profile.display_name;
+  $('user-initial').textContent = (profile.display_name || '?').trim().charAt(0);
   $('display-name').value = profile.display_name;
   $('preferences').value = profile.preference_note.replace('Preferenze registrate, non ancora applicate ai calcoli.','Preferenze di colazione e spuntini applicate quando il bilancio giornaliero è attivo.');
   $('demo').checked = profile.targets_demo;
@@ -126,125 +127,202 @@ async function loadPlans() {
   plans = await api('plans');
   renderPlans();
 }
+const mealMeta = {
+  breakfast: ['Colazione', '☕'],
+  morning_snack: ['Metà mattina', '🍎'],
+  lunch: ['Pranzo', '🍝'],
+  afternoon_snack: ['Metà pomeriggio', '🍌'],
+  dinner: ['Cena', '🍽️'],
+};
+const macroMeta = [
+  ['kcal', 'Energia', 'kcal'],
+  ['protein_g', 'Proteine', 'g'],
+  ['carbs_available_g', 'Carboidrati', 'g'],
+  ['fat_g', 'Grassi', 'g'],
+];
+const fmt0 = (value) => Math.round(value).toLocaleString('it-IT');
+const percent = (value) => Math.max(0, Math.min(100, value * 100)) + '%';
+function foodSource(f) {
+  if (f.source === 'user_label') return ['tua etichetta', 'src src-user'];
+  if (f.source === 'Open Food Facts') return ['marca', 'src src-brand'];
+  return null;
+}
+const foodKey = (f) => f.meal + '|' + (f.crea_id || f.id || f.food);
+function meter(label, unit, value, check) {
+  const wrap = element('div', undefined, 'meter');
+  const head = element('div', undefined, 'meter-head');
+  const shown = element('span', fmt0(value) + ' ' + unit, 'meter-value');
+  if (check?.target != null) shown.append(element('em', ' / ' + fmt0(check.target)));
+  head.append(element('span', label, 'meter-label'), shown);
+  wrap.append(head);
+  if (check) {
+    const scale = Math.max(check.max, value) * 1.08 || 1;
+    const track = element('div', undefined, 'meter-track');
+    const range = element('span', undefined, 'meter-range');
+    range.style.left = percent(check.min / scale);
+    range.style.width = percent((check.max - check.min) / scale);
+    const fill = element('span', undefined, 'meter-fill' + (check.respected ? '' : ' out'));
+    fill.style.width = percent(value / scale);
+    track.append(range, fill);
+    if (check.target != null) {
+      const tick = element('span', undefined, 'meter-target');
+      tick.style.left = percent(check.target / scale);
+      track.append(tick);
+    }
+    track.title = 'Limiti ' + fmt0(check.min) + '–' + fmt0(check.max) + ' ' + unit + (check.target != null ? ' · bersaglio ' + fmt0(check.target) : '');
+    wrap.append(track);
+    if (!check.respected) wrap.append(element('div', '⚠ Fuori dai limiti ' + fmt0(check.min) + '–' + fmt0(check.max) + ' ' + unit, 'meter-out'));
+  }
+  return wrap;
+}
+function technicalDetails(p) {
+  const details = element('details', undefined, 'tech');
+  details.append(element('summary', 'Dettagli tecnici'));
+  const opt = p.optimization;
+  if (opt) {
+    const names = { balanced: 'Bilanciato', pareto: 'Pareto · campione di compromessi', minmax: 'Min-Max', maxmin: 'Max-Min' };
+    details.append(element('p', 'Metodo: ' + names[opt.strategy] + (opt.requested === 'bandit' ? ' · suggerito dal bandit (' + (opt.bandit_reason === 'exploration' ? 'esplorazione' : 'UCB1') + ')' : ''), 'muted'));
+    if (opt.relative_errors) {
+      const labels = { kcal: 'Energia', protein_g: 'Proteine', fat_g: 'Grassi', carbs_available_g: 'Carboidrati' };
+      details.append(element('p', 'Scarto relativo peggiore: ' + (100 * opt.worst_relative_error).toFixed(1) + '% · Soddisfazione minima: ' + (100 * opt.minimum_satisfaction).toFixed(1) + '%', 'muted'));
+      details.append(element('p', Object.entries(opt.relative_errors).map(([k, v]) => labels[k] + ': scarto ' + (100 * v).toFixed(1) + '%').join(' · '), 'muted'));
+    }
+    if (opt.strategy === 'pareto') details.append(element('p', 'Non dominata nel campione calcolato; la frontiera completa non è garantita.', 'muted'));
+  }
+  if (p.diet_note) details.append(element('p', p.diet_note, 'muted'));
+  (p.preference_changes || []).forEach((note) => details.append(element('p', note, 'muted')));
+  const report = p.constraint_report;
+  if (report) {
+    details.append(element('p', 'Porzioni, confezioni intere e scelte alimentari del modello verificate. Il bersaglio è un obiettivo: minimo e massimo sono i limiti obbligatori.', 'muted'));
+    const scroll = element('div', undefined, 'table-scroll');
+    const table = element('table');
+    const heading = element('tr');
+    ['Ambito / nutriente', 'Risultato', 'Limiti', 'Bersaglio', 'Esito'].forEach((t) => heading.append(element('th', t)));
+    const thead = element('thead');
+    thead.append(heading);
+    table.append(thead);
+    const body = element('tbody');
+    const labels = { kcal: 'Energia', protein_g: 'Proteine', carbs_available_g: 'Carboidrati', fat_g: 'Grassi' };
+    const scopes = { day: p.scope === 'full_day_planned_meals' ? 'Giornata' : 'Pranzo + cena', ...Object.fromEntries(Object.entries(mealMeta).map(([k, v]) => [k, v[0]])) };
+    const number = (value) => value.toLocaleString('it-IT', { maximumFractionDigits: 2 });
+    report.checks.forEach((c) => {
+      const unit = c.nutrient === 'kcal' ? ' kcal' : ' g';
+      const row = element('tr');
+      [scopes[c.meal] + ' · ' + labels[c.nutrient], number(c.actual) + unit, number(c.min) + '–' + number(c.max) + unit, c.target == null ? '—' : number(c.target) + unit, c.respected ? '✓' : 'Fuori limite'].forEach((t) => row.append(element('td', t)));
+      body.append(row);
+    });
+    table.append(body);
+    scroll.append(table);
+    details.append(scroll, element('p', report.rounding_note, 'muted'));
+  } else details.append(element('p', 'Storico: dettaglio dei vincoli non disponibile. Genera nuove alternative per visualizzarlo.', 'muted'));
+  return details;
+}
+function ratingControl(entry) {
+  const box = element('div', undefined, 'feedback');
+  box.append(element('span', entry.feedback == null ? 'L’hai provato? Valutalo' : 'La tua valutazione', 'feedback-label'));
+  const stars = element('div', undefined, 'stars');
+  stars.setAttribute('role', 'group');
+  stars.setAttribute('aria-label', 'Valutazione del piano provato');
+  for (let i = 1; i <= 5; i++) {
+    const star = element('button', '★', 'star' + (entry.feedback >= i ? ' on' : ''));
+    star.type = 'button';
+    star.title = 'L’ho provato · ' + i + ' su 5';
+    star.setAttribute('aria-label', 'L’ho provato, voto ' + i + ' su 5');
+    star.onclick = async () => {
+      try {
+        await api('plans/' + entry.id + '/feedback', 'POST', { tried: true, rating: i });
+        await loadPlans();
+        message('Valutazione salvata: ' + i + ' su 5');
+      } catch (e) {
+        message(e.message);
+      }
+    };
+    stars.append(star);
+  }
+  box.append(stars);
+  return box;
+}
 function renderPlans() {
   const day = Number($('day').value),
     mode = $('planning-mode').value;
   const visible = plans.filter((x) => x.plan.day_index === day && x.plan.mode === mode);
   $('plans').replaceChildren();
   $('empty').hidden = visible.length > 0;
-  $('count').textContent = visible.length ? visible.length + ' alternative nello storico' : '';
+  const solved = visible.filter((x) => ['optimal', 'feasible'].includes(x.plan.status));
+  // Highlight foods that are not shared by every solved alternative.
+  const counts = {};
+  solved.forEach((x) => new Set(x.plan.selections.map(foodKey)).forEach((k) => (counts[k] = (counts[k] || 0) + 1)));
+  const compare = solved.length > 1;
+  $('count').replaceChildren();
+  if (visible.length) {
+    $('count').append(document.createTextNode(visible.length + (visible.length === 1 ? ' alternativa' : ' alternative')));
+    if (compare) $('count').append(document.createTextNode(' · '), element('span', 'cosa cambia', 'legend-varies'));
+  }
   visible.forEach((entry, index) => {
     const p = entry.plan;
     const card = element('article', undefined, 'card' + (entry.selected ? ' selected' : ''));
     const header = element('div', undefined, 'card-header');
-    header.append(
-      element('h3', 'Alternativa ' + (index + 1)),
-      element('span', entry.selected ? 'Scelta' : p.demo ? 'Demo' : 'Configurata', 'tag'),
-    );
+    header.append(element('h3', 'Alternativa ' + (index + 1)), element('span', entry.selected ? '✓ Scelta' : p.demo ? 'Demo' : 'Configurata', 'tag' + (entry.selected ? ' is-selected' : '')));
     card.append(header);
     if (!['optimal', 'feasible'].includes(p.status)) {
-      card.append(
-        element(
-          'p',
-          'Nessuna soluzione nel sottoinsieme modellato con questi vincoli. Questo non prova che la dieta completa sia impossibile.',
-          'error',
-        ),
-      );
-    } else {
-      const opt=p.optimization;
-      if(opt){
-        const names={balanced:'Bilanciato',pareto:'Pareto · campione di compromessi',minmax:'Min-Max',maxmin:'Max-Min'};
-        card.append(element('p',names[opt.strategy]+(opt.requested==='bandit'?' · suggerito dal bandit ('+(opt.bandit_reason==='exploration'?'esplorazione':'UCB1')+')':''),'muted'));
-        if(opt.relative_errors)card.append(element('p','Scarto relativo peggiore: '+(100*opt.worst_relative_error).toFixed(1)+'% · Soddisfazione minima: '+(100*opt.minimum_satisfaction).toFixed(1)+'%','muted'));
-        if(opt.relative_errors){const labels={kcal:'Energia',protein_g:'Proteine',fat_g:'Grassi',carbs_available_g:'Carboidrati'};card.append(element('p',Object.entries(opt.relative_errors).map(([k,v])=>labels[k]+': scarto '+(100*v).toFixed(1)+'%').join(' · '),'muted'))}
-        if(opt.strategy==='pareto')card.append(element('p','Non dominata nel campione calcolato; la frontiera completa non è garantita.','muted'));
-      }
-      const meals=p.scope==='full_day_planned_meals'?['breakfast','morning_snack','lunch','afternoon_snack','dinner']:['lunch','dinner'];
-      const mealNames={breakfast:'Colazione',morning_snack:'Metà mattina',lunch:'Pranzo',afternoon_snack:'Metà pomeriggio',dinner:'Cena'};
-      card.append(element('p',p.scope==='full_day_planned_meals'?'Totali della giornata pianificata':'Totali di pranzo + cena','muted'));
-      if(p.diet_note)card.append(element('p',p.diet_note,'muted'));
-      (p.preference_changes||[]).forEach(note=>card.append(element('p',note,'muted')));
-      meals.forEach((meal) => {
-        const block = element('div', undefined, 'meal');
-        block.append(element('h4', mealNames[meal]+(p.slots[meal]==='personalized_habits'?' · abitudini personali':p.slots[meal]==='not_planned'?' · non pianificato':' · '+p.slots[meal])));
-        p.selections
-          .filter((f) => f.meal === meal)
-          .forEach((f) => {
-            const row = element('div', undefined, 'food');
-            row.append(element('span', f.food+((f.source==='CREA'||(!f.source&&f.crea_id))?' · alimento generico CREA':f.source==='user_label'?' · etichetta fornita nel profilo':'')), element('span', f.grams.toLocaleString('it-IT') + ' g' + (f.units ? ' · ' + f.units + (f.units === 1 ? ' confezione' : ' confezioni') : '')));
-            block.append(row);
-          });
-        if(p.nutrients_by_meal?.[meal]&&p.slots[meal]!=='not_planned')block.append(element('p',Math.round(p.nutrients_by_meal[meal].kcal)+' kcal · '+p.nutrients_by_meal[meal].protein_g.toFixed(1)+' g proteine · '+p.nutrients_by_meal[meal].carbs_available_g.toFixed(1)+' g carboidrati · '+p.nutrients_by_meal[meal].fat_g.toFixed(1)+' g grassi','muted'));
-        card.append(block);
-      });
-      const metrics = element('div', undefined, 'metrics');
-      [
-        ['kcal', 'kcal'],
-        ['protein_g', 'proteine'],
-        ['carbs_available_g', 'carboidrati'],
-        ['fat_g', 'grassi'],
-      ].forEach(([key, label]) => {
-        const cell = element('div');
-        cell.append(
-          element('strong', Math.round(p.nutrients[key]) + (key === 'kcal' ? '' : ' g')),
-          element('small', label),
-        );
-        metrics.append(cell);
-      });
-      card.append(metrics);
-      const report = p.constraint_report;
-      if (report) {
-        card.append(element('p', report.verified && report.all_respected ? '✓ Vincoli modellati rispettati' : 'Verifica dei vincoli da controllare', report.all_respected ? 'constraint-ok' : 'error'));
-        const details = element('details', undefined, 'constraint-details');
-        details.append(element('summary', 'Quantità, obiettivi e limiti verificati'));
-        details.append(element('p', 'Porzioni, confezioni intere e scelte alimentari del modello verificate. Il bersaglio è un obiettivo: minimo e massimo sono i limiti obbligatori.', 'muted'));
-        const table = element('table');
-        const heading = element('tr');
-        ['Ambito / nutriente', 'Risultato', 'Limiti', 'Bersaglio', 'Esito'].forEach(t => heading.append(element('th', t)));
-        const thead = element('thead'); thead.append(heading); table.append(thead);
-        const body = element('tbody');
-        const labels = {kcal:'Energia',protein_g:'Proteine',carbs_available_g:'Carboidrati',fat_g:'Grassi'};
-        const scopes = {day:p.scope === 'full_day_planned_meals' ? 'Giornata' : 'Pranzo + cena',breakfast:'Colazione',morning_snack:'Metà mattina',lunch:'Pranzo',afternoon_snack:'Metà pomeriggio',dinner:'Cena'};
-        const number = value => value.toLocaleString('it-IT', {maximumFractionDigits:2});
-        report.checks.forEach(c => {
-          const unit = c.nutrient === 'kcal' ? ' kcal' : ' g';
-          const row = element('tr');
-          [scopes[c.meal] + ' · ' + labels[c.nutrient], number(c.actual) + unit,
-           number(c.min) + '–' + number(c.max) + unit,
-           c.target == null ? '—' : number(c.target) + unit,
-           c.respected ? '✓ Rispettato' : 'Fuori limite'].forEach(t => row.append(element('td', t)));
-          body.append(row);
-        });
-        table.append(body); details.append(table);
-        details.append(element('p', report.rounding_note, 'muted'));
-        card.append(details);
-      } else {
-        card.append(element('p', 'Storico: dettaglio dei vincoli non disponibile. Genera nuove alternative per visualizzarlo.', 'muted'));
-      }
-      const button = element(
-        'button',
-        entry.selected ? 'Piano scelto' : 'Scegli questo piano',
-        entry.selected ? 'secondary' : '',
-      );
-      const feedback=element('div',undefined,'feedback');
-      const tried=element('input');tried.type='checkbox';tried.checked=entry.feedback!=null;
-      const triedLabel=element('label');triedLabel.append(tried,document.createTextNode(' Ho effettivamente provato questo piano'));
-      const rating=element('select');rating.setAttribute('aria-label','Valutazione del piano');
-      for(let i=1;i<=5;i++){const o=element('option',i+' / 5');o.value=i;rating.append(o)}rating.value=entry.feedback??3;
-      const send=element('button',entry.feedback==null?'Salva feedback':'Aggiorna feedback','secondary');
-      send.onclick=async()=>{if(!tried.checked){message('Conferma di aver effettivamente provato il piano');return}try{await api('plans/'+entry.id+'/feedback','POST',{tried:true,rating:Number(rating.value)});await loadPlans();message('Feedback personale salvato')}catch(e){message(e.message)}};
-      feedback.append(triedLabel,rating,send);card.append(feedback);
-      button.disabled = entry.selected;
-      button.onclick = async () => {
-        try {
-          await api('plans/' + entry.id + '/select', 'POST', {});
-          await loadPlans();
-        } catch (e) {
-          message(e.message);
-        }
-      };
-      card.append(button);
+      card.append(element('p', 'Nessuna soluzione nel sottoinsieme modellato con questi vincoli. Questo non prova che la dieta completa sia impossibile.', 'error'));
+      $('plans').append(card);
+      return;
     }
+    const checks = Object.fromEntries((p.constraint_report?.checks || []).filter((c) => c.meal === 'day').map((c) => [c.nutrient, c]));
+    const hero = element('div', undefined, 'plan-hero');
+    const left = element('div');
+    const kcal = element('div', fmt0(p.nutrients.kcal), 'hero-kcal');
+    kcal.append(element('small', 'kcal'));
+    left.append(kcal, element('div', p.scope === 'full_day_planned_meals' ? 'Totale della giornata pianificata' : 'Totale di pranzo + cena', 'hero-caption'));
+    hero.append(left);
+    const report = p.constraint_report;
+    if (report) hero.append(element('span', report.verified && report.all_respected ? '✓ Vincoli rispettati' : '⚠ Vincoli da controllare', 'status' + (report.all_respected ? '' : ' bad')));
+    card.append(hero);
+    const meters = element('div', undefined, 'meters');
+    macroMeta.forEach(([key, label, unit]) => meters.append(meter(label, unit, p.nutrients[key], checks[key])));
+    card.append(meters);
+    const meals = p.scope === 'full_day_planned_meals' ? ['breakfast', 'morning_snack', 'lunch', 'afternoon_snack', 'dinner'] : ['lunch', 'dinner'];
+    meals.forEach((meal) => {
+      const slot = p.slots[meal];
+      const block = element('div', undefined, 'meal');
+      const head = element('div', undefined, 'meal-head');
+      head.append(element('span', mealMeta[meal][1], 'meal-icon'), element('h4', mealMeta[meal][0]));
+      if (slot === 'personalized_habits') head.append(element('span', 'abitudini', 'chip'));
+      else if (slot === 'not_planned') head.append(element('span', 'non pianificato', 'chip'));
+      else if (slot) head.append(element('span', 'schema ' + slot, 'chip'));
+      const mealNutrients = p.nutrients_by_meal?.[meal];
+      if (mealNutrients && slot !== 'not_planned') head.append(element('span', fmt0(mealNutrients.kcal) + ' kcal', 'meal-kcal'));
+      block.append(head);
+      p.selections
+        .filter((f) => f.meal === meal)
+        .forEach((f) => {
+          const row = element('div', undefined, 'food' + (compare && counts[foodKey(f)] < solved.length ? ' varies' : ''));
+          const name = element('span', f.food.replace(/,\s*/g, ', '), 'food-name');
+          const source = foodSource(f);
+          if (source) name.append(element('span', source[0], source[1]));
+          const amount = element('span', fmt0(f.grams) + ' g', 'food-grams');
+          if (f.units) amount.append(element('small', ' · ' + f.units + ' conf.'));
+          row.append(name, amount);
+          block.append(row);
+        });
+      if (mealNutrients && slot !== 'not_planned')
+        block.append(element('p', 'P ' + fmt0(mealNutrients.protein_g) + ' g · C ' + fmt0(mealNutrients.carbs_available_g) + ' g · G ' + fmt0(mealNutrients.fat_g) + ' g', 'meal-macros'));
+      card.append(block);
+    });
+    card.append(technicalDetails(p), ratingControl(entry));
+    const button = element('button', entry.selected ? '✓ Piano scelto' : 'Scegli questo piano', 'card-cta ' + (entry.selected ? 'secondary' : 'primary'));
+    button.disabled = entry.selected;
+    button.onclick = async () => {
+      try {
+        await api('plans/' + entry.id + '/select', 'POST', {});
+        await loadPlans();
+        message('Piano scelto per questa giornata');
+      } catch (e) {
+        message(e.message);
+      }
+    };
+    card.append(button);
     $('plans').append(card);
   });
 }
@@ -339,14 +417,23 @@ $('generate').onclick = async () => {
     button.textContent = 'Genera alternative';
   }
 };
+const pageMeta = {
+  planning: ['Dalle possibilità al piano', 'Pianificazione', 'Genera e confronta le alternative per una giornata.'],
+  recipes: ['Cucina', 'Ricette', 'Sfoglia il catalogo, controlla la compatibilità con la dieta, adatta un piatto.'],
+  profile: ['Impostazioni', 'Il mio profilo', 'Obiettivi, abitudini e preferenze che guidano i calcoli.'],
+  health: ['Dati personali', 'Salute', 'Misure e dispendio importati da Apple Salute.'],
+};
 document.querySelectorAll('[data-page]').forEach(
   (button) =>
     (button.onclick = () => {
       const page = button.dataset.page;
       ['profile', 'planning', 'recipes', 'health'].forEach((id) => ($(id).hidden = id !== page));
       document.querySelectorAll('[data-page]').forEach((b) => b.classList.toggle('active', b === button));
-      $('page-title').textContent =
-        page === 'profile' ? 'Il mio profilo' : page === 'recipes' ? 'Ricette dal mondo' : page === 'health' ? 'Salute · dati personali' : 'Pianificazione';
+      const meta = pageMeta[page];
+      $('page-eyebrow').textContent = meta[0];
+      $('page-title').textContent = meta[1];
+      $('page-subtitle').textContent = meta[2];
+      window.scrollTo({ top: 0 });
       if (page === 'health') loadHealth().catch(e => message(e.message));
       if (page === 'recipes') Promise.all([loadRecipes(), loadRecipeSolver()]).catch((e) => message(e.message));
     }),
@@ -360,20 +447,146 @@ for (let i = 0; i < 14; i++) {
 load().catch(() => {});
 
 const cuisineLabels = {
-  italian: 'Italiana',
-  chinese: 'Cinese',
-  japanese: 'Giapponese',
-  indian: 'Indiana',
-  thai: 'Thailandese',
-  french: 'Francese',
-  mexican: 'Messicana',
-  greek: 'Greca',
-  spanish: 'Spagnola',
-  korean: 'Coreana',
-  mediterranean: 'Mediterranea',
+  'afghan': 'Afghana',
+  'albanian': 'Albanese',
+  'algerian': 'Algerina',
+  'american': 'Americana',
+  'argentinian': 'Argentina',
+  'armenian': 'Armena',
+  'australian': 'Australiana',
+  'austrian': 'Austriaca',
+  'azerbaijani': 'Azera',
+  'belarusian': 'Bielorussa',
+  'belgian': 'Belga',
+  'bengali': 'Bengalese',
+  'bhutanese': 'Bhutanese',
+  'bolivian': 'Boliviana',
+  'bosnian': 'Bosniaca',
+  'brazilian': 'Brasiliana',
+  'british': 'Britannica',
+  'bulgarian': 'Bulgara',
+  'burmese': 'Birmana',
+  'cameroonian': 'Camerunese',
+  'canadian': 'Canadese',
+  'chilean': 'Cilena',
+  'chinese': 'Cinese',
+  'colombian': 'Colombiana',
+  'congolese': 'Congolese',
+  'costa-rican': 'Costaricana',
+  'croatian': 'Croata',
+  'cuban': 'Cubana',
+  'cypriot': 'Cipriota',
+  'czech': 'Ceca',
+  'danish': 'Danese',
+  'dominican': 'Dominicana',
+  'dutch': 'Olandese',
+  'east-asian': 'Asia orientale',
+  'eastern-european': 'Europa orientale',
+  'ecuadorian': 'Ecuadoriana',
+  'egyptian': 'Egiziana',
+  'emirati': 'Emiratina',
+  'estonian': 'Estone',
+  'ethiopian': 'Etiope',
+  'filipino': 'Filippina',
+  'finnish': 'Finlandese',
+  'french': 'Francese',
+  'georgian': 'Georgiana',
+  'german': 'Tedesca',
+  'ghanaian': 'Ghanese',
+  'greek': 'Greca',
+  'guatemalan': 'Guatemalteca',
+  'honduran': 'Honduregna',
+  'hungarian': 'Ungherese',
+  'icelandic': 'Islandese',
+  'indian': 'Indiana',
+  'indonesian': 'Indonesiana',
+  'iraqi': 'Irachena',
+  'irish': 'Irlandese',
+  'israeli': 'Israeliana',
+  'italian': 'Italiana',
+  'ivorian': 'Ivoriana',
+  'jamaican': 'Giamaicana',
+  'japanese': 'Giapponese',
+  'jordanian': 'Giordana',
+  'kazakh': 'Kazaka',
+  'kenyan': 'Keniota',
+  'khmer': 'Khmer',
+  'korean': 'Coreana',
+  'kosovar': 'Kosovara',
+  'kuwaiti': 'Kuwaitiana',
+  'kyrgyz': 'Kirghisa',
+  'lao': 'Laotiana',
+  'latvian': 'Lettone',
+  'lebanese': 'Libanese',
+  'lithuanian': 'Lituana',
+  'luxembourgish': 'Lussemburghese',
+  'macedonian': 'Macedone',
+  'malagasy': 'Malgascia',
+  'malaysian': 'Malese',
+  'maldivian': 'Maldiviana',
+  'malian': 'Maliana',
+  'maltese': 'Maltese',
+  'mediterranean': 'Mediterranea',
+  'mexican': 'Messicana',
+  'middle-eastern': 'Mediorientale',
+  'modern-european': 'Europea moderna',
+  'moldovan': 'Moldava',
+  'mongolian': 'Mongola',
+  'montenegrin': 'Montenegrina',
+  'moroccan': 'Marocchina',
+  'mozambican': 'Mozambicana',
+  'nepali': 'Nepalese',
+  'new-zealand': 'Neozelandese',
+  'nicaraguan': 'Nicaraguense',
+  'nigerian': 'Nigeriana',
+  'north-indian': 'India del nord',
+  'northern-european': 'Nord Europa',
+  'norwegian': 'Norvegese',
+  'omani': 'Omanita',
+  'pakistani': 'Pakistana',
+  'panamanian': 'Panamense',
+  'paraguayan': 'Paraguaiana',
+  'persian': 'Persiana',
+  'peruvian': 'Peruviana',
+  'polish': 'Polacca',
+  'portuguese': 'Portoghese',
+  'romanian': 'Rumena',
+  'russian': 'Russa',
+  'saudi': 'Saudita',
+  'senegalese': 'Senegalese',
+  'serbian': 'Serba',
+  'singaporean': 'Singaporiana',
+  'slovak': 'Slovacca',
+  'slovenian': 'Slovena',
+  'south-african': 'Sudafricana',
+  'south-indian': 'India del sud',
+  'southeast-asian': 'Sud-est asiatico',
+  'spanish': 'Spagnola',
+  'sri-lankan': 'Singalese',
+  'sudanese': 'Sudanese',
+  'swedish': 'Svedese',
+  'swiss': 'Svizzera',
+  'syrian': 'Siriana',
+  'taiwanese': 'Taiwanese',
+  'tajik': 'Tagika',
+  'tanzanian': 'Tanzaniana',
+  'thai': 'Thailandese',
+  'trinidadian': 'Trinidadiana',
+  'tunisian': 'Tunisina',
+  'turkish': 'Turca',
+  'turkmen': 'Turkmena',
+  'ugandan': 'Ugandese',
+  'ukrainian': 'Ucraina',
+  'uruguayan': 'Uruguaiana',
+  'uzbek': 'Uzbeka',
+  'venezuelan': 'Venezuelana',
+  'vietnamese': 'Vietnamita',
+  'west-african': 'Africa occidentale',
+  'yemeni': 'Yemenita',
+  'zimbabwean': 'Zimbabwese',
 };
 async function loadCuisines() {
-  cuisineOptions = await api('cuisines');
+  cuisineOptions = (await api('cuisines')).sort((a, b) => (cuisineLabels[a.id] || a.name).localeCompare(cuisineLabels[b.id] || b.name, 'it'));
   $('cuisine-preferences').replaceChildren();
   $('recipe-cuisine').replaceChildren(element('option', 'Tutte le cucine'));
   $('recipe-cuisine').firstChild.value = '';
@@ -390,6 +603,23 @@ async function loadCuisines() {
     $('recipe-cuisine').append(option);
   });
 }
+const dishIcons = [
+  [/pasta|spaghetti|noodle|lasagn|ravioli|gnocchi|mantu|dumpling|pierogi/i, '🍝'],
+  [/rice|risotto|pilaf|plov|paella|biryani|pilau/i, '🍚'],
+  [/soup|stew|broth|chowder|borscht|minestr|goulash/i, '🥣'],
+  [/salad/i, '🥗'],
+  [/curry|dal|dhal|masala/i, '🍛'],
+  [/fish|salmon|cod|tuna|shrimp|prawn|saltfish|seafood/i, '🐟'],
+  [/chicken|poultry|turkey/i, '🍗'],
+  [/beef|lamb|pork|steak|meat|kebab|sausage/i, '🥩'],
+  [/bread|flatbread|naan|pita|tortilla|arepa/i, '🥖'],
+  [/cake|biscuit|cookie|tart|pie|pudding|strudel|alfajor|dessert|sweet|baklava/i, '🍰'],
+  [/bean|lentil|chickpea|hummus|falafel/i, '🫘'],
+  [/egg|omelet|frittata|shakshuka/i, '🍳'],
+  [/oat|porridge|pancake/i, '🥞'],
+];
+const dishIcon = (title) => (dishIcons.find(([re]) => re.test(title)) || [null, '🍲'])[1];
+const hash = (text) => [...(text || '')].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
 async function loadRecipes() {
   const params = new URLSearchParams({
     q: $('recipe-search').value,
@@ -399,14 +629,14 @@ async function loadRecipes() {
   });
   const data = await api('recipes?' + params);
   $('recipe-count').textContent =
-    data.total +
+    data.total.toLocaleString('it-IT') +
     ' ricette · ' +
     (data.recipes.length ? recipeOffset + 1 : 0) +
     '–' +
     (recipeOffset + data.recipes.length);
   $('recipe-list').replaceChildren();
   data.recipes.forEach((r) => {
-    const card = element('article', undefined, 'card');
+    const card = element('article', undefined, 'card recipe-card');
     if (r.illustrative_image) {
       const img = element('img', undefined, 'recipe-thumb');
       img.src = r.illustrative_image.thumbnail_url || r.illustrative_image.image_url;
@@ -423,29 +653,20 @@ async function loadRecipes() {
       srcLink.href = r.illustrative_image.source_page;
       srcLink.target = '_blank';
       srcLink.rel = 'noopener noreferrer';
-      attr.append(
-        srcLink,
-        element('span', 'Foto illustrativa — ingredienti e porzioni possono differire.', 'disclaimer'),
-      );
+      attr.append(srcLink, element('span', 'Foto illustrativa — ingredienti e porzioni possono differire.', 'disclaimer'));
       card.append(img, attr);
-    }
-    card.append(
-      element('h3', r.title),
-      element(
-        'p',
-        (cuisineLabels[r.cuisine_id] || r.cuisine) +
-          ' · ' +
-          (r.total_minutes ?? '?') +
-          ' min · ' +
-          r.servings +
-          ' porzioni',
-        'muted',
-      ),
-    );
+    } else card.append(element('div', dishIcon(r.title), 'recipe-placeholder tone-' + (hash(r.cuisine_id) % 4)));
+    const body = element('div', undefined, 'recipe-body');
+    body.append(element('h3', r.title), element('p', cuisineLabels[r.cuisine_id] || r.cuisine, 'muted'));
     const n = r.declared_nutrition;
-    card.append(
-      element('p', (n.kcal ?? '?') + ' kcal per porzione · ' + (n.protein_g ?? '?') + ' g proteine', 'subhead'),
-    );
+    const facts = element('div', undefined, 'recipe-facts');
+    [
+      '⏱ ' + (r.total_minutes ?? '?') + ' min',
+      r.servings + ' porzioni',
+      (n.kcal ?? '?') + ' kcal/porz.',
+      (n.protein_g ?? '?') + ' g proteine',
+    ].forEach((text) => facts.append(element('span', text, 'chip')));
+    body.append(facts);
     const details = element('details');
     details.append(element('summary', 'Ingredienti e procedimento'));
     r.ingredients.forEach((i) => {
@@ -457,12 +678,13 @@ async function loadRecipes() {
       r.steps.forEach((text) => steps.append(element('li', text)));
       details.append(steps);
     } else details.append(element('p', 'Procedimento disponibile nella pagina originale.', 'muted'));
-    card.append(details);
+    body.append(details);
     const link = element('a', r.source + ' · ' + r.license);
     if (r.source_url.startsWith('https://')) link.href = r.source_url;
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
-    card.append(link, element('p', 'Abbinamento ingredienti: da verificare.', 'muted'));
+    body.append(link, element('p', 'Abbinamento ingredienti da verificare.', 'muted small'));
+    card.append(body);
     $('recipe-list').append(card);
   });
   $('recipe-prev').disabled = recipeOffset === 0;
@@ -785,6 +1007,7 @@ function renderRecipeDietOptions() {
           $('solver-recipe').value = r.recipe_id;
           recipeProductFields();
           $('recipe-solution').replaceChildren();
+          showRecipeTab('solver');
           message(r.label + '. La prova del solver resta separata dal piano giornaliero.');
         };
         item.append(button);
@@ -840,3 +1063,29 @@ async function loadHealth(){
  if(healthPoll)clearTimeout(healthPoll);healthPoll=running?setTimeout(()=>loadHealth().catch(e=>message(e.message)),3000):null;
 }
 $('health-import').onclick=async()=>{try{await api('health/import','POST',{});await loadHealth()}catch(e){message(e.message)}};
+
+function showRecipeTab(tab) {
+  document.querySelectorAll('[data-recipe-tab]').forEach((b) => {
+    const on = b.dataset.recipeTab === tab;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-selected', String(on));
+  });
+  document.querySelectorAll('[data-recipe-panel]').forEach((panel) => (panel.hidden = panel.dataset.recipePanel !== tab));
+}
+document.querySelectorAll('[data-recipe-tab]').forEach((b) => (b.onclick = () => showRecipeTab(b.dataset.recipeTab)));
+
+// Theme: follows the system unless the viewer picked one (kept only in this browser).
+function applyTheme(theme) {
+  if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+}
+try {
+  applyTheme(localStorage.getItem('diet-theme'));
+} catch {}
+$('theme-toggle').onclick = () => {
+  const current = document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const next = current === 'dark' ? 'light' : 'dark';
+  applyTheme(next);
+  try {
+    localStorage.setItem('diet-theme', next);
+  } catch {}
+};

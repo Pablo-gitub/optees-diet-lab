@@ -127,7 +127,7 @@ async def protect_origin(request, next_call):
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['X-Frame-Options'] = 'DENY'
     response.headers['Content-Security-Policy'] = (
-        "default-src 'self'; script-src 'self'; style-src 'self'; frame-ancestors 'none'"
+        "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' https://upload.wikimedia.org; frame-ancestors 'none'"
     )
     return response
 

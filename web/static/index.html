@@ -2,234 +2,348 @@
 <html lang="it">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <meta name="theme-color" content="#10251c" />
     <title>Optees · Diario personale</title>
     <link rel="stylesheet" href="/static/style.css" />
     <script src="/static/app.js" defer></script>
   </head>
   <body>
     <section id="login" class="login">
-      <div class="brand">optees <span>/ diet lab</span></div>
-      <h1>Il tuo piano,<br />le tue scelte.</h1>
-      <p>Uno spazio personale per esplorare gli abbinamenti e pianificare i pasti.</p>
-      <form id="login-form">
-        <label>Nome utente<input id="username" autocomplete="username" required /></label
-        ><label
-          >Password<input id="password" type="password" autocomplete="current-password" required minlength="10"
-        /></label>
-        <div class="actions">
-          <button>Accedi</button><button type="button" id="register" class="secondary">Crea profilo</button>
+      <div class="login-hero">
+        <div class="brand">optees <span>diet lab</span></div>
+        <div>
+          <h1>Il tuo piano,<br />le tue scelte.</h1>
+          <p>Pianifica i pasti, confronta le alternative e resta dentro i tuoi obiettivi, giorno dopo giorno.</p>
         </div>
-      </form>
-      <p class="muted">
-        Ogni profilo conserva configurazione e piani separati. I nuovi profili iniziano con obiettivi dimostrativi.
-      </p>
+        <ul class="hero-points">
+          <li>Piani ottimizzati con Optees</li>
+          <li>Ricette e prodotti reali</li>
+          <li>I dati restano sul tuo PC</li>
+        </ul>
+      </div>
+      <div class="login-panel">
+        <form id="login-form" class="login-card">
+          <p class="eyebrow">Spazio personale</p>
+          <h2>Accedi</h2>
+          <p class="muted">Entra nel tuo profilo per riprendere da dove avevi lasciato.</p>
+          <label>Nome utente<input id="username" autocomplete="username" required /></label>
+          <label
+            >Password<input id="password" type="password" autocomplete="current-password" required minlength="10"
+          /></label>
+          <div class="actions">
+            <button class="primary">Accedi</button>
+            <button type="button" id="register" class="ghost">Crea profilo</button>
+          </div>
+          <p class="muted">
+            Ogni profilo conserva configurazione e piani separati. I nuovi profili iniziano con obiettivi dimostrativi.
+          </p>
+        </form>
+      </div>
     </section>
-    <div id="workspace" hidden>
-      <aside>
-        <div class="brand">optees <span>/ diet lab</span></div>
-        <p class="eyebrow">SPAZIO PERSONALE</p>
-        <button class="nav active" data-page="planning">Pianificazione</button
-        ><button class="nav" data-page="recipes">Ricette</button
-        ><button class="nav" data-page="profile">Il mio profilo</button><button class="nav" data-page="health">Salute</button>
-        <div class="sidebar-bottom">
-          <strong id="user-name"></strong>
-          <p class="muted">Applicazione locale</p>
-          <button id="logout" class="secondary">Esci</button>
+
+    <div id="workspace" class="workspace" hidden>
+      <aside class="sidebar">
+        <div class="brand">optees <span>diet lab</span></div>
+        <nav class="nav-list" aria-label="Sezioni">
+          <button class="nav active" data-page="planning">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="3" /><path d="M16 2v4M8 2v4M3 10h18M8 15h2M14 15h2" /></svg>
+            <span>Pianificazione</span>
+          </button>
+          <button class="nav" data-page="recipes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 13.9A4 4 0 0 1 7.3 6a5 5 0 0 1 9.4 0A4 4 0 0 1 18 13.9V21H6z" /><path d="M6 17h12" /></svg>
+            <span>Ricette</span>
+          </button>
+          <button class="nav" data-page="profile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" /></svg>
+            <span>Profilo</span>
+          </button>
+          <button class="nav" data-page="health">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.5 12.6 12 20l-7.5-7.4A5 5 0 1 1 12 6a5 5 0 1 1 7.5 6.6z" /><path d="M3.5 12h4l2-3 3 5 2-2h6" /></svg>
+            <span>Salute</span>
+          </button>
+        </nav>
+        <div class="sidebar-foot">
+          <strong>Prototipo locale</strong>
+          Calcoli eseguiti da Optees sul tuo PC.
         </div>
       </aside>
+
       <main>
-        <header>
+        <header class="page-header">
           <div>
-            <p class="eyebrow">DALLE POSSIBILITÀ AL PIANO</p>
+            <p class="eyebrow" id="page-eyebrow">Dalle possibilità al piano</p>
             <h1 id="page-title">Pianificazione</h1>
+            <p class="page-subtitle" id="page-subtitle">Genera e confronta le alternative per una giornata.</p>
           </div>
-          <span class="badge">Prototipo · pianificazione alimentare</span>
+          <div class="header-actions">
+            <button id="theme-toggle" type="button" class="icon-button" aria-label="Cambia tema chiaro/scuro" title="Tema chiaro/scuro">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" /></svg>
+            </button>
+            <div class="user-chip"><span class="avatar" id="user-initial"></span><strong id="user-name"></strong></div>
+            <button id="logout" type="button" class="ghost">Esci</button>
+          </div>
         </header>
+
         <section id="planning">
-          <div class="notice">
-            <span id="planning-scope-note"></span> Frequenze settimanali, bevande caloriche ed extra restano da integrare.
-          </div>
-          <div class="toolbar">
-            <label
-              >Programma<select id="planning-mode">
-                <option value="sedentary">Dieta sedentaria</option>
-                <option value="training">Dieta palestra</option>
-                <option value="free">Algoritmo libero</option>
-              </select></label
-            ><label>Giornata<select id="day"></select></label><label>Metodo<select id="optimization-strategy"><option value="balanced">Bilanciato</option><option value="pareto">Pareto · compromessi</option><option value="minmax">Min-Max · scarto peggiore</option><option value="maxmin">Max-Min · soddisfazione minima</option><option value="bandit">Bandit · impara dai piani provati</option></select></label><button id="generate">Genera alternative</button>
+          <div class="control-card">
+            <div class="controls">
+              <label
+                >Programma<select id="planning-mode">
+                  <option value="sedentary">Dieta sedentaria</option>
+                  <option value="training">Dieta palestra</option>
+                  <option value="free">Algoritmo libero</option>
+                </select></label
+              >
+              <label>Giornata<select id="day"></select></label>
+              <label
+                >Metodo<select id="optimization-strategy">
+                  <option value="balanced">Bilanciato</option>
+                  <option value="pareto">Pareto · compromessi</option>
+                  <option value="minmax">Min-Max · scarto peggiore</option>
+                  <option value="maxmin">Max-Min · soddisfazione minima</option>
+                  <option value="bandit">Bandit · impara dai piani provati</option>
+                </select></label
+              >
+              <button id="generate" class="primary">Genera alternative</button>
+            </div>
+            <p class="hint">
+              <span><span id="planning-scope-note"></span> Frequenze settimanali, bevande caloriche ed extra restano da integrare.</span>
+            </p>
           </div>
           <div class="section-head">
             <h2>Alternative da esplorare</h2>
             <span id="count" class="muted"></span>
           </div>
-          <p id="empty" class="empty">
-            Il prossimo piano comincia qui.<br /><span>Scegli una giornata e genera gli abbinamenti.</span>
-          </p>
+          <div id="empty" class="empty">
+            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="32" cy="34" r="20" opacity=".25" /><circle cx="32" cy="34" r="12" /><path d="M32 6v8M14 10l3 5M50 10l-3 5" opacity=".6" /><path d="M27 34l4 4 7-8" /></svg>
+            Il prossimo piano comincia qui.
+            <span>Scegli una giornata e genera gli abbinamenti.</span>
+          </div>
           <div id="plans" class="cards"></div>
         </section>
+
         <section id="profile" hidden>
           <form id="profile-form">
             <div class="panel">
-              <h2>Il mio profilo</h2>
+              <h2>Chi sei</h2>
+              <p class="muted">Nome, programma di partenza e abitudini personali.</p>
               <div class="grid">
-                <label>Nome visualizzato<input id="display-name" maxlength="80" /></label
-                ><label>Programma iniziale<select id="profile-mode"></select></label>
+                <label>Nome visualizzato<input id="display-name" maxlength="80" /></label>
+                <label>Programma iniziale<select id="profile-mode"></select></label>
               </div>
-              <label>Abitudini e preferenze<textarea id="preferences" rows="4" maxlength="2000"></textarea></label>
+              <label>Abitudini e preferenze<textarea id="preferences" rows="3" maxlength="2000"></textarea></label>
               <p class="muted">
-                Queste note restano personali. Le scelte della dieta sono vincoli; le preferenze saranno usate per
-                ordinare le soluzioni ammesse.
+                Note personali. Le scelte della dieta sono vincoli; le preferenze servono a ordinare le soluzioni ammesse.
               </p>
             </div>
+
             <div class="panel">
               <h2>Le cucine che preferisco</h2>
-              <p class="muted">
-                Scegli più cucine. Nessuna selezione significa nessuna preferenza; i vincoli della dieta restano
-                prioritari.
-              </p>
-              <div id="cuisine-preferences" class="cuisine-options"></div>
+              <p class="muted">Tocca per selezionare. Nessuna selezione = nessuna preferenza; i vincoli della dieta restano prioritari.</p>
+              <div id="cuisine-preferences" class="chips"></div>
             </div>
+
             <div class="panel">
               <h2>Obiettivi di pranzo + cena</h2>
-              <p>Imposta intervalli e valori bersaglio per la somma dei due pasti.</p>
+              <p class="muted">Intervalli e valori bersaglio per la somma dei due pasti.</p>
               <label class="check"><input type="checkbox" id="demo" /> Sto usando obiettivi dimostrativi</label>
               <div id="targets"></div>
-              <details>
-                <summary>Limiti per singolo pasto</summary>
-                <p class="muted">Facoltativi: lasciali vuoti per usare solo i vincoli complessivi.</p>
+              <details class="advanced">
+                <summary>Avanzate · limiti per pasto ed esclusioni</summary>
+                <p class="muted">Limiti facoltativi: lasciali vuoti per usare solo i vincoli complessivi.</p>
                 <div id="local-targets"></div>
+                <label
+                  >Alimenti generici esclusi — codici CREA separati da virgola<input
+                    id="exclusions"
+                    placeholder="es. 123610, 008570"
+                /></label>
               </details>
-              <label
-                >Alimenti generici esclusi — codici del database italiano CREA separati da virgola<input
-                  id="exclusions"
-                  placeholder="es. 123610, 008570"
-              /></label>
             </div>
-            <div class="panel"><h2>Colazione, spuntini e bilancio giornaliero</h2>
-              <label class="check"><input type="checkbox" id="daily-enabled"> Includi colazione e spuntini — variante personalizzata</label>
-              <p>Quando attivo, gli obiettivi giornalieri qui sotto sostituiscono quelli della somma pranzo + cena. I limiti dei singoli pasti restano applicati. I valori iniziali sono dimostrativi, da configurare.</p>
+
+            <div class="panel">
+              <h2>Colazione, spuntini e bilancio giornaliero</h2>
+              <p class="muted">
+                Quando attivo, gli obiettivi giornalieri sostituiscono quelli di pranzo + cena. I limiti dei singoli pasti
+                restano applicati.
+              </p>
+              <label class="check"
+                ><input type="checkbox" id="daily-enabled" /> Includi colazione e spuntini · variante personalizzata</label
+              >
               <p id="daily-products" class="muted"></p>
-              <label class="check"><input type="checkbox" id="daily-second-bar"> Consenti una seconda barretta a colazione</label>
-              <label class="check"><input type="checkbox" id="daily-afternoon-fruit"> Pianifica anche un frutto a metà pomeriggio</label>
-              <div class="grid"><label>Banana: minimo g senza buccia<input type="number" id="daily-banana-min" min="20" max="500" required></label><label>Banana: massimo g senza buccia<input type="number" id="daily-banana-max" min="20" max="500" required></label></div>
-              <p class="muted">Porzioni della banana modificabili, inizialmente dimostrative. I prodotti confezionati sono usati a unità intere; la seconda barretta non è obbligatoria. La banana è un’alternativa quando la preferenza non permette di rispettare i vincoli. Disattivare il frutto pomeridiano indica che non è pianificato.</p>
-              <label class="check"><input type="checkbox" id="daily-demo"> Obiettivi giornalieri dimostrativi</label><div id="daily-targets"></div>
-              <p class="muted">Questa variante usa le abitudini del profilo per colazione e spuntini e non viene dichiarata conforme alle colazioni originali delle diete.</p>
+              <label class="check"><input type="checkbox" id="daily-second-bar" /> Consenti una seconda barretta a colazione</label>
+              <label class="check"
+                ><input type="checkbox" id="daily-afternoon-fruit" /> Pianifica anche un frutto a metà pomeriggio</label
+              >
+              <div class="grid">
+                <label
+                  >Banana · minimo g senza buccia<input type="number" id="daily-banana-min" min="20" max="500" required
+                /></label>
+                <label
+                  >Banana · massimo g senza buccia<input type="number" id="daily-banana-max" min="20" max="500" required
+                /></label>
+              </div>
+              <label class="check"><input type="checkbox" id="daily-demo" /> Obiettivi giornalieri dimostrativi</label>
+              <div id="daily-targets"></div>
+              <details>
+                <summary>Come funziona questa variante</summary>
+                <p class="muted">
+                  Porzioni della banana modificabili, inizialmente dimostrative. I prodotti confezionati sono usati a unità
+                  intere; la seconda barretta non è obbligatoria. La banana è un’alternativa quando la preferenza non
+                  permette di rispettare i vincoli. Disattivare il frutto pomeridiano indica che non è pianificato.
+                </p>
+                <p class="muted">
+                  La variante usa le abitudini del profilo per colazione e spuntini e non viene dichiarata conforme alle
+                  colazioni originali delle diete.
+                </p>
+              </details>
             </div>
-            <button>Salva configurazione</button>
+
+            <div class="save-bar">
+              <p class="muted">Le modifiche valgono per i prossimi calcoli; i piani salvati non cambiano.</p>
+              <button class="primary">Salva configurazione</button>
+            </div>
           </form>
         </section>
+
         <section id="recipes" hidden>
-          <div class="panel">
-            <h2>Adatta ingredienti e porzione</h2>
-            <p class="muted">
-              Prova su un singolo piatto con ingredienti associati al catalogo. Obiettivi dimostrativi separati da
-              pranzo + cena. Questa prova non verifica gli abbinamenti delle diete personali e non sostituisce il piano
-              scelto.
+          <div class="segmented" role="tablist" aria-label="Strumenti ricette">
+            <button type="button" class="seg active" role="tab" aria-selected="true" data-recipe-tab="catalog">Catalogo</button>
+            <button type="button" class="seg" role="tab" aria-selected="false" data-recipe-tab="diet">Compatibili con la dieta</button>
+            <button type="button" class="seg" role="tab" aria-selected="false" data-recipe-tab="solver">Adatta un piatto</button>
+          </div>
+
+          <div data-recipe-panel="catalog">
+            <div class="toolbar">
+              <label
+                >Cucina<select id="recipe-cuisine">
+                  <option value="">Tutte le cucine</option>
+                </select></label
+              >
+              <label>Cerca una ricetta<input id="recipe-search" placeholder="es. pasta, rice, tofu" /></label>
+              <button id="search-recipes" class="primary">Cerca</button>
+            </div>
+            <label class="check"><input type="checkbox" id="only-preferred" /> Mostra solo le mie cucine preferite</label>
+            <p class="hint">
+              <span>Nutrienti <strong>dichiarati dalla fonte</strong>, ancora da ricalcolare sugli alimenti scelti. Le ricette
+              non entrano ancora nel solver della dieta.</span>
             </p>
-            <div class="notice" id="recipe-diet-panel">
-              <h3>Ricette e abbinamenti della dieta</h3>
-              <p>
-                Controlla gli ingredienti per il pasto scelto. Una ricetta può coprire un ramo modellato oppure
-                richiedere altri alimenti. Quantità e obiettivi nutrizionali della giornata sono ancora da verificare.
+            <div class="section-head"><h2>Ricette</h2><span id="recipe-count" class="muted"></span></div>
+            <div id="recipe-list" class="cards"></div>
+            <div class="actions pagination">
+              <button id="recipe-prev" class="ghost">← Precedenti</button>
+              <button id="recipe-next" class="ghost">Successive →</button>
+            </div>
+          </div>
+
+          <div data-recipe-panel="diet" hidden>
+            <div class="panel" id="recipe-diet-panel">
+              <h2>Ricette e abbinamenti della dieta</h2>
+              <p class="muted">
+                Controlla gli ingredienti per il pasto scelto. Una ricetta può coprire un ramo modellato oppure richiedere
+                altri alimenti. Quantità e obiettivi della giornata sono ancora da verificare.
               </p>
               <div class="grid">
-                <label>Programma<select id="recipe-diet-mode"></select></label
-                ><label>Giorno<select id="recipe-diet-day"></select></label
-                ><label
+                <label>Programma<select id="recipe-diet-mode"></select></label>
+                <label>Giorno<select id="recipe-diet-day"></select></label>
+                <label
                   >Pasto<select id="recipe-diet-meal">
                     <option value="lunch">Pranzo</option>
                     <option value="dinner">Cena</option>
                   </select></label
                 >
               </div>
-              <p id="recipe-diet-summary" role="status"></p>
+              <p id="recipe-diet-summary" class="notice" role="status"></p>
               <label class="check"
                 ><input type="checkbox" id="recipe-diet-show-review" /> Mostra anche le ricette da verificare</label
               >
               <div id="recipe-diet-options"></div>
             </div>
-            <form id="recipe-solver-form">
-              <label>Ricetta da ottimizzare<select id="solver-recipe"></select></label>
-              <p id="recipe-mapping-note" class="muted"></p>
-              <div class="grid">
-                <label
-                  >Flessibilità ingredienti (%)<input
-                    id="recipe-flex"
-                    type="number"
-                    min="0"
-                    max="20"
-                    step="1"
-                    value="10"
-                    required /></label
-                ><label
-                  >Porzione minima (× riferimento)<input
-                    id="recipe-scale-min"
-                    type="number"
-                    min="0.25"
-                    max="3"
-                    step="0.05"
-                    value="0.5"
-                    required /></label
-                ><label
-                  >Porzione massima (× riferimento)<input
-                    id="recipe-scale-max"
-                    type="number"
-                    min="0.25"
-                    max="3"
-                    step="0.05"
-                    value="1.8"
-                    required
-                /></label>
-              </div>
-              <h3>Obiettivi del singolo piatto</h3>
-              <div id="recipe-targets"></div>
-              <h3>Prodotti e alimenti disponibili</h3>
-              <p class="muted">
-                I prodotti confezionati sono identificati da nome e marca e usano i valori nutrizionali della loro
-                etichetta presenti nel catalogo. CREA è un database italiano di valori nutrizionali generici, non una
-                marca: serve per alimenti sfusi o senza etichetta, come verdure, carne e pesce. Anche uova e olio
-                possono usare dati di marca quando disponibili e compatibili. Deseleziona le alternative che non vuoi
-                usare. I prodotti di marca utilizzabili hanno priorità sui riferimenti generici.
-              </p>
-              <div id="recipe-products" class="cuisine-options"></div>
-              <button id="optimize-recipe">Ottimizza la ricetta</button>
-            </form>
-            <div id="recipe-solution"></div>
-            <details>
-              <summary>Ultime prove personali</summary>
-              <div id="recipe-history"></div>
-            </details>
           </div>
+
+          <div data-recipe-panel="solver" hidden>
+            <div class="panel">
+              <h2>Adatta ingredienti e porzione</h2>
+              <p class="muted">
+                Prova su un singolo piatto con ingredienti associati al catalogo. Obiettivi dimostrativi, separati da pranzo
+                + cena. Non verifica gli abbinamenti delle diete personali e non sostituisce il piano scelto.
+              </p>
+              <form id="recipe-solver-form">
+                <label>Ricetta da ottimizzare<select id="solver-recipe"></select></label>
+                <p id="recipe-mapping-note" class="muted"></p>
+                <div class="grid">
+                  <label
+                    >Flessibilità ingredienti (%)<input id="recipe-flex" type="number" min="0" max="20" step="1" value="10" required
+                  /></label>
+                  <label
+                    >Porzione minima (× riferimento)<input
+                      id="recipe-scale-min"
+                      type="number"
+                      min="0.25"
+                      max="3"
+                      step="0.05"
+                      value="0.5"
+                      required
+                  /></label>
+                  <label
+                    >Porzione massima (× riferimento)<input
+                      id="recipe-scale-max"
+                      type="number"
+                      min="0.25"
+                      max="3"
+                      step="0.05"
+                      value="1.8"
+                      required
+                  /></label>
+                </div>
+                <h3>Obiettivi del singolo piatto</h3>
+                <div id="recipe-targets"></div>
+                <h3>Prodotti e alimenti disponibili</h3>
+                <p class="muted">
+                  Deseleziona le alternative che non vuoi usare. I prodotti di marca utilizzabili hanno priorità sui
+                  riferimenti generici.
+                </p>
+                <details>
+                  <summary>Marca o generico CREA: che differenza c’è</summary>
+                  <p class="muted">
+                    I prodotti confezionati sono identificati da nome e marca e usano i valori nutrizionali della loro
+                    etichetta presenti nel catalogo. CREA è un database italiano di valori nutrizionali generici, non una
+                    marca: serve per alimenti sfusi o senza etichetta, come verdure, carne e pesce. Anche uova e olio
+                    possono usare dati di marca quando disponibili e compatibili.
+                  </p>
+                </details>
+                <div id="recipe-products" class="cuisine-options"></div>
+                <p></p>
+                <button id="optimize-recipe" class="primary">Ottimizza la ricetta</button>
+              </form>
+              <div id="recipe-solution"></div>
+              <details>
+                <summary>Ultime prove personali</summary>
+                <div id="recipe-history" class="cards"></div>
+              </details>
+            </div>
+          </div>
+        </section>
+
+        <section id="health" hidden>
           <div class="notice">
-            Ricette consultabili offline. I nutrienti mostrati sono <strong>dichiarati dalla fonte</strong>, ancora da
-            ricalcolare sugli alimenti scelti. Le ricette non entrano ancora nel solver della dieta.
+            Dati sanitari personali. Le calorie sono stime del dispositivo; obiettivi nutrizionali e dieta non vengono
+            modificati automaticamente.
           </div>
           <div class="toolbar">
-            <label
-              >Cucina<select id="recipe-cuisine">
-                <option value="">Tutte le cucine</option>
-              </select></label
-            ><label>Cerca una ricetta<input id="recipe-search" placeholder="es. pasta, rice, tofu" /></label
-            ><button id="search-recipes">Cerca</button>
+            <button id="health-import" class="primary" hidden>Esamina nuova estrazione</button
+            ><span id="health-import-status" class="muted" role="status"></span>
           </div>
-          <label class="check"><input type="checkbox" id="only-preferred" /> Mostra solo le mie cucine preferite</label>
-          <p id="recipe-count" class="muted"></p>
-          <div id="recipe-list" class="cards"></div>
-          <div class="actions pagination">
-            <button id="recipe-prev" class="secondary">Precedenti</button
-            ><button id="recipe-next" class="secondary">Successive</button>
-          </div>
-        </section>
-        <section id="health" hidden>
-          <div class="notice">Dati sanitari personali. Le calorie sono stime del dispositivo; obiettivi nutrizionali e dieta non vengono modificati automaticamente.</div>
-          <div class="toolbar"><button id="health-import" hidden>Esamina nuova estrazione</button><span id="health-import-status" role="status"></span></div>
           <div id="health-summary"></div>
         </section>
-        <footer>
-          Optees esegue l’ottimizzazione. Pareto mostra un campione di compromessi non dominati fra le soluzioni calcolate. Il bandit usa soltanto i voti dei piani effettivamente provati.
-        </footer>
+
+        <details class="about">
+          <summary>Come funziona</summary>
+          <p>
+            Optees esegue l’ottimizzazione. Pareto mostra un campione di compromessi non dominati fra le soluzioni
+            calcolate. Il bandit usa soltanto i voti dei piani effettivamente provati.
+          </p>
+        </details>
       </main>
     </div>
     <div id="message" role="status" hidden></div>
