@@ -135,14 +135,17 @@ def progress(db,user,profile,measurements,as_of,weeks=8):
 
 
 def summary(analysis):
-    week=analysis['weeks'][-1];diet=week['diet'];training=week['training']
+    week=analysis['weeks'][-1]
+    if week['coverage']['elapsed_days']==0 and len(analysis['weeks'])>1:week=analysis['weeks'][-2]
+    diet=week['diet'];training=week['training']
     fields=dict(diet=diet['value'],training=training['value'],diet_detail=diet,training_detail=training,week_start=week['week_start'])
     adherence=dict(status='available',**fields) if diet['status']=='available' or training['status']=='available' else unavailable('Copertura settimanale insufficiente; vedere dieta e allenamento.',**fields)
     workout_fields={k:training[k] for k in ('done','planned','free_done','unknown','skipped')}
+    workout_fields['week_start']=week['week_start']
     workout_fields['done']=training['logged_done_total'];workout_fields['free_done']=training['free_done_total']
     # Counts of explicit completed logs are valid even when adherence is unknown.
     counts=dict(status='available',**workout_fields) if training['planned'] or training['logged_done_total'] else unavailable('Nessun allenamento pianificato o registrato.',**workout_fields)
-    return dict(weight=analysis['weight'],adherence_week=adherence,kcal_average=week['kcal_average'],workouts=counts)
+    return dict(weight=analysis['weight'],adherence_week=adherence,kcal_average=dict(week['kcal_average'],week_start=week['week_start']),workouts=counts)
 
 
 def invalidate_forecast(db,user,date,reason='plan_changed'):

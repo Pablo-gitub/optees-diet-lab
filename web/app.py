@@ -683,7 +683,7 @@ def stats_progress(request:Request,weeks:int=8):
 @app.get('/api/stats/summary')
 def stats_summary(request:Request):
     from progress_analysis import summary
-    return summary(stats_progress(request,weeks=1))
+    return summary(stats_progress(request,weeks=2))
 
 
 @app.post('/api/progress/check-in')

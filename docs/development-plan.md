@@ -157,4 +157,6 @@ Riconoscimento dei pasti da foto, sincronizzazione live con Withings/HealthKit (
 
 | B7 | **fatto** — `882f5cf` | 198 test unittest verdi; explore preferisce schede diverse da varied sul fronte, fallback solo dieta spiegato |
 
-| B9 | **fatto** — commit di questo passo | 222 test verdi; Kalman diretto sulle mediane, trend settimanale con regressione, parametri progress-v2 |
+| B9 | **fatto** — `7a4e12e` | 222 test verdi; Kalman diretto sulle mediane, trend settimanale con regressione, parametri progress-v2 |
+
+| B10 | **fatto** — commit di questo passo | 222 test verdi; riepilogo del lunedì sull’ultima settimana conclusa, week_start esplicito nei tre riquadri |

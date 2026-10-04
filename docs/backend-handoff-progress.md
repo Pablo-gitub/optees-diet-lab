@@ -122,3 +122,5 @@ Suite finale: 221 test unittest verdi. Coperti rumore e buchi, misure ripetute, 
 Il turno frontend 5.3 può partire da questo contratto; il backend non include modifiche a `web/static/`.
 
 Il `trend_7d` v2 è la pendenza ai minimi quadrati dei punti filtrati negli ultimi sette giorni, moltiplicata per sette; richiede punti agli estremi e non interpola i buchi.
+
+B10: il lunedì `/api/stats/summary` usa l’ultima settimana conclusa per aderenza, kcal e allenamenti. Tutti e tre i riquadri hanno `week_start`; il peso rimane aggiornato a oggi. Dati mancanti nella settimana conclusa restano insufficient_data.

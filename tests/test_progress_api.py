@@ -36,8 +36,10 @@ class ProgressAPI(base.DiaryTests):
             self.assertIn('parameters',result['analysis']['weight']);self.assertEqual(len(result['analysis']['weight']['raw_points']),2)
             summary=self.client.get('/api/stats/summary').json()
             self.assertEqual(summary['weight']['status'],'available');self.assertIn('trend_7d',summary['weight'])
-            self.assertEqual(summary['adherence_week']['status'],'insufficient_data') # current Monday has no elapsed days
-            self.assertIsNone(summary['kcal_average']['eaten_avg'])
+            self.assertEqual(summary['adherence_week']['status'],'available')
+            self.assertEqual(summary['adherence_week']['diet'],1)
+            for key in ('adherence_week','kcal_average','workouts'):self.assertEqual(summary[key]['week_start'],self.start)
+            self.assertEqual(summary['kcal_average']['days'],7)
             with self.app.connect() as db:self.assertEqual(json.loads(db.execute('SELECT profile FROM users WHERE id=?',(self.user,)).fetchone()['profile'])['targets'],self.profile['targets'])
     def test_partial_diary_missing_nutrients_and_main_meals_are_not_full_days(self):
         with patch.object(self.app.diary,'local_today',return_value=self.today):
