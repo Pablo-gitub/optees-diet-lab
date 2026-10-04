@@ -59,3 +59,5 @@ In **Piano → Settimana** l'opzione «Pianifica anche l'allenamento» chiama `P
 |---|---|---|
 | B6 | `GET /api/profile` aggiunge `daily_meals` di default (abilitato per i profili personali), ma `owner_profile` no: con un profilo mai salvato la settimana congiunta risponde 400 «Attiva colazione e spuntini» anche se il profilo mostra l'opzione attiva | applicare lo stesso default in `owner_profile` (o salvarlo alla creazione dell'utente) |
 | B7 | Il ruolo `explore` può avere la stessa scheda palestra di `varied` e differire solo nella dieta | valutare la diversità minima anche sulle sessioni quando il pool palestra ha più candidati |
+
+B6 risolto: default condivisi da GET profilo e owner_profile, senza scritture implicite nel profilo. Test su profilo appena creato e su nuove abitudini personali mai salvate.

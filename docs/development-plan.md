@@ -152,3 +152,5 @@ Riconoscimento dei pasti da foto, sincronizzazione live con Withings/HealthKit (
 | B1–B5 | **fatto** — `9e45ae0` | 162 test verdi; end-to-end HTTP con Optees reale: settimana generata e applicata → alternative pranzo applicate, cena invariata; binarie bloccate con uguaglianze; warning unico; ricerca ordinata, incluso mela → mele CREA (regressione sui dati reali); provenienza del passato separata dal nome |
 
 | W1–W3 | **fatto** — `652da35` | 176 test verdi; più sessioni per giorno, spiegazione dello snapshot e minuti visualizzati arrotondati, secondi del modello esatti |
+
+| B6 | **fatto** — commit di chiusura B6 | 197 test unittest verdi; profilo nuovo mai salvato: stessi default in UI e owner, richiesta congiunta accettata per le abitudini personali abilitate |

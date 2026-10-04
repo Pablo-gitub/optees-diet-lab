@@ -48,8 +48,14 @@ def connect():
     return db
 
 
+def profile_defaults(profile):
+    profile.setdefault('preferred_cuisines', [])
+    profile.setdefault('daily_meals',daily_defaults(bool(profile.get('food_preferences'))))
+    return profile
+
+
 def owner_profile(user):
-    profile=json.loads(user['profile'])
+    profile=profile_defaults(json.loads(user['profile']))
     with connect() as db:
         profile['_workout_settings']=workout_settings.read(db,user['id'])
         profile['_recipe_runs']={'run:'+str(r['id']):json.loads(r['payload']) for r in db.execute('SELECT id,payload FROM recipe_runs WHERE user_id=?',(user['id'],))}
@@ -245,9 +251,7 @@ def logout(request: Request):
 @app.get('/api/profile')
 def profile(request: Request):
     user = identity(request)
-    data = json.loads(user['profile'])
-    data.setdefault('preferred_cuisines', [])
-    data.setdefault('daily_meals',daily_defaults(bool(data.get('food_preferences'))))
+    data = profile_defaults(json.loads(user['profile']))
     return {'profile': data, 'csrf': user['csrf'], 'warnings': profile_target_warnings(data)}
 
 
