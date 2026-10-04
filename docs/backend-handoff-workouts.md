@@ -81,3 +81,11 @@ Le bozze dei protocolli restano indicate come demo. M1 richiede ancora l'interfa
 ## Verifica passo 3.3
 
 175 test verdi. Audit Optees reale: settimana isometrica con profilo sintetico completamente dichiarato e `demo:false` nella richiesta; candidato verificato, `demo:true` conservato nei template e nel PlanSet. Test di assenza di carichi dedotti, separazione dei profili, migrazione dell'inventario una sola volta, invalidità atomica degli override, barra australiana, varianti, filtro HIIT, snapshot immutabile, candidati obsoleti. Raffinamento B4 verificato sul catalogo reale: query «mela» include «Mele, fresche» CREA con dati completi prima delle corrispondenze meno pertinenti. Nessuna modifica a `web/static/`.
+
+## Commit e prossimo turno
+
+- B1–B5: `9e45ae0` (con ulteriore regressione reale mela/mele in `dd599f5`).
+- 3.1: `18ab5c6`.
+- 3.3: `dd599f5`.
+
+Prossimo lavoro frontend: passo 3.2, usare questi endpoint e le domande di configurazione per completare il profilo; poi QA media 3.4. Non aggiungere calorie allenamento ai target: collegamento Salute e ottimizzazione congiunta appartengono a 4.1. I lavori Gemini non relativi a questi passi restano fuori dai commit di Codex.
