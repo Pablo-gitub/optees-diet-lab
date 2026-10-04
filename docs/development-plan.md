@@ -40,7 +40,7 @@ Il lavoro di Gemini viene sempre **rivisto** da Claude (dati e media) o da Codex
 | T7 | Claude | 3.2 → **M1** | Gemini: 3.4 · **fatto** — `fcacbf2`, Gemini 6.4 `ce54515`, 3.4 `804caae`; **M1 raggiunto** |
 | T8 | Codex | 4.1 · 4.2 | **fatto** — W1–W3 `652da35`, `a8c411a`, `ee2fa5b` |
 | T9 | Claude | 4.3 · 5.3 (UI su dati demo) | 4.3 **fatto** — `c732350`; 5.3 da fare dopo 5.1/5.2 (Codex: B6–B7) |
-| T10 | Codex | 5.1 · 5.2 | **fatto** — B6 `72f9660`, B7 `882f5cf`, 5.1 `dc4df6b`, commit di chiusura 5.2; Gemini 5.4 separato |
+| T10 | Codex | 5.1 · 5.2 | **fatto** — B6 `72f9660`, B7 `882f5cf`, 5.1 `dc4df6b`, `824daba`; Gemini 5.4 separato |
 | T11 | Claude | revisione 5.x · 6.3 (UI sgarro) | Gemini: 6.4 |
 | T12 | Codex | 6.1 · 6.2 → **M2** | — |
 | T13 | Claude | 7.1 · 7.3 | Gemini: 7.4 · QA visiva |
@@ -119,7 +119,7 @@ Consegna preparata per i passi 0.3–0.5: [prompt per Gemini](gemini-handoff-pha
 | # | Passo | Chi | Dim. | Fatto quando | Stato |
 |---|---|---|---|---|---|
 | 5.1 | Trend del peso (media mobile esponenziale, poi filtro di Kalman semplice); aderenza dieta/allenamento; confronto atteso vs osservato separando «piano non seguito» da «risposta diversa dal previsto» | Codex | M | test su serie sintetiche con rumore | **fatto** — `dc4df6b`; 209 test unittest verdi; EMA/Kalman, copertura, aderenza, confronto e check-in; [consegna backend](backend-handoff-progress.md) |
-| 5.2 | Proposta di ricalibrazione: dispendio personale stimato con limiti di sicurezza fissi (variazione massima settimanale, minimi nutrizionali); l'utente approva | Codex | M | nessuna modifica automatica dei target; limiti mai superati | **fatto** — commit di chiusura 5.2; 221 test unittest verdi; proposte motivate, limiti fissi, decisioni CSRF atomiche e conflitti 409; [consegna frontend 5.3](backend-handoff-progress.md) |
+| 5.2 | Proposta di ricalibrazione: dispendio personale stimato con limiti di sicurezza fissi (variazione massima settimanale, minimi nutrizionali); l'utente approva | Codex | M | nessuna modifica automatica dei target; limiti mai superati | **fatto** — `824daba`; 221 test unittest verdi; proposte motivate, limiti fissi, decisioni CSRF atomiche e conflitti 409; [consegna frontend 5.3](backend-handoff-progress.md) |
 | 5.3 | UI **Progressi**: inserimento peso del lunedì, grafico reale vs atteso, aderenza, proposta di ricalibrazione con motivazione | Claude | M | verifica visiva; grafici leggibili in chiaro e scuro | da fare |
 | 5.4 | Guida all'aggiornamento periodico dell'export Apple Salute/Withings e controllo della copertura | Gemini | S | `docs/apple-health-import.md` aggiornato | da fare |
 
