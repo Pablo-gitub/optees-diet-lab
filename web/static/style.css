@@ -439,3 +439,7 @@ footer {
 .feedback { display: grid; gap: .6rem; margin: 1rem 0; border-top: 1px solid #ddd; padding-top: .8rem; }
 .feedback label { display: flex; align-items: center; gap: .5rem; }
 .feedback input[type="checkbox"] { width: auto; }
+
+#health { overflow-x: auto; }
+.health-table { width:100%; border-collapse: collapse; margin:1rem 0 2rem; font-size:.9rem; }
+.health-table th,.health-table td { text-align:left; padding:.7rem; border-bottom:1px solid #ddd; }

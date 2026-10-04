@@ -22,6 +22,7 @@ from recipe_diet_compatibility import meal_options
 from optees_command import optees_command
 from daily_meals import defaults as daily_defaults, validate as validate_daily
 from multiobjective_day import solve_strategy, nondominated, choose_arm, STRATEGIES
+from health_inputs import load_report as load_health_report, algorithm_inputs as health_algorithm_inputs
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
@@ -29,6 +30,9 @@ DB = Path(os.environ.get('DIET_WEB_DB', ROOT / 'data/personal/web.sqlite'))
 app = FastAPI()
 app.mount('/static', StaticFiles(directory=ROOT / 'web/static'), name='static')
 solver_lock = asyncio.Lock()
+health_lock = asyncio.Lock()
+health_job = {}
+health_task = None
 
 
 def connect():
@@ -399,6 +403,46 @@ async def plan_feedback(plan_id: int, request: Request):
         if json.loads(row['payload'])['status'] not in ['optimal','feasible']:raise HTTPException(400,'Piano senza soluzione')
         db.execute('INSERT INTO plan_feedback VALUES(?,?,?,?) ON CONFLICT(user_id,plan_id) DO UPDATE SET rating=excluded.rating,tried_at=excluded.tried_at',(user['id'],plan_id,rating,time.time()))
     return {'ok':True}
+
+
+def health_directory(user_id):
+    return DB.parent / 'health' / f'user_{user_id}'
+
+
+def health_import_allowed(user_id):
+    marker=DB.parent/'health/owner.json'
+    return marker.exists() and json.loads(marker.read_text()).get('user_id')==user_id
+
+
+@app.get('/api/health')
+def health_summary(request: Request):
+    user=identity(request);report=load_health_report(health_directory(user['id']))
+    job=dict(health_job) if health_job.get('user_id')==user['id'] else None
+    if job:job.pop('user_id',None)
+    return dict(imported=report is not None,can_import=health_import_allowed(user['id']),job=job,report=report,algorithm_inputs=health_algorithm_inputs(report) if report else None)
+
+
+@app.post('/api/health/import')
+async def health_import(request: Request):
+    global health_task
+    user=identity(request,True)
+    if not health_import_allowed(user['id']):raise HTTPException(403,'Nessuna esportazione sanitaria assegnata a questo profilo')
+    if (health_directory(user['id'])/'health.importing.sqlite').exists():raise HTTPException(409,'Importazione esterna già in corso')
+    if health_lock.locked() or (health_task and not health_task.done()):raise HTTPException(409,'Importazione già in corso')
+    archives=list((ROOT/'sanitary_data_export').glob('*.zip'))
+    if len(archives)!=1:raise HTTPException(400,'Lascia un solo ZIP nella cartella delle esportazioni sanitarie')
+    owner=dict(user_id=user['id'],username=user['username'])
+    health_job.clear();health_job.update(user_id=user['id'],state='starting')
+    async def run():
+        async with health_lock:
+            try:
+                from apple_health import import_zip
+                await asyncio.to_thread(import_zip,archives[0],health_directory(user['id']),owner,lambda s:health_job.update(s))
+            except Exception as error:
+                print('Health import error:',repr(error),flush=True)
+                health_job.update(state='failed',message='Importazione non riuscita; il riepilogo precedente resta disponibile.')
+    health_task=asyncio.create_task(run())
+    return {'started':True}
 
 
 @app.get('/api/cuisines')

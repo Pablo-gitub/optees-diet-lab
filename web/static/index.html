@@ -31,7 +31,7 @@
         <p class="eyebrow">SPAZIO PERSONALE</p>
         <button class="nav active" data-page="planning">Pianificazione</button
         ><button class="nav" data-page="recipes">Ricette</button
-        ><button class="nav" data-page="profile">Il mio profilo</button>
+        ><button class="nav" data-page="profile">Il mio profilo</button><button class="nav" data-page="health">Salute</button>
         <div class="sidebar-bottom">
           <strong id="user-name"></strong>
           <p class="muted">Applicazione locale</p>
@@ -221,6 +221,11 @@
             <button id="recipe-prev" class="secondary">Precedenti</button
             ><button id="recipe-next" class="secondary">Successive</button>
           </div>
+        </section>
+        <section id="health" hidden>
+          <div class="notice">Dati sanitari personali. Le calorie sono stime del dispositivo; obiettivi nutrizionali e dieta non vengono modificati automaticamente.</div>
+          <div class="toolbar"><button id="health-import" hidden>Esamina nuova estrazione</button><span id="health-import-status" role="status"></span></div>
+          <div id="health-summary"></div>
         </section>
         <footer>
           Optees esegue l’ottimizzazione. Pareto mostra un campione di compromessi non dominati fra le soluzioni calcolate. Il bandit usa soltanto i voti dei piani effettivamente provati.

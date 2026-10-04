@@ -343,10 +343,11 @@ document.querySelectorAll('[data-page]').forEach(
   (button) =>
     (button.onclick = () => {
       const page = button.dataset.page;
-      ['profile', 'planning', 'recipes'].forEach((id) => ($(id).hidden = id !== page));
+      ['profile', 'planning', 'recipes', 'health'].forEach((id) => ($(id).hidden = id !== page));
       document.querySelectorAll('[data-page]').forEach((b) => b.classList.toggle('active', b === button));
       $('page-title').textContent =
-        page === 'profile' ? 'Il mio profilo' : page === 'recipes' ? 'Ricette dal mondo' : 'Pianificazione';
+        page === 'profile' ? 'Il mio profilo' : page === 'recipes' ? 'Ricette dal mondo' : page === 'health' ? 'Salute · dati personali' : 'Pianificazione';
+      if (page === 'health') loadHealth().catch(e => message(e.message));
       if (page === 'recipes') Promise.all([loadRecipes(), loadRecipeSolver()]).catch((e) => message(e.message));
     }),
 );
@@ -804,3 +805,38 @@ function dailyFields(){
  nutrients.forEach(([n,label])=>{const row=element('div',undefined,'target-row');row.append(element('span',label));['min','target','max'].forEach(k=>{const input=element('input');input.id='daily-'+n+'-'+k;input.type='number';input.min='0';input.step='any';input.max='10000';input.required=true;input.value=d.targets[n][k];input.setAttribute('aria-label','Giornata '+label+' '+k);row.append(input)});fields.append(row)});
 }
 function readDailyFields(){const targets={};nutrients.forEach(([n])=>{targets[n]={};['min','target','max'].forEach(k=>targets[n][k]=Number($('daily-'+n+'-'+k).value))});return {enabled:$('daily-enabled').checked,allow_second_bar:$('daily-second-bar').checked,afternoon_fruit:$('daily-afternoon-fruit').checked,banana_min_g:Number($('daily-banana-min').value),banana_max_g:Number($('daily-banana-max').value),targets,targets_demo:$('daily-demo').checked,policy:'personalized_habits'}}
+
+let healthPoll = null;
+function healthTable(headers,rows){const table=element('table',undefined,'health-table');const head=element('thead'),tr=element('tr');headers.forEach(h=>tr.append(element('th',h)));head.append(tr);table.append(head);const body=element('tbody');rows.forEach(values=>{const r=element('tr');values.forEach(v=>r.append(element('td',String(v))));body.append(r)});table.append(body);return table}
+async function loadHealth(){
+ const response=await api('health');$('health-import').hidden=!response.can_import;
+ const job=response.job;const running=job&&['starting','parsing','summarizing'].includes(job.state);
+ $('health-import').disabled=running;
+ $('health-import-status').textContent=running?'Importazione in corso · '+(job.records??0).toLocaleString('it-IT')+' record esaminati':job?.state==='failed'?job.message:job?.state==='complete'?(job.reused?'Esportazione già esaminata':'Importazione completata'):'';
+ const panel=$('health-summary');panel.replaceChildren();
+ if(!response.imported){panel.append(element('p','Nessuna esportazione sanitaria importata per questo profilo.'))}
+ else {
+  const r=response.report;const fmt=v=>v==null?'—':Number(v).toLocaleString('it-IT',{maximumFractionDigits:1});
+  panel.append(element('h2','Copertura e aggiornamento'));
+  panel.append(element('p','Record esaminati: '+r.import.records_seen.toLocaleString('it-IT')+' · Allenamenti: '+r.import.workouts_stored+' · Ultimo giorno con energia: '+(r.latest_energy_date??'—')));
+  panel.append(element('p',r.scenarios.status==='available'?'Base calorica disponibile per scenari di consumo.':'Base calorica insufficiente o obsoleta: non usare questi valori come consumo attuale.','notice'));
+  panel.append(element('h2','Misure corporee e indicatori'));
+  if(r.body_profile_needs_review)panel.append(element('p','Peso assente o non aggiornato negli ultimi 90 giorni: rivedere il profilo corporeo prima di personalizzare gli obiettivi.','notice'));
+  const labels={weight:'Peso',height:'Altezza',body_fat:'Grasso corporeo',bmi:'BMI',resting_hr:'Frequenza a riposo',vo2max:'VO₂ max'};
+  panel.append(healthTable(['Misura','Valore','Data','Fonte'],Object.entries(r.measures).map(([k,v])=>[labels[k]??k,fmt(v.value)+' '+v.unit,v.date+' · '+v.age_days+' giorni fa',v.source])));
+  panel.append(element('h2','Dispendio recente stimato'));
+  panel.append(element('p','Finestre ancorate agli ultimi giorni utilizzabili, non necessariamente alla data odierna. I giorni mancanti non sono trattati come zero.','muted'));
+  panel.append(healthTable(['Finestra','Giorni utilizzabili','Ultimo giorno','Media kcal/giorno','Equivalente kcal/settimana'],r.windows.map(w=>[w.days+' giorni',w.valid_days+'/'+w.days,w.end_date??'—',fmt(w.mean_daily_estimated_kcal),fmt(w.weekly_equivalent_estimated_kcal)])));
+  panel.append(element('h3','Scenari empirici di consumo · ultimi 28 giorni disponibili'));
+  panel.append(element('p','Basso: '+fmt(r.scenarios.low_kcal)+' · Centrale: '+fmt(r.scenarios.central_kcal)+' · Alto: '+fmt(r.scenarios.high_kcal)+' kcal/giorno. Dati di '+(r.scenarios.staleness_days??'—')+' giorni fa. Percentili 20/50/80: variabilità osservata, non intervallo di confidenza.'));
+  panel.append(element('h2','Storico degli allenamenti'));
+  panel.append(healthTable(['Data','Attività','Durata','Energia attiva stimata','Provenienza energia'],r.workouts.slice(-20).reverse().map(w=>[w.date,w.activity.replace('HKWorkoutActivityType',''),fmt(w.duration_minutes)+' min',fmt(w.active_kcal)+' kcal',w.active_energy_kind??'non disponibile'])));
+  panel.append(element('h3','Modelli calorici preliminari per attività'));
+  panel.append(healthTable(['Attività','Prove','kcal/min P20–P50–P80','Stato'],r.workout_forecasts.map(w=>[w.activity.replace('HKWorkoutActivityType',''),w.observations,[w.kcal_per_min_p20,w.kcal_per_min_p50,w.kcal_per_min_p80].map(fmt).join(' – '),w.status==='provisional'?'Preliminare':'Insufficiente/obsoleto'])));
+  panel.append(element('h2','Dati disponibili per gli algoritmi'));
+  panel.append(element('p','Misure con data e fonte, scenari di consumo e modelli preliminari degli allenamenti sono disponibili. Il solver congiunto dieta/palestra è il passaggio successivo; gli obiettivi demo restano invariati.'));
+  const details=element('details');details.append(element('summary','Qualità dei dati e limiti'));r.limitations.forEach(note=>details.append(element('p',note,'muted')));details.append(element('p','Campioni scartati: '+JSON.stringify(r.import.invalid)+' · Duplicati saltati: '+r.import.duplicates_skipped,'muted'));panel.append(details);
+ }
+ if(healthPoll)clearTimeout(healthPoll);healthPoll=running?setTimeout(()=>loadHealth().catch(e=>message(e.message)),3000):null;
+}
+$('health-import').onclick=async()=>{try{await api('health/import','POST',{});await loadHealth()}catch(e){message(e.message)}};

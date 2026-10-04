@@ -34,6 +34,20 @@ class WebTests(unittest.TestCase):
         self.assertEqual(reply.status_code, 200)
         return client, {'x-csrf-token': reply.json()['csrf']}
 
+    def test_health_reports_and_import_ownership_are_private(self):
+        first,h1=self.account('healthfirst');second,h2=self.account('healthsecond')
+        with self.module.connect() as db:owner=db.execute('SELECT id FROM users WHERE username=?',('healthfirst',)).fetchone()['id']
+        directory=self.module.health_directory(owner);directory.mkdir(parents=True,exist_ok=True)
+        report=dict(version='test',timezone='Europe/Rome',as_of='2026-10-01',measures={'weight':dict(value=80,date='2026-10-01')},scenarios={'valid_days':0},windows=[{'days':28,'end_date':None}],workout_forecasts=[])
+        (directory/'summary.json').write_text(json.dumps(report))
+        marker=directory.parent/'owner.json';marker.write_text(json.dumps({'user_id':owner}))
+        self.assertEqual(TestClient(self.module.app).get('/api/health').status_code,401)
+        self.assertTrue(first.get('/api/health').json()['imported'])
+        self.assertTrue(first.get('/api/health').json()['can_import'])
+        response=second.get('/api/health').json();self.assertFalse(response['imported']);self.assertFalse(response['can_import']);self.assertIsNone(response['report'])
+        self.assertEqual(first.post('/api/health/import',json={}).status_code,403)
+        self.assertEqual(second.post('/api/health/import',json={},headers=h2).status_code,403)
+
     def test_trial_feedback_is_private_validated_and_updates_once(self):
         first,h1=self.account('trialfirst');second,h2=self.account('trialsecond')
         with self.module.connect() as db:
