@@ -5,7 +5,7 @@ import statistics
 from zoneinfo import ZoneInfo
 import diary_service as diary
 
-PARAMETERS=dict(version='progress-v1',ema_half_life_days=7,kalman_process_variance_kg2_per_day=.01,kalman_observation_variance_kg2=.16,kalman_initial_variance_kg2=.25,filter_reset_gap_days=14,minimum_complete_week_days=5,meal_kcal_tolerance_fraction=.1,adherence_threshold=.8,energy_equivalent_kcal_per_kg=7700,weight_response_tolerance_kg=.3)
+PARAMETERS=dict(version='progress-v2',filter_input='daily_median',filter_method='scalar_kalman',trend_method='weekly_least_squares_filtered',ema_half_life_days=7,kalman_process_variance_kg2_per_day=.01,kalman_observation_variance_kg2=.04,kalman_initial_variance_kg2=.25,filter_reset_gap_days=14,minimum_complete_week_days=5,meal_kcal_tolerance_fraction=.1,adherence_threshold=.8,energy_equivalent_kcal_per_kg=7700,weight_response_tolerance_kg=.3)
 
 
 def number(x):return isinstance(x,(int,float)) and not isinstance(x,bool) and math.isfinite(x)
@@ -27,14 +27,18 @@ def weight_series(measurements,as_of):
         if reset:ema=filtered=value;variance=PARAMETERS['kalman_initial_variance_kg2']
         else:
             alpha=1-2**(-gap/PARAMETERS['ema_half_life_days']);ema+=alpha*(value-ema)
-            predicted=variance+gap*PARAMETERS['kalman_process_variance_kg2_per_day'];gain=predicted/(predicted+PARAMETERS['kalman_observation_variance_kg2']);filtered+=gain*(ema-filtered);variance=(1-gain)*predicted
+            predicted=variance+gap*PARAMETERS['kalman_process_variance_kg2_per_day'];gain=predicted/(predicted+PARAMETERS['kalman_observation_variance_kg2']);filtered+=gain*(value-filtered);variance=(1-gain)*predicted
         daily.append(dict(date=date,value=value,ema_kg=ema,filtered_kg=filtered,filter_variance_kg2=variance,raw_count=len(items),aggregation_count=len(chosen),source='manual' if manual else 'apple_health',reset=reset,gap_days=gap));previous=day
     fields=dict(raw_points=raw,daily_points=daily,points=[[p['date'],round(p['filtered_kg'],4)] for p in daily],ema_points=[[p['date'],round(p['ema_kg'],4)] for p in daily],parameters=PARAMETERS,trend_7d=None)
     if not daily:return unavailable('Nessuna pesata disponibile.',**fields)
     latest=daily[-1];age=(as_of-dt.date.fromisoformat(latest['date'])).days
     prior=next((p for p in daily if p['date']==(dt.date.fromisoformat(latest['date'])-dt.timedelta(days=7)).isoformat()),None)
     fields.update(value=latest['value'],unit='kg',date=latest['date'],source=latest['source'],age_days=age,trend_status='available' if prior else 'insufficient_data')
-    if prior:fields['trend_7d']=round(latest['filtered_kg']-prior['filtered_kg'],4)
+    if prior:
+        window=[p for p in daily if prior['date']<=p['date']<=latest['date']]
+        xs=[(dt.date.fromisoformat(p['date'])-dt.date.fromisoformat(prior['date'])).days for p in window];ys=[p['filtered_kg'] for p in window]
+        mx=statistics.mean(xs);my=statistics.mean(ys)
+        fields['trend_7d']=round(7*sum((x-mx)*(y-my) for x,y in zip(xs,ys))/sum((x-mx)**2 for x in xs),4)
     else:fields['trend_reason']='Manca una pesata sette giorni prima; nessuna interpolazione.'
     if age>14:return unavailable('Ultima pesata più vecchia di 14 giorni.',**fields)
     return dict(status='available',**fields)

@@ -156,3 +156,5 @@ Riconoscimento dei pasti da foto, sincronizzazione live con Withings/HealthKit (
 | B6 | **fatto** — `72f9660` | 197 test unittest verdi; profilo nuovo mai salvato: stessi default in UI e owner, richiesta congiunta accettata per le abitudini personali abilitate |
 
 | B7 | **fatto** — `882f5cf` | 198 test unittest verdi; explore preferisce schede diverse da varied sul fronte, fallback solo dieta spiegato |
+
+| B9 | **fatto** — commit di questo passo | 222 test verdi; Kalman diretto sulle mediane, trend settimanale con regressione, parametri progress-v2 |

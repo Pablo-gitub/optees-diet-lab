@@ -139,7 +139,7 @@ Ogni riquadro ha `status`: `available` | `insufficient_data` (con `reason`). Nie
 }
 ```
 
-- Dal passo 5.1 il trend usa EMA con emivita 7 giorni e poi Kalman scalare, conservando le pesate grezze. Parametri, copertura, serie attesa e check-in/decisioni sono definiti nel [contratto Progressi T10](backend-handoff-progress.md). Il precedente riepilogo provvisorio usava una media semplice dichiarata.
+- Dal passo 5.1 il trend usa Kalman scalare sulle mediane giornaliere (progress-v2); EMA con emivita 7 giorni separata, conservando le pesate grezze. Parametri, copertura, serie attesa e check-in/decisioni sono definiti nel [contratto Progressi T10](backend-handoff-progress.md). Il precedente riepilogo provvisorio usava una media semplice dichiarata.
 - L'aderenza dieta è la quota di pasti pianificati registrati come `as_planned` o con scostamento kcal ≤ 10%, sui soli giorni con copertura completa.
 
 ### 4.4 `GET /api/foods/search?q=ricotta&limit=20`

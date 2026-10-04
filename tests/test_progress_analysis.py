@@ -39,3 +39,13 @@ class ProgressFilters(unittest.TestCase):
         self.assertEqual(comparison(week,weight,expected,dt.date(2026,9,14))['classification'],'within_expected_uncertainty')
         week['diet']['status']='insufficient_data'
         self.assertEqual(comparison(week,weight,expected,dt.date(2026,9,14))['status'],'insufficient_data')
+
+    def test_known_linear_decline_with_noise_tracks_weekly_slope(self):
+        import random
+        randomizer=random.Random(42);start=dt.date(2026,8,1)
+        raw=[dict(date=(start+dt.timedelta(days=i)).isoformat(),kind='weight',unit='kg',value=80-.3*i/7+randomizer.gauss(0,.04),source='manual') for i in range(35)]
+        result=weight_series(raw,start+dt.timedelta(days=34))
+        self.assertAlmostEqual(result['trend_7d'],-.3,delta=.08)
+        self.assertLess(abs(result['daily_points'][-1]['filtered_kg']-(80-.3*34/7)),.15)
+        self.assertEqual(result['parameters']['version'],'progress-v2')
+        self.assertEqual(result['parameters']['filter_input'],'daily_median')
