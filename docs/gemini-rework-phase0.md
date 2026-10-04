@@ -275,3 +275,73 @@ Nessun commit è stato effettuato.
 ### Revisione Claude del 6.4 rifatto (2026-10-04)
 
 **Accettato con riserva.** I 53 riferimenti CREA coincidono per codice, nome e valori con `dataset/crea/foods.csv`; i nutrienti assenti in CREA restano `null`; sushi e kebab restano vuoti per mancanza di fonti verificabili, come richiesto. Riserva: le 6 fonti McDonald's Italia non hanno la data di consultazione e i valori non sono stati ricontrollati sul sito da Claude. Da completare quando si implementa la schermata «Ho sgarrato» (6.3).
+
+---
+
+## Passo 3.4 — QA Media nella UI (Allenamento) (2026-10-04)
+
+Verifica effettuata con l'applicazione attiva (`./scripts/start_web.sh` su `http://127.0.0.1:8765`), navigando in **Allenamento** → scheda **Settimana** → pannello **Catalogo delle sessioni** e ispezionando ciascuna sessione e ciascun esercizio.
+
+### 1. Riepilogo catalogo e sessioni verificate
+
+Sono state verificate tutte le **11 sessioni** del catalogo e i relativi **10 esercizi distinti**:
+
+| Sessione | Esercizi inclusi | Foto (0 / 1) | Link video YouTube |
+|---|---|---|---|
+| `strength_dumbbells` (Forza con manubri) | `dumbbell-floor-press`, `dumbbell-deadlift` | 4/4 conformi | 4/4 funzionanti (200 OK) |
+| `hypertrophy_basic` (Massa · corpo libero) | `bodyweight-squat`, `push-up`, `inverted-row` | 6/6 conformi | 6/6 funzionanti (200 OK) |
+| `endurance_basic` (Resistenza muscolare) | `bodyweight-squat`, `push-up`, `inverted-row` | 6/6 conformi | 6/6 funzionanti (200 OK) |
+| `circuit_bodyweight` (Circuito corpo libero) | `bodyweight-squat`, `push-up`, `inverted-row` | 6/6 conformi | 6/6 funzionanti (200 OK) |
+| `emom_bodyweight` (EMOM corpo libero) | `bodyweight-squat`, `push-up`, `inverted-row` | 6/6 conformi | 6/6 funzionanti (200 OK) |
+| `isometric_core` (Isometria · plank) | `plank` | **Anomalia 0.jpg** (corretta) / 1.jpg conforme | 2/2 funzionanti (200 OK) |
+| `continuous_stationary-bike` (Cyclette continuo) | `stationary-bike` | 2/2 conformi | 2/2 funzionanti (200 OK) |
+| `continuous_rowing-machine` (Vogatore continuo) | `rowing-machine` | 2/2 conformi | 2/2 funzionanti (200 OK) |
+| `continuous_incline-treadmill-walk` (Camminata inclinata) | `incline-treadmill-walk` | 2/2 conformi | 2/2 funzionanti (200 OK) |
+| `continuous_elliptical-trainer` (Ellittica continuo) | `elliptical-trainer` | 2/2 conformi | 2/2 funzionanti (200 OK) |
+| `interval_bike` (Cyclette a intervalli) | `stationary-bike` | 2/2 conformi | 2/2 funzionanti (200 OK) |
+
+---
+
+### 2. Elenco anomalie e osservazioni riscontrate
+
+#### Anomalia 1 (Risolta): `plank` — Foto `0.jpg` non ritrae un plank
+- **Problema**: Il file `web/static/media/exercises/plank/0.jpg` ritrae il modello sportivo inginocchiato su un solo ginocchio a riposo sul parquet, con il braccio appoggiato alla coscia, mentre guarda a lato. Non mostra affatto la postura del plank.
+- **Impatto in UI**:
+  1. Nella card dell'esercizio, la galleria a 2 immagini mostrava `0.jpg` etichettandolo automaticamente come `Plank · inizio movimento`, il che è sia visivamente errato sia concettualmente inadeguato per un esercizio isometrico di tenuta.
+  2. In `config/exercise-media.json`, sia `image_url` sia `thumbnail_url` puntavano a `0.jpg`, facendo apparire la foto dell'atleta inginocchiato anche come miniatura della sessione e dell'esercizio in tutta l'applicazione.
+- **Verifica foto 1.jpg**: `web/static/media/exercises/plank/1.jpg` è perfettamente corretta: mostra l'atleta in orizzontale in appoggio solido sugli avambracci (forearm plank).
+- **Correzione applicata in `config/exercise-media.json`**:
+  - `illustrative_image.image_url` e `thumbnail_url` aggiornati a `/static/media/exercises/plank/1.jpg`.
+  - `illustrative_image.title` aggiornato a `Free Exercise DB: Plank (1.jpg)`.
+  - `images` aggiornato a `["/static/media/exercises/plank/1.jpg"]`. In questo modo la UI mostra l'immagine corretta del plank con attributo `alt="Plank"` senza l'artificiosa suddivisione dinamica inizio/fine movimento.
+
+#### Osservazione 2 (UI / Didascalie): Didascalie per esercizi ciclici e continui
+- In `web/static/workout.js`, il template della galleria applica a qualsiasi esercizio con 2 immagini i suffissi `· inizio movimento` per la prima e `· fine movimento` per la seconda.
+- Per gli esercizi cardio stazionari (`elliptical-trainer`, `incline-treadmill-walk`, `stationary-bike`), le due foto rappresentano una vista d'insieme e un primo piano dell'atleta sull'attrezzo: le immagini sono pertinenti al 100%, ma l'etichetta testuale automatica riflette una convenzione pensata per esercizi a ripetizioni (eccentrica/concentrica). Non è un'anomalia dei file multimediali, ma una caratteristica del componente frontend.
+
+#### Osservazione 3 (UI / Navigazione catalogo): Apertura sessioni dal catalogo
+- Nel pannello del catalogo (`<details class="panel catalog-panel">`), ogni card espone unicamente il tasto `Inizia oggi`.
+- Il click invoca `startWorkout` (`POST /api/workouts/start`), che crea una riga `workout_log` persistente nel database dell'utente e apre la scheda di allenamento attivo.
+- Non è presente un tasto di sola consultazione o anteprima della sessione (per visualizzare esercizi, carichi e video prima di decidere se avviare la registrazione).
+
+---
+
+### 3. Verifica dei link video YouTube
+
+Tutti i **20 video YouTube** registrati in `config/exercise-media.json` sono stati verificati:
+- **Disponibilità HTTP e oEmbed**: tutti i 20 URL rispondono con HTTP 200 e restituiscono metadati validi da `https://www.youtube.com/oembed`.
+- **Riprodotte e attive**: nessun video è privato, cancellato, rimosso o bloccato geograficamente.
+- **Canali e titoli didattici**: tutti i canali sono istituzionali o didattici riconosciuti (Calisthenicmovement, Squat University, BarBend, Concept2, Global Cycling Network, ScottHermanFitness, Colossus Fitness, Sunny Health & Fitness, Live Lean TV, Fit Father Project, Upright Health, Training Tall, EverFit Strategies, Get Exercise Confident).
+- **Integrazione con la CSP**: la Content Security Policy dell'app blocca iframe e immagini YouTube esterne; i link sono renderizzati come collegamenti ipertestuali esterni (`target="_blank"`, `rel="noopener noreferrer"`), garantendo la piena compatibilità con le policy di sicurezza del browser.
+
+---
+
+### 4. File modificati
+
+- Modificato unicamente: [`config/exercise-media.json`](file:///home/paolo/Projects/local_work/optees_diet_case_of_studi/config/exercise-media.json) (correzione foto e thumbnail per `plank`).
+- Nessun file di codice, API o database personale è stato alterato.
+- Nessun git commit effettuato.
+
+### Revisione Claude del 3.4 (2026-10-04)
+
+**Accettato.** Verificate a vista le due foto del plank: `0.jpg` ritrae l'atleta in ginocchio, `1.jpg` il plank sugli avambracci; la correzione in `config/exercise-media.json` è giusta. Le osservazioni 2 e 3 sono state risolte nella UI: le didascalie «inizio/fine movimento» compaiono solo per gli esercizi a ripetizioni (per gli altri «foto 1 di 2»), e il catalogo ha il tasto **Guarda** per un'anteprima che non registra nulla. Con il 3.4 si chiude **M1**.

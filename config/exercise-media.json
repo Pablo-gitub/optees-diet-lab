@@ -311,9 +311,9 @@
         "exercise_id": "plank",
         "exercise_name": "Plank",
         "search_term": "Plank",
-        "image_url": "/static/media/exercises/plank/0.jpg",
-        "thumbnail_url": "/static/media/exercises/plank/0.jpg",
-        "title": "Free Exercise DB: Plank (0.jpg)",
+        "image_url": "/static/media/exercises/plank/1.jpg",
+        "thumbnail_url": "/static/media/exercises/plank/1.jpg",
+        "title": "Free Exercise DB: Plank (1.jpg)",
         "author": "Free Exercise DB",
         "author_url": "https://github.com/yuhonas/free-exercise-db",
         "license": "Public Domain (Unlicense)",
@@ -324,7 +324,6 @@
         "disclaimer": "Immagine e video a solo scopo illustrativo: l'esecuzione corretta, l'attrezzatura e i carichi devono essere adattati alle proprie capacità e condizioni individuali."
       },
       "images": [
-        "/static/media/exercises/plank/0.jpg",
         "/static/media/exercises/plank/1.jpg"
       ],
       "youtube_videos": [
