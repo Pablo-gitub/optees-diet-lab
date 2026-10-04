@@ -1,6 +1,6 @@
 # Contratto API e modello dati — Oggi, Settimana, Diario, Statistiche
 
-Stato: **bozza da approvare** (passo 2.1 di [development-plan.md](development-plan.md)). Implementazione: passo 2.2 (Codex) per diario e settimana, 3.1 per la palestra, 5.x per le statistiche complete. La generazione dei piani segue [orchestration.md](orchestration.md).
+Stato: **approvato il 2026-10-04** (passo 2.1 di [development-plan.md](development-plan.md)). Implementazione: passo 2.2 (Codex) per diario e settimana, 3.1 per la palestra, 5.x per le statistiche complete. La generazione dei piani segue [orchestration.md](orchestration.md).
 
 ## 1. La schermata iniziale
 
