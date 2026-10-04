@@ -71,7 +71,9 @@ def week_analysis(db,user,profile,start,as_of):
     due=[s for v in past for s in v['workouts'] if s['planned_session_id'] is not None]
     free_done=sum(s['status']=='done' for v in past for s in v['workouts'] if s['planned_session_id'] is None)
     done=sum(s['status']=='done' for s in due);unknown=sum(s['status'] not in ('done','skipped') for s in due)
-    training_fields=dict(value=None,planned=len(sessions),due=len(due),done=done,skipped=sum(s['status']=='skipped' for s in due),unknown=unknown,free_done=free_done)
+    logged_done_total=sum(s['status']=='done' for v in views if v['date']<=as_of.isoformat() for s in v['workouts'])
+    free_done_total=sum(s['status']=='done' for v in views if v['date']<=as_of.isoformat() for s in v['workouts'] if s['planned_session_id'] is None)
+    training_fields=dict(logged_done_total=logged_done_total,free_done_total=free_done_total,value=None,planned=len(sessions),due=len(due),done=done,skipped=sum(s['status']=='skipped' for s in due),unknown=unknown,free_done=free_done)
     if len(past)<5:training=unavailable('Settimana ancora troppo incompleta per valutare gli allenamenti.',**training_fields)
     elif not due:training=unavailable('Nessuna sessione pianificata da valutare.',**training_fields)
     elif unknown:training=unavailable('Alcune sessioni passate non sono concluse né dichiarate saltate.',**training_fields)
@@ -133,8 +135,9 @@ def summary(analysis):
     fields=dict(diet=diet['value'],training=training['value'],diet_detail=diet,training_detail=training,week_start=week['week_start'])
     adherence=dict(status='available',**fields) if diet['status']=='available' or training['status']=='available' else unavailable('Copertura settimanale insufficiente; vedere dieta e allenamento.',**fields)
     workout_fields={k:training[k] for k in ('done','planned','free_done','unknown','skipped')}
+    workout_fields['done']=training['logged_done_total'];workout_fields['free_done']=training['free_done_total']
     # Counts of explicit completed logs are valid even when adherence is unknown.
-    counts=dict(status='available',**workout_fields) if training['planned'] or training['free_done'] else unavailable('Nessun allenamento pianificato o registrato.',**workout_fields)
+    counts=dict(status='available',**workout_fields) if training['planned'] or training['logged_done_total'] else unavailable('Nessun allenamento pianificato o registrato.',**workout_fields)
     return dict(weight=analysis['weight'],adherence_week=adherence,kcal_average=week['kcal_average'],workouts=counts)
 
 

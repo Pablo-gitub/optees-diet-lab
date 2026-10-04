@@ -125,7 +125,7 @@ async def generate_week(session,profile,data,make_config,foods,health=None,worko
     modes,balance=validate_request(profile,data);start=data['week_start'];index=data.get('day_index',dt.date.fromisoformat(start).weekday());integer(index,0,13)
     workout_request=dict(data['workout'],week_start=start)
     workout_set=await workout_engine.generate_week(session,profile,workout_request,workout_locks)
-    result=dict(kind='joint',spec_version='orchestration-v2-joint',mode=profile['mode'],week_start=start,horizon=dict(days=7),status=workout_set['status'],plans=[],pool=dict(candidates=0,front=0),warnings=copy.deepcopy(workout_set['warnings']),configuration_hash=workout_engine.configuration_hash(profile),versions=dict(engine='joint-v1',health=(health or {}).get('version')),request_hash=hashlib.sha256(json.dumps(dict(profile=profile,request=data),sort_keys=True).encode()).hexdigest())
+    result=dict(kind='joint',energy_balance_target_kcal=balance,spec_version='orchestration-v2-joint',mode=profile['mode'],week_start=start,horizon=dict(days=7),status=workout_set['status'],plans=[],pool=dict(candidates=0,front=0),warnings=copy.deepcopy(workout_set['warnings']),configuration_hash=workout_engine.configuration_hash(profile),versions=dict(engine='joint-v1',health=(health or {}).get('version')),request_hash=hashlib.sha256(json.dumps(dict(profile=profile,request=data),sort_keys=True).encode()).hexdigest())
     if not workout_set['plans']:return result
     pool=[];seen=set();context=context_key(profile,data)
     for workout in workout_set['plans']:

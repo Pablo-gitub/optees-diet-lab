@@ -230,7 +230,7 @@ def apply_plan(db,user,profile,plan_set,plan,data):
         for day in plan['days']:
             date=day['date'];context[date]=dict(targets=day['targets'],mode=day['mode'],day_type=day.get('day_type','unknown'),scope=day.get('scope'))
             if plan_set.get('kind')=='joint' and not any(item['date']==date for item in skipped):
-                context[date]['progress_forecast']=dict(valid=True,scope=day.get('scope'),energy_scenarios=day.get('energy_scenarios',{}),planned_kcal=day['nutrients']['kcal'],plan_id=plan.get('id'),recorded_at=time.time())
+                context[date]['progress_forecast']=dict(valid=True,scope=day.get('scope'),energy_scenarios=day.get('energy_scenarios',{}),planned_kcal=day['nutrients']['kcal'],plan_id=plan.get('id'),energy_balance_target_kcal=plan_set.get('energy_balance_target_kcal'),recorded_at=time.time())
         db.execute('UPDATE week_plan SET day_context=? WHERE id=?',(json.dumps(context),id))
     result=day_view(db,user,profile,dates[0]);result.update(skipped_slots=skipped,applied_slots=applied);return result
 

@@ -28,6 +28,7 @@ import diary_service as diary
 import workout_service as workouts
 import workout_configuration as workout_settings
 import joint_orchestration as joint
+import progress_recalibration as recalibration
 from day_orchestration import orchestrate_day, context_key
 from health_inputs import load_report as load_health_report, algorithm_inputs as health_algorithm_inputs
 from mcp import ClientSession, StdioServerParameters
@@ -126,6 +127,7 @@ def initialize():
             access.chmod(0o600)
     with connect() as db:
         diary.migrate(db)
+        recalibration.migrate(db)
         legacy=db.execute("SELECT id,profile FROM users WHERE username='paolo'").fetchone()
         if legacy and json.loads(legacy['profile']).get('personal_diets'):
             workout_settings.seed_legacy_equipment(db,legacy['id'],ROOT/'data/personal/equipment.json')
@@ -273,6 +275,15 @@ async def update_profile(request: Request):
     ):
         raise HTTPException(400, 'Cucine non valide')
     old['preferred_cuisines'] = list(dict.fromkeys(preferred))
+    if 'energy_balance_target_kcal' in data:
+        old['energy_balance_target_kcal']=workouts.finite(data['energy_balance_target_kcal'],'Bilancio calorico',-1000,1000,True)
+    if 'day_type_targets' in data:
+        groups=data['day_type_targets']
+        if not isinstance(groups,dict) or set(groups)!= {'rest','training'}:raise diary.DomainError('Target per tipo di giornata non validi')
+        try:
+            for target in groups.values():validate_daily(dict(old.get('daily_meals',daily_defaults(bool(old.get('food_preferences')))),targets=target))
+        except ValueError as exc:raise diary.DomainError(str(exc))
+        old['day_type_targets']=groups
     try:old['daily_meals']=validate_daily(data.get('daily_meals',old.get('daily_meals',daily_defaults(bool(old.get('food_preferences'))))))
     except (ValueError,TypeError) as e:raise HTTPException(400,str(e))
     old.update(
@@ -685,8 +696,41 @@ async def monday_check_in(request:Request):
     profile=owner_profile(user)
     with connect() as db:
         diary.add_measurement(db,user['id'],dict(date=date,kind='weight',value=data.get('weight_kg'),unit='kg'))
-        analysis=progress_analysis.progress(db,user['id'],profile,measurement_values(db,user['id'],as_of=day),day,weeks=3)
-        return dict(date=date,analysis=analysis,previous_week=analysis['weeks'][-2])
+        report=load_health_report(health_directory(user['id']))
+        values=measurement_values(db,user['id'],report=report)
+        analysis=progress_analysis.progress(db,user['id'],profile,values,day,weeks=3)
+        proposal=recalibration.make_proposal(db,user['id'],profile,report,values,day,diary.local_today()) if not health_updating(user['id']) else dict(status='insufficient_data',reason='Importazione Salute in corso; riprova quando è conclusa.')
+        return dict(date=date,analysis=analysis,previous_week=analysis['weeks'][-2],recalibration=proposal)
+
+
+def health_updating(user_id):
+    return (health_directory(user_id)/'health.importing.sqlite').exists() or (health_job.get('user_id')==user_id and health_task is not None and not health_task.done())
+
+
+@app.get('/api/progress/recalibrations')
+def read_recalibrations(request:Request):
+    user=identity(request)
+    with connect() as db:return recalibration.history(db,user['id'])
+
+
+async def decide_recalibration(request,proposal_id,decision):
+    user=identity(request,True);data=await request.json()
+    if health_updating(user['id']):raise diary.DomainError('Importazione Salute in corso; riprova quando è conclusa','health_import_running',409)
+    with connect() as db:
+        db.execute('BEGIN IMMEDIATE')
+        fresh=db.execute('SELECT * FROM users WHERE id=?',(user['id'],)).fetchone();profile=owner_profile(fresh)
+        report=load_health_report(health_directory(user['id']));values=measurement_values(db,user['id'],report=report)
+        result=recalibration.decide(db,user['id'],profile,report,values,proposal_id,data,decision,diary.local_today())
+        result['profile']=profile_defaults(json.loads(db.execute('SELECT profile FROM users WHERE id=?',(user['id'],)).fetchone()['profile']))
+        return result
+
+
+@app.post('/api/progress/recalibrations/{proposal_id}/approve')
+async def approve_recalibration(proposal_id:int,request:Request):return await decide_recalibration(request,proposal_id,'approve')
+
+
+@app.post('/api/progress/recalibrations/{proposal_id}/reject')
+async def reject_recalibration(proposal_id:int,request:Request):return await decide_recalibration(request,proposal_id,'reject')
 
 
 @app.get('/api/plan-sets/{set_id}')

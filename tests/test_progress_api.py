@@ -63,6 +63,9 @@ class ProgressAPI(base.DiaryTests):
                 db.execute("UPDATE planned_session SET status='skipped' WHERE id=?",(ids[1],))
                 after=progress.week_analysis(db,self.user,self.profile,self.start,self.today)['training']
                 self.assertEqual(after['status'],'available');self.assertEqual(after['value'],.5);self.assertEqual(after['done'],1)
+                analysis=progress.progress(db,self.user,self.profile,[],dt.date.fromisoformat(self.start),1)
+                self.assertEqual(progress.summary(analysis)['workouts']['done'],2) # explicit completions today, including one free session
+                self.assertEqual(progress.summary(analysis)['adherence_week']['training'],None)
     def test_check_in_csrf_monday_validation_and_owner_isolation(self):
         self.assertEqual(self.client.post('/api/progress/check-in',json={}).status_code,403)
         self.assertEqual(self.client.post('/api/progress/check-in',json=dict(date='2026-09-22',weight_kg=80),headers=self.headers).status_code,400)
