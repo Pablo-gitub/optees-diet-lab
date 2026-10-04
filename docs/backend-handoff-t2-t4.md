@@ -2,6 +2,8 @@
 
 Nessuna modifica a `web/static/`. Il backend mantiene piani storici e feedback precedenti.
 
+Verifica finale: 158 test superati. Audit Optees con target demo della giornata completa: entrambe le settimane di entrambe le diete hanno una soluzione verificata; tre risultati sono `partial` entro il limite di tempo. Dopo la discretizzazione, l'audit su quattro giornate restituisce due alternative non dominate in due giornate (distanze 5 e 4) e un solo piano non dominato nelle altre due: non si riempiono le card con soluzioni dominate. Il precedente audit del passo 1.2, prima della discretizzazione, aveva distanza media 4–5 in tutte e quattro le giornate. Il server locale è stato riavviato con i nuovi endpoint.
+
 ## Catena della giornata
 
 `POST /api/generate` restituisce direttamente il PlanSet v1, con `run_id`, `plans`, `warnings`, `pool`, versioni e hash. Ogni piano ha un ID selezionabile e valutabile attraverso gli endpoint esistenti. `count` resta per compatibilità. `strategy` è ignorato con warning. La generazione e la scelta non producono ricompense: vengono usati solo i voti esplicitamente associati a piani provati, nel contesto corretto. Le osservazioni dei vecchi bracci-metodo restano archiviate e non alimentano i nuovi bracci.
