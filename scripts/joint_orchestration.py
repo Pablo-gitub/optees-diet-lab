@@ -7,6 +7,7 @@ from diary_service import DomainError,valid_date,integer,day_view
 from daily_meals import validate as validate_daily
 from day_orchestration import plan_diff,exploration_score
 from joint_energy import day_scenarios
+from joint_robustness import annotate_pool
 import week_orchestration as diet_engine
 import workout_service as workout_engine
 
@@ -108,6 +109,7 @@ def select(result,pool,data,observations=()):
     for rank,p in enumerate(selected,1):
         p.update(rank=rank,explanation=dict(headline=headlines[p['role']],reasons=['Vincoli di dieta e palestra verificati',f"Copertura degli obiettivi di allenamento: {p['objectives']['training_fit']:.2f}" if p['objectives']['training_fit'] is not None else 'Obiettivi di copertura muscolare non configurati'],tradeoffs=[]))
         p['diff']=None if p is best else dict(reference_plan='best',distance=len(diet_engine.week_keys(best)-diet_engine.week_keys(p)),days=[dict(date=a['date'],**plan_diff(a,b)) for a,b in zip(best['days'],p['days'])],**session_diff(best,p))
+    if not any(p['role']=='robust' for p in selected):result['warnings'].append(dict(code='robust_role_omitted',message='Nessun ulteriore candidato distinto con scenari completi sul fronte, oppure numero di piani richiesto insufficiente.'))
     result['plans']=selected;result['pool'].update(candidates=len(pool),front=len(candidates))
     if len(selected)==1:result['warnings'].append(dict(code='limited_alternatives',message='Una sola combinazione distinta sul fronte campionato.'))
     return result
@@ -154,7 +156,8 @@ async def generate_week(session,profile,data,make_config,foods,health=None,worko
                 day.update(day_type=day_types[day['date']],workout_sessions=copy.deepcopy(by_date[day['date']]),energy_scenarios=day_scenarios(health,by_date[day['date']],data.get('workout_activity_map')))
             p['robustness']=dict(status='unavailable',reason='Robustezza sul pool congiunto nel passo 4.2.');pool.append(p)
     if not pool:result['status']='infeasible';return result
-    # Step 4.2 adds the verified robust selector here, before role selection.
+    result['robust_selection']=await annotate_pool(session,pool,balance)
+    if result['robust_selection']['status']=='unavailable':result['warnings'].append(dict(code='robustness_unavailable',message=result['robust_selection']['reason']))
     return select(result,pool,data,observations)
 
 

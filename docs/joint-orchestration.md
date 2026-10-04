@@ -34,4 +34,14 @@ Min-Max minimizza la perdita peggiore; regret sottrae, scenario per scenario, il
 
 ## Verifica 4.1
 
-188 test verdi; audit reale Optees su sette giorni con target distinti, quantità a passi di 5 g e vincoli dieta/palestra verificati. Il pool è campionato: non certifica un ottimo globale congiunto. Il passo 4.2 completa la robustezza. Nessuna modifica a `web/static/`.
+188 test verdi; audit reale Optees su sette giorni con target distinti, quantità a passi di 5 g e vincoli dieta/palestra verificati. Il pool è campionato: non certifica un ottimo globale congiunto. Il passo 4.2 completa la robustezza (vedi sotto). Nessuna modifica a `web/static/`.
+
+## Consegna 4.2 e frontend 4.3
+
+`robust_selection` nel PlanSet espone `comparable_candidates`, `total_candidates`, `min_max` e `minimax_regret`: indice del candidato nel pool, stato matematico, valore garantito e scenari verificati. Gli indici identificano i candidati prima della selezione dei ruoli, che rimane limitata al fronte Pareto. `candidate_index` è salvato nei piani; il ruolo `robust` è il miglior regret fra i candidati distinti ancora disponibili sul fronte, quindi può differire dal vincitore assoluto del pool già scelto come `best`.
+
+Ogni piano ha `robustness.scenarios`, `regret_scenarios`, `scenario_minima_kcal`, `max_loss_kcal`, `max_regret_kcal`, `aggregation:"mean_daily_absolute_error"` e `scope:"sampled_joint_pool"`. Se manca il bilancio esplicito o uno scenario di un giorno, la robustezza è indisponibile senza valori numerici inventati. I candidati incompleti non entrano nelle minime del regret. Se la capability Optees manca, la graduatoria finita è locale e `backend_status:"unavailable"` lo dichiara; non si attribuisce una verifica al solver.
+
+196 test verdi, inclusi settimana completa con scenari, ruolo robusto distinto e rifiuto di miscele, scenari incoerenti e falsi ottimi. Audit con MCP Optees reale: perdite `[0,100,100]` e `[60,90,90]`; Min-Max sceglie il secondo piano (90 kcal), regret il primo (10 kcal), entrambi ottimi verificati. Sono errori medi giornalieri, non calorie settimanali.
+
+Per Claude 4.3: raccogliere target completi per riposo/allenamento e il bilancio energetico esplicito prima della generazione congiunta. `null` non significa mantenimento; zero è una scelta esplicita. Mostrare motivi di indisponibilità e warning `robust_role_omitted` quando il fronte non permette un ulteriore ruolo distinto o `k` è insufficiente. Dati Salute e modelli attività conservano provenienza e incertezza; nessun target automatico. `web/static/` non è stato modificato.
