@@ -7,7 +7,7 @@ python scripts/build_workout_catalog.py
 python scripts/plan_workout_week.py --config config/demo-week.json
 ```
 
-Richiede un Python con le dipendenze di requirements.txt. In questa macchina il test usa `/home/paolo/anaconda3/envs/optees/bin/python`. Output in `data/personal/workout_week.json`, escluso da Git. Nessun piano viene automaticamente scelto o registrato come eseguito.
+Richiede un Python con le dipendenze di requirements.txt. Il server `optees-mcp` viene cercato accanto al Python in uso, oppure indicato con `OPTEES_COMMAND`. Output in `data/personal/workout_week.json`, escluso da Git. Nessun piano viene automaticamente scelto o registrato come eseguito.
 
 La configurazione demo è marcata `demo: true`: giorni in ordine lunedì–domenica, disponibilità, massimo settimanale, numero minimo/massimo di sessioni, quota cardio, distanza fra sessioni di forza e target di copertura muscolare euristica. Non sono obiettivi personali già concordati. La futura schermata deve chiedere all'utente di configurarli prima di generare un piano personale.
 

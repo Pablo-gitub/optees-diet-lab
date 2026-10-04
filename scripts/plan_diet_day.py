@@ -210,9 +210,10 @@ def decode_result(config, problem, choices, slots, foods, result):
 async def run(config, output):
     from mcp import ClientSession, StdioServerParameters
     from mcp.client.stdio import stdio_client
+    from optees_command import optees_command
     foods = load_foods()
     problem, choices, slots = formulate(config, foods)
-    async with stdio_client(StdioServerParameters(command=config['optees_command'])) as (read, write):
+    async with stdio_client(StdioServerParameters(command=optees_command(config))) as (read, write):
         async with ClientSession(read, write) as session:
             await session.initialize()
             result = await solve_problem(session, problem)

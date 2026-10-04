@@ -18,6 +18,7 @@ sys.path.insert(0, str(ROOT / 'scripts'))
 from plan_diet_day import NUTRIENTS, load_foods, formulate, solve_problem, decode_result
 from plan_recipe import templates as recipe_templates, formulate_recipe, optimize_recipe
 from recipe_diet_compatibility import meal_options
+from optees_command import optees_command
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 DB = Path(os.environ.get('DIET_WEB_DB', ROOT / 'data/personal/web.sqlite'))
@@ -68,7 +69,7 @@ def initialize():
             pref = ROOT/'data/personal/current_food_preferences.json'
             if pref.exists():
                 profile['food_preferences'] = json.loads(pref.read_text())
-                profile['preference_note'] = ''
+                profile['preference_note'] = str(profile['food_preferences'].get('note', ''))
             db.execute('INSERT INTO users(username,salt,password,profile) VALUES(?,?,?,?)', ('paolo',salt,password_hash(password,salt),json.dumps(profile)))
             access = DB.parent/'web_access.txt'
             access.write_text('Accesso personale locale\nUtente: paolo\nPassword: '+password+'\n')
@@ -112,6 +113,8 @@ def index():
 
 @app.post('/api/register')
 async def register(request: Request):
+    if os.environ.get('DIET_WEB_ALLOW_REGISTER', '1') == '0':
+        raise HTTPException(403,'Creazione di nuovi profili disattivata')
     data = await request.json()
     username = str(data.get('username','')).strip().lower()
     password = str(data.get('password',''))
@@ -181,7 +184,7 @@ async def update_profile(request: Request):
         raise HTTPException(400,'Cucine non valide')
     old['preferred_cuisines']=list(dict.fromkeys(preferred))
     old.update(display_name=str(data.get('display_name',''))[:80],mode=mode,
-               preference_note=str(data.get('preference_note',''))[:2000],targets=data['targets'],
+               preference_note=str(data.get('preference_note',''))[:2000],targets=data.get('targets',old['targets']),
                meal_targets=data.get('meal_targets',{}),excluded_crea_ids=data.get('excluded_crea_ids',[]),
                targets_demo=data.get('targets_demo',True))
     if not isinstance(old['excluded_crea_ids'],list) or not all(isinstance(x,str) for x in old['excluded_crea_ids']):
@@ -224,7 +227,7 @@ async def generate(request: Request):
         try:
             problem,choices,slots=formulate(config,foods)
             alternatives=[]
-            async with stdio_client(StdioServerParameters(command=config['optees_command'])) as (read,write):
+            async with stdio_client(StdioServerParameters(command=optees_command(config))) as (read,write):
                 async with ClientSession(read,write) as session:
                     await session.initialize()
                     for _ in range(3):
@@ -348,7 +351,7 @@ async def recipe_optimize(request: Request):
     except (ValueError,KeyError,TypeError) as e:raise HTTPException(400,str(e))
     if solver_lock.locked():raise HTTPException(409,'Calcolo già in corso: riprova fra poco')
     async with solver_lock:
-        command=json.loads((ROOT/'config/demo-diet-day.json').read_text())['optees_command']
+        command=optees_command()
         try:
             async with stdio_client(StdioServerParameters(command=command)) as (read,write):
                 async with ClientSession(read,write) as session:

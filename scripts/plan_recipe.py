@@ -4,6 +4,7 @@ import asyncio
 import json
 import math
 from pathlib import Path
+from optees_command import optees_command
 from calculate_recipe_nutrients import food_lookup, NUTRIENTS
 from plan_diet_day import solve_problem
 ROOT=Path(__file__).resolve().parents[1]
@@ -144,7 +145,7 @@ async def run(config):
     from mcp import ClientSession,StdioServerParameters
     from mcp.client.stdio import stdio_client
     recipe=next(r for r in templates() if r['id']==config['recipe_id'])
-    async with stdio_client(StdioServerParameters(command=config.get('optees_command','/home/paolo/anaconda3/envs/optees/bin/optees-mcp'))) as (read,write):
+    async with stdio_client(StdioServerParameters(command=optees_command(config))) as (read,write):
         async with ClientSession(read,write) as session:
             await session.initialize();return await optimize_recipe(session,recipe,config)
 

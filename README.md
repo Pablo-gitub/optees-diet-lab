@@ -32,6 +32,8 @@ Primo pianificatore settimanale via MCP: [docs/weekly-planner.md](docs/weekly-pl
 
 ## Interfaccia locale
 
+Copiare `.env.example` in `.env` e indicare il Python con le dipendenze (`DIET_PYTHON`);
+`optees-mcp` viene cercato accanto a quell'interprete, oppure si imposta `OPTEES_COMMAND`.
 Avviare `./scripts/start_web.sh` e aprire http://127.0.0.1:8765.
 Per la rete domestica: `DIET_WEB_HOST=0.0.0.0 ./scripts/start_web.sh`.
 Credenziali iniziali Paolo in `data/personal/web_access.txt`, escluso da Git.

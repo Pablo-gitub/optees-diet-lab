@@ -39,9 +39,9 @@ Pareto, min-max, max-min e bandit non sono ancora implementati.
 ## Audit ripetibile
 
 ```sh
-/home/paolo/anaconda3/envs/optees/bin/python scripts/check_diet_fortnights.py
-/home/paolo/anaconda3/envs/optees/bin/python scripts/diagnose_diet_audit.py
-/home/paolo/anaconda3/envs/optees/bin/python -m unittest discover -s tests -v
+python scripts/check_diet_fortnights.py
+python scripts/diagnose_diet_audit.py
+python -m unittest discover -s tests -v
 ```
 
 L'audit usa una sessione MCP per 84 problemi: 28 giorni × solo locale, solo

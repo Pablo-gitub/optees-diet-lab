@@ -15,6 +15,8 @@ DIET_WEB_HOST=0.0.0.0 ./scripts/start_web.sh
 Gli amici aprono `http://IP-DEL-PC:8765` e creano il proprio profilo con nome
 utente e password. HTTP locale non cifra traffico o password: usare questa
 prima versione su una rete domestica fidata, senza pubblicarla su Internet.
+Quando tutti i profili sono stati creati, `DIET_WEB_ALLOW_REGISTER=0` disattiva la
+registrazione di nuovi utenti (anche in `.env`).
 Il server non viene installato come servizio: termina se viene fermato il
 processo. Non è previsto avvio automatico al riavvio del PC.
 

@@ -2,7 +2,6 @@
   "demo": true,
   "mode": "training",
   "day_index": 0,
-  "optees_command": "/home/paolo/anaconda3/envs/optees/bin/optees-mcp",
   "excluded_crea_ids": [],
   "portion_bounds_g": {},
   "main_meals_targets": {

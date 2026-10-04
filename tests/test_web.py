@@ -104,6 +104,20 @@ class WebTests(unittest.TestCase):
         profile['preferred_cuisines']=['unknown']
         self.assertEqual(first.put('/api/profile',json=profile,headers=h1).status_code,400)
 
+    def test_registration_can_be_disabled(self):
+        client=TestClient(self.module.app)
+        os.environ['DIET_WEB_ALLOW_REGISTER']='0'
+        try:reply=client.post('/api/register',json={'username':'blocked','password':'long-test-password'})
+        finally:del os.environ['DIET_WEB_ALLOW_REGISTER']
+        self.assertEqual(reply.status_code,403)
+        with self.module.connect() as db:
+            self.assertIsNone(db.execute('SELECT 1 FROM users WHERE username=?',('blocked',)).fetchone())
+    def test_profile_update_without_targets_keeps_existing(self):
+        client,headers=self.account('notargets')
+        profile=client.get('/api/profile').json()['profile'];targets=profile.pop('targets')
+        self.assertEqual(client.put('/api/profile',json=profile,headers=headers).status_code,200)
+        self.assertEqual(client.get('/api/profile').json()['profile']['targets'],targets)
+
     def test_personal_files_are_not_served(self):
         client=TestClient(self.module.app)
         self.assertEqual(client.get('/data/personal/web_access.txt').status_code,404)

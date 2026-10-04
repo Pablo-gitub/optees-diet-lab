@@ -8,6 +8,5 @@
   "strength_sessions_max": 2,
   "cardio_minutes_min": 40,
   "strength_gap_days": 1,
-  "muscle_targets_proxy": {"pectoralis_major": 4, "latissimus_dorsi": 4, "quadriceps": 4},
-  "optees_command": "/home/paolo/anaconda3/envs/optees/bin/optees-mcp"
+  "muscle_targets_proxy": {"pectoralis_major": 4, "latissimus_dorsi": 4, "quadriceps": 4}
 }

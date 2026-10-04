@@ -4,6 +4,7 @@ import copy
 import hashlib
 import json
 from pathlib import Path
+from optees_command import optees_command
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 from plan_diet_day import ROOT, NUTRIENTS, load_foods, formulate, solve_problem, decode_result
@@ -36,7 +37,7 @@ async def audit():
     local = json.loads((ROOT/'config/demo-diet-audit.json').read_text())['meal_targets']
     foods = load_foods()
     records = []
-    async with stdio_client(StdioServerParameters(command=base['optees_command'])) as (read, write):
+    async with stdio_client(StdioServerParameters(command=optees_command(base))) as (read, write):
         async with ClientSession(read, write) as session:
             await session.initialize()
             for mode in ['sedentary', 'training']:

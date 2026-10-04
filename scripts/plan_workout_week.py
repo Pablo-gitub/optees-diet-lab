@@ -71,10 +71,11 @@ def formulate(config, catalog, mode):
 async def run(config_path, catalog_path, output):
     from mcp import ClientSession, StdioServerParameters
     from mcp.client.stdio import stdio_client
+    from optees_command import optees_command
     config = json.loads(config_path.read_text())
     catalog = json.loads(catalog_path.read_text())
     results = []
-    async with stdio_client(StdioServerParameters(command=config['optees_command'])) as (read, write):
+    async with stdio_client(StdioServerParameters(command=optees_command(config))) as (read, write):
         async with ClientSession(read, write) as session:
             await session.initialize()
 

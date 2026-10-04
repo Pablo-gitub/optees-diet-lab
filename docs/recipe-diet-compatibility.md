@@ -16,7 +16,7 @@ Le associazioni sono riferite ai rami attualmente modellati, senza certificare l
 Audit ripetibile delle 25 ricette su 56 contesti (due programmi × 14 giorni × due pasti), con 1.400 valutazioni. Il report contiene hash dei template, delle regole, delle categorie e del calendario, e le ragioni per ciascun ramo:
 
 ```sh
-/home/paolo/anaconda3/envs/optees/bin/python scripts/recipe_diet_compatibility.py
+python scripts/recipe_diet_compatibility.py
 ```
 
 Output personale: `data/personal/recipe_diet_compatibility_audit.json`. I test coprono ingredienti non mappati, scelte multiple, rami alternativi, condimenti, complementi mancanti, modalità libera e isolamento delle regole personali. Non serve una risoluzione Optees per questo controllo strutturale; l’ottimizzazione delle quantità resta nel solver esistente.

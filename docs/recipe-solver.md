@@ -32,7 +32,7 @@ Obiettivi del singolo piatto dimostrativi, modificabili nell'interfaccia; non de
 ## Esecuzione e verifica
 
 ```sh
-/home/paolo/anaconda3/envs/optees/bin/python scripts/plan_recipe.py --config config/demo-recipe.json --output /tmp/recipe-result.json
+python scripts/plan_recipe.py --config config/demo-recipe.json --output /tmp/recipe-result.json
 ```
 
 Prova reale Optees del 4 ottobre 2026: soluzione ottima con La Molisana 93,03 g, passata 142,72 g, olio 9,55 g, basilico 4,76 g; 446,1947 kcal, 15,9577 g proteine, 12 g grassi, 65 g carboidrati. Tutti gli intervalli e le proporzioni rispettati.
