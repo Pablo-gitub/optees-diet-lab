@@ -639,24 +639,54 @@ async def manual_measurement(request:Request):
         return result
 
 
-@app.get('/api/measurements')
-def read_measurements(request:Request):
-    user=identity(request)
-    with connect() as db:values=[dict(r) for r in db.execute('SELECT id,date,kind,value,unit,source FROM measurement WHERE user_id=? ORDER BY date DESC,id DESC LIMIT 365',(user['id'],))]
-    report=load_health_report(health_directory(user['id']))
+def measurement_values(db,user_id,report=None,as_of=None):
+    from zoneinfo import ZoneInfo
+    as_of=as_of or diary.local_today();cutoff=as_of-dt.timedelta(days=365)
+    values=[dict(r) for r in db.execute('SELECT id,date,kind,value,unit,source FROM measurement WHERE user_id=? AND date>=? AND date<=? ORDER BY date,id',(user_id,cutoff.isoformat(),as_of.isoformat()))]
+    report=report if report is not None else load_health_report(health_directory(user_id))
     if report:
-        values.extend(dict(date=x['date'],kind='weight',value=x['value'],unit='kg',source='apple_health',source_detail=x.get('source')) for x in report.get('weight_history',[]))
+        health_db=health_directory(user_id)/'health.sqlite'
+        if health_db.exists():
+            zone=ZoneInfo(report.get('timezone','Europe/Rome'));begin=dt.datetime.combine(cutoff,dt.time(),zone).timestamp();end=dt.datetime.combine(as_of+dt.timedelta(days=1),dt.time(),zone).timestamp()
+            with sqlite3.connect('file:'+str(health_db)+'?mode=ro',uri=True) as health:
+                for value,timestamp,source in health.execute("SELECT value,end,source FROM measures WHERE kind='weight' AND end>=? AND end<? ORDER BY end",(begin,end)):
+                    when=dt.datetime.fromtimestamp(timestamp,zone);values.append(dict(date=when.date().isoformat(),timestamp=when.isoformat(),kind='weight',value=value,unit='kg',source='apple_health',source_detail=source))
+        else:values.extend(dict(date=x['date'],kind='weight',value=x['value'],unit='kg',source='apple_health',source_detail=x.get('source')) for x in report.get('weight_history',[]))
         values.extend(dict(date=x['date'],kind=k,value=x['value'],unit=x['unit'],source='apple_health',source_detail=x.get('source')) for k,x in report.get('measures',{}).items() if k!='weight')
     return sorted(values,key=lambda x:x['date'],reverse=True)
 
 
+@app.get('/api/measurements')
+def read_measurements(request:Request):
+    user=identity(request)
+    with connect() as db:return measurement_values(db,user['id'])
+
+
+@app.get('/api/stats/progress')
+def stats_progress(request:Request,weeks:int=8):
+    import progress_analysis
+    user=identity(request);today=diary.local_today();profile=owner_profile(user)
+    with connect() as db:return progress_analysis.progress(db,user['id'],profile,measurement_values(db,user['id']),today,weeks)
+
+
 @app.get('/api/stats/summary')
 def stats_summary(request:Request):
-    values=read_measurements(request);weights=[x for x in values if x['kind']=='weight']
-    insufficient=dict(status='insufficient_data',reason='Analisi completa prevista nel passo 5.1')
-    user=identity(request);today=diary.local_today();start=(today-dt.timedelta(days=today.weekday())).isoformat()
-    with connect() as db:workout_counts=workouts.counts(db,user['id'],start)
-    return dict(weight=dict(status='available',**weights[0],points=[[x['date'],x['value']] for x in weights]) if weights else insufficient,adherence_week=insufficient,kcal_average=insufficient,workouts=dict(status='available' if any(workout_counts.values()) else 'insufficient_data',**workout_counts))
+    from progress_analysis import summary
+    return summary(stats_progress(request,weeks=1))
+
+
+@app.post('/api/progress/check-in')
+async def monday_check_in(request:Request):
+    import progress_analysis
+    user=identity(request,True);data=await request.json()
+    if not isinstance(data,dict) or set(data)-{'date','weight_kg'}:raise diary.DomainError('Check-in non valido')
+    date=diary.valid_date(data.get('date'));day=dt.date.fromisoformat(date)
+    if day.weekday()!=0 or day>diary.local_today():raise diary.DomainError('Il check-in richiede una data di lunedì non futura')
+    profile=owner_profile(user)
+    with connect() as db:
+        diary.add_measurement(db,user['id'],dict(date=date,kind='weight',value=data.get('weight_kg'),unit='kg'))
+        analysis=progress_analysis.progress(db,user['id'],profile,measurement_values(db,user['id'],as_of=day),day,weeks=3)
+        return dict(date=date,analysis=analysis,previous_week=analysis['weeks'][-2])
 
 
 @app.get('/api/plan-sets/{set_id}')

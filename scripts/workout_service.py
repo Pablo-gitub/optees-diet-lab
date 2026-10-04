@@ -169,6 +169,9 @@ def apply_week(db,user,profile,plan_set,plan,data):
         date=(dt.date.fromisoformat(start)+dt.timedelta(days=offset)).isoformat()
         rows=db.execute("SELECT s.id,s.status FROM planned_session s JOIN week_plan w ON w.id=s.week_plan_id WHERE w.user_id=? AND s.date=? AND w.status='active'",(user,date)).fetchall()
         if db.execute('SELECT 1 FROM workout_log WHERE user_id=? AND date=?',(user,date)).fetchone() or any(r['status'] in ('in_progress','done','skipped') for r in rows):protected[date]=True;skipped.append(dict(date=date,reason='session_already_logged'));continue
+        if plan_set.get('kind')!='joint':
+            from progress_analysis import invalidate_forecast
+            invalidate_forecast(db,user,date,'workout_plan_changed')
         for r in rows:db.execute('DELETE FROM planned_session WHERE id=?',(r['id'],))
     for item in plan['workout_sessions']:
         date=item['date']

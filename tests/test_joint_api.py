@@ -30,7 +30,11 @@ class JointAPI(diary_tests.DiaryTests):
             client.cookies.update(self.client.cookies);result=self.generate(client);plan=result['plans'][0]
             applied=client.post('/api/plan-sets/'+result['run_id']+'/apply',json=dict(plan_id=plan['id'],scope='week'),headers=self.headers)
             self.assertEqual(applied.status_code,200,applied.text)
+            with self.app.connect() as db:
+                context=json.loads(db.execute("SELECT day_context FROM week_plan WHERE user_id=? AND week_start=? AND status='active'",(self.user,self.date)).fetchone()['day_context'])
             for day in plan['days']:
+                self.assertEqual(context[day['date']]['progress_forecast']['scope'],'full_day_planned_meals')
+                self.assertEqual(context[day['date']]['progress_forecast']['planned_kcal'],day['nutrients']['kcal'])
                 view=client.get('/api/day',params=dict(date=day['date'])).json()
                 self.assertEqual(view['targets']['kcal'],self.data['day_targets'][day['day_type']]['kcal_100g'])
                 self.assertEqual(view['day_type'],day['day_type']);self.assertIsNone(view['totals']['eaten'])

@@ -173,4 +173,6 @@ def apply_week(db,user,profile,plan_set,plan,data):
     if plan_set['configuration_hash']!=workout_engine.configuration_hash(profile):raise DomainError('Configurazione palestra cambiata; rigenera','configuration_changed',409)
     if plan_set.get('state_hash')!=state_hash(db,user,profile,plan_set['week_start']):raise DomainError('Piano o registri cambiati; rigenera la settimana congiunta','planning_state_changed',409)
     diet=apply_plan(db,user,profile,plan_set,plan,data);workout=workout_engine.apply_week(db,user,profile,plan_set,plan,data)
+    from progress_analysis import invalidate_forecast
+    for item in workout['skipped_slots']:invalidate_forecast(db,user,item['date'],'workout_slot_protected')
     view=day_view(db,user,profile,plan_set['week_start']);view.update(applied_slots=diet['applied_slots']+workout['applied_slots'],skipped_slots=diet['skipped_slots']+workout['skipped_slots']);return view

@@ -222,9 +222,15 @@ def apply_plan(db,user,profile,plan_set,plan,data):
                 item=dict(food=dict(source=source,id=identifier),grams=s['grams'],units=s.get('units'))
                 quantity(item,resolve_food(item['food'],profile));items.append(item)
             db.execute("INSERT INTO planned_meal(week_plan_id,date,slot,items,role,status,locked,day_index) VALUES(?,?,?,?,?,'chosen',?,?) ON CONFLICT(week_plan_id,date,slot) DO UPDATE SET items=excluded.items,role=excluded.role,status='chosen',day_index=excluded.day_index",(id,date,slot,json.dumps(items),plan.get('role','best'),int(slot in day.get('locked_slots',[])),day.get('day_index',0)));applied.append(dict(date=date,slot=slot))
+    if plan_set.get('kind')!='joint':
+        from progress_analysis import invalidate_forecast
+        for date in {item['date'] for item in applied}:invalidate_forecast(db,user,date)
     if scope=='week' and 'targets_by_date' in plan:
         context=json.loads(week['day_context'] or '{}') if week else {}
-        for day in plan['days']:context[day['date']]=dict(targets=day['targets'],mode=day['mode'],day_type=day.get('day_type','unknown'))
+        for day in plan['days']:
+            date=day['date'];context[date]=dict(targets=day['targets'],mode=day['mode'],day_type=day.get('day_type','unknown'),scope=day.get('scope'))
+            if plan_set.get('kind')=='joint' and not any(item['date']==date for item in skipped):
+                context[date]['progress_forecast']=dict(valid=True,scope=day.get('scope'),energy_scenarios=day.get('energy_scenarios',{}),planned_kcal=day['nutrients']['kcal'],plan_id=plan.get('id'),recorded_at=time.time())
         db.execute('UPDATE week_plan SET day_context=? WHERE id=?',(json.dumps(context),id))
     result=day_view(db,user,profile,dates[0]);result.update(skipped_slots=skipped,applied_slots=applied);return result
 
