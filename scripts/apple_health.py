@@ -14,7 +14,7 @@ import zipfile
 from zoneinfo import ZoneInfo
 
 VERSION='apple-health-v1'
-ANALYSIS_VERSION='health-analysis-v1.1'
+ANALYSIS_VERSION='health-analysis-v2'
 TYPES={
  'HKQuantityTypeIdentifierActiveEnergyBurned':'active_energy',
  'HKQuantityTypeIdentifierBasalEnergyBurned':'resting_energy',
@@ -143,7 +143,9 @@ def summarize(db,timezone='Europe/Rome',today=None):
     for activity,observations in sorted(rates.items()):
         observations=observations[-20:];values=[v for _,v in observations];age=(today-dt.datetime.fromtimestamp(observations[-1][0],zone).date()).days
         forecasts.append(dict(activity=activity,observations=len(values),kcal_per_min_p20=round(quantile(values,.2),3),kcal_per_min_p50=round(quantile(values,.5),3),kcal_per_min_p80=round(quantile(values,.8),3),status='provisional' if len(values)>=3 and age<=90 else 'insufficient_or_stale',age_days=age,note='Stima per tipo Apple, non per esercizio/protocollo; scalare alla durata è un’ipotesi.'))
-    return dict(version=VERSION,analysis_version=ANALYSIS_VERSION,as_of=today.isoformat(),timezone=timezone,latest_energy_date=days[-1]['date'] if days else None,measures=measures,weight_history=weights,body_profile_needs_review=not measures.get('weight') or measures['weight']['age_days']>90,windows=windows,scenarios=scenarios,daily=days[-90:],workouts=workouts[-100:],workout_forecasts=forecasts,limitations=['Energia Watch stimata, non misura metabolica diretta.','L’energia delle sessioni non è sommata al totale giornaliero.','Sovrapposizioni: Watch > iPhone > altre fonti; a parità intervallo più breve, poi registrazione più recente.','Distribuzione uniforme delle calorie dentro ogni intervallo; giorni nel fuso configurato.','Copertura del riposo è un indicatore di completezza, non prova di uso continuo del Watch.','Frequenza cardiaca campione per campione, sonno e itinerari non vengono importati in questa prima versione; le statistiche cardiache degli allenamenti sono conservate se presenti.','Mancano etichette dei protocolli, carichi, ripetizioni e feedback reale per stimare la risposta a una scheda.'])
+    from joint_energy import non_workout_baseline
+    net=non_workout_baseline(days,workouts,timezone,today)
+    return dict(non_workout_scenarios=net,version=VERSION,analysis_version=ANALYSIS_VERSION,as_of=today.isoformat(),timezone=timezone,latest_energy_date=days[-1]['date'] if days else None,measures=measures,weight_history=weights,body_profile_needs_review=not measures.get('weight') or measures['weight']['age_days']>90,windows=windows,scenarios=scenarios,daily=days[-90:],workouts=workouts[-100:],workout_forecasts=forecasts,limitations=['Energia Watch stimata, non misura metabolica diretta.','L’energia delle sessioni non è sommata al totale giornaliero.','Sovrapposizioni: Watch > iPhone > altre fonti; a parità intervallo più breve, poi registrazione più recente.','Distribuzione uniforme delle calorie dentro ogni intervallo; giorni nel fuso configurato.','Copertura del riposo è un indicatore di completezza, non prova di uso continuo del Watch.','Frequenza cardiaca campione per campione, sonno e itinerari non vengono importati in questa prima versione; le statistiche cardiache degli allenamenti sono conservate se presenti.','Mancano etichette dei protocolli, carichi, ripetizioni e feedback reale per stimare la risposta a una scheda.'])
 
 
 def import_zip(archive,output,owner,progress=None,timezone='Europe/Rome',force=False):

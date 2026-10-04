@@ -35,6 +35,7 @@ def migrate(db):
 
     columns={r[1] for r in db.execute('PRAGMA table_info(planned_meal)')}
     if 'day_index' not in columns:db.execute('ALTER TABLE planned_meal ADD COLUMN day_index INTEGER DEFAULT 0')
+    if 'day_context' not in {r[1] for r in db.execute('PRAGMA table_info(week_plan)')}:db.execute("ALTER TABLE week_plan ADD COLUMN day_context TEXT DEFAULT '{}'")
     from workout_service import migrate as workout_migrate
     workout_migrate(db)
 
@@ -137,11 +138,13 @@ def day_view(db,user,profile,date):
         actions=['edit','reset'] if st!='unknown' else ['edit','skip']+(['confirm','alternatives'] if p and not p['locked'] else ['confirm'] if p else [])
         meals.append(dict(slot=slot,state=st,planned=dict(planned_meal_id=p['id'],role=p['role'],day_index=p['day_index'],status=p['status'],locked=bool(p['locked']),items=planned_items,**totals(planned_items)) if p else None,eaten=dict(items=eaten_items,**totals(eaten_items)) if st!='unknown' else None,actions=actions))
     targets=json.loads(week['targets']) if week else (profile.get('daily_meals',{}).get('targets') if profile.get('daily_meals',{}).get('enabled') else profile['targets'])
+    context=json.loads(week['day_context'] or '{}').get(date,{}) if week else {}
+    targets=context.get('targets',targets)
     any_logged=any(m['state']!='unknown' for m in meals)
     from workout_service import day_workouts
     workouts=day_workouts(db,user,date)
     workout=max(workouts,key=lambda x:(x["workout_log_id"] or 0,x["planned_session_id"] or 0)) if workouts else None
-    return dict(date=date,day_type='training' if any(w['status']!='skipped' for w in workouts) else 'unknown',mode=week['mode'] if week else profile['mode'],week_plan_id=week['id'] if week else None,targets={k.replace('_100g',''):v for k,v in targets.items()},totals=dict(planned=totals(all_planned) if planned_count else None,eaten=totals(all_eaten) if any_logged else None,coverage=dict(logged_slots=logged,planned_slots=planned_count)),meals=meals,workout=workout,workouts=workouts,warnings=[])
+    return dict(date=date,day_type='training' if any(w['status']!='skipped' for w in workouts) else context.get('day_type','unknown'),mode=context.get('mode',week['mode']) if week else profile['mode'],week_plan_id=week['id'] if week else None,targets={k.replace('_100g',''):v for k,v in targets.items()},totals=dict(planned=totals(all_planned) if planned_count else None,eaten=totals(all_eaten) if any_logged else None,coverage=dict(logged_slots=logged,planned_slots=planned_count)),meals=meals,workout=workout,workouts=workouts,warnings=[])
 
 def diary_mutation(db,user,profile,action,data,entry_id=None):
     entry=None
@@ -219,6 +222,10 @@ def apply_plan(db,user,profile,plan_set,plan,data):
                 item=dict(food=dict(source=source,id=identifier),grams=s['grams'],units=s.get('units'))
                 quantity(item,resolve_food(item['food'],profile));items.append(item)
             db.execute("INSERT INTO planned_meal(week_plan_id,date,slot,items,role,status,locked,day_index) VALUES(?,?,?,?,?,'chosen',?,?) ON CONFLICT(week_plan_id,date,slot) DO UPDATE SET items=excluded.items,role=excluded.role,status='chosen',day_index=excluded.day_index",(id,date,slot,json.dumps(items),plan.get('role','best'),int(slot in day.get('locked_slots',[])),day.get('day_index',0)));applied.append(dict(date=date,slot=slot))
+    if scope=='week' and 'targets_by_date' in plan:
+        context=json.loads(week['day_context'] or '{}') if week else {}
+        for day in plan['days']:context[day['date']]=dict(targets=day['targets'],mode=day['mode'],day_type=day.get('day_type','unknown'))
+        db.execute('UPDATE week_plan SET day_context=? WHERE id=?',(json.dumps(context),id))
     result=day_view(db,user,profile,dates[0]);result.update(skipped_slots=skipped,applied_slots=applied);return result
 
 def search_foods(db,user,profile,q,limit):

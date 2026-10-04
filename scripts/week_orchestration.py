@@ -54,7 +54,7 @@ def weekly_model(profile,request,make_config,foods):
             c['principal_protein']=bool(family(c['food_id'])) and c['group']==max(candidates,default=-1)
             if c.get('locked'):
                 fixed=[other for other in choices if other['meal']==c['meal'] and other.get('locked')]
-                principal=max(fixed,key=lambda other:(other['nutrients'][1]*p['variables'][other['q']]['lb'],other['food_id']),default=None)
+                principal=max(fixed,key=lambda other:(other['nutrients'][1]*other.get('locked_grams',p['variables'][other['q']]['lb']),other['food_id']),default=None)
                 c['principal_protein']=c is principal and c['nutrients'][1]>0
         all_choices.extend(dict(c,q=c['q']+shift,y=c['y']+shift,date=date,day=offset) for c in choices)
         blocks.append(dict(date=date,config=config,problem=p,choices=choices,slots=slots,shift=shift))
@@ -91,7 +91,8 @@ def decode_week(problem,blocks,foods,result,maximum):
         sub=dict(mathematical_status=result['mathematical_status'],validation=result['validation'],result=dict(variables=[dict(name=v['name'],value=by_name[f'd{offset}_{v["name"]}']) for v in block['problem']['variables']]))
         day=decode_result(block['config'],block['problem'],block['choices'],block['slots'],foods,sub)
         day={k:v for k,v in day.items() if k not in ('config','result','excluded_for_missing_nutrients','crea_sha256')}
-        day.update(date=block['date'],mode=block['config']['mode'],day_index=block['config']['day_index'],locked_slots=list(block['config'].get('locked_meals',{})))
+        day_targets=block['config']['daily_meals']['targets'] if block['config'].get('daily_meals',{}).get('enabled') else block['config']['main_meals_targets']
+        day.update(targets=copy.deepcopy(day_targets),date=block['date'],mode=block['config']['mode'],day_index=block['config']['day_index'],locked_slots=list(block['config'].get('locked_meals',{})))
         if not day['constraint_report']['all_respected']:raise DomainError('Vincoli della giornata non verificati')
         days.append(day)
     frequencies={}
@@ -100,8 +101,8 @@ def decode_week(problem,blocks,foods,result,maximum):
             for f in {s['food_id'] for s in day['selections'] if s['meal']==slot and s.get('principal_protein')}:frequencies[f]=frequencies.get(f,0)+1
     if any(v>maximum for v in frequencies.values()):raise DomainError('Frequenze non rispettate')
     targets=blocks[0]['config']['daily_meals']['targets'] if blocks[0]['config'].get('daily_meals',{}).get('enabled') else blocks[0]['config']['main_meals_targets']
-    errors=[abs(day['nutrients'][n.replace('_100g','')]-targets[n]['target'])/targets[n]['target'] for day in days for n in NUTRIENTS]
-    return dict(days=days,targets=targets,nutrients={n:round(sum(day['nutrients'][n] for day in days),3) for n in days[0]['nutrients']},objectives=dict(nutrition_error=sum(errors),worst_error=max(errors),preference=1.,variety=len({s['food_id'] for day in days for s in day['selections']})/max(sum(len(day['selections']) for day in days),1),prep_minutes=None),constraint_report=dict(verified=True,all_respected=True,protein_frequencies=frequencies,max_protein_repetitions=maximum,frequency_scope='principal_food_id_per_meal'),arms=sorted(set(a for day in days for a in arms(day))),robustness=dict(status='unavailable',reason='Robustezza congiunta settimanale prevista nel passo 4.2.'))
+    errors=[abs(day['nutrients'][n.replace('_100g','')]-day['targets'][n]['target'])/day['targets'][n]['target'] for day in days for n in NUTRIENTS]
+    return dict(days=days,targets=targets,targets_by_date={d['date']:d['targets'] for d in days},nutrients={n:round(sum(day['nutrients'][n] for day in days),3) for n in days[0]['nutrients']},objectives=dict(nutrition_error=sum(errors),worst_error=max(errors),preference=1.,variety=len({s['food_id'] for day in days for s in day['selections']})/max(sum(len(day['selections']) for day in days),1),prep_minutes=None),constraint_report=dict(verified=True,all_respected=True,protein_frequencies=frequencies,max_protein_repetitions=maximum,frequency_scope='principal_food_id_per_meal'),arms=sorted(set(a for day in days for a in arms(day))),robustness=dict(status='unavailable',reason='Robustezza congiunta settimanale prevista nel passo 4.2.'))
 
 
 def week_keys(plan):return {(day['date'],s['meal'],s['food_id']) for day in plan['days'] for s in day['selections'] if s['meal'] in ('lunch','dinner') and s['meal'] not in day.get('locked_slots',[])}
@@ -210,7 +211,8 @@ def generate_meal_alternatives(db,user,profile,request,make_config):
     if current['planned']['locked']:raise DomainError('Pasto bloccato','slot_locked',409)
     if view['week_plan_id']:
         week=db.execute('SELECT * FROM week_plan WHERE id=? AND user_id=?',(view['week_plan_id'],user)).fetchone()
-        profile=copy.deepcopy(profile);profile['mode']=week['mode'];index=current['planned'].get('day_index',0)
+        profile=copy.deepcopy(profile);profile['mode']=view['mode'];index=current['planned'].get('day_index',0)
+        if profile.get('daily_meals',{}).get('enabled'):profile['daily_meals']['targets']={n:view['targets'][n.replace('_100g','')] for n in NUTRIENTS}
     else:index=0
     config=make_config(profile,index);config['alternative_slot']=slot;foods=load_foods()
     for meal in view['meals']:

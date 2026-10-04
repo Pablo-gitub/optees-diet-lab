@@ -93,11 +93,12 @@ def week_config(data):
     return cfg,times
 
 
-async def generate_week(session,profile,data):
+async def generate_week(session,profile,data,locked_by_date=None):
     from plan_workout_week import formulate
     from plan_diet_day import solve_problem
     from plan_recipe import values_verified
     cfg,times=week_config(data);public=catalog(profile)
+    if locked_by_date is not None:cfg['locked_by_date']=locked_by_date
     result=dict(kind='workout',mode=profile['mode'],week_start=data['week_start'],horizon=dict(days=7),demo=True,require_personal_configuration=not cfg['demo'],configuration_hash=configuration_hash(profile),status='ok',plans=[],warnings=[dict(code='workout_demo',message='Tempi e volume dei protocolli sono bozze dimostrative; i carichi sono personali solo se dichiarati.')])
     signatures=set()
     for mode in ('time','coverage'):
@@ -111,6 +112,7 @@ async def generate_week(session,profile,data):
         values_verified(problem,solved)
         values={v['name']:v['value'] for v in solved['result']['variables']}
         chosen=[dict(date=d,session_id=t['id'],minutes=display_minutes(t['duration_seconds']),duration_seconds=t['duration_seconds'],start_time=times.get(d),session=copy.deepcopy(t)) for i,(d,t) in enumerate(slots) if values[f's{i}']>.5]
+        chosen=[dict(member,date=item['date'],minutes=display_minutes(member['session']['duration_seconds']),duration_seconds=member['session']['duration_seconds'],locked=True) if item['session'].get('locked_observation') else member for item in chosen for member in item['session'].get('locked_members',[item])]
         signature=tuple((s['date'],s['session_id']) for s in chosen)
         if signature in signatures:continue
         signatures.add(signature)
@@ -166,7 +168,7 @@ def apply_week(db,user,profile,plan_set,plan,data):
     for offset in range(7):
         date=(dt.date.fromisoformat(start)+dt.timedelta(days=offset)).isoformat()
         rows=db.execute("SELECT s.id,s.status FROM planned_session s JOIN week_plan w ON w.id=s.week_plan_id WHERE w.user_id=? AND s.date=? AND w.status='active'",(user,date)).fetchall()
-        if any(r['status'] in ('in_progress','done','skipped') for r in rows):protected[date]=True;skipped.append(dict(date=date,reason='session_already_logged'));continue
+        if db.execute('SELECT 1 FROM workout_log WHERE user_id=? AND date=?',(user,date)).fetchone() or any(r['status'] in ('in_progress','done','skipped') for r in rows):protected[date]=True;skipped.append(dict(date=date,reason='session_already_logged'));continue
         for r in rows:db.execute('DELETE FROM planned_session WHERE id=?',(r['id'],))
     for item in plan['workout_sessions']:
         date=item['date']

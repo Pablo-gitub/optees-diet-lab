@@ -42,28 +42,33 @@ def formulate(config, catalog, mode):
     if catalog.get('model_version')=='workout-sessions-v2':
         from workout_sessions import validate_session
         for t in templates:validate_session(t)
-    slots = [(day, t) for day in days for t in templates if t['duration_minutes_assumed'] <= config['days'][day]]
-    if not slots:
+    locked=config.get('locked_by_date',{})
+    slots = [(day,t) for day in days for t in (locked[day] if day in locked else templates) if t['duration_minutes_assumed'] <= config['days'][day]]
+    if not slots and any(config[k]>0 for k in ('sessions_min','strength_sessions_min','cardio_minutes_min')):
         raise ValueError('No available slots')
     n = len(slots)
     variables = [{'name': f's{i}', 'lb': 0, 'ub': 1, 'integrality': 'B'} for i in range(n)]
     muscles = list(config['muscle_targets_proxy'])
     variables += [{'name': f'coverage_{i}', 'lb': 0, 'ub': 1, 'integrality': 'C'} for i in range(len(muscles))]
+    if not variables:variables.append(dict(name='idle',lb=0,ub=0,integrality='C'))
     size = len(variables)
     constraints = []
 
     def add(values, relation, rhs):
         constraints.append({'coefficients': values + [0] * (size - len(values)), 'relation': relation, 'rhs': rhs})
 
-    strength = [t.get('resistance_session',bool(t['score_vector']['muscle_coverage_proxy'])) for _, t in slots]
+    strength = [t.get('strength_count',int(t.get('resistance_session',bool(t['score_vector']['muscle_coverage_proxy'])))) for _, t in slots]
     duration = [t['duration_minutes_assumed'] for _, t in slots]
     for day in days:
         add([int(d == day) for d, _ in slots], '<=', 1)
     add(duration, '<=', config['weekly_minutes_max'])
-    add([1] * n, '>=', config['sessions_min'])
-    add([1] * n, '<=', config['sessions_max'])
-    add([int(s) for s in strength], '>=', config['strength_sessions_min'])
-    add([int(s) for s in strength], '<=', config['strength_sessions_max'])
+    counts=[t.get('session_count',1) for _,t in slots]
+    add(counts, '>=', config['sessions_min'])
+    add(counts, '<=', config['sessions_max'])
+    for day,locked_templates in locked.items():
+        if locked_templates:add([int(d==day) for d,_ in slots],'=',1)
+    add(strength, '>=', config['strength_sessions_min'])
+    add(strength, '<=', config['strength_sessions_max'])
     cardio = [t.get('cardio_work_seconds', t['duration_minutes_assumed']*60 if not s else 0)/60 for (_,t),s in zip(slots,strength)]
     add(cardio, '>=', config['cardio_minutes_min'])
     gap = config['strength_gap_days']
@@ -71,7 +76,7 @@ def formulate(config, catalog, mode):
         raise ValueError('Recovery gap must be an integer')
     for i, day in enumerate(days):
         window = days[i : i + int(gap) + 1]
-        add([int(d in window and s) for (d, _), s in zip(slots, strength)], '<=', 1)
+        add([s if d in window else 0 for (d, _), s in zip(slots, strength)], '<=', 1)
     for k, muscle in enumerate(muscles):
         row = [
             -t['score_vector']['muscle_coverage_proxy'].get(muscle, 0) / config['muscle_targets_proxy'][muscle]
@@ -85,6 +90,7 @@ def formulate(config, catalog, mode):
     else:
         objective = [0] * n + [1] * len(muscles)
         sense = 'max'
+    objective += [0]*(size-len(objective))
     return {
         'version': '1',
         'variables': variables,

@@ -2,6 +2,9 @@
 import copy
 import datetime as dt
 import json
+import os
+import sqlite3
+import tempfile
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -24,17 +27,30 @@ def refresh_report(report,today=None):
             if len(selected)==window['valid_days'] and selected:
                 window['mean_active_kcal']=round(sum(d['active_kcal'] for d in selected)/len(selected),2)
                 window['mean_resting_kcal']=round(sum(d['resting_kcal'] for d in selected)/len(selected),2)
+    net=report.get('non_workout_scenarios')
+    if net:
+        net_age=(today-dt.date.fromisoformat(net['end_date'])).days if net.get('end_date') else None
+        net['staleness_days']=net_age;net['status']='available' if net['valid_days']>=7 and net_age is not None and 0<=net_age<=14 else 'insufficient_or_stale'
     report['body_profile_needs_review']=not report['measures'].get('weight') or report['measures']['weight']['age_days']>90
     return report
 
 
 def algorithm_inputs(report):
     scenario=report['scenarios']
-    return dict(version='health-inputs-v1',body_measurements=report['measures'],body_profile_needs_review=report.get('body_profile_needs_review',True),consumption_scenarios=scenario,workout_energy_models=report['workout_forecasts'],usable_consumption_baseline=scenario['status']=='available',nutritional_targets='unchanged_requires_goal_configuration',joint_optimization='not_yet_implemented',do_not_add_workout_energy_to_existing_daily_total=True)
+    return dict(version='health-inputs-v1',body_measurements=report['measures'],body_profile_needs_review=report.get('body_profile_needs_review',True),consumption_scenarios=scenario,workout_energy_models=report['workout_forecasts'],usable_consumption_baseline=scenario['status']=='available',nutritional_targets='unchanged_requires_goal_configuration',joint_optimization='candidate_pool_v1',non_workout_consumption_scenarios=report.get('non_workout_scenarios',{'status':'unavailable'}),do_not_add_workout_energy_to_existing_daily_total=True)
 
 
 def load_report(directory):
     path=Path(directory)/'summary.json'
     if not path.exists():return None
-    report=json.loads(path.read_text());report['imported_as_of']=report['as_of']
+    report=json.loads(path.read_text())
+    database=Path(directory)/'health.sqlite'
+    if 'non_workout_scenarios' not in report and database.exists():
+        from apple_health import summarize
+        with sqlite3.connect(database) as db:updated=summarize(db,report.get('timezone','Europe/Rome'))
+        if 'import' in report:updated['import']=report['import']
+        with tempfile.NamedTemporaryFile(mode='w',dir=directory,prefix='summary.',suffix='.tmp',delete=False) as stream:
+            json.dump(updated,stream,ensure_ascii=False);temporary=stream.name
+        os.chmod(temporary,0o600);os.replace(temporary,path);report=updated
+    report['imported_as_of']=report['as_of']
     return refresh_report(report)

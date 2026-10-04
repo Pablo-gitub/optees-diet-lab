@@ -95,7 +95,7 @@ def formulate(config, foods):
             if any(not math.isfinite(v) or v<0 for v in values):raise ValueError('Nutrienti bloccati non validi')
             y=var(f'locked_y{len(choices)}',0,1,'B');q=var(f'locked_q{len(choices)}',0,3000)
             add({y:1},'=',1);add({q:1},'=',grams)
-            choices.append(dict(meal=meal,combination='locked',branch_index=0,group=0,food_id=food_id,y=y,q=q,nutrients=values,source=item['source'],reference_id=item['reference_id'],units=item.get('units'),locked=True))
+            choices.append(dict(meal=meal,combination='locked',branch_index=0,group=0,food_id=food_id,y=y,q=q,nutrients=values,source=item['source'],reference_id=item['reference_id'],units=item.get('units'),locked=True,locked_grams=grams))
     for meal, expression in slots.items():
         if meal in config.get('locked_meals',{}):
             fixed_meal(meal);continue

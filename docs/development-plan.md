@@ -110,7 +110,7 @@ Consegna preparata per i passi 0.3–0.5: [prompt per Gemini](gemini-handoff-pha
 
 | # | Passo | Chi | Dim. | Fatto quando | Stato |
 |---|---|---|---|---|---|
-| 4.1 | Candidati congiunti: tipo di giornata (allenamento/riposo) → target del giorno; dispendio da scenari Salute + modelli per attività senza doppio conteggio; `training_fit` in S3 | Codex | L | settimana congiunta con ruoli e diff che includono le sessioni | da fare |
+| 4.1 | Candidati congiunti: tipo di giornata (allenamento/riposo) → target del giorno; dispendio da scenari Salute + modelli per attività senza doppio conteggio; `training_fit` in S3 | Codex | L | settimana congiunta con ruoli e diff che includono le sessioni | **fatto** — commit di chiusura 4.1; 188 test verdi e audit Optees di una settimana completa |
 | 4.2 | Robustezza S4 completa (Min-Max e regret sugli scenari) ed estensione a `scenario.linear.min_max_loss` di Optees quando la formulazione è lineare | Codex | M | ruolo `robust` presente quando Salute è disponibile; test con scenari sintetici | da fare |
 | 4.3 | UI: card settimana con allenamenti, spiegazione della robustezza in linguaggio semplice | Claude | M | verifica visiva | da fare |
 
@@ -151,4 +151,4 @@ Riconoscimento dei pasti da foto, sincronizzazione live con Withings/HealthKit (
 |---|---|---|
 | B1–B5 | **fatto** — `9e45ae0` | 162 test verdi; end-to-end HTTP con Optees reale: settimana generata e applicata → alternative pranzo applicate, cena invariata; binarie bloccate con uguaglianze; warning unico; ricerca ordinata, incluso mela → mele CREA (regressione sui dati reali); provenienza del passato separata dal nome |
 
-| W1–W3 | **fatto** — commit di chiusura W1–W3 | 176 test verdi; più sessioni per giorno, spiegazione dello snapshot e minuti visualizzati arrotondati, secondi del modello esatti |
+| W1–W3 | **fatto** — `652da35` | 176 test verdi; più sessioni per giorno, spiegazione dello snapshot e minuti visualizzati arrotondati, secondi del modello esatti |

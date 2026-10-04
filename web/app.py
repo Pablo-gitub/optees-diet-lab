@@ -27,6 +27,7 @@ from multiobjective_day import solve_strategy, nondominated, choose_arm, STRATEG
 import diary_service as diary
 import workout_service as workouts
 import workout_configuration as workout_settings
+import joint_orchestration as joint
 from day_orchestration import orchestrate_day, context_key
 from health_inputs import load_report as load_health_report, algorithm_inputs as health_algorithm_inputs
 from mcp import ClientSession, StdioServerParameters
@@ -670,7 +671,7 @@ async def apply_plan_set(set_id:int,request:Request):
     plan=next((p for p in plan_set['plans'] if p.get('id')==data.get('plan_id')),None)
     if not plan:raise diary.DomainError('Alternativa non trovata','not_found',404)
     with connect() as db:
-        result=(workouts.apply_week if plan_set.get('kind')=='workout' else diary.apply_plan)(db,user['id'],owner_profile(user),plan_set,plan,data)
+        result=(joint.apply_week if plan_set.get('kind')=='joint' else workouts.apply_week if plan_set.get('kind')=='workout' else diary.apply_plan)(db,user['id'],owner_profile(user),plan_set,plan,data)
         if result['applied_slots']:db.execute('UPDATE plans SET selected=1 WHERE id=? AND user_id=?',(plan['id'],user['id']))
         return result
 
@@ -704,10 +705,24 @@ async def planning_job(job_id,user_id,profile,data,kind):
                             source=meal['eaten'] if meal['eaten'] is not None else meal['planned'] if meal['planned'] and meal['planned']['locked'] else None
                             if source is not None:locks[date,meal['slot']]=dict(date=date,slot=meal['slot'],items=[{k:item[k] for k in ('food','grams','units') if k in item} for item in source['items']])
                     data=dict(data,locked=list(locks.values()))
+                    if kind=='joint':
+                        workout_locks=joint.locked_workouts(db,user_id,data['week_start'])
+                        joint_state=joint.state_hash(db,user_id,profile,data['week_start'])
             async with stdio_client(StdioServerParameters(command=optees_command())) as (read,write):
                 async with ClientSession(read,write) as session:
                     await session.initialize()
-                    if kind=='workout':result=await workouts.generate_week(session,profile,data)
+                    if kind=='joint':
+                        report=load_health_report(health_directory(user_id))
+                        health=health_algorithm_inputs(report) if report else None
+                        context=joint.context_key(profile,data)
+                        with connect() as db:trials=db.execute('SELECT p.payload,f.rating FROM plan_feedback f JOIN plans p ON p.id=f.plan_id AND p.user_id=f.user_id WHERE f.user_id=?',(user_id,)).fetchall()
+                        observations=[]
+                        for row in trials:
+                            p=json.loads(row['payload'])
+                            if p.get('optimization',{}).get('context')==context:observations.extend((arm,(row['rating']-1)/4) for arm in p.get('arms',[]))
+                        result=await joint.generate_week(session,profile,data,make_config,load_foods(),health,workout_locks,observations)
+                        result['state_hash']=joint_state
+                    elif kind=='workout':result=await workouts.generate_week(session,profile,data)
                     elif kind=='week':
                         context=context_key(make_config(profile,data.get('day_index',0)))
                         with connect() as db:
@@ -740,12 +755,13 @@ async def enqueue_planning(request,kind):
     user=identity(request,True);profile=owner_profile(user);data=await request.json()
     if not isinstance(data,dict):raise diary.DomainError('Corpo della richiesta non valido')
     if kind=='workout':workouts.week_config(data)
-    elif kind=='week':
+    elif kind in ('week','joint'):
         diary.valid_date(data.get('week_start'))
         mode=data.get('mode',profile['mode'])
         if mode not in (('free','sedentary','training') if profile['personal_diets'] else ('free',)):raise diary.DomainError('Programma non disponibile')
         profile['mode']=mode
         if not isinstance(data.get('locked',[]),list):raise diary.DomainError('Blocchi non validi')
+        if kind=='joint':joint.validate_request(profile,data)
     else:
         diary.valid_date(data.get('date'));diary.valid_slot(data.get('slot'))
         with connect() as db:
@@ -825,3 +841,7 @@ async def update_workout_config(request:Request):
         result=diary.day_view(db,user['id'],profile,diary.local_today().isoformat())
         result['workout_configuration']=workout_settings.view(settings,public)
         return result
+
+
+@app.post('/api/plans/joint-week')
+async def joint_week(request:Request):return await enqueue_planning(request,'joint')

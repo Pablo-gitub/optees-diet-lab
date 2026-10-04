@@ -47,6 +47,12 @@ class WeekOrchestrationTests(unittest.TestCase):
         with self.assertRaises(ValueError):weekly_model(profile,dict(week_start='2026-10-05',locked=[dict(date='2026-10-15',slot='lunch',items=[])]),make_config,load_foods())
         with self.assertRaises(ValueError):weekly_model(profile,dict(week_start='2026-10-05',max_protein_repetitions=True),make_config,load_foods())
 
+    def test_locked_principal_protein_uses_fixed_grams_not_zero_variable_bound(self):
+        request=dict(week_start='2026-10-05',locked=[dict(date='2026-10-05',slot='lunch',items=[dict(food=dict(source='CREA',id='106500'),grams=120),dict(food=dict(source='CREA',id='004005'),grams=20)])])
+        _,_,choices,_=weekly_model(self.profile(),request,make_config,load_foods())
+        principal=[c['food_id'] for c in choices if c.get('locked') and c['principal_protein']]
+        self.assertEqual(principal,['106500'])
+
 class MealAlternativeTests(unittest.TestCase):
     def test_other_meals_fixed_and_constraints_verified(self):
         import sqlite3
