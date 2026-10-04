@@ -122,6 +122,7 @@ async function load() {
   dailyFields();
   await loadCuisines();
   await loadPlans();
+  await loadHome();
 }
 async function loadPlans() {
   plans = await api('plans');
@@ -242,10 +243,60 @@ function ratingControl(entry) {
   box.append(stars);
   return box;
 }
+const roleMeta = {
+  best: ['Il migliore', '★'],
+  varied: ['Più vario', '◇'],
+  robust: ['Più robusto', '◆'],
+  preferred: ['I tuoi preferiti', '♥'],
+  explore: ['Da provare', '✦'],
+};
+function roleBadge(role) {
+  const meta = roleMeta[role] || [role, '•'];
+  const badge = element('span', undefined, 'role-badge role-' + role);
+  badge.append(element('span', meta[1], 'role-icon'), document.createTextNode(meta[0]));
+  return badge;
+}
+function diffItemName(x) {
+  return x.name || x.food_name || (typeof x.food === 'string' ? x.food : x.food?.name || x.food?.id || '');
+}
+function diffChips(diff) {
+  const box = element('div', undefined, 'diff-chips');
+  if (!diff) return box;
+  const days = Array.isArray(diff.days) ? diff.days : [diff];
+  days.forEach((d) => {
+    const prefix = d.date ? new Date(d.date + 'T12:00').toLocaleDateString('it-IT', { weekday: 'short' }) + ' ' : '';
+    (d.added || []).forEach((x) => box.append(element('span', prefix + '+ ' + diffItemName(x) + (x.grams ? ' ' + fmt0(x.grams) + ' g' : ''), 'chip diff-add')));
+    (d.removed || []).forEach((x) => box.append(element('span', prefix + '− ' + diffItemName(x), 'chip diff-remove')));
+    (d.changed || []).forEach((x) => box.append(element('span', prefix + diffItemName(x) + ' ' + fmt0(x.from_g) + '→' + fmt0(x.to_g) + ' g', 'chip diff-change')));
+  });
+  return box;
+}
+function explanationBlock(p) {
+  const box = element('div', undefined, 'explanation');
+  const e = p.explanation || {};
+  if (e.headline) box.append(element('p', e.headline, 'headline'));
+  if (p.diff) {
+    const chips = diffChips(p.diff);
+    if (chips.childElementCount) box.append(chips);
+  }
+  const notes = element('ul', undefined, 'reasons');
+  (e.reasons || []).forEach((r) => notes.append(element('li', r)));
+  (e.tradeoffs || []).forEach((r) => notes.append(element('li', r, 'tradeoff')));
+  if (p.status === 'partial') notes.append(element('li', 'Soluzione verificata; ottimo non certificato entro il tempo di calcolo.', 'tradeoff'));
+  if (notes.childElementCount) box.append(notes);
+  return box;
+}
+function renderWarnings(target, warnings) {
+  target.replaceChildren(...(warnings || []).map((w) => element('p', w.message || w.code, 'notice warn')));
+}
 function renderPlans() {
   const day = Number($('day').value),
     mode = $('planning-mode').value;
-  const visible = plans.filter((x) => x.plan.day_index === day && x.plan.mode === mode);
+  const all = plans.filter((x) => x.plan.day_index === day && x.plan.mode === mode);
+  // Show only the latest generation (same request, created together) plus a chosen plan.
+  const latest = Math.max(0, ...all.map((x) => x.created || 0));
+  const visible = all.filter((x) => latest - (x.created || 0) < 15 || x.selected);
+  const older = all.length - visible.length;
   $('plans').replaceChildren();
   $('empty').hidden = visible.length > 0;
   const solved = visible.filter((x) => ['optimal', 'feasible'].includes(x.plan.status));
@@ -257,13 +308,15 @@ function renderPlans() {
   if (visible.length) {
     $('count').append(document.createTextNode(visible.length + (visible.length === 1 ? ' alternativa' : ' alternative')));
     if (compare) $('count').append(document.createTextNode(' · '), element('span', 'cosa cambia', 'legend-varies'));
+    if (older) $('count').append(document.createTextNode(' · ' + older + ' più vecchie nello storico'));
   }
   visible.forEach((entry, index) => {
     const p = entry.plan;
     const card = element('article', undefined, 'card' + (entry.selected ? ' selected' : ''));
     const header = element('div', undefined, 'card-header');
-    header.append(element('h3', 'Alternativa ' + (index + 1)), element('span', entry.selected ? '✓ Scelta' : p.demo ? 'Demo' : 'Configurata', 'tag' + (entry.selected ? ' is-selected' : '')));
+    header.append(p.role ? roleBadge(p.role) : element('h3', 'Alternativa ' + (index + 1)), element('span', entry.selected ? '✓ Scelta' : p.demo ? 'Demo' : 'Configurata', 'tag' + (entry.selected ? ' is-selected' : '')));
     card.append(header);
+    if (p.explanation) card.append(explanationBlock(p));
     if (!['optimal', 'feasible'].includes(p.status)) {
       card.append(element('p', 'Nessuna soluzione nel sottoinsieme modellato con questi vincoli. Questo non prova che la dieta completa sia impossibile.', 'error'));
       $('plans').append(card);
@@ -407,9 +460,11 @@ $('generate').onclick = async () => {
       profile.mode = $('planning-mode').value;
       $('profile-mode').value = profile.mode;
     }
-    const r = await api('generate', 'POST', { day_index: Number($('day').value), strategy:$('optimization-strategy').value });
+    const r = await api('generate', 'POST', { day_index: Number($('day').value) });
+    renderWarnings($('plan-warnings'), r.warnings);
     await loadPlans();
-    message(r.count + ' alternative salvate');
+    const n = (r.plans || []).length || r.count;
+    message(n === 1 ? 'Una sola alternativa rispetta i vincoli di questa giornata' : n + ' alternative davvero diverse');
   } catch (e) {
     message(e.message);
   } finally {
@@ -418,23 +473,26 @@ $('generate').onclick = async () => {
   }
 };
 const pageMeta = {
-  planning: ['Dalle possibilità al piano', 'Pianificazione', 'Genera e confronta le alternative per una giornata.'],
+  home: ['Diario', 'Oggi', 'Pasti e attività della giornata, la settimana e i progressi.'],
+  planning: ['Dalle possibilità al piano', 'Piano', 'Genera la settimana e confronta le alternative proposte.'],
+  progress: ['Andamento', 'Progressi', 'Misure, statistiche e dati importati da Apple Salute.'],
   recipes: ['Cucina', 'Ricette', 'Sfoglia il catalogo, controlla la compatibilità con la dieta, adatta un piatto.'],
   profile: ['Impostazioni', 'Il mio profilo', 'Obiettivi, abitudini e preferenze che guidano i calcoli.'],
-  health: ['Dati personali', 'Salute', 'Misure e dispendio importati da Apple Salute.'],
 };
 document.querySelectorAll('[data-page]').forEach(
   (button) =>
     (button.onclick = () => {
       const page = button.dataset.page;
-      ['profile', 'planning', 'recipes', 'health'].forEach((id) => ($(id).hidden = id !== page));
+      ['home', 'planning', 'recipes', 'progress', 'profile'].forEach((id) => ($(id).hidden = id !== page));
       document.querySelectorAll('[data-page]').forEach((b) => b.classList.toggle('active', b === button));
       const meta = pageMeta[page];
       $('page-eyebrow').textContent = meta[0];
       $('page-title').textContent = meta[1];
       $('page-subtitle').textContent = meta[2];
       window.scrollTo({ top: 0 });
-      if (page === 'health') loadHealth().catch(e => message(e.message));
+      if (page === 'home') loadHome().catch((e) => message(e.message));
+      if (page === 'planning') preparePlanning();
+      if (page === 'progress') Promise.all([loadProgress(), loadHealth()]).catch((e) => message(e.message));
       if (page === 'recipes') Promise.all([loadRecipes(), loadRecipeSolver()]).catch((e) => message(e.message));
     }),
 );

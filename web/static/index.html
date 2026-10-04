@@ -7,6 +7,7 @@
     <title>Optees · Diario personale</title>
     <link rel="stylesheet" href="/static/style.css" />
     <script src="/static/app.js" defer></script>
+    <script src="/static/today.js" defer></script>
   </head>
   <body>
     <section id="login" class="login">
@@ -46,21 +47,25 @@
       <aside class="sidebar">
         <div class="brand">optees <span>diet lab</span></div>
         <nav class="nav-list" aria-label="Sezioni">
-          <button class="nav active" data-page="planning">
+          <button class="nav active" data-page="home">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg>
+            <span>Oggi</span>
+          </button>
+          <button class="nav" data-page="planning">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="3" /><path d="M16 2v4M8 2v4M3 10h18M8 15h2M14 15h2" /></svg>
-            <span>Pianificazione</span>
+            <span>Piano</span>
           </button>
           <button class="nav" data-page="recipes">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 13.9A4 4 0 0 1 7.3 6a5 5 0 0 1 9.4 0A4 4 0 0 1 18 13.9V21H6z" /><path d="M6 17h12" /></svg>
             <span>Ricette</span>
           </button>
+          <button class="nav" data-page="progress">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18" /><path d="M7 15l4-4 3 3 5-6" /></svg>
+            <span>Progressi</span>
+          </button>
           <button class="nav" data-page="profile">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" /></svg>
             <span>Profilo</span>
-          </button>
-          <button class="nav" data-page="health">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.5 12.6 12 20l-7.5-7.4A5 5 0 1 1 12 6a5 5 0 1 1 7.5 6.6z" /><path d="M3.5 12h4l2-3 3 5 2-2h6" /></svg>
-            <span>Salute</span>
           </button>
         </nav>
         <div class="sidebar-foot">
@@ -72,9 +77,9 @@
       <main>
         <header class="page-header">
           <div>
-            <p class="eyebrow" id="page-eyebrow">Dalle possibilità al piano</p>
-            <h1 id="page-title">Pianificazione</h1>
-            <p class="page-subtitle" id="page-subtitle">Genera e confronta le alternative per una giornata.</p>
+            <p class="eyebrow" id="page-eyebrow">Diario</p>
+            <h1 id="page-title">Oggi</h1>
+            <p class="page-subtitle" id="page-subtitle">Pasti e attività della giornata, la settimana e i progressi.</p>
           </div>
           <div class="header-actions">
             <button id="theme-toggle" type="button" class="icon-button" aria-label="Cambia tema chiaro/scuro" title="Tema chiaro/scuro">
@@ -85,7 +90,62 @@
           </div>
         </header>
 
-        <section id="planning">
+        <section id="home">
+          <div class="day-head">
+            <button id="day-prev" type="button" class="icon-button" aria-label="Giorno precedente">‹</button>
+            <div class="day-title">
+              <h2 id="day-title"></h2>
+              <p id="day-sub" class="muted"></p>
+            </div>
+            <button id="day-next" type="button" class="icon-button" aria-label="Giorno successivo">›</button>
+            <button id="day-today" type="button" class="ghost">Oggi</button>
+          </div>
+          <div id="day-empty" class="empty" hidden>
+            Nessun piano per questa giornata.
+            <span>Genera la settimana per vedere qui pasti e attività previsti.</span>
+            <button type="button" class="primary" data-goto="planning">Pianifica la settimana</button>
+          </div>
+          <div class="today-grid">
+            <div id="day-meals" class="meal-list"></div>
+            <div class="today-side">
+              <div id="day-progress" class="panel compact"></div>
+              <div id="day-workout" class="panel compact"></div>
+            </div>
+          </div>
+
+          <div class="section-head"><h2>Settimana</h2><span id="week-range" class="muted"></span></div>
+          <div id="week-strip" class="week-strip"></div>
+          <div id="week-budget" class="panel compact"></div>
+
+          <div class="section-head">
+            <h2>Statistiche</h2>
+            <button type="button" class="ghost" data-goto="progress">Progressi →</button>
+          </div>
+          <div id="stats-tiles" class="stat-tiles"></div>
+        </section>
+
+        <section id="planning" hidden>
+          <div class="segmented" role="tablist" aria-label="Pianificazione">
+            <button type="button" class="seg active" role="tab" aria-selected="true" data-plan-tab="week">Settimana</button>
+            <button type="button" class="seg" role="tab" aria-selected="false" data-plan-tab="day">Esplora una giornata</button>
+          </div>
+
+          <div data-plan-panel="week">
+            <div class="control-card">
+              <div class="controls">
+                <label>Programma<select id="week-mode"></select></label>
+                <label>Settimana<select id="week-start"></select></label>
+                <span></span>
+                <button id="week-generate" type="button" class="primary">Genera la settimana</button>
+              </div>
+              <p class="hint"><span>Optees propone 7 giorni completi rispettando la dieta, le porzioni e le ripetizioni. I pasti già registrati restano bloccati.</span></p>
+            </div>
+            <div id="week-job" class="job" hidden></div>
+            <div id="week-warnings"></div>
+            <div id="week-plans" class="cards"></div>
+          </div>
+
+          <div data-plan-panel="day" hidden>
           <div class="control-card">
             <div class="controls">
               <label
@@ -96,15 +156,7 @@
                 </select></label
               >
               <label>Giornata<select id="day"></select></label>
-              <label
-                >Metodo<select id="optimization-strategy">
-                  <option value="balanced">Bilanciato</option>
-                  <option value="pareto">Pareto · compromessi</option>
-                  <option value="minmax">Min-Max · scarto peggiore</option>
-                  <option value="maxmin">Max-Min · soddisfazione minima</option>
-                  <option value="bandit">Bandit · impara dai piani provati</option>
-                </select></label
-              >
+              <span></span>
               <button id="generate" class="primary">Genera alternative</button>
             </div>
             <p class="hint">
@@ -118,9 +170,11 @@
           <div id="empty" class="empty">
             <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="32" cy="34" r="20" opacity=".25" /><circle cx="32" cy="34" r="12" /><path d="M32 6v8M14 10l3 5M50 10l-3 5" opacity=".6" /><path d="M27 34l4 4 7-8" /></svg>
             Il prossimo piano comincia qui.
-            <span>Scegli una giornata e genera gli abbinamenti.</span>
+            <span>Scegli una giornata della dieta e genera le alternative.</span>
           </div>
+          <div id="plan-warnings"></div>
           <div id="plans" class="cards"></div>
+          </div>
         </section>
 
         <section id="profile" hidden>
@@ -325,23 +379,46 @@
           </div>
         </section>
 
-        <section id="health" hidden>
-          <div class="notice">
-            Dati sanitari personali. Le calorie sono stime del dispositivo; obiettivi nutrizionali e dieta non vengono
-            modificati automaticamente.
+        <section id="progress" hidden>
+          <div class="stat-tiles" id="progress-tiles"></div>
+          <div class="panel">
+            <h2>Registra una misura</h2>
+            <p class="muted">La pesata del lunedì, a digiuno e nelle stesse condizioni, è la più utile per il confronto settimanale.</p>
+            <form id="measure-form" class="controls measure-controls">
+              <label>Data<input id="measure-date" type="date" required /></label>
+              <label
+                >Misura<select id="measure-kind">
+                  <option value="weight">Peso (kg)</option>
+                  <option value="waist">Circonferenza vita (cm)</option>
+                  <option value="body_fat">Grasso corporeo (%)</option>
+                  <option value="height">Altezza (cm)</option>
+                </select></label
+              >
+              <label>Valore<input id="measure-value" type="number" step="0.1" min="0" required /></label>
+              <button class="primary">Salva</button>
+            </form>
+            <div id="measure-list"></div>
           </div>
-          <div class="toolbar">
-            <button id="health-import" class="primary" hidden>Esamina nuova estrazione</button
-            ><span id="health-import-status" class="muted" role="status"></span>
+          <div id="health">
+            <div class="section-head"><h2>Dati da Apple Salute</h2></div>
+            <div class="notice">
+              Dati sanitari personali. Le calorie sono stime del dispositivo; obiettivi nutrizionali e dieta non vengono
+              modificati automaticamente.
+            </div>
+            <div class="toolbar">
+              <button id="health-import" class="primary" hidden>Esamina nuova estrazione</button
+              ><span id="health-import-status" class="muted" role="status"></span>
+            </div>
+            <div id="health-summary"></div>
           </div>
-          <div id="health-summary"></div>
         </section>
 
         <details class="about">
           <summary>Come funziona</summary>
           <p>
-            Optees esegue l’ottimizzazione. Pareto mostra un campione di compromessi non dominati fra le soluzioni
-            calcolate. Il bandit usa soltanto i voti dei piani effettivamente provati.
+            Optees esegue l’ottimizzazione in una catena unica: trova l’ottimo di riferimento, cerca alternative quasi
+            ottime davvero diverse, le confronta su più obiettivi e assegna a ciascuna un ruolo. Il bandit impara solo dai
+            piani che hai effettivamente provato e valutato.
           </p>
         </details>
       </main>
