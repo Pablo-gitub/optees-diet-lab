@@ -187,7 +187,7 @@ def values_verified(problem, result):
             not math.isfinite(x)
             or x < v['lb'] - 1e-5
             or x > v['ub'] + 1e-5
-            or (v['integrality'] == 'B' and abs(x - round(x)) > 1e-5)
+            or (v['integrality'] != 'C' and abs(x - round(x)) > 1e-5)
         ):
             raise ValueError('Variabile fuori limite')
     for row in problem['constraints']:

@@ -135,6 +135,8 @@ def formulate(config, foods):
                         raise ValueError(f'Invalid portion bounds: {food_id}')
                     y = var(f'y{len(choices)}', 0, 1, 'B')
                     q = var(f'q{len(choices)}', 0, high)
+                    steps = var(f'portion_steps{len(choices)}', 0, math.floor(high / 5), 'I')
+                    add({q: 1, steps: -5}, '=', 0)
                     add({q: 1, y: -high}, '<=', 0)
                     add({q: 1, y: -low}, '>=', 0)
                     selected.append(y)
@@ -299,6 +301,8 @@ def decode_result(config, problem, choices, slots, foods, result):
             grams = values[problem['variables'][c['q']]['name']]
             if grams <= 1e-6:
                 continue
+            if abs(grams-round(grams))>1e-5:raise ValueError('Quantità non intera')
+            grams=int(round(grams))
             food = foods[c['food_id']]
             record['selections'].append(
                 dict(
@@ -310,7 +314,7 @@ def decode_result(config, problem, choices, slots, foods, result):
                     source=c.get('source','CREA'),
                     units=c.get('units'),
                     food=food['name'],
-                    grams=round(grams, 2),
+                    grams=grams,
                 )
             )
             totals = [a + grams * b for a, b in zip(totals, c['nutrients'])]
@@ -333,7 +337,7 @@ def decode_result(config, problem, choices, slots, foods, result):
                                    respected=spec['min'] - tolerance <= actual <= spec['max'] + tolerance))
         record['constraint_report'] = dict(verified=True, all_respected=all(c['respected'] for c in checks),
                                            checks=checks, quantities_verified=True,
-                                           diet_scope='modeled_choices', rounding_note='Verifica sulle quantità non arrotondate; valori mostrati arrotondati.')
+                                           diet_scope='modeled_choices', rounding_note='Quantità intere verificate nel modello: passi di 5 g o confezioni intere.')
     record['daily_policy']='personalized_habits' if config.get('daily_meals',{}).get('enabled') else None
     record['preference_penalty']=result.get('preference_penalty')
     record['preference_changes']=[]

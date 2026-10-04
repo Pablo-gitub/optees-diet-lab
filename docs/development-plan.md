@@ -83,7 +83,7 @@ Consegna preparata per i passi 0.3–0.5: [prompt per Gemini](gemini-handoff-pha
 | # | Passo | Chi | Dim. | Fatto quando | Stato |
 |---|---|---|---|---|---|
 | 1.1 | Specifica della catena, vincolo di diversità, formato `PlanSet` (role, explanation, diff) | Claude | M | [orchestration.md](orchestration.md) approvato | **fatto** |
-| 1.2 | Implementare S0–S7 per una giornata secondo orchestration.md; `/api/generate` restituisce un `PlanSet`; `strategy` ignorato con warning; bandit sui bracci-caratteristica | Codex | L | i 10 test del §9 di orchestration.md verdi; audit su 4 giornate reali con distanza media ≥ 3 | da fare |
+| 1.2 | Implementare S0–S7 per una giornata secondo orchestration.md; `/api/generate` restituisce un `PlanSet`; `strategy` ignorato con warning; bandit sui bracci-caratteristica | Codex | L | i 10 test del §9 di orchestration.md verdi; audit su 4 giornate reali con distanza media ≥ 3 | **fatto** — `608f411`, 134 test verdi; audit Optees su 4 giornate: distanza media 4–5 |
 | 1.3 | UI: via il menu Metodo; badge ruolo, headline, chip del diff, warning in alto, dettagli tecnici con objectives/robustness/pool | Claude | M | verifica visiva desktop e mobile; nessun riferimento ai metodi fuori dai dettagli | da fare |
 | 1.4 | Quantità «pesabili» nel modello: grammi a passi di 5 g (variabile intera × 5) o porzioni discrete per gli alimenti a pezzi; i totali restano verificati sui valori interi | Codex | S | nessuna quantità con decimali nei piani; test di verifica | da fare |
 

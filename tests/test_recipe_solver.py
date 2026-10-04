@@ -20,7 +20,7 @@ def solve(problem):
         hi.append(r['rhs'] if r['relation'] in ['=', '<='] else np.inf)
     result = milp(
         np.array(problem['objective']['coefficients']),
-        integrality=np.array([int(v['integrality'] == 'B') for v in problem['variables']]),
+        integrality=np.array([int(v['integrality'] != 'C') for v in problem['variables']]),
         bounds=Bounds([v['lb'] for v in problem['variables']], [v['ub'] for v in problem['variables']]),
         constraints=LinearConstraint(np.array([r['coefficients'] for r in rows]), lo, hi),
     )

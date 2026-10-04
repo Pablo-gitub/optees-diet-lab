@@ -12,7 +12,7 @@ from test_recipe_solver import solve
 
 class OrchestrationTests(unittest.TestCase):
     def config(self):
-        c=json.loads((ROOT/'config/demo-diet-day.json').read_text());c['mode']='free';return c
+        c=json.loads((ROOT/'config/demo-diet-day.json').read_text());c['mode']='free';c['portion_bounds_g']={i:[40,40] for i in ['000800','000100','000530']};c['portion_bounds_g'].update({i:[120,120] for i in ['106500','121410','181100','123610','004005','004125','004505']});c['portion_bounds_g'].update({i:[100,100] for i in ['005730','006600','005410','007120','007260']});c['portion_bounds_g']['009210']=[10,10];return c
     def run_chain(self,request=None,config=None,**kwargs):
         async def fake(session,p):return solve(p)
         with patch('multiobjective_day.solve_problem',side_effect=fake):return asyncio.run(orchestrate_day(None,config or self.config(),load_foods(),request or dict(pool_size=5,k=4,time_limit=120),**kwargs))
@@ -49,3 +49,20 @@ class OrchestrationTests(unittest.TestCase):
             self.assertAlmostEqual(p['robustness']['scenarios']['low'],abs(p['nutrients']['kcal']-1500+300))
     def test_invalid_request(self):
         with self.assertRaises(ValueError):self.run_chain(dict(k=True))
+
+class WeighablePortionsTests(unittest.TestCase):
+    def test_integer_portions_and_recomputed_totals(self):
+        c=OrchestrationTests().config()
+        async def fake(session,p):return solve(p)
+        with patch('multiobjective_day.solve_problem',side_effect=fake):r=asyncio.run(orchestrate_day(None,c,load_foods(),dict(pool_size=4,k=4,time_limit=120)))
+        foods=load_foods()
+        for p in r['plans']:
+            for s in p['selections']:self.assertIsInstance(s['grams'],int);self.assertEqual(s['grams']%5,0)
+            for n in ['kcal','protein_g','fat_g','carbs_available_g']:
+                total=sum(float(foods[s['food_id']][n+'_100g'])*s['grams']/100 for s in p['selections'])
+                self.assertAlmostEqual(total,p['nutrients'][n],places=2)
+    def test_fractional_integer_variable_rejected(self):
+        from plan_recipe import values_verified
+        problem=dict(variables=[dict(name='steps',lb=0,ub=10,integrality='I')],constraints=[])
+        result=dict(validation=dict(status='verified'),result=dict(variables=[dict(name='steps',value=2.5)]))
+        with self.assertRaises(ValueError):values_verified(problem,result)

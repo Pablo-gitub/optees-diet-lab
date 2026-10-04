@@ -64,6 +64,9 @@ def add_choices(config,foods,var,add,choices):
    if any(not math.isfinite(v) or v<0 for v in values):raise ValueError('Nutrienti mancanti nello spuntino')
    y=var(f'{meal}_choice_{option}',0,1,'B');q=var(f'{meal}_grams_{option}',0,high);ys.append(y)
    add({q:1,y:-high},'<=',0);add({q:1,y:-low},'>=',0)
+   if not food_id.startswith('personal:'):
+    steps=var(f'{meal}_portion_steps_{option}',0,math.floor(high/5),'I');add({q:1,steps:-5},'=',0)
+   elif low!=int(low) or high!=int(high):raise ValueError('Porzione confezionata non esprimibile in grammi interi')
    cost[y]=penalty
    choices.append(dict(meal=meal,combination='personalized_habits',branch_index=option,group=0,food_id=food_id,y=y,q=q,nutrients=values,
     source=food.get('source','CREA'),preferred=penalty==0,units=round(low/food['serving_g']) if food_id.startswith('personal:') else None))
