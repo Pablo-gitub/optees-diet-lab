@@ -44,12 +44,11 @@
             <p class="eyebrow">DALLE POSSIBILITÀ AL PIANO</p>
             <h1 id="page-title">Pianificazione</h1>
           </div>
-          <span class="badge">Prototipo · pranzo e cena</span>
+          <span class="badge">Prototipo · pianificazione alimentare</span>
         </header>
         <section id="planning">
           <div class="notice">
-            Il calcolo copre <strong>pranzo e cena</strong>. Colazione, spuntini e frequenze settimanali sono ancora da
-            integrare. Le preferenze sono conservate nel profilo, ma non ordinano ancora i risultati.
+            <span id="planning-scope-note"></span> Frequenze settimanali, bevande caloriche ed extra restano da integrare.
           </div>
           <div class="toolbar">
             <label
@@ -58,7 +57,7 @@
                 <option value="training">Dieta palestra</option>
                 <option value="free">Algoritmo libero</option>
               </select></label
-            ><label>Giornata<select id="day"></select></label><button id="generate">Genera alternative</button>
+            ><label>Giornata<select id="day"></select></label><label>Metodo<select id="optimization-strategy"><option value="balanced">Bilanciato</option><option value="pareto">Pareto · compromessi</option><option value="minmax">Min-Max · scarto peggiore</option><option value="maxmin">Max-Min · soddisfazione minima</option><option value="bandit">Bandit · impara dai piani provati</option></select></label><button id="generate">Genera alternative</button>
           </div>
           <div class="section-head">
             <h2>Alternative da esplorare</h2>
@@ -106,6 +105,17 @@
                   id="exclusions"
                   placeholder="es. 123610, 008570"
               /></label>
+            </div>
+            <div class="panel"><h2>Colazione, spuntini e bilancio giornaliero</h2>
+              <label class="check"><input type="checkbox" id="daily-enabled"> Includi colazione e spuntini — variante personalizzata</label>
+              <p>Quando attivo, gli obiettivi giornalieri qui sotto sostituiscono quelli della somma pranzo + cena. I limiti dei singoli pasti restano applicati. I valori iniziali sono dimostrativi, da configurare.</p>
+              <p id="daily-products" class="muted"></p>
+              <label class="check"><input type="checkbox" id="daily-second-bar"> Consenti una seconda barretta a colazione</label>
+              <label class="check"><input type="checkbox" id="daily-afternoon-fruit"> Pianifica anche un frutto a metà pomeriggio</label>
+              <div class="grid"><label>Banana: minimo g senza buccia<input type="number" id="daily-banana-min" min="20" max="500" required></label><label>Banana: massimo g senza buccia<input type="number" id="daily-banana-max" min="20" max="500" required></label></div>
+              <p class="muted">Porzioni della banana modificabili, inizialmente dimostrative. I prodotti confezionati sono usati a unità intere; la seconda barretta non è obbligatoria. La banana è un’alternativa quando la preferenza non permette di rispettare i vincoli. Disattivare il frutto pomeridiano indica che non è pianificato.</p>
+              <label class="check"><input type="checkbox" id="daily-demo"> Obiettivi giornalieri dimostrativi</label><div id="daily-targets"></div>
+              <p class="muted">Questa variante usa le abitudini del profilo per colazione e spuntini e non viene dichiarata conforme alle colazioni originali delle diete.</p>
             </div>
             <button>Salva configurazione</button>
           </form>
@@ -213,8 +223,7 @@
           </div>
         </section>
         <footer>
-          Optees esegue l’ottimizzazione. Le alternative successive possono avere uno scarto maggiore dal bersaglio: non
-          sono una frontiera Pareto.
+          Optees esegue l’ottimizzazione. Pareto mostra un campione di compromessi non dominati fra le soluzioni calcolate. Il bandit usa soltanto i voti dei piani effettivamente provati.
         </footer>
       </main>
     </div>

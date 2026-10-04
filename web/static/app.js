@@ -112,12 +112,13 @@ async function load() {
   $('workspace').hidden = false;
   $('user-name').textContent = profile.display_name;
   $('display-name').value = profile.display_name;
-  $('preferences').value = profile.preference_note;
+  $('preferences').value = profile.preference_note.replace('Preferenze registrate, non ancora applicate ai calcoli.','Preferenze di colazione e spuntini applicate quando il bilancio giornaliero è attivo.');
   $('demo').checked = profile.targets_demo;
   $('exclusions').value = profile.excluded_crea_ids.join(', ');
   fillModes('profile-mode');
   fillModes('planning-mode');
   targetFields();
+  dailyFields();
   await loadCuisines();
   await loadPlans();
 }
@@ -150,16 +151,30 @@ function renderPlans() {
         ),
       );
     } else {
-      ['lunch', 'dinner'].forEach((meal) => {
+      const opt=p.optimization;
+      if(opt){
+        const names={balanced:'Bilanciato',pareto:'Pareto · campione di compromessi',minmax:'Min-Max',maxmin:'Max-Min'};
+        card.append(element('p',names[opt.strategy]+(opt.requested==='bandit'?' · suggerito dal bandit ('+(opt.bandit_reason==='exploration'?'esplorazione':'UCB1')+')':''),'muted'));
+        if(opt.relative_errors)card.append(element('p','Scarto relativo peggiore: '+(100*opt.worst_relative_error).toFixed(1)+'% · Soddisfazione minima: '+(100*opt.minimum_satisfaction).toFixed(1)+'%','muted'));
+        if(opt.relative_errors){const labels={kcal:'Energia',protein_g:'Proteine',fat_g:'Grassi',carbs_available_g:'Carboidrati'};card.append(element('p',Object.entries(opt.relative_errors).map(([k,v])=>labels[k]+': scarto '+(100*v).toFixed(1)+'%').join(' · '),'muted'))}
+        if(opt.strategy==='pareto')card.append(element('p','Non dominata nel campione calcolato; la frontiera completa non è garantita.','muted'));
+      }
+      const meals=p.scope==='full_day_planned_meals'?['breakfast','morning_snack','lunch','afternoon_snack','dinner']:['lunch','dinner'];
+      const mealNames={breakfast:'Colazione',morning_snack:'Metà mattina',lunch:'Pranzo',afternoon_snack:'Metà pomeriggio',dinner:'Cena'};
+      card.append(element('p',p.scope==='full_day_planned_meals'?'Totali della giornata pianificata':'Totali di pranzo + cena','muted'));
+      if(p.diet_note)card.append(element('p',p.diet_note,'muted'));
+      (p.preference_changes||[]).forEach(note=>card.append(element('p',note,'muted')));
+      meals.forEach((meal) => {
         const block = element('div', undefined, 'meal');
-        block.append(element('h4', (meal === 'lunch' ? 'Pranzo' : 'Cena') + ' · ' + p.slots[meal]));
+        block.append(element('h4', mealNames[meal]+(p.slots[meal]==='personalized_habits'?' · abitudini personali':p.slots[meal]==='not_planned'?' · non pianificato':' · '+p.slots[meal])));
         p.selections
           .filter((f) => f.meal === meal)
           .forEach((f) => {
             const row = element('div', undefined, 'food');
-            row.append(element('span', f.food), element('span', f.grams.toLocaleString('it-IT') + ' g'));
+            row.append(element('span', f.food+((f.source==='CREA'||(!f.source&&f.crea_id))?' · alimento generico CREA':f.source==='user_label'?' · etichetta fornita nel profilo':'')), element('span', f.grams.toLocaleString('it-IT') + ' g' + (f.units ? ' · ' + f.units + (f.units === 1 ? ' confezione' : ' confezioni') : '')));
             block.append(row);
           });
+        if(p.nutrients_by_meal?.[meal]&&p.slots[meal]!=='not_planned')block.append(element('p',Math.round(p.nutrients_by_meal[meal].kcal)+' kcal · '+p.nutrients_by_meal[meal].protein_g.toFixed(1)+' g proteine · '+p.nutrients_by_meal[meal].carbs_available_g.toFixed(1)+' g carboidrati · '+p.nutrients_by_meal[meal].fat_g.toFixed(1)+' g grassi','muted'));
         card.append(block);
       });
       const metrics = element('div', undefined, 'metrics');
@@ -177,11 +192,48 @@ function renderPlans() {
         metrics.append(cell);
       });
       card.append(metrics);
+      const report = p.constraint_report;
+      if (report) {
+        card.append(element('p', report.verified && report.all_respected ? '✓ Vincoli modellati rispettati' : 'Verifica dei vincoli da controllare', report.all_respected ? 'constraint-ok' : 'error'));
+        const details = element('details', undefined, 'constraint-details');
+        details.append(element('summary', 'Quantità, obiettivi e limiti verificati'));
+        details.append(element('p', 'Porzioni, confezioni intere e scelte alimentari del modello verificate. Il bersaglio è un obiettivo: minimo e massimo sono i limiti obbligatori.', 'muted'));
+        const table = element('table');
+        const heading = element('tr');
+        ['Ambito / nutriente', 'Risultato', 'Limiti', 'Bersaglio', 'Esito'].forEach(t => heading.append(element('th', t)));
+        const thead = element('thead'); thead.append(heading); table.append(thead);
+        const body = element('tbody');
+        const labels = {kcal:'Energia',protein_g:'Proteine',carbs_available_g:'Carboidrati',fat_g:'Grassi'};
+        const scopes = {day:p.scope === 'full_day_planned_meals' ? 'Giornata' : 'Pranzo + cena',breakfast:'Colazione',morning_snack:'Metà mattina',lunch:'Pranzo',afternoon_snack:'Metà pomeriggio',dinner:'Cena'};
+        const number = value => value.toLocaleString('it-IT', {maximumFractionDigits:2});
+        report.checks.forEach(c => {
+          const unit = c.nutrient === 'kcal' ? ' kcal' : ' g';
+          const row = element('tr');
+          [scopes[c.meal] + ' · ' + labels[c.nutrient], number(c.actual) + unit,
+           number(c.min) + '–' + number(c.max) + unit,
+           c.target == null ? '—' : number(c.target) + unit,
+           c.respected ? '✓ Rispettato' : 'Fuori limite'].forEach(t => row.append(element('td', t)));
+          body.append(row);
+        });
+        table.append(body); details.append(table);
+        details.append(element('p', report.rounding_note, 'muted'));
+        card.append(details);
+      } else {
+        card.append(element('p', 'Storico: dettaglio dei vincoli non disponibile. Genera nuove alternative per visualizzarlo.', 'muted'));
+      }
       const button = element(
         'button',
         entry.selected ? 'Piano scelto' : 'Scegli questo piano',
         entry.selected ? 'secondary' : '',
       );
+      const feedback=element('div',undefined,'feedback');
+      const tried=element('input');tried.type='checkbox';tried.checked=entry.feedback!=null;
+      const triedLabel=element('label');triedLabel.append(tried,document.createTextNode(' Ho effettivamente provato questo piano'));
+      const rating=element('select');rating.setAttribute('aria-label','Valutazione del piano');
+      for(let i=1;i<=5;i++){const o=element('option',i+' / 5');o.value=i;rating.append(o)}rating.value=entry.feedback??3;
+      const send=element('button',entry.feedback==null?'Salva feedback':'Aggiorna feedback','secondary');
+      send.onclick=async()=>{if(!tried.checked){message('Conferma di aver effettivamente provato il piano');return}try{await api('plans/'+entry.id+'/feedback','POST',{tried:true,rating:Number(rating.value)});await loadPlans();message('Feedback personale salvato')}catch(e){message(e.message)}};
+      feedback.append(triedLabel,rating,send);card.append(feedback);
       button.disabled = entry.selected;
       button.onclick = async () => {
         try {
@@ -224,6 +276,7 @@ async function save() {
       .map((x) => x.trim())
       .filter(Boolean),
     targets_demo: $('demo').checked,
+    daily_meals:readDailyFields(),
     preferred_cuisines: [...document.querySelectorAll('#cuisine-preferences input:checked')].map((x) => x.value),
   });
   await load();
@@ -276,7 +329,7 @@ $('generate').onclick = async () => {
       profile.mode = $('planning-mode').value;
       $('profile-mode').value = profile.mode;
     }
-    const r = await api('generate', 'POST', { day_index: Number($('day').value) });
+    const r = await api('generate', 'POST', { day_index: Number($('day').value), strategy:$('optimization-strategy').value });
     await loadPlans();
     message(r.count + ' alternative salvate');
   } catch (e) {
@@ -742,3 +795,12 @@ function renderRecipeDietOptions() {
   (id) => ($(id).onchange = () => loadRecipeDietOptions().catch((e) => message(e.message))),
 );
 $('recipe-diet-show-review').onchange = renderRecipeDietOptions;
+
+function dailyFields(){
+ const d=profile.daily_meals;$('daily-enabled').checked=d.enabled;$('daily-second-bar').checked=d.allow_second_bar;$('daily-afternoon-fruit').checked=d.afternoon_fruit;$('daily-banana-min').value=d.banana_min_g;$('daily-banana-max').value=d.banana_max_g;$('daily-demo').checked=d.targets_demo;
+ const ps=profile.food_preferences?.products||[];$('daily-products').textContent=ps.length?ps.map(p=>p.name+' · '+p.serving_g+' g · '+p.kcal_per_serving+' kcal per unità (etichetta fornita da te)').join('; '):'Nessun prodotto personale registrato: la prima scelta disponibile è una banana per colazione e ciascuno spuntino pianificato.';
+ $('daily-second-bar').disabled=!ps.length;$('planning-scope-note').textContent=d.enabled?'Il prossimo calcolo include colazione, spuntini pianificati, pranzo e cena. Colazione e spuntini seguono una variante personalizzata.':'Il prossimo calcolo copre pranzo e cena. Puoi includere colazione e spuntini dal profilo.';
+ const fields=$('daily-targets');fields.replaceChildren();const head=element('div',undefined,'target-row');['Nutriente','Minimo','Bersaglio','Massimo'].forEach(t=>head.append(element('span',t)));fields.append(head);
+ nutrients.forEach(([n,label])=>{const row=element('div',undefined,'target-row');row.append(element('span',label));['min','target','max'].forEach(k=>{const input=element('input');input.id='daily-'+n+'-'+k;input.type='number';input.min='0';input.step='any';input.max='10000';input.required=true;input.value=d.targets[n][k];input.setAttribute('aria-label','Giornata '+label+' '+k);row.append(input)});fields.append(row)});
+}
+function readDailyFields(){const targets={};nutrients.forEach(([n])=>{targets[n]={};['min','target','max'].forEach(k=>targets[n][k]=Number($('daily-'+n+'-'+k).value))});return {enabled:$('daily-enabled').checked,allow_second_bar:$('daily-second-bar').checked,afternoon_fruit:$('daily-afternoon-fruit').checked,banana_min_g:Number($('daily-banana-min').value),banana_max_g:Number($('daily-banana-max').value),targets,targets_demo:$('daily-demo').checked,policy:'personalized_habits'}}

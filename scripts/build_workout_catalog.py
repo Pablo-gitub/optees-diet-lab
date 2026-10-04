@@ -22,6 +22,8 @@ EQUIPMENT = {
 }
 # Only these exercises have an explicit prerequisite review for draft templates.
 REVIEWED = {
+    "dumbbell-floor-press": ["manubri"],
+    "dumbbell-deadlift": ["manubri"],
     "bodyweight-squat": [],
     "push-up": [],
     "plank": [],
@@ -70,56 +72,18 @@ def build(source, personal, output):
             }
         )
     index = {x["source_id"]: x for x in catalog}
-    definitions = [
-        (
-            "full_body_basic",
-            "Full body di base",
-            30,
-            [("bodyweight-squat", 2), ("push-up", 2), ("inverted-row", 2), ("plank", 2)],
-        ),
-        ("cardio_bike", "Cyclette", 20, [("stationary-bike", None)]),
-        ("cardio_row", "Vogatore", 20, [("rowing-machine", None)]),
-        ("cardio_walk", "Camminata su tapis roulant", 20, [("incline-treadmill-walk", None)]),
-        ("cardio_elliptical", "Ellittica", 20, [("elliptical-trainer", None)]),
-    ]
-    templates = []
-    for key, name, minutes, movements in definitions:
-        coverage = {}
-        for exercise, sets in movements:
-            if exercise not in index or not index[exercise]["equipment_feasible"]:
-                raise ValueError(f"Template {key}: missing prerequisite for {exercise}")
-            if sets is not None:
-                # Coverage units are model proxies, not measured biological stimulus.
-                for muscle in index[exercise]["primary_muscles"]:
-                    coverage[muscle] = coverage.get(muscle, 0) + sets
-                for muscle in index[exercise]["secondary_muscles"]:
-                    coverage[muscle] = coverage.get(muscle, 0) + sets * 0.5
-        templates.append(
-            {
-                "id": key,
-                "name": name,
-                "status": "draft_requires_personal_configuration",
-                "duration_minutes_assumed": minutes,
-                "exercises": [
-                    {"source_id": e, "sets_assumed": s, "repetitions": None, "load": None} for e, s in movements
-                ],
-                "score_vector": {
-                    "muscle_coverage_proxy": coverage,
-                    "time_cost_minutes": minutes,
-                    "energy_kcal": None,
-                    "adherence": None,
-                    "performance": None,
-                },
-            }
-        )
+    from workout_sessions import build_sessions
+    templates, unavailable = build_sessions(index)
     result = {
-        "model_version": "workout-draft-v1",
+        "model_version": "workout-sessions-v2",
         "source_sha256": hashlib.sha256(raw).hexdigest(),
         "coefficients": {"primary_muscle_per_set": 1.0, "secondary_muscle_per_set": 0.5},
         "assumptions": "Coefficients and durations are explicit heuristics, not validated efficacy scores."
         " MET retained as source metadata; not used to predict calories or body changes.",
         "catalog": catalog,
         "templates": templates,
+        "unavailable_sessions": unavailable,
+        "protocols_sha256": hashlib.sha256((ROOT / "config/workout-protocols.json").read_bytes()).hexdigest(),
         "pending_custom_equipment": ["aqua_bag", "aqua_tank"],
     }
     output.parent.mkdir(parents=True, exist_ok=True)

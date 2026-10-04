@@ -153,6 +153,11 @@ def formulate(config, foods):
                 add({**{y: 1 for y in selected}, branch: -1}, '=', 0)
             # One optional condiment group, with a zero lower bound for oil.
         add({b: 1 for b in branch_vars}, '=', 1)
+    preference_cost={}
+    if config.get('daily_meals',{}).get('enabled'):
+        from daily_meals import add_choices
+        preference_cost=add_choices(config,foods,var,add,choices)
+        slots.update(breakfast='personalized_habits',morning_snack='personalized_habits',afternoon_snack='personalized_habits' if config['daily_meals']['afternoon_fruit'] else 'not_planned')
     for meal, targets in config.get('meal_targets', {}).items():
         if meal not in slots:
             raise ValueError('Unknown meal in meal_targets')
@@ -170,10 +175,11 @@ def formulate(config, foods):
             add(total, '>=', low)
             add(total, '<=', high)
     objective = {}
+    global_targets=config['daily_meals']['targets'] if config.get('daily_meals',{}).get('enabled') else config['main_meals_targets']
     for n, nutrient in enumerate(NUTRIENTS):
-        if nutrient not in config['main_meals_targets']:
+        if nutrient not in global_targets:
             continue
-        spec = config['main_meals_targets'][nutrient]
+        spec = global_targets[nutrient]
         low, target, high = [spec[k] for k in ['min', 'target', 'max']]
         if (
             any(
@@ -200,6 +206,7 @@ def formulate(config, foods):
         objective=dict(sense='min', coefficients=dense(objective)),
         solver=dict(time_limit=15),
     )
+    if preference_cost:problem['preference_coefficients']=dense(preference_cost)
     return problem, choices, slots
 
 
@@ -230,17 +237,39 @@ async def solve_problem(session, problem):
     return (await call('get_job_result', dict(job_id=job_id)))['result']
 
 
+async def optimize_day(session,problem):
+    import copy
+    from plan_recipe import values_verified
+    active=copy.deepcopy(problem);preference=active.pop('preference_coefficients',None)
+    if preference and any(preference):
+        nutrient_objective=active['objective']['coefficients'][:]
+        active['objective']['coefficients']=preference
+        first=await solve_problem(session,active)
+        if first['mathematical_status']!='optimal':return first
+        values=values_verified(active,first);penalty=sum(c*x for c,x in zip(preference,values))
+        active['constraints'].append(dict(coefficients=preference,relation='<=',rhs=penalty+1e-7))
+        active['objective']['coefficients']=nutrient_objective
+        result=await solve_problem(session,active)
+        if result['mathematical_status'] not in ['optimal','feasible']:result=first
+        else:values_verified(active,result)
+        result['preference_penalty']=penalty
+        return result
+    result=await solve_problem(session,active)
+    if result['mathematical_status'] in ['optimal','feasible']:values_verified(active,result)
+    return result
+
+
 def decode_result(config, problem, choices, slots, foods, result):
     record = dict(
         demo=config['demo'],
-        scope='lunch_and_dinner_only',
+        scope='full_day_planned_meals' if config.get('daily_meals',{}).get('enabled') else 'lunch_and_dinner_only',
         config=config,
         slots=slots,
         status=result['mathematical_status'],
         selections=[],
         nutrients={},
         result=result,
-        objective='sum of relative absolute deviations; no Pareto or min-max yet',
+        objective=result.get('optimization', {}).get('strategy', 'sum of relative absolute deviations'),
         excluded_for_missing_nutrients=[
             i
             for i in sorted(
@@ -260,8 +289,12 @@ def decode_result(config, problem, choices, slots, foods, result):
     if record['status'] in ['optimal', 'feasible']:
         if result['validation']['status'] != 'verified':
             raise ValueError('Unverified solution')
+        from plan_recipe import values_verified
+        checked=dict(problem);checked.pop('preference_coefficients',None)
+        values_verified(checked,result)
         values = {x['name']: x['value'] for x in result['result']['variables']}
         totals = [0.0] * len(NUTRIENTS)
+        meal_totals={meal:[0.]*len(NUTRIENTS) for meal in slots}
         for c in choices:
             grams = values[problem['variables'][c['q']]['name']]
             if grams <= 1e-6:
@@ -272,13 +305,49 @@ def decode_result(config, problem, choices, slots, foods, result):
                     meal=c['meal'],
                     combination=c['combination'],
                     branch_index=c['branch_index'],
-                    crea_id=c['food_id'],
+                    crea_id=None if c['food_id'].startswith('personal:') else c['food_id'],
+                    food_id=c['food_id'],
+                    source=c.get('source','CREA'),
+                    units=c.get('units'),
                     food=food['name'],
                     grams=round(grams, 2),
                 )
             )
             totals = [a + grams * b for a, b in zip(totals, c['nutrients'])]
+            meal_totals[c['meal']]=[a+grams*b for a,b in zip(meal_totals[c['meal']],c['nutrients'])]
         record['nutrients'] = {n.replace('_100g', ''): round(v, 3) for n, v in zip(NUTRIENTS, totals)}
+    record['nutrients_by_meal']={meal:{n.replace('_100g',''):round(v,3) for n,v in zip(NUTRIENTS,values)} for meal,values in meal_totals.items()} if record['status'] in ['optimal','feasible'] else {}
+    record['constraint_report'] = None
+    if record['status'] in ['optimal', 'feasible']:
+        targets = config['daily_meals']['targets'] if config.get('daily_meals', {}).get('enabled') else config['main_meals_targets']
+        checks = []
+        for meal, bounds, actuals in [('day', targets, totals)] + [
+            (meal, bounds, meal_totals[meal]) for meal, bounds in config.get('meal_targets', {}).items()
+        ]:
+            for nutrient, spec in bounds.items():
+                actual = actuals[NUTRIENTS.index(nutrient)]
+                tolerance = 1e-6 * max(1, abs(spec['min']), abs(spec['max']))
+                checks.append(dict(meal=meal, nutrient=nutrient.replace('_100g', ''),
+                                   actual=actual, min=spec['min'], max=spec['max'],
+                                   target=spec.get('target'),
+                                   respected=spec['min'] - tolerance <= actual <= spec['max'] + tolerance))
+        record['constraint_report'] = dict(verified=True, all_respected=all(c['respected'] for c in checks),
+                                           checks=checks, quantities_verified=True,
+                                           diet_scope='modeled_choices', rounding_note='Verifica sulle quantità non arrotondate; valori mostrati arrotondati.')
+    record['daily_policy']='personalized_habits' if config.get('daily_meals',{}).get('enabled') else None
+    record['preference_penalty']=result.get('preference_penalty')
+    record['preference_changes']=[]
+    if record['daily_policy']:
+        preferred=config.get('food_preferences',{}).get('preferences',{})
+        meal_names={'breakfast':'Colazione','morning_snack':'Metà mattina'}
+        for selected in record['selections']:
+            wanted=preferred.get(selected['meal'],{}).get('preferred_product_id')
+            if wanted and selected['food_id']!='personal:'+wanted:
+                record['preference_changes'].append(meal_names[selected['meal']]+': scelta un’alternativa al prodotto preferito per rispettare i vincoli.')
+            elif wanted and selected.get('units',1)==2:
+                record['preference_changes'].append(meal_names[selected['meal']]+': scelta la seconda unità facoltativa, consentita nel profilo.')
+
+    record['diet_note']='Colazione e spuntini sono una variante personalizzata; non certificano la dieta originale. Bevande caloriche, extra e frequenze settimanali non inclusi.' if record['daily_policy'] else ''
     return record
 
 
@@ -292,7 +361,7 @@ async def run(config, output):
     async with stdio_client(StdioServerParameters(command=optees_command(config))) as (read, write):
         async with ClientSession(read, write) as session:
             await session.initialize()
-            result = await solve_problem(session, problem)
+            result = await optimize_day(session, problem)
     record = decode_result(config, problem, choices, slots, foods, result)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(record, ensure_ascii=False, indent=2) + '\n')

@@ -1,0 +1,212 @@
+{
+  "version": "workout-protocols-v1",
+  "demo": true,
+  "sources": [
+    {
+      "id": "acsm_rt_2026",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12965823/",
+      "title": "ACSM Resistance Training Position Stand 2026",
+      "checked_on": "2026-10-04",
+      "scope": "Principi generali: obiettivi, carico, volume; non valida i singoli template o i tempi demo."
+    },
+    {
+      "id": "acsm_hiit",
+      "url": "https://acsm.org/high-intensity-interval-training-fitness/",
+      "title": "ACSM HIIT: For Fitness, for Health or Both?",
+      "checked_on": "2026-10-04",
+      "scope": "Alternanza fra lavoro intenso e recupero; non prescrive gli intervalli demo."
+    }
+  ],
+  "protocols": [
+    {
+      "id": "strength_sets",
+      "name": "Forza · serie tradizionali",
+      "format": "sets",
+      "compatible_goals": [
+        "strength"
+      ],
+      "intensity": {
+        "kind": "rir",
+        "min": 2,
+        "max": 3,
+        "load_kg": null
+      },
+      "defaults_demo": {
+        "sets": 3,
+        "reps": 5,
+        "seconds_per_rep": 4,
+        "rest_seconds": 180
+      },
+      "source_refs": [
+        "acsm_rt_2026"
+      ],
+      "parameter_provenance": "local_demo_assumptions",
+      "notes": "Carico da configurare; poche ripetizioni senza carico adeguato non garantiscono uno stimolo di forza."
+    },
+    {
+      "id": "hypertrophy_sets",
+      "name": "Massa · serie tradizionali",
+      "format": "sets",
+      "compatible_goals": [
+        "hypertrophy"
+      ],
+      "intensity": {
+        "kind": "rir",
+        "min": 2,
+        "max": 3,
+        "load_kg": null
+      },
+      "defaults_demo": {
+        "sets": 3,
+        "reps": 10,
+        "seconds_per_rep": 4,
+        "rest_seconds": 90
+      },
+      "source_refs": [
+        "acsm_rt_2026"
+      ],
+      "parameter_provenance": "local_demo_assumptions",
+      "notes": "Dose demo; il volume settimanale e la progressione vanno verificati separatamente."
+    },
+    {
+      "id": "endurance_sets",
+      "name": "Resistenza muscolare · serie",
+      "format": "sets",
+      "compatible_goals": [
+        "muscular_endurance"
+      ],
+      "intensity": {
+        "kind": "rpe_0_10",
+        "min": 5,
+        "max": 7,
+        "load_kg": null
+      },
+      "defaults_demo": {
+        "sets": 2,
+        "reps": 15,
+        "seconds_per_rep": 3,
+        "rest_seconds": 60
+      },
+      "source_refs": [
+        "acsm_rt_2026"
+      ],
+      "parameter_provenance": "local_demo_assumptions",
+      "notes": "Serie tradizionali a dose dimostrativa, non punteggio fisiologico misurato."
+    },
+    {
+      "id": "circuit_basic",
+      "name": "Circuito a stazioni",
+      "format": "circuit",
+      "compatible_goals": [
+        "muscular_endurance",
+        "general_fitness"
+      ],
+      "intensity": {
+        "kind": "rpe_0_10",
+        "min": 5,
+        "max": 7
+      },
+      "defaults_demo": {
+        "rounds": 3,
+        "work_seconds": 30,
+        "station_transition_seconds": 20,
+        "round_rest_seconds": 60
+      },
+      "source_refs": [],
+      "parameter_provenance": "local_demo_assumptions",
+      "notes": "Il circuito non è automaticamente HIIT. Tempi locali demo."
+    },
+    {
+      "id": "emom_basic",
+      "name": "EMOM · ritmo al minuto",
+      "format": "emom",
+      "compatible_goals": [
+        "muscular_endurance",
+        "general_fitness"
+      ],
+      "intensity": {
+        "kind": "rpe_0_10",
+        "min": 5,
+        "max": 7
+      },
+      "defaults_demo": {
+        "rounds": 3,
+        "slot_seconds": 60,
+        "reps": 6,
+        "seconds_per_rep": 4,
+        "transition_seconds": 5,
+        "min_rest_seconds": 15
+      },
+      "source_refs": [],
+      "parameter_provenance": "local_demo_assumptions",
+      "notes": "Si parte a ogni minuto. Ripetizioni compatibili con tempo di lavoro, cambio e recupero; nessuna rincorsa se non si completa lo slot."
+    },
+    {
+      "id": "isometric_basic",
+      "name": "Isometria · tenute",
+      "format": "isometric",
+      "compatible_goals": [
+        "isometric_endurance",
+        "general_fitness"
+      ],
+      "intensity": {
+        "kind": "rpe_0_10",
+        "min": 4,
+        "max": 6
+      },
+      "defaults_demo": {
+        "sets": 3,
+        "hold_seconds": 20,
+        "rest_seconds": 40
+      },
+      "source_refs": [],
+      "parameter_provenance": "local_demo_assumptions",
+      "notes": "Dose locale demo; i secondi di tenuta restano separati dalle serie dinamiche e dai loro punteggi."
+    },
+    {
+      "id": "cardio_continuous",
+      "name": "Cardio continuo",
+      "format": "continuous",
+      "compatible_goals": [
+        "aerobic_endurance",
+        "general_fitness"
+      ],
+      "intensity": {
+        "kind": "rpe_0_10",
+        "min": 3,
+        "max": 5
+      },
+      "defaults_demo": {
+        "work_seconds": 1200
+      },
+      "source_refs": [],
+      "parameter_provenance": "local_demo_assumptions",
+      "notes": "Durata/intensità demo, adattabili; nessuna frequenza cardiaca o velocità inventata."
+    },
+    {
+      "id": "cardio_hiit",
+      "name": "Cardio · intervalli intensi",
+      "format": "intervals",
+      "compatible_goals": [
+        "aerobic_endurance"
+      ],
+      "intensity": {
+        "kind": "rpe_0_10",
+        "work_min": 7,
+        "work_max": 8,
+        "recovery_min": 2,
+        "recovery_max": 3
+      },
+      "defaults_demo": {
+        "rounds": 6,
+        "work_seconds": 30,
+        "recovery_seconds": 90
+      },
+      "source_refs": [
+        "acsm_hiit"
+      ],
+      "parameter_provenance": "local_demo_assumptions",
+      "notes": "Parametri demo, recupero finale incluso; richiede conferma personale di idoneità agli intervalli intensi."
+    }
+  ]
+}

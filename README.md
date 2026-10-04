@@ -55,3 +55,9 @@ Importare con `python scripts/import_recipes.py --download`; rigenerare dagli or
 Il [solver delle ricette](docs/recipe-solver.md) sceglie prodotti e quantità con proporzioni flessibili; attualmente 25 composizioni con mapping esplicito, senza integrazione automatica nei piani delle diete.
 
 Il [controllo degli abbinamenti delle ricette](docs/recipe-diet-compatibility.md) valuta ingredienti, rami e complementi mancanti per i 14 giorni di ogni programma. La verifica nutrizionale e l’inserimento automatico nel piano giornaliero restano separati.
+
+Il [bilancio giornaliero](docs/full-day-planner.md) include colazione e spuntini come variante personalizzata, con obiettivi separati e preferenze del profilo. Restano da integrare frequenze settimanali, consumi effettivi e ricette nel piano.
+
+Strategie Pareto, Min-Max/Max-Min e bandit personale: [documentazione](docs/multiobjective-planner.md).
+
+Catalogo dei protocolli e sessioni palestra complete: [modello v2](docs/workout-protocols.md).

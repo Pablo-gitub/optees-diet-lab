@@ -65,3 +65,7 @@ Prossimi passi: ampliare gli alimenti/rami e le ricette, aggiungere gli altri
 pasti, definire gli obiettivi personali tramite interfaccia e introdurre
 criteri Pareto e vincoli fra giorni. Una lettera sconosciuta blocca la giornata
 anziché essere ignorata. La funzione `run` resta richiamabile dal futuro backend.
+
+## Estensione al bilancio giornaliero
+
+È disponibile il [pianificatore della giornata con colazione e spuntini](full-day-planner.md), con target separati e preferenze personali. L’audit pranzo+cena descritto sopra rimane riferito al modello iniziale; i nuovi risultati riguardano una variante personalizzata con i pasti aggiuntivi, non la conformità alle colazioni originali o ai vincoli settimanali.

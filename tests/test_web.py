@@ -23,12 +23,32 @@ class WebTests(unittest.TestCase):
     def tearDownClass(cls):
         cls.temp.cleanup()
 
+    def setUp(self):
+        # Login rate-limit state belongs to a test, not the whole suite.
+        self.module.attempts.clear()
+
     def account(self, name):
         client = TestClient(self.module.app)
         client.post('/api/register', json={'username': name, 'password': 'long-test-password'})
         reply = client.post('/api/login', json={'username': name, 'password': 'long-test-password'})
         self.assertEqual(reply.status_code, 200)
         return client, {'x-csrf-token': reply.json()['csrf']}
+
+    def test_trial_feedback_is_private_validated_and_updates_once(self):
+        first,h1=self.account('trialfirst');second,h2=self.account('trialsecond')
+        with self.module.connect() as db:
+            owner=db.execute('SELECT id FROM users WHERE username=?',('trialfirst',)).fetchone()['id']
+            plan_id=db.execute('INSERT INTO plans(user_id,created,payload) VALUES(?,?,?)',(owner,0,json.dumps({'status':'optimal','mode':'free','day_index':0}))).lastrowid
+        url=f'/api/plans/{plan_id}/feedback'
+        self.assertEqual(first.post(url,json={'tried':True,'rating':4}).status_code,403)
+        self.assertEqual(second.post(url,json={'tried':True,'rating':4},headers=h2).status_code,404)
+        for data in [{'tried':False,'rating':4},{'tried':True,'rating':True},{'tried':True,'rating':6}]:
+            self.assertEqual(first.post(url,json=data,headers=h1).status_code,400)
+        for rating in [4,5]:
+            self.assertEqual(first.post(url,json={'tried':True,'rating':rating},headers=h1).status_code,200)
+        self.assertEqual(first.get('/api/plans').json()[0]['feedback'],5)
+        self.assertEqual(second.get('/api/plans').json(),[])
+        with self.module.connect() as db:self.assertEqual(db.execute('SELECT COUNT(*) FROM plan_feedback').fetchone()[0],1)
 
     def test_recipe_solver_auth_validation_and_history_isolation(self):
         first, h1 = self.account('recipefirst')
@@ -80,6 +100,22 @@ class WebTests(unittest.TestCase):
         self.assertEqual(reply.json()['expression'], 'A')
         self.assertIn('rules_sha256', reply.json())
         self.assertEqual(client.get('/api/recipe-diet-options?mode=unknown').status_code, 400)
+
+    def test_daily_configuration_is_private_validated_and_persisted(self):
+        first,h1=self.account('dailyfirst');second,h2=self.account('dailysecond')
+        profile=first.get('/api/profile').json()['profile']
+        self.assertFalse(profile['daily_meals']['enabled'])
+        self.assertNotIn('food_preferences',profile)
+        profile['daily_meals']['enabled']=True
+        self.assertEqual(first.put('/api/profile',json=profile,headers=h1).status_code,200)
+        updated=first.get('/api/profile').json()['profile']
+        self.assertTrue(updated['daily_meals']['enabled'])
+        self.assertFalse(second.get('/api/profile').json()['profile']['daily_meals']['enabled'])
+        config=self.module.make_config(updated,0)
+        self.assertEqual(config['food_preferences'],{})
+        self.assertEqual(config['daily_meals']['targets'],updated['daily_meals']['targets'])
+        profile['daily_meals']['banana_min_g']=600
+        self.assertEqual(first.put('/api/profile',json=profile,headers=h1).status_code,400)
 
     def test_new_profile_has_no_paolo_data_or_diets(self):
         client, headers = self.account('amico')

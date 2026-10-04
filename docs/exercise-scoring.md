@@ -25,3 +25,7 @@ Il comando `python scripts/build_workout_catalog.py` genera `data/personal/worko
 Il modello `workout-draft-v1` assegna, per serie ipotizzata, 1 unità al muscolo primario e 0,5 al secondario. Sono unità euristiche di copertura; niente previsioni di ipertrofia o dimagrimento. Il template full body usa due serie ipotetiche; ripetizioni e carichi restano vuoti. Durate ipotizzate, aderenza e prestazione non apprese. MET conservati senza conversione automatica in calorie. Aqua bag/tank restano estensioni da modellare.
 
 Selezionare gli esercizi compatibili, conservando prerequisiti multipli (panca, barra, supporti) che un singolo campo equipment può omettere. Aggiungere varianti australiane con barra regolabile confermata e attrezzi ad acqua. Costruire pochi template di sessione, poi definire coefficienti e scenari con esempi riproducibili prima della chiamata Optees.
+
+## Aggiornamento v2
+
+Il modello sopra descrive il prototipo iniziale. Ora il catalogo genera 11 bozze di sessione complete, da otto protocolli, con tempi comprensivi di lavoro e recuperi e dieci prerequisiti di esercizi controllati. Dettagli, provenienza e limiti: [Protocolli e sessioni](workout-protocols.md).

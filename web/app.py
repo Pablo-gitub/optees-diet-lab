@@ -16,10 +16,12 @@ from fastapi.staticfiles import StaticFiles
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
-from plan_diet_day import NUTRIENTS, load_foods, formulate, solve_problem, decode_result
+from plan_diet_day import NUTRIENTS, load_foods, formulate, solve_problem, decode_result, optimize_day
 from plan_recipe import templates as recipe_templates, formulate_recipe, optimize_recipe
 from recipe_diet_compatibility import meal_options
 from optees_command import optees_command
+from daily_meals import defaults as daily_defaults, validate as validate_daily
+from multiobjective_day import solve_strategy, nondominated, choose_arm, STRATEGIES
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
@@ -70,6 +72,7 @@ def initialize():
         db.executescript('''CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, username TEXT UNIQUE, salt TEXT, password TEXT, profile TEXT);
         CREATE TABLE IF NOT EXISTS sessions(token TEXT PRIMARY KEY, user_id INTEGER, expires REAL, csrf TEXT);
         CREATE TABLE IF NOT EXISTS plans(id INTEGER PRIMARY KEY, user_id INTEGER, created REAL, payload TEXT, selected INTEGER DEFAULT 0);
+        CREATE TABLE IF NOT EXISTS plan_feedback(user_id INTEGER, plan_id INTEGER, rating INTEGER, tried_at REAL, PRIMARY KEY(user_id,plan_id));
         CREATE TABLE IF NOT EXISTS recipe_runs(id INTEGER PRIMARY KEY, user_id INTEGER, created REAL, payload TEXT);''')
         if not db.execute('SELECT 1 FROM users').fetchone():
             password = secrets.token_urlsafe(16)
@@ -210,6 +213,7 @@ def profile(request: Request):
     user = identity(request)
     data = json.loads(user['profile'])
     data.setdefault('preferred_cuisines', [])
+    data.setdefault('daily_meals',daily_defaults(bool(data.get('food_preferences'))))
     return {'profile': data, 'csrf': user['csrf']}
 
 
@@ -231,6 +235,8 @@ async def update_profile(request: Request):
     ):
         raise HTTPException(400, 'Cucine non valide')
     old['preferred_cuisines'] = list(dict.fromkeys(preferred))
+    try:old['daily_meals']=validate_daily(data.get('daily_meals',old.get('daily_meals',daily_defaults(bool(old.get('food_preferences'))))))
+    except (ValueError,TypeError) as e:raise HTTPException(400,str(e))
     old.update(
         display_name=str(data.get('display_name', ''))[:80],
         mode=mode,
@@ -261,6 +267,12 @@ def make_config(profile, day):
         meal_targets=profile['meal_targets'],
         excluded_crea_ids=profile['excluded_crea_ids'],
     )
+    settings=profile.get('daily_meals',daily_defaults(bool(profile.get('food_preferences'))))
+    validate_daily(settings)
+    base['daily_meals']=settings
+    if settings['enabled']:
+        base['food_preferences']=profile.get('food_preferences',{})
+        base['demo']=settings['targets_demo']
     return base
 
 
@@ -271,8 +283,9 @@ def plans(request: Request):
         rows = db.execute(
             'SELECT id,created,payload,selected FROM plans WHERE user_id=? ORDER BY id DESC LIMIT 30', (user['id'],)
         ).fetchall()
+        feedback={r['plan_id']:r['rating'] for r in db.execute('SELECT plan_id,rating FROM plan_feedback WHERE user_id=?',(user['id'],))}
     return [
-        {'id': r['id'], 'created': r['created'], 'selected': bool(r['selected']), 'plan': json.loads(r['payload'])}
+        {'id': r['id'], 'created': r['created'], 'selected': bool(r['selected']), 'plan': json.loads(r['payload']), 'feedback':feedback.get(r['id'])}
         for r in rows
     ]
 
@@ -282,6 +295,9 @@ async def generate(request: Request):
     user = identity(request, True)
     profile = json.loads(user['profile'])
     data = await request.json()
+    strategy=data.get('strategy','balanced')
+    if strategy not in (*STRATEGIES,'bandit'):
+        raise HTTPException(400,'Strategia non valida')
     day = data.get('day_index', 0)
     if isinstance(day, bool) or not isinstance(day, int) or not 0 <= day < 14:
         raise HTTPException(400, 'Giorno non valido')
@@ -289,6 +305,13 @@ async def generate(request: Request):
         raise HTTPException(409, 'Calcolo già in corso: riprova fra poco')
     async with solver_lock:
         config = make_config(profile, day)
+        context=hashlib.sha256(json.dumps(dict(version='nutrition-strategy-ucb1-v1',configuration={k:config.get(k) for k in ['mode','main_meals_targets','daily_meals','meal_targets','excluded_crea_ids','food_preferences']}),sort_keys=True).encode()).hexdigest()
+        requested=strategy; reason=None
+        if strategy=='bandit':
+            with connect() as db:
+                trials=db.execute('SELECT p.payload,f.rating FROM plan_feedback f JOIN plans p ON p.id=f.plan_id AND p.user_id=f.user_id WHERE f.user_id=?',(user['id'],)).fetchall()
+            observations=[(p['optimization']['strategy'],(r['rating']-1)/4) for r in trials if (p:=json.loads(r['payload'])).get('optimization',{}).get('context')==context]
+            strategy,reason=choose_arm(observations)
         foods = load_foods()
         try:
             problem, choices, slots = formulate(config, foods)
@@ -296,23 +319,35 @@ async def generate(request: Request):
             async with stdio_client(StdioServerParameters(command=optees_command(config))) as (read, write):
                 async with ClientSession(read, write) as session:
                     await session.initialize()
-                    for _ in range(3):
-                        result = await solve_problem(session, problem)
+                    results=[]
+                    if strategy=='pareto':
+                        keys=['kcal','protein_g','fat_g','carbs_available_g']
+                        for weights in [None]+[{key:4. for key in [focus]} for focus in keys]:
+                            result=await solve_strategy(session,problem,config,choices,'pareto',weights)
+                            if result['mathematical_status'] in ['optimal','feasible']:results.append(result)
+                            elif not results:results=[result];break
+                        if results and results[0]['mathematical_status'] in ['optimal','feasible']:
+                            results=nondominated(results)
+                    for attempt in range(len(results) if strategy=='pareto' else 3):
+                        result=results[attempt] if strategy=='pareto' else await solve_strategy(session,problem,config,choices,strategy)
                         record = decode_result(config, problem, choices, slots, foods, result)
                         # Only expose the reviewable plan; raw problem/source paths stay on server.
                         safe = {
-                            key: record[key] for key in ['demo', 'scope', 'slots', 'status', 'selections', 'nutrients']
+                            key: record[key] for key in ['demo', 'scope', 'slots', 'status', 'selections', 'nutrients','nutrients_by_meal','daily_policy','diet_note','preference_penalty','preference_changes','constraint_report']
                         }
+                        safe['optimization']=result.get('optimization',{'strategy':strategy})
+                        safe['optimization'].update(context=context,requested=requested,bandit_reason=reason,pareto_scope='sampled_weighted_solutions' if strategy=='pareto' else None)
                         safe['mode'] = config['mode']
                         safe['day_index'] = day
                         safe['preference_status'] = (
-                            'Preferenze registrate; non ancora usate per ordinare le alternative.'
+                            'Colazione e spuntini: preferenze applicate dopo i vincoli rigidi, prima degli scarti nutrizionali.' if config['daily_meals']['enabled'] else 'Preferenze di colazione/spuntini non attive.'
                         )
                         if record['status'] not in ['optimal', 'feasible']:
                             if not alternatives:
                                 alternatives.append(safe)
                             break
                         alternatives.append(safe)
+                        if strategy=='pareto':continue
                         values = {v['name']: v['value'] for v in result['result']['variables']}
                         selected = [c['y'] for c in choices if values[problem['variables'][c['y']]['name']] > 0.5]
                         row = [0] * len(problem['variables'])
@@ -350,6 +385,20 @@ def select_plan(plan_id: int, request: Request):
         )
         db.execute('UPDATE plans SET selected=1 WHERE id=? AND user_id=?', (plan_id, user['id']))
     return {'ok': True}
+
+
+@app.post('/api/plans/{plan_id}/feedback')
+async def plan_feedback(plan_id: int, request: Request):
+    user=identity(request,True);data=await request.json()
+    rating=data.get('rating')
+    if data.get('tried') is not True or isinstance(rating,bool) or not isinstance(rating,int) or not 1<=rating<=5:
+        raise HTTPException(400,'Conferma di aver provato il piano e assegna un voto da 1 a 5')
+    with connect() as db:
+        row=db.execute('SELECT payload FROM plans WHERE id=? AND user_id=?',(plan_id,user['id'])).fetchone()
+        if not row:raise HTTPException(404,'Piano non trovato')
+        if json.loads(row['payload'])['status'] not in ['optimal','feasible']:raise HTTPException(400,'Piano senza soluzione')
+        db.execute('INSERT INTO plan_feedback VALUES(?,?,?,?) ON CONFLICT(user_id,plan_id) DO UPDATE SET rating=excluded.rating,tried_at=excluded.tried_at',(user['id'],plan_id,rating,time.time()))
+    return {'ok':True}
 
 
 @app.get('/api/cuisines')

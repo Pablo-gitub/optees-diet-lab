@@ -32,7 +32,14 @@ def formulate(config, catalog, mode):
         for v in config['muscle_targets_proxy'].values()
     ):
         raise ValueError('Muscle proxy targets must be finite and positive')
-    templates = catalog['templates']
+    templates = [t for t in catalog['templates']
+                 if (not config.get('goal') or config['goal'] in t.get('compatible_goals', []))
+                 and (not config.get('allowed_protocols') or t.get('protocol_id') in config['allowed_protocols'])
+                 and (config.get('allow_high_intensity_demo',False) or t.get('format')!='intervals')
+                 and (config.get('demo',False) or not t.get('pending_configuration'))]
+    if catalog.get('model_version')=='workout-sessions-v2':
+        from workout_sessions import validate_session
+        for t in templates:validate_session(t)
     slots = [(day, t) for day in days for t in templates if t['duration_minutes_assumed'] <= config['days'][day]]
     if not slots:
         raise ValueError('No available slots')
@@ -46,7 +53,7 @@ def formulate(config, catalog, mode):
     def add(values, relation, rhs):
         constraints.append({'coefficients': values + [0] * (size - len(values)), 'relation': relation, 'rhs': rhs})
 
-    strength = [bool(t['score_vector']['muscle_coverage_proxy']) for _, t in slots]
+    strength = [t.get('resistance_session',bool(t['score_vector']['muscle_coverage_proxy'])) for _, t in slots]
     duration = [t['duration_minutes_assumed'] for _, t in slots]
     for day in days:
         add([int(d == day) for d, _ in slots], '<=', 1)
@@ -55,7 +62,8 @@ def formulate(config, catalog, mode):
     add([1] * n, '<=', config['sessions_max'])
     add([int(s) for s in strength], '>=', config['strength_sessions_min'])
     add([int(s) for s in strength], '<=', config['strength_sessions_max'])
-    add([0 if s else minutes for s, minutes in zip(strength, duration)], '>=', config['cardio_minutes_min'])
+    cardio = [t.get('cardio_work_seconds', t['duration_minutes_assumed']*60 if not s else 0)/60 for (_,t),s in zip(slots,strength)]
+    add(cardio, '>=', config['cardio_minutes_min'])
     gap = config['strength_gap_days']
     if int(gap) != gap:
         raise ValueError('Recovery gap must be an integer')
@@ -128,10 +136,12 @@ async def run(config_path, catalog_path, output):
                 if envelope['mathematical_status'] in ['optimal', 'feasible']:
                     if envelope['validation']['status'] != 'verified':
                         raise ValueError('Solution failed independent validation')
+                    from plan_recipe import values_verified
+                    values_verified(problem,envelope)
                     values = {v['name']: v['value'] for v in envelope['result']['variables']}
                     selected = [(d, t) for i, (d, t) in enumerate(slots) if values[f's{i}'] > 0.5]
                     summary['sessions'] = [
-                        {'day': d, 'template_id': t['id'], 'minutes': t['duration_minutes_assumed']}
+                        {'day': d, 'template_id': t['id'], 'minutes': t['duration_minutes_assumed'], 'session': t}
                         for d, t in selected
                     ]
                     summary['weekly_minutes'] = sum(t['duration_minutes_assumed'] for _, t in selected)

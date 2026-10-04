@@ -429,3 +429,13 @@ footer {
   font-size: 10px;
   margin-top: 2px;
 }
+
+.constraint-ok { color: #286044; font-weight: 600; }
+.constraint-details { margin: 1rem 0; overflow-x: auto; }
+.constraint-details summary { cursor: pointer; font-weight: 600; }
+.constraint-details table { width: 100%; border-collapse: collapse; font-size: .8rem; margin: .8rem 0; }
+.constraint-details th, .constraint-details td { text-align: left; padding: .4rem; border-bottom: 1px solid var(--line, #ddd); }
+
+.feedback { display: grid; gap: .6rem; margin: 1rem 0; border-top: 1px solid #ddd; padding-top: .8rem; }
+.feedback label { display: flex; align-items: center; gap: .5rem; }
+.feedback input[type="checkbox"] { width: auto; }
