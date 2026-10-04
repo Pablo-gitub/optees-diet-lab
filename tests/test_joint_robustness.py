@@ -92,3 +92,19 @@ class JointRobustness(unittest.TestCase):
         with patch('plan_diet_day.solve_problem',side_effect=diet_solver),patch.object(robust,'call',side_effect=descriptor),patch.object(robust,'solve',side_effect=selector):result=asyncio.run(joint.generate_week(None,profile,request,make_config,load_foods(),health))
         self.assertEqual(result['robust_selection']['status'],'verified')
         self.assertTrue(all(p['robustness']['status']=='available' for p in result['plans']))
+
+    def test_explore_prefers_different_workout_and_explains_food_only_fallback(self):
+        import joint_orchestration as joint
+        def candidate(index,workout):
+            p=plan(2000,[1900]*3)
+            p.update(objectives=dict(nutrition_error=index+1,worst_error=.2,preference=1,variety=index,training_fit=.5,training_minutes=60),workout_sessions=[dict(date='2026-10-05',session_id=workout)],robustness=dict(status='unavailable'),arms=['food:'+str(index)])
+            for j,d in enumerate(p['days']):d.update(date=f'2026-10-{5+j:02d}',selections=[])
+            return p
+        for different in (True,False):
+            pool=[candidate(0,'bike'),candidate(3,'bike'),candidate(2,'bike'),candidate(1,'row' if different else 'bike')]
+            result=dict(pool={},warnings=[])
+            with patch('joint_orchestration.plan_diff',return_value={}),patch('week_orchestration.week_keys',return_value=set()),patch('joint_orchestration.exploration_score',side_effect=lambda p,o:(p['objectives']['variety'],)):
+                joint.select(result,pool,dict(k=3))
+            explored=next(p for p in result['plans'] if p['role']=='explore')
+            if different:self.assertEqual(explored['workout_sessions'][0]['session_id'],'row')
+            else:self.assertTrue(any('Esplorazione alimentare' in reason for reason in explored['explanation']['reasons']))

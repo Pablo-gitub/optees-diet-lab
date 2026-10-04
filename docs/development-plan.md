@@ -153,4 +153,6 @@ Riconoscimento dei pasti da foto, sincronizzazione live con Withings/HealthKit (
 
 | W1–W3 | **fatto** — `652da35` | 176 test verdi; più sessioni per giorno, spiegazione dello snapshot e minuti visualizzati arrotondati, secondi del modello esatti |
 
-| B6 | **fatto** — commit di chiusura B6 | 197 test unittest verdi; profilo nuovo mai salvato: stessi default in UI e owner, richiesta congiunta accettata per le abitudini personali abilitate |
+| B6 | **fatto** — `72f9660` | 197 test unittest verdi; profilo nuovo mai salvato: stessi default in UI e owner, richiesta congiunta accettata per le abitudini personali abilitate |
+
+| B7 | **fatto** — commit di chiusura B7 | 198 test unittest verdi; explore preferisce schede diverse da varied sul fronte, fallback solo dieta spiegato |

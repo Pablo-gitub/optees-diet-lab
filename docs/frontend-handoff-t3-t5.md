@@ -61,3 +61,5 @@ In **Piano → Settimana** l'opzione «Pianifica anche l'allenamento» chiama `P
 | B7 | Il ruolo `explore` può avere la stessa scheda palestra di `varied` e differire solo nella dieta | valutare la diversità minima anche sulle sessioni quando il pool palestra ha più candidati |
 
 B6 risolto: default condivisi da GET profilo e owner_profile, senza scritture implicite nel profilo. Test su profilo appena creato e su nuove abitudini personali mai salvate.
+
+B7 risolto: explore preferisce una scheda diversa da varied tra i candidati distinti ancora sul fronte; se non esiste, explanation dichiara l’esplorazione soltanto alimentare. Test della preferenza e del fallback.

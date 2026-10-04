@@ -104,10 +104,16 @@ def select(result,pool,data,observations=()):
     take('robust',lambda p:(p['robustness']['max_regret_kcal'],p['robustness']['max_loss_kcal']),lambda p:p['robustness']['status']=='available')
     take('varied',lambda p:(-p['objectives']['variety'],-(p['objectives']['training_fit'] or 0)))
     if observations:take('preferred',lambda p:-p['objectives']['preference'])
-    take('explore',lambda p:tuple(-v for v in exploration_score(p,observations)))
+    def workout_signature(p):
+        return tuple(sorted((s['date'],s['session_id'],json.dumps(s.get('session',{}),sort_keys=True)) for s in p['workout_sessions']))
+    varied=next((p for p in selected if p['role']=='varied'),None)
+    # Preserve Pareto feasibility; prefer exploration of a different workout too.
+    take('explore',lambda p:(workout_signature(p)==workout_signature(varied) if varied else False,tuple(-v for v in exploration_score(p,observations))))
     headlines=dict(best='Dieta e allenamento vicini ai tuoi obiettivi',varied='Una settimana con alimenti e sessioni diversi',robust='Più stabile negli scenari di consumo',preferred='Più vicina alle combinazioni che apprezzi',explore='Una combinazione nuova da provare')
     for rank,p in enumerate(selected,1):
         p.update(rank=rank,explanation=dict(headline=headlines[p['role']],reasons=['Vincoli di dieta e palestra verificati',f"Copertura degli obiettivi di allenamento: {p['objectives']['training_fit']:.2f}" if p['objectives']['training_fit'] is not None else 'Obiettivi di copertura muscolare non configurati'],tradeoffs=[]))
+        if p['role']=='explore' and varied and workout_signature(p)==workout_signature(varied):
+            p['explanation']['reasons'].append('Esplorazione alimentare: la scheda palestra coincide con il piano varied; nessuna scheda diversa resta selezionabile sul fronte.')
         p['diff']=None if p is best else dict(reference_plan='best',distance=len(diet_engine.week_keys(best)-diet_engine.week_keys(p)),days=[dict(date=a['date'],**plan_diff(a,b)) for a,b in zip(best['days'],p['days'])],**session_diff(best,p))
     if not any(p['role']=='robust' for p in selected):result['warnings'].append(dict(code='robust_role_omitted',message='Nessun ulteriore candidato distinto con scenari completi sul fronte, oppure numero di piani richiesto insufficiente.'))
     result['plans']=selected;result['pool'].update(candidates=len(pool),front=len(candidates))
