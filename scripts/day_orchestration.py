@@ -26,7 +26,7 @@ def distance(a,b):
 
 def family(food_id):
     if food_id in LEGUMES:return 'legumes'
-    return {'106500':'white_meat','121410':'fish','181100':'eggs','123610':'red_meat','166000':'cheese'}.get(food_id)
+    return {'106500':'white_meat','121410':'fish','181100':'eggs','123610':'fish','110020':'red_meat','110400':'red_meat','166000':'cheese','000720':'cheese','008540':'nuts','008570':'nuts'}.get(food_id)
 
 
 def arms(plan):

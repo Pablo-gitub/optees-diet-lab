@@ -23,6 +23,7 @@ from optees_command import optees_command
 from daily_meals import defaults as daily_defaults, validate as validate_daily
 from target_validation import profile_target_warnings
 from multiobjective_day import solve_strategy, nondominated, choose_arm, STRATEGIES
+import diary_service as diary
 from day_orchestration import orchestrate_day, context_key
 from health_inputs import load_report as load_health_report, algorithm_inputs as health_algorithm_inputs
 from mcp import ClientSession, StdioServerParameters
@@ -41,6 +42,13 @@ def connect():
     db = sqlite3.connect(DB)
     db.row_factory = sqlite3.Row
     return db
+
+
+def owner_profile(user):
+    profile=json.loads(user['profile'])
+    with connect() as db:
+        profile['_recipe_runs']={'run:'+str(r['id']):json.loads(r['payload']) for r in db.execute('SELECT id,payload FROM recipe_runs WHERE user_id=?',(user['id'],))}
+    return profile
 
 
 def password_hash(password, salt):
@@ -105,6 +113,9 @@ def initialize():
             access = DB.parent / 'web_access.txt'
             access.write_text('Accesso personale locale\nUtente: paolo\nPassword: ' + password + '\n')
             access.chmod(0o600)
+    with connect() as db:
+        diary.migrate(db)
+        db.execute("UPDATE job SET state='failed',error=? WHERE state IN ('queued','running')",(json.dumps(dict(code='interrupted',detail='Calcolo interrotto dal riavvio; riprova.')),))
     DB.chmod(0o600)
 
 
@@ -127,7 +138,7 @@ def identity(request, mutation=False):
 
 @app.middleware('http')
 async def protect_origin(request, next_call):
-    if request.method in ['POST', 'PUT', 'DELETE']:
+    if request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
         from urllib.parse import urlsplit
 
         origin = request.headers.get('origin')
@@ -558,3 +569,154 @@ async def recipe_optimize(request: Request):
                 (user['id'], time.time(), json.dumps(result)),
             )
     return result
+
+
+@app.exception_handler(diary.DomainError)
+async def domain_error(request,exc):
+    return JSONResponse({'detail':str(exc),'code':exc.code},status_code=exc.status)
+
+
+@app.get('/api/day')
+def read_day(request:Request,date:str):
+    user=identity(request)
+    with connect() as db:return diary.day_view(db,user['id'],owner_profile(user),date)
+
+
+@app.get('/api/week')
+def read_week(request:Request,start:str):
+    user=identity(request)
+    with connect() as db:return diary.week_view(db,user['id'],owner_profile(user),start)
+
+
+@app.get('/api/foods/search')
+def search_foods(request:Request,q:str,limit:int=20):
+    user=identity(request)
+    with connect() as db:return diary.search_foods(db,user['id'],owner_profile(user),q,limit)
+
+
+async def mutate_diary(request,action,entry_id=None):
+    user=identity(request,True)
+    data={} if action=='delete' else await request.json()
+    with connect() as db:return diary.diary_mutation(db,user['id'],owner_profile(user),action,data,entry_id)
+
+
+@app.post('/api/diary/confirm')
+async def confirm_meal(request:Request):return await mutate_diary(request,'confirm')
+@app.post('/api/diary/entries')
+async def add_diary_entry(request:Request):return await mutate_diary(request,'add')
+@app.patch('/api/diary/entries/{entry_id}')
+async def edit_diary_entry(entry_id:int,request:Request):return await mutate_diary(request,'edit',entry_id)
+@app.delete('/api/diary/entries/{entry_id}')
+async def delete_diary_entry(entry_id:int,request:Request):return await mutate_diary(request,'delete',entry_id)
+@app.post('/api/diary/skip')
+async def skip_meal(request:Request):return await mutate_diary(request,'skip')
+@app.post('/api/diary/reset')
+async def reset_meal(request:Request):return await mutate_diary(request,'reset')
+
+
+@app.post('/api/measurements')
+async def manual_measurement(request:Request):
+    user=identity(request,True);data=await request.json()
+    with connect() as db:
+        date=diary.add_measurement(db,user['id'],data)
+        result=diary.day_view(db,user['id'],owner_profile(user),date)
+        result['measurements']=[dict(r) for r in db.execute('SELECT date,kind,value,unit,source FROM measurement WHERE user_id=? AND date=?',(user['id'],date))]
+        return result
+
+
+@app.get('/api/measurements')
+def read_measurements(request:Request):
+    user=identity(request)
+    with connect() as db:values=[dict(r) for r in db.execute('SELECT id,date,kind,value,unit,source FROM measurement WHERE user_id=? ORDER BY date DESC,id DESC LIMIT 365',(user['id'],))]
+    report=load_health_report(health_directory(user['id']))
+    if report:
+        values.extend(dict(date=x['date'],kind='weight',value=x['value'],unit='kg',source='apple_health',source_detail=x.get('source')) for x in report.get('weight_history',[]))
+        values.extend(dict(date=x['date'],kind=k,value=x['value'],unit=x['unit'],source='apple_health',source_detail=x.get('source')) for k,x in report.get('measures',{}).items() if k!='weight')
+    return sorted(values,key=lambda x:x['date'],reverse=True)
+
+
+@app.get('/api/stats/summary')
+def stats_summary(request:Request):
+    values=read_measurements(request);weights=[x for x in values if x['kind']=='weight']
+    insufficient=dict(status='insufficient_data',reason='Analisi completa prevista nel passo 5.1')
+    return dict(weight=dict(status='available',**weights[0],points=[[x['date'],x['value']] for x in weights]) if weights else insufficient,adherence_week=insufficient,kcal_average=insufficient,workouts=dict(status='insufficient_data',reason='Registro palestra previsto nel passo 3.1'))
+
+
+@app.get('/api/plan-sets/{set_id}')
+def read_plan_set(set_id:int,request:Request):
+    user=identity(request)
+    with connect() as db:row=db.execute('SELECT payload FROM plan_set WHERE id=? AND user_id=?',(set_id,user['id'])).fetchone()
+    if not row:raise diary.DomainError('Piano non trovato','not_found',404)
+    return json.loads(row['payload'])
+
+
+@app.post('/api/plan-sets/{set_id}/apply')
+async def apply_plan_set(set_id:int,request:Request):
+    user=identity(request,True);data=await request.json()
+    plan_set=read_plan_set(set_id,request)
+    plan=next((p for p in plan_set['plans'] if p.get('id')==data.get('plan_id')),None)
+    if not plan:raise diary.DomainError('Alternativa non trovata','not_found',404)
+    with connect() as db:return diary.apply_plan(db,user['id'],owner_profile(user),plan_set,plan,data)
+
+
+planning_tasks={}
+
+@app.get('/api/jobs/{job_id}')
+def read_job(job_id:str,request:Request):
+    user=identity(request)
+    with connect() as db:row=db.execute('SELECT * FROM job WHERE id=? AND user_id=?',(job_id,user['id'])).fetchone()
+    if not row:raise diary.DomainError('Calcolo non trovato','not_found',404)
+    return dict(state=row['state'],progress=row['progress'],result=dict(plan_set_id=row['result_ref']) if row['result_ref'] else None,error=json.loads(row['error']) if row['error'] else None)
+
+
+async def planning_job(job_id,user_id,profile,data,kind):
+    try:
+        from week_orchestration import generate_week,generate_meal_alternatives
+        async with solver_lock:
+            with connect() as db:db.execute("UPDATE job SET state='running',progress=.1 WHERE id=?",(job_id,))
+            with connect() as db:
+                if kind=='meal':configuration=generate_meal_alternatives(db,user_id,profile,data,make_config)
+                else:configuration=None
+            async with stdio_client(StdioServerParameters(command=optees_command())) as (read,write):
+                async with ClientSession(read,write) as session:
+                    await session.initialize()
+                    if kind=='week':result=await generate_week(session,profile,data,make_config,load_foods())
+                    else:result=await configuration(session)
+            with connect() as db:
+                set_id=db.execute('INSERT INTO plan_set(user_id,created,payload,input) VALUES(?,?,?,?)',(user_id,time.time(),'{}',json.dumps(dict(profile=profile,request=data,kind=kind)))).lastrowid
+                result['run_id']=str(set_id)
+                for i,p in enumerate(result['plans'],1):p['id']=i
+                db.execute('UPDATE plan_set SET payload=? WHERE id=?',(json.dumps(result),set_id))
+                db.execute("UPDATE job SET state='done',progress=1,result_ref=? WHERE id=?",(set_id,job_id))
+    except Exception as exc:
+        print('Planning job error:',repr(exc),flush=True)
+        error=dict(code=exc.code if isinstance(exc,diary.DomainError) else 'infeasible' if isinstance(exc,ValueError) else 'calculation_failed',detail=str(exc) if isinstance(exc,diary.DomainError) else 'Calcolo non riuscito; verifica vincoli e obiettivi.')
+        with connect() as db:db.execute("UPDATE job SET state='failed',error=? WHERE id=?",(json.dumps(error),job_id))
+    finally:planning_tasks.pop(job_id,None)
+
+
+async def enqueue_planning(request,kind):
+    user=identity(request,True);profile=owner_profile(user);data=await request.json()
+    if kind=='week':
+        diary.valid_date(data.get('week_start'))
+        mode=data.get('mode',profile['mode'])
+        if mode not in (('free','sedentary','training') if profile['personal_diets'] else ('free',)):raise diary.DomainError('Programma non disponibile')
+        profile['mode']=mode
+        if not isinstance(data.get('locked',[]),list):raise diary.DomainError('Blocchi non validi')
+    else:
+        diary.valid_date(data.get('date'));diary.valid_slot(data.get('slot'))
+        with connect() as db:
+            if diary.state(db,user['id'],data['date'],data['slot'])!='unknown':raise diary.DomainError('Pasto già registrato','slot_already_logged',409)
+            p=diary.planned(db,user['id'],data['date'],data['slot'])
+            if p and p['locked']:raise diary.DomainError('Pasto bloccato','slot_locked',409)
+    with connect() as db:
+        if db.execute("SELECT 1 FROM job WHERE user_id=? AND state IN ('queued','running')",(user['id'],)).fetchone():raise diary.DomainError('Calcolo già in corso','job_running',409)
+        job_id=secrets.token_hex(16);db.execute("INSERT INTO job VALUES(?,?,?,'queued',0,NULL,NULL,?)",(job_id,user['id'],kind,time.time()))
+    task=asyncio.create_task(planning_job(job_id,user['id'],profile,data,kind));planning_tasks[job_id]=task
+    return JSONResponse(dict(job_id=job_id),status_code=202)
+
+
+@app.post('/api/plans/week')
+async def plan_week(request:Request):return await enqueue_planning(request,'week')
+@app.post('/api/plans/meal-alternatives')
+async def meal_alternatives(request:Request):return await enqueue_planning(request,'meal')

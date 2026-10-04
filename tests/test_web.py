@@ -222,7 +222,12 @@ class WebTests(unittest.TestCase):
             async def __aexit__(self,*args):pass
             async def initialize(self):pass
         async def fake(session,problem):return solve(problem)
-        with patch.object(self.module,'stdio_client',stream),patch.object(self.module,'ClientSession',Session),patch('multiobjective_day.solve_problem',side_effect=fake):
+        original=self.module.orchestrate_day
+        async def small_chain(session,config,*args):
+            from test_day_orchestration import OrchestrationTests
+            config['portion_bounds_g']=OrchestrationTests().config()['portion_bounds_g']
+            return await original(session,config,*args)
+        with patch.object(self.module,'orchestrate_day',side_effect=small_chain),patch.object(self.module,'stdio_client',stream),patch.object(self.module,'ClientSession',Session),patch('multiobjective_day.solve_problem',side_effect=fake):
             self.assertEqual(client.post('/api/generate',json={}).status_code,403)
             response=client.post('/api/generate',json=dict(strategy='legacy',pool_size=4,k=4,time_limit=120),headers=headers)
         self.assertEqual(response.status_code,200)
