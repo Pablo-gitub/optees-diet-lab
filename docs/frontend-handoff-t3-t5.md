@@ -26,3 +26,21 @@ Prossimo turno di Codex: B1–B5, poi 3.1 e 3.3 (palestra).
 ## Esito Codex — B1–B5
 
 Corretti il 2026-10-04. Suite: 162 test verdi. B1 verificato con il processo MCP Optees reale in `tests/test_week_meal_e2e.py`, dalla generazione e applicazione di una settimana alle alternative e applicazione di un singolo pasto. Gli altri pasti e il consumato restano invariati. B2 mantiene i vincoli interi e strutturali, con un solo warning quando il fronte contiene un solo piano; B3 omette la distanza per best; B4 ordina per pertinenza, completezza e fonte; B5 espone composizione/provenienza separatamente dal nome leggibile.
+
+## Passo 3.2 — Allenamento (2026-10-04)
+
+Pagina **Allenamento** (`web/static/workout.js`), tre schede:
+
+- **Settimana**: sessioni della settimana corrente lette da `GET /api/day` dei 7 giorni; generazione con minuti per giorno (`POST /api/workouts/week`, `excluded_days` = giorni a 0, `demo: true`), card con ruolo e minuti, `apply` con `scope: week`; catalogo con «Inizia oggi» (avvio senza piano).
+- **Sessione**: intestazione con intensità (RIR/RPE), avviso bozza e configurazione mancante, cronologia proporzionale (riscaldamento, lavoro, recuperi, defaticamento), esercizi con le due foto locali, video come link esterni (il CSP non consente iframe né miniature YouTube), registro serie (`POST /api/workouts/{id}/sets`) con ripetizioni, kg per manubrio quando `load_basis = kg_per_dumbbell`, secondi o minuti per tenute e cardio; timer di recupero dopo ogni serie; conclusione con RPE 1–10 e note.
+- **Configura**: domande da `GET /api/workouts/config` (livello, conferme, attrezzi, pesi disponibili, carichi di partenza, varianti eseguibili); `PATCH` con le mappe complete unite a quelle correnti.
+
+In **Oggi** la scheda Attività ha Inizia/Apri/Salta/Continua; la striscia della settimana mostra 🏋 nei giorni con sessione.
+
+### Segnalazioni per Codex
+
+| # | Osservazione | Proposta |
+|---|---|---|
+| W1 | `day.workout` espone una sola sessione: se si avvia una sessione libera dal catalogo nello stesso giorno, la sessione pianificata del giorno (es. cyclette) sparisce dalla vista | esporre `workouts: [...]` nel DayView (pianificate + libere), mantenendo `workout` per compatibilità |
+| W2 | Una sessione avviata conserva `pending_configuration` del momento dell'avvio anche dopo aver completato la configurazione | comportamento corretto (snapshot immutabile); valutare un campo `configuration_at_start` per spiegarlo in UI |
+| W3 | Durate frazionarie (28,5 min, 10,83 min) | arrotondare `minutes` al minuto nelle risposte, mantenendo i secondi esatti in `duration_seconds` |

@@ -342,10 +342,32 @@ function renderWorkout(day) {
     img.alt = '';
     row.append(img);
   }
+  const st = workoutStatus[w.status] || [w.status, ''];
   const text = element('div');
-  text.append(element('strong', w.title || w.session_id), element('p', [w.minutes && w.minutes + ' min', w.start_time].filter(Boolean).join(' · '), 'muted'));
+  text.append(element('strong', w.title || w.session_id), element('p', [w.minutes && Math.round(w.minutes) + ' min', w.start_time, st[0]].filter(Boolean).join(' · '), 'muted'));
   row.append(text);
   box.append(row);
+  if (w.demo) box.append(element('p', 'Bozza dimostrativa' + (w.pending_configuration?.length ? ' · ' + w.pending_configuration.length + ' informazioni da configurare' : ''), 'muted small'));
+  const actions = element('div', undefined, 'actions');
+  const add = (label, cls, fn) => {
+    const b = element('button', label, cls);
+    b.type = 'button';
+    b.onclick = fn;
+    actions.append(b);
+  };
+  if (w.status === 'chosen' || w.status === 'proposed') {
+    add('Inizia', 'primary small', () => startWorkout({ planned_session_id: w.planned_session_id, session_id: w.session_id, date: day.date }));
+    add('Apri', 'secondary small', () => openDayWorkout(w));
+    add('Salta', 'ghost small', async () => {
+      try {
+        renderDay(await api('workouts/skip', 'POST', { planned_session_id: w.planned_session_id }));
+        refreshWeek();
+      } catch (e) {
+        message(e.message);
+      }
+    });
+  } else add(w.status === 'in_progress' ? 'Continua' : 'Vedi', w.status === 'in_progress' ? 'primary small' : 'secondary small', () => openDayWorkout(w));
+  box.append(actions);
 }
 
 // ---------- Settimana ----------
@@ -365,6 +387,7 @@ function renderWeek(week) {
         dot.title = (mealMeta[m.slot]?.[0] || m.slot) + ': ' + (stateMeta[m.state]?.[0] || m.state);
         dots.append(dot);
       });
+      if (d.workout) b.append(element('span', '🏋', 'wd-workout ' + (workoutStatus[d.workout]?.[1] || '')));
       b.append(dots, element('span', d.kcal_eaten != null ? fmt0(d.kcal_eaten) + ' kcal' : d.kcal_planned != null ? fmt0(d.kcal_planned) + ' prev.' : '—', 'wd-kcal'));
       b.onclick = () => {
         homeDate = d.date;

@@ -475,6 +475,7 @@ $('generate').onclick = async () => {
 const pageMeta = {
   home: ['Diario', 'Oggi', 'Pasti e attività della giornata, la settimana e i progressi.'],
   planning: ['Dalle possibilità al piano', 'Piano', 'Genera la settimana e confronta le alternative proposte.'],
+  workout: ['Palestra', 'Allenamento', 'Sessioni della settimana, esecuzione e registro delle serie.'],
   progress: ['Andamento', 'Progressi', 'Misure, statistiche e dati importati da Apple Salute.'],
   recipes: ['Cucina', 'Ricette', 'Sfoglia il catalogo, controlla la compatibilità con la dieta, adatta un piatto.'],
   profile: ['Impostazioni', 'Il mio profilo', 'Obiettivi, abitudini e preferenze che guidano i calcoli.'],
@@ -483,7 +484,7 @@ document.querySelectorAll('[data-page]').forEach(
   (button) =>
     (button.onclick = () => {
       const page = button.dataset.page;
-      ['home', 'planning', 'recipes', 'progress', 'profile'].forEach((id) => ($(id).hidden = id !== page));
+      ['home', 'planning', 'workout', 'recipes', 'progress', 'profile'].forEach((id) => ($(id).hidden = id !== page));
       document.querySelectorAll('[data-page]').forEach((b) => b.classList.toggle('active', b === button));
       const meta = pageMeta[page];
       $('page-eyebrow').textContent = meta[0];
@@ -492,6 +493,7 @@ document.querySelectorAll('[data-page]').forEach(
       window.scrollTo({ top: 0 });
       if (page === 'home') loadHome().catch((e) => message(e.message));
       if (page === 'planning') preparePlanning();
+      if (page === 'workout') loadWorkout().catch((e) => message(e.message));
       if (page === 'progress') Promise.all([loadProgress(), loadHealth()]).catch((e) => message(e.message));
       if (page === 'recipes') Promise.all([loadRecipes(), loadRecipeSolver()]).catch((e) => message(e.message));
     }),
