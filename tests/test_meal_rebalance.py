@@ -104,6 +104,16 @@ class RebalanceAPI(base.DiaryTests):
         self.assertIn(result['status'],('partial','unchanged'),result)
         self.assertLessEqual(result['budget']['correction_kcal'],500.001)
 
+    def test_optional_afternoon_snack_does_not_make_full_day_incomplete(self):
+        self.profile['daily_meals']['afternoon_fruit']=False
+        with self.app.connect() as db:
+            db.execute('UPDATE users SET profile=? WHERE id=?',(json.dumps(self.profile),self.user))
+            db.execute("DELETE FROM planned_meal WHERE slot='afternoon_snack' AND week_plan_id IN (SELECT id FROM week_plan WHERE user_id=?)",(self.user,))
+        result=self.proposal()['result']
+        self.assertEqual(result['status'],'partial',result)
+        self.assertIsNotNone(result['budget']['reference_week_kcal'])
+        self.assertTrue(all('afternoon_snack' not in [c['slot'] for c in d['changes']] for d in result['days']))
+
     def test_missing_preset_refused_before_solver_and_catalog_explicit(self):
         cat=self.client.get('/api/rebalance/presets').json()
         self.assertTrue(all(isinstance(size['available'],bool) for preset in cat['presets'].values() for size in preset['sizes'].values()))

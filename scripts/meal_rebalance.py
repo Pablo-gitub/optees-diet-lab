@@ -81,6 +81,7 @@ async def preview(session,profile,meal,snap,make_config,foods):
     reference_known=True
     for view in snap['views']:
         for slot in view['meals']:
+            if slot['slot']=='afternoon_snack' and not profile.get('daily_meals',{}).get('afternoon_fruit',True) and slot['planned'] is None and slot['state']=='unknown':continue
             if slot.get('consumed_estimate'):
                 for k in reference:reference[k]+=slot['consumed_estimate']['nutrients']['kcal'][k]
             else:
@@ -112,7 +113,8 @@ async def preview(session,profile,meal,snap,make_config,foods):
         date=view['date'];ctx=snap['context'].get(date,{});energy=ctx.get('progress_forecast',{}).get('energy_scenarios',ctx.get('energy_scenarios',{}))
         low=energy.get('consumption_kcal',{}).get('low')
         if energy.get('status')!='available' or not isinstance(low,(int,float)) or not math.isfinite(low) or low<=0:return unavailable('Manca lo scenario basso del consumo da Salute per '+date+'.')
-        if not all(m['planned'] for m in view['meals']):return unavailable('Il piano di '+date+' non copre tutti i pasti.')
+        required=set(diary.SLOTS)-({'afternoon_snack'} if not profile['daily_meals']['afternoon_fruit'] else set())
+        if not all(m['planned'] for m in view['meals'] if m['slot'] in required):return unavailable('Il piano di '+date+' non copre tutti i pasti previsti dal profilo.')
         index=next((m['planned']['day_index'] for m in view['meals'] if m['planned']),0)
         cfg=copy.deepcopy(make_config(profile,index));cfg.update(mode=view['mode'],day_index=index)
         targets={n:copy.deepcopy(view['targets'][n.replace('_100g','')]) for n in NUTRIENTS}
@@ -123,9 +125,9 @@ async def preview(session,profile,meal,snap,make_config,foods):
         for spec in targets.values():spec['target']=max(spec['min'],min(spec['target'],spec['max']))
         cfg['daily_meals']['targets']=targets;configs[date]=cfg
         for m in view['meals']:
-            if m['state']!='unknown' or m['planned']['locked']:
+            if m['state']!='unknown' or m['planned'] and m['planned']['locked']:
                 if m.get('consumed_estimate'):return unavailable('Un pasto futuro stimato a intervallo richiede una verifica manuale.')
-                items=m['eaten']['items'] if m['eaten'] is not None else m['planned']['items']
+                items=m['eaten']['items'] if m['eaten'] is not None else m['planned']['items'] if m['planned'] else []
                 locks.append(dict(date=date,slot=m['slot'],items=[{k:x[k] for k in ('food','grams','units') if k in x} for x in items]))
     # weekly_model calls make_config for actual calendar offsets; use the date to select its snapshot.
     start=dt.date.fromisoformat(snap['start'])
@@ -155,7 +157,7 @@ async def preview(session,profile,meal,snap,make_config,foods):
         changes=[]
         for m in by_date[date]['meals']:
             selections=[s for s in day['selections'] if s['meal']==m['slot']]
-            if m['state']=='unknown' and not m['planned']['locked']:changes.append(dict(slot=m['slot'],before=m['planned']['items'],after=selections))
+            if m['planned'] and m['state']=='unknown' and not m['planned']['locked']:changes.append(dict(slot=m['slot'],before=m['planned']['items'],after=selections))
         response['days'].append(dict(date=date,before_kcal=before,after_kcal=after,reduction_kcal=round(reduction,3),changes=changes,nutrients=day['nutrients'],constraint_report=day['constraint_report']))
         correction+=reduction
     response['budget'].update(correction_kcal=round(correction,3),remaining_excess_kcal={k:round(v-correction,3) for k,v in excess.items()})

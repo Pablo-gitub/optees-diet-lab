@@ -42,7 +42,7 @@ Il lavoro di Gemini viene sempre **rivisto** da Claude (dati e media) o da Codex
 | T9 | Claude | 4.3 · 5.3 (UI su dati demo) | **fatto** — 4.3 `c732350`; 5.3 (vedi riga 5.3); Gemini 5.4 rivisto `21c128a` |
 | T10 | Codex | 5.1 · 5.2 | **fatto** — B6 `72f9660`, B7 `882f5cf`, 5.1 `dc4df6b`, `824daba`; Gemini 5.4 separato |
 | T11 | Claude | revisione 5.x · 6.3 (UI sgarro) | Gemini: 6.4 |
-| T12 | Codex | 6.2 → 6.1 → **M2** | **backend fatto** — B9/B10 chiusi, 236 test verdi; UI 6.3 ancora a Claude |
+| T12 | Codex | 6.2 → 6.1 → **M2** | **backend fatto** — B9/B10 chiusi, 237 test verdi; UI 6.3 ancora a Claude |
 | T13 | Claude | 7.1 · 7.3 | Gemini: 7.4 · QA visiva |
 | T14 | Codex | 7.2 → **M3** | — |
 
@@ -118,7 +118,7 @@ Consegna preparata per i passi 0.3–0.5: [prompt per Gemini](gemini-handoff-pha
 
 | # | Passo | Chi | Dim. | Fatto quando | Stato |
 |---|---|---|---|---|---|
-| 5.1 | Trend del peso (media mobile esponenziale, poi filtro di Kalman semplice); aderenza dieta/allenamento; confronto atteso vs osservato separando «piano non seguito» da «risposta diversa dal previsto» | Codex | M | test su serie sintetiche con rumore | **fatto** — `dc4df6b`; 209 test unittest verdi; EMA/Kalman, copertura, aderenza, confronto e check-in; [consegna backend](backend-handoff-progress.md) |
+| 5.1 | Trend del peso (EMA separata, Kalman diretto sulle mediane giornaliere dopo B9); aderenza dieta/allenamento; confronto atteso vs osservato separando «piano non seguito» da «risposta diversa dal previsto» | Codex | M | test su serie sintetiche con rumore | **fatto** — `dc4df6b`; 209 test unittest verdi; EMA/Kalman, copertura, aderenza, confronto e check-in; [consegna backend](backend-handoff-progress.md) |
 | 5.2 | Proposta di ricalibrazione: dispendio personale stimato con limiti di sicurezza fissi (variazione massima settimanale, minimi nutrizionali); l'utente approva | Codex | M | nessuna modifica automatica dei target; limiti mai superati | **fatto** — `824daba`; 221 test unittest verdi; proposte motivate, limiti fissi, decisioni CSRF atomiche e conflitti 409; [consegna frontend 5.3](backend-handoff-progress.md) |
 | 5.3 | UI **Progressi**: inserimento peso del lunedì, grafico reale vs atteso, aderenza, proposta di ricalibrazione con motivazione | Claude | M | verifica visiva; grafici leggibili in chiaro e scuro | **fatto** — check-in del lunedì con analisi della settimana; grafico SVG pesate + andamento filtrato + peso atteso per settimana (fasce, mai collegate); settimane con aderenza dieta/allenamento e confronto in chiaro; proposta di ricalibrazione con prima/dopo, motivazione, consumo stimato con intervallo, limiti e Approva/Non ora; cronologia. Piano: bilancio e obiettivi per tipo di giornata salvati nel profilo. Verificato su dati sintetici (proposta +90 kcal limitata da +466, approvazione 1800→1890), telefono e tema scuro |
 | 5.4 | Guida all'aggiornamento periodico dell'export Apple Salute/Withings e controllo della copertura | Gemini | S | `docs/apple-health-import.md` aggiornato | **fatto** — guida di Gemini rivista da Claude: importazione il lunedì mattina dopo la pesata (non la domenica), soglie verificate nel codice |
@@ -127,8 +127,8 @@ Consegna preparata per i passi 0.3–0.5: [prompt per Gemini](gemini-handoff-pha
 
 | # | Passo | Chi | Dim. | Fatto quando | Stato |
 |---|---|---|---|---|---|
-| 6.1 | Bandit contestuale sui bracci-caratteristica con ricompensa da voto + aderenza (S6 completo) | Codex | M | test: solo piani provati; contesti separati | **fatto** — commit di questo passo; 236 test verdi; ricompensa voto + aderenza, provenienza delle applicazioni, UCB1 contestuale per dieta e protocolli; [consegna backend](backend-handoff-bandit.md) |
-| 6.2 | **Ribilanciamento**: «Ho sgarrato» → stima a intervallo del pasto → riottimizzazione dei giorni rimanenti con il consumato bloccato; deficit giornaliero massimo, proteine protette, correzione distribuita; palestra solo come opzione aggiuntiva | Codex | L | la settimana rientra nei confini quando possibile; altrimenti lo dice, senza punire | **fatto** — `d0d701a`; 228 test verdi; anteprima Optees senza scritture, limiti fissi, consumato bloccato, azioni CSRF/409; [contratto 6.3](backend-handoff-rebalance.md) |
+| 6.1 | Bandit contestuale sui bracci-caratteristica con ricompensa da voto + aderenza (S6 completo) | Codex | M | test: solo piani provati; contesti separati | **fatto** — `3f78cfc`; 236 test verdi; ricompensa voto + aderenza, provenienza delle applicazioni, UCB1 contestuale per dieta e protocolli; [consegna backend](backend-handoff-bandit.md) |
+| 6.2 | **Ribilanciamento**: «Ho sgarrato» → stima a intervallo del pasto → riottimizzazione dei giorni rimanenti con il consumato bloccato; deficit giornaliero massimo, proteine protette, correzione distribuita; palestra solo come opzione aggiuntiva | Codex | L | la settimana rientra nei confini quando possibile; altrimenti lo dice, senza punire | **fatto** — `d0d701a`; 228 test verdi alla chiusura, 237 nella verifica finale (anche spuntino pomeridiano facoltativo disattivato); anteprima Optees senza scritture, limiti fissi, consumato bloccato, azioni CSRF/409; [contratto 6.3](backend-handoff-rebalance.md) |
 | 6.3 | UI sgarro: scelta tipo (pizzeria, ristorante, aperitivo, dolce, libero) e taglia, impatto sul budget, anteprima del diff sui giorni successivi, Accetta/Modifica/Non compensare; tono non colpevolizzante | Claude | M | flusso completo in meno di 4 tocchi | da fare |
 | 6.4 | Catalogo preset degli sgarri con intervalli di kcal e macro e fonti citate | Gemini | S | `config/meal-presets.json` con fonti; rivisto da Claude | **fatto con riserva** — 53 fonti CREA verificate; sushi e kebab senza fonte; date di consultazione McDonald's mancanti |
 
@@ -160,3 +160,5 @@ Riconoscimento dei pasti da foto, sincronizzazione live con Withings/HealthKit (
 | B9 | **fatto** — `7a4e12e` | 222 test verdi; Kalman diretto sulle mediane, trend settimanale con regressione, parametri progress-v2 |
 
 | B10 | **fatto** — `919e014` | 222 test verdi; riepilogo del lunedì sull’ultima settimana conclusa, week_start esplicito nei tre riquadri |
+
+Verifica finale T12 (2026-10-05): **237 test unittest verdi**, compresa anteprima HTTP con Optees reale e database identico prima/dopo. B9, B10, 6.2 e 6.1 hanno commit distinti; ulteriore regressione del ribilanciamento corretta per lo spuntino facoltativo. `web/static/` intatto. UI 6.3 da completare con [contratto ribilanciamento](backend-handoff-rebalance.md); [bandit v2](backend-handoff-bandit.md). Le modifiche concorrenti Gemini a preset e report restano fuori dai commit backend.
