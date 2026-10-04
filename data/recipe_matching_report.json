@@ -1,14 +1,14 @@
 {
   "total_recipes": 834,
   "total_ingredient_occurrences": 7843,
-  "total_canonical_groups": 1019,
+  "total_canonical_groups": 990,
   "ingredient_statuses": {
-    "missing": 3034,
-    "ambiguous": 973,
-    "approved": 875,
-    "proposed_exact": 2330,
-    "proposed_proxy": 587,
-    "needs_review": 44
+    "missing": 2707,
+    "ambiguous": 1039,
+    "approved": 999,
+    "proposed_exact": 2344,
+    "proposed_proxy": 593,
+    "needs_review": 161
   },
   "ingredient_quantities": {
     "resolved": 4503,
@@ -16,15 +16,15 @@
     "needs_review": 2425
   },
   "canonical_group_statuses": {
-    "ambiguous": 11,
-    "approved": 6,
-    "proposed_proxy": 9,
-    "proposed_exact": 52,
-    "missing": 941
+    "ambiguous": 19,
+    "approved": 7,
+    "proposed_proxy": 13,
+    "proposed_exact": 56,
+    "missing": 895
   },
-  "recipes_all_associations_approved": 1,
-  "recipes_all_associations_proposed": 18,
+  "recipes_all_associations_approved": 24,
+  "recipes_all_associations_proposed": 42,
   "recipes_all_quantities_resolved": 300,
-  "recipes_solver_ready": 1,
-  "recipes_pending_review": 833
+  "recipes_solver_ready": 24,
+  "recipes_pending_review": 810
 }

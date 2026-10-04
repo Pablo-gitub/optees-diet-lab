@@ -33,12 +33,30 @@ def formulate_recipe(recipe,config,lookup=food_lookup):
     for ingredient in recipe['ingredients']:
         base=number(ingredient['grams_per_reference_portion'],.001,3000,'peso ingrediente')
         key=ingredient['key'];selected=[];amounts=[]
-        for candidate in ingredient['candidates']:
+        candidates=ingredient['candidates']
+        # Prefer usable branded alternatives per ingredient; preserve generic fallback
+        # when brands are disabled or their nutrition/state cannot be used.
+        cache={}
+        if config.get('prefer_branded',recipe.get('product_policy')=='branded_first'):
+            branded=[]
+            for candidate in candidates:
+                if candidate['source']!='Open Food Facts':continue
+                identifier=candidate['id']
+                if 'Open Food Facts:'+identifier in disabled:continue
+                if candidate.get('reviewed') is not True or candidate.get('state_checked') is not True:
+                    raise ValueError('Associazione non verificata: '+key)
+                food=lookup('Open Food Facts',identifier);cache[identifier]=food
+                if food.get('nutrient_basis','per_100_g')!='per_100_g' or food.get('source_quality_errors') or any(f.startswith(('implausible','inconsistent')) for f in food.get('quality_flags',[])):continue
+                try:valid=all(math.isfinite(float(food[col])) and float(food[col])>=0 for col in NUTRIENTS.values())
+                except (ValueError,TypeError,KeyError):valid=False
+                if valid:branded.append(candidate)
+            if branded:candidates=branded
+        for candidate in candidates:
             if candidate.get('reviewed') is not True or candidate.get('state_checked') is not True:
                 raise ValueError('Associazione non verificata: '+key)
             source=candidate['source'];identifier=candidate['id']
             if (source=='CREA' and identifier in excluded) or source+':'+identifier in disabled:continue
-            food=lookup(source,identifier)
+            food=({'name':'Acqua pura','nutrient_basis':'per_100_g',**{col:0. for col in NUTRIENTS.values()}} if source=='water' and identifier=='water' else (cache[identifier] if source=='Open Food Facts' and identifier in cache else lookup(source,identifier)))
             if food.get('nutrient_basis','per_100_g')!='per_100_g' or food.get('source_quality_errors') or any(f.startswith(('implausible','inconsistent')) for f in food.get('quality_flags',[])):
                 continue
             values={}
@@ -92,7 +110,7 @@ def values_verified(problem,result):
 
 
 def decode_recipe(recipe,config,problem,choices,result):
-    record=dict(recipe_id=recipe['id'],title=recipe['title'],status=result['mathematical_status'],scope='single_recipe',diet_eligibility='not_checked',flexibility=config.get('flexibility',.1),targets=config['targets'],selections=[],nutrients={},note='Pesi degli ingredienti, non peso finale dopo cottura. Tutti gli ingredienti sono conteggiati come consumati. Gli abbinamenti delle diete personali non sono verificati.')
+    record=dict(recipe_id=recipe['id'],title=recipe['title'],status=result['mathematical_status'],scope='single_recipe',diet_eligibility='not_checked',flexibility=config.get('flexibility',.1),targets=config['targets'],adaptation_notes=recipe.get('adaptation_notes',[]),source_url=recipe.get('source_url'),license=recipe.get('license'),selections=[],nutrients={},note='Pesi degli ingredienti, non peso finale dopo cottura. Tutti gli ingredienti sono conteggiati come consumati. Gli abbinamenti delle diete personali non sono verificati.')
     if record['status'] not in ['optimal','feasible']:return record
     values=values_verified(problem,result);scale=values[0];record['portion_scale']=scale
     totals={n:0. for n in NUTRIENTS}

@@ -1,0 +1,1133 @@
+{
+  "scope": "Reference-derived test bounds, not personal diet eligibility",
+  "recipes": [
+    {
+      "recipe_id": "demo:pasta-pomodoro",
+      "status": "optimal",
+      "branded_ingredients": 2,
+      "nutrients": {
+        "kcal": 428.4,
+        "protein_g": 14.555,
+        "fat_g": 12.62,
+        "carbs_g": 59.91
+      },
+      "selections": [
+        {
+          "key": "pasta",
+          "ingredient": "Pasta secca",
+          "source": "Open Food Facts",
+          "id": "8004690611517",
+          "food": "Spaghetto quadrato. - Integrale",
+          "brands": "La Molisana",
+          "state": "secca, prima della cottura",
+          "source_url": "https://world.openfoodfacts.org/product/8004690611517",
+          "grams": 80.0,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "tomato",
+          "ingredient": "Passata di pomodoro",
+          "source": "Open Food Facts",
+          "id": "8005110630217",
+          "food": "Passata di pomodoro",
+          "brands": "Mutti",
+          "state": "passata, peso prima della cottura",
+          "source_url": "https://world.openfoodfacts.org/product/8005110630217",
+          "grams": 150.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "oil",
+          "ingredient": "Olio extravergine di oliva",
+          "source": "CREA",
+          "id": "009210",
+          "food": "Olio di oliva extra vergine",
+          "brands": "",
+          "state": "olio aggiunto, interamente consumato",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "grams": 10.0,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "basil",
+          "ingredient": "Basilico fresco",
+          "source": "CREA",
+          "id": "006800",
+          "food": "Basilico, fresco",
+          "brands": "",
+          "state": "fresco, parte edibile",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006800",
+          "grams": 5.0,
+          "proportion_change_percent": -0.0
+        }
+      ]
+    },
+    {
+      "recipe_id": "foodose:R315",
+      "status": "optimal",
+      "branded_ingredients": 1,
+      "nutrients": {
+        "kcal": 478.6545,
+        "protein_g": 18.66,
+        "fat_g": 22.7105,
+        "carbs_g": 52.81
+      },
+      "selections": [
+        {
+          "key": "1",
+          "ingredient": "tomatoes",
+          "source": "CREA",
+          "id": "006610",
+          "food": "Pomodori, maturi, freschi",
+          "brands": "",
+          "state": "fresco, parte edibile",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006610",
+          "grams": 100.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "2",
+          "ingredient": "mozzarella",
+          "source": "Open Food Facts",
+          "id": "8000430132410",
+          "food": "Mozzarella - Santa Lucia",
+          "brands": "Galbani Santa Lucia",
+          "state": "mozzarella pronta al consumo",
+          "source_url": "https://world.openfoodfacts.org/product/8000430132410",
+          "grams": 62.5,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "3",
+          "ingredient": "bread rolls",
+          "source": "CREA",
+          "id": "000530",
+          "food": "Pane bianco",
+          "brands": "",
+          "state": "pane pronto al consumo",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000530",
+          "grams": 80.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "4",
+          "ingredient": "black olives",
+          "source": "CREA",
+          "id": "008810",
+          "food": "Olive, nere",
+          "brands": "",
+          "state": "olive nere denocciolate, parte edibile",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008810",
+          "grams": 25.0,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "5",
+          "ingredient": "fresh basil",
+          "source": "CREA",
+          "id": "006800",
+          "food": "Basilico, fresco",
+          "brands": "",
+          "state": "fresco, parte edibile",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006800",
+          "grams": 5.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "6",
+          "ingredient": "olive oil",
+          "source": "CREA",
+          "id": "009210",
+          "food": "Olio di oliva extra vergine",
+          "brands": "",
+          "state": "olio interamente consumato",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "grams": 4.55,
+          "proportion_change_percent": -0.0
+        }
+      ]
+    },
+    {
+      "recipe_id": "foodose:R048",
+      "status": "optimal",
+      "branded_ingredients": 3,
+      "nutrients": {
+        "kcal": 263.9545,
+        "protein_g": 20.7275,
+        "fat_g": 10.8155,
+        "carbs_g": 17.78
+      },
+      "selections": [
+        {
+          "key": "1",
+          "ingredient": "aubergine",
+          "source": "CREA",
+          "id": "005500",
+          "food": "Melanzane, crude",
+          "brands": "",
+          "state": "Melanzane, crude",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005500",
+          "grams": 200.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "2",
+          "ingredient": "olive oil",
+          "source": "CREA",
+          "id": "009210",
+          "food": "Olio di oliva extra vergine",
+          "brands": "",
+          "state": "Olio di oliva extra vergine",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "grams": 4.55,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "3",
+          "ingredient": "passata",
+          "source": "Open Food Facts",
+          "id": "8005110630217",
+          "food": "Passata di pomodoro",
+          "brands": "Mutti",
+          "state": "Pomodori, passata",
+          "source_url": "https://world.openfoodfacts.org/product/8005110630217",
+          "grams": 150.0,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "4",
+          "ingredient": "cottage cheese",
+          "source": "Open Food Facts",
+          "id": "0865239599875",
+          "food": "Fiocchi di latte",
+          "brands": "Vita well",
+          "state": "Fiocchi di latte",
+          "source_url": "https://world.openfoodfacts.org/product/0865239599875",
+          "grams": 100.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "5",
+          "ingredient": "fresh basil",
+          "source": "CREA",
+          "id": "006800",
+          "food": "Basilico, fresco",
+          "brands": "",
+          "state": "Basilico, fresco",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006800",
+          "grams": 2.5,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "6",
+          "ingredient": "mozzarella",
+          "source": "Open Food Facts",
+          "id": "8000430132410",
+          "food": "Mozzarella - Santa Lucia",
+          "brands": "Galbani Santa Lucia",
+          "state": "Mozzarella di vacca",
+          "source_url": "https://world.openfoodfacts.org/product/8000430132410",
+          "grams": 25.0,
+          "proportion_change_percent": -0.0
+        }
+      ]
+    },
+    {
+      "recipe_id": "foodose:R054",
+      "status": "optimal",
+      "branded_ingredients": 4,
+      "nutrients": {
+        "kcal": 436.577,
+        "protein_g": 20.6,
+        "fat_g": 16.6227,
+        "carbs_g": 49.375
+      },
+      "selections": [
+        {
+          "key": "1",
+          "ingredient": "dried lasagne sheets",
+          "source": "Open Food Facts",
+          "id": "8076809523738",
+          "food": "Lasagne Platten",
+          "brands": "Barilla",
+          "state": "Pasta di semola",
+          "source_url": "https://world.openfoodfacts.org/product/8076809523738",
+          "grams": 50.0,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "2",
+          "ingredient": "olive oil",
+          "source": "CREA",
+          "id": "009210",
+          "food": "Olio di oliva extra vergine",
+          "brands": "",
+          "state": "Olio di oliva extra vergine",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "grams": 2.3,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "3",
+          "ingredient": "courgette",
+          "source": "CREA",
+          "id": "005730",
+          "food": "Zucchine, crude",
+          "brands": "",
+          "state": "Zucchine, crude",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005730",
+          "grams": 100.0,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "4",
+          "ingredient": "ricotta",
+          "source": "Open Food Facts",
+          "id": "8000430193015",
+          "food": "Ricotta",
+          "brands": "Galbani, Santa Lucia",
+          "state": "Ricotta di vacca",
+          "source_url": "https://world.openfoodfacts.org/product/8000430193015",
+          "grams": 90.0,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "5",
+          "ingredient": "passata",
+          "source": "Open Food Facts",
+          "id": "8005110630217",
+          "food": "Passata di pomodoro",
+          "brands": "Mutti",
+          "state": "Pomodori, passata",
+          "source_url": "https://world.openfoodfacts.org/product/8005110630217",
+          "grams": 125.0,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "6",
+          "ingredient": "mozzarella",
+          "source": "Open Food Facts",
+          "id": "8000430132410",
+          "food": "Mozzarella - Santa Lucia",
+          "brands": "Galbani Santa Lucia",
+          "state": "Mozzarella di vacca",
+          "source_url": "https://world.openfoodfacts.org/product/8000430132410",
+          "grams": 20.0,
+          "proportion_change_percent": 0.0
+        }
+      ]
+    },
+    {
+      "recipe_id": "foodose:R270",
+      "status": "optimal",
+      "branded_ingredients": 2,
+      "nutrients": {
+        "kcal": 554.2545,
+        "protein_g": 22.515,
+        "fat_g": 13.9654,
+        "carbs_g": 76.4
+      },
+      "selections": [
+        {
+          "key": "1",
+          "ingredient": "walnuts",
+          "source": "CREA",
+          "id": "008570",
+          "food": "Noci, secche",
+          "brands": "",
+          "state": "Noci, secche",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008570",
+          "grams": 10.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "2",
+          "ingredient": "onion",
+          "source": "CREA",
+          "id": "005300",
+          "food": "Cipolle, crude",
+          "brands": "",
+          "state": "Cipolle, crude",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005300",
+          "grams": 60.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "3",
+          "ingredient": "carrot",
+          "source": "CREA",
+          "id": "005150",
+          "food": "Carote, crude",
+          "brands": "",
+          "state": "Carote, crude",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005150",
+          "grams": 60.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "4",
+          "ingredient": "garlic",
+          "source": "CREA",
+          "id": "005000",
+          "food": "Aglio",
+          "brands": "",
+          "state": "Aglio",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005000",
+          "grams": 5.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "5",
+          "ingredient": "olive oil",
+          "source": "CREA",
+          "id": "009210",
+          "food": "Olio di oliva extra vergine",
+          "brands": "",
+          "state": "Olio di oliva extra vergine",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "grams": 4.55,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "6",
+          "ingredient": "cooked lentils",
+          "source": "CREA",
+          "id": "004505",
+          "food": "Lenticchie, secche, cotte, bollite",
+          "brands": "",
+          "state": "Lenticchie, secche, cotte, bollite",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004505",
+          "grams": 150.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "7",
+          "ingredient": "passata",
+          "source": "Open Food Facts",
+          "id": "8005110630217",
+          "food": "Passata di pomodoro",
+          "brands": "Mutti",
+          "state": "Pomodori, passata",
+          "source_url": "https://world.openfoodfacts.org/product/8005110630217",
+          "grams": 150.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "8",
+          "ingredient": "spaghetti",
+          "source": "Open Food Facts",
+          "id": "8076800195057",
+          "food": "Spaghetti N°5",
+          "brands": "Barilla",
+          "state": "Pasta di semola",
+          "source_url": "https://world.openfoodfacts.org/product/8076800195057",
+          "grams": 50.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "9",
+          "ingredient": "fresh basil",
+          "source": "CREA",
+          "id": "006800",
+          "food": "Basilico, fresco",
+          "brands": "",
+          "state": "Basilico, fresco",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006800",
+          "grams": 5.0,
+          "proportion_change_percent": 0.0
+        }
+      ]
+    },
+    {
+      "recipe_id": "foodose:R068",
+      "status": "optimal",
+      "branded_ingredients": 3,
+      "nutrients": {
+        "kcal": 515.1895,
+        "protein_g": 23.0525,
+        "fat_g": 11.7184,
+        "carbs_g": 71.801
+      },
+      "selections": [
+        {
+          "key": "1",
+          "ingredient": "olive oil",
+          "source": "CREA",
+          "id": "009210",
+          "food": "Olio di oliva extra vergine",
+          "brands": "",
+          "state": "Olio di oliva extra vergine",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "grams": 2.3,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "2",
+          "ingredient": "mushrooms",
+          "source": "CREA",
+          "id": "006000",
+          "food": "Funghi coltivati, prataioli, crudi",
+          "brands": "",
+          "state": "Funghi coltivati, prataioli, crudi",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006000",
+          "grams": 75.0,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "3",
+          "ingredient": "walnuts",
+          "source": "CREA",
+          "id": "008570",
+          "food": "Noci, secche",
+          "brands": "",
+          "state": "Noci, secche",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008570",
+          "grams": 10.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "4",
+          "ingredient": "cooked lentils",
+          "source": "CREA",
+          "id": "004505",
+          "food": "Lenticchie, secche, cotte, bollite",
+          "brands": "",
+          "state": "Lenticchie, secche, cotte, bollite",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004505",
+          "grams": 125.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "5",
+          "ingredient": "passata",
+          "source": "Open Food Facts",
+          "id": "8005110630217",
+          "food": "Passata di pomodoro",
+          "brands": "Mutti",
+          "state": "Pomodori, passata",
+          "source_url": "https://world.openfoodfacts.org/product/8005110630217",
+          "grams": 150.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "6",
+          "ingredient": "dried oregano",
+          "source": "Open Food Facts",
+          "id": "8004708082094",
+          "food": "Origano foglie",
+          "brands": "Drogheria & Alimentari, La Drogheria",
+          "state": "Origano foglie",
+          "source_url": "https://world.openfoodfacts.org/product/8004708082094",
+          "grams": 0.25,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "7",
+          "ingredient": "pasta",
+          "source": "Open Food Facts",
+          "id": "8076800195057",
+          "food": "Spaghetti N°5",
+          "brands": "Barilla",
+          "state": "Pasta di semola",
+          "source_url": "https://world.openfoodfacts.org/product/8076800195057",
+          "grams": 60.0,
+          "proportion_change_percent": 0.0
+        }
+      ]
+    },
+    {
+      "recipe_id": "foodose:R326",
+      "status": "optimal",
+      "branded_ingredients": 4,
+      "nutrients": {
+        "kcal": 547.8045,
+        "protein_g": 23.855,
+        "fat_g": 19.5929,
+        "carbs_g": 68.045
+      },
+      "selections": [
+        {
+          "key": "1",
+          "ingredient": "potatoes",
+          "source": "CREA",
+          "id": "006500",
+          "food": "Patate, crude",
+          "brands": "",
+          "state": "Patate, crude",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006500",
+          "grams": 175.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "2",
+          "ingredient": "ricotta",
+          "source": "Open Food Facts",
+          "id": "8000430193015",
+          "food": "Ricotta",
+          "brands": "Galbani, Santa Lucia",
+          "state": "Ricotta di vacca",
+          "source_url": "https://world.openfoodfacts.org/product/8000430193015",
+          "grams": 75.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "3",
+          "ingredient": "eggs",
+          "source": "Open Food Facts",
+          "id": "8002330008048",
+          "food": "10 Uova fresche medie da allevamento a terra",
+          "brands": "Esselunga, Smart, smart",
+          "state": "10 Uova fresche medie da allevamento a terra",
+          "source_url": "https://world.openfoodfacts.org/product/8002330008048",
+          "grams": 25.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "4",
+          "ingredient": "plain flour",
+          "source": "CREA",
+          "id": "000220",
+          "food": "Farina di frumento, tipo 00",
+          "brands": "",
+          "state": "Farina di frumento, tipo 00",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000220",
+          "grams": 35.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "5",
+          "ingredient": "passata",
+          "source": "Open Food Facts",
+          "id": "8005110630217",
+          "food": "Passata di pomodoro",
+          "brands": "Mutti",
+          "state": "Pomodori, passata",
+          "source_url": "https://world.openfoodfacts.org/product/8005110630217",
+          "grams": 200.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "6",
+          "ingredient": "olive oil",
+          "source": "CREA",
+          "id": "009210",
+          "food": "Olio di oliva extra vergine",
+          "brands": "",
+          "state": "Olio di oliva extra vergine",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "grams": 4.55,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "7",
+          "ingredient": "fresh basil",
+          "source": "CREA",
+          "id": "006800",
+          "food": "Basilico, fresco",
+          "brands": "",
+          "state": "Basilico, fresco",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006800",
+          "grams": 5.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "8",
+          "ingredient": "Parmesan",
+          "source": "Open Food Facts",
+          "id": "20815004",
+          "food": "Parmesan Parmigiano Reggiano",
+          "brands": "Consorzio Latterie",
+          "state": "Parmesan Parmigiano Reggiano",
+          "source_url": "https://world.openfoodfacts.org/product/20815004",
+          "grams": 12.5,
+          "proportion_change_percent": 0.0
+        }
+      ]
+    },
+    {
+      "recipe_id": "foodose:R039",
+      "status": "optimal",
+      "branded_ingredients": 2,
+      "nutrients": {
+        "kcal": 363.1695,
+        "protein_g": 27.588,
+        "fat_g": 6.0562,
+        "carbs_g": 47.9907
+      },
+      "selections": [
+        {
+          "key": "1",
+          "ingredient": "linguine",
+          "source": "Open Food Facts",
+          "id": "8000139931048",
+          "food": "Linguine",
+          "brands": "Garofalo",
+          "state": "Pasta di semola",
+          "source_url": "https://world.openfoodfacts.org/product/8000139931048",
+          "grams": 60.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "2",
+          "ingredient": "olive oil",
+          "source": "CREA",
+          "id": "009210",
+          "food": "Olio di oliva extra vergine",
+          "brands": "",
+          "state": "Olio di oliva extra vergine",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "grams": 4.55,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "3",
+          "ingredient": "courgette",
+          "source": "CREA",
+          "id": "005730",
+          "food": "Zucchine, crude",
+          "brands": "",
+          "state": "Zucchine, crude",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005730",
+          "grams": 125.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "4",
+          "ingredient": "garlic",
+          "source": "CREA",
+          "id": "005000",
+          "food": "Aglio",
+          "brands": "",
+          "state": "Aglio",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005000",
+          "grams": 2.5,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "5",
+          "ingredient": "raw prawns",
+          "source": "CREA",
+          "id": "128100",
+          "food": "Gamberi",
+          "brands": "",
+          "state": "Gamberi",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/128100",
+          "grams": 125.0,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "6",
+          "ingredient": "parsley",
+          "source": "Open Food Facts",
+          "id": "8051499550332",
+          "food": "Prezzemolo",
+          "brands": "Fruttital srl, Conad",
+          "state": "Prezzemolo",
+          "source_url": "https://world.openfoodfacts.org/product/8051499550332",
+          "grams": 2.5,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "7",
+          "ingredient": "lemon juice",
+          "source": "CREA",
+          "id": "008040",
+          "food": "Limoni, succo",
+          "brands": "",
+          "state": "Limoni, succo",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008040",
+          "grams": 5.15,
+          "proportion_change_percent": -0.0
+        }
+      ]
+    },
+    {
+      "recipe_id": "foodose:R223",
+      "status": "optimal",
+      "branded_ingredients": 2,
+      "nutrients": {
+        "kcal": 423.2065,
+        "protein_g": 28.221,
+        "fat_g": 9.1646,
+        "carbs_g": 55.4427
+      },
+      "selections": [
+        {
+          "key": "1",
+          "ingredient": "spaghetti",
+          "source": "Open Food Facts",
+          "id": "8076800195057",
+          "food": "Spaghetti N°5",
+          "brands": "Barilla",
+          "state": "Pasta di semola",
+          "source_url": "https://world.openfoodfacts.org/product/8076800195057",
+          "grams": 70.0,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "2",
+          "ingredient": "garlic",
+          "source": "CREA",
+          "id": "005000",
+          "food": "Aglio",
+          "brands": "",
+          "state": "Aglio",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005000",
+          "grams": 5.0,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "3",
+          "ingredient": "olive oil",
+          "source": "CREA",
+          "id": "009210",
+          "food": "Olio di oliva extra vergine",
+          "brands": "",
+          "state": "Olio di oliva extra vergine",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "grams": 6.85,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "4",
+          "ingredient": "courgette",
+          "source": "CREA",
+          "id": "005730",
+          "food": "Zucchine, crude",
+          "brands": "",
+          "state": "Zucchine, crude",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005730",
+          "grams": 100.0,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "5",
+          "ingredient": "raw prawns",
+          "source": "CREA",
+          "id": "128100",
+          "food": "Gamberi",
+          "brands": "",
+          "state": "Gamberi",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/128100",
+          "grams": 125.0,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "6",
+          "ingredient": "lemon juice",
+          "source": "CREA",
+          "id": "008040",
+          "food": "Limoni, succo",
+          "brands": "",
+          "state": "Limoni, succo",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008040",
+          "grams": 7.75,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "7",
+          "ingredient": "parsley",
+          "source": "Open Food Facts",
+          "id": "8051499550332",
+          "food": "Prezzemolo",
+          "brands": "Fruttital srl, Conad",
+          "state": "Prezzemolo",
+          "source_url": "https://world.openfoodfacts.org/product/8051499550332",
+          "grams": 5.0,
+          "proportion_change_percent": -0.0
+        }
+      ]
+    },
+    {
+      "recipe_id": "foodose:R100",
+      "status": "optimal",
+      "branded_ingredients": 2,
+      "nutrients": {
+        "kcal": 366.167,
+        "protein_g": 21.8035,
+        "fat_g": 15.8777,
+        "carbs_g": 34.114
+      },
+      "selections": [
+        {
+          "key": "1",
+          "ingredient": "courgette",
+          "source": "CREA",
+          "id": "005730",
+          "food": "Zucchine, crude",
+          "brands": "",
+          "state": "Zucchine, crude",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005730",
+          "grams": 50.0,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "2",
+          "ingredient": "red pepper",
+          "source": "CREA",
+          "id": "005600",
+          "food": "Peperoni, crudi",
+          "brands": "",
+          "state": "Peperoni, crudi",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005600",
+          "grams": 40.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "3",
+          "ingredient": "olive oil",
+          "source": "CREA",
+          "id": "009210",
+          "food": "Olio di oliva extra vergine",
+          "brands": "",
+          "state": "Olio di oliva extra vergine",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "grams": 2.3,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "4",
+          "ingredient": "eggs",
+          "source": "Open Food Facts",
+          "id": "8002330008048",
+          "food": "10 Uova fresche medie da allevamento a terra",
+          "brands": "Esselunga, Smart, smart",
+          "state": "10 Uova fresche medie da allevamento a terra",
+          "source_url": "https://world.openfoodfacts.org/product/8002330008048",
+          "grams": 84.0,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "5",
+          "ingredient": "mozzarella",
+          "source": "Open Food Facts",
+          "id": "8000430132410",
+          "food": "Mozzarella - Santa Lucia",
+          "brands": "Galbani Santa Lucia",
+          "state": "Mozzarella di vacca",
+          "source_url": "https://world.openfoodfacts.org/product/8000430132410",
+          "grams": 25.0,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "6",
+          "ingredient": "wholemeal bread",
+          "source": "CREA",
+          "id": "000550",
+          "food": "Pane di tipo integrale",
+          "brands": "",
+          "state": "Pane di tipo integrale",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000550",
+          "grams": 70.0,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "7",
+          "ingredient": "fresh basil",
+          "source": "CREA",
+          "id": "006800",
+          "food": "Basilico, fresco",
+          "brands": "",
+          "state": "Basilico, fresco",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006800",
+          "grams": 2.5,
+          "proportion_change_percent": -0.0
+        }
+      ]
+    },
+    {
+      "recipe_id": "foodose:R057",
+      "status": "optimal",
+      "branded_ingredients": 2,
+      "nutrients": {
+        "kcal": 427.3395,
+        "protein_g": 24.0725,
+        "fat_g": 12.7584,
+        "carbs_g": 50.116
+      },
+      "selections": [
+        {
+          "key": "1",
+          "ingredient": "olive oil",
+          "source": "CREA",
+          "id": "009210",
+          "food": "Olio di oliva extra vergine",
+          "brands": "",
+          "state": "Olio di oliva extra vergine",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "grams": 2.3,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "2",
+          "ingredient": "onion",
+          "source": "CREA",
+          "id": "005300",
+          "food": "Cipolle, crude",
+          "brands": "",
+          "state": "Cipolle, crude",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005300",
+          "grams": 30.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "3",
+          "ingredient": "tomatoes",
+          "source": "CREA",
+          "id": "006610",
+          "food": "Pomodori, maturi, freschi",
+          "brands": "",
+          "state": "Pomodori, maturi, freschi",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006610",
+          "grams": 150.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "4",
+          "ingredient": "dried oregano",
+          "source": "Open Food Facts",
+          "id": "8004708082094",
+          "food": "Origano foglie",
+          "brands": "Drogheria & Alimentari, La Drogheria",
+          "state": "Origano foglie",
+          "source_url": "https://world.openfoodfacts.org/product/8004708082094",
+          "grams": 0.25,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "5",
+          "ingredient": "cooked lentils",
+          "source": "CREA",
+          "id": "004505",
+          "food": "Lenticchie, secche, cotte, bollite",
+          "brands": "",
+          "state": "Lenticchie, secche, cotte, bollite",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004505",
+          "grams": 150.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "6",
+          "ingredient": "mozzarella",
+          "source": "Open Food Facts",
+          "id": "8000430132410",
+          "food": "Mozzarella - Santa Lucia",
+          "brands": "Galbani Santa Lucia",
+          "state": "Mozzarella di vacca",
+          "source_url": "https://world.openfoodfacts.org/product/8000430132410",
+          "grams": 50.0,
+          "proportion_change_percent": 0.0
+        },
+        {
+          "key": "7",
+          "ingredient": "wholemeal bread",
+          "source": "CREA",
+          "id": "000550",
+          "food": "Pane di tipo integrale",
+          "brands": "",
+          "state": "Pane di tipo integrale",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000550",
+          "grams": 40.0,
+          "proportion_change_percent": 0.0
+        }
+      ]
+    },
+    {
+      "recipe_id": "foodose:R044",
+      "status": "optimal",
+      "branded_ingredients": 3,
+      "nutrients": {
+        "kcal": 464.1895,
+        "protein_g": 39.2125,
+        "fat_g": 12.8234,
+        "carbs_g": 47.786
+      },
+      "selections": [
+        {
+          "key": "1",
+          "ingredient": "pasta",
+          "source": "Open Food Facts",
+          "id": "8076800195057",
+          "food": "Spaghetti N°5",
+          "brands": "Barilla",
+          "state": "Pasta di semola",
+          "source_url": "https://world.openfoodfacts.org/product/8076800195057",
+          "grams": 60.0,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "2",
+          "ingredient": "olive oil",
+          "source": "CREA",
+          "id": "009210",
+          "food": "Olio di oliva extra vergine",
+          "brands": "",
+          "state": "Olio di oliva extra vergine",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "grams": 2.3,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "3",
+          "ingredient": "chopped tomatoes",
+          "source": "CREA",
+          "id": "006680",
+          "food": "Pomodori, pelati in scatola",
+          "brands": "",
+          "state": "Pomodori, pelati in scatola",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006680",
+          "grams": 150.0,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "4",
+          "ingredient": "dried oregano",
+          "source": "Open Food Facts",
+          "id": "8004708082094",
+          "food": "Origano foglie",
+          "brands": "Drogheria & Alimentari, La Drogheria",
+          "state": "Origano foglie",
+          "source_url": "https://world.openfoodfacts.org/product/8004708082094",
+          "grams": 0.25,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "5",
+          "ingredient": "tinned tuna",
+          "source": "CREA",
+          "id": "123550",
+          "food": "Tonno in salamoia, sgocciolato",
+          "brands": "",
+          "state": "Tonno in salamoia, sgocciolato",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/123550",
+          "grams": 100.0,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "6",
+          "ingredient": "black olives",
+          "source": "CREA",
+          "id": "008810",
+          "food": "Olive, nere",
+          "brands": "",
+          "state": "Olive, nere",
+          "source_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008810",
+          "grams": 15.0,
+          "proportion_change_percent": -0.0
+        },
+        {
+          "key": "7",
+          "ingredient": "mozzarella",
+          "source": "Open Food Facts",
+          "id": "8000430132410",
+          "food": "Mozzarella - Santa Lucia",
+          "brands": "Galbani Santa Lucia",
+          "state": "Mozzarella di vacca",
+          "source_url": "https://world.openfoodfacts.org/product/8000430132410",
+          "grams": 25.0,
+          "proportion_change_percent": -0.0
+        }
+      ]
+    }
+  ]
+}

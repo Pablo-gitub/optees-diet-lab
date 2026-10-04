@@ -17,6 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 from plan_diet_day import NUTRIENTS, load_foods, formulate, solve_problem, decode_result
 from plan_recipe import templates as recipe_templates, formulate_recipe, optimize_recipe
+from recipe_diet_compatibility import meal_options
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 DB = Path(os.environ.get('DIET_WEB_DB', ROOT / 'data/personal/web.sqlite'))
@@ -313,6 +314,15 @@ def recipe_solver_options(request: Request):
             r_copy['illustrative_image'] = images[r['id']]
         templates_list.append(r_copy)
     return {'recipes':templates_list,'defaults':json.loads((ROOT/'config/demo-recipe.json').read_text())}
+
+
+@app.get('/api/recipe-diet-options')
+def recipe_diet_options(request: Request, mode: str='free', day_index: int=0, meal: str='lunch'):
+    user=identity(request);profile=json.loads(user['profile'])
+    if mode!='free' and not profile.get('personal_diets'):
+        raise HTTPException(403,'Le diete personali sono disponibili solo nel profilo del proprietario')
+    try:return meal_options(mode,day_index,meal)
+    except (ValueError,KeyError) as e:raise HTTPException(400,str(e))
 
 
 @app.get('/api/recipe-runs')

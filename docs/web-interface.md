@@ -56,10 +56,10 @@ password, recupero accesso o gestione amministrativa dei profili nell'interfacci
 
 Le preferenze di cucina filtrano il catalogo ma non orientano ancora il solver. I nutrienti delle ricette sono quelli dichiarati dalle fonti.
 
-Verifica: 33 test (MILP, autenticazione, CSRF/Origin, isolamento piani/profili,
+Verifica: 60 test (MILP, autenticazione, CSRF/Origin, isolamento piani/profili,
 nessuna pubblicazione dei file personali), controllo sintassi JS, prova reale
 login/generazione con Optees e controllo browser delle schermate.
 
 ## Ottimizzazione della singola ricetta
 
-Nella pagina Ricette si possono adattare due composizioni con associazioni esplicite: pasta al pomodoro dimostrativa e un adattamento foodose del panino mozzarella/pomodoro/olive. Si scelgono prodotti disponibili, intervalli nutrizionali, limite della porzione e flessibilità delle proporzioni. Le prove sono salvate nello storico privato di ogni profilo, separato dai piani. Dettagli e limiti in [recipe-solver.md](recipe-solver.md). La conformità alle due diete personali non è ancora verificata.
+Nella pagina Ricette si possono adattare 25 composizioni con associazioni esplicite: pasta al pomodoro dimostrativa e un adattamento foodose del panino mozzarella/pomodoro/olive. Si scelgono prodotti disponibili, intervalli nutrizionali, limite della porzione e flessibilità delle proporzioni. Le prove sono salvate nello storico privato di ogni profilo, separato dai piani. Dettagli e limiti in [recipe-solver.md](recipe-solver.md). La conformità alle due diete personali non è ancora verificata.

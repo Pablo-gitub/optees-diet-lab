@@ -355,6 +355,61 @@ class RecipeMatchingTests(unittest.TestCase):
         self.assertIsNotNone(calc_result['per_serving']['kcal'])
         self.assertEqual(len(calc_result['blocked']), 0)
 
+    def test_whole_milk_ricotta_is_not_misclassified_as_wholegrain(self):
+        approved=load_approved_mappings(DEFAULT_APPROVED)
+        ing={'key':'4','name':'ricotta','quantity':180,'unit':'g','grams_whole_recipe':180,'source_nutrition_reference':{'description':'Cheese, ricotta, whole milk'}}
+        result=process_ingredient(ing,{'id':'foodose:R054'},self.dictionary,approved,self.crea_foods,self.db_off)
+        self.assertTrue(result['reviewed'])
+
+    def test_verified_candidate_audit_covers_all_42_and_corrects_tuna_lentils(self):
+        report=json.loads((ROOT/'data/recipe_candidate_verification.json').read_text())
+        self.assertEqual(len(report['recipes']),42)
+        self.assertEqual(report['approved_count'],24)
+        self.assertEqual(report['blocked_count'],18)
+        approved=load_approved_mappings(DEFAULT_APPROVED)
+        self.assertEqual(approved['recipe_overrides']['foodose:R270']['6']['id'],'004505')
+        self.assertEqual(approved['recipe_overrides']['foodose:R094']['4']['id'],'123550')
+        self.assertNotIn('foodose:R105',approved['recipe_overrides'])
+
+    def test_new_food_states_and_reference_ids_do_not_collide(self):
+        from collections import defaultdict
+        ids=defaultdict(list)
+        for key,item in self.dictionary['canonical_ingredients'].items():
+            for fid in item.get('usda_ids',[]):ids[fid].append(key)
+        self.assertFalse({fid:keys for fid,keys in ids.items() if len(keys)>1})
+        for name,expected in [('silken tofu','tofu_morbido'),('firm tofu','tofu_fresco')]:
+            self.assertEqual(find_canonical_ingredient({'name':name},self.dictionary)['id'],expected)
+        tofu=find_canonical_ingredient({'name':'silken tofu'},self.dictionary)
+        self.assertFalse(tofu.get('off_brand_candidates'))
+        turkey=find_canonical_ingredient({'name':'turkey breast','source_nutrition_reference':{'id':'171098'}},self.dictionary)
+        self.assertEqual(turkey['id'],'tacchino_petto_crudo')
+        candidates=match_crea_candidates(turkey,{'cooking_state':'raw'},self.crea_foods)
+        self.assertTrue(all(candidate['match_type']!='exact' for candidate in candidates))
+        yeast=find_canonical_ingredient({'name':'active dry yeast'},self.dictionary)
+        self.assertFalse(yeast.get('off_brand_candidates'))
+
+    def test_dry_vs_compressed_yeast_distinction(self):
+        """Dry yeast (360+ kcal) must not be matched to compressed fresh yeast (70 kcal)."""
+        dry_y = find_canonical_ingredient({'name': 'active dry yeast'}, self.dictionary)
+        self.assertEqual(dry_y['id'], 'lievito_secco')
+        # CREA only has compressed yeast 503100, which must NOT be the primary match for dry yeast
+        self.assertNotIn('503100', [c['id'] for c in dry_y.get('crea_matches', {}).values()])
+
+        fresh_y = find_canonical_ingredient({'name': 'fresh yeast'}, self.dictionary)
+        self.assertEqual(fresh_y['id'], 'lievito_birra')
+        self.assertEqual(fresh_y['crea_matches']['primary']['id'], '503100')
+
+    def test_liquid_stock_is_not_equated_to_concentrated_bouillon_cube(self):
+        """Ready liquid stock cannot be equated to concentrated bouillon cube without review."""
+        stock_ing = {'key': '1', 'name': 'vegetable stock', 'quantity': 500, 'unit': 'ml', 'grams_whole_recipe': 500.0}
+        recipe = {'id': 'test:stock', 'title': 'Soup Test'}
+        appr_empty = {'canonical_approvals': {}, 'recipe_overrides': {}}
+
+        res = process_ingredient(stock_ing, recipe, self.dictionary, appr_empty, self.crea_foods, self.db_off)
+        self.assertEqual(res['match_status'], 'needs_review')
+        self.assertFalse(res['reviewed'])
+        self.assertIn('diluizione', res['note'].lower())
+
 
 if __name__ == '__main__':
     unittest.main()

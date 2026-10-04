@@ -108,44 +108,3964 @@
       "1": {
         "source": "CREA",
         "id": "006610",
+        "label": "Pomodori, maturi, freschi",
         "reviewed": true,
         "state_checked": true,
-        "label": "Pomodori, maturi, freschi"
+        "state": "Pomodori, maturi, freschi",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/mozzarella-tomato-olive-bread-roll-basil",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170457",
+            "description": "Tomatoes, red, ripe, raw, year round average"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006610",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 200.0
       },
       "2": {
         "source": "CREA",
         "id": "164820",
+        "label": "Mozzarella di vacca",
         "reviewed": true,
         "state_checked": true,
-        "label": "Mozzarella di vacca"
+        "state": "Mozzarella di vacca",
+        "approved_by": "codex_catalog_review",
+        "note": "Mozzarella vaccina CREA, variante della mozzarella parzialmente scremata della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/mozzarella-tomato-olive-bread-roll-basil",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170847",
+            "description": "Cheese, mozzarella, part skim milk"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/164820",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 125.0
       },
       "3": {
         "source": "CREA",
         "id": "000530",
+        "label": "Pane bianco",
         "reviewed": true,
         "state_checked": true,
-        "label": "Pane bianco"
+        "state": "Pane bianco",
+        "approved_by": "codex_catalog_review",
+        "note": "Pane bianco CREA come proxy dichiarato del panino.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/mozzarella-tomato-olive-bread-roll-basil",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "175030",
+            "description": "Rolls, dinner, wheat"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000530",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 160.0
       },
       "4": {
         "source": "CREA",
         "id": "008810",
+        "label": "Olive, nere",
         "reviewed": true,
         "state_checked": true,
-        "label": "Olive, nere"
+        "state": "Olive, nere",
+        "approved_by": "codex_catalog_review",
+        "note": "Olive nere CREA: grammi della parte edibile senza nocciolo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/mozzarella-tomato-olive-bread-roll-basil",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169094",
+            "description": "Olives, ripe, canned (small-extra large)"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008810",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 50.0
       },
       "5": {
         "source": "CREA",
         "id": "006800",
+        "label": "Basilico, fresco",
         "reviewed": true,
         "state_checked": true,
-        "label": "Basilico, fresco"
+        "state": "Basilico, fresco",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/mozzarella-tomato-olive-bread-roll-basil",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172232",
+            "description": "Basil, fresh"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006800",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 10.0
       },
       "6": {
         "source": "CREA",
         "id": "009210",
+        "label": "Olio di oliva extra vergine",
         "reviewed": true,
         "state_checked": true,
-        "label": "Olio di oliva extra vergine"
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/mozzarella-tomato-olive-bread-roll-basil",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 9.1
+      }
+    },
+    "foodose:R048": {
+      "1": {
+        "source": "CREA",
+        "id": "005500",
+        "label": "Melanzane, crude",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Melanzane, crude",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-cottage-cheese-parmigiana",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169228",
+            "description": "Eggplant, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005500",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 400.0
+      },
+      "2": {
+        "source": "CREA",
+        "id": "009210",
+        "label": "Olio di oliva extra vergine",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-cottage-cheese-parmigiana",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 9.1
+      },
+      "3": {
+        "source": "CREA",
+        "id": "006670",
+        "label": "Pomodori, passata",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pomodori, passata",
+        "approved_by": "codex_catalog_review",
+        "note": "Passata CREA come variante della purea di pomodoro della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-cottage-cheese-parmigiana",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170460",
+            "description": "Tomato products, canned, puree, without salt added"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006670",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 300.0
+      },
+      "4": {
+        "source": "Open Food Facts",
+        "id": "0865239599875",
+        "label": "Fiocchi di latte · Vita well",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Fiocchi di latte",
+        "approved_by": "codex_catalog_review",
+        "note": "Fiocchi di latte Vita well scremati come variante dei fiocchi cremosi della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-cottage-cheese-parmigiana",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172179",
+            "description": "Cheese, cottage, creamed, large or small curd"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/0865239599875",
+          "catalog_ingredients": "_Latte_ scremato, sale, caglio microbico, fermenti lattici.",
+          "basis": "per_100_g"
+        },
+        "grams_override": 200.0
+      },
+      "5": {
+        "source": "CREA",
+        "id": "006800",
+        "label": "Basilico, fresco",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Basilico, fresco",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-cottage-cheese-parmigiana",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172232",
+            "description": "Basil, fresh"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006800",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 5.0
+      },
+      "6": {
+        "source": "CREA",
+        "id": "164820",
+        "label": "Mozzarella di vacca",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Mozzarella di vacca",
+        "approved_by": "codex_catalog_review",
+        "note": "Mozzarella vaccina CREA, variante della mozzarella parzialmente scremata della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-cottage-cheese-parmigiana",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170847",
+            "description": "Cheese, mozzarella, part skim milk"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/164820",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 50.0
+      }
+    },
+    "foodose:R328": {
+      "1": {
+        "source": "CREA",
+        "id": "005500",
+        "label": "Melanzane, crude",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Melanzane, crude",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-caponata-white-beans",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169228",
+            "description": "Eggplant, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005500",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 500.0
+      },
+      "2": {
+        "source": "CREA",
+        "id": "009210",
+        "label": "Olio di oliva extra vergine",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-caponata-white-beans",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 18.2
+      },
+      "3": {
+        "source": "CREA",
+        "id": "005300",
+        "label": "Cipolle, crude",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Cipolle, crude",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-caponata-white-beans",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170000",
+            "description": "Onions, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005300",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 120.0
+      },
+      "4": {
+        "source": "CREA",
+        "id": "005680",
+        "label": "Sedano, crudo",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Sedano, crudo",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-caponata-white-beans",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169988",
+            "description": "Celery, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005680",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 150.0
+      },
+      "5": {
+        "source": "CREA",
+        "id": "006680",
+        "label": "Pomodori, pelati in scatola",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pomodori, pelati in scatola",
+        "approved_by": "codex_catalog_review",
+        "note": "Pelati in scatola CREA da spezzettare, mantenendo il liquido alimentare conteggiato.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-caponata-white-beans",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170051",
+            "description": "Tomatoes, red, ripe, canned, packed in tomato juice"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006680",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 400.0
+      },
+      "6": {
+        "source": "CREA",
+        "id": "008810",
+        "label": "Olive, nere",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olive, nere",
+        "approved_by": "codex_catalog_review",
+        "note": "Olive nere CREA: grammi della parte edibile senza nocciolo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-caponata-white-beans",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169094",
+            "description": "Olives, ripe, canned (small-extra large)"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008810",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 50.0
+      },
+      "7": {
+        "source": "Open Food Facts",
+        "id": "8000633014766",
+        "label": "Capperi in aceto · Unes",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Capperi in aceto",
+        "approved_by": "codex_catalog_review",
+        "note": "Capperi in aceto Unes: ingredienti dichiarati capperi, acqua, aceto, sale; peso della parte alimentare sgocciolata da confermare se si usa una confezione diversa.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-caponata-white-beans",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172238",
+            "description": "Capers, canned"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8000633014766",
+          "catalog_ingredients": "capperi, acqua, aceto di vino, sale Contiene solfiti",
+          "basis": "per_100_g"
+        },
+        "grams_override": 20.0
+      },
+      "8": {
+        "source": "CREA",
+        "id": "004210",
+        "label": "Fagioli, Cannellini in scatola, scolati",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Fagioli, Cannellini in scatola, scolati",
+        "approved_by": "codex_catalog_review",
+        "note": "Cannellini in scatola scolati come variante dei fagioli bianchi della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-caponata-white-beans",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "175204",
+            "description": "Beans, white, mature seeds, canned"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 400.0
+      },
+      "9": {
+        "source": "CREA",
+        "id": "000530",
+        "label": "Pane bianco",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pane bianco",
+        "approved_by": "codex_catalog_review",
+        "note": "Pane bianco CREA come proxy dichiarato del pane a lievitazione naturale.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-caponata-white-beans",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172675",
+            "description": "Bread, french or vienna (includes sourdough)"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000530",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 80.0
+      }
+    },
+    "foodose:R299": {
+      "1": {
+        "source": "CREA",
+        "id": "106500",
+        "label": "Pollo, petto, crudo",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pollo, petto, crudo",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/baked-chicken-schnitzel-green-beans-lemon",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171077",
+            "description": "Chicken, broiler or fryers, breast, skinless, boneless, meat only, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/106500",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 300.0
+      },
+      "2": {
+        "source": "CREA",
+        "id": "000220",
+        "label": "Farina di frumento, tipo 00",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Farina di frumento, tipo 00",
+        "approved_by": "codex_catalog_review",
+        "note": "Farina tipo 00 CREA come variante della farina bianca generica.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/baked-chicken-schnitzel-green-beans-lemon",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169761",
+            "description": "Wheat flour, white, all-purpose, unenriched"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000220",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 20.0
+      },
+      "3": {
+        "source": "Open Food Facts",
+        "id": "8002330008048",
+        "label": "10 Uova fresche medie da allevamento a terra · Esselunga, Smart, smart",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "10 Uova fresche medie da allevamento a terra",
+        "approved_by": "codex_catalog_review",
+        "note": "Uova fresche Esselunga Smart, ingrediente dichiarato uova, tutti i macro disponibili. Grammi della parte edibile senza guscio; sostituisce CREA con carboidrati mancanti.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/baked-chicken-schnitzel-green-beans-lemon",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171287",
+            "description": "Egg, whole, raw, fresh"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8002330008048",
+          "catalog_ingredients": "Uova",
+          "basis": "per_100_g"
+        },
+        "grams_override": 50.0
+      },
+      "4": {
+        "source": "CREA",
+        "id": "000570",
+        "label": "Pangrattato",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pangrattato",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/baked-chicken-schnitzel-green-beans-lemon",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "174928",
+            "description": "Bread, crumbs, dry, grated, plain"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000570",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 40.0
+      },
+      "5": {
+        "source": "CREA",
+        "id": "009210",
+        "label": "Olio di oliva extra vergine",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/baked-chicken-schnitzel-green-beans-lemon",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 18.2
+      },
+      "6": {
+        "source": "CREA",
+        "id": "004310",
+        "label": "Fagiolini, freschi",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Fagiolini, freschi",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/baked-chicken-schnitzel-green-beans-lemon",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169961",
+            "description": "Beans, snap, green, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004310",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 250.0
+      },
+      "7": {
+        "source": "CREA",
+        "id": "008040",
+        "label": "Limoni, succo",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Limoni, succo",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/baked-chicken-schnitzel-green-beans-lemon",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "167747",
+            "description": "Lemon juice, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008040",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 15.5
+      },
+      "8": {
+        "source": "Open Food Facts",
+        "id": "8051499550332",
+        "label": "Prezzemolo · Fruttital srl, Conad",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Prezzemolo",
+        "approved_by": "codex_catalog_review",
+        "note": "Prezzemolo Fruttital/Conad, ingrediente singolo dichiarato, confezione 50 g, categoria erbe e macro completi. Grammi della parte edibile prima della cottura; verifica sul record locale, non sulla confezione attuale.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/baked-chicken-schnitzel-green-beans-lemon",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170416",
+            "description": "Parsley, fresh"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8051499550332",
+          "catalog_ingredients": "Prezzemolo",
+          "basis": "per_100_g"
+        },
+        "grams_override": 10.0
+      }
+    },
+    "foodose:R144": {
+      "1": {
+        "source": "CREA",
+        "id": "121410",
+        "label": "Merluzzo o nasello",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Merluzzo o nasello",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/cod-chickpea-fritters",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171955",
+            "description": "Fish, cod, Atlantic, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/121410",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 250.0
+      },
+      "2": {
+        "source": "CREA",
+        "id": "004010",
+        "label": "Ceci, in scatola, scolati",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Ceci, in scatola, scolati",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/cod-chickpea-fritters",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "173800",
+            "description": "Chickpeas (garbanzo beans, bengal gram), mature seeds, canned, drained solids"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004010",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 180.0
+      },
+      "3": {
+        "source": "Open Food Facts",
+        "id": "8002330008048",
+        "label": "10 Uova fresche medie da allevamento a terra · Esselunga, Smart, smart",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "10 Uova fresche medie da allevamento a terra",
+        "approved_by": "codex_catalog_review",
+        "note": "Uova fresche Esselunga Smart, ingrediente dichiarato uova, tutti i macro disponibili. Grammi della parte edibile senza guscio; sostituisce CREA con carboidrati mancanti.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/cod-chickpea-fritters",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171287",
+            "description": "Egg, whole, raw, fresh"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8002330008048",
+          "catalog_ingredients": "Uova",
+          "basis": "per_100_g"
+        },
+        "grams_override": 56.0
+      },
+      "4": {
+        "source": "CREA",
+        "id": "000570",
+        "label": "Pangrattato",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pangrattato",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/cod-chickpea-fritters",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "174928",
+            "description": "Bread, crumbs, dry, grated, plain"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000570",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 25.0
+      },
+      "5": {
+        "source": "CREA",
+        "id": "009210",
+        "label": "Olio di oliva extra vergine",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/cod-chickpea-fritters",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 4.6
+      },
+      "6": {
+        "source": "CREA",
+        "id": "005150",
+        "label": "Carote, crude",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Carote, crude",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/cod-chickpea-fritters",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170393",
+            "description": "Carrots, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005150",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 200.0
+      },
+      "7": {
+        "source": "CREA",
+        "id": "151000",
+        "label": "Yogurt da latte, parzialmente scremato",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Yogurt da latte, parzialmente scremato",
+        "approved_by": "codex_catalog_review",
+        "note": "Yogurt parzialmente scremato, variante esplicita del riferimento low-fat; non yogurt intero.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/cod-chickpea-fritters",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170886",
+            "description": "Yogurt, plain, low fat"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/151000",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 100.0
+      },
+      "8": {
+        "source": "Open Food Facts",
+        "id": "8051499550332",
+        "label": "Prezzemolo · Fruttital srl, Conad",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Prezzemolo",
+        "approved_by": "codex_catalog_review",
+        "note": "Prezzemolo Fruttital/Conad, ingrediente singolo dichiarato, confezione 50 g, categoria erbe e macro completi. Grammi della parte edibile prima della cottura; verifica sul record locale, non sulla confezione attuale.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/cod-chickpea-fritters",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170416",
+            "description": "Parsley, fresh"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8051499550332",
+          "catalog_ingredients": "Prezzemolo",
+          "basis": "per_100_g"
+        },
+        "grams_override": 5.0
+      }
+    },
+    "foodose:R054": {
+      "1": {
+        "source": "CREA",
+        "id": "000800",
+        "label": "Pasta di semola",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pasta di semola",
+        "approved_by": "codex_catalog_review",
+        "note": "Pasta secca di semola CREA come proxy nutrizionale delle sfoglie; mantenere il formato lasagna.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/courgette-ricotta-lasagne-rolls",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169736",
+            "description": "Pasta, dry, enriched"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000800",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 100.0
+      },
+      "2": {
+        "source": "CREA",
+        "id": "009210",
+        "label": "Olio di oliva extra vergine",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/courgette-ricotta-lasagne-rolls",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 4.6
+      },
+      "3": {
+        "source": "CREA",
+        "id": "005730",
+        "label": "Zucchine, crude",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Zucchine, crude",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/courgette-ricotta-lasagne-rolls",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169291",
+            "description": "Squash, summer, zucchini, includes skin, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005730",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 200.0
+      },
+      "4": {
+        "source": "CREA",
+        "id": "166820",
+        "label": "Ricotta di vacca",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Ricotta di vacca",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/courgette-ricotta-lasagne-rolls",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170851",
+            "description": "Cheese, ricotta, whole milk"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/166820",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 180.0
+      },
+      "5": {
+        "source": "CREA",
+        "id": "006670",
+        "label": "Pomodori, passata",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pomodori, passata",
+        "approved_by": "codex_catalog_review",
+        "note": "Passata CREA come variante della purea di pomodoro della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/courgette-ricotta-lasagne-rolls",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170460",
+            "description": "Tomato products, canned, puree, without salt added"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006670",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 250.0
+      },
+      "6": {
+        "source": "CREA",
+        "id": "164820",
+        "label": "Mozzarella di vacca",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Mozzarella di vacca",
+        "approved_by": "codex_catalog_review",
+        "note": "Mozzarella vaccina CREA, variante della mozzarella parzialmente scremata della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/courgette-ricotta-lasagne-rolls",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170847",
+            "description": "Cheese, mozzarella, part skim milk"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/164820",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 40.0
+      }
+    },
+    "foodose:R270": {
+      "1": {
+        "source": "CREA",
+        "id": "008570",
+        "label": "Noci, secche",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Noci, secche",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/lentil-walnut-bolognese-spaghetti",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170187",
+            "description": "Nuts, walnuts, english"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008570",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 20.0
+      },
+      "2": {
+        "source": "CREA",
+        "id": "005300",
+        "label": "Cipolle, crude",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Cipolle, crude",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/lentil-walnut-bolognese-spaghetti",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170000",
+            "description": "Onions, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005300",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 120.0
+      },
+      "3": {
+        "source": "CREA",
+        "id": "005150",
+        "label": "Carote, crude",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Carote, crude",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/lentil-walnut-bolognese-spaghetti",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170393",
+            "description": "Carrots, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005150",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 120.0
+      },
+      "4": {
+        "source": "CREA",
+        "id": "005000",
+        "label": "Aglio",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Aglio",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/lentil-walnut-bolognese-spaghetti",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169230",
+            "description": "Garlic, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005000",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 10.0
+      },
+      "5": {
+        "source": "CREA",
+        "id": "009210",
+        "label": "Olio di oliva extra vergine",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/lentil-walnut-bolognese-spaghetti",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 9.1
+      },
+      "6": {
+        "source": "CREA",
+        "id": "004505",
+        "label": "Lenticchie, secche, cotte, bollite",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Lenticchie, secche, cotte, bollite",
+        "approved_by": "codex_catalog_review",
+        "note": "Lenticchie bollite: sostituisce il candidato errato in scatola.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/lentil-walnut-bolognese-spaghetti",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172421",
+            "description": "Lentils, mature seeds, cooked, boiled, without salt"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004505",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 300.0
+      },
+      "7": {
+        "source": "CREA",
+        "id": "006670",
+        "label": "Pomodori, passata",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pomodori, passata",
+        "approved_by": "codex_catalog_review",
+        "note": "Passata CREA come variante della purea di pomodoro della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/lentil-walnut-bolognese-spaghetti",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170460",
+            "description": "Tomato products, canned, puree, without salt added"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006670",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 300.0
+      },
+      "8": {
+        "source": "CREA",
+        "id": "000800",
+        "label": "Pasta di semola",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pasta di semola",
+        "approved_by": "codex_catalog_review",
+        "note": "Pasta di semola secca CREA come proxy del formato spaghetti.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/lentil-walnut-bolognese-spaghetti",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169736",
+            "description": "Pasta, dry, enriched"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000800",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 100.0
+      },
+      "9": {
+        "source": "CREA",
+        "id": "006800",
+        "label": "Basilico, fresco",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Basilico, fresco",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/lentil-walnut-bolognese-spaghetti",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172232",
+            "description": "Basil, fresh"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006800",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 10.0
+      }
+    },
+    "foodose:R068": {
+      "1": {
+        "source": "CREA",
+        "id": "009210",
+        "label": "Olio di oliva extra vergine",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/lentil-walnut-ragu-pasta",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 4.6
+      },
+      "2": {
+        "source": "CREA",
+        "id": "006000",
+        "label": "Funghi coltivati, prataioli, crudi",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Funghi coltivati, prataioli, crudi",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/lentil-walnut-ragu-pasta",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169251",
+            "description": "Mushrooms, white, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006000",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 150.0
+      },
+      "3": {
+        "source": "CREA",
+        "id": "008570",
+        "label": "Noci, secche",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Noci, secche",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/lentil-walnut-ragu-pasta",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170187",
+            "description": "Nuts, walnuts, english"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008570",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 20.0
+      },
+      "4": {
+        "source": "CREA",
+        "id": "004505",
+        "label": "Lenticchie, secche, cotte, bollite",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Lenticchie, secche, cotte, bollite",
+        "approved_by": "codex_catalog_review",
+        "note": "Lenticchie bollite: sostituisce il candidato errato in scatola.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/lentil-walnut-ragu-pasta",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172421",
+            "description": "Lentils, mature seeds, cooked, boiled, without salt"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004505",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 250.0
+      },
+      "5": {
+        "source": "CREA",
+        "id": "006670",
+        "label": "Pomodori, passata",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pomodori, passata",
+        "approved_by": "codex_catalog_review",
+        "note": "Passata CREA come variante della purea di pomodoro della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/lentil-walnut-ragu-pasta",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170460",
+            "description": "Tomato products, canned, puree, without salt added"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006670",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 300.0
+      },
+      "6": {
+        "source": "Open Food Facts",
+        "id": "8004708082094",
+        "label": "Origano foglie · Drogheria & Alimentari, La Drogheria",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Origano foglie",
+        "approved_by": "codex_catalog_review",
+        "note": "Origano essiccato Drogheria & Alimentari: ingrediente singolo dichiarato. Esclusi candidati con tutti i macro zero o valori non verificati.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/lentil-walnut-ragu-pasta",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171328",
+            "description": "Spices, oregano, dried"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8004708082094",
+          "catalog_ingredients": "origano essiccato",
+          "basis": "per_100_g"
+        },
+        "grams_override": 0.5
+      },
+      "7": {
+        "source": "CREA",
+        "id": "000800",
+        "label": "Pasta di semola",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pasta di semola",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/lentil-walnut-ragu-pasta",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169736",
+            "description": "Pasta, dry, enriched"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000800",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 120.0
+      }
+    },
+    "foodose:R165": {
+      "1": {
+        "source": "CREA",
+        "id": "005730",
+        "label": "Zucchine, crude",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Zucchine, crude",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/mediterranean-vegetable-bread-pudding",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169291",
+            "description": "Squash, summer, zucchini, includes skin, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005730",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 200.0
+      },
+      "2": {
+        "source": "CREA",
+        "id": "005600",
+        "label": "Peperoni, crudi",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Peperoni, crudi",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/mediterranean-vegetable-bread-pudding",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170108",
+            "description": "Peppers, sweet, red, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005600",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 150.0
+      },
+      "3": {
+        "source": "CREA",
+        "id": "009210",
+        "label": "Olio di oliva extra vergine",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/mediterranean-vegetable-bread-pudding",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 9.1
+      },
+      "4": {
+        "source": "Open Food Facts",
+        "id": "8002330008048",
+        "label": "10 Uova fresche medie da allevamento a terra · Esselunga, Smart, smart",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "10 Uova fresche medie da allevamento a terra",
+        "approved_by": "codex_catalog_review",
+        "note": "Uova fresche Esselunga Smart, ingrediente dichiarato uova, tutti i macro disponibili. Grammi della parte edibile senza guscio; sostituisce CREA con carboidrati mancanti.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/mediterranean-vegetable-bread-pudding",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171287",
+            "description": "Egg, whole, raw, fresh"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8002330008048",
+          "catalog_ingredients": "Uova",
+          "basis": "per_100_g"
+        },
+        "grams_override": 168.0
+      },
+      "5": {
+        "source": "CREA",
+        "id": "135020",
+        "label": "Latte di vacca, pastorizzato, parzialmente scremato",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Latte di vacca, pastorizzato, parzialmente scremato",
+        "approved_by": "codex_catalog_review",
+        "note": "Latte parzialmente scremato CREA (1,5% grassi), variante del riferimento latte 2%.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/mediterranean-vegetable-bread-pudding",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171267",
+            "description": "Milk, reduced fat, fluid, 2% milkfat, with added vitamin A and vitamin D"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/135020",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 206.3
+      },
+      "6": {
+        "source": "Open Food Facts",
+        "id": "8004708082094",
+        "label": "Origano foglie · Drogheria & Alimentari, La Drogheria",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Origano foglie",
+        "approved_by": "codex_catalog_review",
+        "note": "Origano essiccato Drogheria & Alimentari: ingrediente singolo dichiarato. Esclusi candidati con tutti i macro zero o valori non verificati.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/mediterranean-vegetable-bread-pudding",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171328",
+            "description": "Spices, oregano, dried"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8004708082094",
+          "catalog_ingredients": "origano essiccato",
+          "basis": "per_100_g"
+        },
+        "grams_override": 0.5
+      },
+      "7": {
+        "source": "CREA",
+        "id": "000530",
+        "label": "Pane bianco",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pane bianco",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/mediterranean-vegetable-bread-pudding",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "174924",
+            "description": "Bread, white, commercially prepared (includes soft bread crumbs)"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000530",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 120.0
+      },
+      "8": {
+        "source": "CREA",
+        "id": "162000",
+        "label": "Feta",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Feta",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/mediterranean-vegetable-bread-pudding",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "173420",
+            "description": "Cheese, feta"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/162000",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 60.0
+      }
+    },
+    "foodose:R326": {
+      "1": {
+        "source": "CREA",
+        "id": "006500",
+        "label": "Patate, crude",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Patate, crude",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/potato-ricotta-gnocchi-tomato-basil",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170026",
+            "description": "Potatoes, flesh and skin, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006500",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 350.0
+      },
+      "2": {
+        "source": "CREA",
+        "id": "166820",
+        "label": "Ricotta di vacca",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Ricotta di vacca",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/potato-ricotta-gnocchi-tomato-basil",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170851",
+            "description": "Cheese, ricotta, whole milk"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/166820",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 150.0
+      },
+      "3": {
+        "source": "Open Food Facts",
+        "id": "8002330008048",
+        "label": "10 Uova fresche medie da allevamento a terra · Esselunga, Smart, smart",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "10 Uova fresche medie da allevamento a terra",
+        "approved_by": "codex_catalog_review",
+        "note": "Uova fresche Esselunga Smart, ingrediente dichiarato uova, tutti i macro disponibili. Grammi della parte edibile senza guscio; sostituisce CREA con carboidrati mancanti.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/potato-ricotta-gnocchi-tomato-basil",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171287",
+            "description": "Egg, whole, raw, fresh"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8002330008048",
+          "catalog_ingredients": "Uova",
+          "basis": "per_100_g"
+        },
+        "grams_override": 50.0
+      },
+      "4": {
+        "source": "CREA",
+        "id": "000220",
+        "label": "Farina di frumento, tipo 00",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Farina di frumento, tipo 00",
+        "approved_by": "codex_catalog_review",
+        "note": "Farina tipo 00 CREA come variante della farina bianca generica.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/potato-ricotta-gnocchi-tomato-basil",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169761",
+            "description": "Wheat flour, white, all-purpose, unenriched"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000220",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 70.0
+      },
+      "5": {
+        "source": "CREA",
+        "id": "006670",
+        "label": "Pomodori, passata",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pomodori, passata",
+        "approved_by": "codex_catalog_review",
+        "note": "Passata CREA come variante della purea di pomodoro della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/potato-ricotta-gnocchi-tomato-basil",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170460",
+            "description": "Tomato products, canned, puree, without salt added"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006670",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 400.0
+      },
+      "6": {
+        "source": "CREA",
+        "id": "009210",
+        "label": "Olio di oliva extra vergine",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/potato-ricotta-gnocchi-tomato-basil",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 9.1
+      },
+      "7": {
+        "source": "CREA",
+        "id": "006800",
+        "label": "Basilico, fresco",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Basilico, fresco",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/potato-ricotta-gnocchi-tomato-basil",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172232",
+            "description": "Basil, fresh"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006800",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 10.0
+      },
+      "8": {
+        "source": "Open Food Facts",
+        "id": "20815004",
+        "label": "Parmesan Parmigiano Reggiano · Consorzio Latterie",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Parmesan Parmigiano Reggiano",
+        "approved_by": "codex_catalog_review",
+        "note": "Parmigiano Reggiano Consorzio Latterie: ingredienti dichiarati latte, sale, caglio, colture. Sostituisce Grana Padano; macro completi.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/potato-ricotta-gnocchi-tomato-basil",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170848",
+            "description": "Cheese, parmesan, hard"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/20815004",
+          "catalog_ingredients": "Milch, Speisesalz, tierisches Lab, Käsereikulturen.",
+          "basis": "per_100_g"
+        },
+        "grams_override": 25.0
+      }
+    },
+    "foodose:R039": {
+      "1": {
+        "source": "CREA",
+        "id": "000800",
+        "label": "Pasta di semola",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pasta di semola",
+        "approved_by": "codex_catalog_review",
+        "note": "Pasta di semola secca CREA come proxy del formato linguine.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/prawn-courgette-linguine",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169736",
+            "description": "Pasta, dry, enriched"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000800",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 120.0
+      },
+      "2": {
+        "source": "CREA",
+        "id": "009210",
+        "label": "Olio di oliva extra vergine",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/prawn-courgette-linguine",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 9.1
+      },
+      "3": {
+        "source": "CREA",
+        "id": "005730",
+        "label": "Zucchine, crude",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Zucchine, crude",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/prawn-courgette-linguine",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169291",
+            "description": "Squash, summer, zucchini, includes skin, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005730",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 250.0
+      },
+      "4": {
+        "source": "CREA",
+        "id": "005000",
+        "label": "Aglio",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Aglio",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/prawn-courgette-linguine",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169230",
+            "description": "Garlic, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005000",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 5.0
+      },
+      "5": {
+        "source": "CREA",
+        "id": "128100",
+        "label": "Gamberi",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Gamberi",
+        "approved_by": "codex_catalog_review",
+        "note": "Gamberi CREA: grammi della parte edibile sgusciata.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/prawn-courgette-linguine",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "175179",
+            "description": "Crustaceans, shrimp, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/128100",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 250.0
+      },
+      "6": {
+        "source": "Open Food Facts",
+        "id": "8051499550332",
+        "label": "Prezzemolo · Fruttital srl, Conad",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Prezzemolo",
+        "approved_by": "codex_catalog_review",
+        "note": "Prezzemolo Fruttital/Conad, ingrediente singolo dichiarato, confezione 50 g, categoria erbe e macro completi. Grammi della parte edibile prima della cottura; verifica sul record locale, non sulla confezione attuale.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/prawn-courgette-linguine",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170416",
+            "description": "Parsley, fresh"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8051499550332",
+          "catalog_ingredients": "Prezzemolo",
+          "basis": "per_100_g"
+        },
+        "grams_override": 5.0
+      },
+      "7": {
+        "source": "CREA",
+        "id": "008040",
+        "label": "Limoni, succo",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Limoni, succo",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/prawn-courgette-linguine",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "167747",
+            "description": "Lemon juice, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008040",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 10.3
+      }
+    },
+    "foodose:R143": {
+      "1": {
+        "source": "CREA",
+        "id": "000100",
+        "label": "Riso, brillato",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Riso, brillato",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/prawn-rice-stuffed-courgettes",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "168877",
+            "description": "Rice, white, long-grain, regular, raw, enriched"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000100",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 80.0
+      },
+      "2": {
+        "source": "CREA",
+        "id": "005730",
+        "label": "Zucchine, crude",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Zucchine, crude",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/prawn-rice-stuffed-courgettes",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169291",
+            "description": "Squash, summer, zucchini, includes skin, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005730",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 450.0
+      },
+      "3": {
+        "source": "CREA",
+        "id": "009210",
+        "label": "Olio di oliva extra vergine",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/prawn-rice-stuffed-courgettes",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 4.6
+      },
+      "4": {
+        "source": "CREA",
+        "id": "006610",
+        "label": "Pomodori, maturi, freschi",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pomodori, maturi, freschi",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/prawn-rice-stuffed-courgettes",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170457",
+            "description": "Tomatoes, red, ripe, raw, year round average"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006610",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 150.0
+      },
+      "5": {
+        "source": "CREA",
+        "id": "128100",
+        "label": "Gamberi",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Gamberi",
+        "approved_by": "codex_catalog_review",
+        "note": "Gamberi CREA: grammi della parte edibile sgusciata.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/prawn-rice-stuffed-courgettes",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "175179",
+            "description": "Crustaceans, shrimp, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/128100",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 220.0
+      },
+      "6": {
+        "source": "Open Food Facts",
+        "id": "8051499550332",
+        "label": "Prezzemolo · Fruttital srl, Conad",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Prezzemolo",
+        "approved_by": "codex_catalog_review",
+        "note": "Prezzemolo Fruttital/Conad, ingrediente singolo dichiarato, confezione 50 g, categoria erbe e macro completi. Grammi della parte edibile prima della cottura; verifica sul record locale, non sulla confezione attuale.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/prawn-rice-stuffed-courgettes",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170416",
+            "description": "Parsley, fresh"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8051499550332",
+          "catalog_ingredients": "Prezzemolo",
+          "basis": "per_100_g"
+        },
+        "grams_override": 5.0
+      },
+      "7": {
+        "source": "Open Food Facts",
+        "id": "20815004",
+        "label": "Parmesan Parmigiano Reggiano · Consorzio Latterie",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Parmesan Parmigiano Reggiano",
+        "approved_by": "codex_catalog_review",
+        "note": "Parmigiano Reggiano Consorzio Latterie: ingredienti dichiarati latte, sale, caglio, colture. Sostituisce Grana Padano; macro completi.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/prawn-rice-stuffed-courgettes",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170848",
+            "description": "Cheese, parmesan, hard"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/20815004",
+          "catalog_ingredients": "Milch, Speisesalz, tierisches Lab, Käsereikulturen.",
+          "basis": "per_100_g"
+        },
+        "grams_override": 20.0
+      }
+    },
+    "foodose:R223": {
+      "1": {
+        "source": "CREA",
+        "id": "000800",
+        "label": "Pasta di semola",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pasta di semola",
+        "approved_by": "codex_catalog_review",
+        "note": "Pasta di semola secca CREA come proxy del formato spaghetti.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/prawns-courgette-garlic-lemon-spaghetti",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169736",
+            "description": "Pasta, dry, enriched"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000800",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 140.0
+      },
+      "2": {
+        "source": "CREA",
+        "id": "005000",
+        "label": "Aglio",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Aglio",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/prawns-courgette-garlic-lemon-spaghetti",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169230",
+            "description": "Garlic, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005000",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 10.0
+      },
+      "3": {
+        "source": "CREA",
+        "id": "009210",
+        "label": "Olio di oliva extra vergine",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/prawns-courgette-garlic-lemon-spaghetti",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 13.7
+      },
+      "4": {
+        "source": "CREA",
+        "id": "005730",
+        "label": "Zucchine, crude",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Zucchine, crude",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/prawns-courgette-garlic-lemon-spaghetti",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169291",
+            "description": "Squash, summer, zucchini, includes skin, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005730",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 200.0
+      },
+      "5": {
+        "source": "CREA",
+        "id": "128100",
+        "label": "Gamberi",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Gamberi",
+        "approved_by": "codex_catalog_review",
+        "note": "Gamberi CREA: grammi della parte edibile sgusciata.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/prawns-courgette-garlic-lemon-spaghetti",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "175179",
+            "description": "Crustaceans, shrimp, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/128100",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 250.0
+      },
+      "6": {
+        "source": "CREA",
+        "id": "008040",
+        "label": "Limoni, succo",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Limoni, succo",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/prawns-courgette-garlic-lemon-spaghetti",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "167747",
+            "description": "Lemon juice, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008040",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 15.5
+      },
+      "7": {
+        "source": "Open Food Facts",
+        "id": "8051499550332",
+        "label": "Prezzemolo · Fruttital srl, Conad",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Prezzemolo",
+        "approved_by": "codex_catalog_review",
+        "note": "Prezzemolo Fruttital/Conad, ingrediente singolo dichiarato, confezione 50 g, categoria erbe e macro completi. Grammi della parte edibile prima della cottura; verifica sul record locale, non sulla confezione attuale.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/prawns-courgette-garlic-lemon-spaghetti",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170416",
+            "description": "Parsley, fresh"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8051499550332",
+          "catalog_ingredients": "Prezzemolo",
+          "basis": "per_100_g"
+        },
+        "grams_override": 10.0
+      }
+    },
+    "foodose:R100": {
+      "1": {
+        "source": "CREA",
+        "id": "005730",
+        "label": "Zucchine, crude",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Zucchine, crude",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/roasted-vegetable-mozzarella-frittata-sandwich",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169291",
+            "description": "Squash, summer, zucchini, includes skin, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005730",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 100.0
+      },
+      "2": {
+        "source": "CREA",
+        "id": "005600",
+        "label": "Peperoni, crudi",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Peperoni, crudi",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/roasted-vegetable-mozzarella-frittata-sandwich",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170108",
+            "description": "Peppers, sweet, red, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005600",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 80.0
+      },
+      "3": {
+        "source": "CREA",
+        "id": "009210",
+        "label": "Olio di oliva extra vergine",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/roasted-vegetable-mozzarella-frittata-sandwich",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 4.6
+      },
+      "4": {
+        "source": "Open Food Facts",
+        "id": "8002330008048",
+        "label": "10 Uova fresche medie da allevamento a terra · Esselunga, Smart, smart",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "10 Uova fresche medie da allevamento a terra",
+        "approved_by": "codex_catalog_review",
+        "note": "Uova fresche Esselunga Smart, ingrediente dichiarato uova, tutti i macro disponibili. Grammi della parte edibile senza guscio; sostituisce CREA con carboidrati mancanti.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/roasted-vegetable-mozzarella-frittata-sandwich",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171287",
+            "description": "Egg, whole, raw, fresh"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8002330008048",
+          "catalog_ingredients": "Uova",
+          "basis": "per_100_g"
+        },
+        "grams_override": 168.0
+      },
+      "5": {
+        "source": "CREA",
+        "id": "164820",
+        "label": "Mozzarella di vacca",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Mozzarella di vacca",
+        "approved_by": "codex_catalog_review",
+        "note": "Mozzarella vaccina CREA, variante della mozzarella parzialmente scremata della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/roasted-vegetable-mozzarella-frittata-sandwich",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170847",
+            "description": "Cheese, mozzarella, part skim milk"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/164820",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 50.0
+      },
+      "6": {
+        "source": "CREA",
+        "id": "000550",
+        "label": "Pane di tipo integrale",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pane di tipo integrale",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/roasted-vegetable-mozzarella-frittata-sandwich",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172688",
+            "description": "Bread, whole-wheat, commercially prepared"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000550",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 140.0
+      },
+      "7": {
+        "source": "CREA",
+        "id": "006800",
+        "label": "Basilico, fresco",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Basilico, fresco",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/roasted-vegetable-mozzarella-frittata-sandwich",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172232",
+            "description": "Basil, fresh"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006800",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 5.0
+      }
+    },
+    "foodose:R009": {
+      "1": {
+        "source": "Open Food Facts",
+        "id": "8002330008048",
+        "label": "10 Uova fresche medie da allevamento a terra · Esselunga, Smart, smart",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "10 Uova fresche medie da allevamento a terra",
+        "approved_by": "codex_catalog_review",
+        "note": "Uova fresche Esselunga Smart, ingrediente dichiarato uova, tutti i macro disponibili. Grammi della parte edibile senza guscio; sostituisce CREA con carboidrati mancanti.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/savoury-oats-peas-eggs-parmesan",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171287",
+            "description": "Egg, whole, raw, fresh"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8002330008048",
+          "catalog_ingredients": "Uova",
+          "basis": "per_100_g"
+        },
+        "grams_override": 112.0
+      },
+      "2": {
+        "source": "CREA",
+        "id": "003030",
+        "label": "Fiocchi d'avena",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Fiocchi d'avena",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/savoury-oats-peas-eggs-parmesan",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "173904",
+            "description": "Cereals, oats, regular and quick, not fortified, dry"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/003030",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 70.0
+      },
+      "3": {
+        "source": "water",
+        "id": "water",
+        "label": "Acqua pura",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "acqua pura",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/savoury-oats-peas-eggs-parmesan",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "",
+            "description": ""
+          },
+          "catalog_url": null,
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 350.0
+      },
+      "4": {
+        "source": "CREA",
+        "id": "135020",
+        "label": "Latte di vacca, pastorizzato, parzialmente scremato",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Latte di vacca, pastorizzato, parzialmente scremato",
+        "approved_by": "codex_catalog_review",
+        "note": "Latte parzialmente scremato CREA (1,5% grassi), variante del riferimento latte 2%.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/savoury-oats-peas-eggs-parmesan",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171267",
+            "description": "Milk, reduced fat, fluid, 2% milkfat, with added vitamin A and vitamin D"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/135020",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 103.1
+      },
+      "5": {
+        "source": "CREA",
+        "id": "004730",
+        "label": "Piselli, surgelati",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Piselli, surgelati",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/savoury-oats-peas-eggs-parmesan",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170016",
+            "description": "Peas, green, frozen, unprepared (Includes foods for USDA's Food Distribution Program)"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004730",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 100.0
+      },
+      "6": {
+        "source": "Open Food Facts",
+        "id": "20815004",
+        "label": "Parmesan Parmigiano Reggiano · Consorzio Latterie",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Parmesan Parmigiano Reggiano",
+        "approved_by": "codex_catalog_review",
+        "note": "Parmigiano Reggiano Consorzio Latterie: ingredienti dichiarati latte, sale, caglio, colture. Sostituisce Grana Padano; macro completi.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/savoury-oats-peas-eggs-parmesan",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170848",
+            "description": "Cheese, parmesan, hard"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/20815004",
+          "catalog_ingredients": "Milch, Speisesalz, tierisches Lab, Käsereikulturen.",
+          "basis": "per_100_g"
+        },
+        "grams_override": 25.0
+      },
+      "7": {
+        "source": "Open Food Facts",
+        "id": "8051499550332",
+        "label": "Prezzemolo · Fruttital srl, Conad",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Prezzemolo",
+        "approved_by": "codex_catalog_review",
+        "note": "Prezzemolo Fruttital/Conad, ingrediente singolo dichiarato, confezione 50 g, categoria erbe e macro completi. Grammi della parte edibile prima della cottura; verifica sul record locale, non sulla confezione attuale.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/savoury-oats-peas-eggs-parmesan",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170416",
+            "description": "Parsley, fresh"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8051499550332",
+          "catalog_ingredients": "Prezzemolo",
+          "basis": "per_100_g"
+        },
+        "grams_override": 5.0
+      }
+    },
+    "foodose:R057": {
+      "1": {
+        "source": "CREA",
+        "id": "009210",
+        "label": "Olio di oliva extra vergine",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tomato-mozzarella-lentil-bake",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 4.6
+      },
+      "2": {
+        "source": "CREA",
+        "id": "005300",
+        "label": "Cipolle, crude",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Cipolle, crude",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tomato-mozzarella-lentil-bake",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170000",
+            "description": "Onions, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005300",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 60.0
+      },
+      "3": {
+        "source": "CREA",
+        "id": "006610",
+        "label": "Pomodori, maturi, freschi",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pomodori, maturi, freschi",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tomato-mozzarella-lentil-bake",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170457",
+            "description": "Tomatoes, red, ripe, raw, year round average"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006610",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 300.0
+      },
+      "4": {
+        "source": "Open Food Facts",
+        "id": "8004708082094",
+        "label": "Origano foglie · Drogheria & Alimentari, La Drogheria",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Origano foglie",
+        "approved_by": "codex_catalog_review",
+        "note": "Origano essiccato Drogheria & Alimentari: ingrediente singolo dichiarato. Esclusi candidati con tutti i macro zero o valori non verificati.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tomato-mozzarella-lentil-bake",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171328",
+            "description": "Spices, oregano, dried"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8004708082094",
+          "catalog_ingredients": "origano essiccato",
+          "basis": "per_100_g"
+        },
+        "grams_override": 0.5
+      },
+      "5": {
+        "source": "CREA",
+        "id": "004505",
+        "label": "Lenticchie, secche, cotte, bollite",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Lenticchie, secche, cotte, bollite",
+        "approved_by": "codex_catalog_review",
+        "note": "Lenticchie bollite: sostituisce il candidato errato in scatola.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tomato-mozzarella-lentil-bake",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172421",
+            "description": "Lentils, mature seeds, cooked, boiled, without salt"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004505",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 300.0
+      },
+      "6": {
+        "source": "CREA",
+        "id": "164820",
+        "label": "Mozzarella di vacca",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Mozzarella di vacca",
+        "approved_by": "codex_catalog_review",
+        "note": "Mozzarella vaccina CREA, variante della mozzarella parzialmente scremata della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tomato-mozzarella-lentil-bake",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170847",
+            "description": "Cheese, mozzarella, part skim milk"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/164820",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 100.0
+      },
+      "7": {
+        "source": "CREA",
+        "id": "000550",
+        "label": "Pane di tipo integrale",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pane di tipo integrale",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tomato-mozzarella-lentil-bake",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172688",
+            "description": "Bread, whole-wheat, commercially prepared"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000550",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 80.0
+      }
+    },
+    "foodose:R094": {
+      "1": {
+        "source": "CREA",
+        "id": "006500",
+        "label": "Patate, crude",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Patate, crude",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-cannellini-potato-bowl",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170026",
+            "description": "Potatoes, flesh and skin, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006500",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 250.0
+      },
+      "2": {
+        "source": "CREA",
+        "id": "004310",
+        "label": "Fagiolini, freschi",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Fagiolini, freschi",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-cannellini-potato-bowl",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169961",
+            "description": "Beans, snap, green, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004310",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 100.0
+      },
+      "3": {
+        "source": "CREA",
+        "id": "004210",
+        "label": "Fagioli, Cannellini in scatola, scolati",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Fagioli, Cannellini in scatola, scolati",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-cannellini-potato-bowl",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "175204",
+            "description": "Beans, white, mature seeds, canned"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 150.0
+      },
+      "4": {
+        "source": "CREA",
+        "id": "123550",
+        "label": "Tonno in salamoia, sgocciolato",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Tonno in salamoia, sgocciolato",
+        "approved_by": "codex_catalog_review",
+        "note": "Tonno in salamoia sgocciolato: sostituisce il candidato errato sott’olio.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-cannellini-potato-bowl",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "173709",
+            "description": "Fish, tuna, light, canned in water, drained solids (Includes foods for USDA's Food Distribution Program)"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/123550",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 200.0
+      },
+      "5": {
+        "source": "CREA",
+        "id": "009210",
+        "label": "Olio di oliva extra vergine",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-cannellini-potato-bowl",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 9.1
+      },
+      "6": {
+        "source": "CREA",
+        "id": "008040",
+        "label": "Limoni, succo",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Limoni, succo",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-cannellini-potato-bowl",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "167747",
+            "description": "Lemon juice, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008040",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 10.3
+      },
+      "7": {
+        "source": "Open Food Facts",
+        "id": "8051499550332",
+        "label": "Prezzemolo · Fruttital srl, Conad",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Prezzemolo",
+        "approved_by": "codex_catalog_review",
+        "note": "Prezzemolo Fruttital/Conad, ingrediente singolo dichiarato, confezione 50 g, categoria erbe e macro completi. Grammi della parte edibile prima della cottura; verifica sul record locale, non sulla confezione attuale.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-cannellini-potato-bowl",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170416",
+            "description": "Parsley, fresh"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8051499550332",
+          "catalog_ingredients": "Prezzemolo",
+          "basis": "per_100_g"
+        },
+        "grams_override": 5.0
+      }
+    },
+    "foodose:R249": {
+      "1": {
+        "source": "CREA",
+        "id": "004210",
+        "label": "Fagioli, Cannellini in scatola, scolati",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Fagioli, Cannellini in scatola, scolati",
+        "approved_by": "codex_catalog_review",
+        "note": "Cannellini in scatola scolati come variante dei fagioli bianchi della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-open-sandwich-rye",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "175204",
+            "description": "Beans, white, mature seeds, canned"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 300.0
+      },
+      "2": {
+        "source": "CREA",
+        "id": "009210",
+        "label": "Olio di oliva extra vergine",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-open-sandwich-rye",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 13.7
+      },
+      "3": {
+        "source": "CREA",
+        "id": "008040",
+        "label": "Limoni, succo",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Limoni, succo",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-open-sandwich-rye",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "167747",
+            "description": "Lemon juice, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008040",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 15.5
+      },
+      "4": {
+        "source": "CREA",
+        "id": "123550",
+        "label": "Tonno in salamoia, sgocciolato",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Tonno in salamoia, sgocciolato",
+        "approved_by": "codex_catalog_review",
+        "note": "Tonno in salamoia sgocciolato: sostituisce il candidato errato sott’olio.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-open-sandwich-rye",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "173709",
+            "description": "Fish, tuna, light, canned in water, drained solids (Includes foods for USDA's Food Distribution Program)"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/123550",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 200.0
+      },
+      "5": {
+        "source": "Open Food Facts",
+        "id": "8051499550332",
+        "label": "Prezzemolo · Fruttital srl, Conad",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Prezzemolo",
+        "approved_by": "codex_catalog_review",
+        "note": "Prezzemolo Fruttital/Conad, ingrediente singolo dichiarato, confezione 50 g, categoria erbe e macro completi. Grammi della parte edibile prima della cottura; verifica sul record locale, non sulla confezione attuale.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-open-sandwich-rye",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170416",
+            "description": "Parsley, fresh"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8051499550332",
+          "catalog_ingredients": "Prezzemolo",
+          "basis": "per_100_g"
+        },
+        "grams_override": 10.0
+      },
+      "6": {
+        "source": "CREA",
+        "id": "005220",
+        "label": "Cetrioli, freschi",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Cetrioli, freschi",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-open-sandwich-rye",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "168409",
+            "description": "Cucumber, with peel, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005220",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 100.0
+      },
+      "7": {
+        "source": "CREA",
+        "id": "000510",
+        "label": "Pane di segale",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pane di segale",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-open-sandwich-rye",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172684",
+            "description": "Bread, rye"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000510",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 90.0
+      }
+    },
+    "foodose:R323": {
+      "1": {
+        "source": "CREA",
+        "id": "000530",
+        "label": "Pane bianco",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pane bianco",
+        "approved_by": "codex_catalog_review",
+        "note": "Pane bianco CREA come proxy dichiarato del pane a lievitazione naturale.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-panzanella",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172675",
+            "description": "Bread, french or vienna (includes sourdough)"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000530",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 100.0
+      },
+      "2": {
+        "source": "CREA",
+        "id": "006610",
+        "label": "Pomodori, maturi, freschi",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pomodori, maturi, freschi",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-panzanella",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170457",
+            "description": "Tomatoes, red, ripe, raw, year round average"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006610",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 300.0
+      },
+      "3": {
+        "source": "CREA",
+        "id": "005300",
+        "label": "Cipolle, crude",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Cipolle, crude",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-panzanella",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170000",
+            "description": "Onions, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005300",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 80.0
+      },
+      "4": {
+        "source": "CREA",
+        "id": "123550",
+        "label": "Tonno in salamoia, sgocciolato",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Tonno in salamoia, sgocciolato",
+        "approved_by": "codex_catalog_review",
+        "note": "Tonno in salamoia sgocciolato: sostituisce il candidato errato sott’olio.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-panzanella",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "173709",
+            "description": "Fish, tuna, light, canned in water, drained solids (Includes foods for USDA's Food Distribution Program)"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/123550",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 200.0
+      },
+      "5": {
+        "source": "CREA",
+        "id": "004210",
+        "label": "Fagioli, Cannellini in scatola, scolati",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Fagioli, Cannellini in scatola, scolati",
+        "approved_by": "codex_catalog_review",
+        "note": "Cannellini in scatola scolati come variante dei fagioli bianchi della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-panzanella",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "175204",
+            "description": "Beans, white, mature seeds, canned"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 300.0
+      },
+      "6": {
+        "source": "CREA",
+        "id": "005220",
+        "label": "Cetrioli, freschi",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Cetrioli, freschi",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-panzanella",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "168409",
+            "description": "Cucumber, with peel, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005220",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 150.0
+      },
+      "7": {
+        "source": "Open Food Facts",
+        "id": "8000633014766",
+        "label": "Capperi in aceto · Unes",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Capperi in aceto",
+        "approved_by": "codex_catalog_review",
+        "note": "Capperi in aceto Unes: ingredienti dichiarati capperi, acqua, aceto, sale; peso della parte alimentare sgocciolata da confermare se si usa una confezione diversa.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-panzanella",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172238",
+            "description": "Capers, canned"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8000633014766",
+          "catalog_ingredients": "capperi, acqua, aceto di vino, sale Contiene solfiti",
+          "basis": "per_100_g"
+        },
+        "grams_override": 20.0
+      },
+      "8": {
+        "source": "CREA",
+        "id": "009210",
+        "label": "Olio di oliva extra vergine",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-panzanella",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 18.2
+      },
+      "9": {
+        "source": "CREA",
+        "id": "008040",
+        "label": "Limoni, succo",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Limoni, succo",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-panzanella",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "167747",
+            "description": "Lemon juice, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008040",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 15.5
+      },
+      "10": {
+        "source": "CREA",
+        "id": "006800",
+        "label": "Basilico, fresco",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Basilico, fresco",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-panzanella",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172232",
+            "description": "Basil, fresh"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006800",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 10.0
+      }
+    },
+    "foodose:R038": {
+      "1": {
+        "source": "CREA",
+        "id": "005600",
+        "label": "Peperoni, crudi",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Peperoni, crudi",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-stuffed-peppers",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170108",
+            "description": "Peppers, sweet, red, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005600",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 300.0
+      },
+      "2": {
+        "source": "CREA",
+        "id": "009210",
+        "label": "Olio di oliva extra vergine",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-stuffed-peppers",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 9.1
+      },
+      "3": {
+        "source": "CREA",
+        "id": "005300",
+        "label": "Cipolle, crude",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Cipolle, crude",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-stuffed-peppers",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170000",
+            "description": "Onions, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005300",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 60.0
+      },
+      "4": {
+        "source": "CREA",
+        "id": "006680",
+        "label": "Pomodori, pelati in scatola",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pomodori, pelati in scatola",
+        "approved_by": "codex_catalog_review",
+        "note": "Pelati in scatola CREA da spezzettare, mantenendo il liquido alimentare conteggiato.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-stuffed-peppers",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170051",
+            "description": "Tomatoes, red, ripe, canned, packed in tomato juice"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006680",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 100.0
+      },
+      "5": {
+        "source": "CREA",
+        "id": "004210",
+        "label": "Fagioli, Cannellini in scatola, scolati",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Fagioli, Cannellini in scatola, scolati",
+        "approved_by": "codex_catalog_review",
+        "note": "Cannellini in scatola scolati come variante dei fagioli bianchi della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-stuffed-peppers",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "175204",
+            "description": "Beans, white, mature seeds, canned"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 180.0
+      },
+      "6": {
+        "source": "CREA",
+        "id": "123550",
+        "label": "Tonno in salamoia, sgocciolato",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Tonno in salamoia, sgocciolato",
+        "approved_by": "codex_catalog_review",
+        "note": "Tonno in salamoia sgocciolato: sostituisce il candidato errato sott’olio.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-stuffed-peppers",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "173709",
+            "description": "Fish, tuna, light, canned in water, drained solids (Includes foods for USDA's Food Distribution Program)"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/123550",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 200.0
+      },
+      "7": {
+        "source": "Open Food Facts",
+        "id": "8051499550332",
+        "label": "Prezzemolo · Fruttital srl, Conad",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Prezzemolo",
+        "approved_by": "codex_catalog_review",
+        "note": "Prezzemolo Fruttital/Conad, ingrediente singolo dichiarato, confezione 50 g, categoria erbe e macro completi. Grammi della parte edibile prima della cottura; verifica sul record locale, non sulla confezione attuale.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-stuffed-peppers",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170416",
+            "description": "Parsley, fresh"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8051499550332",
+          "catalog_ingredients": "Prezzemolo",
+          "basis": "per_100_g"
+        },
+        "grams_override": 5.0
+      }
+    },
+    "foodose:R303": {
+      "1": {
+        "source": "CREA",
+        "id": "006500",
+        "label": "Patate, crude",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Patate, crude",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-egg-potato-salad-green-beans-olives",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170026",
+            "description": "Potatoes, flesh and skin, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006500",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 300.0
+      },
+      "2": {
+        "source": "CREA",
+        "id": "004310",
+        "label": "Fagiolini, freschi",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Fagiolini, freschi",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-egg-potato-salad-green-beans-olives",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169961",
+            "description": "Beans, snap, green, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004310",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 200.0
+      },
+      "3": {
+        "source": "Open Food Facts",
+        "id": "8002330008048",
+        "label": "10 Uova fresche medie da allevamento a terra · Esselunga, Smart, smart",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "10 Uova fresche medie da allevamento a terra",
+        "approved_by": "codex_catalog_review",
+        "note": "Uova fresche Esselunga Smart, ingrediente dichiarato uova, tutti i macro disponibili. Grammi della parte edibile senza guscio; sostituisce CREA con carboidrati mancanti.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-egg-potato-salad-green-beans-olives",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171287",
+            "description": "Egg, whole, raw, fresh"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8002330008048",
+          "catalog_ingredients": "Uova",
+          "basis": "per_100_g"
+        },
+        "grams_override": 100.0
+      },
+      "4": {
+        "source": "CREA",
+        "id": "009210",
+        "label": "Olio di oliva extra vergine",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-egg-potato-salad-green-beans-olives",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 18.2
+      },
+      "5": {
+        "source": "CREA",
+        "id": "008040",
+        "label": "Limoni, succo",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Limoni, succo",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-egg-potato-salad-green-beans-olives",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "167747",
+            "description": "Lemon juice, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008040",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 15.5
+      },
+      "6": {
+        "source": "CREA",
+        "id": "123550",
+        "label": "Tonno in salamoia, sgocciolato",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Tonno in salamoia, sgocciolato",
+        "approved_by": "codex_catalog_review",
+        "note": "Tonno in salamoia sgocciolato: sostituisce il candidato errato sott’olio.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-egg-potato-salad-green-beans-olives",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "173709",
+            "description": "Fish, tuna, light, canned in water, drained solids (Includes foods for USDA's Food Distribution Program)"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/123550",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 200.0
+      },
+      "7": {
+        "source": "CREA",
+        "id": "008810",
+        "label": "Olive, nere",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olive, nere",
+        "approved_by": "codex_catalog_review",
+        "note": "Olive nere CREA: grammi della parte edibile senza nocciolo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-egg-potato-salad-green-beans-olives",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169094",
+            "description": "Olives, ripe, canned (small-extra large)"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008810",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 50.0
+      },
+      "8": {
+        "source": "CREA",
+        "id": "006610",
+        "label": "Pomodori, maturi, freschi",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pomodori, maturi, freschi",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-egg-potato-salad-green-beans-olives",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170457",
+            "description": "Tomatoes, red, ripe, raw, year round average"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006610",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 150.0
+      }
+    },
+    "foodose:R044": {
+      "1": {
+        "source": "CREA",
+        "id": "000800",
+        "label": "Pasta di semola",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pasta di semola",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-tomato-olive-pasta-bake",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169736",
+            "description": "Pasta, dry, enriched"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000800",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 120.0
+      },
+      "2": {
+        "source": "CREA",
+        "id": "009210",
+        "label": "Olio di oliva extra vergine",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-tomato-olive-pasta-bake",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 4.6
+      },
+      "3": {
+        "source": "CREA",
+        "id": "006680",
+        "label": "Pomodori, pelati in scatola",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pomodori, pelati in scatola",
+        "approved_by": "codex_catalog_review",
+        "note": "Pelati in scatola CREA da spezzettare, mantenendo il liquido alimentare conteggiato.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-tomato-olive-pasta-bake",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170051",
+            "description": "Tomatoes, red, ripe, canned, packed in tomato juice"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006680",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 300.0
+      },
+      "4": {
+        "source": "Open Food Facts",
+        "id": "8004708082094",
+        "label": "Origano foglie · Drogheria & Alimentari, La Drogheria",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Origano foglie",
+        "approved_by": "codex_catalog_review",
+        "note": "Origano essiccato Drogheria & Alimentari: ingrediente singolo dichiarato. Esclusi candidati con tutti i macro zero o valori non verificati.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-tomato-olive-pasta-bake",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171328",
+            "description": "Spices, oregano, dried"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8004708082094",
+          "catalog_ingredients": "origano essiccato",
+          "basis": "per_100_g"
+        },
+        "grams_override": 0.5
+      },
+      "5": {
+        "source": "CREA",
+        "id": "123550",
+        "label": "Tonno in salamoia, sgocciolato",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Tonno in salamoia, sgocciolato",
+        "approved_by": "codex_catalog_review",
+        "note": "Tonno in salamoia sgocciolato: sostituisce il candidato errato sott’olio.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-tomato-olive-pasta-bake",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "173709",
+            "description": "Fish, tuna, light, canned in water, drained solids (Includes foods for USDA's Food Distribution Program)"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/123550",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 200.0
+      },
+      "6": {
+        "source": "CREA",
+        "id": "008810",
+        "label": "Olive, nere",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olive, nere",
+        "approved_by": "codex_catalog_review",
+        "note": "Olive nere CREA: grammi della parte edibile senza nocciolo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-tomato-olive-pasta-bake",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169094",
+            "description": "Olives, ripe, canned (small-extra large)"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008810",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 30.0
+      },
+      "7": {
+        "source": "CREA",
+        "id": "164820",
+        "label": "Mozzarella di vacca",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Mozzarella di vacca",
+        "approved_by": "codex_catalog_review",
+        "note": "Mozzarella vaccina CREA, variante della mozzarella parzialmente scremata della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-tomato-olive-pasta-bake",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170847",
+            "description": "Cheese, mozzarella, part skim milk"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/164820",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 50.0
+      }
+    },
+    "foodose:R225": {
+      "1": {
+        "source": "CREA",
+        "id": "005300",
+        "label": "Cipolle, crude",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Cipolle, crude",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-caper-salad-rye",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170000",
+            "description": "Onions, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005300",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 80.0
+      },
+      "2": {
+        "source": "CREA",
+        "id": "123550",
+        "label": "Tonno in salamoia, sgocciolato",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Tonno in salamoia, sgocciolato",
+        "approved_by": "codex_catalog_review",
+        "note": "Tonno in salamoia sgocciolato: sostituisce il candidato errato sott’olio.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-caper-salad-rye",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "173709",
+            "description": "Fish, tuna, light, canned in water, drained solids (Includes foods for USDA's Food Distribution Program)"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/123550",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 200.0
+      },
+      "3": {
+        "source": "CREA",
+        "id": "004210",
+        "label": "Fagioli, Cannellini in scatola, scolati",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Fagioli, Cannellini in scatola, scolati",
+        "approved_by": "codex_catalog_review",
+        "note": "Cannellini in scatola scolati come variante dei fagioli bianchi della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-caper-salad-rye",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "175204",
+            "description": "Beans, white, mature seeds, canned"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 400.0
+      },
+      "4": {
+        "source": "Open Food Facts",
+        "id": "8000633014766",
+        "label": "Capperi in aceto · Unes",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Capperi in aceto",
+        "approved_by": "codex_catalog_review",
+        "note": "Capperi in aceto Unes: ingredienti dichiarati capperi, acqua, aceto, sale; peso della parte alimentare sgocciolata da confermare se si usa una confezione diversa.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-caper-salad-rye",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172238",
+            "description": "Capers, canned"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8000633014766",
+          "catalog_ingredients": "capperi, acqua, aceto di vino, sale Contiene solfiti",
+          "basis": "per_100_g"
+        },
+        "grams_override": 20.0
+      },
+      "5": {
+        "source": "CREA",
+        "id": "009210",
+        "label": "Olio di oliva extra vergine",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-caper-salad-rye",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 13.7
+      },
+      "6": {
+        "source": "CREA",
+        "id": "008040",
+        "label": "Limoni, succo",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Limoni, succo",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-caper-salad-rye",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "167747",
+            "description": "Lemon juice, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/008040",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 15.5
+      },
+      "7": {
+        "source": "Open Food Facts",
+        "id": "8051499550332",
+        "label": "Prezzemolo · Fruttital srl, Conad",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Prezzemolo",
+        "approved_by": "codex_catalog_review",
+        "note": "Prezzemolo Fruttital/Conad, ingrediente singolo dichiarato, confezione 50 g, categoria erbe e macro completi. Grammi della parte edibile prima della cottura; verifica sul record locale, non sulla confezione attuale.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-caper-salad-rye",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170416",
+            "description": "Parsley, fresh"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8051499550332",
+          "catalog_ingredients": "Prezzemolo",
+          "basis": "per_100_g"
+        },
+        "grams_override": 10.0
+      },
+      "8": {
+        "source": "CREA",
+        "id": "000510",
+        "label": "Pane di segale",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pane di segale",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-white-bean-caper-salad-rye",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172684",
+            "description": "Bread, rye"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000510",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 90.0
+      }
+    },
+    "foodose:R064": {
+      "1": {
+        "source": "CREA",
+        "id": "005500",
+        "label": "Melanzane, crude",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Melanzane, crude",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/white-bean-aubergine-tomato-bake",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169228",
+            "description": "Eggplant, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005500",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 300.0
+      },
+      "2": {
+        "source": "CREA",
+        "id": "009210",
+        "label": "Olio di oliva extra vergine",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Olio di oliva extra vergine",
+        "approved_by": "codex_catalog_review",
+        "note": "Uso di olio EVO CREA al posto dell’olio di oliva generico della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/white-bean-aubergine-tomato-bake",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171413",
+            "description": "Oil, olive, salad or cooking"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/009210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 9.1
+      },
+      "3": {
+        "source": "CREA",
+        "id": "004210",
+        "label": "Fagioli, Cannellini in scatola, scolati",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Fagioli, Cannellini in scatola, scolati",
+        "approved_by": "codex_catalog_review",
+        "note": "Cannellini in scatola scolati come variante dei fagioli bianchi della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/white-bean-aubergine-tomato-bake",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "175204",
+            "description": "Beans, white, mature seeds, canned"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 300.0
+      },
+      "4": {
+        "source": "CREA",
+        "id": "006680",
+        "label": "Pomodori, pelati in scatola",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pomodori, pelati in scatola",
+        "approved_by": "codex_catalog_review",
+        "note": "Pelati in scatola CREA da spezzettare, mantenendo il liquido alimentare conteggiato.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/white-bean-aubergine-tomato-bake",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170051",
+            "description": "Tomatoes, red, ripe, canned, packed in tomato juice"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006680",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 300.0
+      },
+      "5": {
+        "source": "Open Food Facts",
+        "id": "8004708082094",
+        "label": "Origano foglie · Drogheria & Alimentari, La Drogheria",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Origano foglie",
+        "approved_by": "codex_catalog_review",
+        "note": "Origano essiccato Drogheria & Alimentari: ingrediente singolo dichiarato. Esclusi candidati con tutti i macro zero o valori non verificati.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/white-bean-aubergine-tomato-bake",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171328",
+            "description": "Spices, oregano, dried"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8004708082094",
+          "catalog_ingredients": "origano essiccato",
+          "basis": "per_100_g"
+        },
+        "grams_override": 0.5
+      },
+      "6": {
+        "source": "CREA",
+        "id": "006800",
+        "label": "Basilico, fresco",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Basilico, fresco",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/white-bean-aubergine-tomato-bake",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172232",
+            "description": "Basil, fresh"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006800",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 5.0
+      },
+      "7": {
+        "source": "CREA",
+        "id": "000550",
+        "label": "Pane di tipo integrale",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pane di tipo integrale",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/white-bean-aubergine-tomato-bake",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172688",
+            "description": "Bread, whole-wheat, commercially prepared"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/000550",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 80.0
       }
     }
   }

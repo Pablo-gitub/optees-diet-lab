@@ -214,6 +214,10 @@ def match_crea_candidates(canonical: dict, qualifiers: dict, crea_foods: dict) -
                         'nutrients': {k: float(alt_food[k]) for k in NUTRIENTS if alt_food.get(k)}
                     })
 
+    if canonical.get('flags', {}).get('proxy_only'):
+        for candidate in candidates:
+            candidate.update(match_type='proxy', confidence='medium', reason='Taglio o composizione non equivalente: proxy da verificare per ricetta.')
+
     # Add proxies if available
     for proxy in cm.get('proxies', []):
         p_id = proxy['id']
@@ -356,7 +360,7 @@ def approval_compatible(ing, canonical, qualifiers, approval, crea_foods, specif
             return False
         if qualifiers.get('processing_state') == 'dry' and re.search(r'\b(fresco|freschi|fresche|fresca)\b',food_name):
             return False
-        if qualifiers.get('grain_type') == 'whole' and 'integrale' not in food_name:
+        if qualifiers.get('grain_type') == 'whole' and food.get('category') == 'Cereali e derivati' and 'integrale' not in food_name:
             return False
         if not specific and qualifiers.get('processing_state') == 'canned' and not any(x in food_name for x in ['scatola','conserv','salamoia']):
             return False
@@ -505,6 +509,25 @@ def process_ingredient(ing: dict, recipe: dict, dictionary: dict, approved_data:
             'quantity_status': qty_status,
             'quantity_note': qty_note,
             'note': 'Olio per friggere: assorbimento effettivo non inferibile, richiede revisione manuale'
+        }
+
+    if canonical and canonical.get('flags', {}).get('requires_dilution'):
+        return {
+            'ingredient_key': ing_key,
+            'original_name': name,
+            'canonical_id': canonical['id'],
+            'canonical_name': canonical['display_name_it'],
+            'qualifiers': qualifiers,
+            'match_status': 'needs_review',
+            'confidence': 'low',
+            'reviewed': False,
+            'state_checked': False,
+            'selected_candidate': None,
+            'candidates': match_crea_candidates(canonical, qualifiers, crea_foods) if canonical else [],
+            'grams': grams,
+            'quantity_status': qty_status,
+            'quantity_note': qty_note,
+            'note': 'Brodo liquido pronto: non equiparabile a dado concentrato senza diluizione, richiede revisione manuale'
         }
 
     # 5. Search CREA candidates
@@ -866,7 +889,7 @@ def export_recipe_mappings(processed_recipes: list, output_dir: Path):
 
 
 def approve_canonical(canonical_id: str, source: str, food_id: str, label: str,
-                      approved_path: Path, note: str = None):
+                      approved_path: Path, note: str = None, approved_by: str = None):
     """Record an approved mapping for a canonical ingredient, propagating across all recipes."""
     approved_data = load_approved_mappings(approved_path)
     canonical_approvals = approved_data.setdefault('canonical_approvals', {})
@@ -878,11 +901,11 @@ def approve_canonical(canonical_id: str, source: str, food_id: str, label: str,
         'state': 'verificato',
         'reviewed': True,
         'state_checked': True,
-        'approved_by': 'user_review',
-        'note': note or f"Approvazione manuale per {canonical_id} -> {source}:{food_id}"
+        'approved_by': approved_by or 'baseline_rule',
+        'note': note or f"Approvazione per {canonical_id} -> {source}:{food_id}"
     }
     save_approved_mappings(approved_data, approved_path)
-    print(f"Approvazione salvata per '{canonical_id}': {source}:{food_id} ({label})")
+    print(f"Approvazione salvata per '{canonical_id}': {source}:{food_id} ({label}) [by: {approved_by or 'baseline_rule'}]")
 
 
 def main():
@@ -904,13 +927,15 @@ def main():
     parser.add_argument('--approve', nargs=3, metavar=('CANONICAL_ID', 'SOURCE', 'FOOD_ID'),
                         help='Registra una revisione approvata per un ingrediente canonico')
     parser.add_argument('--approve-label', type=str, default='', help='Etichetta per l\'alimento approvato')
+    parser.add_argument('--approve-by', type=str, default='baseline_rule', help='Autore o fonte dell\'approvazione')
+    parser.add_argument('--approve-note', type=str, default=None, help='Nota o motivazione dell\'approvazione')
 
     args = parser.parse_args()
 
     # Handle approval command
     if args.approve:
         cid, src, fid = args.approve
-        approve_canonical(cid, src, fid, args.approve_label, args.approved_file)
+        approve_canonical(cid, src, fid, args.approve_label, args.approved_file, note=args.approve_note, approved_by=args.approve_by)
         return
 
     # Process recipes

@@ -1,0 +1,232 @@
+[
+  {
+    "recipe_id": "foodose:R048",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 249.7045,
+      "protein_g": 20.7025,
+      "fat_g": 10.7404,
+      "carbs_g": 14.305
+    }
+  },
+  {
+    "recipe_id": "foodose:R328",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 560.009,
+      "protein_g": 23.065,
+      "fat_g": 19.0759,
+      "carbs_g": 66.82
+    }
+  },
+  {
+    "recipe_id": "foodose:R299",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 402.434,
+      "protein_g": 43.996,
+      "fat_g": 13.3124,
+      "carbs_g": 26.1128
+    }
+  },
+  {
+    "recipe_id": "foodose:R144",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 355.607,
+      "protein_g": 34.9073,
+      "fat_g": 8.731,
+      "carbs_g": 31.85
+    }
+  },
+  {
+    "recipe_id": "foodose:R054",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 415.427,
+      "protein_g": 21.535,
+      "fat_g": 16.9577,
+      "carbs_g": 45.09
+    }
+  },
+  {
+    "recipe_id": "foodose:R270",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 522.7544,
+      "protein_g": 22.315,
+      "fat_g": 13.1154,
+      "carbs_g": 74.1
+    }
+  },
+  {
+    "recipe_id": "foodose:R068",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 481.8895,
+      "protein_g": 22.9025,
+      "fat_g": 10.7884,
+      "carbs_g": 69.671
+    }
+  },
+  {
+    "recipe_id": "foodose:R165",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 474.556,
+      "protein_g": 25.7638,
+      "fat_g": 20.7684,
+      "carbs_g": 46.3075
+    }
+  },
+  {
+    "recipe_id": "foodose:R326",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 517.8044,
+      "protein_g": 23.855,
+      "fat_g": 19.6679,
+      "carbs_g": 61.97
+    }
+  },
+  {
+    "recipe_id": "foodose:R039",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 357.1695,
+      "protein_g": 27.2881,
+      "fat_g": 6.1762,
+      "carbs_g": 49.6107
+    }
+  },
+  {
+    "recipe_id": "foodose:R143",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 326.902,
+      "protein_g": 25.0977,
+      "fat_g": 6.4785,
+      "carbs_g": 41.887
+    }
+  },
+  {
+    "recipe_id": "foodose:R223",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 410.6065,
+      "protein_g": 28.571,
+      "fat_g": 8.6046,
+      "carbs_g": 56.6328
+    }
+  },
+  {
+    "recipe_id": "foodose:R100",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 374.417,
+      "protein_g": 22.2285,
+      "fat_g": 16.2527,
+      "carbs_g": 33.789
+    }
+  },
+  {
+    "recipe_id": "foodose:R009",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 310.148,
+      "protein_g": 18.391,
+      "fat_g": 12.5965,
+      "carbs_g": 29.3505
+    }
+  },
+  {
+    "recipe_id": "foodose:R057",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 443.8395,
+      "protein_g": 24.9225,
+      "fat_g": 13.5084,
+      "carbs_g": 49.466
+    }
+  },
+  {
+    "recipe_id": "foodose:R094",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 311.9945,
+      "protein_g": 33.2531,
+      "fat_g": 5.4862,
+      "carbs_g": 30.7907
+    }
+  },
+  {
+    "recipe_id": "foodose:R249",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 407.1065,
+      "protein_g": 38.386,
+      "fat_g": 9.0897,
+      "carbs_g": 40.4477
+    }
+  },
+  {
+    "recipe_id": "foodose:R323",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 511.0841,
+      "protein_g": 40.9455,
+      "fat_g": 11.3959,
+      "carbs_g": 57.9338
+    }
+  },
+  {
+    "recipe_id": "foodose:R038",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 280.7795,
+      "protein_g": 32.8428,
+      "fat_g": 6.1312,
+      "carbs_g": 20.847
+    }
+  },
+  {
+    "recipe_id": "foodose:R303",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 463.584,
+      "protein_g": 37.5655,
+      "fat_g": 20.8159,
+      "carbs_g": 29.4688
+    }
+  },
+  {
+    "recipe_id": "foodose:R044",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 461.6395,
+      "protein_g": 39.9375,
+      "fat_g": 12.7184,
+      "carbs_g": 48.481
+    }
+  },
+  {
+    "recipe_id": "foodose:R225",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 456.0065,
+      "protein_g": 41.636,
+      "fat_g": 9.2797,
+      "carbs_g": 48.1778
+    }
+  },
+  {
+    "recipe_id": "foodose:R064",
+    "status": "optimal",
+    "nutrients": {
+      "kcal": 328.717,
+      "protein_g": 15.8,
+      "fat_g": 7.3461,
+      "carbs_g": 44.986
+    }
+  }
+]

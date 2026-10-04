@@ -1,0 +1,620 @@
+{
+  "review_basis": "local OFF catalogue, not current physical package",
+  "mappings": [
+    {
+      "recipe_id": "demo:pasta-pomodoro",
+      "ingredient": "pasta",
+      "source": "Open Food Facts",
+      "id": "8076800195057",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Spaghetti N°5 · Barilla",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "DURUM WHEAT SEMOLINA PASTA. May contain traces of soy and mustard.",
+        "source_url": "https://world.openfoodfacts.org/product/8076800195057",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "demo:pasta-pomodoro",
+      "ingredient": "pasta",
+      "source": "Open Food Facts",
+      "id": "8004690051573",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Spaghetti N°15 · La Molisana",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "Pasta di semola di _grano_ duro",
+        "source_url": "https://world.openfoodfacts.org/product/8004690051573",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "demo:pasta-pomodoro",
+      "ingredient": "tomato",
+      "source": "Open Food Facts",
+      "id": "8005110630217",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Passata di pomodoro · Mutti",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "Pomodoro 99,5%, sale",
+        "source_url": "https://world.openfoodfacts.org/product/8005110630217",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "demo:pasta-pomodoro",
+      "ingredient": "tomato",
+      "source": "Open Food Facts",
+      "id": "8005110001802",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Passata emiliana l'armoniosa · Mutti",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "Pomodoro datterino (99,8%), sale",
+        "source_url": "https://world.openfoodfacts.org/product/8005110001802",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "demo:pasta-pomodoro",
+      "ingredient": "tomato",
+      "source": "Open Food Facts",
+      "id": "0024000000099",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "La Classica Passata Finissima · Del Monte, Del Monte Foods Inc., Del Monte Quality",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "POMODORO, SALE, CORRETTORE DI ACIDITÀ: ACIDO CITRICO",
+        "source_url": "https://world.openfoodfacts.org/product/0024000000099",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R315",
+      "ingredient": "2",
+      "source": "Open Food Facts",
+      "id": "8000430132410",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Mozzarella - Santa Lucia · Galbani Santa Lucia",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "latte, sale, correttore di acidità: acido citrico.",
+        "source_url": "https://world.openfoodfacts.org/product/8000430132410",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R048",
+      "ingredient": "3",
+      "source": "Open Food Facts",
+      "id": "8005110630217",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Passata di pomodoro · Mutti",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "Pomodoro 99,5%, sale",
+        "source_url": "https://world.openfoodfacts.org/product/8005110630217",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R048",
+      "ingredient": "3",
+      "source": "Open Food Facts",
+      "id": "8005110001802",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Passata emiliana l'armoniosa · Mutti",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "Pomodoro datterino (99,8%), sale",
+        "source_url": "https://world.openfoodfacts.org/product/8005110001802",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R048",
+      "ingredient": "3",
+      "source": "Open Food Facts",
+      "id": "0024000000099",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "La Classica Passata Finissima · Del Monte, Del Monte Foods Inc., Del Monte Quality",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "POMODORO, SALE, CORRETTORE DI ACIDITÀ: ACIDO CITRICO",
+        "source_url": "https://world.openfoodfacts.org/product/0024000000099",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R048",
+      "ingredient": "6",
+      "source": "Open Food Facts",
+      "id": "8000430132410",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Mozzarella - Santa Lucia · Galbani Santa Lucia",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "latte, sale, correttore di acidità: acido citrico.",
+        "source_url": "https://world.openfoodfacts.org/product/8000430132410",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R054",
+      "ingredient": "1",
+      "source": "Open Food Facts",
+      "id": "8076809523738",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Lasagne Platten · Barilla",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "Hartweizengrieß, Wasser Kann Spuren von Sojabohnen, Ei, und Senf enthalten.",
+        "source_url": "https://world.openfoodfacts.org/product/8076809523738",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R054",
+      "ingredient": "4",
+      "source": "Open Food Facts",
+      "id": "8000430193015",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Ricotta · Galbani, Santa Lucia",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "SIERO DI LATTE VACCINO, CORRETTORE DI ACIDITÀ: ACIDO LATTICO, ACIDO CITRICO",
+        "source_url": "https://world.openfoodfacts.org/product/8000430193015",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R054",
+      "ingredient": "4",
+      "source": "Open Food Facts",
+      "id": "8000430194166",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Ricotta fresca · Galbani, Vallelata",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "Siero di latte vaccino, crema di latte e/o siero di latte vaccino, sale, correttore di acidità: acido lattico, acido citrico.",
+        "source_url": "https://world.openfoodfacts.org/product/8000430194166",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R054",
+      "ingredient": "5",
+      "source": "Open Food Facts",
+      "id": "8005110630217",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Passata di pomodoro · Mutti",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "Pomodoro 99,5%, sale",
+        "source_url": "https://world.openfoodfacts.org/product/8005110630217",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R054",
+      "ingredient": "5",
+      "source": "Open Food Facts",
+      "id": "8005110001802",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Passata emiliana l'armoniosa · Mutti",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "Pomodoro datterino (99,8%), sale",
+        "source_url": "https://world.openfoodfacts.org/product/8005110001802",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R054",
+      "ingredient": "5",
+      "source": "Open Food Facts",
+      "id": "0024000000099",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "La Classica Passata Finissima · Del Monte, Del Monte Foods Inc., Del Monte Quality",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "POMODORO, SALE, CORRETTORE DI ACIDITÀ: ACIDO CITRICO",
+        "source_url": "https://world.openfoodfacts.org/product/0024000000099",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R054",
+      "ingredient": "6",
+      "source": "Open Food Facts",
+      "id": "8000430132410",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Mozzarella - Santa Lucia · Galbani Santa Lucia",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "latte, sale, correttore di acidità: acido citrico.",
+        "source_url": "https://world.openfoodfacts.org/product/8000430132410",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R270",
+      "ingredient": "7",
+      "source": "Open Food Facts",
+      "id": "8005110630217",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Passata di pomodoro · Mutti",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "Pomodoro 99,5%, sale",
+        "source_url": "https://world.openfoodfacts.org/product/8005110630217",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R270",
+      "ingredient": "7",
+      "source": "Open Food Facts",
+      "id": "8005110001802",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Passata emiliana l'armoniosa · Mutti",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "Pomodoro datterino (99,8%), sale",
+        "source_url": "https://world.openfoodfacts.org/product/8005110001802",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R270",
+      "ingredient": "7",
+      "source": "Open Food Facts",
+      "id": "0024000000099",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "La Classica Passata Finissima · Del Monte, Del Monte Foods Inc., Del Monte Quality",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "POMODORO, SALE, CORRETTORE DI ACIDITÀ: ACIDO CITRICO",
+        "source_url": "https://world.openfoodfacts.org/product/0024000000099",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R270",
+      "ingredient": "8",
+      "source": "Open Food Facts",
+      "id": "8076800195057",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Spaghetti N°5 · Barilla",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "DURUM WHEAT SEMOLINA PASTA. May contain traces of soy and mustard.",
+        "source_url": "https://world.openfoodfacts.org/product/8076800195057",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R270",
+      "ingredient": "8",
+      "source": "Open Food Facts",
+      "id": "8004690051573",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Spaghetti N°15 · La Molisana",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "Pasta di semola di _grano_ duro",
+        "source_url": "https://world.openfoodfacts.org/product/8004690051573",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R068",
+      "ingredient": "5",
+      "source": "Open Food Facts",
+      "id": "8005110630217",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Passata di pomodoro · Mutti",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "Pomodoro 99,5%, sale",
+        "source_url": "https://world.openfoodfacts.org/product/8005110630217",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R068",
+      "ingredient": "5",
+      "source": "Open Food Facts",
+      "id": "8005110001802",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Passata emiliana l'armoniosa · Mutti",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "Pomodoro datterino (99,8%), sale",
+        "source_url": "https://world.openfoodfacts.org/product/8005110001802",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R068",
+      "ingredient": "5",
+      "source": "Open Food Facts",
+      "id": "0024000000099",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "La Classica Passata Finissima · Del Monte, Del Monte Foods Inc., Del Monte Quality",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "POMODORO, SALE, CORRETTORE DI ACIDITÀ: ACIDO CITRICO",
+        "source_url": "https://world.openfoodfacts.org/product/0024000000099",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R068",
+      "ingredient": "7",
+      "source": "Open Food Facts",
+      "id": "8076800195057",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Spaghetti N°5 · Barilla",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale. Formato spaghetti ammesso come adattamento della pasta generica.",
+      "evidence": {
+        "ingredients_text": "DURUM WHEAT SEMOLINA PASTA. May contain traces of soy and mustard.",
+        "source_url": "https://world.openfoodfacts.org/product/8076800195057",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R068",
+      "ingredient": "7",
+      "source": "Open Food Facts",
+      "id": "8004690051573",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Spaghetti N°15 · La Molisana",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale. Formato spaghetti ammesso come adattamento della pasta generica.",
+      "evidence": {
+        "ingredients_text": "Pasta di semola di _grano_ duro",
+        "source_url": "https://world.openfoodfacts.org/product/8004690051573",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R326",
+      "ingredient": "2",
+      "source": "Open Food Facts",
+      "id": "8000430193015",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Ricotta · Galbani, Santa Lucia",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "SIERO DI LATTE VACCINO, CORRETTORE DI ACIDITÀ: ACIDO LATTICO, ACIDO CITRICO",
+        "source_url": "https://world.openfoodfacts.org/product/8000430193015",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R326",
+      "ingredient": "2",
+      "source": "Open Food Facts",
+      "id": "8000430194166",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Ricotta fresca · Galbani, Vallelata",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "Siero di latte vaccino, crema di latte e/o siero di latte vaccino, sale, correttore di acidità: acido lattico, acido citrico.",
+        "source_url": "https://world.openfoodfacts.org/product/8000430194166",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R326",
+      "ingredient": "5",
+      "source": "Open Food Facts",
+      "id": "8005110630217",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Passata di pomodoro · Mutti",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "Pomodoro 99,5%, sale",
+        "source_url": "https://world.openfoodfacts.org/product/8005110630217",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R326",
+      "ingredient": "5",
+      "source": "Open Food Facts",
+      "id": "8005110001802",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Passata emiliana l'armoniosa · Mutti",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "Pomodoro datterino (99,8%), sale",
+        "source_url": "https://world.openfoodfacts.org/product/8005110001802",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R326",
+      "ingredient": "5",
+      "source": "Open Food Facts",
+      "id": "0024000000099",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "La Classica Passata Finissima · Del Monte, Del Monte Foods Inc., Del Monte Quality",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "POMODORO, SALE, CORRETTORE DI ACIDITÀ: ACIDO CITRICO",
+        "source_url": "https://world.openfoodfacts.org/product/0024000000099",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R039",
+      "ingredient": "1",
+      "source": "Open Food Facts",
+      "id": "8000139931048",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Linguine · Garofalo",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "Semola di GRANO duro. Può contenere tracce di SOIA",
+        "source_url": "https://world.openfoodfacts.org/product/8000139931048",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R039",
+      "ingredient": "1",
+      "source": "Open Food Facts",
+      "id": "3560070555307",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Linguine · Carrefour",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "Semoule de _blé_ dur de qualité supérieure. Peut contenir des traces de soja et de moutarde.",
+        "source_url": "https://world.openfoodfacts.org/product/3560070555307",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R223",
+      "ingredient": "1",
+      "source": "Open Food Facts",
+      "id": "8076800195057",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Spaghetti N°5 · Barilla",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "DURUM WHEAT SEMOLINA PASTA. May contain traces of soy and mustard.",
+        "source_url": "https://world.openfoodfacts.org/product/8076800195057",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R223",
+      "ingredient": "1",
+      "source": "Open Food Facts",
+      "id": "8004690051573",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Spaghetti N°15 · La Molisana",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "Pasta di semola di _grano_ duro",
+        "source_url": "https://world.openfoodfacts.org/product/8004690051573",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R100",
+      "ingredient": "5",
+      "source": "Open Food Facts",
+      "id": "8000430132410",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Mozzarella - Santa Lucia · Galbani Santa Lucia",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "latte, sale, correttore di acidità: acido citrico.",
+        "source_url": "https://world.openfoodfacts.org/product/8000430132410",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R057",
+      "ingredient": "6",
+      "source": "Open Food Facts",
+      "id": "8000430132410",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Mozzarella - Santa Lucia · Galbani Santa Lucia",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "latte, sale, correttore di acidità: acido citrico.",
+        "source_url": "https://world.openfoodfacts.org/product/8000430132410",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R044",
+      "ingredient": "1",
+      "source": "Open Food Facts",
+      "id": "8076800195057",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Spaghetti N°5 · Barilla",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale. Formato spaghetti ammesso come adattamento della pasta generica.",
+      "evidence": {
+        "ingredients_text": "DURUM WHEAT SEMOLINA PASTA. May contain traces of soy and mustard.",
+        "source_url": "https://world.openfoodfacts.org/product/8076800195057",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R044",
+      "ingredient": "1",
+      "source": "Open Food Facts",
+      "id": "8004690051573",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Spaghetti N°15 · La Molisana",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale. Formato spaghetti ammesso come adattamento della pasta generica.",
+      "evidence": {
+        "ingredients_text": "Pasta di semola di _grano_ duro",
+        "source_url": "https://world.openfoodfacts.org/product/8004690051573",
+        "nutrient_basis": "per_100_g"
+      }
+    },
+    {
+      "recipe_id": "foodose:R044",
+      "ingredient": "7",
+      "source": "Open Food Facts",
+      "id": "8000430132410",
+      "reviewed": true,
+      "state_checked": true,
+      "label": "Mozzarella - Santa Lucia · Galbani Santa Lucia",
+      "note": "Prodotto di marca compatibile verificato su nome, ingredienti, stato e valori per 100 g nel catalogo locale. Nessuna verifica della confezione attuale.",
+      "evidence": {
+        "ingredients_text": "latte, sale, correttore di acidità: acido citrico.",
+        "source_url": "https://world.openfoodfacts.org/product/8000430132410",
+        "nutrient_basis": "per_100_g"
+      }
+    }
+  ]
+}

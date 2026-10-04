@@ -27,7 +27,8 @@ class WebTests(unittest.TestCase):
         first,h1=self.account('recipefirst');second,h2=self.account('recipesecond')
         self.assertEqual(TestClient(self.module.app).get('/api/recipe-solver').status_code,401)
         options=first.get('/api/recipe-solver').json()
-        self.assertEqual(len(options['recipes']),2)
+        self.assertGreaterEqual(len(options['recipes']),2)
+        self.assertIn('foodose:R054',{r['id'] for r in options['recipes']})
         config=options['defaults']
         self.assertEqual(first.post('/api/recipe-optimize',json=config).status_code,403)
         self.assertEqual(first.post('/api/recipe-optimize',json=dict(config,recipe_id='foodose:unmapped'),headers=h1).status_code,400)
@@ -38,6 +39,26 @@ class WebTests(unittest.TestCase):
             db.execute('INSERT INTO recipe_runs(user_id,created,payload) VALUES(?,?,?)',(user,0,json.dumps({'title':'first only'})))
         self.assertEqual(second.get('/api/recipe-runs').json(),[])
         self.assertEqual(first.get('/api/recipe-runs').json()[0]['result']['title'],'first only')
+
+    def test_recipe_diet_options_are_private_and_validate_context(self):
+        client,_=self.account('dietrecipes')
+        self.assertEqual(TestClient(self.module.app).get('/api/recipe-diet-options').status_code,401)
+        self.assertEqual(client.get('/api/recipe-diet-options?mode=training').status_code,403)
+        free=client.get('/api/recipe-diet-options').json()
+        self.assertNotIn('rules_sha256',free)
+        self.assertTrue(all(r['status']=='unconstrained' for r in free['recipes']))
+        self.assertEqual(client.get('/api/recipe-diet-options?day_index=14').status_code,400)
+        self.assertEqual(client.get('/api/recipe-diet-options?meal=breakfast').status_code,400)
+        with self.module.connect() as db:
+            row=db.execute('SELECT id,profile FROM users WHERE username=?',('dietrecipes',)).fetchone()
+            profile=json.loads(row['profile']);profile['personal_diets']=True
+            db.execute('UPDATE users SET profile=? WHERE id=?',(json.dumps(profile),row['id']))
+        reply=client.get('/api/recipe-diet-options?mode=training&day_index=0&meal=lunch')
+        self.assertEqual(reply.status_code,200)
+        self.assertEqual(reply.json()['expression'],'A')
+        self.assertIn('rules_sha256',reply.json())
+        self.assertEqual(client.get('/api/recipe-diet-options?mode=unknown').status_code,400)
+
 
     def test_new_profile_has_no_paolo_data_or_diets(self):
         client,headers=self.account('amico')

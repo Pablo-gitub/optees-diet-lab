@@ -246,7 +246,7 @@
     "canonical_name": "Aglio",
     "occurrences": 218,
     "recipes_count": 218,
-    "primary_status": "proposed_exact",
+    "primary_status": "approved",
     "raw_names": [
       "Garlic",
       "Garlic bulbs",
@@ -354,6 +354,28 @@
           "protein_g_100g": 12.4,
           "fat_g_100g": 8.7
         }
+      },
+      {
+        "source": "Open Food Facts",
+        "id": "8002330008048",
+        "label": "10 Uova fresche medie da allevamento a terra · Esselunga, Smart, smart",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "10 Uova fresche medie da allevamento a terra",
+        "approved_by": "codex_catalog_review",
+        "note": "Uova fresche Esselunga Smart, ingrediente dichiarato uova, tutti i macro disponibili. Grammi della parte edibile senza guscio; sostituisce CREA con carboidrati mancanti.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/baked-chicken-schnitzel-green-beans-lemon",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171287",
+            "description": "Egg, whole, raw, fresh"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8002330008048",
+          "catalog_ingredients": "Uova",
+          "basis": "per_100_g"
+        },
+        "grams_override": 50.0
       }
     ],
     "sample_recipes": [
@@ -1115,6 +1137,28 @@
           "protein_g_100g": 3.7,
           "fat_g_100g": 0.6
         }
+      },
+      {
+        "source": "Open Food Facts",
+        "id": "8051499550332",
+        "label": "Prezzemolo · Fruttital srl, Conad",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Prezzemolo",
+        "approved_by": "codex_catalog_review",
+        "note": "Prezzemolo Fruttital/Conad, ingrediente singolo dichiarato, confezione 50 g, categoria erbe e macro completi. Grammi della parte edibile prima della cottura; verifica sul record locale, non sulla confezione attuale.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/baked-chicken-schnitzel-green-beans-lemon",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170416",
+            "description": "Parsley, fresh"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8051499550332",
+          "catalog_ingredients": "Prezzemolo",
+          "basis": "per_100_g"
+        },
+        "grams_override": 10.0
       }
     ],
     "sample_recipes": [
@@ -1850,7 +1894,7 @@
   },
   {
     "canonical_id": "brodo_vegetale",
-    "canonical_name": "Brodo vegetale",
+    "canonical_name": "Brodo vegetale pronto (liquido)",
     "occurrences": 62,
     "recipes_count": 62,
     "primary_status": "proposed_proxy",
@@ -1867,9 +1911,8 @@
         "name": "Dadi da brodo",
         "match_type": "proxy",
         "confidence": "medium",
-        "state": "brodo vegetale pronto (liquido)",
-        "reason": "Dadi da brodo CREA 503010 come proxy per brodo concentrato (richiede densità/diluizione)",
-        "is_ambiguous": false,
+        "state": "Dadi da brodo",
+        "reason": "Dadi da brodo concentrati CREA 503010 (richiede fattore di diluizione ~1:50, non equiparabile tal quale)",
         "nutrients": {
           "kcal_100g": 250.0,
           "protein_g_100g": 15.7,
@@ -2006,6 +2049,28 @@
           "fat_g_100g": 3.9,
           "carbs_available_g_100g": 4.3
         }
+      },
+      {
+        "source": "CREA",
+        "id": "151000",
+        "label": "Yogurt da latte, parzialmente scremato",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Yogurt da latte, parzialmente scremato",
+        "approved_by": "codex_catalog_review",
+        "note": "Yogurt parzialmente scremato, variante esplicita del riferimento low-fat; non yogurt intero.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/cod-chickpea-fritters",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170886",
+            "description": "Yogurt, plain, low fat"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/151000",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 100.0
       }
     ],
     "sample_recipes": [
@@ -2054,7 +2119,7 @@
   },
   {
     "canonical_id": "brodo_pollo",
-    "canonical_name": "Brodo di pollo",
+    "canonical_name": "Brodo di pollo pronto (liquido)",
     "occurrences": 55,
     "recipes_count": 55,
     "primary_status": "proposed_proxy",
@@ -2071,9 +2136,8 @@
         "name": "Dadi da brodo",
         "match_type": "proxy",
         "confidence": "medium",
-        "state": "brodo di carne pronto (liquido)",
-        "reason": "Dadi da brodo CREA 503010 come proxy (richiede densità/diluizione)",
-        "is_ambiguous": false,
+        "state": "Dadi da brodo",
+        "reason": "Dadi da brodo concentrati CREA 503010 (richiede fattore di diluizione ~1:50, non equiparabile tal quale)",
         "nutrients": {
           "kcal_100g": 250.0,
           "protein_g_100g": 15.7,
@@ -2143,18 +2207,24 @@
       {
         "source": "CREA",
         "id": "004210",
-        "name": "Fagioli, Cannellini in scatola, scolati",
-        "match_type": "exact",
-        "confidence": "high",
-        "state": "in scatola, scolati, pronti al consumo",
-        "reason": "Fagioli cannellini in scatola scolati CREA 004210",
-        "is_ambiguous": false,
-        "nutrients": {
-          "kcal_100g": 86.0,
-          "protein_g_100g": 6.0,
-          "fat_g_100g": 0.6,
-          "carbs_available_g_100g": 12.5
-        }
+        "label": "Fagioli, Cannellini in scatola, scolati",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Fagioli, Cannellini in scatola, scolati",
+        "approved_by": "codex_catalog_review",
+        "note": "Cannellini in scatola scolati come variante dei fagioli bianchi della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-caponata-white-beans",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "175204",
+            "description": "Beans, white, mature seeds, canned"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 400.0
       }
     ],
     "sample_recipes": [
@@ -2557,6 +2627,101 @@
         "original_name": "Oil for frying",
         "grams": null,
         "quantity_status": "needs_review"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "origano_secco",
+    "canonical_name": "Origano essiccato",
+    "occurrences": 41,
+    "recipes_count": 41,
+    "primary_status": "proposed_proxy",
+    "raw_names": [
+      "Dried oregano",
+      "Mexican oregano",
+      "Oregano",
+      "dried oregano"
+    ],
+    "candidates": [
+      {
+        "source": "Open Food Facts",
+        "id": "8002330020644",
+        "name": "Origano · Esselunga",
+        "brands": "Esselunga",
+        "match_type": "brand_candidate",
+        "confidence": "high",
+        "reason": "Origano secco essiccato Esselunga in OFF (244 kcal/100g)",
+        "nutrients": {
+          "kcal_100g": 244.0,
+          "protein_g_100g": 0.0,
+          "fat_g_100g": 2.78,
+          "carbs_available_g_100g": 53.61
+        }
+      },
+      {
+        "source": "Open Food Facts",
+        "id": "8004708082094",
+        "label": "Origano foglie · Drogheria & Alimentari, La Drogheria",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Origano foglie",
+        "approved_by": "codex_catalog_review",
+        "note": "Origano essiccato Drogheria & Alimentari: ingrediente singolo dichiarato. Esclusi candidati con tutti i macro zero o valori non verificati.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/lentil-walnut-ragu-pasta",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171328",
+            "description": "Spices, oregano, dried"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/8004708082094",
+          "catalog_ingredients": "origano essiccato",
+          "basis": "per_100_g"
+        },
+        "grams_override": 0.5
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:arroz-con-pollo-cubano",
+        "recipe_title": "Arroz con pollo",
+        "ingredient_key": "11",
+        "original_name": "Oregano",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:asado-argentino",
+        "recipe_title": "Asado",
+        "ingredient_key": "8",
+        "original_name": "Dried oregano",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "foodose:R027",
+        "recipe_title": "Chicken cacciatore with soft polenta",
+        "ingredient_key": "7",
+        "original_name": "dried oregano",
+        "grams": 0.5,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R128",
+        "recipe_title": "Chicken souvlaki with warm flatbread",
+        "ingredient_key": "4",
+        "original_name": "dried oregano",
+        "grams": 0.5,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R025",
+        "recipe_title": "Chicken, artichoke and butter bean bake",
+        "ingredient_key": "8",
+        "original_name": "dried oregano",
+        "grams": 0.5,
+        "quantity_status": "resolved"
       }
     ],
     "ambiguity_count": 0
@@ -3087,6 +3252,81 @@
     "ambiguity_count": 0
   },
   {
+    "canonical_id": "menta_fresca",
+    "canonical_name": "Menta, fresca",
+    "occurrences": 36,
+    "recipes_count": 36,
+    "primary_status": "proposed_exact",
+    "raw_names": [
+      "Dried mint",
+      "Fresh mint",
+      "Mint",
+      "Mint and coriander",
+      "fresh mint"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "006810",
+        "name": "Menta, fresca",
+        "match_type": "exact",
+        "confidence": "high",
+        "state": "fresco, parte edibile",
+        "reason": "Menta fresca CREA 006810 (49 kcal/100g)",
+        "is_ambiguous": false,
+        "nutrients": {
+          "kcal_100g": 49.0,
+          "protein_g_100g": 3.8,
+          "fat_g_100g": 0.7,
+          "carbs_available_g_100g": 5.3
+        }
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:mantu-afghan",
+        "recipe_title": "Afghan mantu",
+        "ingredient_key": "10",
+        "original_name": "Dried mint",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:dolma-azerbaijani",
+        "recipe_title": "Azerbaijani dolma",
+        "ingredient_key": "5",
+        "original_name": "Fresh mint",
+        "grams": 50.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R227",
+        "recipe_title": "Baked aubergine with feta, tomato and mint",
+        "ingredient_key": "7",
+        "original_name": "fresh mint",
+        "grams": 10.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R056",
+        "recipe_title": "Cauliflower and chickpea couscous with mint yoghurt",
+        "ingredient_key": "8",
+        "original_name": "fresh mint",
+        "grams": 5.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:chicken-biryani",
+        "recipe_title": "Chicken biryani",
+        "ingredient_key": "13",
+        "original_name": "Mint and coriander",
+        "grams": null,
+        "quantity_status": "needs_review"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
     "canonical_id": "piselli_surgelati",
     "canonical_name": "Piselli, surgelati",
     "occurrences": 35,
@@ -3171,79 +3411,6 @@
         "ingredient_key": "6",
         "original_name": "frozen peas",
         "grams": 100.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "lievito_birra",
-    "canonical_name": "Lievito di birra, compresso",
-    "occurrences": 34,
-    "recipes_count": 34,
-    "primary_status": "proposed_exact",
-    "raw_names": [
-      "Dried yeast",
-      "Dry yeast",
-      "Fresh yeast"
-    ],
-    "candidates": [
-      {
-        "source": "CREA",
-        "id": "503100",
-        "name": "Lievito di birra, compresso",
-        "match_type": "exact",
-        "confidence": "high",
-        "state": "lievito per panificazione",
-        "reason": "Lievito di birra CREA 503100",
-        "is_ambiguous": false,
-        "nutrients": {
-          "kcal_100g": 70.0,
-          "protein_g_100g": 12.1,
-          "fat_g_100g": 0.4,
-          "carbs_available_g_100g": 1.1
-        }
-      }
-    ],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:pakhlava-baku",
-        "recipe_title": "Baku pakhlava",
-        "ingredient_key": "3",
-        "original_name": "Dry yeast",
-        "grams": 7.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:baursaki",
-        "recipe_title": "Baursak",
-        "ingredient_key": "3",
-        "original_name": "Dry yeast",
-        "grams": 7.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:bint-al-sahn",
-        "recipe_title": "Bint al-sahn",
-        "ingredient_key": "3",
-        "original_name": "Dry yeast",
-        "grams": 7.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:boorsok",
-        "recipe_title": "Boorsok",
-        "ingredient_key": "3",
-        "original_name": "Dry yeast",
-        "grams": 10.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:sladke-buchty",
-        "recipe_title": "Buchty",
-        "ingredient_key": "3",
-        "original_name": "Dry yeast",
-        "grams": 10.0,
         "quantity_status": "resolved"
       }
     ],
@@ -3446,6 +3613,61 @@
     "ambiguity_count": 0
   },
   {
+    "canonical_id": "lievito_secco",
+    "canonical_name": "Lievito secco per panificazione",
+    "occurrences": 32,
+    "recipes_count": 32,
+    "primary_status": "missing",
+    "raw_names": [
+      "Dried yeast",
+      "Dry yeast"
+    ],
+    "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:pakhlava-baku",
+        "recipe_title": "Baku pakhlava",
+        "ingredient_key": "3",
+        "original_name": "Dry yeast",
+        "grams": 7.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:baursaki",
+        "recipe_title": "Baursak",
+        "ingredient_key": "3",
+        "original_name": "Dry yeast",
+        "grams": 7.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:bint-al-sahn",
+        "recipe_title": "Bint al-sahn",
+        "ingredient_key": "3",
+        "original_name": "Dry yeast",
+        "grams": 7.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:boorsok",
+        "recipe_title": "Boorsok",
+        "ingredient_key": "3",
+        "original_name": "Dry yeast",
+        "grams": 10.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:sladke-buchty",
+        "recipe_title": "Buchty",
+        "ingredient_key": "3",
+        "original_name": "Dry yeast",
+        "grams": 10.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
     "canonical_id": "pomodori_pelati_scatola",
     "canonical_name": "Pomodori, pelati in scatola",
     "occurrences": 32,
@@ -3459,18 +3681,24 @@
       {
         "source": "CREA",
         "id": "006680",
-        "name": "Pomodori, pelati in scatola",
-        "match_type": "exact",
-        "confidence": "high",
-        "state": "in scatola con succo, pronto al consumo/cottura",
-        "reason": "Pomodori pelati in scatola CREA 006680",
-        "is_ambiguous": false,
-        "nutrients": {
-          "kcal_100g": 22.0,
-          "protein_g_100g": 1.2,
-          "fat_g_100g": 0.5,
-          "carbs_available_g_100g": 3.0
-        }
+        "label": "Pomodori, pelati in scatola",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pomodori, pelati in scatola",
+        "approved_by": "codex_catalog_review",
+        "note": "Pelati in scatola CREA da spezzettare, mantenendo il liquido alimentare conteggiato.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-caponata-white-beans",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170051",
+            "description": "Tomatoes, red, ripe, canned, packed in tomato juice"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006680",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 400.0
       }
     ],
     "sample_recipes": [
@@ -3518,59 +3746,95 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:dried oregano",
-    "canonical_name": "dried oregano",
-    "occurrences": 30,
-    "recipes_count": 30,
-    "primary_status": "missing",
+    "canonical_id": "tacchino_petto_crudo",
+    "canonical_name": "Tacchino, fesa / petto, crudo",
+    "occurrences": 31,
+    "recipes_count": 31,
+    "primary_status": "ambiguous",
     "raw_names": [
-      "Dried oregano",
-      "dried oregano"
+      "Turkey",
+      "Turkey or chicken",
+      "cooked turkey",
+      "turkey breast",
+      "turkey mince"
     ],
-    "candidates": [],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "106710",
+        "name": "Tacchino intero, senza pelle, crudo",
+        "match_type": "proxy",
+        "confidence": "medium",
+        "state": "carne cruda macinata o fesa senza pelle",
+        "reason": "Taglio o composizione non equivalente: proxy da verificare per ricetta.",
+        "is_ambiguous": true,
+        "nutrients": {
+          "kcal_100g": 109.0,
+          "protein_g_100g": 21.9,
+          "fat_g_100g": 2.4,
+          "carbs_available_g_100g": 0.0
+        }
+      },
+      {
+        "source": "CREA",
+        "id": "106719",
+        "name": "Tacchino intero, senza pelle, cotto, al forno",
+        "match_type": "proxy",
+        "confidence": "medium",
+        "state": "cotto / bollito",
+        "reason": "Taglio o composizione non equivalente: proxy da verificare per ricetta.",
+        "is_ambiguous": true,
+        "nutrients": {
+          "kcal_100g": 117.0,
+          "protein_g_100g": 23.3,
+          "fat_g_100g": 2.6,
+          "carbs_available_g_100g": 0.0
+        }
+      }
+    ],
     "sample_recipes": [
       {
-        "recipe_id": "unitools:asado-argentino",
-        "recipe_title": "Asado",
-        "ingredient_key": "8",
-        "original_name": "Dried oregano",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "foodose:R027",
-        "recipe_title": "Chicken cacciatore with soft polenta",
-        "ingredient_key": "7",
-        "original_name": "dried oregano",
-        "grams": 0.5,
+        "recipe_id": "unitools:kak-ik",
+        "recipe_title": "Kak'ik",
+        "ingredient_key": "1",
+        "original_name": "Turkey",
+        "grams": 2000.0,
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "foodose:R128",
-        "recipe_title": "Chicken souvlaki with warm flatbread",
-        "ingredient_key": "4",
-        "original_name": "dried oregano",
-        "grams": 0.5,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R025",
-        "recipe_title": "Chicken, artichoke and butter bean bake",
-        "ingredient_key": "8",
-        "original_name": "dried oregano",
-        "grams": 0.5,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R214",
-        "recipe_title": "Chicken, fennel and olive traybake with orzo",
+        "recipe_id": "foodose:R028",
+        "recipe_title": "Maple-Dijon turkey with apple and cabbage",
         "ingredient_key": "6",
-        "original_name": "dried oregano",
-        "grams": 1.0,
+        "original_name": "turkey breast",
+        "grams": 280.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:satsivi",
+        "recipe_title": "Satsivi",
+        "ingredient_key": "1",
+        "original_name": "Turkey or chicken",
+        "grams": 2000.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R019",
+        "recipe_title": "Smoky turkey and sweet potato skillet",
+        "ingredient_key": "3",
+        "original_name": "turkey mince",
+        "grams": 300.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R107",
+        "recipe_title": "Turkey and apple breakfast patties",
+        "ingredient_key": "1",
+        "original_name": "turkey mince",
+        "grams": 250.0,
         "quantity_status": "resolved"
       }
     ],
-    "ambiguity_count": 0
+    "ambiguity_count": 2
   },
   {
     "canonical_id": "basilico_fresco",
@@ -3589,11 +3853,23 @@
         "source": "CREA",
         "id": "006800",
         "label": "Basilico, fresco",
-        "state": "fresco, parte edibile",
         "reviewed": true,
         "state_checked": true,
-        "approved_by": "baseline_rule",
-        "note": "Basilico fresco CREA 006800 verificato da demo:pasta-pomodoro e foodose:R315."
+        "state": "Basilico, fresco",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-cottage-cheese-parmigiana",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172232",
+            "description": "Basil, fresh"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006800",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 5.0
       }
     ],
     "sample_recipes": [
@@ -3966,6 +4242,168 @@
     "ambiguity_count": 0
   },
   {
+    "canonical_id": "gamberi_sgusciati",
+    "canonical_name": "Gamberi sgusciati",
+    "occurrences": 27,
+    "recipes_count": 27,
+    "primary_status": "proposed_exact",
+    "raw_names": [
+      "Large prawns",
+      "Prawns",
+      "Small cold-water prawns",
+      "Small prawns",
+      "raw prawns"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "128100",
+        "name": "Gamberi",
+        "match_type": "exact",
+        "confidence": "high",
+        "state": "crostaceo crudo sgusciato, parte edibile",
+        "reason": "Gamberi freschi CREA 128100 (71 kcal, 13.6g proteine)",
+        "is_ambiguous": false,
+        "nutrients": {
+          "kcal_100g": 71.0,
+          "protein_g_100g": 13.6,
+          "fat_g_100g": 0.6,
+          "carbs_available_g_100g": 2.9
+        }
+      },
+      {
+        "source": "CREA",
+        "id": "128110",
+        "name": "Gamberi sgusciati, surgelati",
+        "match_type": "proxy",
+        "confidence": "medium",
+        "state": "Gamberi sgusciati, surgelati",
+        "reason": "Gamberi sgusciati surgelati CREA 128110 (85 kcal, 16.5g proteine)",
+        "nutrients": {
+          "kcal_100g": 85.0,
+          "protein_g_100g": 16.5,
+          "fat_g_100g": 0.9,
+          "carbs_available_g_100g": 2.9
+        }
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:char-kway-teow",
+        "recipe_title": "Char kway teow",
+        "ingredient_key": "2",
+        "original_name": "Prawns",
+        "grams": 200.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:chawanmushi",
+        "recipe_title": "Chawanmushi",
+        "ingredient_key": "5",
+        "original_name": "Prawns",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:ceviche-ecuatoriano",
+        "recipe_title": "Ecuadorian ceviche",
+        "ingredient_key": "1",
+        "original_name": "Prawns",
+        "grams": 900.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:goi-cuon",
+        "recipe_title": "Gỏi cuốn",
+        "ingredient_key": "2",
+        "original_name": "Prawns",
+        "grams": 400.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:laksa-singapore",
+        "recipe_title": "Katong laksa",
+        "ingredient_key": "2",
+        "original_name": "Prawns",
+        "grams": 500.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "pangrattato",
+    "canonical_name": "Pangrattato",
+    "occurrences": 27,
+    "recipes_count": 27,
+    "primary_status": "proposed_exact",
+    "raw_names": [
+      "Breadcrumbs",
+      "dried breadcrumbs"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "000570",
+        "name": "Pangrattato",
+        "match_type": "exact",
+        "confidence": "high",
+        "state": "pane secco grattugiato",
+        "reason": "Pangrattato secco CREA 000570 (357 kcal, 10.1g proteine)",
+        "is_ambiguous": false,
+        "nutrients": {
+          "kcal_100g": 357.0,
+          "protein_g_100g": 10.1,
+          "fat_g_100g": 2.1,
+          "carbs_available_g_100g": 77.8
+        }
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:apfelstrudel",
+        "recipe_title": "Apfelstrudel",
+        "ingredient_key": "8",
+        "original_name": "Breadcrumbs",
+        "grams": 80.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R299",
+        "recipe_title": "Baked chicken schnitzel with green beans and lemon",
+        "ingredient_key": "4",
+        "original_name": "dried breadcrumbs",
+        "grams": 40.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R035",
+        "recipe_title": "Baked salmon cakes with dill yoghurt",
+        "ingredient_key": "4",
+        "original_name": "dried breadcrumbs",
+        "grams": 25.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:bitterballen",
+        "recipe_title": "Bitterballen",
+        "ingredient_key": "9",
+        "original_name": "Breadcrumbs",
+        "grams": 250.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R049",
+        "recipe_title": "Broccoli and cheddar potato cakes",
+        "ingredient_key": "5",
+        "original_name": "dried breadcrumbs",
+        "grams": 25.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
     "canonical_id": "unmapped:lamb",
     "canonical_name": "Lamb",
     "occurrences": 26,
@@ -4128,6 +4566,94 @@
     "ambiguity_count": 0
   },
   {
+    "canonical_id": "tofu_fresco",
+    "canonical_name": "Tofu compatto al naturale",
+    "occurrences": 25,
+    "recipes_count": 25,
+    "primary_status": "proposed_proxy",
+    "raw_names": [
+      "Firm tofu",
+      "Fried tofu puffs",
+      "Tofu",
+      "firm tofu"
+    ],
+    "candidates": [
+      {
+        "source": "Open Food Facts",
+        "id": "20001568",
+        "name": "Tofu Bio al naturale · Vemondo - Lidl",
+        "brands": "Vemondo - Lidl",
+        "match_type": "brand_candidate",
+        "confidence": "high",
+        "reason": "Tofu Bio al naturale Vemondo in OFF (151 kcal, 15g prot per 100g)",
+        "nutrients": {
+          "kcal_100g": 151.0,
+          "protein_g_100g": 15.0,
+          "fat_g_100g": 9.2,
+          "carbs_available_g_100g": 0.6
+        }
+      },
+      {
+        "source": "Open Food Facts",
+        "id": "3273227588393",
+        "name": "Tofu naturale · Sojasun",
+        "brands": "Sojasun",
+        "match_type": "brand_candidate",
+        "confidence": "high",
+        "reason": "Tofu naturale Sojasun in OFF (149 kcal, 16g prot per 100g)",
+        "nutrients": {
+          "kcal_100g": 149.0,
+          "protein_g_100g": 16.0,
+          "fat_g_100g": 9.0,
+          "carbs_available_g_100g": 0.7
+        }
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "foodose:R188",
+        "recipe_title": "Brothy tofu and vegetable tortellini",
+        "ingredient_key": "3",
+        "original_name": "firm tofu",
+        "grams": 200.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R073",
+        "recipe_title": "Haricot bean and pumpkin tray bake",
+        "ingredient_key": "2",
+        "original_name": "firm tofu",
+        "grams": 150.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:kimchi-jjigae",
+        "recipe_title": "Kimchi jjigae",
+        "ingredient_key": "3",
+        "original_name": "Tofu",
+        "grams": 300.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:laksa-lemak",
+        "recipe_title": "Laksa lemak",
+        "ingredient_key": "3",
+        "original_name": "Fried tofu puffs",
+        "grams": 150.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R061",
+        "recipe_title": "Lemon-herb tofu with Mediterranean rice",
+        "ingredient_key": "1",
+        "original_name": "firm tofu",
+        "grams": 300.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
     "canonical_id": "unmapped:paprika",
     "canonical_name": "Paprika",
     "occurrences": 24,
@@ -4235,6 +4761,187 @@
       }
     ],
     "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "melanzane_crude",
+    "canonical_name": "Melanzane, crude",
+    "occurrences": 23,
+    "recipes_count": 23,
+    "primary_status": "ambiguous",
+    "raw_names": [
+      "African aubergines",
+      "Aubergine",
+      "Aubergines",
+      "Thai aubergines",
+      "aubergine"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "005500",
+        "name": "Melanzane, crude",
+        "match_type": "exact",
+        "confidence": "low",
+        "state": "crudo, parte edibile",
+        "reason": "Melanzane crude CREA 005500",
+        "is_ambiguous": true,
+        "nutrients": {
+          "kcal_100g": 23.0,
+          "protein_g_100g": 1.0,
+          "fat_g_100g": 0.4,
+          "carbs_available_g_100g": 2.6
+        }
+      },
+      {
+        "source": "CREA",
+        "id": "005506",
+        "name": "Melanzane, cotte, in padella",
+        "match_type": "cooked_alternate",
+        "confidence": "low",
+        "state": "cotto / bollito",
+        "reason": "Possibile alternativa cotta (Melanzane, cotte, in padella) - stato non specificato nella ricetta",
+        "is_ambiguous": true,
+        "nutrients": {
+          "kcal_100g": 39.0,
+          "protein_g_100g": 1.3,
+          "fat_g_100g": 0.7,
+          "carbs_available_g_100g": 5.4
+        }
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:ajvar",
+        "recipe_title": "Ajvar",
+        "ingredient_key": "2",
+        "original_name": "Aubergines",
+        "grams": 600.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R048",
+        "recipe_title": "Aubergine and cottage cheese parmigiana",
+        "ingredient_key": "1",
+        "original_name": "aubergine",
+        "grams": 400.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R328",
+        "recipe_title": "Aubergine caponata with white beans",
+        "ingredient_key": "1",
+        "original_name": "aubergine",
+        "grams": 500.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R227",
+        "recipe_title": "Baked aubergine with feta, tomato and mint",
+        "ingredient_key": "1",
+        "original_name": "aubergine",
+        "grams": 500.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:dolma-iraqi",
+        "recipe_title": "Iraqi dolma",
+        "ingredient_key": "6",
+        "original_name": "Aubergines",
+        "grams": null,
+        "quantity_status": "needs_review"
+      }
+    ],
+    "ambiguity_count": 16
+  },
+  {
+    "canonical_id": "porri_crudi",
+    "canonical_name": "Porri, crudi",
+    "occurrences": 23,
+    "recipes_count": 23,
+    "primary_status": "ambiguous",
+    "raw_names": [
+      "Leek",
+      "Leeks",
+      "Spring onion or leek",
+      "leek"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "005650",
+        "name": "Porri, crudi",
+        "match_type": "exact",
+        "confidence": "low",
+        "state": "crudo, parte edibile",
+        "reason": "Porri crudi CREA 005650 (35 kcal/100g)",
+        "is_ambiguous": true,
+        "nutrients": {
+          "kcal_100g": 35.0,
+          "protein_g_100g": 2.1,
+          "fat_g_100g": 0.1,
+          "carbs_available_g_100g": 5.2
+        }
+      },
+      {
+        "source": "CREA",
+        "id": "005655",
+        "name": "Porri, cotti, bolliti",
+        "match_type": "cooked_alternate",
+        "confidence": "low",
+        "state": "cotto / bollito",
+        "reason": "Possibile alternativa cotta (Porri, cotti, bolliti) - stato non specificato nella ricetta",
+        "is_ambiguous": true,
+        "nutrients": {
+          "kcal_100g": 35.0,
+          "protein_g_100g": 2.1,
+          "fat_g_100g": 0.1,
+          "carbs_available_g_100g": 5.3
+        }
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:asado-negro",
+        "recipe_title": "Asado negro",
+        "ingredient_key": "6",
+        "original_name": "Leek",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:bouillabaisse",
+        "recipe_title": "Bouillabaisse",
+        "ingredient_key": "5",
+        "original_name": "Leek",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "foodose:R158",
+        "recipe_title": "Butter bean and leek savoury crumble",
+        "ingredient_key": "2",
+        "original_name": "leek",
+        "grams": 200.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R272",
+        "recipe_title": "Butter bean, leek and lemon soup with parsley",
+        "ingredient_key": "1",
+        "original_name": "leek",
+        "grams": 300.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R076",
+        "recipe_title": "Chicken and leek barley soup",
+        "ingredient_key": "2",
+        "original_name": "leek",
+        "grams": 150.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 8
   },
   {
     "canonical_id": "zucchine_crude",
@@ -4583,61 +5290,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:firm tofu",
-    "canonical_name": "firm tofu",
-    "occurrences": 22,
-    "recipes_count": 22,
-    "primary_status": "missing",
-    "raw_names": [
-      "Firm tofu",
-      "firm tofu"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R188",
-        "recipe_title": "Brothy tofu and vegetable tortellini",
-        "ingredient_key": "3",
-        "original_name": "firm tofu",
-        "grams": 200.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R073",
-        "recipe_title": "Haricot bean and pumpkin tray bake",
-        "ingredient_key": "2",
-        "original_name": "firm tofu",
-        "grams": 150.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R061",
-        "recipe_title": "Lemon-herb tofu with Mediterranean rice",
-        "ingredient_key": "1",
-        "original_name": "firm tofu",
-        "grams": 300.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R170",
-        "recipe_title": "Lentil and spinach filo pie",
-        "ingredient_key": "5",
-        "original_name": "firm tofu",
-        "grams": 180.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R204",
-        "recipe_title": "Mediterranean tofu flatbread melts",
-        "ingredient_key": "4",
-        "original_name": "firm tofu",
-        "grams": 220.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:dijon mustard",
     "canonical_name": "Dijon mustard",
     "occurrences": 21,
@@ -4792,6 +5444,28 @@
           "fat_g_100g": 28.5,
           "carbs_available_g_100g": 0.0
         }
+      },
+      {
+        "source": "Open Food Facts",
+        "id": "20815004",
+        "label": "Parmesan Parmigiano Reggiano · Consorzio Latterie",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Parmesan Parmigiano Reggiano",
+        "approved_by": "codex_catalog_review",
+        "note": "Parmigiano Reggiano Consorzio Latterie: ingredienti dichiarati latte, sale, caglio, colture. Sostituisce Grana Padano; macro completi.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/potato-ricotta-gnocchi-tomato-basil",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170848",
+            "description": "Cheese, parmesan, hard"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/20815004",
+          "catalog_ingredients": "Milch, Speisesalz, tierisches Lab, Käsereikulturen.",
+          "basis": "per_100_g"
+        },
+        "grams_override": 25.0
       }
     ],
     "sample_recipes": [
@@ -5165,6 +5839,91 @@
     "ambiguity_count": 0
   },
   {
+    "canonical_id": "fiocchi_di_latte",
+    "canonical_name": "Fiocchi di latte",
+    "occurrences": 20,
+    "recipes_count": 20,
+    "primary_status": "proposed_proxy",
+    "raw_names": [
+      "cottage cheese"
+    ],
+    "candidates": [
+      {
+        "source": "Open Food Facts",
+        "id": "0865239599875",
+        "name": "Fiocchi di latte · Vita well",
+        "brands": "Vita well",
+        "match_type": "brand_candidate",
+        "confidence": "high",
+        "reason": "Fiocchi di latte Vita well in OFF (67 kcal, 12g prot per 100g)",
+        "nutrients": {
+          "kcal_100g": 67.0,
+          "protein_g_100g": 12.0,
+          "fat_g_100g": 0.2,
+          "carbs_available_g_100g": 4.3
+        }
+      },
+      {
+        "source": "Open Food Facts",
+        "id": "17311632",
+        "name": "Fiocchi di latte · Milbona",
+        "brands": "Milbona",
+        "match_type": "brand_candidate",
+        "confidence": "high",
+        "reason": "Fiocchi di latte Milbona in OFF (98 kcal, 11.5g prot per 100g)",
+        "nutrients": {
+          "kcal_100g": 98.0,
+          "protein_g_100g": 11.5,
+          "fat_g_100g": 4.5,
+          "carbs_available_g_100g": 2.8
+        }
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "foodose:R111",
+        "recipe_title": "Asparagus and Gruyère crustless quiche",
+        "ingredient_key": "4",
+        "original_name": "cottage cheese",
+        "grams": 150.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R048",
+        "recipe_title": "Aubergine and cottage cheese parmigiana",
+        "ingredient_key": "4",
+        "original_name": "cottage cheese",
+        "grams": 200.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R012",
+        "recipe_title": "Banana and cottage cheese griddle cakes",
+        "ingredient_key": "1",
+        "original_name": "cottage cheese",
+        "grams": 150.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R164",
+        "recipe_title": "Cauliflower and cheese stuffed potatoes",
+        "ingredient_key": "3",
+        "original_name": "cottage cheese",
+        "grams": 180.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R251",
+        "recipe_title": "Cottage cheese and roasted pepper toast with chives",
+        "ingredient_key": "1",
+        "original_name": "cottage cheese",
+        "grams": 300.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
     "canonical_id": "pomodori_passata",
     "canonical_name": "Pomodori, passata",
     "occurrences": 20,
@@ -5178,18 +5937,24 @@
       {
         "source": "CREA",
         "id": "006670",
-        "name": "Pomodori, passata",
-        "match_type": "exact",
-        "confidence": "high",
-        "state": "passata, peso prima della cottura",
-        "reason": "Passata di pomodoro CREA 006670",
-        "is_ambiguous": false,
-        "nutrients": {
-          "kcal_100g": 21.0,
-          "protein_g_100g": 1.3,
-          "fat_g_100g": 0.2,
-          "carbs_available_g_100g": 3.0
-        }
+        "label": "Pomodori, passata",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Pomodori, passata",
+        "approved_by": "codex_catalog_review",
+        "note": "Passata CREA come variante della purea di pomodoro della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-cottage-cheese-parmigiana",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170460",
+            "description": "Tomato products, canned, puree, without salt added"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/006670",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 300.0
       },
       {
         "source": "Open Food Facts",
@@ -5252,60 +6017,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:cottage cheese",
-    "canonical_name": "cottage cheese",
-    "occurrences": 20,
-    "recipes_count": 20,
-    "primary_status": "missing",
-    "raw_names": [
-      "cottage cheese"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R111",
-        "recipe_title": "Asparagus and Gruyère crustless quiche",
-        "ingredient_key": "4",
-        "original_name": "cottage cheese",
-        "grams": 150.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R048",
-        "recipe_title": "Aubergine and cottage cheese parmigiana",
-        "ingredient_key": "4",
-        "original_name": "cottage cheese",
-        "grams": 200.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R012",
-        "recipe_title": "Banana and cottage cheese griddle cakes",
-        "ingredient_key": "1",
-        "original_name": "cottage cheese",
-        "grams": 150.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R164",
-        "recipe_title": "Cauliflower and cheese stuffed potatoes",
-        "ingredient_key": "3",
-        "original_name": "cottage cheese",
-        "grams": 180.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R251",
-        "recipe_title": "Cottage cheese and roasted pepper toast with chives",
-        "ingredient_key": "1",
-        "original_name": "cottage cheese",
-        "grams": 300.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:fresh dill",
     "canonical_name": "fresh dill",
     "occurrences": 20,
@@ -5354,61 +6065,6 @@
         "ingredient_key": "8",
         "original_name": "fresh dill",
         "grams": 5.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:leek",
-    "canonical_name": "leek",
-    "occurrences": 20,
-    "recipes_count": 20,
-    "primary_status": "missing",
-    "raw_names": [
-      "Leek",
-      "leek"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:asado-negro",
-        "recipe_title": "Asado negro",
-        "ingredient_key": "6",
-        "original_name": "Leek",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:bouillabaisse",
-        "recipe_title": "Bouillabaisse",
-        "ingredient_key": "5",
-        "original_name": "Leek",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "foodose:R158",
-        "recipe_title": "Butter bean and leek savoury crumble",
-        "ingredient_key": "2",
-        "original_name": "leek",
-        "grams": 200.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R272",
-        "recipe_title": "Butter bean, leek and lemon soup with parsley",
-        "ingredient_key": "1",
-        "original_name": "leek",
-        "grams": 300.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R076",
-        "recipe_title": "Chicken and leek barley soup",
-        "ingredient_key": "2",
-        "original_name": "leek",
-        "grams": 150.0,
         "quantity_status": "resolved"
       }
     ],
@@ -5577,60 +6233,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:turkey mince",
-    "canonical_name": "turkey mince",
-    "occurrences": 19,
-    "recipes_count": 19,
-    "primary_status": "missing",
-    "raw_names": [
-      "turkey mince"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R019",
-        "recipe_title": "Smoky turkey and sweet potato skillet",
-        "ingredient_key": "3",
-        "original_name": "turkey mince",
-        "grams": 300.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R107",
-        "recipe_title": "Turkey and apple breakfast patties",
-        "ingredient_key": "1",
-        "original_name": "turkey mince",
-        "grams": 250.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R088",
-        "recipe_title": "Turkey and butter bean tomato soup",
-        "ingredient_key": "4",
-        "original_name": "turkey mince",
-        "grams": 250.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R132",
-        "recipe_title": "Turkey and cheddar mini meatloaves",
-        "ingredient_key": "1",
-        "original_name": "turkey mince",
-        "grams": 300.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R218",
-        "recipe_title": "Turkey and courgette koftas with tahini yoghurt",
-        "ingredient_key": "2",
-        "original_name": "turkey mince",
-        "grams": 300.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:spring onions",
     "canonical_name": "Spring onions",
     "occurrences": 18,
@@ -5685,54 +6287,86 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:fresh mint",
-    "canonical_name": "fresh mint",
-    "occurrences": 18,
-    "recipes_count": 18,
-    "primary_status": "missing",
+    "canonical_id": "capperi_sottaceto",
+    "canonical_name": "Capperi in aceto",
+    "occurrences": 17,
+    "recipes_count": 17,
+    "primary_status": "proposed_proxy",
     "raw_names": [
-      "Fresh mint",
-      "fresh mint"
+      "Capers",
+      "Capers and lemon",
+      "capers"
     ],
-    "candidates": [],
+    "candidates": [
+      {
+        "source": "Open Food Facts",
+        "id": "8000965040280",
+        "name": "Capperi · Consilia",
+        "brands": "Consilia",
+        "match_type": "brand_candidate",
+        "confidence": "high",
+        "reason": "Capperi in aceto Consilia in OFF (24 kcal, 1.8g prot per 100g)",
+        "nutrients": {
+          "kcal_100g": 24.0,
+          "protein_g_100g": 1.8,
+          "fat_g_100g": 0.4,
+          "carbs_available_g_100g": 0.6
+        }
+      },
+      {
+        "source": "Open Food Facts",
+        "id": "8000633014766",
+        "name": "Capperi in aceto · Unes",
+        "brands": "Unes",
+        "match_type": "brand_candidate",
+        "confidence": "high",
+        "reason": "Capperi in aceto Unes in OFF (27 kcal, 2.0g prot per 100g)",
+        "nutrients": {
+          "kcal_100g": 27.0,
+          "protein_g_100g": 2.0,
+          "fat_g_100g": 1.0,
+          "carbs_available_g_100g": 1.0
+        }
+      }
+    ],
     "sample_recipes": [
       {
-        "recipe_id": "unitools:dolma-azerbaijani",
-        "recipe_title": "Azerbaijani dolma",
-        "ingredient_key": "5",
-        "original_name": "Fresh mint",
-        "grams": 50.0,
+        "recipe_id": "unitools:ajiaco-bogotano",
+        "recipe_title": "Ajiaco bogotano",
+        "ingredient_key": "10",
+        "original_name": "Capers",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "foodose:R328",
+        "recipe_title": "Aubergine caponata with white beans",
+        "ingredient_key": "7",
+        "original_name": "capers",
+        "grams": 20.0,
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "foodose:R227",
-        "recipe_title": "Baked aubergine with feta, tomato and mint",
-        "ingredient_key": "7",
-        "original_name": "fresh mint",
+        "recipe_id": "unitools:brik",
+        "recipe_title": "Brik",
+        "ingredient_key": "6",
+        "original_name": "Capers",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "foodose:R022",
+        "recipe_title": "Chicken piccata with parsley potatoes",
+        "ingredient_key": "6",
+        "original_name": "capers",
         "grams": 10.0,
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "foodose:R056",
-        "recipe_title": "Cauliflower and chickpea couscous with mint yoghurt",
-        "ingredient_key": "8",
-        "original_name": "fresh mint",
-        "grams": 5.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R295",
-        "recipe_title": "Chicken, hummus and cucumber flatbread",
-        "ingredient_key": "5",
-        "original_name": "fresh mint",
-        "grams": 10.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R310",
-        "recipe_title": "Chickpea and millet salad with roasted pepper and mint",
-        "ingredient_key": "7",
-        "original_name": "fresh mint",
+        "recipe_id": "foodose:R314",
+        "recipe_title": "Egg, quark and caper open sandwich on rye",
+        "ingredient_key": "4",
+        "original_name": "capers",
         "grams": 15.0,
         "quantity_status": "resolved"
       }
@@ -5818,6 +6452,28 @@
           "fat_g_100g": 0.5,
           "carbs_available_g_100g": 15.4
         }
+      },
+      {
+        "source": "CREA",
+        "id": "004505",
+        "label": "Lenticchie, secche, cotte, bollite",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Lenticchie, secche, cotte, bollite",
+        "approved_by": "codex_catalog_review",
+        "note": "Lenticchie bollite: sostituisce il candidato errato in scatola.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/lentil-walnut-bolognese-spaghetti",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172421",
+            "description": "Lentils, mature seeds, cooked, boiled, without salt"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004505",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 300.0
       }
     ],
     "sample_recipes": [
@@ -6132,6 +6788,101 @@
     "ambiguity_count": 0
   },
   {
+    "canonical_id": "sedano_crudo",
+    "canonical_name": "Sedano, crudo",
+    "occurrences": 16,
+    "recipes_count": 16,
+    "primary_status": "ambiguous",
+    "raw_names": [
+      "Celery",
+      "Celery sticks",
+      "celery"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "005680",
+        "label": "Sedano, crudo",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Sedano, crudo",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-caponata-white-beans",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169988",
+            "description": "Celery, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/005680",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 150.0
+      },
+      {
+        "source": "CREA",
+        "id": "005684",
+        "name": "Sedano, cotto, al microonde",
+        "match_type": "cooked_alternate",
+        "confidence": "low",
+        "state": "cotto / bollito",
+        "reason": "Possibile alternativa cotta (Sedano, cotto, al microonde) - stato non specificato nella ricetta",
+        "is_ambiguous": true,
+        "nutrients": {
+          "kcal_100g": 24.0,
+          "protein_g_100g": 2.4,
+          "fat_g_100g": 0.2,
+          "carbs_available_g_100g": 2.4
+        }
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "foodose:R328",
+        "recipe_title": "Aubergine caponata with white beans",
+        "ingredient_key": "4",
+        "original_name": "celery",
+        "grams": 150.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:avgolemono",
+        "recipe_title": "Avgolemono",
+        "ingredient_key": "7",
+        "original_name": "Celery",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:buffalo-wings",
+        "recipe_title": "Buffalo wings",
+        "ingredient_key": "7",
+        "original_name": "Celery sticks",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:buseca",
+        "recipe_title": "Buseca",
+        "ingredient_key": "7",
+        "original_name": "Celery",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "foodose:R307",
+        "recipe_title": "Celery, apple and walnut spelt salad with quark",
+        "ingredient_key": "3",
+        "original_name": "celery",
+        "grams": 200.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 8
+  },
+  {
     "canonical_id": "unmapped:shallots",
     "canonical_name": "Shallots",
     "occurrences": 16,
@@ -6289,115 +7040,6 @@
         "original_name": "Thyme",
         "grams": null,
         "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:capers",
-    "canonical_name": "capers",
-    "occurrences": 16,
-    "recipes_count": 16,
-    "primary_status": "missing",
-    "raw_names": [
-      "Capers",
-      "capers"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:ajiaco-bogotano",
-        "recipe_title": "Ajiaco bogotano",
-        "ingredient_key": "10",
-        "original_name": "Capers",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "foodose:R328",
-        "recipe_title": "Aubergine caponata with white beans",
-        "ingredient_key": "7",
-        "original_name": "capers",
-        "grams": 20.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:brik",
-        "recipe_title": "Brik",
-        "ingredient_key": "6",
-        "original_name": "Capers",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "foodose:R022",
-        "recipe_title": "Chicken piccata with parsley potatoes",
-        "ingredient_key": "6",
-        "original_name": "capers",
-        "grams": 10.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R314",
-        "recipe_title": "Egg, quark and caper open sandwich on rye",
-        "ingredient_key": "4",
-        "original_name": "capers",
-        "grams": 15.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:dried breadcrumbs",
-    "canonical_name": "dried breadcrumbs",
-    "occurrences": 16,
-    "recipes_count": 16,
-    "primary_status": "missing",
-    "raw_names": [
-      "dried breadcrumbs"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R299",
-        "recipe_title": "Baked chicken schnitzel with green beans and lemon",
-        "ingredient_key": "4",
-        "original_name": "dried breadcrumbs",
-        "grams": 40.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R035",
-        "recipe_title": "Baked salmon cakes with dill yoghurt",
-        "ingredient_key": "4",
-        "original_name": "dried breadcrumbs",
-        "grams": 25.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R049",
-        "recipe_title": "Broccoli and cheddar potato cakes",
-        "ingredient_key": "5",
-        "original_name": "dried breadcrumbs",
-        "grams": 25.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R144",
-        "recipe_title": "Cod and chickpea fritters",
-        "ingredient_key": "4",
-        "original_name": "dried breadcrumbs",
-        "grams": 25.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R224",
-        "recipe_title": "Cod under a parsley and almond crust with green beans",
-        "ingredient_key": "3",
-        "original_name": "dried breadcrumbs",
-        "grams": 20.0,
-        "quantity_status": "resolved"
       }
     ],
     "ambiguity_count": 0
@@ -6655,115 +7297,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:prawns",
-    "canonical_name": "Prawns",
-    "occurrences": 15,
-    "recipes_count": 15,
-    "primary_status": "missing",
-    "raw_names": [
-      "Prawns"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:char-kway-teow",
-        "recipe_title": "Char kway teow",
-        "ingredient_key": "2",
-        "original_name": "Prawns",
-        "grams": 200.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:chawanmushi",
-        "recipe_title": "Chawanmushi",
-        "ingredient_key": "5",
-        "original_name": "Prawns",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:ceviche-ecuatoriano",
-        "recipe_title": "Ecuadorian ceviche",
-        "ingredient_key": "1",
-        "original_name": "Prawns",
-        "grams": 900.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:goi-cuon",
-        "recipe_title": "Gỏi cuốn",
-        "ingredient_key": "2",
-        "original_name": "Prawns",
-        "grams": 400.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:laksa-singapore",
-        "recipe_title": "Katong laksa",
-        "ingredient_key": "2",
-        "original_name": "Prawns",
-        "grams": 500.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:celery",
-    "canonical_name": "celery",
-    "occurrences": 15,
-    "recipes_count": 15,
-    "primary_status": "missing",
-    "raw_names": [
-      "Celery",
-      "celery"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R328",
-        "recipe_title": "Aubergine caponata with white beans",
-        "ingredient_key": "4",
-        "original_name": "celery",
-        "grams": 150.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:avgolemono",
-        "recipe_title": "Avgolemono",
-        "ingredient_key": "7",
-        "original_name": "Celery",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:buseca",
-        "recipe_title": "Buseca",
-        "ingredient_key": "7",
-        "original_name": "Celery",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "foodose:R307",
-        "recipe_title": "Celery, apple and walnut spelt salad with quark",
-        "ingredient_key": "3",
-        "original_name": "celery",
-        "grams": 200.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R191",
-        "recipe_title": "Chicken Waldorf-style rye sandwiches",
-        "ingredient_key": "3",
-        "original_name": "celery",
-        "grams": 50.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:quark",
     "canonical_name": "quark",
     "occurrences": 15,
@@ -6890,6 +7423,94 @@
     "ambiguity_count": 0
   },
   {
+    "canonical_id": "finocchi_crudi",
+    "canonical_name": "Finocchi, crudi",
+    "occurrences": 14,
+    "recipes_count": 14,
+    "primary_status": "ambiguous",
+    "raw_names": [
+      "Fennel",
+      "Fennel seeds",
+      "Ground fennel",
+      "fennel"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "005320",
+        "name": "Finocchi, crudi",
+        "match_type": "exact",
+        "confidence": "low",
+        "state": "crudo, parte edibile",
+        "reason": "Finocchi crudi CREA 005320 (15 kcal/100g)",
+        "is_ambiguous": true,
+        "nutrients": {
+          "kcal_100g": 15.0,
+          "protein_g_100g": 1.2,
+          "carbs_available_g_100g": 1.5
+        }
+      },
+      {
+        "source": "CREA",
+        "id": "005325",
+        "name": "Finocchi, cotti, bolliti",
+        "match_type": "cooked_alternate",
+        "confidence": "low",
+        "state": "cotto / bollito",
+        "reason": "Possibile alternativa cotta (Finocchi, cotti, bolliti) - stato non specificato nella ricetta",
+        "is_ambiguous": true,
+        "nutrients": {
+          "kcal_100g": 17.0,
+          "protein_g_100g": 1.4,
+          "carbs_available_g_100g": 1.7
+        }
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:bouillabaisse",
+        "recipe_title": "Bouillabaisse",
+        "ingredient_key": "3",
+        "original_name": "Fennel",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "foodose:R308",
+        "recipe_title": "Butter bean and fennel braise with orange and olive",
+        "ingredient_key": "1",
+        "original_name": "fennel",
+        "grams": 300.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R214",
+        "recipe_title": "Chicken, fennel and olive traybake with orzo",
+        "ingredient_key": "1",
+        "original_name": "fennel",
+        "grams": 250.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R032",
+        "recipe_title": "Cod en papillote with fennel",
+        "ingredient_key": "4",
+        "original_name": "fennel",
+        "grams": 200.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R084",
+        "recipe_title": "Cod, tomato and fennel broth",
+        "ingredient_key": "2",
+        "original_name": "fennel",
+        "grams": 200.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 5
+  },
+  {
     "canonical_id": "miele",
     "canonical_name": "Miele",
     "occurrences": 14,
@@ -6976,11 +7597,23 @@
         "source": "CREA",
         "id": "164820",
         "label": "Mozzarella di vacca",
-        "state": "mozzarella pronta al consumo",
         "reviewed": true,
         "state_checked": true,
-        "approved_by": "baseline_rule",
-        "note": "Mozzarella di vacca CREA 164820 verificata da foodose:R315."
+        "state": "Mozzarella di vacca",
+        "approved_by": "codex_catalog_review",
+        "note": "Mozzarella vaccina CREA, variante della mozzarella parzialmente scremata della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-cottage-cheese-parmigiana",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "170847",
+            "description": "Cheese, mozzarella, part skim milk"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/164820",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 50.0
       }
     ],
     "sample_recipes": [
@@ -7022,6 +7655,79 @@
         "ingredient_key": "6",
         "original_name": "mozzarella",
         "grams": 40.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "pane_segale",
+    "canonical_name": "Pane di segale",
+    "occurrences": 14,
+    "recipes_count": 14,
+    "primary_status": "proposed_exact",
+    "raw_names": [
+      "Dark rye bread",
+      "Rye bread",
+      "rye bread"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "000510",
+        "name": "Pane di segale",
+        "match_type": "exact",
+        "confidence": "high",
+        "state": "pane di segale pronto al consumo",
+        "reason": "Pane di segale CREA 000510 (228 kcal, 8.3g proteine)",
+        "is_ambiguous": false,
+        "nutrients": {
+          "kcal_100g": 228.0,
+          "protein_g_100g": 8.3,
+          "fat_g_100g": 1.7,
+          "carbs_available_g_100g": 45.4
+        }
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "foodose:R256",
+        "recipe_title": "Baked ricotta with roasted tomatoes and thyme on rye",
+        "ingredient_key": "6",
+        "original_name": "rye bread",
+        "grams": 90.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R191",
+        "recipe_title": "Chicken Waldorf-style rye sandwiches",
+        "ingredient_key": "7",
+        "original_name": "rye bread",
+        "grams": 140.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R314",
+        "recipe_title": "Egg, quark and caper open sandwich on rye",
+        "ingredient_key": "7",
+        "original_name": "rye bread",
+        "grams": 90.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:erwtensoep",
+        "recipe_title": "Erwtensoep",
+        "ingredient_key": "11",
+        "original_name": "Rye bread",
+        "grams": 300.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:salo-po-ukrainski",
+        "recipe_title": "Home-cured salo",
+        "ingredient_key": "8",
+        "original_name": "Rye bread",
+        "grams": 400.0,
         "quantity_status": "resolved"
       }
     ],
@@ -7428,6 +8134,156 @@
     "ambiguity_count": 0
   },
   {
+    "canonical_id": "fagiolini_freschi",
+    "canonical_name": "Fagiolini, freschi",
+    "occurrences": 13,
+    "recipes_count": 13,
+    "primary_status": "ambiguous",
+    "raw_names": [
+      "Flat green beans",
+      "Green beans",
+      "green beans"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "004310",
+        "label": "Fagiolini, freschi",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Fagiolini, freschi",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/baked-chicken-schnitzel-green-beans-lemon",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169961",
+            "description": "Beans, snap, green, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004310",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 250.0
+      },
+      {
+        "source": "CREA",
+        "id": "004305",
+        "name": "Fagiolini a corallo, cotti, bolliti",
+        "match_type": "cooked_alternate",
+        "confidence": "low",
+        "state": "cotto / bollito",
+        "reason": "Possibile alternativa cotta (Fagiolini a corallo, cotti, bolliti) - stato non specificato nella ricetta",
+        "is_ambiguous": true,
+        "nutrients": {
+          "kcal_100g": 31.0,
+          "protein_g_100g": 1.7,
+          "fat_g_100g": 0.1,
+          "carbs_available_g_100g": 4.6
+        }
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "foodose:R299",
+        "recipe_title": "Baked chicken schnitzel with green beans and lemon",
+        "ingredient_key": "6",
+        "original_name": "green beans",
+        "grams": 250.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R159",
+        "recipe_title": "Beetroot and ricotta wonton ravioli",
+        "ingredient_key": "5",
+        "original_name": "green beans",
+        "grams": 150.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R224",
+        "recipe_title": "Cod under a parsley and almond crust with green beans",
+        "ingredient_key": "6",
+        "original_name": "green beans",
+        "grams": 250.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R031",
+        "recipe_title": "Dijon-dill salmon with crushed potatoes",
+        "ingredient_key": "2",
+        "original_name": "green beans",
+        "grams": 200.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:lagman",
+        "recipe_title": "Lagman",
+        "ingredient_key": "5",
+        "original_name": "Green beans",
+        "grams": 200.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 6
+  },
+  {
+    "canonical_id": "tofu_morbido",
+    "canonical_name": "Tofu morbido / silken",
+    "occurrences": 13,
+    "recipes_count": 13,
+    "primary_status": "missing",
+    "raw_names": [
+      "Soft tofu",
+      "silken tofu"
+    ],
+    "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "foodose:R176",
+        "recipe_title": "Black bean and quinoa cakes",
+        "ingredient_key": "8",
+        "original_name": "silken tofu",
+        "grams": 100.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R171",
+        "recipe_title": "Cauliflower and tofu orzo",
+        "ingredient_key": "3",
+        "original_name": "silken tofu",
+        "grams": 250.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R062",
+        "recipe_title": "Creamy roasted pepper tofu pasta",
+        "ingredient_key": "2",
+        "original_name": "silken tofu",
+        "grams": 250.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R073",
+        "recipe_title": "Haricot bean and pumpkin tray bake",
+        "ingredient_key": "6",
+        "original_name": "silken tofu",
+        "grams": 100.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R066",
+        "recipe_title": "Lemon-dill chickpea and quinoa bowl",
+        "ingredient_key": "2",
+        "original_name": "silken tofu",
+        "grams": 150.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
     "canonical_id": "unmapped:pumpkin",
     "canonical_name": "pumpkin",
     "occurrences": 13,
@@ -7477,115 +8333,6 @@
         "ingredient_key": "1",
         "original_name": "Pumpkin",
         "grams": 3000.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:rye bread",
-    "canonical_name": "rye bread",
-    "occurrences": 13,
-    "recipes_count": 13,
-    "primary_status": "missing",
-    "raw_names": [
-      "Rye bread",
-      "rye bread"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R256",
-        "recipe_title": "Baked ricotta with roasted tomatoes and thyme on rye",
-        "ingredient_key": "6",
-        "original_name": "rye bread",
-        "grams": 90.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R191",
-        "recipe_title": "Chicken Waldorf-style rye sandwiches",
-        "ingredient_key": "7",
-        "original_name": "rye bread",
-        "grams": 140.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R314",
-        "recipe_title": "Egg, quark and caper open sandwich on rye",
-        "ingredient_key": "7",
-        "original_name": "rye bread",
-        "grams": 90.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:erwtensoep",
-        "recipe_title": "Erwtensoep",
-        "ingredient_key": "11",
-        "original_name": "Rye bread",
-        "grams": 300.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:salo-po-ukrainski",
-        "recipe_title": "Home-cured salo",
-        "ingredient_key": "8",
-        "original_name": "Rye bread",
-        "grams": 400.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:aubergines",
-    "canonical_name": "Aubergines",
-    "occurrences": 12,
-    "recipes_count": 12,
-    "primary_status": "missing",
-    "raw_names": [
-      "Aubergines"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:ajvar",
-        "recipe_title": "Ajvar",
-        "ingredient_key": "2",
-        "original_name": "Aubergines",
-        "grams": 600.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:dolma-iraqi",
-        "recipe_title": "Iraqi dolma",
-        "ingredient_key": "6",
-        "original_name": "Aubergines",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:kare-kare",
-        "recipe_title": "Kare-kare",
-        "ingredient_key": "7",
-        "original_name": "Aubergines",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:maqluba",
-        "recipe_title": "Maqluba",
-        "ingredient_key": "3",
-        "original_name": "Aubergines",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:melanzane-alla-parmigiana",
-        "recipe_title": "Melanzane alla parmigiana",
-        "ingredient_key": "1",
-        "original_name": "Aubergines",
-        "grams": 1500.0,
         "quantity_status": "resolved"
       }
     ],
@@ -7755,60 +8502,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:dried mint",
-    "canonical_name": "Dried mint",
-    "occurrences": 12,
-    "recipes_count": 12,
-    "primary_status": "missing",
-    "raw_names": [
-      "Dried mint"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:mantu-afghan",
-        "recipe_title": "Afghan mantu",
-        "ingredient_key": "10",
-        "original_name": "Dried mint",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:ashak",
-        "recipe_title": "Ashak",
-        "ingredient_key": "9",
-        "original_name": "Dried mint",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:chorba-frik",
-        "recipe_title": "Chorba frik",
-        "ingredient_key": "9",
-        "original_name": "Dried mint",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:galayet-bandora",
-        "recipe_title": "Galayet bandora",
-        "ingredient_key": "7",
-        "original_name": "Dried mint",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:kibbeh-nayyeh",
-        "recipe_title": "Kibbeh nayyeh",
-        "ingredient_key": "5",
-        "original_name": "Dried mint",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:ground cardamom",
     "canonical_name": "Ground cardamom",
     "occurrences": 12,
@@ -7859,6 +8552,101 @@
         "original_name": "Ground cardamom",
         "grams": null,
         "quantity_status": "needs_review"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "merluzzo_fresco",
+    "canonical_name": "Merluzzo o nasello, fresco",
+    "occurrences": 12,
+    "recipes_count": 12,
+    "primary_status": "proposed_exact",
+    "raw_names": [
+      "Cod",
+      "Cod fillet",
+      "cod",
+      "hake"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "121410",
+        "label": "Merluzzo o nasello",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Merluzzo o nasello",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/cod-chickpea-fritters",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171955",
+            "description": "Fish, cod, Atlantic, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/121410",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 250.0
+      },
+      {
+        "source": "CREA",
+        "id": "121420",
+        "name": "Merluzzo o nasello, surgelato",
+        "match_type": "proxy",
+        "confidence": "medium",
+        "state": "Merluzzo o nasello, surgelato",
+        "reason": "Merluzzo surgelato CREA 121420 (75 kcal, 17.3g proteine)",
+        "nutrients": {
+          "kcal_100g": 75.0,
+          "protein_g_100g": 17.3,
+          "fat_g_100g": 0.6,
+          "carbs_available_g_100g": 0.0
+        }
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "foodose:R144",
+        "recipe_title": "Cod and chickpea fritters",
+        "ingredient_key": "1",
+        "original_name": "cod",
+        "grams": 250.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R034",
+        "recipe_title": "Cod and sweetcorn chowder",
+        "ingredient_key": "7",
+        "original_name": "cod",
+        "grams": 280.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R148",
+        "recipe_title": "Cod and trout fish pie",
+        "ingredient_key": "5",
+        "original_name": "cod",
+        "grams": 150.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R032",
+        "recipe_title": "Cod en papillote with fennel",
+        "ingredient_key": "5",
+        "original_name": "cod",
+        "grams": 280.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R224",
+        "recipe_title": "Cod under a parsley and almond crust with green beans",
+        "ingredient_key": "5",
+        "original_name": "cod",
+        "grams": 320.0,
+        "quantity_status": "resolved"
       }
     ],
     "ambiguity_count": 0
@@ -7943,6 +8731,28 @@
           "fat_g_100g": 10.1,
           "carbs_available_g_100g": 0.0
         }
+      },
+      {
+        "source": "CREA",
+        "id": "123550",
+        "label": "Tonno in salamoia, sgocciolato",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Tonno in salamoia, sgocciolato",
+        "approved_by": "codex_catalog_review",
+        "note": "Tonno in salamoia sgocciolato: sostituisce il candidato errato sott’olio.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/tuna-cannellini-potato-bowl",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "173709",
+            "description": "Fish, tuna, light, canned in water, drained solids (Includes foods for USDA's Food Distribution Program)"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/123550",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 200.0
       }
     ],
     "sample_recipes": [
@@ -8100,60 +8910,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:silken tofu",
-    "canonical_name": "silken tofu",
-    "occurrences": 12,
-    "recipes_count": 12,
-    "primary_status": "missing",
-    "raw_names": [
-      "silken tofu"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R176",
-        "recipe_title": "Black bean and quinoa cakes",
-        "ingredient_key": "8",
-        "original_name": "silken tofu",
-        "grams": 100.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R171",
-        "recipe_title": "Cauliflower and tofu orzo",
-        "ingredient_key": "3",
-        "original_name": "silken tofu",
-        "grams": 250.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R062",
-        "recipe_title": "Creamy roasted pepper tofu pasta",
-        "ingredient_key": "2",
-        "original_name": "silken tofu",
-        "grams": 250.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R073",
-        "recipe_title": "Haricot bean and pumpkin tray bake",
-        "ingredient_key": "6",
-        "original_name": "silken tofu",
-        "grams": 100.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R066",
-        "recipe_title": "Lemon-dill chickpea and quinoa bowl",
-        "ingredient_key": "2",
-        "original_name": "silken tofu",
-        "grams": 150.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:bay leaf",
     "canonical_name": "Bay leaf",
     "occurrences": 11,
@@ -8262,58 +9018,92 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:breadcrumbs",
-    "canonical_name": "Breadcrumbs",
+    "canonical_id": "couscous_crudo",
+    "canonical_name": "Couscous, crudo",
     "occurrences": 11,
     "recipes_count": 11,
-    "primary_status": "missing",
+    "primary_status": "ambiguous",
     "raw_names": [
-      "Breadcrumbs"
+      "Couscous",
+      "couscous"
     ],
-    "candidates": [],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "000045",
+        "name": "Couscous, crudo",
+        "match_type": "exact",
+        "confidence": "low",
+        "state": "secco, prima della reidratazione",
+        "reason": "Couscous crudo secco CREA 000045 (361 kcal, 13.7g proteine)",
+        "is_ambiguous": true,
+        "nutrients": {
+          "kcal_100g": 361.0,
+          "protein_g_100g": 13.7,
+          "fat_g_100g": 1.1,
+          "carbs_available_g_100g": 76.5
+        }
+      },
+      {
+        "source": "CREA",
+        "id": "000046",
+        "name": "Couscous, cotto",
+        "match_type": "cooked_alternate",
+        "confidence": "low",
+        "state": "cotto / bollito",
+        "reason": "Possibile alternativa cotta (Couscous, cotto) - stato non specificato nella ricetta",
+        "is_ambiguous": true,
+        "nutrients": {
+          "kcal_100g": 179.0,
+          "protein_g_100g": 3.6,
+          "fat_g_100g": 1.1,
+          "carbs_available_g_100g": 39.7
+        }
+      }
+    ],
     "sample_recipes": [
       {
-        "recipe_id": "unitools:apfelstrudel",
-        "recipe_title": "Apfelstrudel",
+        "recipe_id": "unitools:couscous-algerien",
+        "recipe_title": "Algerian couscous",
+        "ingredient_key": "1",
+        "original_name": "Couscous",
+        "grams": 700.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R123",
+        "recipe_title": "Apricot chicken with couscous",
         "ingredient_key": "8",
-        "original_name": "Breadcrumbs",
+        "original_name": "couscous",
+        "grams": 100.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R056",
+        "recipe_title": "Cauliflower and chickpea couscous with mint yoghurt",
+        "ingredient_key": "5",
+        "original_name": "couscous",
         "grams": 80.0,
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "unitools:bitterballen",
-        "recipe_title": "Bitterballen",
-        "ingredient_key": "9",
-        "original_name": "Breadcrumbs",
-        "grams": 250.0,
+        "recipe_id": "foodose:R301",
+        "recipe_title": "Chicken, olive and lemon with couscous",
+        "ingredient_key": "8",
+        "original_name": "couscous",
+        "grams": 100.0,
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "unitools:coxinha",
-        "recipe_title": "Coxinha",
-        "ingredient_key": "10",
-        "original_name": "Breadcrumbs",
-        "grams": 300.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:croquetas-de-jamon",
-        "recipe_title": "Ham croquetas",
-        "ingredient_key": "9",
-        "original_name": "Breadcrumbs",
-        "grams": 150.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:jamaican-patty",
-        "recipe_title": "Jamaican patties",
-        "ingredient_key": "11",
-        "original_name": "Breadcrumbs",
-        "grams": 60.0,
+        "recipe_id": "foodose:R097",
+        "recipe_title": "Chicken, roasted pepper and couscous lunch bowl",
+        "ingredient_key": "1",
+        "original_name": "couscous",
+        "grams": 90.0,
         "quantity_status": "resolved"
       }
     ],
-    "ambiguity_count": 0
+    "ambiguity_count": 11
   },
   {
     "canonical_id": "unmapped:curry powder",
@@ -8365,83 +9155,6 @@
         "original_name": "Curry powder",
         "grams": null,
         "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "fagioli_cannellini_secchi",
-    "canonical_name": "Fagioli, Cannellini, secchi",
-    "occurrences": 11,
-    "recipes_count": 11,
-    "primary_status": "proposed_exact",
-    "raw_names": [
-      "Baked beans",
-      "Beans",
-      "Black beans",
-      "Black-eyed beans",
-      "Green beans",
-      "Kidney beans",
-      "Red beans"
-    ],
-    "candidates": [
-      {
-        "source": "CREA",
-        "id": "004200",
-        "name": "Fagioli, Cannellini, secchi",
-        "match_type": "exact",
-        "confidence": "high",
-        "state": "secco, prima dell ammollo e cottura",
-        "reason": "Fagioli cannellini secchi CREA 004200",
-        "is_ambiguous": false,
-        "nutrients": {
-          "kcal_100g": 314.0,
-          "protein_g_100g": 23.4,
-          "fat_g_100g": 1.6,
-          "carbs_available_g_100g": 45.5
-        }
-      }
-    ],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:baleadas",
-        "recipe_title": "Baleadas",
-        "ingredient_key": "4",
-        "original_name": "Red beans",
-        "grams": 400.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:casado",
-        "recipe_title": "Casado",
-        "ingredient_key": "3",
-        "original_name": "Black beans",
-        "grams": 400.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:chakalaka",
-        "recipe_title": "Chakalaka",
-        "ingredient_key": "4",
-        "original_name": "Baked beans",
-        "grams": 400.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:feijoada",
-        "recipe_title": "Feijoada",
-        "ingredient_key": "1",
-        "original_name": "Black beans",
-        "grams": 700.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:gallo-pinto",
-        "recipe_title": "Gallo pinto",
-        "ingredient_key": "2",
-        "original_name": "Black beans",
-        "grams": 400.0,
-        "quantity_status": "resolved"
       }
     ],
     "ambiguity_count": 0
@@ -8937,171 +9650,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:couscous",
-    "canonical_name": "couscous",
-    "occurrences": 11,
-    "recipes_count": 11,
-    "primary_status": "missing",
-    "raw_names": [
-      "Couscous",
-      "couscous"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:couscous-algerien",
-        "recipe_title": "Algerian couscous",
-        "ingredient_key": "1",
-        "original_name": "Couscous",
-        "grams": 700.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R123",
-        "recipe_title": "Apricot chicken with couscous",
-        "ingredient_key": "8",
-        "original_name": "couscous",
-        "grams": 100.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R056",
-        "recipe_title": "Cauliflower and chickpea couscous with mint yoghurt",
-        "ingredient_key": "5",
-        "original_name": "couscous",
-        "grams": 80.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R301",
-        "recipe_title": "Chicken, olive and lemon with couscous",
-        "ingredient_key": "8",
-        "original_name": "couscous",
-        "grams": 100.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R097",
-        "recipe_title": "Chicken, roasted pepper and couscous lunch bowl",
-        "ingredient_key": "1",
-        "original_name": "couscous",
-        "grams": 90.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:fennel",
-    "canonical_name": "fennel",
-    "occurrences": 11,
-    "recipes_count": 11,
-    "primary_status": "missing",
-    "raw_names": [
-      "Fennel",
-      "fennel"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:bouillabaisse",
-        "recipe_title": "Bouillabaisse",
-        "ingredient_key": "3",
-        "original_name": "Fennel",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "foodose:R308",
-        "recipe_title": "Butter bean and fennel braise with orange and olive",
-        "ingredient_key": "1",
-        "original_name": "fennel",
-        "grams": 300.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R214",
-        "recipe_title": "Chicken, fennel and olive traybake with orzo",
-        "ingredient_key": "1",
-        "original_name": "fennel",
-        "grams": 250.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R032",
-        "recipe_title": "Cod en papillote with fennel",
-        "ingredient_key": "4",
-        "original_name": "fennel",
-        "grams": 200.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R084",
-        "recipe_title": "Cod, tomato and fennel broth",
-        "ingredient_key": "2",
-        "original_name": "fennel",
-        "grams": 200.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:green beans",
-    "canonical_name": "green beans",
-    "occurrences": 11,
-    "recipes_count": 11,
-    "primary_status": "missing",
-    "raw_names": [
-      "Green beans",
-      "green beans"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R299",
-        "recipe_title": "Baked chicken schnitzel with green beans and lemon",
-        "ingredient_key": "6",
-        "original_name": "green beans",
-        "grams": 250.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R159",
-        "recipe_title": "Beetroot and ricotta wonton ravioli",
-        "ingredient_key": "5",
-        "original_name": "green beans",
-        "grams": 150.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R224",
-        "recipe_title": "Cod under a parsley and almond crust with green beans",
-        "ingredient_key": "6",
-        "original_name": "green beans",
-        "grams": 250.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R031",
-        "recipe_title": "Dijon-dill salmon with crushed potatoes",
-        "ingredient_key": "2",
-        "original_name": "green beans",
-        "grams": 200.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:lagman",
-        "recipe_title": "Lagman",
-        "ingredient_key": "5",
-        "original_name": "Green beans",
-        "grams": 200.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:ground turmeric",
     "canonical_name": "ground turmeric",
     "occurrences": 11,
@@ -9210,6 +9758,82 @@
     "ambiguity_count": 0
   },
   {
+    "canonical_id": "fagioli_cannellini_secchi",
+    "canonical_name": "Fagioli, Cannellini, secchi",
+    "occurrences": 10,
+    "recipes_count": 10,
+    "primary_status": "proposed_exact",
+    "raw_names": [
+      "Baked beans",
+      "Beans",
+      "Black beans",
+      "Black-eyed beans",
+      "Kidney beans",
+      "Red beans"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "004200",
+        "name": "Fagioli, Cannellini, secchi",
+        "match_type": "exact",
+        "confidence": "high",
+        "state": "secco, prima dell ammollo e cottura",
+        "reason": "Fagioli cannellini secchi CREA 004200",
+        "is_ambiguous": false,
+        "nutrients": {
+          "kcal_100g": 314.0,
+          "protein_g_100g": 23.4,
+          "fat_g_100g": 1.6,
+          "carbs_available_g_100g": 45.5
+        }
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:baleadas",
+        "recipe_title": "Baleadas",
+        "ingredient_key": "4",
+        "original_name": "Red beans",
+        "grams": 400.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:casado",
+        "recipe_title": "Casado",
+        "ingredient_key": "3",
+        "original_name": "Black beans",
+        "grams": 400.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:chakalaka",
+        "recipe_title": "Chakalaka",
+        "ingredient_key": "4",
+        "original_name": "Baked beans",
+        "grams": 400.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:feijoada",
+        "recipe_title": "Feijoada",
+        "ingredient_key": "1",
+        "original_name": "Black beans",
+        "grams": 700.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:gallo-pinto",
+        "recipe_title": "Gallo pinto",
+        "ingredient_key": "2",
+        "original_name": "Black beans",
+        "grams": 400.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
     "canonical_id": "unmapped:nutmeg",
     "canonical_name": "Nutmeg",
     "occurrences": 10,
@@ -9262,6 +9886,94 @@
       }
     ],
     "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "polenta_cruda",
+    "canonical_name": "Polenta (farina di mais), cruda",
+    "occurrences": 10,
+    "recipes_count": 10,
+    "primary_status": "ambiguous",
+    "raw_names": [
+      "Cornmeal",
+      "polenta"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "000075",
+        "name": "Polenta, cruda",
+        "match_type": "exact",
+        "confidence": "low",
+        "state": "farina di mais bramata secca cruda",
+        "reason": "Polenta cruda CREA 000075 (323 kcal, 8.0g proteine)",
+        "is_ambiguous": true,
+        "nutrients": {
+          "kcal_100g": 323.0,
+          "protein_g_100g": 8.0,
+          "fat_g_100g": 0.7,
+          "carbs_available_g_100g": 72.7
+        }
+      },
+      {
+        "source": "CREA",
+        "id": "000076",
+        "name": "Polenta, cotta",
+        "match_type": "cooked_alternate",
+        "confidence": "low",
+        "state": "cotto / bollito",
+        "reason": "Possibile alternativa cotta (Polenta, cotta) - stato non specificato nella ricetta",
+        "is_ambiguous": true,
+        "nutrients": {
+          "kcal_100g": 73.0,
+          "protein_g_100g": 0.9,
+          "fat_g_100g": 0.04,
+          "carbs_available_g_100g": 17.8
+        }
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "foodose:R117",
+        "recipe_title": "Baked polenta with tomatoes and eggs",
+        "ingredient_key": "3",
+        "original_name": "polenta",
+        "grams": 70.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:ballokume",
+        "recipe_title": "Ballokume",
+        "ingredient_key": "1",
+        "original_name": "Cornmeal",
+        "grams": 600.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:chapli-kebab",
+        "recipe_title": "Chapli kebab",
+        "ingredient_key": "2",
+        "original_name": "Cornmeal",
+        "grams": 60.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R027",
+        "recipe_title": "Chicken cacciatore with soft polenta",
+        "ingredient_key": "8",
+        "original_name": "polenta",
+        "grams": 80.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R141",
+        "recipe_title": "Cornmeal-baked tilapia with sweet potato",
+        "ingredient_key": "4",
+        "original_name": "polenta",
+        "grams": 30.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 10
   },
   {
     "canonical_id": "unmapped:sweet paprika",
@@ -9751,116 +10463,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:aubergine",
-    "canonical_name": "aubergine",
-    "occurrences": 9,
-    "recipes_count": 9,
-    "primary_status": "missing",
-    "raw_names": [
-      "Aubergine",
-      "aubergine"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R048",
-        "recipe_title": "Aubergine and cottage cheese parmigiana",
-        "ingredient_key": "1",
-        "original_name": "aubergine",
-        "grams": 400.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R328",
-        "recipe_title": "Aubergine caponata with white beans",
-        "ingredient_key": "1",
-        "original_name": "aubergine",
-        "grams": 500.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R227",
-        "recipe_title": "Baked aubergine with feta, tomato and mint",
-        "ingredient_key": "1",
-        "original_name": "aubergine",
-        "grams": 500.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R153",
-        "recipe_title": "Lentil and aubergine moussaka",
-        "ingredient_key": "1",
-        "original_name": "aubergine",
-        "grams": 350.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:ratatouille",
-        "recipe_title": "Ratatouille",
-        "ingredient_key": "1",
-        "original_name": "Aubergine",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:cod",
-    "canonical_name": "cod",
-    "occurrences": 9,
-    "recipes_count": 9,
-    "primary_status": "missing",
-    "raw_names": [
-      "Cod",
-      "cod"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R144",
-        "recipe_title": "Cod and chickpea fritters",
-        "ingredient_key": "1",
-        "original_name": "cod",
-        "grams": 250.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R034",
-        "recipe_title": "Cod and sweetcorn chowder",
-        "ingredient_key": "7",
-        "original_name": "cod",
-        "grams": 280.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R148",
-        "recipe_title": "Cod and trout fish pie",
-        "ingredient_key": "5",
-        "original_name": "cod",
-        "grams": 150.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R032",
-        "recipe_title": "Cod en papillote with fennel",
-        "ingredient_key": "5",
-        "original_name": "cod",
-        "grams": 280.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R224",
-        "recipe_title": "Cod under a parsley and almond crust with green beans",
-        "ingredient_key": "5",
-        "original_name": "cod",
-        "grams": 320.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:dried sage",
     "canonical_name": "dried sage",
     "occurrences": 9,
@@ -9909,60 +10511,6 @@
         "ingredient_key": "3",
         "original_name": "dried sage",
         "grams": 0.4,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:raw prawns",
-    "canonical_name": "raw prawns",
-    "occurrences": 9,
-    "recipes_count": 9,
-    "primary_status": "missing",
-    "raw_names": [
-      "raw prawns"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R039",
-        "recipe_title": "Prawn and courgette linguine",
-        "ingredient_key": "5",
-        "original_name": "raw prawns",
-        "grams": 250.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R143",
-        "recipe_title": "Prawn and rice stuffed courgettes",
-        "ingredient_key": "5",
-        "original_name": "raw prawns",
-        "grams": 220.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R246",
-        "recipe_title": "Prawn and sweetcorn chowder",
-        "ingredient_key": "7",
-        "original_name": "raw prawns",
-        "grams": 250.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R043",
-        "recipe_title": "Prawn and sweetcorn polenta bowls",
-        "ingredient_key": "6",
-        "original_name": "raw prawns",
-        "grams": 250.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R324",
-        "recipe_title": "Prawn skewers with garlic, lemon and couscous",
-        "ingredient_key": "1",
-        "original_name": "raw prawns",
-        "grams": 250.0,
         "quantity_status": "resolved"
       }
     ],
@@ -10582,60 +11130,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:polenta",
-    "canonical_name": "polenta",
-    "occurrences": 8,
-    "recipes_count": 8,
-    "primary_status": "missing",
-    "raw_names": [
-      "polenta"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R117",
-        "recipe_title": "Baked polenta with tomatoes and eggs",
-        "ingredient_key": "3",
-        "original_name": "polenta",
-        "grams": 70.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R027",
-        "recipe_title": "Chicken cacciatore with soft polenta",
-        "ingredient_key": "8",
-        "original_name": "polenta",
-        "grams": 80.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R141",
-        "recipe_title": "Cornmeal-baked tilapia with sweet potato",
-        "ingredient_key": "4",
-        "original_name": "polenta",
-        "grams": 30.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R177",
-        "recipe_title": "Mushroom and white bean polenta bake",
-        "ingredient_key": "2",
-        "original_name": "polenta",
-        "grams": 80.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R296",
-        "recipe_title": "Polenta porridge with plum and quark",
-        "ingredient_key": "4",
-        "original_name": "polenta",
-        "grams": 70.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:red lentils",
     "canonical_name": "red lentils",
     "occurrences": 8,
@@ -11036,60 +11530,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:mint",
-    "canonical_name": "Mint",
-    "occurrences": 7,
-    "recipes_count": 7,
-    "primary_status": "missing",
-    "raw_names": [
-      "Mint"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:gemista",
-        "recipe_title": "Gemista",
-        "ingredient_key": "7",
-        "original_name": "Mint",
-        "grams": 20.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:halloumi-grilled",
-        "recipe_title": "Grilled halloumi with watermelon",
-        "ingredient_key": "3",
-        "original_name": "Mint",
-        "grams": 20.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:goi-cuon",
-        "recipe_title": "Gỏi cuốn",
-        "ingredient_key": "6",
-        "original_name": "Mint",
-        "grams": 30.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:indio-viejo",
-        "recipe_title": "Indio viejo",
-        "ingredient_key": "7",
-        "original_name": "Mint",
-        "grams": 30.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:kak-ik",
-        "recipe_title": "Kak'ik",
-        "ingredient_key": "12",
-        "original_name": "Mint",
-        "grams": 20.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:mirin",
     "canonical_name": "Mirin",
     "occurrences": 7,
@@ -11137,60 +11577,6 @@
         "recipe_title": "Nikujaga",
         "ingredient_key": "7",
         "original_name": "Mirin",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:oregano",
-    "canonical_name": "Oregano",
-    "occurrences": 7,
-    "recipes_count": 7,
-    "primary_status": "missing",
-    "raw_names": [
-      "Oregano"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:arroz-con-pollo-cubano",
-        "recipe_title": "Arroz con pollo",
-        "ingredient_key": "11",
-        "original_name": "Oregano",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:milanesa-a-la-napolitana",
-        "recipe_title": "Milanesa a la napolitana",
-        "ingredient_key": "9",
-        "original_name": "Oregano",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:moros-y-cristianos",
-        "recipe_title": "Moros y cristianos",
-        "ingredient_key": "8",
-        "original_name": "Oregano",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:ropa-vieja-panamena",
-        "recipe_title": "Panamanian ropa vieja",
-        "ingredient_key": "10",
-        "original_name": "Oregano",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:frango-piri-piri",
-        "recipe_title": "Piri-piri chicken",
-        "ingredient_key": "9",
-        "original_name": "Oregano",
         "grams": null,
         "quantity_status": "needs_review"
       }
@@ -12820,60 +13206,6 @@
         "ingredient_key": "3",
         "original_name": "trout",
         "grams": 280.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:turkey breast",
-    "canonical_name": "turkey breast",
-    "occurrences": 6,
-    "recipes_count": 6,
-    "primary_status": "missing",
-    "raw_names": [
-      "turkey breast"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R028",
-        "recipe_title": "Maple-Dijon turkey with apple and cabbage",
-        "ingredient_key": "6",
-        "original_name": "turkey breast",
-        "grams": 280.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R024",
-        "recipe_title": "Turkey and mushroom stroganoff",
-        "ingredient_key": "5",
-        "original_name": "turkey breast",
-        "grams": 280.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R122",
-        "recipe_title": "Turkey and spinach roulades",
-        "ingredient_key": "5",
-        "original_name": "turkey breast",
-        "grams": 280.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R320",
-        "recipe_title": "Turkey goulash with paprika and potato",
-        "ingredient_key": "2",
-        "original_name": "turkey breast",
-        "grams": 300.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R300",
-        "recipe_title": "Turkey, apricot and almond pilaf",
-        "ingredient_key": "2",
-        "original_name": "turkey breast",
-        "grams": 300.0,
         "quantity_status": "resolved"
       }
     ],
@@ -15018,52 +15350,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:mexican oregano",
-    "canonical_name": "Mexican oregano",
-    "occurrences": 4,
-    "recipes_count": 4,
-    "primary_status": "missing",
-    "raw_names": [
-      "Mexican oregano"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:chiles-en-nogada",
-        "recipe_title": "Chiles rellenos",
-        "ingredient_key": "8",
-        "original_name": "Mexican oregano",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:cochinita-pibil",
-        "recipe_title": "Cochinita pibil",
-        "ingredient_key": "7",
-        "original_name": "Mexican oregano",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:pozole-rojo",
-        "recipe_title": "Pozole rojo",
-        "ingredient_key": "7",
-        "original_name": "Mexican oregano",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:tacos-al-pastor",
-        "recipe_title": "Tacos al pastor",
-        "ingredient_key": "9",
-        "original_name": "Mexican oregano",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:mutton fat",
     "canonical_name": "Mutton fat",
     "occurrences": 4,
@@ -16086,52 +16372,6 @@
         "ingredient_key": "4",
         "original_name": "cooked prawns",
         "grams": 220.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:cooked turkey",
-    "canonical_name": "cooked turkey",
-    "occurrences": 4,
-    "recipes_count": 4,
-    "primary_status": "missing",
-    "raw_names": [
-      "cooked turkey"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R193",
-        "recipe_title": "Turkey, cranberry and cottage cheese rolls",
-        "ingredient_key": "4",
-        "original_name": "cooked turkey",
-        "grams": 180.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R255",
-        "recipe_title": "Turkey, cranberry and spinach roll",
-        "ingredient_key": "5",
-        "original_name": "cooked turkey",
-        "grams": 250.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R202",
-        "recipe_title": "Turkey, pea and basil pasta salad",
-        "ingredient_key": "6",
-        "original_name": "cooked turkey",
-        "grams": 180.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R096",
-        "recipe_title": "Turkey, pear and cheddar toastie",
-        "ingredient_key": "3",
-        "original_name": "cooked turkey",
-        "grams": 180.0,
         "quantity_status": "resolved"
       }
     ],
@@ -19643,36 +19883,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:cornmeal",
-    "canonical_name": "Cornmeal",
-    "occurrences": 2,
-    "recipes_count": 2,
-    "primary_status": "missing",
-    "raw_names": [
-      "Cornmeal"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:ballokume",
-        "recipe_title": "Ballokume",
-        "ingredient_key": "1",
-        "original_name": "Cornmeal",
-        "grams": 600.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:chapli-kebab",
-        "recipe_title": "Chapli kebab",
-        "ingredient_key": "2",
-        "original_name": "Cornmeal",
-        "grams": 60.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:dark beer",
     "canonical_name": "Dark beer",
     "occurrences": 2,
@@ -19786,6 +19996,36 @@
         "recipe_title": "Machboos",
         "ingredient_key": "5",
         "original_name": "Dried lime loomi",
+        "grams": null,
+        "quantity_status": "needs_review"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "unmapped:dried mint",
+    "canonical_name": "Dried mint",
+    "occurrences": 2,
+    "recipes_count": 2,
+    "primary_status": "missing",
+    "raw_names": [
+      "Dried mint"
+    ],
+    "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:ashak",
+        "recipe_title": "Ashak",
+        "ingredient_key": "9",
+        "original_name": "Dried mint",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:kibbeh-nayyeh",
+        "recipe_title": "Kibbeh nayyeh",
+        "ingredient_key": "5",
+        "original_name": "Dried mint",
         "grams": null,
         "quantity_status": "needs_review"
       }
@@ -20273,36 +20513,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:ground fennel",
-    "canonical_name": "Ground fennel",
-    "occurrences": 2,
-    "recipes_count": 2,
-    "primary_status": "missing",
-    "raw_names": [
-      "Ground fennel"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:kleicha",
-        "recipe_title": "Kleicha",
-        "ingredient_key": "8",
-        "original_name": "Ground fennel",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:rogan-josh",
-        "recipe_title": "Rogan josh",
-        "ingredient_key": "4",
-        "original_name": "Ground fennel",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:halloumi",
     "canonical_name": "Halloumi",
     "occurrences": 2,
@@ -20633,31 +20843,48 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:leeks",
-    "canonical_name": "Leeks",
+    "canonical_id": "lievito_birra",
+    "canonical_name": "Lievito di birra, compresso",
     "occurrences": 2,
     "recipes_count": 2,
-    "primary_status": "missing",
+    "primary_status": "proposed_exact",
     "raw_names": [
-      "Leeks"
+      "Fresh yeast"
     ],
-    "candidates": [],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "503100",
+        "name": "Lievito di birra, compresso",
+        "match_type": "exact",
+        "confidence": "high",
+        "state": "lievito fresco compresso per panificazione",
+        "reason": "Lievito di birra compresso fresco CREA 503100",
+        "is_ambiguous": false,
+        "nutrients": {
+          "kcal_100g": 70.0,
+          "protein_g_100g": 12.1,
+          "fat_g_100g": 0.4,
+          "carbs_available_g_100g": 1.1
+        }
+      }
+    ],
     "sample_recipes": [
       {
-        "recipe_id": "unitools:erwtensoep",
-        "recipe_title": "Erwtensoep",
-        "ingredient_key": "6",
-        "original_name": "Leeks",
-        "grams": null,
-        "quantity_status": "needs_review"
+        "recipe_id": "unitools:croissant",
+        "recipe_title": "Croissant",
+        "ingredient_key": "3",
+        "original_name": "Fresh yeast",
+        "grams": 15.0,
+        "quantity_status": "resolved"
       },
       {
-        "recipe_id": "unitools:waterzooi",
-        "recipe_title": "Waterzooi",
-        "ingredient_key": "2",
-        "original_name": "Leeks",
-        "grams": null,
-        "quantity_status": "needs_review"
+        "recipe_id": "unitools:pizza-margherita",
+        "recipe_title": "Pizza margherita",
+        "ingredient_key": "3",
+        "original_name": "Fresh yeast",
+        "grams": 1.0,
+        "quantity_status": "resolved"
       }
     ],
     "ambiguity_count": 0
@@ -21653,36 +21880,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:tofu",
-    "canonical_name": "Tofu",
-    "occurrences": 2,
-    "recipes_count": 2,
-    "primary_status": "missing",
-    "raw_names": [
-      "Tofu"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:kimchi-jjigae",
-        "recipe_title": "Kimchi jjigae",
-        "ingredient_key": "3",
-        "original_name": "Tofu",
-        "grams": 300.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:miso-soup",
-        "recipe_title": "Miso soup",
-        "ingredient_key": "5",
-        "original_name": "Tofu",
-        "grams": 200.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:turnips",
     "canonical_name": "Turnips",
     "occurrences": 2,
@@ -22163,36 +22360,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:hake",
-    "canonical_name": "hake",
-    "occurrences": 2,
-    "recipes_count": 2,
-    "primary_status": "missing",
-    "raw_names": [
-      "hake"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R145",
-        "recipe_title": "Hake in green parsley sauce",
-        "ingredient_key": "5",
-        "original_name": "hake",
-        "grams": 280.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R221",
-        "recipe_title": "Hake in tomato and saffron with butter beans",
-        "ingredient_key": "7",
-        "original_name": "hake",
-        "grams": 300.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:halibut",
     "canonical_name": "halibut",
     "occurrences": 2,
@@ -22367,28 +22534,6 @@
         "ingredient_key": "3",
         "original_name": "wild rice",
         "grams": 80.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:african aubergines",
-    "canonical_name": "African aubergines",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "African aubergines"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:kedjenou",
-        "recipe_title": "Kedjenou",
-        "ingredient_key": "4",
-        "original_name": "African aubergines",
-        "grams": 200.0,
         "quantity_status": "resolved"
       }
     ],
@@ -23869,28 +24014,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:capers and lemon",
-    "canonical_name": "Capers and lemon",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Capers and lemon"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:smorrebrod",
-        "recipe_title": "Smørrebrød",
-        "ingredient_key": "10",
-        "original_name": "Capers and lemon",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:cardamom, cloves, cinnamon, bay",
     "canonical_name": "Cardamom, cloves, cinnamon, bay",
     "occurrences": 1,
@@ -24145,28 +24268,6 @@
         "original_name": "Celery leaves",
         "grams": 30.0,
         "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:celery sticks",
-    "canonical_name": "Celery sticks",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Celery sticks"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:buffalo-wings",
-        "recipe_title": "Buffalo wings",
-        "ingredient_key": "7",
-        "original_name": "Celery sticks",
-        "grams": null,
-        "quantity_status": "needs_review"
       }
     ],
     "ambiguity_count": 0
@@ -24672,28 +24773,6 @@
         "ingredient_key": "7",
         "original_name": "Coconut oil",
         "grams": 30.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:cod fillet",
-    "canonical_name": "Cod fillet",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Cod fillet"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:fish-and-chips",
-        "recipe_title": "Fish and chips",
-        "ingredient_key": "1",
-        "original_name": "Cod fillet",
-        "grams": 800.0,
         "quantity_status": "resolved"
       }
     ],
@@ -25310,28 +25389,6 @@
         "ingredient_key": "5",
         "original_name": "Dark muscovado sugar",
         "grams": 300.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:dark rye bread",
-    "canonical_name": "Dark rye bread",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Dark rye bread"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:rupjmaizes-kartojums",
-        "recipe_title": "Rye bread layer dessert",
-        "ingredient_key": "1",
-        "original_name": "Dark rye bread",
-        "grams": 400.0,
         "quantity_status": "resolved"
       }
     ],
@@ -26191,28 +26248,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:fennel seeds",
-    "canonical_name": "Fennel seeds",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Fennel seeds"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:nihari",
-        "recipe_title": "Nihari",
-        "ingredient_key": "6",
-        "original_name": "Fennel seeds",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:fermented black beans",
     "canonical_name": "Fermented black beans",
     "occurrences": 1,
@@ -26449,28 +26484,6 @@
         "ingredient_key": "2",
         "original_name": "Flank or skirt",
         "grams": 1500.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:flat green beans",
-    "canonical_name": "Flat green beans",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Flat green beans"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:paella-valenciana",
-        "recipe_title": "Paella valenciana",
-        "ingredient_key": "4",
-        "original_name": "Flat green beans",
-        "grams": 200.0,
         "quantity_status": "resolved"
       }
     ],
@@ -26730,28 +26743,6 @@
         "ingredient_key": "2",
         "original_name": "Fried peanuts",
         "grams": 80.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:fried tofu puffs",
-    "canonical_name": "Fried tofu puffs",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Fried tofu puffs"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:laksa-lemak",
-        "recipe_title": "Laksa lemak",
-        "ingredient_key": "3",
-        "original_name": "Fried tofu puffs",
-        "grams": 150.0,
         "quantity_status": "resolved"
       }
     ],
@@ -28474,28 +28465,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:large prawns",
-    "canonical_name": "Large prawns",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Large prawns"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:tempura",
-        "recipe_title": "Tempura",
-        "ingredient_key": "1",
-        "original_name": "Large prawns",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:lasagne sheets",
     "canonical_name": "Lasagne sheets",
     "occurrences": 1,
@@ -29327,28 +29296,6 @@
         "original_name": "Minced veal",
         "grams": 200.0,
         "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:mint and coriander",
-    "canonical_name": "Mint and coriander",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Mint and coriander"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:chicken-biryani",
-        "recipe_title": "Chicken biryani",
-        "ingredient_key": "13",
-        "original_name": "Mint and coriander",
-        "grams": null,
-        "quantity_status": "needs_review"
       }
     ],
     "ambiguity_count": 0
@@ -32253,28 +32200,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:small cold-water prawns",
-    "canonical_name": "Small cold-water prawns",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Small cold-water prawns"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:toast-skagen",
-        "recipe_title": "Toast Skagen",
-        "ingredient_key": "1",
-        "original_name": "Small cold-water prawns",
-        "grams": 500.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:small onions",
     "canonical_name": "Small onions",
     "occurrences": 1,
@@ -32291,28 +32216,6 @@
         "ingredient_key": "5",
         "original_name": "Small onions",
         "grams": 250.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:small prawns",
-    "canonical_name": "Small prawns",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Small prawns"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:smorrebrod",
-        "recipe_title": "Smørrebrød",
-        "ingredient_key": "4",
-        "original_name": "Small prawns",
-        "grams": 200.0,
         "quantity_status": "resolved"
       }
     ],
@@ -32490,28 +32393,6 @@
         "original_name": "Smoking wood chips",
         "grams": null,
         "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:soft tofu",
-    "canonical_name": "Soft tofu",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Soft tofu"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:mapo-tofu",
-        "recipe_title": "Mapo tofu",
-        "ingredient_key": "1",
-        "original_name": "Soft tofu",
-        "grams": 500.0,
-        "quantity_status": "resolved"
       }
     ],
     "ambiguity_count": 0
@@ -32819,28 +32700,6 @@
         "ingredient_key": "1",
         "original_name": "Split peas",
         "grams": 500.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:spring onion or leek",
-    "canonical_name": "Spring onion or leek",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Spring onion or leek"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:ghormeh-sabzi",
-        "recipe_title": "Ghormeh sabzi",
-        "ingredient_key": "4",
-        "original_name": "Spring onion or leek",
-        "grams": 200.0,
         "quantity_status": "resolved"
       }
     ],
@@ -33507,28 +33366,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:thai aubergines",
-    "canonical_name": "Thai aubergines",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Thai aubergines"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:tam-mak-hoong",
-        "recipe_title": "Tam mak hoong",
-        "ingredient_key": "9",
-        "original_name": "Thai aubergines",
-        "grams": 100.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:thick rice noodles",
     "canonical_name": "Thick rice noodles",
     "occurrences": 1,
@@ -33897,50 +33734,6 @@
         "ingredient_key": "1",
         "original_name": "Tuna or mackerel",
         "grams": 900.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:turkey",
-    "canonical_name": "Turkey",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Turkey"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:kak-ik",
-        "recipe_title": "Kak'ik",
-        "ingredient_key": "1",
-        "original_name": "Turkey",
-        "grams": 2000.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:turkey or chicken",
-    "canonical_name": "Turkey or chicken",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Turkey or chicken"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:satsivi",
-        "recipe_title": "Satsivi",
-        "ingredient_key": "1",
-        "original_name": "Turkey or chicken",
-        "grams": 2000.0,
         "quantity_status": "resolved"
       }
     ],

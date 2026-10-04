@@ -50,4 +50,6 @@ Fonte, licenza e controlli qualità in [dataset/open_food_facts/README.md](datas
 
 Importare con `python scripts/import_recipes.py --download`; rigenerare dagli originali locali omettendo `--download`. La pagina Ricette permette ricerca e filtro della cucina; nel profilo si salvano le cucine preferite. Fonti, licenze e stato del ricalcolo nutrienti in [dataset/recipes/README.md](dataset/recipes/README.md). Le ricette non sono ancora integrate nel solver.
 
-Il [solver delle ricette](docs/recipe-solver.md) sceglie prodotti e quantità con proporzioni flessibili; attualmente due composizioni con mapping esplicito, senza integrazione automatica nei piani delle diete.
+Il [solver delle ricette](docs/recipe-solver.md) sceglie prodotti e quantità con proporzioni flessibili; attualmente 25 composizioni con mapping esplicito, senza integrazione automatica nei piani delle diete.
+
+Il [controllo degli abbinamenti delle ricette](docs/recipe-diet-compatibility.md) valuta ingredienti, rami e complementi mancanti per i 14 giorni di ogni programma. La verifica nutrizionale e l’inserimento automatico nel piano giornaliero restano separati.

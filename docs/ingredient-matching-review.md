@@ -22,3 +22,18 @@ python scripts/match_recipe_ingredients.py --report-file data/recipe_matching_re
 ```
 
 Questo comando non sovrascrive `config/recipe-solver.json` e non riavvia il server. Lo script dispone anche di un comando `--approve`: è un'azione di revisione esplicita, non un passaggio da eseguire automaticamente per svuotare la coda. La voce aglio nel file delle approvazioni riporta `user_review`; l'etichetta salvata da sola non prova una revisione fatta dall'utente umano.
+
+## Seconda espansione di Gemini
+
+Il dizionario era passato da 82 a 100 voci, con 45 ricette aventi almeno una proposta per ogni ingrediente. Le approvazioni esistenti non sono state aumentate: il solo template importato completamente approvato resta R315. Gemini ha aggiunto controlli per la diluizione dei brodi e distinto lievito fresco da secco.
+
+La revisione ha riscontrato e corretto:
+
+- Codice USDA 172232 duplicato tra basilico e capperi: i riferimenti delle ricette originali foodose identificano i capperi con 172238.
+- Codice USDA 171077 duplicato tra pollo e tacchino: per il tacchino sono ora conservati i codici dichiarati nelle ricette originali (172850 macinato crudo, 171098 petto crudo, 171496 petto cotto). Il tacchino intero CREA rimane un proxy, non una corrispondenza esatta per tutti i tagli.
+- Tofu morbido e compatto raggruppati con candidati di marca identici: separato il tofu morbido, senza riutilizzare i prodotti di quello compatto. I riferimenti originali distinguono 172449 morbido e 172475 compatto.
+- Lievito madre candidato per lievito di birra secco: candidato rimosso dalla ricerca attiva e conservato come scartato nel dizionario.
+
+Dopo le correzioni: 101 voci di dizionario, 42 ricette con tutte le associazioni almeno proposte (rispetto alle 18 precedenti), 300 con pesi risolti, una completamente approvata. 56 test del progetto passano; nessuna nuova ricetta attivata nell'interfaccia. Il rapporto e la coda sono stati rigenerati offline sull'intero catalogo.
+
+Prossimo passaggio: revisione delle nuove proposte per ricetta e stato dell'ingrediente, validazione nutrizionale delle associazioni e solo dopo esportazione nel catalogo del solver. I contatori `proposed_exact` rimangono indicazioni del matcher, non approvazioni verificate. Gli `expected_qualifiers` aggiunti al dizionario non sono ancora applicati sistematicamente dalla ricerca: vanno controllati prima di approvare altre regole condivise.

@@ -3005,35 +3005,80 @@
     "lievito_birra": {
       "id": "lievito_birra",
       "display_name_it": "Lievito di birra, compresso",
-      "display_name_en": "Yeast",
+      "display_name_en": "Fresh yeast / Compressed baker's yeast",
       "category": "Prodotti vari",
-      "state": "lievito per panificazione",
+      "state": "lievito fresco compresso per panificazione",
+      "expected_qualifiers": {
+        "processing_state": "fresh"
+      },
       "synonyms_en": [
-        "yeast",
-        "dry yeast",
-        "active dry yeast",
-        "instant yeast",
-        "fresh yeast"
+        "fresh yeast",
+        "compressed yeast",
+        "cake yeast",
+        "fresh baker's yeast"
       ],
       "synonyms_it": [
         "lievito di birra",
-        "lievito secco",
-        "lievito di birra secco"
+        "lievito di birra fresco",
+        "lievito compresso",
+        "cubetto di lievito"
       ],
       "usda_ids": [
         "171295"
       ],
       "unitools_ids": [
-        "yeast"
+        "freshyeast"
       ],
       "crea_matches": {
         "primary": {
           "id": "503100",
           "name": "Lievito di birra, compresso",
           "match_type": "exact",
-          "reason": "Lievito di birra CREA 503100"
+          "reason": "Lievito di birra compresso fresco CREA 503100"
         }
       }
+    },
+    "lievito_secco": {
+      "id": "lievito_secco",
+      "display_name_it": "Lievito secco per panificazione",
+      "display_name_en": "Active dry yeast / Instant dry yeast",
+      "category": "Prodotti vari",
+      "state": "lievito disidratato secco",
+      "expected_qualifiers": {
+        "processing_state": "dry"
+      },
+      "synonyms_en": [
+        "dry yeast",
+        "active dry yeast",
+        "instant yeast",
+        "fast action dried yeast",
+        "dried yeast",
+        "yeast"
+      ],
+      "synonyms_it": [
+        "lievito secco",
+        "lievito di birra secco",
+        "lievito disidratato",
+        "lievito istantaneo"
+      ],
+      "usda_ids": [
+        "171296"
+      ],
+      "unitools_ids": [
+        "yeast",
+        "dryyeast"
+      ],
+      "crea_matches": {},
+      "rejected_candidates": [
+        {
+          "barcode": "0121000541291",
+          "brand": "",
+          "name": "Lievito madre essiccato",
+          "match_type": "brand_candidate",
+          "reason": "Lievito disidratato secco in OFF (362 kcal/100g, non equiparabile a 70 kcal compresso)"
+        }
+      ],
+      "matching_note": "Lievito madre essiccato non equivalente a lievito di birra secco. Il candidato precedente è conservato solo come scartato."
     },
     "vino_bianco": {
       "id": "vino_bianco",
@@ -3098,10 +3143,13 @@
     },
     "brodo_vegetale": {
       "id": "brodo_vegetale",
-      "display_name_it": "Brodo vegetale",
-      "display_name_en": "Vegetable stock",
+      "display_name_it": "Brodo vegetale pronto (liquido)",
+      "display_name_en": "Vegetable stock (ready to use)",
       "category": "Prodotti vari",
-      "state": "brodo vegetale pronto (liquido)",
+      "state": "brodo vegetale pronto liquido",
+      "flags": {
+        "requires_dilution": true
+      },
       "synonyms_en": [
         "vegetable stock",
         "vegetable broth"
@@ -3116,21 +3164,26 @@
         "vegetablestock"
       ],
       "crea_matches": {
-        "primary": {
-          "id": "503010",
-          "name": "Dadi da brodo",
-          "match_type": "proxy",
-          "reason": "Dadi da brodo CREA 503010 come proxy per brodo concentrato (richiede densità/diluizione)"
-        }
+        "proxies": [
+          {
+            "id": "503010",
+            "name": "Dadi da brodo",
+            "match_type": "proxy",
+            "reason": "Dadi da brodo concentrati CREA 503010 (richiede fattore di diluizione ~1:50, non equiparabile tal quale)"
+          }
+        ]
       },
       "density_g_per_ml": 1.0
     },
     "brodo_pollo": {
       "id": "brodo_pollo",
-      "display_name_it": "Brodo di pollo",
-      "display_name_en": "Chicken stock",
+      "display_name_it": "Brodo di pollo pronto (liquido)",
+      "display_name_en": "Chicken stock (ready to use)",
       "category": "Prodotti vari",
-      "state": "brodo di carne pronto (liquido)",
+      "state": "brodo di carne pronto liquido",
+      "flags": {
+        "requires_dilution": true
+      },
       "synonyms_en": [
         "chicken stock",
         "chicken broth"
@@ -3146,14 +3199,723 @@
         "chickenstock"
       ],
       "crea_matches": {
-        "primary": {
-          "id": "503010",
-          "name": "Dadi da brodo",
-          "match_type": "proxy",
-          "reason": "Dadi da brodo CREA 503010 come proxy (richiede densità/diluizione)"
-        }
+        "proxies": [
+          {
+            "id": "503010",
+            "name": "Dadi da brodo",
+            "match_type": "proxy",
+            "reason": "Dadi da brodo concentrati CREA 503010 (richiede fattore di diluizione ~1:50, non equiparabile tal quale)"
+          }
+        ]
       },
       "density_g_per_ml": 1.0
+    },
+    "melanzane_crude": {
+      "id": "melanzane_crude",
+      "display_name_it": "Melanzane, crude",
+      "display_name_en": "Aubergine / Eggplant, raw",
+      "category": "Verdure e ortaggi",
+      "state": "crudo, parte edibile",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "aubergine",
+        "aubergines",
+        "eggplant",
+        "eggplants"
+      ],
+      "synonyms_it": [
+        "melanzana",
+        "melanzane",
+        "melanzane crude"
+      ],
+      "usda_ids": [
+        "169228"
+      ],
+      "unitools_ids": [
+        "eggplant",
+        "aubergine"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "005500",
+          "name": "Melanzane, crude",
+          "match_type": "exact",
+          "reason": "Melanzane crude CREA 005500"
+        },
+        "cooked_alternate": {
+          "id": "005506",
+          "name": "Melanzane, cotte, in padella",
+          "match_type": "cooked_alternate",
+          "reason": "Melanzane cotte in padella CREA 005506"
+        }
+      }
+    },
+    "fiocchi_di_latte": {
+      "id": "fiocchi_di_latte",
+      "display_name_it": "Fiocchi di latte",
+      "display_name_en": "Cottage cheese",
+      "category": "Formaggi e latticini",
+      "state": "formaggio fresco a fiocchi",
+      "synonyms_en": [
+        "cottage cheese",
+        "creamed cottage cheese",
+        "low fat cottage cheese"
+      ],
+      "synonyms_it": [
+        "fiocchi di latte",
+        "cottage cheese"
+      ],
+      "usda_ids": [
+        "173417"
+      ],
+      "unitools_ids": [
+        "cottagecheese"
+      ],
+      "crea_matches": {},
+      "off_brand_candidates": [
+        {
+          "barcode": "0865239599875",
+          "brand": "Vita well",
+          "name": "Fiocchi di latte",
+          "match_type": "brand_candidate",
+          "reason": "Fiocchi di latte Vita well in OFF (67 kcal, 12g prot per 100g)"
+        },
+        {
+          "barcode": "17311632",
+          "brand": "Milbona",
+          "name": "Fiocchi di latte",
+          "match_type": "brand_candidate",
+          "reason": "Fiocchi di latte Milbona in OFF (98 kcal, 11.5g prot per 100g)"
+        }
+      ]
+    },
+    "tofu_fresco": {
+      "id": "tofu_fresco",
+      "display_name_it": "Tofu compatto al naturale",
+      "display_name_en": "Firm tofu / Plain tofu",
+      "category": "Legumi e derivati",
+      "state": "tofu naturale sgocciolato",
+      "expected_qualifiers": {
+        "processing_state": "fresh"
+      },
+      "synonyms_en": [
+        "firm tofu",
+        "tofu",
+        "plain tofu",
+        "fresh tofu"
+      ],
+      "synonyms_it": [
+        "tofu",
+        "tofu naturale",
+        "tofu compatto"
+      ],
+      "usda_ids": [
+        "172475"
+      ],
+      "unitools_ids": [
+        "tofu"
+      ],
+      "crea_matches": {},
+      "off_brand_candidates": [
+        {
+          "barcode": "20001568",
+          "brand": "Vemondo - Lidl",
+          "name": "Tofu Bio al naturale",
+          "match_type": "brand_candidate",
+          "reason": "Tofu Bio al naturale Vemondo in OFF (151 kcal, 15g prot per 100g)"
+        },
+        {
+          "barcode": "3273227588393",
+          "brand": "Sojasun",
+          "name": "Tofu naturale",
+          "match_type": "brand_candidate",
+          "reason": "Tofu naturale Sojasun in OFF (149 kcal, 16g prot per 100g)"
+        }
+      ]
+    },
+    "tacchino_petto_crudo": {
+      "id": "tacchino_petto_crudo",
+      "display_name_it": "Tacchino, fesa / petto, crudo",
+      "display_name_en": "Turkey mince / Turkey breast, raw",
+      "category": "Carni fresche",
+      "state": "carne cruda macinata o fesa senza pelle",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "turkey mince",
+        "ground turkey",
+        "minced turkey",
+        "turkey breast",
+        "cooked turkey"
+      ],
+      "synonyms_it": [
+        "tacchino",
+        "macinato di tacchino",
+        "fesa di tacchino",
+        "petto di tacchino",
+        "carne macinata di tacchino"
+      ],
+      "usda_ids": [
+        "172850",
+        "171098",
+        "171496"
+      ],
+      "unitools_ids": [
+        "turkey",
+        "groundturkey"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "106710",
+          "name": "Tacchino intero, senza pelle, crudo",
+          "match_type": "proxy",
+          "reason": "Tacchino intero senza pelle come proxy di petto o macinato: taglio e grassi non equivalenti, da verificare per ricetta."
+        },
+        "cooked_alternate": {
+          "id": "106719",
+          "name": "Tacchino intero, senza pelle, cotto, al forno",
+          "match_type": "cooked_alternate",
+          "reason": "Tacchino cotto senza pelle CREA 106719"
+        }
+      },
+      "flags": {
+        "proxy_only": true
+      }
+    },
+    "pangrattato": {
+      "id": "pangrattato",
+      "display_name_it": "Pangrattato",
+      "display_name_en": "Dried breadcrumbs",
+      "category": "Cereali e derivati",
+      "state": "pane secco grattugiato",
+      "expected_qualifiers": {
+        "processing_state": "dry"
+      },
+      "synonyms_en": [
+        "dried breadcrumbs",
+        "breadcrumbs",
+        "dry breadcrumbs",
+        "panko"
+      ],
+      "synonyms_it": [
+        "pangrattato",
+        "pane grattugiato",
+        "pan grattato"
+      ],
+      "usda_ids": [
+        "172671"
+      ],
+      "unitools_ids": [
+        "breadcrumbs"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "000570",
+          "name": "Pangrattato",
+          "match_type": "exact",
+          "reason": "Pangrattato secco CREA 000570 (357 kcal, 10.1g proteine)"
+        }
+      }
+    },
+    "porri_crudi": {
+      "id": "porri_crudi",
+      "display_name_it": "Porri, crudi",
+      "display_name_en": "Leeks, raw",
+      "category": "Verdure e ortaggi",
+      "state": "crudo, parte edibile",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "leek",
+        "leeks"
+      ],
+      "synonyms_it": [
+        "porro",
+        "porri",
+        "porri crudi"
+      ],
+      "usda_ids": [
+        "169246"
+      ],
+      "unitools_ids": [
+        "leek"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "005650",
+          "name": "Porri, crudi",
+          "match_type": "exact",
+          "reason": "Porri crudi CREA 005650 (35 kcal/100g)"
+        },
+        "cooked_alternate": {
+          "id": "005655",
+          "name": "Porri, cotti, bolliti",
+          "match_type": "cooked_alternate",
+          "reason": "Porri bolliti CREA 005655"
+        }
+      }
+    },
+    "menta_fresca": {
+      "id": "menta_fresca",
+      "display_name_it": "Menta, fresca",
+      "display_name_en": "Fresh mint",
+      "category": "Erbe e spezie",
+      "state": "fresco, parte edibile",
+      "expected_qualifiers": {
+        "processing_state": "fresh"
+      },
+      "synonyms_en": [
+        "fresh mint",
+        "mint leaves",
+        "mint",
+        "spearmint"
+      ],
+      "synonyms_it": [
+        "menta",
+        "menta fresca",
+        "foglie di menta"
+      ],
+      "usda_ids": [
+        "173475"
+      ],
+      "unitools_ids": [
+        "mint"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "006810",
+          "name": "Menta, fresca",
+          "match_type": "exact",
+          "reason": "Menta fresca CREA 006810 (49 kcal/100g)"
+        }
+      }
+    },
+    "origano_secco": {
+      "id": "origano_secco",
+      "display_name_it": "Origano essiccato",
+      "display_name_en": "Dried oregano",
+      "category": "Erbe e spezie",
+      "state": "erba aromatica essiccata/disidratata in polvere o foglie",
+      "expected_qualifiers": {
+        "processing_state": "dry"
+      },
+      "synonyms_en": [
+        "dried oregano",
+        "oregano"
+      ],
+      "synonyms_it": [
+        "origano",
+        "origano secco",
+        "origano essiccato"
+      ],
+      "usda_ids": [
+        "171328"
+      ],
+      "unitools_ids": [
+        "oregano"
+      ],
+      "crea_matches": {},
+      "off_brand_candidates": [
+        {
+          "barcode": "8002330020644",
+          "brand": "Esselunga",
+          "name": "Origano Esselunga",
+          "match_type": "brand_candidate",
+          "reason": "Origano secco essiccato Esselunga in OFF (244 kcal/100g)"
+        }
+      ]
+    },
+    "finocchi_crudi": {
+      "id": "finocchi_crudi",
+      "display_name_it": "Finocchi, crudi",
+      "display_name_en": "Fennel, raw",
+      "category": "Verdure e ortaggi",
+      "state": "crudo, parte edibile",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "fennel",
+        "fennel bulb",
+        "fresh fennel"
+      ],
+      "synonyms_it": [
+        "finocchio",
+        "finocchi",
+        "finocchi crudi"
+      ],
+      "usda_ids": [
+        "169234"
+      ],
+      "unitools_ids": [
+        "fennel"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "005320",
+          "name": "Finocchi, crudi",
+          "match_type": "exact",
+          "reason": "Finocchi crudi CREA 005320 (15 kcal/100g)"
+        },
+        "cooked_alternate": {
+          "id": "005325",
+          "name": "Finocchi, cotti, bolliti",
+          "match_type": "cooked_alternate",
+          "reason": "Finocchi bolliti CREA 005325"
+        }
+      }
+    },
+    "pane_segale": {
+      "id": "pane_segale",
+      "display_name_it": "Pane di segale",
+      "display_name_en": "Rye bread",
+      "category": "Cereali e derivati",
+      "state": "pane di segale pronto al consumo",
+      "expected_qualifiers": {
+        "grain_type": "whole"
+      },
+      "synonyms_en": [
+        "rye bread",
+        "dark rye bread"
+      ],
+      "synonyms_it": [
+        "pane di segale",
+        "pane nero di segale"
+      ],
+      "usda_ids": [
+        "172687"
+      ],
+      "unitools_ids": [
+        "ryebread"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "000510",
+          "name": "Pane di segale",
+          "match_type": "exact",
+          "reason": "Pane di segale CREA 000510 (228 kcal, 8.3g proteine)"
+        }
+      }
+    },
+    "couscous_crudo": {
+      "id": "couscous_crudo",
+      "display_name_it": "Couscous, crudo",
+      "display_name_en": "Couscous, dry / raw",
+      "category": "Cereali e derivati",
+      "state": "secco, prima della reidratazione",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "couscous",
+        "dry couscous"
+      ],
+      "synonyms_it": [
+        "couscous",
+        "cuscus",
+        "cous cous"
+      ],
+      "usda_ids": [
+        "169747"
+      ],
+      "unitools_ids": [
+        "couscous"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "000045",
+          "name": "Couscous, crudo",
+          "match_type": "exact",
+          "reason": "Couscous crudo secco CREA 000045 (361 kcal, 13.7g proteine)"
+        },
+        "cooked_alternate": {
+          "id": "000046",
+          "name": "Couscous, cotto",
+          "match_type": "cooked_alternate",
+          "reason": "Couscous reidratato cotto CREA 000046"
+        }
+      }
+    },
+    "gamberi_sgusciati": {
+      "id": "gamberi_sgusciati",
+      "display_name_it": "Gamberi sgusciati",
+      "display_name_en": "Prawns / Shrimps, raw",
+      "category": "Prodotti della pesca",
+      "state": "crostaceo crudo sgusciato, parte edibile",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "raw prawns",
+        "prawns",
+        "shrimp",
+        "shrimps",
+        "king prawns"
+      ],
+      "synonyms_it": [
+        "gamberi",
+        "gamberetti",
+        "code di gambero"
+      ],
+      "usda_ids": [
+        "175179"
+      ],
+      "unitools_ids": [
+        "shrimp",
+        "prawns"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "128100",
+          "name": "Gamberi",
+          "match_type": "exact",
+          "reason": "Gamberi freschi CREA 128100 (71 kcal, 13.6g proteine)"
+        },
+        "proxies": [
+          {
+            "id": "128110",
+            "name": "Gamberi sgusciati, surgelati",
+            "match_type": "proxy",
+            "reason": "Gamberi sgusciati surgelati CREA 128110 (85 kcal, 16.5g proteine)"
+          }
+        ]
+      }
+    },
+    "sedano_crudo": {
+      "id": "sedano_crudo",
+      "display_name_it": "Sedano, crudo",
+      "display_name_en": "Celery, raw",
+      "category": "Verdure e ortaggi",
+      "state": "crudo, parte edibile",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "celery",
+        "celery sticks",
+        "celery stalks"
+      ],
+      "synonyms_it": [
+        "sedano",
+        "coste di sedano",
+        "sedano crudo"
+      ],
+      "usda_ids": [
+        "169988"
+      ],
+      "unitools_ids": [
+        "celery"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "005680",
+          "name": "Sedano, crudo",
+          "match_type": "exact",
+          "reason": "Sedano crudo CREA 005680 (23 kcal/100g)"
+        },
+        "cooked_alternate": {
+          "id": "005684",
+          "name": "Sedano, cotto, al microonde",
+          "match_type": "cooked_alternate",
+          "reason": "Sedano cotto CREA 005684"
+        }
+      }
+    },
+    "capperi_sottaceto": {
+      "id": "capperi_sottaceto",
+      "display_name_it": "Capperi in aceto",
+      "display_name_en": "Capers in vinegar / brine",
+      "category": "Verdure e ortaggi",
+      "state": "capperi conservati in aceto o salamoia",
+      "expected_qualifiers": {
+        "processing_state": "canned"
+      },
+      "synonyms_en": [
+        "capers",
+        "caper",
+        "pickled capers"
+      ],
+      "synonyms_it": [
+        "capperi",
+        "capperi sottaceto",
+        "capperi in aceto"
+      ],
+      "usda_ids": [
+        "172238"
+      ],
+      "unitools_ids": [
+        "capers"
+      ],
+      "crea_matches": {},
+      "off_brand_candidates": [
+        {
+          "barcode": "8000965040280",
+          "brand": "Consilia",
+          "name": "Capperi Consilia",
+          "match_type": "brand_candidate",
+          "reason": "Capperi in aceto Consilia in OFF (24 kcal, 1.8g prot per 100g)"
+        },
+        {
+          "barcode": "8000633014766",
+          "brand": "Unes",
+          "name": "Capperi in aceto Unes",
+          "match_type": "brand_candidate",
+          "reason": "Capperi in aceto Unes in OFF (27 kcal, 2.0g prot per 100g)"
+        }
+      ]
+    },
+    "polenta_cruda": {
+      "id": "polenta_cruda",
+      "display_name_it": "Polenta (farina di mais), cruda",
+      "display_name_en": "Polenta / Cornmeal, raw",
+      "category": "Cereali e derivati",
+      "state": "farina di mais bramata secca cruda",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "polenta",
+        "cornmeal",
+        "coarse cornmeal"
+      ],
+      "synonyms_it": [
+        "polenta",
+        "farina per polenta",
+        "polenta bramata"
+      ],
+      "usda_ids": [
+        "170288"
+      ],
+      "unitools_ids": [
+        "polenta"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "000075",
+          "name": "Polenta, cruda",
+          "match_type": "exact",
+          "reason": "Polenta cruda CREA 000075 (323 kcal, 8.0g proteine)"
+        },
+        "cooked_alternate": {
+          "id": "000076",
+          "name": "Polenta, cotta",
+          "match_type": "cooked_alternate",
+          "reason": "Polenta cotta reidratata CREA 000076"
+        }
+      }
+    },
+    "fagiolini_freschi": {
+      "id": "fagiolini_freschi",
+      "display_name_it": "Fagiolini, freschi",
+      "display_name_en": "Green beans, fresh",
+      "category": "Verdure e ortaggi",
+      "state": "fresco, parte edibile",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "green beans",
+        "french beans",
+        "string beans"
+      ],
+      "synonyms_it": [
+        "fagiolini",
+        "fagiolini freschi",
+        "fagiolini verdi"
+      ],
+      "usda_ids": [
+        "169961"
+      ],
+      "unitools_ids": [
+        "greenbeans"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "004310",
+          "name": "Fagiolini, freschi",
+          "match_type": "exact",
+          "reason": "Fagiolini freschi CREA 004310 (24 kcal, 2.1g proteine)"
+        },
+        "cooked_alternate": {
+          "id": "004305",
+          "name": "Fagiolini a corallo, cotti, bolliti",
+          "match_type": "cooked_alternate",
+          "reason": "Fagiolini cotti bolliti CREA 004305"
+        }
+      }
+    },
+    "merluzzo_fresco": {
+      "id": "merluzzo_fresco",
+      "display_name_it": "Merluzzo o nasello, fresco",
+      "display_name_en": "Cod / Hake, fresh",
+      "category": "Prodotti della pesca",
+      "state": "pesce fresco pulito, parte edibile",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "cod",
+        "cod fillets",
+        "fresh cod",
+        "hake"
+      ],
+      "synonyms_it": [
+        "merluzzo",
+        "nasello",
+        "filetto di merluzzo"
+      ],
+      "usda_ids": [
+        "171955"
+      ],
+      "unitools_ids": [
+        "cod"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "121410",
+          "name": "Merluzzo o nasello",
+          "match_type": "exact",
+          "reason": "Merluzzo fresco CREA 121410 (71 kcal, 17.0g proteine)"
+        },
+        "proxies": [
+          {
+            "id": "121420",
+            "name": "Merluzzo o nasello, surgelato",
+            "match_type": "proxy",
+            "reason": "Merluzzo surgelato CREA 121420 (75 kcal, 17.3g proteine)"
+          }
+        ]
+      }
+    },
+    "tofu_morbido": {
+      "id": "tofu_morbido",
+      "display_name_it": "Tofu morbido / silken",
+      "display_name_en": "Soft / silken tofu",
+      "category": "Legumi e derivati",
+      "state": "tofu morbido, distinto dal compatto",
+      "expected_qualifiers": {
+        "processing_state": "fresh"
+      },
+      "synonyms_en": [
+        "silken tofu",
+        "soft tofu"
+      ],
+      "synonyms_it": [
+        "tofu morbido",
+        "tofu vellutato"
+      ],
+      "usda_ids": [
+        "172449"
+      ],
+      "unitools_ids": [
+        "softtofu"
+      ],
+      "crea_matches": {},
+      "off_brand_candidates": []
     }
   }
 }
