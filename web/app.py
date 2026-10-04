@@ -29,6 +29,7 @@ import workout_service as workouts
 import workout_configuration as workout_settings
 import joint_orchestration as joint
 import progress_recalibration as recalibration
+import contextual_bandit as bandit
 from day_orchestration import orchestrate_day, context_key
 from health_inputs import load_report as load_health_report, algorithm_inputs as health_algorithm_inputs
 from mcp import ClientSession, StdioServerParameters
@@ -316,6 +317,7 @@ def make_config(profile, day):
         main_meals_targets=profile['targets'],
         meal_targets=profile['meal_targets'],
         excluded_crea_ids=profile['excluded_crea_ids'],
+        day_type=profile.get('_day_types_by_index',{}).get(day,'rest'),
     )
     settings=profile.get('daily_meals',daily_defaults(bool(profile.get('food_preferences'))))
     validate_daily(settings)
@@ -356,15 +358,13 @@ async def generate(request: Request):
         config = make_config(profile, day)
         if 'mode' in data and data['mode'] != config['mode']:
             raise HTTPException(400, 'Programma diverso dal profilo attivo')
-        context = context_key(config)
         with connect() as db:
-            trials = db.execute('SELECT p.payload,f.rating FROM plan_feedback f JOIN plans p ON p.id=f.plan_id AND p.user_id=f.user_id WHERE f.user_id=?', (user['id'],)).fetchall()
-            previous = db.execute('SELECT payload FROM plans WHERE user_id=? AND selected=1 AND created>=?', (user['id'], time.time()-7*86400)).fetchall()
-        observations=[]
-        for row in trials:
-            plan=json.loads(row['payload'])
-            if plan.get('optimization',{}).get('context') == context and plan.get('arms'):
-                observations.extend((arm,(row['rating']-1)/4) for arm in plan['arms'])
+            view=diary.day_view(db,user['id'],profile,diary.local_today().isoformat())
+            kind=data.get('day_type','training' if any(w['status']!='skipped' for w in view['workouts']) else 'rest')
+            if kind not in ('rest','training'):raise HTTPException(400,'Tipo di giornata non valido')
+            config['day_type']=kind;context=context_key(config)
+            observations=bandit.observations(db,user['id'],profile).get(context,[])
+            previous=db.execute('SELECT payload FROM plans WHERE user_id=? AND selected=1 AND created>=?',(user['id'],time.time()-7*86400)).fetchall()
         history={(x['meal'],x['food_id']) for row in previous for x in json.loads(row['payload']).get('selections',[]) if x['meal'] in ('lunch','dinner')}
         report=load_health_report(health_directory(user['id']))
         health=health_algorithm_inputs(report) if report else None
@@ -414,12 +414,14 @@ async def plan_feedback(plan_id: int, request: Request):
     rating=data.get('rating')
     if data.get('tried') is not True or isinstance(rating,bool) or not isinstance(rating,int) or not 1<=rating<=5:
         raise HTTPException(400,'Conferma di aver provato il piano e assegna un voto da 1 a 5')
+    profile=owner_profile(user)
     with connect() as db:
         row=db.execute('SELECT payload FROM plans WHERE id=? AND user_id=?',(plan_id,user['id'])).fetchone()
         if not row:raise HTTPException(404,'Piano non trovato')
         if json.loads(row['payload'])['status'] not in ['optimal','feasible']:raise HTTPException(400,'Piano senza soluzione')
         db.execute('INSERT INTO plan_feedback VALUES(?,?,?,?) ON CONFLICT(user_id,plan_id) DO UPDATE SET rating=excluded.rating,tried_at=excluded.tried_at',(user['id'],plan_id,rating,time.time()))
-    return {'ok':True}
+        trials=bandit.trials(db,user['id'],profile,plan_id)
+    return dict(ok=True,learning=dict(parameters=bandit.PARAMETERS,status='eligible' if any(t['reward'] is not None for t in trials) else 'insufficient_data',reason=None if any(t['reward'] is not None for t in trials) else 'Servono applicazione, prova dichiarata e diario/allenamenti completi.',trials=trials))
 
 
 def health_directory(user_id):
@@ -750,6 +752,7 @@ async def apply_plan_set(set_id:int,request:Request):
     if not plan:raise diary.DomainError('Alternativa non trovata','not_found',404)
     with connect() as db:
         result=(joint.apply_week if plan_set.get('kind')=='joint' else workouts.apply_week if plan_set.get('kind')=='workout' else diary.apply_plan)(db,user['id'],owner_profile(user),plan_set,plan,data)
+        if result['applied_slots']:bandit.record_application(db,user['id'],owner_profile(user),plan,result)
         if result['applied_slots']:db.execute('UPDATE plans SET selected=1 WHERE id=? AND user_id=?',(plan['id'],user['id']))
         return result
 
@@ -775,10 +778,12 @@ async def planning_job(job_id,user_id,profile,data,kind):
                 else:
                     configuration=None
                     import datetime as dt
+                    profile['_day_types_by_index']={}
                     start=dt.date.fromisoformat(data['week_start']);locks={(x.get('date'),x.get('slot')):x for x in data.get('locked',[])}
                     for offset in range(7):
                         date=(start+dt.timedelta(days=offset)).isoformat()
                         view=diary.day_view(db,user_id,profile,date)
+                        profile['_day_types_by_index'][(data.get('day_index',start.weekday())+offset)%14]='training' if any(w['status']!='skipped' for w in view['workouts']) else 'rest'
                         for meal in view['meals']:
                             if meal.get('consumed_estimate'):raise diary.DomainError('Un pasto consumato ha nutrienti a intervallo: il bilancio esatto non è disponibile','interval_nutrients_unavailable')
                             source=meal['eaten'] if meal['eaten'] is not None else meal['planned'] if meal['planned'] and meal['planned']['locked'] else None
@@ -793,24 +798,15 @@ async def planning_job(job_id,user_id,profile,data,kind):
                     if kind=='joint':
                         report=load_health_report(health_directory(user_id))
                         health=health_algorithm_inputs(report) if report else None
-                        context=joint.context_key(profile,data)
-                        with connect() as db:trials=db.execute('SELECT p.payload,f.rating FROM plan_feedback f JOIN plans p ON p.id=f.plan_id AND p.user_id=f.user_id WHERE f.user_id=?',(user_id,)).fetchall()
-                        observations=[]
-                        for row in trials:
-                            p=json.loads(row['payload'])
-                            if p.get('optimization',{}).get('context')==context:observations.extend((arm,(row['rating']-1)/4) for arm in p.get('arms',[]))
+                        with connect() as db:observations=bandit.observations(db,user_id,profile)
                         result=await joint.generate_week(session,profile,data,make_config,load_foods(),health,workout_locks,observations)
                         result['state_hash']=joint_state
                     elif kind=='workout':result=await workouts.generate_week(session,profile,data)
                     elif kind=='week':
-                        context=context_key(make_config(profile,data.get('day_index',0)))
                         with connect() as db:
-                            trials=db.execute('SELECT p.payload,f.rating FROM plan_feedback f JOIN plans p ON p.id=f.plan_id AND p.user_id=f.user_id WHERE f.user_id=?',(user_id,)).fetchall()
+                            observations=bandit.observations(db,user_id,profile)
                             recent=db.execute('SELECT payload FROM plans WHERE user_id=? AND selected=1 AND created>=?',(user_id,time.time()-7*86400)).fetchall()
-                        observations=[];history=set()
-                        for row in trials:
-                            p=json.loads(row['payload'])
-                            if p.get('optimization',{}).get('context')==context:observations.extend((a,(row['rating']-1)/4) for a in p.get('arms',[]))
+                        history=set()
                         for row in recent:
                             p=json.loads(row['payload'])
                             for day in p.get('days',[p]):history.update(s['food_id'] for s in day.get('selections',[]))
@@ -971,3 +967,11 @@ async def rebalance_apply(preview_id:str,request:Request):return await rebalance
 
 @app.post('/api/rebalance/{preview_id}/keep')
 async def rebalance_keep(preview_id:str,request:Request):return await rebalance_decide(request,preview_id,'keep')
+
+
+@app.get('/api/bandit/summary')
+def bandit_summary(request:Request):
+    user=identity(request);profile=owner_profile(user)
+    with connect() as db:
+        trials=bandit.trials(db,user['id'],profile);observations=bandit.observations(db,user['id'],profile)
+    return dict(parameters=bandit.PARAMETERS,eligible_days=sum(t['reward'] is not None for t in trials),pending_days=sum(t['reward'] is None for t in trials),contexts={key:dict(observations=len(value),arms=sorted({a for a,_ in value})) for key,value in observations.items()},trials=trials)

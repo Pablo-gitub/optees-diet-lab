@@ -43,7 +43,9 @@ def arms(plan):
 
 
 def context_key(config):
-    return hashlib.sha256(json.dumps(dict(version=VERSION,mode=config['mode'],targets=config.get('daily_meals') if config.get('daily_meals',{}).get('enabled') else config['main_meals_targets']),sort_keys=True).encode()).hexdigest()
+    from contextual_bandit import context
+    full=config.get('daily_meals',{}).get('enabled')
+    return context(config['mode'],config.get('day_type','rest'),config['daily_meals']['targets'] if full else config['main_meals_targets'],'full_day_planned_meals' if full else 'lunch_and_dinner_only')
 
 
 def sampled_front(plans):
@@ -64,6 +66,9 @@ def plan_diff(reference,plan):
 
 
 def exploration_score(plan,observations):
+    if isinstance(observations,dict):
+        from contextual_bandit import ucb
+        return ucb(plan,observations)
     counts={a:[] for a in plan['arms']}
     total=len(observations)
     for arm,reward in observations:
@@ -75,6 +80,9 @@ def exploration_score(plan,observations):
 
 async def orchestrate_day(session,config,foods,request=None,history=(),observations=(),health=None,balance=None):
     request=request or {};config=copy.deepcopy(config)
+    if 'day_type' in request:
+        if request['day_type'] not in ('rest','training'):raise ValueError('Tipo di giornata non valido')
+        config['day_type']=request['day_type']
     k=request.get('k',4);pool_size=request.get('pool_size',12);epsilon=request.get('epsilon',.05);seed=request.get('seed',20261004)
     div=request.get('diversity',{});minimum=div.get('min_distance',3);structural=div.get('structural',True)
     if any(isinstance(x,bool) or not isinstance(x,int) for x in (k,pool_size,seed,minimum)) or not 1<=k<=5 or not k<=pool_size<=30 or not 1<=minimum<=10 or not isinstance(structural,bool) or isinstance(epsilon,bool) or not isinstance(epsilon,(int,float)) or not math.isfinite(epsilon) or not 0<=epsilon<=1:
@@ -85,6 +93,7 @@ async def orchestrate_day(session,config,foods,request=None,history=(),observati
     if 'strategy' in request:warnings.append(dict(code='legacy_strategy_ignored',message='Il parametro strategy è ignorato: i metodi sono stadi della catena.'))
     problem,choices,slots=formulate(config,foods);base=copy.deepcopy(problem)
     context=context_key(config)
+    if isinstance(observations,dict):observations=observations.get(context,[])
     envelope=dict(spec_version=VERSION,versions=dict(engine=VERSION,catalog=hashlib.sha256(json.dumps(foods,sort_keys=True).encode()).hexdigest(),rules=hashlib.sha256(json.dumps(dict(slots=slots,rules=load_rules(config)),sort_keys=True).encode()).hexdigest(),health_report=(health or {}).get('version')),request_hash=hashlib.sha256(json.dumps(dict(config=config,request=request,history=sorted(history),observations=list(observations),health=health,balance=balance),sort_keys=True).encode()).hexdigest(),horizon=dict(day_index=config['day_index'],days=1),mode=config['mode'],status='ok',warnings=warnings,pool=dict(candidates=0,front=0,epsilon=epsilon,min_distance=minimum,diversity_relaxed=[]),plans=[],seed=seed)
     start=time.monotonic();budget=request.get('time_limit',20)
     if isinstance(budget,bool) or not isinstance(budget,(int,float)) or not math.isfinite(budget) or not 1<=budget<=120:raise ValueError('Tempo massimo non valido')
@@ -109,6 +118,8 @@ async def orchestrate_day(session,config,foods,request=None,history=(),observati
         safe['objectives']=dict(nutrition_error=sum(errors.values()),worst_error=max(errors.values()),preference=1-(result.get('preference_penalty') or 0)/max(len(slots),1),variety=len(variable-past)/max(len(variable),1),prep_minutes=None)
         safe['optimization']=dict(stage='S2',objective=objective,near_optimal_gap=(sum(errors.values())-reference_error)/max(reference_error,.01),context=context,relative_errors=errors)
         safe['arms']=arms(safe)
+        safe.update(day_type=config.get('day_type','rest'),targets=copy.deepcopy(targets),bandit_context=context,bandit_features=[dict(context=context,arms=safe['arms'])])
+        safe['optimization']['bandit']=dict(version='contextual-bandit-v2',rating_weight=.5,adherence_weight=.5,observed_features=len(observations))
         rewards=[reward for arm,reward in observations if arm in safe['arms']]
         if rewards:safe['objectives']['preference']=sum(rewards)/len(rewards)
         pool.append(safe);return True

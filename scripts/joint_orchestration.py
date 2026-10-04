@@ -103,7 +103,8 @@ def select(result,pool,data,observations=()):
     # Reserve a distinct robust role before filling the varied/exploration slots.
     take('robust',lambda p:(p['robustness']['max_regret_kcal'],p['robustness']['max_loss_kcal']),lambda p:p['robustness']['status']=='available')
     take('varied',lambda p:(-p['objectives']['variety'],-(p['objectives']['training_fit'] or 0)))
-    if observations:take('preferred',lambda p:-p['objectives']['preference'])
+    from contextual_bandit import rewards as contextual_rewards
+    if any(contextual_rewards(p,observations) for p in candidates):take('preferred',lambda p:-p['objectives']['preference'])
     def workout_signature(p):
         return tuple(sorted((s['date'],s['session_id'],json.dumps(s.get('session',{}),sort_keys=True)) for s in p['workout_sessions']))
     varied=next((p for p in selected if p['role']=='varied'),None)
@@ -133,7 +134,7 @@ async def generate_week(session,profile,data,make_config,foods,health=None,worko
         day_types={d:'training' if by_date[d] else 'rest' for d in dates(start)}
         offsets={(index+i)%14:d for i,d in enumerate(dates(start))}
         def config_for_day(original,day):
-            date=offsets[day];kind=day_types[date];personal=copy.deepcopy(original);personal['mode']=modes[kind];personal['daily_meals']['targets']=copy.deepcopy(data['day_targets'][kind]);return make_config(personal,day)
+            date=offsets[day];kind=day_types[date];personal=copy.deepcopy(original);personal['mode']=modes[kind];personal['daily_meals']['targets']=copy.deepcopy(data['day_targets'][kind]);config=make_config(personal,day);config['day_type']=kind;return config
         diet_request=dict(data.get('diet',{}),week_start=start,day_index=index,locked=data.get('locked',[]))
         diet_request.setdefault('pool_size',4);diet_request.setdefault('k',min(4,diet_request['pool_size']))
         diet_set=await diet_engine.generate_week(session,profile,diet_request,config_for_day,foods,history,observations)
@@ -156,7 +157,9 @@ async def generate_week(session,profile,data,make_config,foods,health=None,worko
             p['constraint_report']['workout']=workout['constraint_report'];p['training_metrics']=dict(coverage_fraction_by_muscle={k:min(1,coverage.get(k,0)/v) for k,v in cfg['muscle_targets_proxy'].items()},cardio_work_minutes=cardio,duration_seconds=workout['weekly_duration_seconds'],basis='heuristic_muscle_set_proxy_not_effectiveness')
             p['objectives'].update(training_fit=fit,training_minutes=workout['weekly_duration_seconds']/60)
             p['optimization']['context']=context;p['arms']=sorted(set(p['arms'])|{'protocol:'+s['session']['protocol_id'] for s in p['workout_sessions']})
-            rewards=[reward for arm,reward in observations if arm in p['arms']]
+            from contextual_bandit import rewards as contextual_rewards
+            for feature,day in zip(p['bandit_features'],p['days']):feature['arms']=sorted(set(feature['arms'])|{'protocol:'+s['session']['protocol_id'] for s in by_date[day['date']]})
+            rewards=contextual_rewards(p,observations)
             if rewards:p['objectives']['preference']=sum(rewards)/len(rewards)
             for day in p['days']:
                 day.update(day_type=day_types[day['date']],workout_sessions=copy.deepcopy(by_date[day['date']]),energy_scenarios=day_scenarios(health,by_date[day['date']],data.get('workout_activity_map')))

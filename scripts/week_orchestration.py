@@ -94,7 +94,7 @@ def decode_week(problem,blocks,foods,result,maximum):
         day=decode_result(block['config'],block['problem'],block['choices'],block['slots'],foods,sub)
         day={k:v for k,v in day.items() if k not in ('config','result','excluded_for_missing_nutrients','crea_sha256')}
         day_targets=block['config']['daily_meals']['targets'] if block['config'].get('daily_meals',{}).get('enabled') else block['config']['main_meals_targets']
-        day.update(targets=copy.deepcopy(day_targets),date=block['date'],mode=block['config']['mode'],day_index=block['config']['day_index'],locked_slots=list(block['config'].get('locked_meals',{})))
+        day.update(day_type=block['config'].get('day_type','rest'),bandit_context=context_key(block['config']),targets=copy.deepcopy(day_targets),date=block['date'],mode=block['config']['mode'],day_index=block['config']['day_index'],locked_slots=list(block['config'].get('locked_meals',{})))
         if not day['constraint_report']['all_respected']:raise DomainError('Vincoli della giornata non verificati')
         days.append(day)
     frequencies={}
@@ -104,7 +104,7 @@ def decode_week(problem,blocks,foods,result,maximum):
     if any(v>maximum for v in frequencies.values()):raise DomainError('Frequenze non rispettate')
     targets=blocks[0]['config']['daily_meals']['targets'] if blocks[0]['config'].get('daily_meals',{}).get('enabled') else blocks[0]['config']['main_meals_targets']
     errors=[abs(day['nutrients'][n.replace('_100g','')]-day['targets'][n]['target'])/day['targets'][n]['target'] for day in days for n in NUTRIENTS]
-    return dict(days=days,targets=targets,targets_by_date={d['date']:d['targets'] for d in days},nutrients={n:round(sum(day['nutrients'][n] for day in days),3) for n in days[0]['nutrients']},objectives=dict(nutrition_error=sum(errors),worst_error=max(errors),preference=1.,variety=len({s['food_id'] for day in days for s in day['selections']})/max(sum(len(day['selections']) for day in days),1),prep_minutes=None),constraint_report=dict(verified=True,all_respected=True,protein_frequencies=frequencies,max_protein_repetitions=maximum,frequency_scope='principal_food_id_per_meal'),arms=sorted(set(a for day in days for a in arms(day))),robustness=dict(status='unavailable',reason='Robustezza congiunta settimanale prevista nel passo 4.2.'))
+    return dict(bandit_features=[dict(context=d['bandit_context'],arms=arms(d)) for d in days],days=days,targets=targets,targets_by_date={d['date']:d['targets'] for d in days},nutrients={n:round(sum(day['nutrients'][n] for day in days),3) for n in days[0]['nutrients']},objectives=dict(nutrition_error=sum(errors),worst_error=max(errors),preference=1.,variety=len({s['food_id'] for day in days for s in day['selections']})/max(sum(len(day['selections']) for day in days),1),prep_minutes=None),constraint_report=dict(verified=True,all_respected=True,protein_frequencies=frequencies,max_protein_repetitions=maximum,frequency_scope='principal_food_id_per_meal'),arms=sorted(set(a for day in days for a in arms(day))),robustness=dict(status='unavailable',reason='Robustezza congiunta settimanale prevista nel passo 4.2.'))
 
 
 def week_keys(plan):return {(day['date'],s['meal'],s['food_id']) for day in plan['days'] for s in day['selections'] if s['meal'] in ('lunch','dinner') and s['meal'] not in day.get('locked_slots',[])}
@@ -180,7 +180,8 @@ async def generate_week(session,profile,request,make_config,foods,history=(),obs
             result['pool']['diversity_relaxed'].append(dict(min_distance=minimum,structural=structural))
         else:break
     for plan in pool:
-        rewards=[reward for arm,reward in observations if arm in plan['arms']]
+        from contextual_bandit import rewards as contextual_rewards
+        rewards=contextual_rewards(plan,observations)
         if rewards:plan['objectives']['preference']=sum(rewards)/len(rewards)
         if history:
             ids={s['food_id'] for day in plan['days'] for s in day['selections']}
@@ -189,7 +190,7 @@ async def generate_week(session,profile,request,make_config,foods,history=(),obs
     best=front[0];selected=[best]
     if len(front)>1:selected.append(max(front[1:],key=lambda p:p['objectives']['variety']))
     roles=['best']+(['varied'] if len(selected)>1 else [])
-    if observations and len(selected)<k:
+    if any(contextual_rewards(p,observations) for p in front) and len(selected)<k:
         options=[p for p in front if p not in selected]
         if options:selected.append(max(options,key=lambda p:p['objectives']['preference']));roles.append('preferred')
     options=[p for p in front if p not in selected]
@@ -197,7 +198,7 @@ async def generate_week(session,profile,request,make_config,foods,history=(),obs
     selected=selected[:k];context=context_key(blocks[0]['config'])
     headlines=dict(best='Il più vicino ai tuoi obiettivi',varied='Più varia durante la settimana',preferred='Con gli alimenti che apprezzi di più',explore='Da provare: una settimana diversa')
     for i,plan in enumerate(selected):
-        plan.update(role=roles[i],rank=i+1,status='optimal' if result['status']=='ok' else 'feasible',mode=profile['mode'],demo=any(d['demo'] for d in plan['days']),optimization=dict(stage='S2',context=context,near_optimal_gap=(plan['objectives']['nutrition_error']-z)/max(z,.01)),explanation=dict(headline=headlines[roles[i]],reasons=['Vincoli giornalieri e frequenze settimanali verificati'],tradeoffs=[]),diff=None if i==0 else dict(reference_plan='best',distance=len(week_keys(best)-week_keys(plan)),days=[dict(date=d['date'],**plan_diff(b,d)) for b,d in zip(best['days'],plan['days'])]))
+        plan.update(role=roles[i],rank=i+1,status='optimal' if result['status']=='ok' else 'feasible',mode=profile['mode'],demo=any(d['demo'] for d in plan['days']),optimization=dict(bandit=dict(version='contextual-bandit-v2',rating_weight=.5,adherence_weight=.5),stage='S2',context=context,near_optimal_gap=(plan['objectives']['nutrition_error']-z)/max(z,.01)),explanation=dict(headline=headlines[roles[i]],reasons=['Vincoli giornalieri e frequenze settimanali verificati'],tradeoffs=[]),diff=None if i==0 else dict(reference_plan='best',distance=len(week_keys(best)-week_keys(plan)),days=[dict(date=d['date'],**plan_diff(b,d)) for b,d in zip(best['days'],plan['days'])]))
     result['plans']=selected;result['pool'].update(candidates=len(pool),front=len(front),min_distance=minimum,structural=structural,epsilon=epsilon,reference_error=z,near_optimal_limit=z*(1+epsilon)+.01)
     if result['pool']['diversity_relaxed']:warnings.append(dict(code='diversity_relaxed',message=f'Diversità settimanale ridotta a {minimum} alimenti.'))
     return result
@@ -216,8 +217,11 @@ def generate_meal_alternatives(db,user,profile,request,make_config):
         profile=copy.deepcopy(profile);profile['mode']=view['mode'];index=current['planned'].get('day_index',0)
         if profile.get('daily_meals',{}).get('enabled'):profile['daily_meals']['targets']={n:view['targets'][n.replace('_100g','')] for n in NUTRIENTS}
     else:index=0
-    config=make_config(profile,index);config['alternative_slot']=slot;foods=load_foods()
+    config=make_config(profile,index);config['alternative_slot']=slot;config['day_type']='training' if view['day_type']=='training' else 'rest';foods=load_foods()
+    from contextual_bandit import observations as recorded_observations
+    observations=recorded_observations(db,user,profile)
     for meal in view['meals']:
+        if meal.get('consumed_estimate'):raise DomainError('Nutrienti a intervallo: bilancio esatto non disponibile','interval_nutrients_unavailable')
         if meal['slot']==slot:continue
         source=meal['eaten'] if meal['eaten'] is not None else meal['planned']
         if source is None:
@@ -225,11 +229,11 @@ def generate_meal_alternatives(db,user,profile,request,make_config):
             continue
         add_lock(config,foods,meal['slot'],source['items'],profile)
     async def run(session):
-        result=await orchestrate_day(session,config,foods,dict(k=4,pool_size=6,time_limit=30,diversity=dict(min_distance=1,structural=False)))
+        result=await orchestrate_day(session,config,foods,dict(k=4,pool_size=6,time_limit=30,diversity=dict(min_distance=1,structural=False)),observations=observations)
         result['date']=date;result['slot']=slot;result['week_start']=week['week_start'] if view['week_plan_id'] else date
         result['horizon']=dict(days=1,date=date,slot=slot)
         reference=dict(selections=[dict(meal=slot,food_id=item['food']['id'],food=item['name'],grams=item['grams'],diversity_eligible=True) for item in current['planned']['items']],nutrients={n:current['planned'][n] for n in current['planned'] if n in ('kcal','protein_g','fat_g','carbs_available_g')})
         for plan in result['plans']:
-            plan['selections']=[s for s in plan['selections'] if s['meal']==slot];plan['nutrients']=plan['nutrients_by_meal'][slot];plan['diff']=plan_diff(reference,plan);plan['diff']['reference_plan']='current_meal';plan['date']=date
+            plan['selections']=[s for s in plan['selections'] if s['meal']==slot];plan['arms']=arms(plan);plan['bandit_features']=[dict(context=plan['bandit_context'],arms=plan['arms'])];plan['nutrients']=plan['nutrients_by_meal'][slot];plan['diff']=plan_diff(reference,plan);plan['diff']['reference_plan']='current_meal';plan['date']=date
         return result
     return run

@@ -78,3 +78,5 @@ La pagina usa `GET /api/stats/progress`, `POST /api/progress/check-in`, `GET /ap
 ### Chiusura backend B9–B10 e consegna 6.2
 
 B9: `7a4e12e`, filtro Kalman diretto sulle mediane giornaliere, parametri progress-v2; trend da regressione settimanale. B10: `919e014`, il lunedì riquadri dell’ultima settimana conclusa con week_start. Per Claude 6.3: [contratto ribilanciamento](backend-handoff-rebalance.md), anteprima e decisioni implementate; 228 test verdi, inclusa prova HTTP con Optees reale e database invariato dopo l’anteprima.
+
+Consegna 6.1: [bandit contestuale v2](backend-handoff-bandit.md). Le valutazioni rimangono compatibili, ma `learning` distingue voto salvato da prova eleggibile; `GET /api/bandit/summary` spiega copertura e contesti. 236 test verdi, compresi isolamento training/rest e caratteristiche realmente provate.

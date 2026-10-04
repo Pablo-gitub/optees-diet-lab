@@ -176,7 +176,7 @@ def apply_week(db,user,profile,plan_set,plan,data):
     for item in plan['workout_sessions']:
         date=item['date']
         if date in protected:continue
-        db.execute("INSERT INTO planned_session(week_plan_id,date,session_id,minutes,start_time,status,snapshot) VALUES(?,?,?,?,?,'chosen',?)",(week,date,item['session_id'],item['session']['duration_seconds']/60,item['start_time'],json.dumps(item['session'])));applied.append(dict(date=date,session_id=item['session_id']))
+        cursor=db.execute("INSERT INTO planned_session(week_plan_id,date,session_id,minutes,start_time,status,snapshot) VALUES(?,?,?,?,?,'chosen',?)",(week,date,item['session_id'],item['session']['duration_seconds']/60,item['start_time'],json.dumps(item['session'])));applied.append(dict(date=date,session_id=item['session_id'],planned_session_id=cursor.lastrowid))
     view=day_view(db,user,profile,start);view.update(applied_slots=applied,skipped_slots=skipped);return view
 
 

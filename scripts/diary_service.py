@@ -36,6 +36,8 @@ def migrate(db):
     columns={r[1] for r in db.execute('PRAGMA table_info(planned_meal)')}
     if 'day_index' not in columns:db.execute('ALTER TABLE planned_meal ADD COLUMN day_index INTEGER DEFAULT 0')
     if 'day_context' not in {r[1] for r in db.execute('PRAGMA table_info(week_plan)')}:db.execute("ALTER TABLE week_plan ADD COLUMN day_context TEXT DEFAULT '{}'")
+    from contextual_bandit import migrate as bandit_migrate
+    bandit_migrate(db)
     from meal_rebalance import migrate as rebalance_migrate
     rebalance_migrate(db)
     from workout_service import migrate as workout_migrate
