@@ -56,13 +56,21 @@ Dimensioni indicative: **S** < 2 h, **M** 2–5 h, **L** > 5 h di lavoro dell'op
 |---|---|---|---|---|---|
 | 0.1 | Committare il lavoro Salute in sospeso (`health_inputs.py`, test, `apple-health-import.md`, tabella in `app.js`, roadmap) | Codex | S | working tree pulito, test verdi | **fatto** — `4bfcb73`, 121 test verdi |
 | 0.2 | Target demo coerenti: kcal ≈ 4P+4C+9G (±10%) in `config/demo-diet-day.json` e nei default giornalieri; controllo di coerenza in validazione profilo (S0 di orchestration.md) | Codex | S | test sul controllo; target demo coerenti | **fatto** — `d144771`, 126 test verdi; warning API pronti per la UI |
-| 0.3 | **Media esercizi da Free Exercise DB.** Mappare gli esercizi usati nei protocolli (`config/workout-protocols.json`) agli id di `dataset/free_exercise_db/exercises.json`; scaricare solo le loro 2 immagini (pubblico dominio) in `web/static/media/exercises/<id>/`; sostituire le immagini Commons errate in `config/exercise-media.json`; tenere al massimo 2 video YouTube per esercizio, da canali di istruzione riconoscibili, scartando shorts e titoli clickbait | Gemini | M | ogni esercizio dei protocolli ha immagini locali corrette, verificate a vista; nessuna immagine di un esercizio diverso | da fare |
-| 0.4 | **Foto ricette.** Estendere `config/recipe-images.json` almeno alle ricette italiane (81) e alle 25 composizioni del solver: Wikimedia Commons, licenza libera, foto del **piatto giusto** (non «ossobuco con risotto» per il risotto), attribuzione completa | Gemini | M | copertura ≥ 100 ricette, ogni foto controllata a vista | da fare |
-| 0.5 | **Titoli in italiano.** Campo `title_it` per le 834 ricette (traduzione fedele, nomi propri invariati: «Ackee and saltfish» resta tale), in un file di overlay versionato invece che nel catalogo originale | Gemini | M | overlay completo; la UI mostra `title_it` con fallback | da fare |
+| 0.3 | **Media esercizi da Free Exercise DB.** Mappare gli esercizi usati nei protocolli (`config/workout-protocols.json`) agli id di `dataset/free_exercise_db/exercises.json`; scaricare solo le loro 2 immagini (pubblico dominio) in `web/static/media/exercises/<id>/`; sostituire le immagini Commons errate in `config/exercise-media.json`; tenere al massimo 2 video YouTube per esercizio, da canali di istruzione riconoscibili, scartando shorts e titoli clickbait | Gemini | M | ogni esercizio dei protocolli ha immagini locali corrette, verificate a vista; nessuna immagine di un esercizio diverso | **fatto con riserva** — revisione Claude: 20/20 immagini corrette; 20 video esistenti, titoli riallineati; 3 video da sostituire (R1) |
+| 0.4 | **Foto ricette.** Estendere `config/recipe-images.json` almeno alle ricette italiane (81) e alle 25 composizioni del solver: Wikimedia Commons, licenza libera, foto del **piatto giusto** (non «ossobuco con risotto» per il risotto), attribuzione completa | Gemini | M | copertura ≥ 100 ricette, ogni foto controllata a vista | **parziale** — revisione Claude: 80 foto verificate (obiettivo 100); 50 ID inesistenti e 25 foto errate rimosse (R2) |
+| 0.5 | **Titoli in italiano.** Campo `title_it` per le 834 ricette (traduzione fedele, nomi propri invariati: «Ackee and saltfish» resta tale), in un file di overlay versionato invece che nel catalogo originale | Gemini | M | overlay completo; la UI mostra `title_it` con fallback | **fatto** — 834/834; UI con titolo italiano, ricerca anche in italiano; ~25 titoli con aggettivo inglese da tradurre (R3) |
 
 **Perché oggi non si vedono le foto e i video di Gemini:**
 
-Consegna preparata per i passi 0.3–0.5: [prompt per Gemini](gemini-handoff-phase0.md). I passi restano da fare fino alla revisione dei risultati.
+Consegna preparata per i passi 0.3–0.5: [prompt per Gemini](gemini-handoff-phase0.md). Revisione e rilavorazioni: [gemini-rework-phase0.md](gemini-rework-phase0.md).
+
+**Rilavorazioni Gemini dopo la revisione T3** (in parallelo al prossimo turno di Codex):
+
+| # | Rilavorazione | Fatto quando | Stato |
+|---|---|---|---|
+| R1 | Sostituire i 2 video dello squat e il video «Zero Healthcare» della cyclette | canali didattici; titolo e canale originali verificati via oEmbed | da fare |
+| R2 | Portare le foto ricette verificate da 80 a ≥ 100, priorità alle italiane (20/81) e al solver (11/25) | ogni ID esiste; nessuna foto fra le scartate; controllo a vista | da fare |
+| R3 | Tradurre i titoli con aggettivo d'origine o nomi comuni inglesi («Argentinian empanadas» → «Empanadas argentine») | nessun titolo con aggettivo inglese; nomi propri invariati | da fare |
 
 - Il CSP del server bloccava ogni immagine esterna fino al commit `05710e1`.
 - Le ricette con foto sono solo 4 su 834, e nel catalogo ordinato per titolo finiscono in pagine lontane.

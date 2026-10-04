@@ -216,6 +216,17 @@ class WebTests(unittest.TestCase):
         self.assertEqual(client.put('/api/profile', json=profile, headers=headers).status_code, 200)
         self.assertEqual(client.get('/api/profile').json()['profile']['targets'], targets)
 
+    def test_recipe_catalog_uses_italian_titles_and_photos_first(self):
+        client, _ = self.account('italiantitles')
+        found = client.get('/api/recipes?q=polpette%20di%20tacchino').json()
+        self.assertGreater(found['total'], 0)
+        self.assertTrue(all('tacchino' in r['title_it'].lower() for r in found['recipes']))
+        self.assertNotIn('tacchino', found['recipes'][0]['title'].lower())
+        first = client.get('/api/recipes').json()['recipes']
+        flags = [bool(r.get('illustrative_image')) for r in first]
+        self.assertEqual(flags, sorted(flags, reverse=True))
+        self.assertTrue(flags[0])
+
     def test_personal_files_are_not_served(self):
         client = TestClient(self.module.app)
         self.assertEqual(client.get('/data/personal/web_access.txt').status_code, 404)

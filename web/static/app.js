@@ -640,7 +640,7 @@ async function loadRecipes() {
     if (r.illustrative_image) {
       const img = element('img', undefined, 'recipe-thumb');
       img.src = r.illustrative_image.thumbnail_url || r.illustrative_image.image_url;
-      img.alt = r.title;
+      img.alt = r.title_it || r.title;
       img.loading = 'lazy';
       const attr = element('div', undefined, 'recipe-image-attribution');
       if (r.illustrative_image.author) attr.append(element('span', 'Foto: ' + r.illustrative_image.author + ' · '));
@@ -657,7 +657,9 @@ async function loadRecipes() {
       card.append(img, attr);
     } else card.append(element('div', dishIcon(r.title), 'recipe-placeholder tone-' + (hash(r.cuisine_id) % 4)));
     const body = element('div', undefined, 'recipe-body');
-    body.append(element('h3', r.title), element('p', cuisineLabels[r.cuisine_id] || r.cuisine, 'muted'));
+    const title = r.title_it || r.title;
+    body.append(element('h3', title));
+    body.append(element('p', (cuisineLabels[r.cuisine_id] || r.cuisine) + (title !== r.title ? ' · ' + r.title : ''), 'muted'));
     const n = r.declared_nutrition;
     const facts = element('div', undefined, 'recipe-facts');
     [

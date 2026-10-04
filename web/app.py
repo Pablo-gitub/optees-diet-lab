@@ -71,6 +71,14 @@ def load_recipe_images():
     return {}
 
 
+def load_recipe_titles_it():
+    path = ROOT / 'config/recipe-titles-it.json'
+    try:
+        return json.loads(path.read_text()).get('titles', {})
+    except (OSError, ValueError):
+        return {}
+
+
 def initialize():
     DB.parent.mkdir(parents=True, exist_ok=True)
     with connect() as db:
@@ -128,7 +136,7 @@ async def protect_origin(request, next_call):
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['X-Frame-Options'] = 'DENY'
     response.headers['Content-Security-Policy'] = (
-        "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' https://upload.wikimedia.org; frame-ancestors 'none'"
+        "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' https://upload.wikimedia.org https://thumb.wikimedia.org; frame-ancestors 'none'"
     )
     return response
 
@@ -465,11 +473,16 @@ def recipes(request: Request, q: str = '', cuisine: str = '', preferred: bool = 
         raise HTTPException(400, 'Filtro non valido')
     from import_recipes import fold
 
+    titles_it = load_recipe_titles_it()
     clauses = []
     args = []
     if q:
-        clauses.append("search_text LIKE ? ESCAPE '\\'")
-        args.append('%' + fold(q).replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_') + '%')
+        # Match the original catalog text or the Italian title overlay.
+        needle = fold(q)
+        italian = [rid for rid, title in titles_it.items() if needle in fold(title)]
+        clauses.append("(search_text LIKE ? ESCAPE '\\'" + (' OR id IN (' + ','.join('?' * len(italian)) + ')' if italian else '') + ')')
+        args.append('%' + needle.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_') + '%')
+        args.extend(italian)
     if cuisine:
         clauses.append('cuisine_id=?')
         args.append(cuisine)
@@ -480,20 +493,22 @@ def recipes(request: Request, q: str = '', cuisine: str = '', preferred: bool = 
         clauses.append('cuisine_id IN (' + ','.join('?' for _ in favorites) + ')')
         args.extend(favorites)
     where = ' WHERE ' + ' AND '.join(clauses) if clauses else ''
-    with sqlite3.connect(ROOT / 'dataset/recipes/catalog.sqlite') as db:
-        total = db.execute('SELECT COUNT(*) FROM recipes' + where, args).fetchone()[0]
-        rows = db.execute(
-            'SELECT payload FROM recipes' + where + ' ORDER BY title,id LIMIT 30 OFFSET ?', [*args, offset]
-        ).fetchall()
     images = load_recipe_images()
+    with sqlite3.connect(ROOT / 'dataset/recipes/catalog.sqlite') as db:
+        found = db.execute('SELECT id, title FROM recipes' + where, args).fetchall()
+        # Recipes with a verified photo first, then by Italian title.
+        found.sort(key=lambda r: (r[0] not in images, fold(titles_it.get(r[0], r[1])), r[0]))
+        page = [r[0] for r in found[offset : offset + 30]]
+        payloads = dict(db.execute('SELECT id, payload FROM recipes WHERE id IN (' + ','.join('?' * len(page)) + ')', page).fetchall()) if page else {}
     recipe_list = []
-    for r in rows:
-        rec = json.loads(r[0])
-        img = images.get(rec['id'])
+    for rid in page:
+        rec = json.loads(payloads[rid])
+        rec['title_it'] = titles_it.get(rid, rec['title'])
+        img = images.get(rid)
         if img:
             rec['illustrative_image'] = img
         recipe_list.append(rec)
-    return {'total': total, 'recipes': recipe_list}
+    return {'total': len(found), 'recipes': recipe_list}
 
 
 @app.get('/api/recipe-solver')
