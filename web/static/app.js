@@ -1049,7 +1049,7 @@ async function loadHealth(){
   panel.append(healthTable(['Misura','Valore','Data','Fonte'],Object.entries(r.measures).map(([k,v])=>[labels[k]??k,fmt(v.value)+' '+v.unit,v.date+' · '+v.age_days+' giorni fa',v.source])));
   panel.append(element('h2','Dispendio recente stimato'));
   panel.append(element('p','Finestre ancorate agli ultimi giorni utilizzabili, non necessariamente alla data odierna. I giorni mancanti non sono trattati come zero.','muted'));
-  panel.append(healthTable(['Finestra','Giorni utilizzabili','Ultimo giorno','Media kcal/giorno','Equivalente kcal/settimana'],r.windows.map(w=>[w.days+' giorni',w.valid_days+'/'+w.days,w.end_date??'—',fmt(w.mean_daily_estimated_kcal),fmt(w.weekly_equivalent_estimated_kcal)])));
+  panel.append(healthTable(['Finestra','Giorni utilizzabili','Ultimo giorno','Attive kcal/giorno','Riposo kcal/giorno','Totale kcal/giorno','Equivalente kcal/settimana'],r.windows.map(w=>[w.days+' giorni',w.valid_days+'/'+w.days,w.end_date??'—',fmt(w.mean_active_kcal),fmt(w.mean_resting_kcal),fmt(w.mean_daily_estimated_kcal),fmt(w.weekly_equivalent_estimated_kcal)])));
   panel.append(element('h3','Scenari empirici di consumo · ultimi 28 giorni disponibili'));
   panel.append(element('p','Basso: '+fmt(r.scenarios.low_kcal)+' · Centrale: '+fmt(r.scenarios.central_kcal)+' · Alto: '+fmt(r.scenarios.high_kcal)+' kcal/giorno. Dati di '+(r.scenarios.staleness_days??'—')+' giorni fa. Percentili 20/50/80: variabilità osservata, non intervallo di confidenza.'));
   panel.append(element('h2','Storico degli allenamenti'));

@@ -86,6 +86,13 @@ class HealthTests(unittest.TestCase):
             with zipfile.ZipFile(temp/'bad.zip','w') as z:z.writestr('export.xml','<HealthData><Record')
             with self.assertRaises(ET.ParseError):import_zip(temp/'bad.zip',temp/'out',{'user_id':1})
             self.assertEqual(json.loads((temp/'out/summary.json').read_text()),r)
+    def test_refresh_separates_active_resting_energy_and_expires_models(self):
+        r=dict(timezone='Europe/Rome',as_of='2026-10-01',measures={},scenarios={'valid_days':1,'status':'available'},windows=[{'days':28,'end_date':'2026-10-01','valid_days':1}],daily=[dict(date='2026-10-01',usable_for_baseline=True,active_kcal=500,resting_kcal=1500)],workout_forecasts=[dict(observations=20,age_days=80,status='provisional')])
+        refreshed=refresh_report(r,today=dt.date(2026,10,20))
+        self.assertEqual(refreshed['windows'][0]['mean_active_kcal'],500)
+        self.assertEqual(refreshed['windows'][0]['mean_resting_kcal'],1500)
+        self.assertEqual(refreshed['workout_forecasts'][0]['status'],'insufficient_or_stale')
+        self.assertEqual(r['workout_forecasts'][0]['age_days'],80)
     def test_cached_baseline_becomes_stale_without_changing_targets(self):
         r=dict(timezone='Europe/Rome',as_of='2026-10-01',measures={},scenarios={'valid_days':20,'status':'available'},windows=[{'days':28,'end_date':'2026-10-01'}],workout_forecasts=[])
         refreshed=refresh_report(r,today=dt.date(2026,11,1));self.assertEqual(refreshed['scenarios']['status'],'insufficient_or_stale');self.assertEqual(r['scenarios']['status'],'available')

@@ -77,7 +77,9 @@ Free Exercise DB come primo candidato; wger come alternativa o fonte di routine.
 
 Adult Compendium come eventuale fonte di MET, dopo verifica delle condizioni d'uso. Le stime MET sono facoltative: evitare di sommarle a calorie Watch che descrivono la stessa attività.
 
-### Apple Salute e misure corporee — export in preparazione
+### Apple Salute e misure corporee — prima importazione completata
+
+Sono disponibili import streaming, deduplicazione, energia attiva/a riposo, misure Withings presenti nell'export, scenari empirici, storico delle sessioni e pagina privata Salute. Vedere [regole, limiti e input per gli algoritmi](apple-health-import.md). Sonno, passi e analisi cardiaca dettagliata restano da integrare. Il confronto congiunto dieta/palestra è il passaggio successivo.
 
 Parser XML in streaming, import ripetibile con deduplicazione e provenienza. Conservare timestamp, fuso, unità, sorgente e tipo. Gestire sovrapposizioni iPhone/Watch, intervalli di sonno e confini giornalieri; non sommare indiscriminatamente tutti i campioni. Conservare gli originali e ricostruire i riepiloghi con regole versionate. Iniziare da passi, energia attiva, allenamenti, sonno e peso; supportare le misure Withings presenti nell'export, senza presumere che ci siano.
 

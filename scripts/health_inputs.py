@@ -18,6 +18,12 @@ def refresh_report(report,today=None):
         # Stored age refers to the report's original import day.
         f['age_days']+=max(0,(today-dt.date.fromisoformat(original_date)).days)
         f['status']='provisional' if f['observations']>=3 and 0<=f['age_days']<=90 else 'insufficient_or_stale'
+    for window in report['windows']:
+        if window.get('end_date') and report.get('daily'):
+            anchor=dt.date.fromisoformat(window['end_date']);selected=[d for d in report['daily'] if d['usable_for_baseline'] and anchor-dt.timedelta(days=window['days']-1)<=dt.date.fromisoformat(d['date'])<=anchor]
+            if len(selected)==window['valid_days'] and selected:
+                window['mean_active_kcal']=round(sum(d['active_kcal'] for d in selected)/len(selected),2)
+                window['mean_resting_kcal']=round(sum(d['resting_kcal'] for d in selected)/len(selected),2)
     report['body_profile_needs_review']=not report['measures'].get('weight') or report['measures']['weight']['age_days']>90
     return report
 
