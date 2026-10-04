@@ -71,23 +71,22 @@
       ],
       "youtube_videos": [
         {
-          "video_id": "2t3Ab7a2ZM4",
-          "title": "How To Squat Properly - The Perfect Form & Technique by Brittne Babe",
-          "channel": "Passion.io",
-          "duration": "2:01",
-          "url": "https://www.youtube.com/watch?v=2t3Ab7a2ZM4",
-          "thumbnail_url": "https://i.ytimg.com/vi/2t3Ab7a2ZM4/hqdefault.jpg"
+          "video_id": "X0qC1k0Zi6k",
+          "title": "The Perfect Squat - Do it right!",
+          "channel": "Calisthenicmovement",
+          "duration": "7:59",
+          "url": "https://www.youtube.com/watch?v=X0qC1k0Zi6k",
+          "thumbnail_url": "https://i.ytimg.com/vi/X0qC1k0Zi6k/hqdefault.jpg"
         },
         {
-          "video_id": "YaXPRqUwItQ",
-          "title": "How To Do Perfect SQUAT | FITNESS SPECIAL | SQUATS For Beginners | WORKOUT VIDEO",
-          "channel": "Mind Body Soul",
-          "duration": "2:42",
-          "url": "https://www.youtube.com/watch?v=YaXPRqUwItQ",
-          "thumbnail_url": "https://i.ytimg.com/vi/YaXPRqUwItQ/hqdefault.jpg"
+          "video_id": "my0tLDaWyDU",
+          "title": "How To Squat Correctly (NO BACK PAIN)",
+          "channel": "Squat University",
+          "duration": "7:37",
+          "url": "https://www.youtube.com/watch?v=my0tLDaWyDU",
+          "thumbnail_url": "https://i.ytimg.com/vi/my0tLDaWyDU/hqdefault.jpg"
         }
-      ],
-      "review_note": "Video da sostituire: canale non didattico o promozionale (revisione Claude, 2026-10-04)."
+      ]
     },
     "dumbbell-deadlift": {
       "exercise_id": "dumbbell-deadlift",
@@ -424,15 +423,14 @@
           "thumbnail_url": "https://i.ytimg.com/vi/JjuH3j6ydsA/hqdefault.jpg"
         },
         {
-          "video_id": "gWosN1CY4bg",
-          "title": "Zero Healthcare™ Fitness Tips At Home | How To Use A Spin Bike Correctly",
-          "channel": "Zero Healthcare_Official",
-          "duration": "1:31",
-          "url": "https://www.youtube.com/watch?v=gWosN1CY4bg",
-          "thumbnail_url": "https://i.ytimg.com/vi/gWosN1CY4bg/hqdefault.jpg"
+          "video_id": "IesPRDSU0_c",
+          "title": "How To Set Up An Indoor Bike",
+          "channel": "Global Cycling Network",
+          "duration": "3:18",
+          "url": "https://www.youtube.com/watch?v=IesPRDSU0_c",
+          "thumbnail_url": "https://i.ytimg.com/vi/IesPRDSU0_c/hqdefault.jpg"
         }
-      ],
-      "review_note": "Video da sostituire: canale non didattico o promozionale (revisione Claude, 2026-10-04)."
+      ]
     }
   }
 }

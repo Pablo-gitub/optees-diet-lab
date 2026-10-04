@@ -306,6 +306,21 @@
       "illustrative": true,
       "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
     },
+    "unitools:avgolemono": {
+      "recipe_id": "unitools:avgolemono",
+      "recipe_title": "Avgolemono",
+      "search_term": "Avgolemono soup Greek",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/a/a6/Avgolemono_-_Sarah_Stierch.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/Avgolemono_-_Sarah_Stierch.jpg/960px-Avgolemono_-_Sarah_Stierch.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Avgolemono - Sarah Stierch.jpg",
+      "author": "Missvain",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Avgolemono_-_Sarah_Stierch.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
     "unitools:bacalhau-a-bras": {
       "recipe_id": "unitools:bacalhau-a-bras",
       "recipe_title": "Bacalhau à brás",
@@ -386,6 +401,21 @@
       "illustrative": true,
       "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
     },
+    "unitools:bitterballen": {
+      "recipe_id": "unitools:bitterballen",
+      "recipe_title": "Bitterballen",
+      "search_term": "Bitterballen mosterd",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/8/89/Bitterballen_mosterd_mayo.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/Bitterballen_mosterd_mayo.jpg/960px-Bitterballen_mosterd_mayo.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Bitterballen mosterd mayo.jpg",
+      "author": "Takeaway",
+      "license": "CC BY-SA 3.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File%3ABitterballen_mosterd_mayo.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
     "unitools:borscht": {
       "recipe_id": "unitools:borscht",
       "recipe_title": "Borscht",
@@ -399,6 +429,36 @@
       "license_url": "https://creativecommons.org/licenses/by/4.0",
       "source": "Wikimedia Commons",
       "source_page": "https://commons.wikimedia.org/wiki/File:Borscht,_Rostov-on-Don,_Russia.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
+    "unitools:bouillabaisse": {
+      "recipe_id": "unitools:bouillabaisse",
+      "recipe_title": "Bouillabaisse",
+      "search_term": "Bouillabaisse Marseille",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/bb/Bouillabaisse_de_chez_Fonfon_dans_un_restaurant_du_Vieux-Port_%28Marseille%29_en_novembre_2022.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bb/Bouillabaisse_de_chez_Fonfon_dans_un_restaurant_du_Vieux-Port_%28Marseille%29_en_novembre_2022.JPG/960px-Bouillabaisse_de_chez_Fonfon_dans_un_restaurant_du_Vieux-Port_%28Marseille%29_en_novembre_2022.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Bouillabaisse de chez Fonfon dans un restaurant du Vieux-Port (Marseille) en novembre 2022.JPG",
+      "author": "Benoît Prieur",
+      "license": "CC0",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Bouillabaisse_de_chez_Fonfon_dans_un_restaurant_du_Vieux-Port_(Marseille)_en_novembre_2022.JPG",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
+    "unitools:bucatini-all-amatriciana": {
+      "recipe_id": "unitools:bucatini-all-amatriciana",
+      "recipe_title": "Bucatini all'amatriciana",
+      "search_term": "Bucatini amatriciana",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Bucatini_%28amatriciana_rossa%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/Bucatini_%28amatriciana_rossa%29.jpg/960px-Bucatini_%28amatriciana_rossa%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Bucatini (amatriciana rossa).jpg",
+      "author": "stu_spivack",
+      "license": "CC BY-SA 2.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Bucatini_(amatriciana_rossa).jpg",
       "illustrative": true,
       "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
     },
@@ -450,6 +510,21 @@
       "illustrative": true,
       "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
     },
+    "unitools:chawanmushi": {
+      "recipe_id": "unitools:chawanmushi",
+      "recipe_title": "Chawanmushi",
+      "search_term": "Chawanmushi Japanese",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/8/89/Chawan-mushi.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/Chawan-mushi.JPG/960px-Chawan-mushi.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Chawan-mushi.JPG",
+      "author": "Brücke-Osteuropa",
+      "license": "CC0",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Chawan-mushi.JPG",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
     "unitools:chicken-biryani": {
       "recipe_id": "unitools:chicken-biryani",
       "recipe_title": "Chicken biryani",
@@ -498,6 +573,21 @@
       "illustrative": true,
       "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
     },
+    "unitools:croquetas-de-jamon": {
+      "recipe_id": "unitools:croquetas-de-jamon",
+      "recipe_title": "Ham croquetas",
+      "search_term": "Croquetas de jamon",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/0/06/Croquetas-Jam%C3%B3n-Riofr%C3%ADo.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Croquetas-Jam%C3%B3n-Riofr%C3%ADo.jpg/960px-Croquetas-Jam%C3%B3n-Riofr%C3%ADo.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Croquetas-Jamón-Riofrío.jpg",
+      "author": "Tamorlan",
+      "license": "CC BY 3.0",
+      "license_url": "https://creativecommons.org/licenses/by/3.0",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Croquetas-Jam%C3%B3n-Riofr%C3%ADo.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
     "unitools:dal-tadka": {
       "recipe_id": "unitools:dal-tadka",
       "recipe_title": "Dal tadka",
@@ -514,6 +604,21 @@
       "illustrative": true,
       "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
     },
+    "unitools:dobos-torta": {
+      "recipe_id": "unitools:dobos-torta",
+      "recipe_title": "Dobos torte",
+      "search_term": "Dobostorta",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Dobos_cake_%28Gerbeaud_Confectionery_Budapest_Hungary%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3f/Dobos_cake_%28Gerbeaud_Confectionery_Budapest_Hungary%29.jpg/960px-Dobos_cake_%28Gerbeaud_Confectionery_Budapest_Hungary%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Dobos cake (Gerbeaud Confectionery Budapest Hungary).jpg",
+      "author": "Savannah Grandfather",
+      "license": "CC BY 2.0",
+      "license_url": "https://creativecommons.org/licenses/by/2.0",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Dobos_cake_(Gerbeaud_Confectionery_Budapest_Hungary).jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
     "unitools:empanadas-argentinas": {
       "recipe_id": "unitools:empanadas-argentinas",
       "recipe_title": "Argentinian empanadas",
@@ -527,6 +632,21 @@
       "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
       "source": "Wikimedia Commons",
       "source_page": "https://commons.wikimedia.org/wiki/File:Empanada_-_Stu_Spivack.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
+    "unitools:fabada-asturiana": {
+      "recipe_id": "unitools:fabada-asturiana",
+      "recipe_title": "Fabada asturiana",
+      "search_term": "Fabada asturiana plato",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/d/d7/Fabada_asturiana_del_Valle_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/Fabada_asturiana_del_Valle_01.jpg/960px-Fabada_asturiana_del_Valle_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Fabada asturiana del Valle 01.jpg",
+      "author": "Sahaquiel9102",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Fabada_asturiana_del_Valle_01.jpg",
       "illustrative": true,
       "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
     },
@@ -594,6 +714,21 @@
       "illustrative": true,
       "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
     },
+    "unitools:gemista": {
+      "recipe_id": "unitools:gemista",
+      "recipe_title": "Gemista",
+      "search_term": "Gemista Greek stuffed",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/ee/Gemista.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/Gemista.jpg/960px-Gemista.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Gemista.jpg",
+      "author": "Photo and cooking: Badseed",
+      "license": "CC BY-SA 3.0",
+      "license_url": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File%3AGemista.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
     "unitools:gong-bao-chicken": {
       "recipe_id": "unitools:gong-bao-chicken",
       "recipe_title": "Gong bao chicken",
@@ -642,6 +777,21 @@
       "illustrative": true,
       "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
     },
+    "unitools:gyudon": {
+      "recipe_id": "unitools:gyudon",
+      "recipe_title": "Gyudon",
+      "search_term": "Gyudon beef bowl",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/7/73/Beef_Bowl%2C_Gy%C5%ABdon.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/73/Beef_Bowl%2C_Gy%C5%ABdon.jpg/960px-Beef_Bowl%2C_Gy%C5%ABdon.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Beef Bowl, Gyūdon.jpg",
+      "author": "Calgary Reviews",
+      "license": "CC BY 2.0",
+      "license_url": "https://creativecommons.org/licenses/by/2.0",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Beef_Bowl,_Gy%C5%ABdon.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
     "unitools:hainanese-chicken-rice": {
       "recipe_id": "unitools:hainanese-chicken-rice",
       "recipe_title": "Hainanese chicken rice",
@@ -655,6 +805,21 @@
       "license_url": "https://creativecommons.org/licenses/by/2.0",
       "source": "Wikimedia Commons",
       "source_page": "https://commons.wikimedia.org/wiki/File:Hainanese_Chicken_Rice,_with_asparagus.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
+    "unitools:harira": {
+      "recipe_id": "unitools:harira",
+      "recipe_title": "Harira",
+      "search_term": "Harira soup Morocco",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/0/0d/Harira..JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0d/Harira..JPG/960px-Harira..JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Harira..JPG",
+      "author": "Miansari66",
+      "license": "CC0",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File%3AHarira..JPG",
       "illustrative": true,
       "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
     },
@@ -706,6 +871,36 @@
       "illustrative": true,
       "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
     },
+    "unitools:kaesespaetzle": {
+      "recipe_id": "unitools:kaesespaetzle",
+      "recipe_title": "Käsespätzle",
+      "search_term": "Kasespatzle",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/e2/2015_0718_K%C3%A4sesp%C3%A4tzle_S%C3%B6lden.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/2015_0718_K%C3%A4sesp%C3%A4tzle_S%C3%B6lden.jpg/960px-2015_0718_K%C3%A4sesp%C3%A4tzle_S%C3%B6lden.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:2015 0718 Käsespätzle Sölden.jpg",
+      "author": "Takeaway",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File:2015_0718_K%C3%A4sesp%C3%A4tzle_S%C3%B6lden.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
+    "unitools:katsudon": {
+      "recipe_id": "unitools:katsudon",
+      "recipe_title": "Katsudon",
+      "search_term": "Katsudon bowl",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/a/a2/Egg_katsudon_with_green_leek.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/Egg_katsudon_with_green_leek.jpg/960px-Egg_katsudon_with_green_leek.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Egg katsudon with green leek.jpg",
+      "author": "Ле Лой",
+      "license": "CC0",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Egg_katsudon_with_green_leek.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
     "unitools:key-lime-pie": {
       "recipe_id": "unitools:key-lime-pie",
       "recipe_title": "Key lime pie",
@@ -719,6 +914,36 @@
       "license_url": "https://creativecommons.org/licenses/by/2.0",
       "source": "Wikimedia Commons",
       "source_page": "https://commons.wikimedia.org/wiki/File:Key_Lime_Pie_with_lime_decoration.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
+    "unitools:khao-soi": {
+      "recipe_id": "unitools:khao-soi",
+      "recipe_title": "Khao soi",
+      "search_term": "Khao soi bowl Chiang Mai",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/be/Khao_Soi_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/be/Khao_Soi_01.jpg/960px-Khao_Soi_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Khao Soi 01.jpg",
+      "author": "Douglas Perkins",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Khao_Soi_01.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
+    "unitools:koshari": {
+      "recipe_id": "unitools:koshari",
+      "recipe_title": "Koshari",
+      "search_term": "Egyptian Koshari",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/5/50/Egyptian_Food.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/50/Egyptian_Food.jpg/960px-Egyptian_Food.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Egyptian Food.jpg",
+      "author": "Dina Said",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Egyptian_Food.jpg",
       "illustrative": true,
       "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
     },
@@ -751,6 +976,21 @@
       "license_url": "https://creativecommons.org/licenses/by/2.0",
       "source": "Wikimedia Commons",
       "source_page": "https://commons.wikimedia.org/wiki/File:Lasagna_Bolognese_(28840811363).jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
+    "unitools:lomo-saltado": {
+      "recipe_id": "unitools:lomo-saltado",
+      "recipe_title": "Lomo saltado",
+      "search_term": "Lomo saltado plato arroz",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/1/1e/Lomo_saltado_13012008.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1e/Lomo_saltado_13012008.JPG/960px-Lomo_saltado_13012008.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Lomo saltado 13012008.JPG",
+      "author": "Dtarazona",
+      "license": "CC BY-SA 3.0",
+      "license_url": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File%3ALomo_saltado_13012008.JPG",
       "illustrative": true,
       "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
     },
@@ -930,6 +1170,21 @@
       "illustrative": true,
       "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
     },
+    "unitools:papanasi": {
+      "recipe_id": "unitools:papanasi",
+      "recipe_title": "Papanași",
+      "search_term": "Papanasi smantana dulceata",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Papanasi-romaniancook.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Papanasi-romaniancook.jpg/960px-Papanasi-romaniancook.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Papanasi-romaniancook.jpg",
+      "author": "Romaniancook",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File%3APapanasi-romaniancook.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
     "unitools:pastel-de-nata": {
       "recipe_id": "unitools:pastel-de-nata",
       "recipe_title": "Pastel de nata",
@@ -943,6 +1198,21 @@
       "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
       "source": "Wikimedia Commons",
       "source_page": "https://commons.wikimedia.org/wiki/File:Funchal_(Madeira,_Portugal),_Rua_Dr._Fern%C3%A3o_de_Ornelas,_Nata_7_-_Fern%C3%A3o_Ornelas_--_2025_--_1205.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
+    "unitools:patatas-bravas": {
+      "recipe_id": "unitools:patatas-bravas",
+      "recipe_title": "Patatas bravas",
+      "search_term": "Patatas bravas tapas",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Patatas_Bravas.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/Patatas_Bravas.JPG/960px-Patatas_Bravas.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Patatas Bravas.JPG",
+      "author": "Juan Emilio Prades Bel",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Patatas_Bravas.JPG",
       "illustrative": true,
       "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
     },
@@ -975,6 +1245,21 @@
       "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
       "source": "Wikimedia Commons",
       "source_page": "https://commons.wikimedia.org/wiki/File:Pho_Bo_by_Banh_%26_Mee_in_Kirkgate_Market.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
+    "unitools:pierogi-ruskie": {
+      "recipe_id": "unitools:pierogi-ruskie",
+      "recipe_title": "Pierogi ruskie",
+      "search_term": "Pierogi ruskie",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/be/Food_in_Lichen_Stary_%28pierogi_ruskie%2C_dumplings%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/be/Food_in_Lichen_Stary_%28pierogi_ruskie%2C_dumplings%29.jpg/960px-Food_in_Lichen_Stary_%28pierogi_ruskie%2C_dumplings%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Food in Lichen Stary (pierogi ruskie, dumplings).jpg",
+      "author": "MOs810",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File%3AFood_in_Lichen_Stary_%28pierogi_ruskie%2C_dumplings%29.jpg",
       "illustrative": true,
       "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
     },
@@ -1023,6 +1308,21 @@
       "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
       "source": "Wikimedia Commons",
       "source_page": "https://commons.wikimedia.org/wiki/File:Pulled-pork-sandwiches.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
+    "unitools:pulpo-a-feira": {
+      "recipe_id": "unitools:pulpo-a-feira",
+      "recipe_title": "Pulpo a feira",
+      "search_term": "Pulpo a la gallega feira",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/2/2d/El_Pulpo_a_la_gallega%2C_t%C3%ADpica_tapa_espa%C3%B1ola.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2d/El_Pulpo_a_la_gallega%2C_t%C3%ADpica_tapa_espa%C3%B1ola.jpg/960px-El_Pulpo_a_la_gallega%2C_t%C3%ADpica_tapa_espa%C3%B1ola.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:El Pulpo a la gallega, típica tapa española.jpg",
+      "author": "Juan Emilio Prades Bel",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File:El_Pulpo_a_la_gallega,_t%C3%ADpica_tapa_espa%C3%B1ola.jpg",
       "illustrative": true,
       "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
     },
@@ -1090,6 +1390,21 @@
       "illustrative": true,
       "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
     },
+    "unitools:sachertorte": {
+      "recipe_id": "unitools:sachertorte",
+      "recipe_title": "Sachertorte",
+      "search_term": "Sachertorte Wien",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/4/49/Sachertorte_Aida_in_Wien.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/Sachertorte_Aida_in_Wien.JPG/960px-Sachertorte_Aida_in_Wien.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Sachertorte Aida in Wien.JPG",
+      "author": "Dr. Bernd Gross",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Sachertorte_Aida_in_Wien.JPG",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
     "unitools:samosa": {
       "recipe_id": "unitools:samosa",
       "recipe_title": "Samosa",
@@ -1103,6 +1418,21 @@
       "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
       "source": "Wikimedia Commons",
       "source_page": "https://commons.wikimedia.org/wiki/File:Samosa_13.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
+    "unitools:schweinshaxe": {
+      "recipe_id": "unitools:schweinshaxe",
+      "recipe_title": "Schweinshaxe",
+      "search_term": "Schweinshaxe mit",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/2/24/Halbe_Schweinshaxe_K%C3%A4lberhalle_Augsburg.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/Halbe_Schweinshaxe_K%C3%A4lberhalle_Augsburg.jpg/960px-Halbe_Schweinshaxe_K%C3%A4lberhalle_Augsburg.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Halbe Schweinshaxe Kälberhalle Augsburg.jpg",
+      "author": "Benreis",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Halbe_Schweinshaxe_K%C3%A4lberhalle_Augsburg.jpg",
       "illustrative": true,
       "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
     },
@@ -1122,6 +1452,21 @@
       "illustrative": true,
       "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
     },
+    "unitools:shopska-salata": {
+      "recipe_id": "unitools:shopska-salata",
+      "recipe_title": "Shopska salad",
+      "search_term": "Shopska salad Bulgarian",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/6/64/02021_0385_Shopska_salad%2C_Beskids.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/64/02021_0385_Shopska_salad%2C_Beskids.jpg/960px-02021_0385_Shopska_salad%2C_Beskids.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:02021 0385 Shopska salad, Beskids.jpg",
+      "author": "Silar",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File:02021_0385_Shopska_salad,_Beskids.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
     "unitools:shoyu-ramen": {
       "recipe_id": "unitools:shoyu-ramen",
       "recipe_title": "Shoyu ramen",
@@ -1135,6 +1480,21 @@
       "license_url": "https://creativecommons.org/licenses/by/2.0",
       "source": "Wikimedia Commons",
       "source_page": "https://commons.wikimedia.org/wiki/File:Shoyu_Ramen.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
+    "unitools:soda-bread": {
+      "recipe_id": "unitools:soda-bread",
+      "recipe_title": "Soda bread",
+      "search_term": "Irish soda bread loaf",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Corrigan_loaf_01_%283177771098%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b8/Corrigan_loaf_01_%283177771098%29.jpg/960px-Corrigan_loaf_01_%283177771098%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Corrigan loaf 01 (3177771098).jpg",
+      "author": "michael clarke stuff",
+      "license": "CC BY-SA 2.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File%3ACorrigan_loaf_01_%283177771098%29.jpg",
       "illustrative": true,
       "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
     },
@@ -1215,6 +1575,21 @@
       "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
       "source": "Wikimedia Commons",
       "source_page": "https://commons.wikimedia.org/wiki/File:Syrniki6.jpg",
+      "illustrative": true,
+      "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
+    },
+    "unitools:tarator": {
+      "recipe_id": "unitools:tarator",
+      "recipe_title": "Tarator",
+      "search_term": "Tarator cold soup Bulgarian",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/bf/Bulgarian_dish_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "thumbnail_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bf/Bulgarian_dish_01.jpg/960px-Bulgarian_dish_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "title": "File:Bulgarian dish 01.jpg",
+      "author": "Kritzolina",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "Wikimedia Commons",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Bulgarian_dish_01.jpg",
       "illustrative": true,
       "disclaimer": "Immagine a scopo illustrativo: ingredienti, quantità e porzioni possono differire dalla ricetta specifica."
     },

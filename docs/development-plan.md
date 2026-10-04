@@ -68,9 +68,9 @@ Consegna preparata per i passi 0.3–0.5: [prompt per Gemini](gemini-handoff-pha
 
 | # | Rilavorazione | Fatto quando | Stato |
 |---|---|---|---|
-| R1 | Sostituire i 2 video dello squat e il video «Zero Healthcare» della cyclette | canali didattici; titolo e canale originali verificati via oEmbed | da fare |
-| R2 | Portare le foto ricette verificate da 80 a ≥ 100, priorità alle italiane (20/81) e al solver (11/25) | ogni ID esiste; nessuna foto fra le scartate; controllo a vista | da fare |
-| R3 | Tradurre i titoli con aggettivo d'origine o nomi comuni inglesi («Argentinian empanadas» → «Empanadas argentine») | nessun titolo con aggettivo inglese; nomi propri invariati | da fare |
+| R1 | Sostituire i 2 video dello squat e il video «Zero Healthcare» della cyclette | canali didattici; titolo e canale originali verificati via oEmbed | **fatto** |
+| R2 | Portare le foto ricette verificate da 80 a ≥ 100, priorità alle italiane (20/81) e al solver (11/25) | ogni ID esiste; nessuna foto fra le scartate; controllo a vista | **fatto** — 105 verificate |
+| R3 | Tradurre i titoli con aggettivo d'origine o nomi comuni inglesi («Argentinian empanadas» → «Empanadas argentine») | nessun titolo con aggettivo inglese; nomi propri invariati | **fatto** — 33 titoli |
 
 - Il CSP del server bloccava ogni immagine esterna fino al commit `05710e1`.
 - Le ricette con foto sono solo 4 su 834, e nel catalogo ordinato per titolo finiscono in pagine lontane.
@@ -130,7 +130,7 @@ Consegna preparata per i passi 0.3–0.5: [prompt per Gemini](gemini-handoff-pha
 | 6.1 | Bandit contestuale sui bracci-caratteristica con ricompensa da voto + aderenza (S6 completo) | Codex | M | test: solo piani provati; contesti separati | da fare |
 | 6.2 | **Ribilanciamento**: «Ho sgarrato» → stima a intervallo del pasto → riottimizzazione dei giorni rimanenti con il consumato bloccato; deficit giornaliero massimo, proteine protette, correzione distribuita; palestra solo come opzione aggiuntiva | Codex | L | la settimana rientra nei confini quando possibile; altrimenti lo dice, senza punire | da fare |
 | 6.3 | UI sgarro: scelta tipo (pizzeria, ristorante, aperitivo, dolce, libero) e taglia, impatto sul budget, anteprima del diff sui giorni successivi, Accetta/Modifica/Non compensare; tono non colpevolizzante | Claude | M | flusso completo in meno di 4 tocchi | da fare |
-| 6.4 | Catalogo preset degli sgarri con intervalli di kcal e macro e fonti citate | Gemini | S | `config/meal-presets.json` con fonti; rivisto da Claude | da fare |
+| 6.4 | Catalogo preset degli sgarri con intervalli di kcal e macro e fonti citate | Gemini | S | `config/meal-presets.json` con fonti; rivisto da Claude | **respinto** — fonti inventate, da rifare (vedi gemini-rework-phase0.md) |
 
 ### Fase 7 — Rifinitura → **M3**
 
