@@ -74,3 +74,7 @@ La pagina usa `GET /api/stats/progress`, `POST /api/progress/check-in`, `GET /ap
 |---|---|---|
 | B9 | L'andamento filtrato resta molto sopra le pesate recenti: con pesate quotidiane in calo di ~0,3 kg/settimana la linea mostra −0,1 kg in 7 giorni. EMA (emivita 7 giorni) seguita da Kalman sul risultato EMA smussa due volte e introduce un forte ritardo | applicare il Kalman alle mediane giornaliere (non all'EMA), oppure esporre l'EMA da sola come andamento; verificare il ritardo con un test su una discesa lineare nota |
 | B10 | Il lunedì i riquadri «della settimana» di `GET /api/stats/summary` (aderenza, kcal medie, allenamenti) sono tutti «dati insufficienti», proprio il giorno del check-in | quando la settimana corrente non ha giorni trascorsi, riportare l'ultima settimana conclusa con `week_start` esplicito |
+
+### Chiusura backend B9–B10 e consegna 6.2
+
+B9: `7a4e12e`, filtro Kalman diretto sulle mediane giornaliere, parametri progress-v2; trend da regressione settimanale. B10: `919e014`, il lunedì riquadri dell’ultima settimana conclusa con week_start. Per Claude 6.3: [contratto ribilanciamento](backend-handoff-rebalance.md), anteprima e decisioni implementate; 228 test verdi, inclusa prova HTTP con Optees reale e database invariato dopo l’anteprima.

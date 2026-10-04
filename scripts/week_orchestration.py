@@ -41,12 +41,14 @@ def weekly_model(profile,request,make_config,foods):
         locks[date,slot]=items
     blocks=[];variables=[];sparse_rows=[];objectives=[];preferences=[];all_choices=[]
     for offset in range(7):
-        date=(start+dt.timedelta(days=offset)).isoformat();config=make_config(profile,(index+offset)%14)
+        date=(start+dt.timedelta(days=offset)).isoformat()
+        if request.get('_active_dates') is not None and date not in request['_active_dates']:continue
+        model_index=len(blocks);config=make_config(profile,(index+offset)%14)
         config['portion_bounds_g']=request.get('portion_bounds_g',config.get('portion_bounds_g',{}))
         for (lock_date,slot),items in locks.items():
             if lock_date==date:add_lock(config,foods,slot,items,profile)
         p,choices,slots=formulate(config,foods);shift=len(variables)
-        variables.extend(dict(v,name=f'd{offset}_{v["name"]}') for v in p['variables'])
+        variables.extend(dict(v,name=f'd{model_index}_{v["name"]}') for v in p['variables'])
         sparse_rows.extend(({i+shift:v for i,v in enumerate(r['coefficients']) if v},r['relation'],r['rhs']) for r in p['constraints'])
         objectives.extend(p['objective']['coefficients']);preferences.extend(p.get('preference_coefficients',[0.]*len(p['variables'])))
         for c in choices:
@@ -69,7 +71,7 @@ def weekly_model(profile,request,make_config,foods):
                 indicator=len(variables);variables.append(dict(name=f'frequency_{block["date"]}_{slot}_{f}',lb=0,ub=1,integrality='B'));objectives.append(0.);preferences.append(0.);freq[f].append(indicator)
                 for y in ys:sparse_rows.append(({y:1,indicator:-1},'<=',0))
                 sparse_rows.append(({indicator:1,**{y:-1 for y in ys}},'<=',0))
-    for f,indices in freq.items():sparse_rows.append(({i:1 for i in indices},'<=',maximum))
+    for f,indices in freq.items():sparse_rows.append(({i:1 for i in indices},'<=',max(0,maximum-request.get('_prior_frequencies',{}).get(f,0))))
     # Optional reviewed frequency rules are explicit hard bounds, never inferred.
     frequencies=request.get('protein_frequencies',{})
     if not isinstance(frequencies,dict) or any(f not in freq for f in frequencies):raise DomainError('Frequenze non valide')

@@ -58,6 +58,7 @@ def fingerprint(db,user,profile,report,measurements):
     tables={}
     tables['profile']=profile;tables['measurements']=measurements
     for table,query in {
+        'estimates':'SELECT * FROM consumed_estimate WHERE user_id=? ORDER BY date,slot',
         'weeks':'SELECT * FROM week_plan WHERE user_id=? ORDER BY id',
         'meals':'SELECT p.* FROM planned_meal p JOIN week_plan w ON w.id=p.week_plan_id WHERE w.user_id=? ORDER BY p.id',
         'diary':'SELECT * FROM diary_entry WHERE user_id=? ORDER BY id',

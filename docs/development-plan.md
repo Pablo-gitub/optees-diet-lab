@@ -128,7 +128,7 @@ Consegna preparata per i passi 0.3–0.5: [prompt per Gemini](gemini-handoff-pha
 | # | Passo | Chi | Dim. | Fatto quando | Stato |
 |---|---|---|---|---|---|
 | 6.1 | Bandit contestuale sui bracci-caratteristica con ricompensa da voto + aderenza (S6 completo) | Codex | M | test: solo piani provati; contesti separati | da fare |
-| 6.2 | **Ribilanciamento**: «Ho sgarrato» → stima a intervallo del pasto → riottimizzazione dei giorni rimanenti con il consumato bloccato; deficit giornaliero massimo, proteine protette, correzione distribuita; palestra solo come opzione aggiuntiva | Codex | L | la settimana rientra nei confini quando possibile; altrimenti lo dice, senza punire | da fare |
+| 6.2 | **Ribilanciamento**: «Ho sgarrato» → stima a intervallo del pasto → riottimizzazione dei giorni rimanenti con il consumato bloccato; deficit giornaliero massimo, proteine protette, correzione distribuita; palestra solo come opzione aggiuntiva | Codex | L | la settimana rientra nei confini quando possibile; altrimenti lo dice, senza punire | **fatto** — commit di questo passo; 228 test verdi; anteprima Optees senza scritture, limiti fissi, consumato bloccato, azioni CSRF/409; [contratto 6.3](backend-handoff-rebalance.md) |
 | 6.3 | UI sgarro: scelta tipo (pizzeria, ristorante, aperitivo, dolce, libero) e taglia, impatto sul budget, anteprima del diff sui giorni successivi, Accetta/Modifica/Non compensare; tono non colpevolizzante | Claude | M | flusso completo in meno di 4 tocchi | da fare |
 | 6.4 | Catalogo preset degli sgarri con intervalli di kcal e macro e fonti citate | Gemini | S | `config/meal-presets.json` con fonti; rivisto da Claude | **fatto con riserva** — 53 fonti CREA verificate; sushi e kebab senza fonte; date di consultazione McDonald's mancanti |
 
@@ -159,4 +159,4 @@ Riconoscimento dei pasti da foto, sincronizzazione live con Withings/HealthKit (
 
 | B9 | **fatto** — `7a4e12e` | 222 test verdi; Kalman diretto sulle mediane, trend settimanale con regressione, parametri progress-v2 |
 
-| B10 | **fatto** — commit di questo passo | 222 test verdi; riepilogo del lunedì sull’ultima settimana conclusa, week_start esplicito nei tre riquadri |
+| B10 | **fatto** — `919e014` | 222 test verdi; riepilogo del lunedì sull’ultima settimana conclusa, week_start esplicito nei tre riquadri |

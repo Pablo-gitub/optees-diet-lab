@@ -780,6 +780,7 @@ async def planning_job(job_id,user_id,profile,data,kind):
                         date=(start+dt.timedelta(days=offset)).isoformat()
                         view=diary.day_view(db,user_id,profile,date)
                         for meal in view['meals']:
+                            if meal.get('consumed_estimate'):raise diary.DomainError('Un pasto consumato ha nutrienti a intervallo: il bilancio esatto non è disponibile','interval_nutrients_unavailable')
                             source=meal['eaten'] if meal['eaten'] is not None else meal['planned'] if meal['planned'] and meal['planned']['locked'] else None
                             if source is not None:locks[date,meal['slot']]=dict(date=date,slot=meal['slot'],items=[{k:item[k] for k in ('food','grams','units') if k in item} for item in source['items']])
                     data=dict(data,locked=list(locks.values()))
@@ -923,3 +924,50 @@ async def update_workout_config(request:Request):
 
 @app.post('/api/plans/joint-week')
 async def joint_week(request:Request):return await enqueue_planning(request,'joint')
+
+
+# Previews are deliberately ephemeral: reading a proposed correction writes no rows.
+rebalance_previews={}
+
+@app.get('/api/rebalance/presets')
+def rebalance_presets(request:Request):
+    import meal_rebalance
+    identity(request)
+    return meal_rebalance.catalog()
+
+@app.post('/api/rebalance/preview')
+async def rebalance_preview(request:Request):
+    import meal_rebalance
+    user=identity(request,True);profile=owner_profile(user)
+    meal=meal_rebalance.estimate(await request.json(),diary.local_today())
+    with connect() as db:snapshot=meal_rebalance.snapshot(db,user['id'],profile,meal)
+    if solver_lock.locked():raise diary.DomainError('Calcolo già in corso','solver_busy',409)
+    async with solver_lock:
+        async with stdio_client(StdioServerParameters(command=optees_command(make_config(profile,0)))) as (read,write):
+            async with ClientSession(read,write) as session:
+                await session.initialize()
+                result=await meal_rebalance.preview(session,profile,meal,snapshot,make_config,load_foods())
+    token=secrets.token_urlsafe(24);now=time.time()
+    for key in list(rebalance_previews):
+        if rebalance_previews[key]['expires']<now:del rebalance_previews[key]
+    rebalance_previews[token]=dict(user=user['id'],state=snapshot['state'],start=snapshot['start'],result=result,expires=now+1800)
+    return dict({k:v for k,v in result.items() if not k.startswith('_')},preview_id=token)
+
+async def rebalance_decide(request,preview_id,action):
+    import meal_rebalance
+    user=identity(request,True)
+    if await request.json()!={}:raise diary.DomainError('Corpo della decisione non valido')
+    proposal=rebalance_previews.get(preview_id)
+    if not proposal or proposal['user']!=user['id'] or proposal['expires']<time.time():raise diary.DomainError('Anteprima scaduta o non trovata','not_found',404)
+    with connect() as db:
+        db.execute('BEGIN IMMEDIATE')
+        fresh=dict(db.execute('SELECT * FROM users WHERE id=?',(user['id'],)).fetchone())
+        result=meal_rebalance.decide(db,user['id'],owner_profile(fresh),preview_id,proposal,action)
+    # Retain token until expiry so repeated actions return a conflict, not duplicate writes.
+    return result
+
+@app.post('/api/rebalance/{preview_id}/apply')
+async def rebalance_apply(preview_id:str,request:Request):return await rebalance_decide(request,preview_id,'apply')
+
+@app.post('/api/rebalance/{preview_id}/keep')
+async def rebalance_keep(preview_id:str,request:Request):return await rebalance_decide(request,preview_id,'keep')
