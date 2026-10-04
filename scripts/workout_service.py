@@ -1,5 +1,6 @@
 """Private workout plans and actual logs; public demo templates are never prescriptions."""
 import copy
+import hashlib
 import datetime as dt
 import json
 import math
@@ -19,6 +20,8 @@ def migrate(db):
     CREATE UNIQUE INDEX IF NOT EXISTS workout_planned_once ON workout_log(planned_session_id) WHERE planned_session_id IS NOT NULL;
     CREATE TABLE IF NOT EXISTS set_log(id INTEGER PRIMARY KEY,workout_log_id INTEGER,exercise_id TEXT,set_no INTEGER,reps INTEGER,kg REAL,seconds REAL,rir REAL,UNIQUE(workout_log_id,exercise_id,set_no));
     CREATE INDEX IF NOT EXISTS workout_owner_day ON workout_log(user_id,date);
+    CREATE TABLE IF NOT EXISTS workout_configuration(user_id INTEGER PRIMARY KEY,settings TEXT,updated TEXT);
+    INSERT OR IGNORE INTO schema_migration VALUES(3,strftime('%s','now'));
     INSERT OR IGNORE INTO schema_migration VALUES(2,strftime('%s','now'));
     ''')
 
@@ -32,7 +35,8 @@ def catalog(profile):
         session['title']=session['name']
         for exercise in session['exercises']:
             exercise.update(name=index[exercise['source_id']]['name'],exercise_id=exercise['source_id'],media=index[exercise['source_id']]['media'],load_kg=None)
-    return dict(model_version='workout-sessions-v2',demo=True,templates=sessions,exercises=list(index.values()),unavailable_sessions=unavailable,protocols=json.loads((ROOT/'config/workout-protocols.json').read_text())['protocols'])
+    from workout_configuration import personalize
+    return personalize(dict(model_version='workout-sessions-v2',demo=True,templates=sessions,exercises=list(index.values()),unavailable_sessions=unavailable,protocols=json.loads((ROOT/'config/workout-protocols.json').read_text())['protocols']),profile.get('_workout_settings',{}))
 
 
 def session_by_id(profile,identifier):
@@ -66,9 +70,9 @@ def week_config(data):
     for key in ('demo','allow_high_intensity_demo'):
         if key in cfg and not isinstance(cfg[key],bool):raise DomainError('Opzione non valida')
     goals={g for p in json.loads((ROOT/'config/workout-protocols.json').read_text())['protocols'] for g in p['compatible_goals']}
-    if cfg.get('goal') is not None and cfg['goal'] not in goals:raise DomainError('Obiettivo non valido')
+    if cfg.get('goal') is not None and (not isinstance(cfg['goal'],str) or cfg['goal'] not in goals):raise DomainError('Obiettivo non valido')
     protocols={p['id'] for p in json.loads((ROOT/'config/workout-protocols.json').read_text())['protocols']}
-    if 'allowed_protocols' in cfg and (not isinstance(cfg['allowed_protocols'],list) or any(p not in protocols for p in cfg['allowed_protocols'])):raise DomainError('Protocolli non validi')
+    if 'allowed_protocols' in cfg and (not isinstance(cfg['allowed_protocols'],list) or any(not isinstance(p,str) or p not in protocols for p in cfg['allowed_protocols'])):raise DomainError('Protocolli non validi')
     for key in ('sessions_min','sessions_max','strength_sessions_min','strength_sessions_max','strength_gap_days'):integer(cfg[key],0,7)
     finite(cfg['weekly_minutes_max'],'Minuti settimanali',0,10080);finite(cfg['cardio_minutes_min'],'Minuti cardio',0,10080)
     if cfg['sessions_min']>cfg['sessions_max'] or cfg['strength_sessions_min']>cfg['strength_sessions_max']:raise DomainError('Limiti delle sessioni incoerenti')
@@ -92,7 +96,7 @@ async def generate_week(session,profile,data):
     from plan_diet_day import solve_problem
     from plan_recipe import values_verified
     cfg,times=week_config(data);public=catalog(profile)
-    result=dict(kind='workout',mode=profile['mode'],week_start=data['week_start'],horizon=dict(days=7),demo=cfg['demo'],status='ok',plans=[],warnings=[dict(code='workout_demo',message='Tempi e volume dei protocolli sono bozze dimostrative; carichi da configurare.')])
+    result=dict(kind='workout',mode=profile['mode'],week_start=data['week_start'],horizon=dict(days=7),demo=True,require_personal_configuration=not cfg['demo'],configuration_hash=configuration_hash(profile),status='ok',plans=[],warnings=[dict(code='workout_demo',message='Tempi e volume dei protocolli sono bozze dimostrative; i carichi sono personali solo se dichiarati.')])
     signatures=set()
     for mode in ('time','coverage'):
         try:problem,slots=formulate(cfg,public,mode)
@@ -124,6 +128,7 @@ def planned(db,user,identifier):
 def day_workout(db,user,date):
     row=db.execute("SELECT s.* FROM planned_session s JOIN week_plan w ON w.id=s.week_plan_id WHERE w.user_id=? AND s.date=? AND w.status='active' ORDER BY s.id DESC LIMIT 1",(user,date)).fetchone()
     log=db.execute('SELECT * FROM workout_log WHERE user_id=? AND date=? ORDER BY id DESC LIMIT 1',(user,date)).fetchone()
+    if log and (not row or log['planned_session_id']!=row['id']):row=None
     if not row and not log:return None
     snapshot=json.loads(row['snapshot'] if row else log['snapshot']);first=snapshot['exercises'][0].get('media') or {}
     image=first.get('illustrative_image') or {}
@@ -132,6 +137,8 @@ def day_workout(db,user,date):
 
 def apply_week(db,user,profile,plan_set,plan,data):
     import time
+    integer(data.get('plan_id'),1,2**63-1)
+    if plan_set.get('configuration_hash') and plan_set['configuration_hash']!=configuration_hash(profile):raise DomainError('Configurazione palestra cambiata; rigenera la settimana prima di applicarla','configuration_changed',409)
     if data.get('scope')!='week':raise DomainError('La settimana palestra richiede scope week')
     start=valid_date(plan_set['week_start'])
     row=db.execute("SELECT id FROM week_plan WHERE user_id=? AND week_start=? AND status='active'",(user,start)).fetchone()
@@ -152,6 +159,11 @@ def apply_week(db,user,profile,plan_set,plan,data):
 def now():return dt.datetime.now(ZoneInfo('Europe/Rome')).isoformat()
 
 
+def configuration_hash(profile):
+    from workout_configuration import defaults
+    return hashlib.sha256(json.dumps(dict(defaults(),**profile.get('_workout_settings',{})),sort_keys=True).encode()).hexdigest()
+
+
 def own_log(db,user,identifier):
     row=db.execute('SELECT * FROM workout_log WHERE id=? AND user_id=?',(identifier,user)).fetchone()
     if row is None:raise DomainError('Allenamento non trovato','not_found',404)
@@ -166,6 +178,7 @@ def mutation(db,user,profile,action,data,log_id=None):
         if p and (p['date']!=date or p['session_id']!=identifier):raise DomainError('Sessione e data non corrispondono al piano')
         if p and p['status'] in ('done','skipped'):raise DomainError('Sessione già conclusa','conflict',409)
         snapshot=json.loads(p['snapshot']) if p else session_by_id(profile,identifier)
+        if not p and not snapshot['equipment_feasible']:raise DomainError('Attrezzatura o variante non compatibile con la configurazione personale')
         existing=db.execute('SELECT id FROM workout_log WHERE user_id=? AND planned_session_id=?',(user,p['id'])).fetchone() if p else db.execute('SELECT id FROM workout_log WHERE user_id=? AND date=? AND session_id=? AND ended IS NULL AND planned_session_id IS NULL',(user,date,identifier)).fetchone()
         log_id=existing['id'] if existing else db.execute('INSERT INTO workout_log(user_id,date,planned_session_id,session_id,started,snapshot) VALUES(?,?,?,?,?,?)',(user,date,p['id'] if p else None,identifier,now(),json.dumps(snapshot))).lastrowid
         if p:db.execute("UPDATE planned_session SET status='in_progress' WHERE id=?",(p['id'],))

@@ -2,6 +2,7 @@
 import datetime as dt
 import json
 import math
+import re
 import sqlite3
 import time
 import unicodedata
@@ -220,31 +221,39 @@ def apply_plan(db,user,profile,plan_set,plan,data):
     result=day_view(db,user,profile,dates[0]);result.update(skipped_slots=skipped,applied_slots=applied);return result
 
 def search_foods(db,user,profile,q,limit):
-    if not isinstance(q,str) or not 1<=len(q)<=100:raise DomainError('Ricerca non valida')
-    integer(limit,1,50);needle=fold(q);found=[]
+    if not isinstance(q,str) or not 1<=len(q.strip())<=100:raise DomainError('Ricerca non valida')
+    integer(limit,1,50);needle=fold(q.strip());found=[]
+    aliases={'mela':'mele','uovo':'uova','patata':'patate','pomodoro':'pomodori','pera':'pere','banana':'banane','zucchina':'zucchine','carota':'carote'}
+    aliases.update({v:k for k,v in list(aliases.items())})
+    needles=[needle]+([aliases[needle]] if needle in aliases else [])
+    def matches(name):return any(term in fold(name) for term in needles)
     for identifier,row in products(profile.get('food_preferences',{})).items():
-        if needle in fold(row['name']):found.append(resolve_food(dict(source='user_label',id=identifier),profile))
+        if matches(row['name']):found.append(resolve_food(dict(source='user_label',id=identifier),profile))
     used=db.execute('SELECT DISTINCT food FROM diary_entry WHERE user_id=? ORDER BY updated DESC LIMIT 100',(user,)).fetchall()
     for row in used:
         try:food=resolve_food(json.loads(row['food']),profile)
         except DomainError:continue
-        if needle in fold(food['name']):found.append(food)
+        if matches(food['name']):found.append(food)
     with sqlite3.connect(ROOT/'dataset/open_food_facts/catalog.sqlite') as off:
         off.create_function('fold',1,fold)
-        rows=off.execute("SELECT barcode FROM products WHERE fold(name || ' ' || brands) LIKE ? ESCAPE '\\' ORDER BY barcode LIMIT ?",('%'+needle.replace('%','\\%').replace('_','\\_')+'%',500)).fetchall()
+        conditions=" OR ".join("fold(name || ' ' || brands) LIKE ? ESCAPE '\\'" for _ in needles)
+        patterns=['%'+term.replace('%','\\%').replace('_','\\_')+'%' for term in needles]
+        rows=off.execute('SELECT barcode FROM products WHERE '+conditions+' ORDER BY barcode LIMIT 500',patterns).fetchall()
     for row in rows:found.append(resolve_food(dict(source='OFF',id=row[0]),profile))
     for identifier,row in crea().items():
-        if not identifier.startswith('recipe:') and needle in fold(row['name']):found.append(resolve_food(dict(source='CREA',id=identifier),profile))
+        if not identifier.startswith('recipe:') and matches(row['name']):found.append(resolve_food(dict(source='CREA',id=identifier),profile))
     seen=set();result=[]
     for item in found:
         key=(item['food']['source'],item['food']['id'])
         if key not in seen:seen.add(key);result.append(item)
     def ranking(item):
-        name=fold(item['name']);tokens=name.split();words=needle.split()
-        relevance=0 if name==needle else 1 if all(w in tokens for w in words) else 2 if name.startswith(needle) else 3
+        name=fold(item['name']);tokens=re.findall(r'\w+',name);words=needle.split()
+        generic_exact=item['food']['source']=='CREA' and len(words)==1 and name.split(',')[0].strip() in needles
+        relevance=0 if name in needles or generic_exact else 1 if any(all(w in tokens for w in term.split()) for term in needles) else 2 if any(name.startswith(term) for term in needles) else 3
         complete=all(v is not None for v in item['per_100g'].values())
         source_priority={'user_label':0,'CREA':1,'OFF':2,'recipe':3}
-        return relevance,not complete,source_priority[item['food']['source']],name,item['food']['id']
+        fresh_priority=0 if generic_exact and any(word in tokens for word in ('fresche','crude','fresco','crudo')) else 1
+        return relevance,not complete,source_priority[item['food']['source']],fresh_priority,name,item['food']['id']
     return sorted(result,key=ranking)[:limit]
 
 def add_measurement(db,user,data):

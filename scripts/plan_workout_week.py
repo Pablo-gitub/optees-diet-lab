@@ -33,7 +33,9 @@ def formulate(config, catalog, mode):
     ):
         raise ValueError('Muscle proxy targets must be finite and positive')
     templates = [t for t in catalog['templates']
-                 if (not config.get('goal') or config['goal'] in t.get('compatible_goals', []))
+                 if t.get('equipment_feasible',True)
+                 and (t.get('format')!='intervals' or t.get('high_intensity_ready',True))
+                 and (not config.get('goal') or config['goal'] in t.get('compatible_goals', []))
                  and (not config.get('allowed_protocols') or t.get('protocol_id') in config['allowed_protocols'])
                  and (config.get('allow_high_intensity_demo',False) or t.get('format')!='intervals')
                  and (config.get('demo',False) or not t.get('pending_configuration'))]

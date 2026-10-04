@@ -26,6 +26,7 @@ from target_validation import profile_target_warnings
 from multiobjective_day import solve_strategy, nondominated, choose_arm, STRATEGIES
 import diary_service as diary
 import workout_service as workouts
+import workout_configuration as workout_settings
 from day_orchestration import orchestrate_day, context_key
 from health_inputs import load_report as load_health_report, algorithm_inputs as health_algorithm_inputs
 from mcp import ClientSession, StdioServerParameters
@@ -49,6 +50,7 @@ def connect():
 def owner_profile(user):
     profile=json.loads(user['profile'])
     with connect() as db:
+        profile['_workout_settings']=workout_settings.read(db,user['id'])
         profile['_recipe_runs']={'run:'+str(r['id']):json.loads(r['payload']) for r in db.execute('SELECT id,payload FROM recipe_runs WHERE user_id=?',(user['id'],))}
     return profile
 
@@ -117,6 +119,9 @@ def initialize():
             access.chmod(0o600)
     with connect() as db:
         diary.migrate(db)
+        legacy=db.execute("SELECT id,profile FROM users WHERE username='paolo'").fetchone()
+        if legacy and json.loads(legacy['profile']).get('personal_diets'):
+            workout_settings.seed_legacy_equipment(db,legacy['id'],ROOT/'data/personal/equipment.json')
         db.execute("UPDATE job SET state='failed',error=? WHERE state IN ('queued','running')",(json.dumps(dict(code='interrupted',detail='Calcolo interrotto dal riavvio; riprova.')),))
     DB.chmod(0o600)
 
@@ -801,3 +806,22 @@ def planned_workout(planned_id:int,request:Request):
     user=identity(request)
     with connect() as db:
         value=dict(workouts.planned(db,user['id'],planned_id));value['session']=json.loads(value.pop('snapshot'));return value
+
+
+@app.get('/api/workouts/config')
+def read_workout_config(request:Request):
+    user=identity(request);profile=owner_profile(user);public=workouts.catalog(profile)
+    return workout_settings.view(profile['_workout_settings'],public)
+
+@app.patch('/api/workouts/config')
+async def update_workout_config(request:Request):
+    user=identity(request,True);data=await request.json()
+    with connect() as db:
+        settings=workout_settings.update(workout_settings.read(db,user['id']),data)
+        # Compile every overridden protocol before committing; invalid EMOM recovery is rejected.
+        profile=owner_profile(user);profile['_workout_settings']=settings
+        public=workouts.catalog(profile)
+        db.execute('INSERT INTO workout_configuration(user_id,settings,updated) VALUES(?,?,?) ON CONFLICT(user_id) DO UPDATE SET settings=excluded.settings,updated=excluded.updated',(user['id'],json.dumps(settings),workouts.now()))
+        result=diary.day_view(db,user['id'],profile,diary.local_today().isoformat())
+        result['workout_configuration']=workout_settings.view(settings,public)
+        return result

@@ -10,6 +10,11 @@ from test_recipe_solver import solve
 
 
 class WorkoutAPI(diary_tests.DiaryTests):
+    def setUp(self):
+        super().setUp()
+        settings=dict(level='beginner',equipment=['cyclette','vogatore_acqua','tapis_roulant_inclinabile','ellittica'],intensity_confirmed=True)
+        response=self.client.patch('/api/workouts/config',json=settings,headers=self.headers)
+        self.assertEqual(response.status_code,200,response.text)
     def seed(self,session_id='hypertrophy_basic',offset=0):
         session=self.app.workouts.session_by_id({},session_id)
         date=(dt.date.fromisoformat(self.date)+dt.timedelta(days=offset)).isoformat()
@@ -101,7 +106,7 @@ class WorkoutAPI(diary_tests.DiaryTests):
             self.assertTrue(session['demo']);self.assertTrue(session['pending_configuration'])
             self.assertTrue(all(e['load_kg'] is None for e in session['exercises']))
         data=self.request()
-        for patch_ in [dict(days={}),dict(excluded_days=['1999-01-01']),dict(start_times={self.date:'99:99'}),dict(sessions_min=True),dict(goal='invented')]:
+        for patch_ in [dict(days={}),dict(excluded_days=['1999-01-01']),dict(start_times={self.date:'99:99'}),dict(sessions_min=True),dict(goal='invented'),dict(allowed_protocols=[{}])]:
             self.assertEqual(self.client.post('/api/workouts/week',json=dict(data,**patch_),headers=self.headers).status_code,400)
         data['days']={d:1 for d in data['days']}
         result=asyncio.run(self.app.workouts.generate_week(None,self.profile,data));self.assertEqual(result['status'],'infeasible');self.assertFalse(result['plans'])

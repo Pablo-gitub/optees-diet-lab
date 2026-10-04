@@ -42,6 +42,42 @@ Il PlanSet ha `kind: "workout"`; i piani contengono `workout_sessions: [{date,se
 
 Le bozze dei protocolli restano indicate come demo. M1 richiede ancora l'interfaccia di Claude (3.2) e QA media (3.4).
 
+## Configurazione personale — passo 3.3
+
+`GET /api/workouts/config` restituisce `settings`, `missing_fields` (campo, domanda, scelte quando disponibili), `equipment_options`, `variant_options`, protocolli e stato per sessione (`equipment_feasible`, `personal_configuration_complete`, `pending_configuration`). La UI può chiedere solo i campi elencati nella sessione/protocollo scelto. La conferma per alta intensità è opzionale e riguarda solo `cardio_hiit`.
+
+`PATCH /api/workouts/config` salva solo il proprio profilo e restituisce il DayView di oggi con `workout_configuration` nello stesso formato. Esempio sintetico, **non carichi personali consigliati**:
+
+```json
+{
+  "level":"beginner",
+  "equipment":["manubri"],
+  "available_loads_kg":[4,6,8],
+  "starting_loads_kg":{"dumbbell-floor-press":4,"dumbbell-deadlift":6},
+  "variants":{
+    "dumbbell-floor-press":{"variant":"standard","executable":true},
+    "dumbbell-deadlift":{"variant":"standard","executable":true}
+  },
+  "intensity_confirmed":true,
+  "protocol_overrides":{"strength_sets":{"sets":2,"reps":4,"rest_seconds":120}}
+}
+```
+
+- Livelli ammessi: `beginner`, `intermediate`, `advanced`; `null` = non dichiarato. Il livello non inventa carichi o progressioni.
+- `equipment:null` = non ancora configurato, `[]` = solo corpo libero; i nuovi profili non ereditano l'inventario personale di Paolo. Una sola volta, l'inventario locale già dichiarato in `data/personal/equipment.json` viene trasferito al profilo personale originario `paolo`, se abilitato alle diete personali. Configurazioni esistenti non vengono sovrascritte. Livello, carichi, varianti e intensità restano da dichiarare.
+- Kg per **singolo manubrio**: il carico di partenza deve comparire in `available_loads_kg`. Nessun riempimento automatico dei carichi mancanti. `0` è accettato come carico esterno esplicitamente dichiarato per esercizi a corpo libero; non è un manubrio disponibile.
+- Mappe annidate (`variants`, `starting_loads_kg`, `protocol_overrides`) sono sostituzioni complete della mappa inviata; i campi di primo livello omessi restano invariati. Per cancellare una mappa inviare `{}`. Per aggiornare un solo esercizio la UI unisce la mappa corrente prima di inviarla.
+- Varianti: push-up standard, ginocchia o mani rialzate (panca); squat standard o assistito con sedia; trazioni australiane `feet_on_floor`, con barra disponibile e `australian_pullups_setup_verified:true`. Le altre varianti del catalogo sono `standard`. Le dichiarazioni `executable:false` e gli attrezzi mancanti escludono la sessione anche in modalità demo.
+- Override dei soli parametri del protocollo; la timeline viene ricompilata e l'EMOM deve conservare il recupero minimo. Un aggiornamento non valido viene rifiutato interamente. Riscaldamento e defaticamento demo non vengono trasformati in una prescrizione personalizzata.
+- Il catalogo mostra anche i template indisponibili con ragioni; il solver li esclude. Aqua bag e aqua tank sono salvabili come inventario ma restano in `pending_custom_equipment`, senza protocolli verificati.
+- `demo:false` nella richiesta settimanale richiede la configurazione personale completa per ogni candidato. **Le sessioni e il PlanSet conservano `demo:true`**, perché i protocolli derivano ancora dalle bozze: il PlanSet aggiunge `require_personal_configuration:true`. Nessuna certificazione automatica dell'efficacia individuale.
+- Gli intervalli richiedono sia `high_intensity_ready:true` nel profilo sia `allow_high_intensity_demo:true` nella richiesta, oltre ai vincoli di disponibilità. Non vengono selezionati per default.
+- Configurazione in tabella privata separata: un salvataggio del profilo dieta non la cancella. I log e i piani già applicati conservano la sessione salvata. Un candidato generato prima di una modifica della configurazione non può essere applicato: 409 `configuration_changed`, rigenerare la settimana.
+
 ## Verifica passo 3.1
 
 166 test verdi; audit con Optees reale: due candidati di settimana, 67,83 e 106 minuti entro 110, giorno escluso rispettato. I test API verificano stati, idempotenza, validazione, CSRF, proprietario, serie senza carico, protezione delle sessioni avviate e separazione dal diario.
+
+## Verifica passo 3.3
+
+175 test verdi. Audit Optees reale: settimana isometrica con profilo sintetico completamente dichiarato e `demo:false` nella richiesta; candidato verificato, `demo:true` conservato nei template e nel PlanSet. Test di assenza di carichi dedotti, separazione dei profili, migrazione dell'inventario una sola volta, invalidità atomica degli override, barra australiana, varianti, filtro HIIT, snapshot immutabile, candidati obsoleti. Raffinamento B4 verificato sul catalogo reale: query «mela» include «Mele, fresche» CREA con dati completi prima delle corrispondenze meno pertinenti. Nessuna modifica a `web/static/`.

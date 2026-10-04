@@ -48,6 +48,13 @@ class DiaryTests(unittest.TestCase):
         self.assertEqual(food['name'],'Passato di zucchine')
         self.assertTrue(food['composition_provenance']['demo'])
         self.assertEqual(food['composition_provenance']['ingredients'][0]['id'],'005735')
+    def test_real_crea_plural_names_match_singular_generic_queries(self):
+        response=self.client.get('/api/foods/search',params=dict(q='mela',limit=20))
+        self.assertEqual(response.status_code,200)
+        result=response.json()
+        self.assertTrue(any(r['food']['source']=='CREA' and r['name'].startswith('Mele,') for r in result))
+        self.assertEqual(result[0]['food']['source'],'CREA');self.assertTrue(result[0]['name'].startswith('Mele,'))
+        self.assertTrue(all(v is not None for v in result[0]['per_100g'].values()))
     def test_confirm_idempotent_edit_delete_and_reset(self):
         a=self.post('/api/diary/confirm');self.assertEqual(a.status_code,200);meal=a.json()['meals'][2]
         self.assertEqual(meal['state'],'as_planned');self.assertEqual(meal['eaten']['items'][0]['grams'],80)
