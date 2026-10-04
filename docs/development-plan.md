@@ -23,7 +23,7 @@ Il lavoro di Gemini viene sempre **rivisto** da Claude (dati e media) o da Codex
 
 ## Traguardi
 
-- **M1 — Utilizzabile** (fine fase 3): settimana pianificata, alternative davvero diverse, diario con conferma rapida, palestra con registro delle sessioni.
+- **M1 — Utilizzabile** (fine fase 3, **raggiunto il 2026-10-04**): settimana pianificata, alternative davvero diverse, diario con conferma rapida, palestra con registro delle sessioni.
 - **M2 — Fatta bene** (fine fase 6): ottimizzazione congiunta dieta + palestra, check-in del lunedì con ricalibrazione, bandit sulle prove reali, ribilanciamento dopo uno sgarro.
 - **M3 — Rifinita** (fine fase 7): app installabile sul telefono, job in background, QA completa.
 
@@ -36,10 +36,10 @@ Il lavoro di Gemini viene sempre **rivisto** da Claude (dati e media) o da Codex
 | T3 | Claude | 1.3 · revisione 0.3–0.5 · 2.1 | — |
 | T4 | Codex | 2.2 · 2.3 | Gemini: 2.5 |
 | T5 | Claude | 2.4 | **fatto** — pagina Oggi (diario con conferma, modifica, ricerca, alternative per pasto), striscia Settimana con budget, riquadri Statistiche, Piano settimanale, Progressi con misure; palestra e statistiche complete attendono 3.1 e 5.1 |
-| T6 | Codex | 3.1 · 3.3 | — |
-| T7 | Claude | 3.2 → **M1** | Gemini: 3.4 |
-| T8 | Codex | 4.1 · 4.2 | — |
-| T9 | Claude | 4.3 · 5.3 (UI su dati demo) | — |
+| T6 | Codex | 3.1 · 3.3 | **fatto** — `18ab5c6`, `dd599f5` |
+| T7 | Claude | 3.2 → **M1** | Gemini: 3.4 · **fatto** — `fcacbf2`, Gemini 6.4 `ce54515`, 3.4 `804caae`; **M1 raggiunto** |
+| T8 | Codex | 4.1 · 4.2 | **fatto** — W1–W3 `652da35`, `a8c411a`, `ee2fa5b` |
+| T9 | Claude | 4.3 · 5.3 (UI su dati demo) | 4.3 **fatto** — `c732350`; 5.3 da fare dopo 5.1/5.2 (Codex: B6–B7) |
 | T10 | Codex | 5.1 · 5.2 | Gemini: 5.4 |
 | T11 | Claude | revisione 5.x · 6.3 (UI sgarro) | Gemini: 6.4 |
 | T12 | Codex | 6.1 · 6.2 → **M2** | — |
