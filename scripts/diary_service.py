@@ -34,6 +34,8 @@ def migrate(db):
 
     columns={r[1] for r in db.execute('PRAGMA table_info(planned_meal)')}
     if 'day_index' not in columns:db.execute('ALTER TABLE planned_meal ADD COLUMN day_index INTEGER DEFAULT 0')
+    from workout_service import migrate as workout_migrate
+    workout_migrate(db)
 
 def local_today():return dt.datetime.now(ZoneInfo('Europe/Rome')).date()
 
@@ -135,7 +137,9 @@ def day_view(db,user,profile,date):
         meals.append(dict(slot=slot,state=st,planned=dict(planned_meal_id=p['id'],role=p['role'],day_index=p['day_index'],status=p['status'],locked=bool(p['locked']),items=planned_items,**totals(planned_items)) if p else None,eaten=dict(items=eaten_items,**totals(eaten_items)) if st!='unknown' else None,actions=actions))
     targets=json.loads(week['targets']) if week else (profile.get('daily_meals',{}).get('targets') if profile.get('daily_meals',{}).get('enabled') else profile['targets'])
     any_logged=any(m['state']!='unknown' for m in meals)
-    return dict(date=date,day_type='unknown',mode=week['mode'] if week else profile['mode'],week_plan_id=week['id'] if week else None,targets={k.replace('_100g',''):v for k,v in targets.items()},totals=dict(planned=totals(all_planned) if planned_count else None,eaten=totals(all_eaten) if any_logged else None,coverage=dict(logged_slots=logged,planned_slots=planned_count)),meals=meals,workout=None,warnings=[])
+    from workout_service import day_workout
+    workout=day_workout(db,user,date)
+    return dict(date=date,day_type='training' if workout and workout['status']!='skipped' else 'unknown',mode=week['mode'] if week else profile['mode'],week_plan_id=week['id'] if week else None,targets={k.replace('_100g',''):v for k,v in targets.items()},totals=dict(planned=totals(all_planned) if planned_count else None,eaten=totals(all_eaten) if any_logged else None,coverage=dict(logged_slots=logged,planned_slots=planned_count)),meals=meals,workout=workout,warnings=[])
 
 def diary_mutation(db,user,profile,action,data,entry_id=None):
     entry=None
@@ -173,9 +177,10 @@ def week_view(db,user,profile,start):
     planned_values=[v['totals']['planned']['kcal'] if v['totals']['planned'] else None for v in views]
     eaten_values=[v['totals']['eaten']['kcal'] for v in views if v['totals']['eaten'] is not None]
     remaining=[m['planned']['kcal'] for v in views for m in v['meals'] if m['planned'] and m['state']=='unknown']
-    days=[dict(date=v['date'],day_type=v['day_type'],meals=[dict(slot=m['slot'],state=m['state']) for m in v['meals']],workout=None,kcal_planned=planned_values[i],kcal_eaten=v['totals']['eaten']['kcal'] if v['totals']['eaten'] else None,coverage=v['totals']['coverage']['logged_slots']/v['totals']['coverage']['planned_slots'] if v['totals']['coverage']['planned_slots'] else None) for i,v in enumerate(views)]
+    days=[dict(date=v['date'],day_type=v['day_type'],meals=[dict(slot=m['slot'],state=m['state']) for m in v['meals']],workout=v['workout']['status'] if v['workout'] else None,kcal_planned=planned_values[i],kcal_eaten=v['totals']['eaten']['kcal'] if v['totals']['eaten'] else None,coverage=v['totals']['coverage']['logged_slots']/v['totals']['coverage']['planned_slots'] if v['totals']['coverage']['planned_slots'] else None) for i,v in enumerate(views)]
     week=db.execute("SELECT * FROM week_plan WHERE user_id=? AND week_start=? AND status='active'",(user,start)).fetchone()
-    return dict(week_start=start,plan_status=week['status'] if week else None,days=days,budget=dict(kcal_target=sum(v['targets']['kcal']['target'] for v in views),kcal_planned=sum_known(planned_values),kcal_eaten=sum_known(eaten_values) if eaten_values else None,kcal_remaining_planned=sum_known(remaining) if week else None,complete_days=sum(v['totals']['coverage']['planned_slots']>0 and v['totals']['coverage']['logged_slots']==v['totals']['coverage']['planned_slots'] for v in views)),workouts=dict(planned=0,done=0))
+    from workout_service import counts as workout_counts
+    return dict(week_start=start,plan_status=week['status'] if week else None,days=days,budget=dict(kcal_target=sum(v['targets']['kcal']['target'] for v in views),kcal_planned=sum_known(planned_values),kcal_eaten=sum_known(eaten_values) if eaten_values else None,kcal_remaining_planned=sum_known(remaining) if week else None,complete_days=sum(v['totals']['coverage']['planned_slots']>0 and v['totals']['coverage']['logged_slots']==v['totals']['coverage']['planned_slots'] for v in views)),workouts=workout_counts(db,user,start))
 
 def apply_plan(db,user,profile,plan_set,plan,data):
     scope=data.get('scope')

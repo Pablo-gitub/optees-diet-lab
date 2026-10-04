@@ -101,7 +101,7 @@ Consegna preparata per i passi 0.3–0.5: [prompt per Gemini](gemini-handoff-pha
 
 | # | Passo | Chi | Dim. | Fatto quando | Stato |
 |---|---|---|---|---|---|
-| 3.1 | API palestra: catalogo sessioni, settimana da `plan_workout_week.py` con disponibilità (minuti per giorno, giorni esclusi), registro sessione eseguita (esercizi, serie, ripetizioni, kg, RPE) | Codex | M | test API; sessioni eseguite separate da quelle pianificate | da fare |
+| 3.1 | API palestra: catalogo sessioni, settimana da `plan_workout_week.py` con disponibilità (minuti per giorno, giorni esclusi), registro sessione eseguita (esercizi, serie, ripetizioni, kg, RPE) | Codex | M | test API; sessioni eseguite separate da quelle pianificate | **fatto** — commit di chiusura 3.1, 166 test verdi; audit Optees reale: 2 settimane candidate verificate (67,83 e 106 minuti); [consegna backend](backend-handoff-workouts.md) |
 | 3.2 | UI **Allenamento**: settimana, dettaglio sessione con cronologia (riscaldamento/lavoro/recuperi), immagini e video, registrazione serie rapida durante l'allenamento | Claude | L | sessione registrabile da telefono senza digitare più del necessario | da fare |
 | 3.3 | Configurazione personale dei protocolli: livello, carichi di partenza, attrezzatura reale, varianti eseguibili; le bozze demo restano marcate | Codex | M | nessun carico inventato; i campi mancanti sono chiesti all'utente | da fare |
 | 3.4 | QA media nella UI: ogni esercizio mostra immagini corrette e video funzionanti; elenco delle anomalie | Gemini | S | rapporto con screenshot; correzioni in `exercise-media.json` | da fare |
@@ -149,4 +149,4 @@ Riconoscimento dei pasti da foto, sincronizzazione live con Withings/HealthKit (
 
 | Passo | Stato | Verifica |
 |---|---|---|
-| B1–B5 | **fatto** — commit di chiusura della correzione | 162 test verdi; end-to-end HTTP con Optees reale: settimana generata e applicata → alternative pranzo applicate, cena invariata; binarie bloccate con uguaglianze; warning unico; ricerca ordinata; provenienza del passato separata dal nome |
+| B1–B5 | **fatto** — `9e45ae0` | 162 test verdi; end-to-end HTTP con Optees reale: settimana generata e applicata → alternative pranzo applicate, cena invariata; binarie bloccate con uguaglianze; warning unico; ricerca ordinata; provenienza del passato separata dal nome |

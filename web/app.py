@@ -1,6 +1,7 @@
 """Local multi-profile planner. Personal configurations are never served as static files."""
 
 import asyncio
+import datetime as dt
 import hashlib
 import hmac
 import json
@@ -24,6 +25,7 @@ from daily_meals import defaults as daily_defaults, validate as validate_daily
 from target_validation import profile_target_warnings
 from multiobjective_day import solve_strategy, nondominated, choose_arm, STRATEGIES
 import diary_service as diary
+import workout_service as workouts
 from day_orchestration import orchestrate_day, context_key
 from health_inputs import load_report as load_health_report, algorithm_inputs as health_algorithm_inputs
 from mcp import ClientSession, StdioServerParameters
@@ -642,7 +644,9 @@ def read_measurements(request:Request):
 def stats_summary(request:Request):
     values=read_measurements(request);weights=[x for x in values if x['kind']=='weight']
     insufficient=dict(status='insufficient_data',reason='Analisi completa prevista nel passo 5.1')
-    return dict(weight=dict(status='available',**weights[0],points=[[x['date'],x['value']] for x in weights]) if weights else insufficient,adherence_week=insufficient,kcal_average=insufficient,workouts=dict(status='insufficient_data',reason='Registro palestra previsto nel passo 3.1'))
+    user=identity(request);today=diary.local_today();start=(today-dt.timedelta(days=today.weekday())).isoformat()
+    with connect() as db:workout_counts=workouts.counts(db,user['id'],start)
+    return dict(weight=dict(status='available',**weights[0],points=[[x['date'],x['value']] for x in weights]) if weights else insufficient,adherence_week=insufficient,kcal_average=insufficient,workouts=dict(status='available' if any(workout_counts.values()) else 'insufficient_data',**workout_counts))
 
 
 @app.get('/api/plan-sets/{set_id}')
@@ -661,7 +665,7 @@ async def apply_plan_set(set_id:int,request:Request):
     plan=next((p for p in plan_set['plans'] if p.get('id')==data.get('plan_id')),None)
     if not plan:raise diary.DomainError('Alternativa non trovata','not_found',404)
     with connect() as db:
-        result=diary.apply_plan(db,user['id'],owner_profile(user),plan_set,plan,data)
+        result=(workouts.apply_week if plan_set.get('kind')=='workout' else diary.apply_plan)(db,user['id'],owner_profile(user),plan_set,plan,data)
         if result['applied_slots']:db.execute('UPDATE plans SET selected=1 WHERE id=? AND user_id=?',(plan['id'],user['id']))
         return result
 
@@ -682,7 +686,8 @@ async def planning_job(job_id,user_id,profile,data,kind):
         async with solver_lock:
             with connect() as db:db.execute("UPDATE job SET state='running',progress=.1 WHERE id=?",(job_id,))
             with connect() as db:
-                if kind=='meal':configuration=generate_meal_alternatives(db,user_id,profile,data,make_config)
+                if kind=='workout':configuration=None
+                elif kind=='meal':configuration=generate_meal_alternatives(db,user_id,profile,data,make_config)
                 else:
                     configuration=None
                     import datetime as dt
@@ -697,7 +702,8 @@ async def planning_job(job_id,user_id,profile,data,kind):
             async with stdio_client(StdioServerParameters(command=optees_command())) as (read,write):
                 async with ClientSession(read,write) as session:
                     await session.initialize()
-                    if kind=='week':
+                    if kind=='workout':result=await workouts.generate_week(session,profile,data)
+                    elif kind=='week':
                         context=context_key(make_config(profile,data.get('day_index',0)))
                         with connect() as db:
                             trials=db.execute('SELECT p.payload,f.rating FROM plan_feedback f JOIN plans p ON p.id=f.plan_id AND p.user_id=f.user_id WHERE f.user_id=?',(user_id,)).fetchall()
@@ -728,7 +734,8 @@ async def planning_job(job_id,user_id,profile,data,kind):
 async def enqueue_planning(request,kind):
     user=identity(request,True);profile=owner_profile(user);data=await request.json()
     if not isinstance(data,dict):raise diary.DomainError('Corpo della richiesta non valido')
-    if kind=='week':
+    if kind=='workout':workouts.week_config(data)
+    elif kind=='week':
         diary.valid_date(data.get('week_start'))
         mode=data.get('mode',profile['mode'])
         if mode not in (('free','sedentary','training') if profile['personal_diets'] else ('free',)):raise diary.DomainError('Programma non disponibile')
@@ -751,3 +758,46 @@ async def enqueue_planning(request,kind):
 async def plan_week(request:Request):return await enqueue_planning(request,'week')
 @app.post('/api/plans/meal-alternatives')
 async def meal_alternatives(request:Request):return await enqueue_planning(request,'meal')
+
+
+@app.get('/api/workouts/catalog')
+def workout_catalog(request:Request):
+    return workouts.catalog(owner_profile(identity(request)))
+
+@app.get('/api/workouts/sessions/{session_id}')
+def workout_session(session_id:str,request:Request):
+    return workouts.session_by_id(owner_profile(identity(request)),session_id)
+
+@app.get('/api/workouts/logs/{log_id}')
+def workout_log(log_id:int,request:Request):
+    user=identity(request)
+    with connect() as db:return workouts.read_log(db,user['id'],log_id)
+
+@app.get('/api/workouts/logs')
+def workout_logs(request:Request,start:str,end:str):
+    user=identity(request);diary.valid_date(start);diary.valid_date(end)
+    if end<start or (dt.date.fromisoformat(end)-dt.date.fromisoformat(start)).days>366:raise diary.DomainError('Intervallo non valido')
+    with connect() as db:return [workouts.read_log(db,user['id'],r['id']) for r in db.execute('SELECT id FROM workout_log WHERE user_id=? AND date BETWEEN ? AND ? ORDER BY date,id',(user['id'],start,end)).fetchall()]
+
+@app.post('/api/workouts/week')
+async def workout_week(request:Request):return await enqueue_planning(request,'workout')
+
+async def mutate_workout(request,action,log_id=None):
+    user=identity(request,True);data=await request.json()
+    with connect() as db:return workouts.mutation(db,user['id'],owner_profile(user),action,data,log_id)
+
+@app.post('/api/workouts/start')
+async def workout_start(request:Request):return await mutate_workout(request,'start')
+@app.post('/api/workouts/{log_id}/sets')
+async def workout_sets(log_id:int,request:Request):return await mutate_workout(request,'sets',log_id)
+@app.post('/api/workouts/{log_id}/finish')
+async def workout_finish(log_id:int,request:Request):return await mutate_workout(request,'finish',log_id)
+@app.post('/api/workouts/skip')
+async def workout_skip(request:Request):return await mutate_workout(request,'skip')
+
+
+@app.get('/api/workouts/planned/{planned_id}')
+def planned_workout(planned_id:int,request:Request):
+    user=identity(request)
+    with connect() as db:
+        value=dict(workouts.planned(db,user['id'],planned_id));value['session']=json.loads(value.pop('snapshot'));return value
