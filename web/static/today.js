@@ -330,11 +330,19 @@ function renderDayProgress(day) {
 function renderWorkout(day) {
   const box = $('day-workout');
   box.replaceChildren(element('h3', 'Attività'));
-  if (!day.workout) {
-    box.append(element('p', 'Nessun allenamento pianificato.', 'muted'), element('p', 'La pianificazione della palestra arriva nel prossimo aggiornamento.', 'muted small'));
+  const workouts = day.workouts || (day.workout ? [day.workout] : []);
+  if (!workouts.length) {
+    box.append(element('p', day.day_type === 'rest' ? 'Giornata di riposo.' : 'Nessun allenamento pianificato.', 'muted'));
+    const cta = element('button', 'Vai all’allenamento', 'secondary small');
+    cta.type = 'button';
+    cta.dataset.goto = 'workout';
+    box.append(cta);
     return;
   }
-  const w = day.workout;
+  workouts.forEach((w) => box.append(dayWorkoutItem(w, day)));
+}
+function dayWorkoutItem(w, day) {
+  const item = element('div', undefined, 'day-workout-item');
   const row = element('div', undefined, 'workout-row');
   if (w.media?.thumbnail) {
     const img = element('img', undefined, 'workout-thumb');
@@ -344,10 +352,10 @@ function renderWorkout(day) {
   }
   const st = workoutStatus[w.status] || [w.status, ''];
   const text = element('div');
-  text.append(element('strong', w.title || w.session_id), element('p', [w.minutes && Math.round(w.minutes) + ' min', w.start_time, st[0]].filter(Boolean).join(' · '), 'muted'));
+  text.append(element('strong', w.title || w.session_id), element('p', [w.minutes && Math.round(w.minutes) + ' min', w.start_time, st[0], w.planned_session_id ? null : 'fuori piano'].filter(Boolean).join(' · '), 'muted'));
   row.append(text);
-  box.append(row);
-  if (w.demo) box.append(element('p', 'Bozza dimostrativa' + (w.pending_configuration?.length ? ' · ' + w.pending_configuration.length + ' informazioni da configurare' : ''), 'muted small'));
+  item.append(row);
+  if (w.demo) item.append(element('p', 'Bozza dimostrativa' + (w.pending_configuration?.length ? ' · ' + w.pending_configuration.length + ' informazioni da configurare' : ''), 'muted small'));
   const actions = element('div', undefined, 'actions');
   const add = (label, cls, fn) => {
     const b = element('button', label, cls);
@@ -367,7 +375,8 @@ function renderWorkout(day) {
       }
     });
   } else add(w.status === 'in_progress' ? 'Continua' : 'Vedi', w.status === 'in_progress' ? 'primary small' : 'secondary small', () => openDayWorkout(w));
-  box.append(actions);
+  item.append(actions);
+  return item;
 }
 
 // ---------- Settimana ----------
@@ -483,15 +492,255 @@ function preparePlanning() {
         return o;
       }),
     );
+    select.addEventListener('change', () => availabilityInputs($('joint-availability'), select.value));
+    const saved = jointSaved();
+    $('week-joint').checked = !!saved.enabled;
+    const balance = saved.balance !== undefined ? saved.balance : profile.energy_balance_target_kcal;
+    setBalance(balance);
     planningReady = true;
   }
+  renderJointTargets();
+  availabilityInputs($('joint-availability'), select.value);
+  syncJointMode();
 }
 
-function weekPlanCard(p, set) {
-  const card = element('article', undefined, 'card week-plan');
+// ---------- Piano: settimana congiunta dieta + palestra (passo 4.3) ----------
+const nutrientRows = [
+  ['kcal_100g', 'Calorie', 'kcal', 50],
+  ['protein_g_100g', 'Proteine', 'g', 5],
+  ['carbs_available_g_100g', 'Carboidrati', 'g', 5],
+  ['fat_g_100g', 'Grassi', 'g', 5],
+];
+const dayTypeNames = { rest: 'Riposo', training: 'Allenamento' };
+const scenarioNames = { low: 'Se consumi meno del solito', central: 'Se consumi come al solito', high: 'Se consumi più del solito' };
+const sessionTitles = {};
+function jointSaved() {
+  try {
+    return JSON.parse(localStorage.getItem('diet-joint-settings') || '{}') || {};
+  } catch {
+    return {};
+  }
+}
+function jointSave(patch) {
+  try {
+    localStorage.setItem('diet-joint-settings', JSON.stringify({ ...jointSaved(), ...patch }));
+  } catch {}
+}
+function setBalance(value) {
+  const select = $('joint-balance');
+  const known = [...select.options].some((o) => o.value !== 'custom' && o.value === (value == null ? '' : String(value)));
+  select.value = value == null ? '' : known ? String(value) : 'custom';
+  if (select.value === 'custom') $('joint-balance-custom').value = value;
+  $('joint-balance-custom-wrap').hidden = select.value !== 'custom';
+}
+function readBalance() {
+  const v = $('joint-balance').value;
+  if (v === '') return null;
+  const n = Number(v === 'custom' ? $('joint-balance-custom').value : v);
+  if ($('joint-balance-custom').value === '' && v === 'custom') throw Error('Indica il bilancio calorico in kcal al giorno');
+  if (!Number.isFinite(n) || n < -1500 || n > 1500) throw Error('Bilancio calorico fra −1500 e +1500 kcal al giorno');
+  return n;
+}
+$('joint-balance').onchange = () => {
+  $('joint-balance-custom-wrap').hidden = $('joint-balance').value !== 'custom';
+  if ($('joint-balance').value === 'custom') $('joint-balance-custom').focus();
+};
+$('week-joint').onchange = () => {
+  jointSave({ enabled: $('week-joint').checked });
+  syncJointMode();
+};
+$('joint-ranges').onchange = () => $('joint-targets').classList.toggle('show-ranges', $('joint-ranges').checked);
+function syncJointMode() {
+  const on = $('week-joint').checked;
+  $('joint-options').hidden = !on;
+  $('week-mode-label').hidden = on;
+  $('week-hint').textContent = on
+    ? 'Optees combina più schede di allenamento con la dieta di 7 giorni e verifica ogni combinazione. Pasti e allenamenti già registrati restano bloccati. Il calcolo può richiedere un paio di minuti.'
+    : 'Optees propone 7 giorni completi rispettando la dieta, le porzioni e le ripetizioni. I pasti già registrati restano bloccati.';
+  $('joint-modes-note').textContent = profile?.personal_diets
+    ? 'Nei giorni di riposo vale la dieta sedentaria, in quelli di allenamento la dieta palestra. Qui scegli gli obiettivi dell’intera giornata, colazione e spuntini compresi.'
+    : 'Obiettivi dell’intera giornata, colazione e spuntini compresi. Nei giorni di allenamento puoi alzare calorie e carboidrati.';
+}
+function renderJointTargets() {
+  const base = profile.daily_meals?.targets || {};
+  const saved = jointSaved().targets || {};
+  const grid = $('joint-targets');
+  grid.classList.toggle('show-ranges', $('joint-ranges').checked);
+  const cells = [element('span'), element('strong', 'Riposo', 'tg-head'), element('strong', '🏋 Allenamento', 'tg-head')];
+  nutrientRows.forEach(([key, label, unit, step]) => {
+    cells.push(element('span', label + ' (' + unit + ')', 'tg-label'));
+    ['rest', 'training'].forEach((type) => {
+      const spec = saved[type]?.[key] || base[key] || {};
+      const cell = element('div', undefined, 'tg-cell');
+      ['min', 'target', 'max'].forEach((part) => {
+        const input = element('input');
+        input.type = 'number';
+        input.min = 0;
+        input.max = 10000;
+        input.step = step;
+        input.value = spec[part] ?? '';
+        input.dataset.type = type;
+        input.dataset.key = key;
+        input.dataset.part = part;
+        input.className = 'tg-' + part;
+        input.setAttribute('aria-label', label + ' ' + dayTypeNames[type].toLowerCase() + ' ' + (part === 'target' ? 'obiettivo' : part === 'min' ? 'minimo' : 'massimo'));
+        cell.append(input);
+      });
+      cells.push(cell);
+    });
+  });
+  grid.replaceChildren(...cells);
+}
+function readJointTargets() {
+  const out = { rest: {}, training: {} };
+  $('joint-targets')
+    .querySelectorAll('input')
+    .forEach((i) => {
+      out[i.dataset.type][i.dataset.key] = out[i.dataset.type][i.dataset.key] || {};
+      out[i.dataset.type][i.dataset.key][i.dataset.part] = Number(i.value);
+    });
+  for (const type of ['rest', 'training'])
+    for (const [key, label] of nutrientRows) {
+      const t = out[type][key];
+      if (![t.min, t.target, t.max].every(Number.isFinite) || !(t.min <= t.target && t.target <= t.max) || t.target <= 0)
+        throw Error(label + ' (' + dayTypeNames[type].toLowerCase() + '): l’obiettivo deve stare fra minimo e massimo. Attiva «Mostra intervalli» per modificarli.');
+    }
+  return out;
+}
+
+function sessionName(id) {
+  return sessionTitles[id] || id;
+}
+function weekdayShort(date) {
+  return parseDate(date).toLocaleDateString('it-IT', { weekday: 'short' });
+}
+// Differenze rispetto al piano migliore: allenamenti prima, alimenti raggruppati.
+function sessionDiffChips(diff) {
+  const box = element('div', undefined, 'diff-chips');
+  if (!diff) return box;
+  (diff.sessions_added || []).forEach((x) => box.append(element('span', '+ ' + sessionName(x.session_id) + ' ' + weekdayShort(x.date), 'chip diff-add')));
+  (diff.sessions_removed || []).forEach((x) => box.append(element('span', '− ' + sessionName(x.session_id) + ' ' + weekdayShort(x.date), 'chip diff-remove')));
+  (diff.sessions_moved || []).forEach((x) => box.append(element('span', sessionName(x.session_id) + ' ' + weekdayShort(x.from_date) + ' → ' + weekdayShort(x.to_date), 'chip diff-change')));
+  return box;
+}
+function robustReason(reason, set) {
+  if (/Bilancio/i.test(reason || '') && set.energy_balance_target_kcal == null)
+    return 'Indica il bilancio calorico che vuoi (anche «Mantenimento») per sapere quanto ogni settimana regge se consumi più o meno del solito.';
+  return (
+    'Per valutarla servono dati Apple Salute recenti (almeno 7 giornate complete nelle ultime 4 settimane) e, per ogni attività pianificata, almeno 3 allenamenti dello stesso tipo registrati negli ultimi 90 giorni. Puoi importare l’export in Progressi.'
+  );
+}
+function robustnessSummary(set) {
+  const box = $('week-robustness');
+  box.replaceChildren();
+  const r = set.robust_selection;
+  if (!r) return;
+  if (r.status === 'unavailable' || !r.comparable_candidates) {
+    const n = element('div', undefined, 'notice robust-off');
+    const t = element('span');
+    t.append(element('strong', 'Robustezza non valutata. '), document.createTextNode(robustReason(r.reason, set)));
+    n.append(t);
+    box.append(n);
+    return;
+  }
+  const n = element('div', undefined, 'notice robust-on');
+  const t = element('span');
+  n.append(t);
+  t.append(
+    element('strong', 'Robustezza valutata. '),
+    document.createTextNode(
+      'Ogni settimana è stata messa alla prova con tre scenari di consumo ricavati da Apple Salute. ' +
+        'Il confronto riguarda le ' + r.comparable_candidates + ' combinazioni calcolate, non tutte quelle possibili.' +
+        (r.status === 'local_finite_pool' ? ' Classifica calcolata localmente: il selettore di Optees non era disponibile.' : ''),
+    ),
+  );
+  box.append(n);
+}
+function robustnessBlock(p, set, scale) {
+  const r = p.robustness || {};
+  const box = element('div', undefined, 'robust-box');
+  if (r.status !== 'available') {
+    if (set.robust_selection?.comparable_candidates) box.append(element('p', 'Robustezza non valutabile per questa combinazione: mancano gli scenari di consumo per alcuni giorni.', 'muted small'));
+    return box.childElementCount ? box : null;
+  }
+  const balance = r.energy_balance_target_kcal;
+  box.append(element('h4', 'Se il tuo consumo cambia'));
+  const rows = element('div', undefined, 'scenario-rows');
+  ['low', 'central', 'high'].forEach((s) => {
+    const loss = r.scenarios[s];
+    const row = element('div', undefined, 'scenario-row' + (loss === r.max_loss_kcal ? ' worst' : ''));
+    const bar = element('span', undefined, 'scenario-bar');
+    const fill = element('i');
+    fill.style.width = Math.max(3, Math.min(100, (loss / scale) * 100)) + '%';
+    bar.append(fill);
+    row.append(element('span', scenarioNames[s], 'scenario-name'), bar, element('span', '± ' + fmt0(loss) + ' kcal', 'scenario-value'));
+    rows.append(row);
+  });
+  box.append(rows);
+  const goal = balance === 0 ? 'dal pareggio fra calorie mangiate e consumate' : 'dal ' + (balance < 0 ? 'deficit' : 'surplus') + ' di ' + fmt0(Math.abs(balance)) + ' kcal che hai scelto';
+  box.append(element('p', 'Nel caso peggiore ti allontani in media di ' + fmt0(r.max_loss_kcal) + ' kcal al giorno ' + goal + '.', 'small'));
+  if (r.max_regret_kcal != null)
+    box.append(
+      element(
+        'p',
+        p.role === 'robust'
+          ? 'È la combinazione più prudente: in qualunque scenario resta al massimo ' + fmt0(r.max_regret_kcal) + ' kcal al giorno dalla scelta migliore per quello scenario.'
+          : 'Rispetto alla scelta migliore per ciascuno scenario perde al massimo ' + fmt0(r.max_regret_kcal) + ' kcal al giorno.',
+        'muted small',
+      ),
+    );
+  const days = p.days || [];
+  const low = days.reduce((a, d) => a + (d.energy_scenarios?.consumption_kcal?.low || 0), 0) / (days.length || 1);
+  const high = days.reduce((a, d) => a + (d.energy_scenarios?.consumption_kcal?.high || 0), 0) / (days.length || 1);
+  if (low && high) box.append(element('p', 'Consumo stimato da Apple Salute: ' + fmt0(low) + '–' + fmt0(high) + ' kcal al giorno, allenamenti contati una sola volta.', 'muted small'));
+  return box;
+}
+function jointDayRow(d) {
+  const row = element('div', undefined, 'wp-day joint-day' + (d.day_type === 'training' ? ' training' : ''));
+  const sessions = (d.workout_sessions || []).map((s) => (s.session?.title || sessionName(s.session_id)) + ' · ' + fmt0(s.minutes) + ' min');
+  const meals = ['lunch', 'dinner']
+    .map((meal) => {
+      const foods = (d.selections || []).filter((s) => s.meal === meal).map((s) => String(s.food).split(',')[0]);
+      return foods.length ? mealMeta[meal][0] + ': ' + foods.slice(0, 3).join(', ') : null;
+    })
+    .filter(Boolean)
+    .join(' · ');
+  const what = element('div', undefined, 'wp-foods');
+  if (sessions.length) what.append(element('span', '🏋 ' + sessions.join(' + '), 'wp-session'));
+  what.append(element('span', meals || '—'));
+  const target = d.targets?.kcal_100g?.target;
+  row.append(
+    element('strong', parseDate(d.date).toLocaleDateString('it-IT', { weekday: 'short', day: 'numeric' })),
+    element('span', dayTypeNames[d.day_type] || '—', 'day-type-pill ' + (d.day_type || '')),
+    what,
+    element('span', fmt0(d.nutrients?.kcal) + (target ? ' / ' + fmt0(target) : '') + ' kcal', 'wp-kcal'),
+  );
+  return row;
+}
+function weekPlanCard(p, set, scale) {
+  const joint = set.kind === 'joint';
+  const card = element('article', undefined, 'card week-plan' + (joint ? ' joint-plan' : ''));
   const header = element('div', undefined, 'card-header');
-  header.append(roleBadge(p.role), element('span', p.status === 'optimal' ? 'Ottimo certificato' : 'Verificata', 'tag'));
-  card.append(header, explanationBlock(p));
+  const tags = element('span', undefined, 'card-tags');
+  tags.append(element('span', p.status === 'optimal' ? 'Ottimo certificato' : 'Verificata', 'tag'));
+  if (joint && p.demo) tags.append(element('span', 'Allenamento dimostrativo', 'tag tag-warn'));
+  header.append(roleBadge(p.role), tags);
+  card.append(header);
+  if (joint) {
+    const e = p.explanation || {};
+    const ex = element('div', undefined, 'explanation');
+    if (e.headline) ex.append(element('p', e.headline, 'headline'));
+    const chips = sessionDiffChips(p.diff);
+    if (chips.childElementCount) ex.append(chips);
+    const foodChanges = (p.diff?.days || []).reduce((a, d) => a + (d.added?.length || 0) + (d.removed?.length || 0) + (d.changed?.length || 0), 0);
+    if (foodChanges) {
+      const more = element('details', undefined, 'diff-more');
+      more.append(element('summary', foodChanges + (foodChanges === 1 ? ' differenza' : ' differenze') + ' negli alimenti rispetto a «Il migliore»'), diffChips(p.diff));
+      ex.append(more);
+    }
+    if (p.status === 'partial') ex.append(element('p', 'Soluzione verificata; ottimo non certificato entro il tempo di calcolo.', 'muted small'));
+    card.append(ex);
+  } else card.append(explanationBlock(p));
   const days = p.days || [];
   const avg = days.length ? days.reduce((a, d) => a + (d.nutrients?.kcal || 0), 0) / days.length : null;
   const hero = element('div', undefined, 'plan-hero');
@@ -500,9 +749,27 @@ function weekPlanCard(p, set) {
   const left = element('div');
   left.append(k, element('div', 'Media dei 7 giorni', 'hero-caption'));
   hero.append(left);
+  if (joint) {
+    const sessions = p.workout_sessions || [];
+    const stats = element('div', undefined, 'hero-stats');
+    const stat = (value, label, title) => {
+      const s = element('div', undefined, 'hero-stat');
+      s.append(element('strong', value), element('span', label));
+      if (title) s.title = title;
+      stats.append(s);
+    };
+    stat(fmt0(p.objectives?.training_minutes) + ' min', sessions.length + (sessions.length === 1 ? ' allenamento' : ' allenamenti'));
+    if (p.objectives?.training_fit != null) stat(Math.round(p.objectives.training_fit * 100) + '%', 'obiettivi di allenamento', 'Stima della copertura dei gruppi muscolari e dei minuti di cardio impostati: non misura l’efficacia.');
+    hero.append(stats);
+  }
   card.append(hero);
+  if (joint) {
+    const robust = robustnessBlock(p, set, scale);
+    if (robust) card.append(robust);
+  }
   const list = element('div', undefined, 'week-plan-days');
   days.forEach((d) => {
+    if (joint) return list.append(jointDayRow(d));
     const row = element('div', undefined, 'wp-day');
     const main = ['lunch', 'dinner']
       .map((meal) => {
@@ -515,7 +782,7 @@ function weekPlanCard(p, set) {
     list.append(row);
   });
   card.append(list);
-  const apply = element('button', 'Usa questa settimana', 'primary card-cta');
+  const apply = element('button', joint ? 'Usa dieta e allenamenti' : 'Usa questa settimana', 'primary card-cta');
   apply.type = 'button';
   apply.onclick = async () => {
     apply.disabled = true;
@@ -523,12 +790,17 @@ function weekPlanCard(p, set) {
       const r = await api('plan-sets/' + set.run_id + '/apply', 'POST', { plan_id: p.id, scope: 'week' });
       const applied = r.applied_slots?.length || 0,
         skipped = r.skipped_slots?.length || 0;
-      message('Settimana pianificata: ' + applied + ' pasti' + (skipped ? ', ' + skipped + ' già registrati lasciati invariati' : ''));
+      const sessions = (r.applied_slots || []).filter((x) => x.session_id).length;
+      message(
+        joint
+          ? 'Settimana pianificata: ' + (applied - sessions) + ' pasti e ' + sessions + (sessions === 1 ? ' allenamento' : ' allenamenti') + (skipped ? ' · ' + skipped + ' già registrati lasciati invariati' : '')
+          : 'Settimana pianificata: ' + applied + ' pasti' + (skipped ? ', ' + skipped + ' già registrati lasciati invariati' : ''),
+      );
       const today = isoDate(new Date());
       homeDate = mondayOf(today) === set.week_start ? today : set.week_start;
       document.querySelector('.nav[data-page="home"]').click();
     } catch (e) {
-      message(e.message);
+      message(e.status === 409 ? 'Qualcosa è cambiato dopo il calcolo (pasti registrati o configurazione): genera di nuovo la settimana.' : e.message);
       apply.disabled = false;
     }
   };
@@ -536,25 +808,66 @@ function weekPlanCard(p, set) {
   return card;
 }
 
+function jointRequest() {
+  const day_targets = readJointTargets();
+  const energy_balance_target_kcal = readBalance();
+  jointSave({ targets: day_targets, balance: energy_balance_target_kcal });
+  return {
+    week_start: $('week-start').value,
+    day_targets,
+    energy_balance_target_kcal,
+    workout: { ...readAvailability($('joint-availability')), demo: true },
+  };
+}
 $('week-generate').onclick = async () => {
   const button = $('week-generate');
   const box = $('week-job');
+  const joint = $('week-joint').checked;
+  let body;
+  try {
+    body = joint ? jointRequest() : { week_start: $('week-start').value, mode: $('week-mode').value };
+  } catch (e) {
+    return message(e.message);
+  }
   button.disabled = true;
   $('week-plans').replaceChildren();
   $('week-warnings').replaceChildren();
+  $('week-robustness').replaceChildren();
   box.hidden = false;
-  const text = element('p', 'Optees sta componendo la settimana…', 'job-text');
+  const label = joint ? 'Optees sta combinando dieta e allenamento…' : 'Optees sta componendo la settimana…';
+  const text = element('p', label, 'job-text');
   box.replaceChildren(element('div', undefined, 'progress-indeterminate'), text);
   try {
-    const { job_id } = await api('plans/week', 'POST', { week_start: $('week-start').value, mode: $('week-mode').value });
-    const job = await waitJob(job_id, (s) => (text.textContent = 'Optees sta componendo la settimana… ' + s + ' s'));
+    const { job_id } = await api(joint ? 'plans/joint-week' : 'plans/week', 'POST', body);
+    const job = await waitJob(job_id, (s) => (text.textContent = label + ' ' + s + ' s'));
     const set = await api('plan-sets/' + job.result.plan_set_id);
     set.week_start = set.week_start || $('week-start').value;
-    renderWarnings($('week-warnings'), set.warnings);
-    $('week-plans').replaceChildren(...set.plans.map((p) => weekPlanCard(p, set)));
+    if (joint) {
+      set.energy_balance_target_kcal = body.energy_balance_target_kcal;
+      set.plans.forEach((p) => (p.workout_sessions || []).forEach((s) => (sessionTitles[s.session_id] = s.session?.title || s.session?.name || s.session_id)));
+    }
+    // Robustness gets its own plain-language summary instead of the raw backend warnings.
+    const robustAvailable = set.robust_selection && set.robust_selection.status !== 'unavailable';
+    renderWarnings(
+      $('week-warnings'),
+      (set.warnings || [])
+        .filter((w) => w.code !== 'robustness_unavailable' && (w.code !== 'robust_role_omitted' || robustAvailable))
+        .map((w) => (w.code === 'robust_role_omitted' ? { message: 'Nessuna combinazione abbastanza diversa da proporre come «Più robusto»: la più stabile coincide con una di quelle mostrate.' } : w)),
+    );
+    if (joint) robustnessSummary(set);
+    const scale = Math.max(1, ...set.plans.map((p) => p.robustness?.max_loss_kcal || 0));
+    $('week-plans').replaceChildren(...set.plans.map((p) => weekPlanCard(p, set, scale)));
     if (set.plans.length === 1) $('week-warnings').append(element('p', 'Con questi vincoli Optees ha trovato una sola proposta valida per la settimana.', 'notice'));
+    if (!set.plans.length) $('week-warnings').append(element('p', joint ? 'Nessuna combinazione rispetta tempi, obiettivi e vincoli: aumenta i minuti disponibili o allarga gli intervalli.' : 'Nessuna settimana rispetta i vincoli.', 'error'));
   } catch (e) {
-    $('week-warnings').replaceChildren(element('p', e.message, 'error'));
+    const box = $('week-warnings');
+    box.replaceChildren(element('p', e.message, 'error'));
+    if (/colazione e spuntini/i.test(e.message)) {
+      const go = element('button', 'Apri il profilo', 'secondary small');
+      go.type = 'button';
+      go.dataset.goto = 'profile';
+      box.append(go);
+    }
   } finally {
     box.hidden = true;
     button.disabled = false;

@@ -48,3 +48,14 @@ In **Oggi** la scheda Attività ha Inizia/Apri/Salta/Continua; la striscia della
 ### Esito Codex W1–W3
 
 176 test verdi. DayView espone `workouts` (piani e log liberi senza duplicare un log collegato), mantenendo `workout` per compatibilità. `configuration_at_start` rende esplicito lo snapshot nei log e nelle schede. `minutes` è arrotondato al minuto, `duration_seconds` e i vincoli del solver restano esatti.
+
+## 4.3 — Settimana congiunta nella UI (Claude, 2026-10-04)
+
+In **Piano → Settimana** l'opzione «Pianifica anche l'allenamento» chiama `POST /api/plans/joint-week` con: minuti per giorno (condivisi con la pagina Allenamento), `day_targets` riposo/allenamento (partono da `daily_meals.targets` del profilo; intervalli modificabili), `energy_balance_target_kcal` esplicito (`null` = non indicato, 0 = mantenimento) e `workout.demo:true`. Le scelte restano nel browser (`diet-joint-settings`). Le card congiunte mostrano tipo di giornata, sessioni, kcal/obiettivo del giorno, differenze di sessioni (aggiunte/tolte/spostate) e, in un riquadro richiudibile, le differenze negli alimenti. La robustezza è spiegata con i tre scenari di consumo (errore medio giornaliero), il caso peggiore e il rimpianto; i warning `robustness_unavailable`/`robust_role_omitted` sono sostituiti da spiegazioni in chiaro. W1 e W2 sono usati: Oggi e Allenamento mostrano tutte le sessioni del giorno (con «fuori piano»), e una sessione avviata prima di completare la configurazione lo spiega.
+
+### Osservazioni per Codex
+
+| # | Osservazione | Proposta |
+|---|---|---|
+| B6 | `GET /api/profile` aggiunge `daily_meals` di default (abilitato per i profili personali), ma `owner_profile` no: con un profilo mai salvato la settimana congiunta risponde 400 «Attiva colazione e spuntini» anche se il profilo mostra l'opzione attiva | applicare lo stesso default in `owner_profile` (o salvarlo alla creazione dell'utente) |
+| B7 | Il ruolo `explore` può avere la stessa scheda palestra di `varied` e differire solo nella dieta | valutare la diversità minima anche sulle sessioni quando il pool palestra ha più candidati |

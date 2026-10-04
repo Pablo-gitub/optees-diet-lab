@@ -138,15 +138,45 @@
           <div data-plan-panel="week">
             <div class="control-card">
               <div class="controls">
-                <label>Programma<select id="week-mode"></select></label>
+                <label id="week-mode-label">Programma<select id="week-mode"></select></label>
                 <label>Settimana<select id="week-start"></select></label>
                 <span></span>
                 <button id="week-generate" type="button" class="primary">Genera la settimana</button>
               </div>
-              <p class="hint"><span>Optees propone 7 giorni completi rispettando la dieta, le porzioni e le ripetizioni. I pasti già registrati restano bloccati.</span></p>
+              <label class="switch-row"><input type="checkbox" id="week-joint" /> <span><strong>Pianifica anche l’allenamento</strong> Dieta e palestra calcolate insieme: nei giorni di allenamento valgono obiettivi diversi.</span></label>
+              <div id="joint-options" class="joint-options" hidden>
+                <div class="joint-block">
+                  <h3>Minuti per l’allenamento</h3>
+                  <p class="muted small">Riscaldamento e recuperi compresi; 0 = nessun allenamento quel giorno.</p>
+                  <div id="joint-availability" class="availability"></div>
+                </div>
+                <div class="joint-block">
+                  <h3>Obiettivi della giornata intera</h3>
+                  <p id="joint-modes-note" class="muted small"></p>
+                  <div id="joint-targets" class="target-grid"></div>
+                  <label class="check small-check"><input type="checkbox" id="joint-ranges" /> Mostra e modifica gli intervalli ammessi (minimo–massimo)</label>
+                </div>
+                <div class="joint-block">
+                  <h3>Bilancio calorico</h3>
+                  <div class="balance-row">
+                    <select id="joint-balance" aria-label="Bilancio calorico">
+                      <option value="">Non indicato</option>
+                      <option value="0">Mantenimento</option>
+                      <option value="-250">Deficit leggero · −250 kcal al giorno</option>
+                      <option value="-500">Deficit · −500 kcal al giorno</option>
+                      <option value="250">Surplus leggero · +250 kcal al giorno</option>
+                      <option value="custom">Altro valore…</option>
+                    </select>
+                    <label id="joint-balance-custom-wrap" class="inline-label" hidden>kcal al giorno<input id="joint-balance-custom" type="number" step="50" min="-1500" max="1500" /></label>
+                  </div>
+                  <p class="muted small">Serve a valutare quanto ogni settimana regge se consumi più o meno del solito (dati Apple Salute). Senza bilancio questa valutazione non viene fatta.</p>
+                </div>
+              </div>
+              <p class="hint"><span id="week-hint">Optees propone 7 giorni completi rispettando la dieta, le porzioni e le ripetizioni. I pasti già registrati restano bloccati.</span></p>
             </div>
             <div id="week-job" class="job" hidden></div>
             <div id="week-warnings"></div>
+            <div id="week-robustness"></div>
             <div id="week-plans" class="cards"></div>
           </div>
 

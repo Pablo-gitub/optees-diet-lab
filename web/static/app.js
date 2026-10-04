@@ -25,7 +25,12 @@ async function api(path, method = 'GET', data) {
     body: data === undefined ? undefined : JSON.stringify(data),
   });
   const value = await response.json();
-  if (!response.ok) throw Error(typeof value.detail === 'string' ? value.detail : 'Richiesta non valida');
+  if (!response.ok) {
+    const error = Error(typeof value.detail === 'string' ? value.detail : 'Richiesta non valida');
+    error.status = response.status;
+    error.code = value.code;
+    throw error;
+  }
   return value;
 }
 function element(tag, text, className) {

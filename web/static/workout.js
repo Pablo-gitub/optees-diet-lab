@@ -54,6 +54,7 @@ function showWorkoutTab(tab) {
   });
   document.querySelectorAll('[data-wk-panel]').forEach((p) => (p.hidden = p.dataset.wkPanel !== tab));
   if (tab === 'config') renderWorkoutConfig();
+  if (tab === 'week' && wkPrepared) loadWorkoutWeek().catch((e) => message(e.message));
 }
 document.querySelectorAll('[data-wk-tab]').forEach((b) => (b.onclick = () => showWorkoutTab(b.dataset.wkTab)));
 
@@ -81,13 +82,15 @@ function prepareWorkout() {
 }
 
 function renderAvailability() {
-  const start = $('wk-week-start').value;
+  availabilityInputs($('wk-availability'), $('wk-week-start').value);
+}
+// Minuti disponibili per giorno, condivisi fra Allenamento e Piano (preferenza del browser).
+function availabilityInputs(box, start) {
   const defaults = [40, 0, 40, 0, 40, 30, 0];
   let saved = null;
   try {
     saved = JSON.parse(localStorage.getItem('diet-workout-availability') || 'null');
   } catch {}
-  const box = $('wk-availability');
   box.replaceChildren(
     ...defaults.map((d, i) => {
       const date = addDays(start, i);
@@ -103,6 +106,14 @@ function renderAvailability() {
       return label;
     }),
   );
+}
+function readAvailability(box) {
+  const inputs = [...box.querySelectorAll('input')];
+  try {
+    localStorage.setItem('diet-workout-availability', JSON.stringify(inputs.map((i) => Number(i.value) || 0)));
+  } catch {}
+  const days = Object.fromEntries(inputs.map((i) => [i.dataset.date, Math.max(0, Math.round(Number(i.value) || 0))]));
+  return { days, excluded_days: Object.keys(days).filter((d) => !days[d]) };
 }
 
 async function loadWorkoutConfig() {
@@ -128,18 +139,17 @@ async function loadWorkoutWeek() {
   const start = mondayOf(isoDate(new Date()));
   $('wk-range').textContent = shortDate(start) + ' – ' + shortDate(addDays(start, 6));
   const days = await Promise.all([0, 1, 2, 3, 4, 5, 6].map((i) => api('day?date=' + addDays(start, i))));
-  const rows = days.filter((d) => d.workout);
+  const rows = days.flatMap((d) => (d.workouts || (d.workout ? [d.workout] : [])).map((w) => [d, w]));
   const list = $('wk-sessions');
   list.replaceChildren();
   if (!rows.length) {
     list.append(element('p', 'Nessuna sessione pianificata questa settimana: generala qui sotto o scegli una sessione dal catalogo.', 'empty-inline muted'));
     return;
   }
-  rows.forEach((d) => list.append(sessionRow(d)));
+  rows.forEach(([d, w]) => list.append(sessionRow(d, w)));
 }
 
-function sessionRow(day) {
-  const w = day.workout;
+function sessionRow(day, w) {
   const st = workoutStatus[w.status] || [w.status, ''];
   const row = element('article', undefined, 'session-row ' + st[1]);
   if (w.media?.thumbnail) {
@@ -150,7 +160,7 @@ function sessionRow(day) {
   }
   const text = element('div', undefined, 'session-text');
   const title = element('strong', w.title || w.session_id);
-  text.append(title, element('span', parseDate(day.date).toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric' }).replace(/^./, (c) => c.toUpperCase()) + ' · ' + minutesText(w.minutes) + (w.start_time ? ' · ' + w.start_time : ''), 'muted'));
+  text.append(title, element('span', parseDate(day.date).toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric' }).replace(/^./, (c) => c.toUpperCase()) + ' · ' + minutesText(w.minutes) + (w.start_time ? ' · ' + w.start_time : '') + (w.planned_session_id ? '' : ' · fuori piano'), 'muted'));
   row.append(text, element('span', st[0], 'chip state-chip'));
   const actions = element('div', undefined, 'session-actions');
   const open = element('button', w.status === 'in_progress' ? 'Continua' : w.status === 'done' ? 'Vedi' : 'Apri', w.status === 'in_progress' ? 'primary small' : 'secondary small');
@@ -185,11 +195,16 @@ async function loadWorkoutCatalog() {
       head.append(element('h3', t.title || t.name), element('span', minutesText(t.duration_minutes_assumed), 'tag'));
       card.append(head, element('p', t.exercises.map(exName).join(' · '), 'muted'));
       if (!t.equipment_feasible) card.append(element('p', 'Attrezzatura mancante', 'error'));
+      const actions = element('div', undefined, 'actions');
+      const preview = element('button', 'Guarda', 'ghost small');
+      preview.type = 'button';
+      preview.onclick = () => previewWorkout(t);
       const start = element('button', 'Inizia oggi', 'secondary small');
       start.type = 'button';
       start.disabled = !t.equipment_feasible;
       start.onclick = () => startWorkout({ session_id: t.id, date: isoDate(new Date()) });
-      card.append(start);
+      actions.append(preview, start);
+      card.append(actions);
       return card;
     }),
   );
@@ -229,11 +244,7 @@ function workoutPlanCard(p, set) {
 
 $('wk-generate').onclick = async () => {
   const button = $('wk-generate');
-  const inputs = [...document.querySelectorAll('#wk-availability input')];
-  const days = Object.fromEntries(inputs.map((i) => [i.dataset.date, Math.max(0, Math.round(Number(i.value) || 0))]));
-  try {
-    localStorage.setItem('diet-workout-availability', JSON.stringify(inputs.map((i) => Number(i.value) || 0)));
-  } catch {}
+  const availability = readAvailability($('wk-availability'));
   button.disabled = true;
   $('wk-plans').replaceChildren();
   $('wk-warnings').replaceChildren();
@@ -244,8 +255,7 @@ $('wk-generate').onclick = async () => {
   try {
     const { job_id } = await api('workouts/week', 'POST', {
       week_start: $('wk-week-start').value,
-      days,
-      excluded_days: Object.keys(days).filter((d) => !days[d]),
+      ...availability,
       demo: true,
     });
     const job = await waitJob(job_id, (s) => (text.textContent = 'Optees sta componendo la settimana di allenamento… ' + s + ' s'));
@@ -285,7 +295,7 @@ async function openPlannedWorkout(plannedId) {
   try {
     const planned = await api('workouts/planned/' + plannedId);
     const day = await api('day?date=' + planned.date);
-    const logId = day.workout?.planned_session_id === plannedId ? day.workout.workout_log_id : null;
+    const logId = (day.workouts || [day.workout]).find((x) => x?.planned_session_id === plannedId)?.workout_log_id || null;
     wkCurrent = { planned, session: planned.session, date: planned.date, status: planned.status, log: logId ? await api('workouts/logs/' + logId) : null };
     renderSession();
     showWorkoutTab('session');
@@ -293,6 +303,13 @@ async function openPlannedWorkout(plannedId) {
   } catch (e) {
     message(e.message);
   }
+}
+
+function previewWorkout(session) {
+  wkCurrent = { planned: null, session, date: isoDate(new Date()), status: 'preview', log: null };
+  renderSession();
+  showWorkoutTab('session');
+  window.scrollTo({ top: 0 });
 }
 
 async function startWorkout(body) {
@@ -418,7 +435,7 @@ function exerciseCard(e, session) {
     images.slice(0, 2).forEach((src, i) => {
       const img = element('img');
       img.src = src;
-      img.alt = exName(e) + (images.length > 1 ? (i ? ' · fine movimento' : ' · inizio movimento') : '');
+      img.alt = exName(e) + (images.length > 1 ? (e.repetitions ? (i ? ' · fine movimento' : ' · inizio movimento') : ' · foto ' + (i + 1) + ' di ' + images.length) : '');
       img.loading = 'lazy';
       gallery.append(img);
     });
@@ -457,14 +474,17 @@ function renderSession() {
   }
   const { session, log } = wkCurrent;
   const status = log ? (log.ended ? 'done' : 'in_progress') : wkCurrent.status;
-  const st = workoutStatus[status] || [status, ''];
+  const st = status === 'preview' ? ['Anteprima', ''] : workoutStatus[status] || [status, ''];
   const head = element('div', undefined, 'panel session-head');
   const titleRow = element('div', undefined, 'card-header');
   titleRow.append(element('h2', session.title || session.name), element('span', st[0], 'chip state-chip ' + st[1]));
   head.append(titleRow);
   head.append(element('p', [longDate(wkCurrent.date), minutesText(session.duration_minutes_assumed), intensityText(session.intensity)].filter(Boolean).join(' · '), 'muted'));
   if (session.demo) head.append(element('p', 'Bozza dimostrativa: tempi, serie e intensità sono ipotesi da adattare a te, non una prescrizione.', 'notice warn'));
-  if (session.pending_configuration?.length) {
+  const atStart = log?.configuration_at_start;
+  if (atStart && atStart.pending_configuration?.length && wkConfig && !wkConfig.missing_fields.some((m) => !m.optional)) {
+    head.append(element('p', 'Sessione avviata il ' + shortDate(isoDate(new Date(atStart.recorded_at))) + ' con la configurazione di allora: le modifiche successive valgono dalle prossime sessioni.', 'notice'));
+  } else if (session.pending_configuration?.length) {
     const p = element('p', undefined, 'notice');
     const t = element('span', 'Da configurare per questa sessione: ' + session.pending_configuration.length + ' informazioni. ');
     const go = element('button', 'Configura', 'secondary small');
@@ -536,6 +556,13 @@ function renderSession() {
     const minutes = (new Date(log.ended) - new Date(log.started)) / 60000;
     foot.append(element('h3', 'Allenamento concluso'), element('p', [log.sets.length + (log.sets.length === 1 ? ' serie registrata' : ' serie registrate'), isFinite(minutes) ? (minutes < 1 ? 'meno di 1 min' : Math.round(minutes) + ' min') : null, log.rpe ? 'sforzo ' + log.rpe + '/10' : null].filter(Boolean).join(' · '), 'muted'));
     if (log.notes) foot.append(element('p', log.notes));
+  } else if (status === 'preview') {
+    foot.append(element('p', 'Anteprima dal catalogo: nulla viene registrato finché non inizi.', 'muted'));
+    const start = element('button', 'Inizia oggi', 'primary');
+    start.type = 'button';
+    start.disabled = !session.equipment_feasible;
+    start.onclick = () => startWorkout({ session_id: session.id, date: isoDate(new Date()) });
+    foot.append(start);
   } else if (status === 'skipped') foot.append(element('p', 'Sessione saltata.', 'muted'));
   box.append(foot);
 }
