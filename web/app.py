@@ -805,7 +805,7 @@ async def workout_skip(request:Request):return await mutate_workout(request,'ski
 def planned_workout(planned_id:int,request:Request):
     user=identity(request)
     with connect() as db:
-        value=dict(workouts.planned(db,user['id'],planned_id));value['session']=json.loads(value.pop('snapshot'));return value
+        value=dict(workouts.planned(db,user['id'],planned_id));value['session']=json.loads(value.pop('snapshot'));value['duration_seconds']=value['session']['duration_seconds'];value['minutes']=workouts.display_minutes(value['duration_seconds']);return value
 
 
 @app.get('/api/workouts/config')

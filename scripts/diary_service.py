@@ -138,9 +138,10 @@ def day_view(db,user,profile,date):
         meals.append(dict(slot=slot,state=st,planned=dict(planned_meal_id=p['id'],role=p['role'],day_index=p['day_index'],status=p['status'],locked=bool(p['locked']),items=planned_items,**totals(planned_items)) if p else None,eaten=dict(items=eaten_items,**totals(eaten_items)) if st!='unknown' else None,actions=actions))
     targets=json.loads(week['targets']) if week else (profile.get('daily_meals',{}).get('targets') if profile.get('daily_meals',{}).get('enabled') else profile['targets'])
     any_logged=any(m['state']!='unknown' for m in meals)
-    from workout_service import day_workout
-    workout=day_workout(db,user,date)
-    return dict(date=date,day_type='training' if workout and workout['status']!='skipped' else 'unknown',mode=week['mode'] if week else profile['mode'],week_plan_id=week['id'] if week else None,targets={k.replace('_100g',''):v for k,v in targets.items()},totals=dict(planned=totals(all_planned) if planned_count else None,eaten=totals(all_eaten) if any_logged else None,coverage=dict(logged_slots=logged,planned_slots=planned_count)),meals=meals,workout=workout,warnings=[])
+    from workout_service import day_workouts
+    workouts=day_workouts(db,user,date)
+    workout=max(workouts,key=lambda x:(x["workout_log_id"] or 0,x["planned_session_id"] or 0)) if workouts else None
+    return dict(date=date,day_type='training' if any(w['status']!='skipped' for w in workouts) else 'unknown',mode=week['mode'] if week else profile['mode'],week_plan_id=week['id'] if week else None,targets={k.replace('_100g',''):v for k,v in targets.items()},totals=dict(planned=totals(all_planned) if planned_count else None,eaten=totals(all_eaten) if any_logged else None,coverage=dict(logged_slots=logged,planned_slots=planned_count)),meals=meals,workout=workout,workouts=workouts,warnings=[])
 
 def diary_mutation(db,user,profile,action,data,entry_id=None):
     entry=None

@@ -36,7 +36,9 @@ def catalog(profile):
         for exercise in session['exercises']:
             exercise.update(name=index[exercise['source_id']]['name'],exercise_id=exercise['source_id'],media=index[exercise['source_id']]['media'],load_kg=None)
     from workout_configuration import personalize
-    return personalize(dict(model_version='workout-sessions-v2',demo=True,templates=sessions,exercises=list(index.values()),unavailable_sessions=unavailable,protocols=json.loads((ROOT/'config/workout-protocols.json').read_text())['protocols']),profile.get('_workout_settings',{}))
+    public=personalize(dict(model_version='workout-sessions-v2',demo=True,templates=sessions,exercises=list(index.values()),unavailable_sessions=unavailable,protocols=json.loads((ROOT/'config/workout-protocols.json').read_text())['protocols']),profile.get('_workout_settings',{}))
+    for template in public['templates']:template['minutes']=display_minutes(template['duration_seconds'])
+    return public
 
 
 def session_by_id(profile,identifier):
@@ -108,11 +110,11 @@ async def generate_week(session,profile,data):
         if solved['mathematical_status'] not in ('optimal','feasible'):continue
         values_verified(problem,solved)
         values={v['name']:v['value'] for v in solved['result']['variables']}
-        chosen=[dict(date=d,session_id=t['id'],minutes=t['duration_minutes_assumed'],start_time=times.get(d),session=copy.deepcopy(t)) for i,(d,t) in enumerate(slots) if values[f's{i}']>.5]
+        chosen=[dict(date=d,session_id=t['id'],minutes=display_minutes(t['duration_seconds']),duration_seconds=t['duration_seconds'],start_time=times.get(d),session=copy.deepcopy(t)) for i,(d,t) in enumerate(slots) if values[f's{i}']>.5]
         signature=tuple((s['date'],s['session_id']) for s in chosen)
         if signature in signatures:continue
         signatures.add(signature)
-        result['plans'].append(dict(role='best' if not result['plans'] else 'varied',workout_sessions=chosen,weekly_minutes=sum(s['minutes'] for s in chosen),constraint_report=dict(verified=True,all_respected=True),explanation=dict(headline='Meno tempo' if mode=='time' else 'Maggiore copertura muscolare stimata',reasons=['Vincoli di disponibilità e recupero verificati'],tradeoffs=[])))
+        result['plans'].append(dict(role='best' if not result['plans'] else 'varied',workout_sessions=chosen,weekly_minutes=display_minutes(sum(s['duration_seconds'] for s in chosen)),weekly_duration_seconds=sum(s['duration_seconds'] for s in chosen),constraint_report=dict(verified=True,all_respected=True),explanation=dict(headline='Meno tempo' if mode=='time' else 'Maggiore copertura muscolare stimata',reasons=['Vincoli di disponibilità e recupero verificati'],tradeoffs=[])))
         if solved['mathematical_status']=='feasible':result['status']='partial'
     if not result['plans']:result.update(status='infeasible',infeasibility=dict(reason='Limiti settimanali non soddisfatti; nessun vincolo rilassato.'))
     return result
@@ -125,14 +127,31 @@ def planned(db,user,identifier):
     return row
 
 
+def display_minutes(seconds):return int(math.floor(seconds/60+.5))
+
+
+def configuration_at_start(log,snapshot):
+    if log is None:return None
+    return dict(source='workout_log_snapshot',recorded_at=log['started'],personal_level=snapshot.get('personal_level'),personal_configuration_complete=snapshot.get('personal_configuration_complete',False),pending_configuration=copy.deepcopy(snapshot.get('pending_configuration',[])))
+
+
+def day_workouts(db,user,date):
+    rows=db.execute("SELECT s.* FROM planned_session s JOIN week_plan w ON w.id=s.week_plan_id WHERE w.user_id=? AND s.date=? AND w.status='active' ORDER BY s.id",(user,date)).fetchall()
+    logs=db.execute('SELECT * FROM workout_log WHERE user_id=? AND date=? ORDER BY id',(user,date)).fetchall()
+    linked={log['planned_session_id']:log for log in logs if log['planned_session_id'] is not None}
+    def descriptor(row,log):
+        snapshot=json.loads(log['snapshot'] if log else row['snapshot']);first=snapshot['exercises'][0].get('media') or {};image=first.get('illustrative_image') or {}
+        seconds=snapshot['duration_seconds']
+        return dict(planned_session_id=row['id'] if row else None,session_id=snapshot['id'],title=snapshot['name'],minutes=display_minutes(seconds),duration_seconds=seconds,start_time=row['start_time'] if row else None,status=row['status'] if row else 'done' if log['ended'] else 'in_progress',media=dict(thumbnail=image.get('thumbnail_url')),workout_log_id=log['id'] if log else None,demo=snapshot['demo'],pending_configuration=snapshot['pending_configuration'],configuration_at_start=configuration_at_start(log,snapshot))
+    results=[descriptor(row,linked.get(row['id'])) for row in rows]
+    included={row['id'] for row in rows}
+    results.extend(descriptor(None,log) for log in logs if log['planned_session_id'] not in included)
+    return results
+
+
 def day_workout(db,user,date):
-    row=db.execute("SELECT s.* FROM planned_session s JOIN week_plan w ON w.id=s.week_plan_id WHERE w.user_id=? AND s.date=? AND w.status='active' ORDER BY s.id DESC LIMIT 1",(user,date)).fetchone()
-    log=db.execute('SELECT * FROM workout_log WHERE user_id=? AND date=? ORDER BY id DESC LIMIT 1',(user,date)).fetchone()
-    if log and (not row or log['planned_session_id']!=row['id']):row=None
-    if not row and not log:return None
-    snapshot=json.loads(row['snapshot'] if row else log['snapshot']);first=snapshot['exercises'][0].get('media') or {}
-    image=first.get('illustrative_image') or {}
-    return dict(planned_session_id=row['id'] if row else None,session_id=row['session_id'] if row else log['session_id'],title=snapshot['name'],minutes=row['minutes'] if row else snapshot['duration_minutes_assumed'],start_time=row['start_time'] if row else None,status=row['status'] if row else 'done' if log['ended'] else 'in_progress',media=dict(thumbnail=image.get('thumbnail_url')),workout_log_id=log['id'] if log and (not row or log['planned_session_id']==row['id']) else None,demo=snapshot['demo'],pending_configuration=snapshot['pending_configuration'])
+    results=day_workouts(db,user,date)
+    return max(results,key=lambda x:(x['workout_log_id'] or 0,x['planned_session_id'] or 0)) if results else None
 
 
 def apply_week(db,user,profile,plan_set,plan,data):
@@ -152,7 +171,7 @@ def apply_week(db,user,profile,plan_set,plan,data):
     for item in plan['workout_sessions']:
         date=item['date']
         if date in protected:continue
-        db.execute("INSERT INTO planned_session(week_plan_id,date,session_id,minutes,start_time,status,snapshot) VALUES(?,?,?,?,?,'chosen',?)",(week,date,item['session_id'],item['minutes'],item['start_time'],json.dumps(item['session'])));applied.append(dict(date=date,session_id=item['session_id']))
+        db.execute("INSERT INTO planned_session(week_plan_id,date,session_id,minutes,start_time,status,snapshot) VALUES(?,?,?,?,?,'chosen',?)",(week,date,item['session_id'],item['session']['duration_seconds']/60,item['start_time'],json.dumps(item['session'])));applied.append(dict(date=date,session_id=item['session_id']))
     view=day_view(db,user,profile,start);view.update(applied_slots=applied,skipped_slots=skipped);return view
 
 
@@ -210,6 +229,7 @@ def mutation(db,user,profile,action,data,log_id=None):
 
 def read_log(db,user,identifier):
     row=own_log(db,user,identifier);result=dict(row);result['session']=json.loads(result.pop('snapshot'))
+    result['configuration_at_start']=configuration_at_start(row,result['session'])
     result['sets']=[dict(r) for r in db.execute('SELECT * FROM set_log WHERE workout_log_id=? ORDER BY exercise_id,set_no',(identifier,))]
     return result
 

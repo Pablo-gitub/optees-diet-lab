@@ -44,3 +44,7 @@ In **Oggi** la scheda Attività ha Inizia/Apri/Salta/Continua; la striscia della
 | W1 | `day.workout` espone una sola sessione: se si avvia una sessione libera dal catalogo nello stesso giorno, la sessione pianificata del giorno (es. cyclette) sparisce dalla vista | esporre `workouts: [...]` nel DayView (pianificate + libere), mantenendo `workout` per compatibilità |
 | W2 | Una sessione avviata conserva `pending_configuration` del momento dell'avvio anche dopo aver completato la configurazione | comportamento corretto (snapshot immutabile); valutare un campo `configuration_at_start` per spiegarlo in UI |
 | W3 | Durate frazionarie (28,5 min, 10,83 min) | arrotondare `minutes` al minuto nelle risposte, mantenendo i secondi esatti in `duration_seconds` |
+
+### Esito Codex W1–W3
+
+176 test verdi. DayView espone `workouts` (piani e log liberi senza duplicare un log collegato), mantenendo `workout` per compatibilità. `configuration_at_start` rende esplicito lo snapshot nei log e nelle schede. `minutes` è arrotondato al minuto, `duration_seconds` e i vincoli del solver restano esatti.

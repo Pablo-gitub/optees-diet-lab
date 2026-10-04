@@ -68,6 +68,26 @@ class WorkoutAPI(diary_tests.DiaryTests):
         detail=self.client.get(f'/api/workouts/logs/{log}').json();self.assertIsNone(detail['sets'][0]['kg']);self.assertIsNone(detail['sets'][0]['reps'])
         self.assertEqual(self.client.post(f'/api/workouts/{log}/finish',json=dict(rpe=11),headers=self.headers).status_code,400)
 
+    def test_multiple_sessions_snapshot_explanation_and_rounded_minutes(self):
+        identifier=self.seed('continuous_stationary-bike')
+        response=self.client.post('/api/workouts/start',json=dict(session_id='isometric_core',date=self.date),headers=self.headers)
+        self.assertEqual(response.status_code,200,response.text)
+        log=response.json()['workout_log_id']
+        before=self.client.get('/api/day',params=dict(date=self.date)).json()
+        self.assertEqual(len(before['workouts']),2)
+        self.assertTrue(any(w['planned_session_id']==identifier for w in before['workouts']))
+        self.assertTrue(any(w['workout_log_id']==log for w in before['workouts']))
+        for w in before['workouts']:
+            self.assertIsInstance(w['minutes'],int)
+            self.assertEqual(w['minutes'],int(w['duration_seconds']/60+.5))
+        snapshot=next(w for w in before['workouts'] if w['workout_log_id']==log)['configuration_at_start']
+        self.assertEqual(snapshot['source'],'workout_log_snapshot')
+        self.client.patch('/api/workouts/config',json=dict(level='advanced'),headers=self.headers)
+        detail=self.client.get(f'/api/workouts/logs/{log}').json()
+        self.assertEqual(detail['configuration_at_start'],snapshot)
+        self.assertTrue(snapshot['pending_configuration'])
+        self.assertEqual(self.client.get('/api/week',params=dict(start=self.date)).json()['workouts'],dict(planned=1,done=0))
+
     def request(self):
         dates=[(dt.date.fromisoformat(self.date)+dt.timedelta(days=i-6)).isoformat() for i in range(7)]
         return dict(week_start=dates[0],days={d:40 for d in dates},excluded_days=[dates[1]],sessions_min=2,sessions_max=2,strength_sessions_min=0,strength_sessions_max=0,cardio_minutes_min=40,weekly_minutes_max=80,start_times={dates[0]:'18:30'})
