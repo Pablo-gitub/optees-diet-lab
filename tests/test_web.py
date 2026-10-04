@@ -209,6 +209,31 @@ class WebTests(unittest.TestCase):
         self.assertEqual(saved['profile']['targets'], profile['targets'])
         self.assertEqual(saved['warnings'][0]['scope'], 'main_meals')
 
+    def test_generate_returns_plan_set_and_preserves_legacy_history(self):
+        from contextlib import asynccontextmanager
+        from unittest.mock import patch
+        from test_recipe_solver import solve
+        client,headers=self.account('chainapi')
+        @asynccontextmanager
+        async def stream(*args):yield (None,None)
+        class Session:
+            def __init__(self,*args):pass
+            async def __aenter__(self):return self
+            async def __aexit__(self,*args):pass
+            async def initialize(self):pass
+        async def fake(session,problem):return solve(problem)
+        with patch.object(self.module,'stdio_client',stream),patch.object(self.module,'ClientSession',Session),patch('multiobjective_day.solve_problem',side_effect=fake):
+            self.assertEqual(client.post('/api/generate',json={}).status_code,403)
+            response=client.post('/api/generate',json=dict(strategy='legacy',pool_size=4,k=4,time_limit=120),headers=headers)
+        self.assertEqual(response.status_code,200)
+        result=response.json();self.assertEqual(result['spec_version'],'orchestration-v1')
+        self.assertIn('legacy_strategy_ignored',[w['code'] for w in result['warnings']])
+        self.assertEqual(len(client.get('/api/plans').json()),result['count'])
+        with self.module.connect() as db:
+            owner=db.execute('SELECT id FROM users WHERE username=?',('chainapi',)).fetchone()['id']
+            self.assertEqual(db.execute('SELECT COUNT(*) FROM plan_feedback WHERE user_id=?',(owner,)).fetchone()[0],0)
+            self.assertTrue(json.loads(db.execute('SELECT input FROM plan_set WHERE user_id=?',(owner,)).fetchone()[0])['request'])
+
     def test_profile_update_without_targets_keeps_existing(self):
         client, headers = self.account('notargets')
         profile = client.get('/api/profile').json()['profile']

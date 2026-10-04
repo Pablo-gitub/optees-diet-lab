@@ -29,7 +29,7 @@ def extend(problem, variable):
     return len(problem['variables']) - 1
 
 
-async def solve_strategy(session, problem, config, choices, strategy='balanced', weights=None):
+async def solve_strategy(session, problem, config, choices, strategy='balanced', weights=None, objective_override=None):
     if strategy not in STRATEGIES:
         raise ValueError('Unknown strategy')
     p = copy.deepcopy(problem)
@@ -77,6 +77,7 @@ async def solve_strategy(session, problem, config, choices, strategy='balanced',
         else:
             result=first
     else:
+        if objective_override is not None:p['objective']['coefficients']=objective_override[:]
         result=await solve_problem(session,p)
     if result['mathematical_status'] not in ('optimal','feasible'):
         return result
