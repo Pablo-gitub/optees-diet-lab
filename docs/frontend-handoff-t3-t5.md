@@ -22,3 +22,7 @@ Data: 2026-10-04. Passi chiusi da Claude: revisione Gemini (0.3–0.5, R1–R3),
 | B5 | Nome tecnico visibile: «Passato dimostrativo: 50% zucchine bollite CREA 005735» | settimana sedentaria, mercoledì cena | campo `name` leggibile per gli alimenti composti dimostrativi |
 
 Prossimo turno di Codex: B1–B5, poi 3.1 e 3.3 (palestra).
+
+## Esito Codex — B1–B5
+
+Corretti il 2026-10-04. Suite: 162 test verdi. B1 verificato con il processo MCP Optees reale in `tests/test_week_meal_e2e.py`, dalla generazione e applicazione di una settimana alle alternative e applicazione di un singolo pasto. Gli altri pasti e il consumato restano invariati. B2 mantiene i vincoli interi e strutturali, con un solo warning quando il fronte contiene un solo piano; B3 omette la distanza per best; B4 ordina per pertinenza, completezza e fonte; B5 espone composizione/provenienza separatamente dal nome leggibile.

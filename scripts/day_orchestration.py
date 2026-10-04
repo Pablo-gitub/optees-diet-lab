@@ -179,8 +179,8 @@ async def orchestrate_day(session,config,foods,request=None,history=(),observati
     for rank,plan in enumerate(chosen,1):
         plan['rank']=rank;plan['diff']=None if plan is best else plan_diff(best,plan)
         tradeoffs=[f'{key}: scarto peggiore di {100*(value-best["optimization"]["relative_errors"][key]):.1f} punti percentuali' for key,value in plan['optimization']['relative_errors'].items() if value-best['optimization']['relative_errors'][key]>.05]
-        plan['explanation']=dict(headline=headlines[plan['role']],reasons=[f'Scarto nutrizionale relativo totale: {plan["objectives"]["nutrition_error"]:.3f}',f'{distance(best,plan)} alimenti principali diversi dal riferimento'][:3],tradeoffs=tradeoffs[:2])
-    if envelope['pool']['diversity_relaxed']:warnings.append(dict(code='diversity_relaxed',message=f'Alternative limitate: distanza minima ridotta a {d}; diversità strutturale {"attiva" if struct else "ridotta"}.'))
+        plan['explanation']=dict(headline=headlines[plan['role']],reasons=[f'Scarto nutrizionale relativo totale: {plan["objectives"]["nutrition_error"]:.3f}',*([f'{distance(best,plan)} alimenti principali diversi dal riferimento'] if plan is not best else [])][:3],tradeoffs=tradeoffs[:2])
+    if len(chosen)>1 and envelope['pool']['diversity_relaxed']:warnings.append(dict(code='diversity_relaxed',message=f'Alternative limitate: distanza minima ridotta a {d}; diversità strutturale {"attiva" if struct else "ridotta"}.'))
     if len(chosen)==1:warnings.append(dict(code='limited_alternatives',message='Un solo piano non dominato disponibile entro i vincoli e il budget di calcolo.'))
     envelope['pool'].update(candidates=len(pool),front=len(front),min_distance=d,structural=struct,reference_error=reference_error,near_optimal_limit=near)
     envelope['plans']=chosen

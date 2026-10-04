@@ -144,3 +144,9 @@ Consegna preparata per i passi 0.3–0.5: [prompt per Gemini](gemini-handoff-pha
 ## Fuori da questo piano
 
 Riconoscimento dei pasti da foto, sincronizzazione live con Withings/HealthKit (app iOS ponte), WorkoutKit, prezzi automatici, ottimizzazione fine della progressione dei carichi, multiutente oltre i profili locali.
+
+## Correzioni dopo la consegna T3/T5
+
+| Passo | Stato | Verifica |
+|---|---|---|
+| B1–B5 | **fatto** — commit di chiusura della correzione | 162 test verdi; end-to-end HTTP con Optees reale: settimana generata e applicata → alternative pranzo applicate, cena invariata; binarie bloccate con uguaglianze; warning unico; ricerca ordinata; provenienza del passato separata dal nome |

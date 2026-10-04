@@ -38,7 +38,10 @@ class WeekOrchestrationTests(unittest.TestCase):
         profile=self.profile();foods=load_foods();request=dict(week_start='2026-10-05',locked=[dict(date='2026-10-05',slot='lunch',items=[dict(food=dict(source='CREA',id='000800'),grams=83)])])
         model,blocks,choices,_=weekly_model(profile,request,make_config,foods)
         locked=[c for c in choices if c.get('locked')];self.assertEqual(len(locked),1)
-        self.assertEqual(model['variables'][locked[0]['q']]['lb'],83);self.assertEqual(model['variables'][locked[0]['q']]['ub'],83)
+        self.assertEqual(model['variables'][locked[0]['y']]['lb'],0);self.assertEqual(model['variables'][locked[0]['y']]['ub'],1)
+        for key,value in [('y',1),('q',83)]:
+            index=locked[0][key]
+            self.assertTrue(any(r['relation']=='=' and r['rhs']==value and r['coefficients'][index]==1 and sum(abs(c) for c in r['coefficients'])==1 for r in model['constraints']))
     def test_invalid_lock_or_unknown_nutrients_refused(self):
         profile=self.profile()
         with self.assertRaises(ValueError):weekly_model(profile,dict(week_start='2026-10-05',locked=[dict(date='2026-10-15',slot='lunch',items=[])]),make_config,load_foods())

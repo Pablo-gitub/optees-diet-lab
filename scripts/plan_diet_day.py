@@ -54,7 +54,8 @@ def load_foods():
     base = foods['005735']
     foods['recipe:vegetable_puree'] = dict(
         source_id='recipe:vegetable_puree',
-        name='Passato dimostrativo: 50% zucchine bollite CREA 005735, 50% acqua',
+        name='Passato di zucchine',
+        composition_provenance=dict(demo=True, ingredients=[dict(source='CREA',id='005735',fraction=.5),dict(name='Acqua',fraction=.5)]),
         **{n: str(float(base[n]) * 0.5) for n in NUTRIENTS},
     )
     return foods
@@ -92,7 +93,8 @@ def formulate(config, foods):
             if isinstance(grams,bool) or not isinstance(grams,int) or not 1<=grams<=3000:raise ValueError('Quantità bloccata non valida')
             values=[float(food[n])/100 for n in NUTRIENTS]
             if any(not math.isfinite(v) or v<0 for v in values):raise ValueError('Nutrienti bloccati non validi')
-            y=var(f'locked_y{len(choices)}',1,1,'B');q=var(f'locked_q{len(choices)}',grams,grams)
+            y=var(f'locked_y{len(choices)}',0,1,'B');q=var(f'locked_q{len(choices)}',0,3000)
+            add({y:1},'=',1);add({q:1},'=',grams)
             choices.append(dict(meal=meal,combination='locked',branch_index=0,group=0,food_id=food_id,y=y,q=q,nutrients=values,source=item['source'],reference_id=item['reference_id'],units=item.get('units'),locked=True))
     for meal, expression in slots.items():
         if meal in config.get('locked_meals',{}):

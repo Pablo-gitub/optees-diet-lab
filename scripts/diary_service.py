@@ -90,7 +90,7 @@ def resolve_food(ref,profile):
             if mass<=0:raise DomainError('Porzione di ricetta non valida')
             row=dict(name=recipe['title'],**{n:numeric(recipe['nutrients'].get('carbs_g' if n=='carbs_available_g_100g' else n.replace('_100g','')))*100/mass if numeric(recipe['nutrients'].get('carbs_g' if n=='carbs_available_g_100g' else n.replace('_100g',''))) is not None else None for n in NUTRIENTS})
     else:raise DomainError('Alimento non trovato')
-    return dict(food=ref,name=row['name'],brand=brand,source_label='database italiano generico' if source=='CREA' else 'marca' if source=='OFF' else 'etichetta personale' if source=='user_label' else 'ricetta',per_100g={n.replace('_100g',''):numeric(row.get(n)) for n in NUTRIENTS},unit_g=unit)
+    return dict(food=ref,name=row['name'],brand=brand,source_label='database italiano generico' if source=='CREA' else 'marca' if source=='OFF' else 'etichetta personale' if source=='user_label' else 'ricetta',per_100g={n.replace('_100g',''):numeric(row.get(n)) for n in NUTRIENTS},unit_g=unit,composition_provenance=row.get('composition_provenance'))
 
 def quantity(data,food):
     grams=data.get('grams');units=data.get('units')
@@ -226,7 +226,7 @@ def search_foods(db,user,profile,q,limit):
         if needle in fold(food['name']):found.append(food)
     with sqlite3.connect(ROOT/'dataset/open_food_facts/catalog.sqlite') as off:
         off.create_function('fold',1,fold)
-        rows=off.execute("SELECT barcode FROM products WHERE fold(name || ' ' || brands) LIKE ? ESCAPE '\\' ORDER BY barcode LIMIT ?",('%'+needle.replace('%','\\%').replace('_','\\_')+'%',limit)).fetchall()
+        rows=off.execute("SELECT barcode FROM products WHERE fold(name || ' ' || brands) LIKE ? ESCAPE '\\' ORDER BY barcode LIMIT ?",('%'+needle.replace('%','\\%').replace('_','\\_')+'%',500)).fetchall()
     for row in rows:found.append(resolve_food(dict(source='OFF',id=row[0]),profile))
     for identifier,row in crea().items():
         if not identifier.startswith('recipe:') and needle in fold(row['name']):found.append(resolve_food(dict(source='CREA',id=identifier),profile))
@@ -234,7 +234,13 @@ def search_foods(db,user,profile,q,limit):
     for item in found:
         key=(item['food']['source'],item['food']['id'])
         if key not in seen:seen.add(key);result.append(item)
-    return result[:limit]
+    def ranking(item):
+        name=fold(item['name']);tokens=name.split();words=needle.split()
+        relevance=0 if name==needle else 1 if all(w in tokens for w in words) else 2 if name.startswith(needle) else 3
+        complete=all(v is not None for v in item['per_100g'].values())
+        source_priority={'user_label':0,'CREA':1,'OFF':2,'recipe':3}
+        return relevance,not complete,source_priority[item['food']['source']],name,item['food']['id']
+    return sorted(result,key=ranking)[:limit]
 
 def add_measurement(db,user,data):
     date=valid_date(data.get('date'),True);kind=data.get('kind');unit=data.get('unit');value=data.get('value')

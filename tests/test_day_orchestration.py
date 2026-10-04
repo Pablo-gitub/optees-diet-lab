@@ -50,6 +50,14 @@ class OrchestrationTests(unittest.TestCase):
     def test_invalid_request(self):
         with self.assertRaises(ValueError):self.run_chain(dict(k=True))
 
+    def test_best_has_no_distance_reason_and_singleton_has_one_warning(self):
+        r=self.run_chain(dict(k=1,pool_size=1))
+        self.assertFalse(any('diversi dal riferimento' in reason for reason in r['plans'][0]['explanation']['reasons']))
+        c=self.config();c['locked_meals']={meal:[dict(food_id=s['food_id'],grams=s['grams'],source='CREA',reference_id=s['food_id']) for s in r['plans'][0]['selections'] if s['meal']==meal] for meal in ('lunch','dinner')}
+        r=self.run_chain(config=c)
+        self.assertEqual(len(r['plans']),1)
+        self.assertEqual([w['code'] for w in r['warnings'] if w['code'] in ('diversity_relaxed','limited_alternatives')],['limited_alternatives'])
+
 class WeighablePortionsTests(unittest.TestCase):
     def test_integer_portions_and_recomputed_totals(self):
         c=OrchestrationTests().config()

@@ -27,6 +27,27 @@ class DiaryTests(unittest.TestCase):
             self.items=[dict(food=dict(source='CREA',id='000800'),grams=80,units=None)]
             self.meal=db.execute("INSERT INTO planned_meal(week_plan_id,date,slot,items,role,status) VALUES(?,?,'lunch',?,'best','chosen')",(week,self.date,json.dumps(self.items))).lastrowid
     def post(self,path,**data):return self.client.post(path,json=dict(date=self.date,slot='lunch',**data),headers=self.headers)
+    def test_search_relevance_completeness_and_readable_composition(self):
+        from contextlib import contextmanager
+        import sqlite3
+        generic=dict(food=dict(source='CREA',id='apple'),name='Mela',per_100g=dict(kcal=50,protein_g=1,fat_g=0,carbs_available_g=12))
+        missing=dict(food=dict(source='OFF',id='missing'),name='Mela',per_100g=dict(kcal=None,protein_g=None,fat_g=None,carbs_available_g=None))
+        complete=dict(food=dict(source='OFF',id='complete'),name='Mela',per_100g=dict(kcal=50,protein_g=1,fat_g=0,carbs_available_g=12))
+        real_connect=sqlite3.connect
+        @contextmanager
+        def catalog(*args,**kwargs):
+            db=real_connect(':memory:');db.execute('CREATE TABLE products(barcode TEXT,name TEXT,brands TEXT)')
+            db.executemany('INSERT INTO products VALUES(?,?,?)',[('missing','Mela','Marca'),('complete','Mela','Marca')])
+            try:yield db
+            finally:db.close()
+        foods={'missing':missing,'complete':complete,'apple':generic}
+        with self.app.connect() as db,patch.object(self.app.diary.sqlite3,'connect',side_effect=catalog),patch.object(self.app.diary,'crea',return_value={'apple':dict(name='Mela')}),patch.object(self.app.diary,'resolve_food',side_effect=lambda ref,profile:foods[ref['id']]):
+            result=self.app.diary.search_foods(db,self.user,{},'mela',10)
+        self.assertEqual([r['food']['id'] for r in result],['apple','complete','missing'])
+        food=self.app.diary.resolve_food(dict(source='recipe',id='vegetable_puree'),{})
+        self.assertEqual(food['name'],'Passato di zucchine')
+        self.assertTrue(food['composition_provenance']['demo'])
+        self.assertEqual(food['composition_provenance']['ingredients'][0]['id'],'005735')
     def test_confirm_idempotent_edit_delete_and_reset(self):
         a=self.post('/api/diary/confirm');self.assertEqual(a.status_code,200);meal=a.json()['meals'][2]
         self.assertEqual(meal['state'],'as_planned');self.assertEqual(meal['eaten']['items'][0]['grams'],80)
