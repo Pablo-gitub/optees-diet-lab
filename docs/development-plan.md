@@ -139,7 +139,7 @@ Consegna preparata per i passi 0.3–0.5: [prompt per Gemini](gemini-handoff-pha
 | 7.1 | PWA: manifest, icone, service worker per la shell offline, installazione su iPhone | Claude | M | icona sulla home, apertura a schermo intero | da fare |
 | 7.2 | Processo Optees MCP riutilizzato, coda dei job con stato e annullamento | Codex | M | generazione settimanale non blocca il server; stato visibile | da fare |
 | 7.3 | Accessibilità e QA mobile completa (contrasti, focus, lettori di schermo, dark mode) | Claude | M | checklist superata | da fare |
-| 7.4 | README e documentazione aggiornati; screenshot delle schermate | Gemini | S | documenti coerenti con il codice | da fare |
+| 7.4 | README e documentazione aggiornati; screenshot delle schermate | Gemini | S | documenti coerenti con il codice | **fatto** — README riscritto da Gemini (seconda consegna) e corretto da Claude; screenshot di un profilo demo rifatti da Claude |
 
 ## Fuori da questo piano
 

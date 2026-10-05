@@ -1,63 +1,57 @@
-# Optees diet case of study
+# Optees Diet Case of Study · Diet Lab
 
-Applicazione personale indipendente: Optees viene usato come motore di ottimizzazione, senza modificare il suo core.
+Applicazione personale per la pianificazione e il diario nutrizionale e motorio, basata sul motore di ottimizzazione matematica **Optees** (solver MILP richiamato via protocollo MCP).
 
-## Obiettivo
+## Dove stanno i dati personali (fuori da Git)
+Per tutelare la riservatezza medica e personale, i dati sensibili sono esclusi dal tracciamento Git tramite [`.gitignore`](.gitignore):
+- `data/personal/`: database SQLite locale `web.sqlite`, note personali e credenziali generate con permessi protetti `0600` da [`web/app.py:initialize`](web/app.py); configurazione attrezzatura personale da [`scripts/workout_configuration.py:seed_legacy_equipment`](scripts/workout_configuration.py). I profili dimostrativi usano default neutri generati da [`web/app.py:defaults`](web/app.py).
+- `sanitary_data_export/`: archivio con l'esportazione grezza di Apple Salute (`export.zip`).
+- `private_docs/`: documenti personali riservati.
+- `.env` e `*.sqlite*`: variabili d'ambiente locali di macchina e copie del database.
 
-Importare dati esistenti di alimenti, ricette e attività; registrare piano scelto e osservazioni; generare alternative tramite ottimizzazione vincolata, Pareto e robustezza Min-Max; aggiungere una politica bandit per esplorare poche strategie del piano.
-
-Il budget iniziale di 10 ore è stato ampliato, senza fissare ancora un nuovo limite. L'interfaccia resta essenziale; il focus è orchestrazione e analisi dati.
-
-## Stato
-
-- Repository locale inizializzato; nessun remote configurato.
-- Importatore CREA da schede ufficiali, con cache e provenienza.
-- Pianificatori MILP via Optees e interfaccia locale con profili separati.
-- Cataloghi di prodotti italiani e ricette dal mondo consultabili offline.
-- Pareto e bandit non ancora implementati.
-
-## Importazione CREA
-
+## Avvio dell'applicazione
+1. Configurare `.env` partendo da `.env.example` indicando l'interprete Python (`DIET_PYTHON`).
+2. Avviare il server web locale su `http://127.0.0.1:8765`:
 ```bash
-python -m pip install -r requirements.txt
-python scripts/import_crea.py
+./scripts/start_web.sh
 ```
+Per avviare su un database temporaneo isolato: `DIET_WEB_DB=/tmp/demo/web.sqlite ./scripts/start_web.sh`.
 
-La cache evita di riscaricare le schede già ottenute. `--limit 5` importa un campione; `--offline` rigenera gli output dalla cache. L'importazione restituisce un errore se alcune schede richieste non sono importabili. I macro simbolici o mancanti sono segnalati nel manifest e richiedono una politica esplicita prima dell'ottimizzazione.
+## Le schermate dell'applicazione
 
-Output e attribuzione: [dataset/crea/README.md](dataset/crea/README.md).
-Architettura prevista: [docs/design.md](docs/design.md).
-Roadmap, interfaccia e fasi di sviluppo: [docs/roadmap.md](docs/roadmap.md).
-Primo pianificatore settimanale via MCP: [docs/weekly-planner.md](docs/weekly-planner.md).
+### Oggi
+Cruscotto giornaliero servito da [`web/app.py:read_day`](web/app.py) tramite [`scripts/diary_service.py:day_view`](scripts/diary_service.py). Gestisce esattamente i cinque pasti della giornata (colazione, metà mattina, pranzo, metà pomeriggio e cena; non c'è spuntino serale) e l'attività sportiva. Ogni pasto si conferma con un tocco o si modifica (grammi, alimenti aggiunti, tolti o sostituiti). «Fuori programma» registra un pasto libero come intervallo di calorie, e «Rientro della settimana» somma tutti gli scostamenti registrati e propone come rientrare nei giorni seguenti, cambiando il meno possibile e senza scendere sotto i minimi protetti ([`scripts/meal_rebalance.py:preview`](scripts/meal_rebalance.py), [`scripts/meal_rebalance.py:decide`](scripts/meal_rebalance.py)). «Com'è andata?» raccoglie un voto da 1 a 5 sul piano applicato.
+![Oggi](docs/screenshots/02_oggi.png)
 
-## Interfaccia locale
+### Piano
+Genera la settimana congiunta dieta + palestra differenziando i target tra riposo e allenamento ([`scripts/joint_orchestration.py:generate_week`](scripts/joint_orchestration.py)) e applica il piano scelto ([`scripts/joint_orchestration.py:apply_week`](scripts/joint_orchestration.py)). Mostra le alternative non dominate (compromessi di Pareto) e il piano più robusto calcolato minimizzando il rimpianto peggiore sugli scenari di dispendio ([`scripts/joint_robustness.py:annotate_pool`](scripts/joint_robustness.py)).
+![Piano](docs/screenshots/03_piano.png)
 
-Copiare `.env.example` in `.env` e indicare il Python con le dipendenze (`DIET_PYTHON`);
-`optees-mcp` viene cercato accanto a quell'interprete, oppure si imposta `OPTEES_COMMAND`.
-Avviare `./scripts/start_web.sh` e aprire http://127.0.0.1:8765.
-Per la rete domestica: `DIET_WEB_HOST=0.0.0.0 ./scripts/start_web.sh`.
-Credenziali iniziali Paolo in `data/personal/web_access.txt`, escluso da Git.
-I nuovi profili partono senza dati personali di Paolo. Dettagli e limiti in
-[docs/web-interface.md](docs/web-interface.md).
+### Allenamento
+Catalogo delle 11 sessioni standard ([`scripts/workout_service.py:catalog`](scripts/workout_service.py)) dai protocolli in `config/workout-protocols.json`, corredate da immagini di postura da Free Exercise DB, video didattici YouTube e registro serie con carichi, ripetizioni, RPE e timer di recupero.
+![Allenamento](docs/screenshots/04_allenamento.png)
 
-## Prodotti di marca
+### Ricette
+Ricettario internazionale in `dataset/recipes/`, con nutrienti calcolati su tabelle ufficiali CREA e immagini libere. Include il Recipe Solver ([`scripts/plan_recipe.py:optimize_recipe`](scripts/plan_recipe.py)) che calcola le grammature ottimali rispettando i vincoli nutrizionali e le proporzioni culinarie.
+![Ricette](docs/screenshots/05_ricette.png)
 
-Catalogo italiano Open Food Facts separato da CREA, importabile con
-`python scripts/import_open_food_facts.py` e indicizzabile con
-`python scripts/build_branded_catalog.py`. Ricerca offline:
-`python scripts/build_branded_catalog.py --search 'La Molisana'`.
-Fonte, licenza e controlli qualità in [dataset/open_food_facts/README.md](dataset/open_food_facts/README.md).
+### Progressi
+Misurazioni e andamento del peso depurato dalle fluttuazioni tramite filtro di Kalman scalare sulle mediane giornaliere (con serie EMA opzionale a 7 giorni), come descritto in [`docs/backend-handoff-progress.md`](docs/backend-handoff-progress.md) e calcolato in [`scripts/progress_analysis.py:progress`](scripts/progress_analysis.py). Include il check-in settimanale del lunedì ([`web/app.py:monday_check_in`](web/app.py)) che analizza le ultime due settimane di dati e propone eventuali ricalibrazioni protette dei consumi ([`scripts/progress_recalibration.py:make_proposal`](scripts/progress_recalibration.py)).
+![Progressi](docs/screenshots/06_progressi.png)
 
-## Ricette dal mondo
+### Profilo
+Gestione dei target nutrizionali e configurazione delle abitudini relative ai cinque pasti giornalieri ([`scripts/daily_meals.py:defaults`](scripts/daily_meals.py), [`scripts/daily_meals.py:validate`](scripts/daily_meals.py)).
+![Profilo](docs/screenshots/07_profilo.png)
 
-Importare con `python scripts/import_recipes.py --download`; rigenerare dagli originali locali omettendo `--download`. La pagina Ricette permette ricerca e filtro della cucina; nel profilo si salvano le cucine preferite. Fonti, licenze e stato del ricalcolo nutrienti in [dataset/recipes/README.md](dataset/recipes/README.md). Le ricette non sono ancora integrate nel solver.
+## La catena di ottimizzazione in parole semplici
+1. **Pasto e ricette (MILP a passi di 5g)**: ogni porzione è discreta e pesabile ([`scripts/plan_diet_day.py:formulate`](scripts/plan_diet_day.py)); il Recipe Solver porziona gli ingredienti salvaguardando le proporzioni culinarie ([`scripts/plan_recipe.py:optimize_recipe`](scripts/plan_recipe.py)).
+2. **Giornata coordinata**: i pasti principali si armonizzano con colazione e spuntini evitando combinazioni monotone delle fonti proteiche.
+3. **Settimana congiunta (Dieta + Allenamento)**: [`scripts/joint_orchestration.py:generate_week`](scripts/joint_orchestration.py) unisce la programmazione degli allenamenti a fabbisogni calorici differenziati per giorni di allenamento e riposo.
+4. **Frontiera di Pareto e Robustezza**: Optees genera alternative ottimali (migliore, varia, preferita) e valuta la stabilità rispetto ai consumi reali rilevati da Apple Salute ([`scripts/joint_robustness.py:annotate_pool`](scripts/joint_robustness.py)).
+5. **Adattamento continuo**: preferenze apprese con bandit UCB1, rientro non punitivo dagli sgarri e ricalibrazione controllata al check-in settimanale.
 
-Il [solver delle ricette](docs/recipe-solver.md) sceglie prodotti e quantità con proporzioni flessibili; attualmente 25 composizioni con mapping esplicito, senza integrazione automatica nei piani delle diete.
-
-Il [controllo degli abbinamenti delle ricette](docs/recipe-diet-compatibility.md) valuta ingredienti, rami e complementi mancanti per i 14 giorni di ogni programma. La verifica nutrizionale e l’inserimento automatico nel piano giornaliero restano separati.
-
-Il [bilancio giornaliero](docs/full-day-planner.md) include colazione e spuntini come variante personalizzata, con obiettivi separati e preferenze del profilo. Restano da integrare frequenze settimanali, consumi effettivi e ricette nel piano.
-
-Strategie Pareto, Min-Max/Max-Min e bandit personale: [documentazione](docs/multiobjective-planner.md).
-
-Catalogo dei protocolli e sessioni palestra complete: [modello v2](docs/workout-protocols.md).
+## Importazione di Apple Salute e Withings
+- L'archivio esportato dall'iPhone va messo in `sanitary_data_export/`: deve esserci un solo file `.zip`.
+- L'importazione atomica su database SQLite locale è gestita da [`scripts/apple_health.py:import_zip`](scripts/apple_health.py).
+- I dati biometrici (peso, grasso corporeo, dispendio a riposo e attivo) vengono usati solo con copertura sufficiente: giornate coperte per almeno 20 ore su 24 ([`scripts/apple_health.py:summarize`](scripts/apple_health.py)), almeno 7 giornate utili su 28 e dati non più vecchi di 14 giorni ([`scripts/health_inputs.py:refresh_report`](scripts/health_inputs.py)).
+- Per la procedura passo per passo, consultare la [Guida all'aggiornamento Apple Salute / Withings (`docs/apple-health-import.md`)](docs/apple-health-import.md).
