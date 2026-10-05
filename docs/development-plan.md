@@ -26,6 +26,7 @@ Il lavoro di Gemini viene sempre **rivisto** da Claude (dati e media) o da Codex
 - **M1 — Utilizzabile** (fine fase 3, **raggiunto il 2026-10-04**): settimana pianificata, alternative davvero diverse, diario con conferma rapida, palestra con registro delle sessioni.
 - **M2 — Fatta bene** (fine fase 6): ottimizzazione congiunta dieta + palestra, check-in del lunedì con ricalibrazione, bandit sulle prove reali, ribilanciamento dopo uno sgarro.
 - **M3 — Rifinita** (fine fase 7): app installabile sul telefono, job in background, QA completa.
+- **M4 — Personale** (fine fase 8): intervista iniziale con obiettivi, attività anche fuori dalla palestra, carichi personali, calorie che seguono l'attività, rientro anche con una passeggiata, ricette nel solver.
 
 ## Sequenza dei turni
 
@@ -45,6 +46,12 @@ Il lavoro di Gemini viene sempre **rivisto** da Claude (dati e media) o da Codex
 | T12 | Codex | 6.2 → 6.1 → **M2** | **backend fatto** — B9/B10 e B11–B15 chiusi, 263 test verdi; UI B11/B13 collegata, correzioni compatibili B14/B15 consegnate |
 | T13 | Claude | 7.1 · 7.3 | Gemini: 7.4 · QA visiva |
 | T14 | Codex | 7.2 → **M3** | — |
+| T15 | Claude | 8.0 specifica · 8.2 matrice obiettivi → dosi con fonti | Gemini: 8.3a catalogo attività · 8.8 sessione 1 |
+| T16 | Codex | 8.1 backend · 8.3 attività nella settimana congiunta | Gemini: 8.8 sessione 2; Claude rivede le sessioni 8.8 |
+| T17 | Claude | 8.1 UI intervista · UI attività | Gemini: 8.8 sessione 3 |
+| T18 | Codex | 8.4 carichi, durata, poco tempo · 8.5 calorie dall'attività | Gemini: 8.8 sessione 4 |
+| T19 | Claude | UI 8.4–8.5 · specifica di dettaglio 8.6–8.7 | Gemini: 8.8 sessioni successive |
+| T20 | Codex | 8.6 rientro con attività · 8.7 piatti bloccati, ricette nel solver, varietà → **M4** | — |
 
 ## Passi
 
@@ -140,6 +147,22 @@ Consegna preparata per i passi 0.3–0.5: [prompt per Gemini](gemini-handoff-pha
 | 7.2 | Processo Optees MCP riutilizzato, coda dei job con stato e annullamento | Codex | M | generazione settimanale non blocca il server; stato visibile | da fare |
 | 7.3 | Accessibilità e QA mobile completa (contrasti, focus, lettori di schermo, dark mode) | Claude | M | checklist superata | da fare |
 | 7.4 | README e documentazione aggiornati; screenshot delle schermate | Gemini | S | documenti coerenti con il codice | **fatto** — README riscritto da Gemini (seconda consegna) e corretto da Claude; screenshot di un profilo demo rifatti da Claude |
+
+### Fase 8 — Obiettivi, attività e varietà → **M4**
+
+Specifica: [phase8-spec.md](phase8-spec.md). Consegna a Gemini a sessioni: [gemini-handoff-phase8.md](gemini-handoff-phase8.md).
+
+| # | Passo | Chi | Dim. | Fatto quando | Stato |
+|---|---|---|---|---|---|
+| 8.0 | Specifica della fase: principi, intervista, contratto API, attività, rientro con attività, piatti bloccati | Claude | M | [phase8-spec.md](phase8-spec.md) approvato da Paolo | **bozza** |
+| 8.1 | Intervista e obiettivi: corpo, attività e tempo, priorità di allenamento, carichi di riferimento; nuove circonferenze nel diario; proposta di bilancio dall'obiettivo da approvare | Codex (backend) · Claude (UI) | L | contratto §1.6 con test; `PUT /api/profile` non cancella `goals`; intervista completabile da telefono saltando ogni domanda | da fare |
+| 8.2 | Matrice obiettivi → dosi (`config/training-goal-matrix.json`) con fonti verificate; soglie del §1.5, §3.2, §4 confermate o marcate euristiche | Claude | M | ogni grandezza con fonte e `checked_on`; punteggio a trapezio documentato | da fare |
+| 8.3 | Attività oltre la palestra: catalogo (8.3a, Gemini, rivisto da Claude), energia personale o da MET netti, sessioni di attività nella settimana congiunta, conferma «fatta» nel diario | Codex · Gemini (8.3a) | L | settimana con `gym: no` solo attività; nessun doppio conteggio con la base Salute; test | da fare |
+| 8.4 | Palestra personalizzata: curva carico–ripetizioni personale aggiornata dai registri, durata massima e sedute doppie, efficienza dei protocolli e due protocolli per poco tempo | Codex | L | nessuna seduta oltre il limite; carichi arrotondati per difetto al disponibile; test | da fare |
+| 8.5 | Obiettivi del giorno proposti dall'attività pianificata (base + attività + bilancio) | Codex · Claude (UI) | M | «Usa i valori proposti» in Piano; soglie rispettate; stima dichiarata senza Salute | da fare |
+| 8.6 | Rientro con attività facoltativa: solo dieta (predefinito), dieta + passeggiata, dieta + attività gradita; limiti fissi; scenario prudente | Codex · Claude (UI) | M | mai attività senza richiesta; attività non fatta torna nel rientro senza doppia compensazione | da fare |
+| 8.7 | Varietà: piatto bloccato in un pasto futuro, ricette approvate come elementi del solver, termine di varietà settimanale | Codex · Claude (UI) | L | «lasagne giovedì» compensata nella settimana; misura della ripetitività prima/dopo | da fare |
+| 8.8 | Ingredienti delle ricette → CREA → prodotti: dizionario e proposte a sessioni, approvazioni verificate | Gemini (proposte) · Claude (approvazione) | L | ricette con tutti gli ingredienti approvati in crescita a ogni sessione; nessun id inesistente | da fare |
 
 ## Fuori da questo piano
 
