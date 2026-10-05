@@ -32,11 +32,13 @@ def validate(settings):
 def products(preferences):
  result={}
  for p in preferences.get('products',[]):
+  if p.get('volume_only'):
+   result[p['id']]=dict(name=p['name'],source='user_label',source_id=p['id'],serving_g=None,brand=p.get('brand'),**{n:'' for n in ('kcal_100g','protein_g_100g','fat_g_100g','carbs_available_g_100g')});continue
   serving=p['serving_g'];basis=p['label_basis_g'];label=p['label_nutrients']
   if not isinstance(serving,(int,float)) or serving<=0 or not isinstance(basis,(int,float)) or basis<=0:raise ValueError('Etichetta personale non valida')
   values=[p['kcal_per_serving']/serving*100,label['protein_g']/basis*100,label['fat_g']/basis*100,label['carbs_g']/basis*100]
   if any(not math.isfinite(v) or v<0 for v in values):raise ValueError('Nutrienti etichetta personale non validi')
-  result[p['id']]=dict(name=p['name'],source='user_label',source_id=p['id'],serving_g=serving,
+  result[p['id']]=dict(name=p['name'],source='user_label',source_id=p['id'],serving_g=serving,brand=p.get('brand'),solver_eligible=p.get('solver_eligible',True),
    kcal_100g=str(values[0]),protein_g_100g=str(values[1]),fat_g_100g=str(values[2]),carbs_available_g_100g=str(values[3]))
  return result
 
@@ -52,7 +54,9 @@ def add_choices(config,foods,var,add,choices):
   options=[]
   if requested:
    if requested not in local:raise ValueError('Prodotto preferito senza etichetta completa: '+meal)
-   p=local[requested];options.append(('personal:'+requested,p['serving_g'],p['serving_g'],0))
+   p=local[requested]
+   if not p.get('solver_eligible',True):raise ValueError('Etichetta preferita non utilizzabile dal solver: verificare valori e base')
+   options.append(('personal:'+requested,p['serving_g'],p['serving_g'],0))
    if meal=='breakfast' and settings['allow_second_bar']:
     options.append(('personal:'+requested,2*p['serving_g'],2*p['serving_g'],.1))
   if '007510' not in config.get('excluded_crea_ids',[]):

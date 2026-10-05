@@ -279,3 +279,47 @@ POST `/api/goals/energy-proposal/7/approve|reject`, corpo `{"state_token":"hash-
 ```
 
 409 `goals_state_changed` su dati/profilo/piano/misure/Salute cambiati; 409 su proposta chiusa, scaduta (7 giorni) o cooldown condiviso con ricalibrazione (7 giorni). Rifiuto registrato, nessun target modificato. Un'anteprima più recente sostituisce quella pendente. 404 per id di altro utente; 400 per dati non validi; 403 senza CSRF.
+
+### 8.10 — catalogo locale e prodotti personali
+
+Nessuna richiesta di rete. GET `/api/foods/barcode/{code}` valida GTIN-8/12/13/14 (stringa, zeri iniziali conservati, cifra di controllo) e cerca prima OFF locale, poi le etichette dell'utente. Risposte:
+
+```json
+{"status":"found","source":"OFF","food":{"food":{"source":"OFF","id":"8076800195057"},"name":"Pasta","brand":"Barilla","source_label":"Open Food Facts","per_100g":{"kcal":359,"protein_g":12,"fat_g":2,"carbs_available_g":71},"unit_g":null,"composition_provenance":null},"label":{"nutrient_basis":"per_100_g"},"serving_g":null,"package_g":500}
+```
+```json
+{"status":"incomplete","source":"user_label","food":{"food":{"source":"user_label","id":"label_uuid"},"name":"Bevanda","brand":null,"per_100g":{"kcal":null,"protein_g":null,"fat_g":null,"carbs_available_g":null}},"label":{"basis":"per_100ml"},"serving_g":null,"package_g":null,"coherence":{"ok":true},"per_100ml":{"kcal":40,"protein_g":0,"fat_g":0,"carbs_available_g":10}}
+```
+```json
+{"status":"not_found","source":null}
+```
+
+POST `/api/foods/personal` crea, PUT `/api/foods/personal/{id}` sostituisce l'etichetta dello stesso prodotto. Input sintetico:
+
+```json
+{"name":"Barretta","brand":"Marca","barcode":"96385074","basis":"per_serving","serving_g":40,"kj":686.176,"protein_g":8,"carbs_g":20,"fat_g":4,"fiber_g":8,"package_g":40}
+```
+
+Basi ammesse: `per_100g`, `per_100ml`, `per_serving`; kcal oppure kJ (÷4,184), proteine/carboidrati/grassi obbligatori, fibre/zuccheri/sale facoltativi. Per porzione richiede `serving_g`; per ml la conversione richiede `density_g_per_ml`. Senza densità i valori per ml restano disponibili e quelli per 100 g sono null: prodotto escluso dal solver. Conversione riusa `daily_meals.products()`. Risposta POST/PUT:
+
+```json
+{"food":{"source":"user_label","id":"label_uuid"},"per_100g":{"kcal":410,"protein_g":20,"fat_g":10,"carbs_available_g":50},"per_100ml":null,"coherence":{"ok":true,"expected_kcal":164,"declared_kcal":164,"deviation_pct":0,"basis":"per_serving"},"solver_eligible":true,"label":{"name":"Barretta","basis":"per_serving","serving_g":40,"kj":686.176,"protein_g":8,"carbs_g":20,"fat_g":4,"fiber_g":8},"serving_g":40,"package_g":40}
+```
+
+Coerenza: 4P+4C+9G+2fibre, scarto relativo al valore calcolato >15% segnala `coherence.ok:false` e `solver_eligible:false`. Il prodotto viene conservato per correggere l'etichetta, ma non può essere preferito nel solver. Ricerca `/api/foods/search` include i prodotti personali solo del proprietario. Codice duplicato fra etichette dello stesso utente: 409 `duplicate_barcode`.
+
+DELETE `/api/foods/personal/{id}`:
+
+```json
+{"status":"deleted","food":{"source":"user_label","id":"label_uuid"}}
+```
+
+409 `food_used` se mai consumato nel diario, anche dopo reset; 409 `food_planned` se ancora referenziato da un piano. 404 per id assente o altrui. La provenienza storica non viene cancellata.
+
+PUT `/api/foods/preferred`, input `{"generic":{"source":"CREA","id":"000800"},"product":{"source":"user_label","id":"label_uuid"}}`, salva un prodotto completo e coerente; `product:null` rimuove la preferenza. Risposta:
+
+```json
+{"generic":{"source":"CREA","id":"000800"},"product":{"source":"user_label","id":"label_uuid"},"preferred_products":{"000800":{"source":"user_label","id":"label_uuid"}}}
+```
+
+Questa API conserva l'associazione; la sua applicazione ai componenti generici e alla spesa appartiene a 8.11. Tutte le scritture richiedono CSRF e sono atomiche; 400 per GTIN/valori/basi non validi, `incomplete_product` o `incoherent_product` su preferenza non utilizzabile, 403 senza CSRF.

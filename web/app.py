@@ -1028,3 +1028,37 @@ async def goals_energy_decide(identifier:int,decision:str,request:Request):
         fresh=dict(db.execute('SELECT * FROM users WHERE id=?',(user['id'],)).fetchone());profile=owner_profile(fresh)
         report=load_health_report(health_directory(user['id']));values=measurement_values(db,user['id'],report=report)
         return personal_goals.decide(db,user['id'],profile,values,report,identifier,data,decision)
+
+
+@app.get('/api/foods/barcode/{code}')
+def food_barcode(code:str,request:Request):
+    import personal_foods
+    return personal_foods.lookup(code,owner_profile(identity(request)))
+
+@app.post('/api/foods/personal')
+async def create_personal_food(request:Request):
+    import personal_foods
+    user=identity(request,True);data=await request.json()
+    with connect() as db:
+        db.execute('BEGIN IMMEDIATE');return personal_foods.save(db,user['id'],data)
+
+@app.put('/api/foods/personal/{identifier}')
+async def update_personal_food(identifier:str,request:Request):
+    import personal_foods
+    user=identity(request,True);data=await request.json()
+    with connect() as db:
+        db.execute('BEGIN IMMEDIATE');return personal_foods.save(db,user['id'],data,identifier)
+
+@app.delete('/api/foods/personal/{identifier}')
+def delete_personal_food(identifier:str,request:Request):
+    import personal_foods
+    user=identity(request,True)
+    with connect() as db:
+        db.execute('BEGIN IMMEDIATE');return personal_foods.delete(db,user['id'],identifier)
+
+@app.put('/api/foods/preferred')
+async def prefer_food(request:Request):
+    import personal_foods
+    user=identity(request,True);data=await request.json()
+    with connect() as db:
+        db.execute('BEGIN IMMEDIATE');return personal_foods.preferred(db,user['id'],data)

@@ -27,6 +27,7 @@ def migrate(db):
     CREATE TABLE IF NOT EXISTS week_plan(id INTEGER PRIMARY KEY,user_id INTEGER,week_start TEXT,mode TEXT,status TEXT,plan_set_run_id INTEGER,created REAL,targets TEXT);
     CREATE UNIQUE INDEX IF NOT EXISTS active_week_owner ON week_plan(user_id,week_start) WHERE status='active';
     CREATE TABLE IF NOT EXISTS planned_meal(id INTEGER PRIMARY KEY,week_plan_id INTEGER,date TEXT,slot TEXT,items TEXT,role TEXT,status TEXT,locked INTEGER DEFAULT 0,UNIQUE(week_plan_id,date,slot));
+    CREATE TABLE IF NOT EXISTS food_usage(user_id INTEGER,source TEXT,food_id TEXT,PRIMARY KEY(user_id,source,food_id));
     CREATE TABLE IF NOT EXISTS diary_entry(id INTEGER PRIMARY KEY,user_id INTEGER,date TEXT,slot TEXT,food TEXT,grams INTEGER,units INTEGER,origin TEXT,planned_meal_id INTEGER,created REAL,updated REAL);
     CREATE TABLE IF NOT EXISTS meal_log(user_id INTEGER,date TEXT,slot TEXT,state TEXT,updated REAL,PRIMARY KEY(user_id,date,slot));
     CREATE TABLE IF NOT EXISTS measurement(id INTEGER PRIMARY KEY,user_id INTEGER,date TEXT,kind TEXT,value REAL,unit TEXT,source TEXT);
@@ -35,6 +36,8 @@ def migrate(db):
     INSERT OR IGNORE INTO schema_migration VALUES(1,strftime('%s','now'));
     ''')
 
+    for owner,raw in db.execute('SELECT user_id,food FROM diary_entry'):
+        ref=json.loads(raw);db.execute('INSERT OR IGNORE INTO food_usage VALUES(?,?,?)',(owner,ref['source'],ref['id']))
     columns={r[1] for r in db.execute('PRAGMA table_info(planned_meal)')}
     if 'day_index' not in columns:db.execute('ALTER TABLE planned_meal ADD COLUMN day_index INTEGER DEFAULT 0')
     if 'day_context' not in {r[1] for r in db.execute('PRAGMA table_info(week_plan)')}:db.execute("ALTER TABLE week_plan ADD COLUMN day_context TEXT DEFAULT '{}'")
@@ -90,7 +93,7 @@ def resolve_food(ref,profile):
     elif source=='user_label':
         row=products(profile.get('food_preferences',{})).get(identifier)
         if not row:raise DomainError('Etichetta personale non trovata')
-        unit=row['serving_g']
+        unit=row['serving_g'];brand=row.get('brand')
     elif source=='recipe':
         if identifier=='vegetable_puree':row=crea()['recipe:vegetable_puree']
         else:
@@ -191,6 +194,9 @@ def diary_mutation(db,user,profile,action,data,entry_id=None):
         db.execute('UPDATE diary_entry SET grams=?,units=?,updated=? WHERE id=? AND user_id=?',(grams,units,time.time(),entry_id,user));set_state(db,user,date,slot,'modified' if p else 'unplanned')
     elif action=='delete':
         db.execute('DELETE FROM diary_entry WHERE id=? AND user_id=?',(entry_id,user));set_state(db,user,date,slot,'modified' if p else 'unplanned')
+    if action in ('confirm','add'):
+        for row in db.execute('SELECT food FROM diary_entry WHERE user_id=? AND date=? AND slot=?',(user,date,slot)):
+            ref=json.loads(row['food']);db.execute('INSERT OR IGNORE INTO food_usage VALUES(?,?,?)',(user,ref['source'],ref['id']))
     return day_view(db,user,profile,date)
 
 def week_view(db,user,profile,start):
