@@ -21,7 +21,12 @@ class OrchestrationTests(unittest.TestCase):
         best=r['plans'][0];self.assertIsNone(best['diff'])
         for i,p in enumerate(r['plans']):
             self.assertTrue(p['constraint_report']['all_respected']);self.assertTrue(p['constraint_report']['verified'])
-            self.assertLessEqual(p['objectives']['nutrition_error'],r['pool']['near_optimal_limit']+1e-6)
+            # 8.9 minimizes overlap inside hard nutritional bounds; epsilon
+            # is a reported reference, not a reason to discard feasible diversity.
+            targets=self.config()['main_meals_targets']
+            for nutrient,spec in targets.items():
+                self.assertGreaterEqual(p['nutrients'][nutrient.replace('_100g','')],spec['min']-1e-3)
+                self.assertLessEqual(p['nutrients'][nutrient.replace('_100g','')],spec['max']+1e-3)
             self.assertEqual(p['robustness']['status'],'unavailable');self.assertNotEqual(p['role'],'robust')
             for q in r['plans'][:i]:self.assertGreaterEqual(distance(q,p),r['pool']['min_distance'])
             if i:

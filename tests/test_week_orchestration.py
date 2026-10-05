@@ -69,6 +69,11 @@ class MealAlternativeTests(unittest.TestCase):
         run=generate_meal_alternatives(db,1,profile,dict(date='2026-10-05',slot='lunch'),make_config)
         with patch('multiobjective_day.solve_problem',side_effect=fake):result=asyncio.run(run(None))
         self.assertTrue(result['plans'])
+        self.assertEqual(result['pool']['overlap_scope'],'meal')
+        from ingredient_overlap import amounts,overlap
+        vectors=[amounts(p,load_foods(),slot='lunch') for p in result['plans']]
+        pairs=[overlap(a,b)*100 for i,a in enumerate(vectors) for b in vectors[:i]]
+        self.assertEqual(result['pool']['overlap_achieved'],round(max(pairs),2) if pairs else None)
         for p in result['plans']:
             self.assertTrue(p['constraint_report']['all_respected']);self.assertTrue(all(s['meal']=='lunch' for s in p['selections']))
             self.assertEqual(p['nutrients_by_meal']['dinner'],original['nutrients_by_meal']['dinner'])

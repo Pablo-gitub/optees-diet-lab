@@ -9,6 +9,7 @@ from multiobjective_day import solve_strategy
 from target_validation import target_warnings
 
 VERSION = 'orchestration-v1'
+ENGINE_VERSION = 'orchestration-v3-gram-overlap'
 SAFE = ['demo','scope','slots','status','selections','nutrients','nutrients_by_meal','daily_policy','diet_note','preference_penalty','preference_changes','constraint_report']
 
 
@@ -94,21 +95,25 @@ async def orchestrate_day(session,config,foods,request=None,history=(),observati
     problem,choices,slots=formulate(config,foods);base=copy.deepcopy(problem)
     context=context_key(config)
     if isinstance(observations,dict):observations=observations.get(context,[])
-    envelope=dict(spec_version=VERSION,versions=dict(engine=VERSION,catalog=hashlib.sha256(json.dumps(foods,sort_keys=True).encode()).hexdigest(),rules=hashlib.sha256(json.dumps(dict(slots=slots,rules=load_rules(config)),sort_keys=True).encode()).hexdigest(),health_report=(health or {}).get('version')),request_hash=hashlib.sha256(json.dumps(dict(config=config,request=request,history=sorted(history),observations=list(observations),health=health,balance=balance),sort_keys=True).encode()).hexdigest(),horizon=dict(day_index=config['day_index'],days=1),mode=config['mode'],status='ok',warnings=warnings,pool=dict(candidates=0,front=0,epsilon=epsilon,min_distance=minimum,diversity_relaxed=[]),plans=[],seed=seed)
+    envelope=dict(spec_version=VERSION,versions=dict(engine=ENGINE_VERSION,catalog=hashlib.sha256(json.dumps(foods,sort_keys=True).encode()).hexdigest(),rules=hashlib.sha256(json.dumps(dict(slots=slots,rules=load_rules(config)),sort_keys=True).encode()).hexdigest(),health_report=(health or {}).get('version')),request_hash=hashlib.sha256(json.dumps(dict(config=config,request=request,history=sorted(history),observations=list(observations),health=health,balance=balance),sort_keys=True).encode()).hexdigest(),horizon=dict(day_index=config['day_index'],days=1),mode=config['mode'],status='ok',warnings=warnings,pool=dict(candidates=0,front=0,epsilon=epsilon,min_distance=minimum,diversity_relaxed=[],overlap_target=10,overlap_achieved=None),plans=[],seed=seed)
     start=time.monotonic();budget=request.get('time_limit',20)
     if isinstance(budget,bool) or not isinstance(budget,(int,float)) or not math.isfinite(budget) or not 1<=budget<=120:raise ValueError('Tempo massimo non valido')
     first=await solve_strategy(session,base,config,choices,'balanced')
     if first['mathematical_status'] not in ('optimal','feasible'):
         envelope.update(status='infeasible',infeasibility=dict(status=first['mathematical_status'],constraints='Limiti nutrizionali, porzioni, esclusioni e abbinamenti configurati'));return envelope
     if first['mathematical_status']!='optimal':
-        envelope['status']='partial';warnings.append(dict(code='reference_not_optimal',message='Ottimo di riferimento non certificato; pool limitato al piano verificato.'))
-    decoded=decode_result(config,base,choices,slots,foods,first)
+        envelope['status']='partial';warnings.append(dict(code='reference_not_optimal',message='Ottimo di riferimento non certificato; si cercano comunque altre combinazioni fattibili.'))
+    decode_result(config,base,choices,slots,foods,first)
+    if 'optimization' not in first:
+        by_name={v['name']:v['value'] for v in first['result']['variables']}
+        errors={n.replace('_100g',''):abs(sum(c['nutrients'][j]*by_name[problem['variables'][c['q']]['name']] for c in choices)-targets[n]['target'])/targets[n]['target'] for j,n in enumerate(NUTRIENTS)}
+        first['optimization']=dict(relative_errors=errors,strategy='balanced_uncertified')
     reference_error=sum(first['optimization']['relative_errors'].values());near=reference_error*(1+epsilon)+.01
-    base['constraints'].append(dict(coefficients=problem['objective']['coefficients'][:],relation='<=',rhs=near))
-    if first.get('preference_penalty') is not None:
-        base['constraints'].append(dict(coefficients=problem['preference_coefficients'][:],relation='<=',rhs=first['preference_penalty']+1e-7))
     pool=[];seen=set();past=set(history)
     def collect(result,p,objective):
+        if problem.get('preference_coefficients'):
+            by_name={v['name']:v['value'] for v in result['result']['variables']}
+            result['preference_penalty']=sum(coef*by_name[var['name']] for coef,var in zip(problem['preference_coefficients'],problem['variables']))
         record=decode_result(config,p,choices,slots,foods,result)
         if not record['constraint_report']['all_respected']:raise ValueError('Vincoli non verificati')
         signature=tuple(sorted((s['meal'],s['food_id']) for s in record['selections']))
@@ -124,47 +129,43 @@ async def orchestrate_day(session,config,foods,request=None,history=(),observati
         if rewards:safe['objectives']['preference']=sum(rewards)/len(rewards)
         pool.append(safe);return True
     collect(first,problem,'balanced')
-    d=minimum;struct=structural;round_no=1
-    while len(pool)<pool_size and envelope['status']!='partial':
-        remaining=budget-(time.monotonic()-start)
-        if remaining<=0:envelope['status']='partial';break
-        p=copy.deepcopy(base);p['solver']['time_limit']=max(.1,remaining)
-        for previous in pool:
-            selected=selection_keys(previous);indices=[c['y'] for c in active_choices(choices) if (c['meal'],c['food_id']) in selected]
+    from ingredient_overlap import minimax_candidate,report,amounts,overlap
+    existing=request.get('_existing_plans',[]);slot=config.get('alternative_slot')
+    if existing:pool.clear();seen.clear()
+    d=0;struct=False;searches=[]
+    # Diversity optimizes within the original nutritional/portion constraints.
+    # Near-optimal error and preference are soft goals, not feasibility bounds.
+    while len(pool)<pool_size:
+        if time.monotonic()-start>=budget:envelope['status']='partial';break
+        previous=existing+pool
+        if not any(not c.get('locked') and (not slot or c['meal']==slot) for c in choices):break
+        p=copy.deepcopy(problem)
+        for prior in previous:
+            selected={(s['meal'],s['food_id']) for s in prior['selections'] if (not slot or s['meal']==slot) and not s.get('locked')}
+            eligible=[c for c in choices if (not slot or c['meal']==slot) and not c.get('locked')]
             row=[0.]*len(p['variables'])
-            for i in indices:row[i]=1
-            p['constraints'].append(dict(coefficients=row,relation='<=',rhs=len(selected)-d))
-            if struct:
-                for meal in ('lunch','dinner'):
-                    protein=next((food for m,food in sorted(selected) if m==meal and family(food)),None);starch=next((food for m,food in sorted(selected) if m==meal and food in STARCH),None)
-                    if protein and starch:
-                        row=[0.]*len(p['variables'])
-                        for c in active_choices(choices):
-                            if c['meal']==meal and c['food_id'] in (protein,starch):row[c['y']]=1
-                        p['constraints'].append(dict(coefficients=row,relation='<=',rhs=1))
-        objective=('minmax','maxmin','preference','variety')[min(round_no-1,3)] if round_no<=4 else 'weighted'
-        strategy=objective if objective in ('minmax','maxmin') else 'balanced';weights=None;custom=None
-        if objective=='weighted':weights={NUTRIENTS[(round_no-5)%4].replace('_100g',''):4.}
-        if objective in ('preference','variety'):
-            custom=[0.]*len(p['variables'])
-            used=past|set().union(*(selection_keys(x) for x in pool))
-            if objective=='variety':
-                for c in active_choices(choices):custom[c['y']]=1. if (c['meal'],c['food_id']) in used else -1.
-            else:
-                rewards={}
-                for arm,reward in observations:rewards.setdefault(arm,[]).append(reward)
-                for c in active_choices(choices):
-                    arm='protein:'+str(family(c['food_id']));custom[c['y']]=-sum(rewards.get(arm,[]))/max(len(rewards.get(arm,[])),1)
-        result=await solve_strategy(session,p,config,choices,strategy,weights,objective_override=custom)
-        if result['mathematical_status'] in ('optimal','feasible'):
-            collect(result,p,objective);round_no+=1
-            if result['mathematical_status']!='optimal':envelope['status']='partial';break
-        elif d>1 or struct:
-            if d>1:d-=1
-            else:struct=False
-            envelope['pool']['diversity_relaxed'].append(dict(min_distance=d,structural=struct))
-        else:break
+            for c in eligible:
+                if (c['meal'],c['food_id']) in selected:row[c['y']]=1
+            if selected:p['constraints'].append(dict(coefficients=row,relation='<=',rhs=len(selected)-1))
+        strategy='diversity_minimax'
+        async def solve(candidate):
+            active=copy.deepcopy(candidate);active.pop('preference_coefficients',None)
+            return await solve_strategy(session,active,config,choices,'balanced',objective_override=[0.]*len(active['variables']))
+        r,p,certificate=await minimax_candidate(p,choices,previous,foods,solve,start+budget,config,slot)
+        searches.append(certificate)
+        if r is None:
+            if not certificate.get('certified'):envelope['status']='partial'
+            break
+        record=decode_result(config,p,choices,slots,foods,r)
+        actual=max((overlap(amounts(record,foods,config,slot),amounts(prior,foods,config,slot)) for prior in previous),default=0)
+        if actual>certificate['threshold']+1e-6:raise ValueError('Sovrapposizione non verificata')
+        if existing and actual>.5+1e-6:break
+        if not collect(r,p,strategy):break
+    envelope['pool']['overlap_searches']=searches
     front=sampled_front(pool)
+    if not pool:
+        report(envelope,[],foods,config,slot,existing)
+        envelope.update(status='no_more_alternatives',reason='Non ci sono altre alternative abbastanza diverse entro i vincoli e il budget.');return envelope
     usable=(health or {}).get('usable_consumption_baseline') and isinstance(balance,(int,float)) and not isinstance(balance,bool) and math.isfinite(balance)
     scenario=(health or {}).get('consumption_scenarios',{})
     if usable:
@@ -181,18 +182,28 @@ async def orchestrate_day(session,config,foods,request=None,history=(),observati
         if options and len(chosen)<k:
             plan=sorted(options,key=key)[0];plan['role']=role;chosen.append(plan)
     take('best',lambda p:(p['objectives']['nutrition_error'],-p['objectives']['preference']))
-    best=chosen[0]
+    best=chosen[0] if chosen else None
     take('varied',lambda p:(-p['objectives']['variety'],p['objectives']['nutrition_error']),lambda p:distance(best,p)>=d)
     if usable:take('robust',lambda p:(p['robustness']['max_regret_kcal'],p['objectives']['nutrition_error']))
     if observations:take('preferred',lambda p:-p['objectives']['preference'])
     take('explore',lambda p:tuple(-x for x in exploration_score(p,observations)))
+    for extra in pool:
+        if len(chosen)>=min(k,3):break
+        if extra not in chosen:
+            extra['role']='alternative_'+str(len(chosen)+1);chosen.append(extra)
+    if not chosen:
+        envelope['plans']=[];report(envelope,[],foods,config,slot,existing)
+        envelope.update(status='no_more_alternatives',reason='Non ci sono altre alternative abbastanza diverse entro i vincoli e il budget.');return envelope
     headlines=dict(best='Il più vicino ai tuoi obiettivi',varied='Più vario: cambia gli alimenti principali',robust='Più sicuro se consumi meno/più del previsto',preferred='Con gli alimenti che apprezzi di più',explore='Da provare: una combinazione poco esplorata')
     for rank,plan in enumerate(chosen,1):
         plan['rank']=rank;plan['diff']=None if plan is best else plan_diff(best,plan)
         tradeoffs=[f'{key}: scarto peggiore di {100*(value-best["optimization"]["relative_errors"][key]):.1f} punti percentuali' for key,value in plan['optimization']['relative_errors'].items() if value-best['optimization']['relative_errors'][key]>.05]
-        plan['explanation']=dict(headline=headlines[plan['role']],reasons=[f'Scarto nutrizionale relativo totale: {plan["objectives"]["nutrition_error"]:.3f}',*([f'{distance(best,plan)} alimenti principali diversi dal riferimento'] if plan is not best else [])][:3],tradeoffs=tradeoffs[:2])
+        if plan not in front:tradeoffs.append('Alternative fattibile aggiunta per offrire almeno tre scelte; fuori dal fronte Pareto campionato.')
+        plan['explanation']=dict(headline=headlines.get(plan['role'],'Un’altra combinazione fattibile'),reasons=[f'Scarto nutrizionale relativo totale: {plan["objectives"]["nutrition_error"]:.3f}',*([f'{distance(best,plan)} alimenti principali diversi dal riferimento'] if plan is not best else [])][:3],tradeoffs=tradeoffs[:2])
     if len(chosen)>1 and envelope['pool']['diversity_relaxed']:warnings.append(dict(code='diversity_relaxed',message=f'Alternative limitate: distanza minima ridotta a {d}; diversità strutturale {"attiva" if struct else "ridotta"}.'))
+    if len(chosen)==2 and k>=3:warnings.append(dict(code='limited_alternatives',message='Solo due alternative verificate entro i vincoli e il tempo disponibile.'))
     if len(chosen)==1:warnings.append(dict(code='limited_alternatives',message='Un solo piano non dominato disponibile entro i vincoli e il budget di calcolo.'))
-    envelope['pool'].update(candidates=len(pool),front=len(front),min_distance=d,structural=struct,reference_error=reference_error,near_optimal_limit=near)
+    envelope['pool'].update(candidates=len(pool),front=len(front),min_distance=d,structural=struct,reference_error=reference_error,near_optimal_limit=near,near_optimal_enforced=False,nutritional_constraints_relaxed=False)
     envelope['plans']=chosen
+    report(envelope,chosen,foods,config,slot,existing)
     return envelope

@@ -264,3 +264,7 @@ Ruoli (`role`): `best` | `varied` | `robust` | `preferred` | `explore`.
 | `min_distance` | 3 | alimenti variabili per giornata; settimana: da tarare in v2 |
 | `structural` | true | cambia proteina o amido principale |
 | tempo massimo pool | 20 s | poi `status: partial` se c'è almeno un piano |
+
+## Aggiornamento 8.9 — diversità in grammi
+
+Il §9 della specifica Fase 8 sostituisce i tagli sul conteggio e la loro riduzione a passi: [identità, minimax e audit](phase8-diversity-audit.md). La regione epsilon di S2 resta un riferimento soft, non un vincolo per escludere alternative nutrizionalmente fattibili. Il pool nasce da un riferimento bilanciato e da ricerche di fattibilità/minimax della sovrapposizione; tutti gli scarti multiobiettivo sono ricalcolati sui nutrienti effettivi. S3/S4/S6 continuano a valutare Pareto, robustezza e feedback. Una terza alternativa fattibile fuori dal fronte campionato è dichiarata. `min_distance` resta solo per compatibilità; UI deve leggere `overlap_pct`, `overlap_target`, `overlap_achieved` e la certificazione della ricerca, senza promettere massima diversità dopo un timeout.

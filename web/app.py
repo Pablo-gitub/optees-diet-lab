@@ -382,7 +382,7 @@ async def generate(request: Request):
             print('Planner error:',repr(e),flush=True)
             raise HTTPException(422,'Calcolo non riuscito. Controlla obiettivi ed esclusioni.')
         with connect() as db:
-            cursor=db.execute('INSERT INTO plan_set(user_id,created,payload,input) VALUES(?,?,?,?)',(user['id'],time.time(),'{}',json.dumps(dict(config=config,request=data,history=sorted(history),observations=observations,health=health))))
+            cursor=db.execute('INSERT INTO plan_set(user_id,created,payload,input) VALUES(?,?,?,?)',(user['id'],time.time(),'{}',json.dumps(dict(config=config,profile=profile,request=data,history=sorted(history),observations=observations,health=health))))
             result['run_id']=str(cursor.lastrowid)
             for plan in result['plans']:
                 cursor=db.execute('INSERT INTO plans(user_id,created,payload) VALUES(?,?,?)',(user['id'],time.time(),json.dumps(plan)))
@@ -1062,3 +1062,80 @@ async def prefer_food(request:Request):
     user=identity(request,True);data=await request.json()
     with connect() as db:
         db.execute('BEGIN IMMEDIATE');return personal_foods.preferred(db,user['id'],data)
+
+
+@app.post('/api/plan-sets/{set_id}/alternatives')
+async def more_plan_alternatives(set_id:int,request:Request):
+    """Extend this exact owner pool, without applying a plan or changing diary."""
+    from week_orchestration import generate_week,generate_meal_alternatives
+    from ingredient_overlap import report as overlap_report,amounts as overlap_amounts,overlap as overlap_value
+    from daily_meals import products
+    user=identity(request,True);body=await request.json()
+    if not isinstance(body,dict) or set(body)-{'time_limit'}:raise diary.DomainError('Parametri alternative non validi')
+    budget=body.get('time_limit',30)
+    if isinstance(budget,bool) or not isinstance(budget,(int,float)) or not 1<=budget<=120:raise diary.DomainError('Tempo massimo non valido')
+    async with solver_lock:
+        with connect() as db:
+            row=db.execute('SELECT * FROM plan_set WHERE id=? AND user_id=?',(set_id,user['id'])).fetchone()
+            if not row:raise diary.DomainError('Pool non trovato','not_found',404)
+            payload=json.loads(row['payload']);original=json.loads(row['input']);profile=owner_profile(identity(request))
+            kind=original.get('kind','day' if 'config' in original else None)
+            if kind not in ('day','week','meal'):raise diary.DomainError('Questo pool non contiene alternative dieta espandibili','unsupported_pool')
+            if not payload.get('plans'):raise diary.DomainError('Pool privo di piani','empty_pool')
+            old_profile=original.get('profile')
+            clean=lambda p:{k:v for k,v in profile_defaults(dict(p)).items() if not k.startswith('_')}
+            if old_profile and clean(old_profile)!=clean(profile):raise diary.DomainError('Profilo cambiato: genera un nuovo pool','plan_set_state_changed',409)
+            token=recalibration.fingerprint(db,user['id'],profile,None,[]);old_payload=row['payload']
+            data=dict(original.get('request',{}),k=3,pool_size=3,time_limit=budget,_existing_plans=payload['plans'])
+            foods=load_foods();foods.update({'personal:'+k:v for k,v in products(profile.get('food_preferences',{})).items()})
+            for plan in payload['plans']:
+                for day in plan.get('days',[plan]):
+                    for selection in day.get('selections',[]):
+                        identifier=selection['food_id']
+                        if identifier not in foods:
+                            ref=dict(source=selection.get('source','CREA'),id=selection.get('reference_id') or identifier)
+                            food=diary.resolve_food(ref,profile)
+                            foods[identifier]=dict(source=ref['source'],source_id=ref['id'],name=food['name'],composition_provenance=food.get('composition_provenance'))
+            if kind=='meal':configuration=generate_meal_alternatives(db,user['id'],profile,data,make_config)
+            elif kind=='week':
+                import datetime as dt
+                locks={(x['date'],x['slot']):x for x in data.get('locked',[])}
+                start=dt.date.fromisoformat(data['week_start'])
+                for offset in range(7):
+                    date=(start+dt.timedelta(days=offset)).isoformat();view=diary.day_view(db,user['id'],profile,date)
+                    for meal in view['meals']:
+                        if meal.get('consumed_estimate'):raise diary.DomainError('Pasto a intervallo: alternative esatte non disponibili','interval_nutrients_unavailable')
+                        source=meal['eaten'] if meal['eaten'] is not None else meal['planned'] if meal['planned'] and meal['planned']['locked'] else None
+                        if source is not None:locks[date,meal['slot']]=dict(date=date,slot=meal['slot'],items=[{k:i[k] for k in ('food','grams','units') if k in i} for i in source['items']])
+                data['locked']=list(locks.values())
+        async with stdio_client(StdioServerParameters(command=optees_command())) as (read,write):
+            async with ClientSession(read,write) as session:
+                await session.initialize()
+                if kind=='meal':result=await configuration(session)
+                elif kind=='week':result=await generate_week(session,original['profile'],data,make_config,foods)
+                else:result=await orchestrate_day(session,original['config'],foods,data)
+        additions=result.get('plans',[])
+        previous=list(payload['plans'])
+        for p in additions:
+            vector=overlap_amounts(p,foods,profile,payload.get('slot'))
+            if any(overlap_value(vector,overlap_amounts(prior,foods,profile,payload.get('slot')))>.5+1e-6 for prior in previous):raise diary.DomainError('Alternativa non abbastanza diversa','overlap_not_verified',422)
+            previous.append(p)
+        with connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            fresh=identity(request);current=owner_profile(fresh)
+            saved=db.execute('SELECT payload FROM plan_set WHERE id=? AND user_id=?',(set_id,user['id'])).fetchone()
+            if not saved or saved['payload']!=old_payload or recalibration.fingerprint(db,user['id'],current,None,[])!=token:raise diary.DomainError('Diario, piano o profilo cambiati: ripeti il calcolo','plan_set_state_changed',409)
+            if not additions:return dict(status='no_more_alternatives',plan_set_id=set_id,added_plan_ids=[],reason=('Non è stata trovata un’altra alternativa entro il tempo disponibile; riprova con un budget maggiore.' if result.get('status')=='partial' or any(not s.get('certified',False) for s in result.get('pool',{}).get('overlap_searches',[])) else 'Non ci sono altre alternative abbastanza diverse: serve almeno il 50% di ingredienti diversi.'),pool=result.get('pool',{}))
+            for p in additions:
+                p['rank']=len(payload['plans'])+1
+                p['role']='alternative_'+str(p['rank'])
+                p['id']=db.execute('INSERT INTO plans(user_id,created,payload) VALUES(?,?,?)',(user['id'],time.time(),json.dumps(p))).lastrowid
+                payload['plans'].append(p)
+            payload['count']=len(payload['plans'])
+            payload['pool']['candidates']=payload['pool'].get('candidates',0)+result['pool'].get('candidates',len(additions))
+            payload['pool'].setdefault('extensions',[]).append(result['pool'])
+            overlap_report(payload,payload['plans'],foods,profile,payload.get('slot'))
+            db.execute('UPDATE plan_set SET payload=? WHERE id=?',(json.dumps(payload),set_id))
+            # Payload references in the list and plan detail agree after overlap changes.
+            for p in payload['plans']:db.execute('UPDATE plans SET payload=? WHERE id=? AND user_id=?',(json.dumps(p),p['id'],user['id']))
+        return dict(status='extended',plan_set_id=set_id,added_plan_ids=[p['id'] for p in additions],plan_set=payload)
