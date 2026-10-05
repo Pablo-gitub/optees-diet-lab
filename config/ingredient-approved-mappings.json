@@ -101,6 +101,306 @@
       "state_checked": true,
       "approved_by": "user_review",
       "note": "Approvazione manuale per aglio -> CREA:005000"
+    },
+    "cipolla_cruda": {
+      "source": "CREA",
+      "id": "005300",
+      "label": "Cipolle, crude",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "olio_vegetale_neutro": {
+      "source": "CREA",
+      "id": "009799",
+      "label": "Oli vegetali",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "farina_grano_00": {
+      "source": "CREA",
+      "id": "000220",
+      "label": "Farina di frumento, tipo 00",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "patate_crude": {
+      "source": "CREA",
+      "id": "006500",
+      "label": "Patate, crude",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "succo_limone": {
+      "source": "CREA",
+      "id": "008040",
+      "label": "Limoni, succo",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "burro": {
+      "source": "CREA",
+      "id": "190010",
+      "label": "Burro",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "riso_brillato_crudo": {
+      "source": "CREA",
+      "id": "000100",
+      "label": "Riso, brillato",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "latte_vacca_parz_scremato": {
+      "source": "CREA",
+      "id": "135020",
+      "label": "Latte di vacca, pastorizzato, parzialmente scremato",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "zucchero": {
+      "source": "CREA",
+      "id": "201500",
+      "label": "Zucchero, saccarosio",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "carote_crude": {
+      "source": "CREA",
+      "id": "005150",
+      "label": "Carote, crude",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "peperoni_crudi": {
+      "source": "CREA",
+      "id": "005600",
+      "label": "Peperoni, crudi",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "yogurt_intero": {
+      "source": "CREA",
+      "id": "150010",
+      "label": "Yogurt, da latte intero",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "spinaci_crudi": {
+      "source": "CREA",
+      "id": "005700",
+      "label": "Spinaci, crudi",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "peperoncino_fresco": {
+      "source": "CREA",
+      "id": "006830",
+      "label": "Peperoncini piccanti, freschi",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "yogurt_greco": {
+      "source": "CREA",
+      "id": "150020",
+      "label": "Yogurt greco, da latte intero",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "salsa_soia": {
+      "source": "CREA",
+      "id": "509020",
+      "label": "Soia, salsa",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "cetrioli_freschi": {
+      "source": "CREA",
+      "id": "005220",
+      "label": "Cetrioli, freschi",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "menta_fresca": {
+      "source": "CREA",
+      "id": "006810",
+      "label": "Menta, fresca",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "piselli_surgelati": {
+      "source": "CREA",
+      "id": "004730",
+      "label": "Piselli, surgelati",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "pomodori_pelati_scatola": {
+      "source": "CREA",
+      "id": "006680",
+      "label": "Pomodori, pelati in scatola",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "tacchino_petto_crudo": {
+      "source": "CREA",
+      "id": "106710",
+      "label": "Tacchino intero, senza pelle, crudo",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "funghi_prataioli_crudi": {
+      "source": "CREA",
+      "id": "006000",
+      "label": "Funghi coltivati, prataioli, crudi",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "gamberi_sgusciati": {
+      "source": "CREA",
+      "id": "128100",
+      "label": "Gamberi",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "pangrattato": {
+      "source": "CREA",
+      "id": "000570",
+      "label": "Pangrattato",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "cavolo_cappuccio_crudo": {
+      "source": "CREA",
+      "id": "005200",
+      "label": "Cavolo cappuccio, verde, crudo",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "agnello_crudo": {
+      "source": "CREA",
+      "id": "104020",
+      "label": "Agnello, crudo",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "melanzane_crude": {
+      "source": "CREA",
+      "id": "005500",
+      "label": "Melanzane, crude",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "porri_crudi": {
+      "source": "CREA",
+      "id": "005650",
+      "label": "Porri, crudi",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "zucchine_crude": {
+      "source": "CREA",
+      "id": "005730",
+      "label": "Zucchine, crude",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "uvetta_secca": {
+      "source": "CREA",
+      "id": "007410",
+      "label": "Uva, secca",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch01",
+      "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
     }
   },
   "recipe_overrides": {

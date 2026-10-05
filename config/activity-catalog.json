@@ -1,0 +1,413 @@
+{
+  "version": "1.0",
+  "description": "Catalogo attività fisica e stime MET basate sul Compendium of Physical Activities 2024",
+  "source": "2024 Adult Compendium of Physical Activities",
+  "checked_on": "2026-10-06",
+  "activities": [
+    {
+      "id": "walking_slow",
+      "name_it": "Camminata lenta",
+      "met": 2.8,
+      "compendium_code": "17152",
+      "compendium_description": "Walking, 2.0 to 2.4 mph, level, slow pace, firm surface",
+      "compendium_url": "https://pacompendium.com/walking",
+      "checked_on": "2026-10-06",
+      "healthkit_types": [
+        "HKWorkoutActivityTypeWalking"
+      ],
+      "duration_minutes": {
+        "min": 15,
+        "max": 90,
+        "step": 5
+      },
+      "goals": [
+        {
+          "goal_id": "health",
+          "zone": "light"
+        }
+      ]
+    },
+    {
+      "id": "walking_moderate",
+      "name_it": "Camminata normale",
+      "met": 3.8,
+      "compendium_code": "17190",
+      "compendium_description": "Walking, 2.8 to 3.4 mph, level, moderate pace, firm surface",
+      "compendium_url": "https://pacompendium.com/walking",
+      "checked_on": "2026-10-06",
+      "healthkit_types": [
+        "HKWorkoutActivityTypeWalking"
+      ],
+      "duration_minutes": {
+        "min": 15,
+        "max": 90,
+        "step": 5
+      },
+      "goals": [
+        {
+          "goal_id": "health",
+          "zone": "moderate"
+        },
+        {
+          "goal_id": "cardio_fitness",
+          "zone": "moderate"
+        }
+      ]
+    },
+    {
+      "id": "walking_brisk",
+      "name_it": "Camminata veloce",
+      "met": 4.8,
+      "compendium_code": "17200",
+      "compendium_description": "Walking, 3.5 to 3.9 mph, level, brisk, firm surface, walking for exercise",
+      "compendium_url": "https://pacompendium.com/walking",
+      "checked_on": "2026-10-06",
+      "healthkit_types": [
+        "HKWorkoutActivityTypeWalking"
+      ],
+      "duration_minutes": {
+        "min": 15,
+        "max": 90,
+        "step": 5
+      },
+      "goals": [
+        {
+          "goal_id": "health",
+          "zone": "moderate"
+        },
+        {
+          "goal_id": "cardio_fitness",
+          "zone": "moderate"
+        },
+        {
+          "goal_id": "fat_loss",
+          "zone": "moderate"
+        }
+      ]
+    },
+    {
+      "id": "walking_uphill",
+      "name_it": "Camminata in salita",
+      "met": 5.3,
+      "compendium_code": "17034",
+      "compendium_description": "Climbing hills, no load, 1 to 5% grade, moderate-to-brisk pace",
+      "compendium_url": "https://pacompendium.com/walking",
+      "checked_on": "2026-10-06",
+      "healthkit_types": [
+        "HKWorkoutActivityTypeWalking",
+        "HKWorkoutActivityTypeHiking"
+      ],
+      "duration_minutes": {
+        "min": 15,
+        "max": 90,
+        "step": 5
+      },
+      "goals": [
+        {
+          "goal_id": "health",
+          "zone": "vigorous"
+        },
+        {
+          "goal_id": "cardio_fitness",
+          "zone": "moderate"
+        },
+        {
+          "goal_id": "muscular_endurance",
+          "zone": "moderate"
+        }
+      ]
+    },
+    {
+      "id": "hiking",
+      "name_it": "Escursione",
+      "met": 5.3,
+      "compendium_code": "17082",
+      "compendium_description": "Hiking or walking at a normal pace through fields and hillsides, no load",
+      "compendium_url": "https://pacompendium.com/walking",
+      "checked_on": "2026-10-06",
+      "healthkit_types": [
+        "HKWorkoutActivityTypeHiking",
+        "HKWorkoutActivityTypeWalking"
+      ],
+      "duration_minutes": {
+        "min": 30,
+        "max": 180,
+        "step": 15
+      },
+      "goals": [
+        {
+          "goal_id": "health",
+          "zone": "moderate"
+        },
+        {
+          "goal_id": "cardio_fitness",
+          "zone": "moderate"
+        },
+        {
+          "goal_id": "fat_loss",
+          "zone": "moderate"
+        }
+      ]
+    },
+    {
+      "id": "cycling_leisure",
+      "name_it": "Bici tranquilla",
+      "met": 4.3,
+      "compendium_code": "01015",
+      "compendium_description": "Bicycling, self-selected easy pace",
+      "compendium_url": "https://pacompendium.com/bicycling",
+      "checked_on": "2026-10-06",
+      "healthkit_types": [
+        "HKWorkoutActivityTypeCycling"
+      ],
+      "duration_minutes": {
+        "min": 15,
+        "max": 120,
+        "step": 5
+      },
+      "goals": [
+        {
+          "goal_id": "health",
+          "zone": "moderate"
+        },
+        {
+          "goal_id": "cardio_fitness",
+          "zone": "light"
+        }
+      ]
+    },
+    {
+      "id": "cycling_moderate",
+      "name_it": "Bici moderata",
+      "met": 7.0,
+      "compendium_code": "01016",
+      "compendium_description": "Bicycling, self-selected moderate pace",
+      "compendium_url": "https://pacompendium.com/bicycling",
+      "checked_on": "2026-10-06",
+      "healthkit_types": [
+        "HKWorkoutActivityTypeCycling"
+      ],
+      "duration_minutes": {
+        "min": 15,
+        "max": 120,
+        "step": 5
+      },
+      "goals": [
+        {
+          "goal_id": "health",
+          "zone": "vigorous"
+        },
+        {
+          "goal_id": "cardio_fitness",
+          "zone": "moderate"
+        },
+        {
+          "goal_id": "fat_loss",
+          "zone": "moderate"
+        }
+      ]
+    },
+    {
+      "id": "running_light",
+      "name_it": "Corsa leggera",
+      "met": 7.5,
+      "compendium_code": "12020",
+      "compendium_description": "Jogging, general, self-selected pace",
+      "compendium_url": "https://pacompendium.com/running",
+      "checked_on": "2026-10-06",
+      "healthkit_types": [
+        "HKWorkoutActivityTypeRunning"
+      ],
+      "duration_minutes": {
+        "min": 15,
+        "max": 60,
+        "step": 5
+      },
+      "goals": [
+        {
+          "goal_id": "cardio_fitness",
+          "zone": "vigorous"
+        },
+        {
+          "goal_id": "health",
+          "zone": "vigorous"
+        },
+        {
+          "goal_id": "fat_loss",
+          "zone": "vigorous"
+        }
+      ]
+    },
+    {
+      "id": "swimming_leisure",
+      "name_it": "Nuoto tranquillo",
+      "met": 6.0,
+      "compendium_code": "18310",
+      "compendium_description": "Swimming, leisurely, not lap swimming, general",
+      "compendium_url": "https://pacompendium.com/water-activities",
+      "checked_on": "2026-10-06",
+      "healthkit_types": [
+        "HKWorkoutActivityTypeSwimming"
+      ],
+      "duration_minutes": {
+        "min": 20,
+        "max": 90,
+        "step": 5
+      },
+      "goals": [
+        {
+          "goal_id": "health",
+          "zone": "moderate"
+        },
+        {
+          "goal_id": "cardio_fitness",
+          "zone": "moderate"
+        },
+        {
+          "goal_id": "mobility",
+          "zone": "light"
+        }
+      ]
+    },
+    {
+      "id": "dancing",
+      "name_it": "Ballo",
+      "met": 4.5,
+      "compendium_code": "03025",
+      "compendium_description": "Ethnic or cultural dancing (e.g. Greek, Middle Eastern, hula, salsa, merengue, bamba y plena,  flamenco, belly, and swing)",
+      "compendium_url": "https://pacompendium.com/dancing",
+      "checked_on": "2026-10-06",
+      "healthkit_types": [
+        "HKWorkoutActivityTypeDance",
+        "HKWorkoutActivityTypeSocialDance"
+      ],
+      "duration_minutes": {
+        "min": 20,
+        "max": 90,
+        "step": 5
+      },
+      "goals": [
+        {
+          "goal_id": "health",
+          "zone": "moderate"
+        },
+        {
+          "goal_id": "cardio_fitness",
+          "zone": "moderate"
+        },
+        {
+          "goal_id": "agility",
+          "zone": "moderate"
+        }
+      ]
+    },
+    {
+      "id": "yoga",
+      "name_it": "Yoga",
+      "met": 2.3,
+      "compendium_code": "02175",
+      "compendium_description": "Yoga, General",
+      "compendium_url": "https://pacompendium.com/conditioning-exercise",
+      "checked_on": "2026-10-06",
+      "healthkit_types": [
+        "HKWorkoutActivityTypeYoga"
+      ],
+      "duration_minutes": {
+        "min": 20,
+        "max": 90,
+        "step": 5
+      },
+      "goals": [
+        {
+          "goal_id": "mobility",
+          "zone": "light"
+        },
+        {
+          "goal_id": "health",
+          "zone": "light"
+        }
+      ]
+    },
+    {
+      "id": "pilates",
+      "name_it": "Pilates",
+      "met": 2.8,
+      "compendium_code": "02105",
+      "compendium_description": "Pilates, general",
+      "compendium_url": "https://pacompendium.com/conditioning-exercise",
+      "checked_on": "2026-10-06",
+      "healthkit_types": [
+        "HKWorkoutActivityTypePilates"
+      ],
+      "duration_minutes": {
+        "min": 20,
+        "max": 90,
+        "step": 5
+      },
+      "goals": [
+        {
+          "goal_id": "mobility",
+          "zone": "moderate"
+        },
+        {
+          "goal_id": "muscular_endurance",
+          "zone": "light"
+        },
+        {
+          "goal_id": "health",
+          "zone": "moderate"
+        }
+      ]
+    },
+    {
+      "id": "stretching",
+      "name_it": "Stretching",
+      "met": 2.3,
+      "compendium_code": "02101",
+      "compendium_description": "Stretching, mild",
+      "compendium_url": "https://pacompendium.com/conditioning-exercise",
+      "checked_on": "2026-10-06",
+      "healthkit_types": [
+        "HKWorkoutActivityTypeFlexibility"
+      ],
+      "duration_minutes": {
+        "min": 10,
+        "max": 45,
+        "step": 5
+      },
+      "goals": [
+        {
+          "goal_id": "mobility",
+          "zone": "light"
+        },
+        {
+          "goal_id": "health",
+          "zone": "light"
+        }
+      ]
+    },
+    {
+      "id": "gardening",
+      "name_it": "Giardinaggio",
+      "met": 3.8,
+      "compendium_code": "08245",
+      "compendium_description": "Gardening, general, moderate effort",
+      "compendium_url": "https://pacompendium.com/lawn-garden",
+      "checked_on": "2026-10-06",
+      "healthkit_types": [
+        "HKWorkoutActivityTypeOther"
+      ],
+      "duration_minutes": {
+        "min": 30,
+        "max": 180,
+        "step": 15
+      },
+      "goals": [
+        {
+          "goal_id": "health",
+          "zone": "moderate"
+        }
+      ]
+    }
+  ]
+}

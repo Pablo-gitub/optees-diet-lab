@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "last_updated": "2026-10-04",
+  "last_updated": "2026-10-06",
   "qualifiers": {
     "cooking_state": {
       "raw": [
@@ -3916,6 +3916,325 @@
       ],
       "crea_matches": {},
       "off_brand_candidates": []
+    },
+    "cumino_polvere": {
+      "id": "cumino_polvere",
+      "display_name_it": "Cumino macinato",
+      "display_name_en": "Ground cumin",
+      "category": "Erbe e spezie",
+      "state": "spezia essiccata in polvere",
+      "synonyms_en": [
+        "ground cumin",
+        "cumin",
+        "cumin powder"
+      ],
+      "synonyms_it": [
+        "cumino macinato",
+        "cumino in polvere",
+        "cumino"
+      ],
+      "crea_matches": {},
+      "off_brand_candidates": [
+        {
+          "barcode": "9100000770208",
+          "brand": "Spar",
+          "name": "Cumino",
+          "match_type": "brand_candidate",
+          "reason": "Cumino macinato Spar in OFF (392 kcal, 18.9g prot, 24.4g fat)"
+        }
+      ]
+    },
+    "zenzero_fresco": {
+      "id": "zenzero_fresco",
+      "display_name_it": "Zenzero fresco",
+      "display_name_en": "Fresh ginger",
+      "category": "Verdure e ortaggi",
+      "state": "radice fresca decorticata",
+      "synonyms_en": [
+        "ginger",
+        "fresh ginger",
+        "ginger root",
+        "grated ginger"
+      ],
+      "synonyms_it": [
+        "zenzero",
+        "zenzero fresco",
+        "radice di zenzero"
+      ],
+      "crea_matches": {}
+    },
+    "curcuma_polvere": {
+      "id": "curcuma_polvere",
+      "display_name_it": "Curcuma in polvere",
+      "display_name_en": "Turmeric powder",
+      "category": "Erbe e spezie",
+      "state": "spezia essiccata in polvere",
+      "synonyms_en": [
+        "turmeric",
+        "ground turmeric",
+        "turmeric powder"
+      ],
+      "synonyms_it": [
+        "curcuma",
+        "curcuma in polvere",
+        "curcuma macinata"
+      ],
+      "crea_matches": {},
+      "off_brand_candidates": [
+        {
+          "barcode": "02772217",
+          "brand": "Sottolestelle",
+          "name": "Curcuma in polvere bio",
+          "match_type": "brand_candidate",
+          "reason": "Curcuma in polvere bio Sottolestelle in OFF (422 kcal, 7.8g prot, 9.9g fat, 65g carbs)"
+        }
+      ]
+    },
+    "alloro_foglie": {
+      "id": "alloro_foglie",
+      "display_name_it": "Alloro, foglie",
+      "display_name_en": "Bay leaves",
+      "category": "Erbe e spezie",
+      "state": "foglie essiccate per aroma/infusione",
+      "synonyms_en": [
+        "bay leaves",
+        "bay leaf",
+        "dried bay leaves"
+      ],
+      "synonyms_it": [
+        "alloro",
+        "foglie di alloro",
+        "alloro secco"
+      ],
+      "crea_matches": {}
+    },
+    "panna_acida": {
+      "id": "panna_acida",
+      "display_name_it": "Panna acida / sour cream",
+      "display_name_en": "Sour cream",
+      "category": "Latte e yogurt",
+      "state": "panna fermentata acida (~15% lipidi)",
+      "synonyms_en": [
+        "soured cream",
+        "sour cream",
+        "creme fraiche"
+      ],
+      "synonyms_it": [
+        "panna acida",
+        "creme fraiche"
+      ],
+      "crea_matches": {},
+      "off_brand_candidates": [
+        {
+          "barcode": "8001120709905",
+          "brand": "Coop",
+          "name": "Panna acida",
+          "match_type": "brand_candidate",
+          "reason": "Panna acida Coop in OFF (170 kcal, 4.4g prot, 15g fat, 4.4g carbs)"
+        }
+      ]
+    },
+    "cavolo_cappuccio_crudo": {
+      "id": "cavolo_cappuccio_crudo",
+      "display_name_it": "Cavolo cappuccio, verde, crudo",
+      "display_name_en": "Cabbage, raw",
+      "category": "Verdure e ortaggi",
+      "state": "crudo, parte edibile",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "cabbage",
+        "green cabbage",
+        "white cabbage",
+        "head cabbage"
+      ],
+      "synonyms_it": [
+        "cavolo",
+        "cavolo cappuccio",
+        "cavolo cappuccio verde"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "005200",
+          "name": "Cavolo cappuccio, verde, crudo",
+          "match_type": "exact",
+          "reason": "Cavolo cappuccio verde crudo CREA 005200 (24 kcal/100g)"
+        },
+        "cooked_alternate": {
+          "id": "005205",
+          "name": "Cavolo cappuccio, verde, cotto, bollito",
+          "match_type": "cooked_alternate",
+          "reason": "Cavolo cappuccio verde bollito CREA 005205"
+        }
+      }
+    },
+    "agnello_crudo": {
+      "id": "agnello_crudo",
+      "display_name_it": "Agnello, crudo",
+      "display_name_en": "Lamb, raw",
+      "category": "Carni fresche",
+      "state": "crudo, parte edibile",
+      "expected_qualifiers": {
+        "cooking_state": "raw"
+      },
+      "synonyms_en": [
+        "lamb",
+        "lamb meat"
+      ],
+      "synonyms_it": [
+        "agnello",
+        "carne di agnello"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "104020",
+          "name": "Agnello, crudo",
+          "match_type": "exact",
+          "reason": "Agnello crudo CREA 104020 (159 kcal/100g)"
+        },
+        "cooked_alternate": {
+          "id": "104029",
+          "name": "Agnello, cotto, al forno",
+          "match_type": "cooked_alternate",
+          "reason": "Agnello cotto al forno CREA 104029"
+        }
+      }
+    },
+    "lime_fresco": {
+      "id": "lime_fresco",
+      "display_name_it": "Lime / Limetta fresca",
+      "display_name_en": "Fresh lime",
+      "category": "Frutta",
+      "state": "frutto fresco intero o succo",
+      "synonyms_en": [
+        "limes",
+        "lime",
+        "lime juice",
+        "fresh lime"
+      ],
+      "synonyms_it": [
+        "lime",
+        "limetta",
+        "succo di lime"
+      ],
+      "crea_matches": {}
+    },
+    "latte_cocco": {
+      "id": "latte_cocco",
+      "display_name_it": "Latte di cocco",
+      "display_name_en": "Coconut milk",
+      "category": "Bevande",
+      "state": "estratto liquido culinario da polpa di cocco",
+      "synonyms_en": [
+        "coconut milk",
+        "canned coconut milk"
+      ],
+      "synonyms_it": [
+        "latte di cocco"
+      ],
+      "crea_matches": {},
+      "off_brand_candidates": [
+        {
+          "barcode": "8016225310437",
+          "brand": "Altromercato",
+          "name": "Latte di cocco",
+          "match_type": "brand_candidate",
+          "reason": "Latte di cocco Altromercato in OFF (170 kcal, 1.2g prot, 17g fat, 3g carbs)"
+        }
+      ]
+    },
+    "paprika_polvere": {
+      "id": "paprika_polvere",
+      "display_name_it": "Paprika in polvere",
+      "display_name_en": "Paprika powder",
+      "category": "Erbe e spezie",
+      "state": "spezia essiccata in polvere",
+      "synonyms_en": [
+        "paprika",
+        "sweet paprika",
+        "smoked paprika",
+        "ground paprika"
+      ],
+      "synonyms_it": [
+        "paprika",
+        "paprica",
+        "paprika dolce",
+        "paprika in polvere"
+      ],
+      "crea_matches": {}
+    },
+    "vaniglia": {
+      "id": "vaniglia",
+      "display_name_it": "Vaniglia / Estratto di vaniglia",
+      "display_name_en": "Vanilla / Vanilla extract",
+      "category": "Erbe e spezie",
+      "state": "aroma naturale / baccello essiccato",
+      "synonyms_en": [
+        "vanilla",
+        "vanilla extract",
+        "vanilla essence",
+        "vanilla pod"
+      ],
+      "synonyms_it": [
+        "vaniglia",
+        "estratto di vaniglia",
+        "baccello di vaniglia"
+      ],
+      "crea_matches": {}
+    },
+    "cannella_stecca": {
+      "id": "cannella_stecca",
+      "display_name_it": "Cannella in stecche",
+      "display_name_en": "Cinnamon stick",
+      "category": "Erbe e spezie",
+      "state": "spezia essiccata in corteccia/stecca",
+      "synonyms_en": [
+        "cinnamon stick",
+        "cinnamon sticks",
+        "cinnamon bark"
+      ],
+      "synonyms_it": [
+        "cannella in stecche",
+        "stecca di cannella",
+        "cannella in corteccia"
+      ],
+      "crea_matches": {}
+    },
+    "uvetta_secca": {
+      "id": "uvetta_secca",
+      "display_name_it": "Uva secca / Uvetta",
+      "display_name_en": "Raisins / Sultanas",
+      "category": "Frutta",
+      "state": "frutto essiccato, pronto al consumo",
+      "synonyms_en": [
+        "raisins",
+        "raisin",
+        "sultanas"
+      ],
+      "synonyms_it": [
+        "uvetta",
+        "uva passa",
+        "uva sultanina",
+        "uva secca"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "007410",
+          "name": "Uva, secca",
+          "match_type": "exact",
+          "reason": "Uva secca CREA 007410 (293 kcal/100g)"
+        }
+      },
+      "off_brand_candidates": [
+        {
+          "barcode": "24128476",
+          "brand": "SweetValley",
+          "name": "Uvetta",
+          "match_type": "brand_candidate",
+          "reason": "Uvetta SweetValley in OFF (328 kcal, 3.4g prot, 0.5g fat, 76g carbs)"
+        }
+      ]
     }
   }
 }
