@@ -1,6 +1,6 @@
 {
-  "version": "1.1",
-  "description": "Catalogo dei preset per pasti liberi / sgarri con intervalli di calorie e macronutrienti per taglia (piccolo, medio, grande). Le fonti citano unicamente codici verificabili presenti in dataset/crea/foods.csv (riportando source_id, nome e kcal del file) e pagine nutrizionali ufficiali di catene di ristorazione con data di consultazione e calcolo esplicito. Le voci prive di fonte verificabile sono lasciate vuote.",
+  "version": "1.2",
+  "description": "Catalogo dei preset per pasti liberi / sgarri con intervalli di calorie e macronutrienti per taglia (piccolo, medio, grande). Le fonti citano unicamente codici verificabili presenti in dataset/crea/foods.csv (riportando source_id, nome e kcal del file), dati ufficiali USDA FoodData Central (con fdc_id e link) e pagine nutrizionali ufficiali di catene di ristorazione con data di consultazione (consulted) e calcolo esplicito. Le voci prive di fonte verificabile sono lasciate vuote.",
   "presets": {
     "pizzeria": {
       "id": "pizzeria",
@@ -407,38 +407,220 @@
     "sushi": {
       "id": "sushi",
       "name": "Sushi e cucina giapponese",
-      "description": "Pasto a base di sushi, sashimi e preparazioni giapponesi.",
-      "note": "Voce lasciata vuota: nessun alimento per sushi è presente in dataset/crea/foods.csv né sono disponibili tabelle nutrizionali ufficiali di catene accreditate in Italia.",
+      "description": "Pasto a base di sushi e preparazioni tradizionali giapponesi (maki roll, California roll e nigiri).",
+      "note": "Valori nutrizionali calcolati a partire dai dati ufficiali USDA FoodData Central (FNDDS Survey Foods, release 2024), con composizione analitica per 100g e porzioni standard per pezzo (30-35g).",
       "sizes": {
         "piccolo": {
           "label": "Piccolo",
-          "portion_description": null,
-          "calories_kcal": null,
-          "protein_g": null,
-          "carbs_g": null,
-          "fat_g": null,
-          "calculation": null,
-          "sources": []
+          "portion_description": "Porzione leggera di 8 pezzi misti (4 maki/roll da 30g e 4 nigiri da 35g, peso netto circa 240-260g).",
+          "calories_kcal": {
+            "min": 226,
+            "max": 307
+          },
+          "protein_g": {
+            "min": 7,
+            "max": 24
+          },
+          "carbs_g": {
+            "min": 33,
+            "max": 44
+          },
+          "fat_g": {
+            "min": 2,
+            "max": 8
+          },
+          "calculation": "Min: 8 pezzi di California roll (240g di USDA FDC 2708961, 94.0 kcal/100g: 240*0.94 = 225.6 kcal, P: 240*0.0292 = 7.0g, C: 240*0.184 = 44.2g, F: 240*0.0067 = 1.6g). Max: 4 pezzi di Nigiri tonno (140g di USDA FDC 2708971, 100.0 kcal/100g: 140*1.00 = 140.0 kcal, P: 140*0.0966 = 13.5g, C: 140*0.134 = 18.8g, F: 140*0.0029 = 0.4g) + 4 pezzi di Nigiri tamago con uovo (140g di USDA FDC 2708972, 119.0 kcal/100g: 140*1.19 = 166.6 kcal, P: 140*0.0732 = 10.2g, C: 140*0.1025 = 14.4g, F: 140*0.0523 = 7.3g) = 306.6 kcal, P: 13.5 + 10.2 = 23.7g, C: 18.8 + 14.4 = 33.2g, F: 0.4 + 7.3 = 7.7g.",
+          "sources": [
+            {
+              "source": "USDA FoodData Central",
+              "fdc_id": 2708961,
+              "name": "Sushi roll, California",
+              "kcal_100g": 94.0,
+              "protein_g_100g": 2.92,
+              "carbs_g_100g": 18.4,
+              "fat_g_100g": 0.67,
+              "portion_reference": "1 pezzo = 30g (28.2 kcal)",
+              "source_url": "https://fdc.nal.usda.gov/food-details/2708961/nutrients",
+              "consulted": "2026-10-05",
+              "consultation_date": "2026-10-05"
+            },
+            {
+              "source": "USDA FoodData Central",
+              "fdc_id": 2708971,
+              "name": "Sushi, topped with tuna",
+              "kcal_100g": 100.0,
+              "protein_g_100g": 9.66,
+              "carbs_g_100g": 13.4,
+              "fat_g_100g": 0.29,
+              "portion_reference": "1 pezzo = 35g (35.0 kcal)",
+              "source_url": "https://fdc.nal.usda.gov/food-details/2708971/nutrients",
+              "consulted": "2026-10-05",
+              "consultation_date": "2026-10-05"
+            },
+            {
+              "source": "USDA FoodData Central",
+              "fdc_id": 2708972,
+              "name": "Sushi, topped with egg",
+              "kcal_100g": 119.0,
+              "protein_g_100g": 7.32,
+              "carbs_g_100g": 10.25,
+              "fat_g_100g": 5.23,
+              "portion_reference": "1 pezzo = 35g (41.7 kcal)",
+              "source_url": "https://fdc.nal.usda.gov/food-details/2708972/nutrients",
+              "consulted": "2026-10-05",
+              "consultation_date": "2026-10-05"
+            }
+          ]
         },
         "medio": {
           "label": "Medio",
-          "portion_description": null,
-          "calories_kcal": null,
-          "protein_g": null,
-          "carbs_g": null,
-          "fat_g": null,
-          "calculation": null,
-          "sources": []
+          "portion_description": "Piatto sushi standard da 16 pezzi misti (8 roll da 30g e 8 nigiri da 35g, peso netto circa 520g).",
+          "calories_kcal": {
+            "min": 451,
+            "max": 539
+          },
+          "protein_g": {
+            "min": 14,
+            "max": 42
+          },
+          "carbs_g": {
+            "min": 70,
+            "max": 88
+          },
+          "fat_g": {
+            "min": 3,
+            "max": 8
+          },
+          "calculation": "Min: 16 pezzi di California roll (480g di USDA FDC 2708961, 94.0 kcal/100g: 480*0.94 = 451.2 kcal, P: 480*0.0292 = 14.0g, C: 480*0.184 = 88.3g, F: 480*0.0067 = 3.2g). Max: 8 pezzi di Maki tonno (240g di USDA FDC 2708965, 97.0 kcal/100g: 240*0.97 = 232.8 kcal, P: 240*0.0740 = 17.8g, C: 240*0.153 = 36.7g, F: 240*0.0026 = 0.6g) + 4 pezzi di Nigiri tonno (140g di USDA FDC 2708971, 100.0 kcal/100g: 140*1.00 = 140.0 kcal, P: 140*0.0966 = 13.5g, C: 140*0.134 = 18.8g, F: 140*0.0029 = 0.4g) + 4 pezzi di Nigiri tamago (140g di USDA FDC 2708972, 119.0 kcal/100g: 140*1.19 = 166.6 kcal, P: 140*0.0732 = 10.2g, C: 140*0.1025 = 14.4g, F: 140*0.0523 = 7.3g) = 539.4 kcal, P: 17.8 + 13.5 + 10.2 = 41.5g, C: 36.7 + 18.8 + 14.4 = 69.9g, F: 0.6 + 0.4 + 7.3 = 8.3g.",
+          "sources": [
+            {
+              "source": "USDA FoodData Central",
+              "fdc_id": 2708961,
+              "name": "Sushi roll, California",
+              "kcal_100g": 94.0,
+              "protein_g_100g": 2.92,
+              "carbs_g_100g": 18.4,
+              "fat_g_100g": 0.67,
+              "portion_reference": "1 pezzo = 30g (28.2 kcal)",
+              "source_url": "https://fdc.nal.usda.gov/food-details/2708961/nutrients",
+              "consulted": "2026-10-05",
+              "consultation_date": "2026-10-05"
+            },
+            {
+              "source": "USDA FoodData Central",
+              "fdc_id": 2708965,
+              "name": "Sushi roll tuna",
+              "kcal_100g": 97.0,
+              "protein_g_100g": 7.4,
+              "carbs_g_100g": 15.3,
+              "fat_g_100g": 0.26,
+              "portion_reference": "1 pezzo = 30g (29.1 kcal)",
+              "source_url": "https://fdc.nal.usda.gov/food-details/2708965/nutrients",
+              "consulted": "2026-10-05",
+              "consultation_date": "2026-10-05"
+            },
+            {
+              "source": "USDA FoodData Central",
+              "fdc_id": 2708971,
+              "name": "Sushi, topped with tuna",
+              "kcal_100g": 100.0,
+              "protein_g_100g": 9.66,
+              "carbs_g_100g": 13.4,
+              "fat_g_100g": 0.29,
+              "portion_reference": "1 pezzo = 35g (35.0 kcal)",
+              "source_url": "https://fdc.nal.usda.gov/food-details/2708971/nutrients",
+              "consulted": "2026-10-05",
+              "consultation_date": "2026-10-05"
+            },
+            {
+              "source": "USDA FoodData Central",
+              "fdc_id": 2708972,
+              "name": "Sushi, topped with egg",
+              "kcal_100g": 119.0,
+              "protein_g_100g": 7.32,
+              "carbs_g_100g": 10.25,
+              "fat_g_100g": 5.23,
+              "portion_reference": "1 pezzo = 35g (41.7 kcal)",
+              "source_url": "https://fdc.nal.usda.gov/food-details/2708972/nutrients",
+              "consulted": "2026-10-05",
+              "consultation_date": "2026-10-05"
+            }
+          ]
         },
         "grande": {
           "label": "Grande",
-          "portion_description": null,
-          "calories_kcal": null,
-          "protein_g": null,
-          "carbs_g": null,
-          "fat_g": null,
-          "calculation": null,
-          "sources": []
+          "portion_description": "Pasto ricco / degustazione da 28-30 pezzi misti (roll, maki e nigiri assortiti, peso netto circa 840-980g).",
+          "calories_kcal": {
+            "min": 790,
+            "max": 1058
+          },
+          "protein_g": {
+            "min": 25,
+            "max": 82
+          },
+          "carbs_g": {
+            "min": 129,
+            "max": 155
+          },
+          "fat_g": {
+            "min": 6,
+            "max": 20
+          },
+          "calculation": "Min: 28 pezzi di California roll (840g di USDA FDC 2708961, 94.0 kcal/100g: 840*0.94 = 789.6 kcal, P: 840*0.0292 = 24.5g, C: 840*0.184 = 154.6g, F: 840*0.0067 = 5.6g). Max: 10 pezzi di Maki tonno (300g di USDA FDC 2708965, 97.0 kcal/100g: 300*0.97 = 291.0 kcal, P: 300*0.0740 = 22.2g, C: 300*0.153 = 45.9g, F: 300*0.0026 = 0.8g) + 10 pezzi di Nigiri tonno (350g di USDA FDC 2708971, 100.0 kcal/100g: 350*1.00 = 350.0 kcal, P: 350*0.0966 = 33.8g, C: 350*0.134 = 46.9g, F: 350*0.0029 = 1.0g) + 10 pezzi di Nigiri tamago (350g di USDA FDC 2708972, 119.0 kcal/100g: 350*1.19 = 416.5 kcal, P: 350*0.0732 = 25.6g, C: 350*0.1025 = 35.9g, F: 350*0.0523 = 18.3g) = 1057.5 kcal, P: 22.2 + 33.8 + 25.6 = 81.6g, C: 45.9 + 46.9 + 35.9 = 128.7g, F: 0.8 + 1.0 + 18.3 = 20.1g.",
+          "sources": [
+            {
+              "source": "USDA FoodData Central",
+              "fdc_id": 2708961,
+              "name": "Sushi roll, California",
+              "kcal_100g": 94.0,
+              "protein_g_100g": 2.92,
+              "carbs_g_100g": 18.4,
+              "fat_g_100g": 0.67,
+              "portion_reference": "1 pezzo = 30g (28.2 kcal)",
+              "source_url": "https://fdc.nal.usda.gov/food-details/2708961/nutrients",
+              "consulted": "2026-10-05",
+              "consultation_date": "2026-10-05"
+            },
+            {
+              "source": "USDA FoodData Central",
+              "fdc_id": 2708965,
+              "name": "Sushi roll tuna",
+              "kcal_100g": 97.0,
+              "protein_g_100g": 7.4,
+              "carbs_g_100g": 15.3,
+              "fat_g_100g": 0.26,
+              "portion_reference": "1 pezzo = 30g (29.1 kcal)",
+              "source_url": "https://fdc.nal.usda.gov/food-details/2708965/nutrients",
+              "consulted": "2026-10-05",
+              "consultation_date": "2026-10-05"
+            },
+            {
+              "source": "USDA FoodData Central",
+              "fdc_id": 2708971,
+              "name": "Sushi, topped with tuna",
+              "kcal_100g": 100.0,
+              "protein_g_100g": 9.66,
+              "carbs_g_100g": 13.4,
+              "fat_g_100g": 0.29,
+              "portion_reference": "1 pezzo = 35g (35.0 kcal)",
+              "source_url": "https://fdc.nal.usda.gov/food-details/2708971/nutrients",
+              "consulted": "2026-10-05",
+              "consultation_date": "2026-10-05"
+            },
+            {
+              "source": "USDA FoodData Central",
+              "fdc_id": 2708972,
+              "name": "Sushi, topped with egg",
+              "kcal_100g": 119.0,
+              "protein_g_100g": 7.32,
+              "carbs_g_100g": 10.25,
+              "fat_g_100g": 5.23,
+              "portion_reference": "1 pezzo = 35g (41.7 kcal)",
+              "source_url": "https://fdc.nal.usda.gov/food-details/2708972/nutrients",
+              "consulted": "2026-10-05",
+              "consultation_date": "2026-10-05"
+            }
+          ]
         }
       }
     },
@@ -446,7 +628,7 @@
       "id": "kebab",
       "name": "Kebab",
       "description": "Döner kebab in panino pita, piadina o al piatto.",
-      "note": "Voce lasciata vuota: nessun alimento per döner kebab è presente in dataset/crea/foods.csv né sono disponibili tabelle nutrizionali ufficiali di catene accreditate in Italia.",
+      "note": "Voce lasciata vuota: nessun alimento per döner kebab o preparazioni simili è presente in dataset/crea/foods.csv né nelle banche dati ufficiali generiche (USDA Survey/Foundation). In Italia non sono disponibili tabelle nutrizionali ufficiali e certificate pubblicate da catene di kebab. Come da requisiti metodologici, in assenza di fonti ufficiali e verificabili i valori restano null.",
       "sizes": {
         "piccolo": {
           "label": "Piccolo",
@@ -881,7 +1063,7 @@
           "label": "Piccolo",
           "portion_description": "Panino singolo standard da fast food (hamburger o cheeseburger) senza patatine né bibita zuccherata.",
           "calories_kcal": {
-            "min": 253,
+            "min": 258,
             "max": 390
           },
           "protein_g": {
@@ -889,14 +1071,14 @@
             "max": 21
           },
           "carbs_g": {
-            "min": 30,
+            "min": 29,
             "max": 39
           },
           "fat_g": {
             "min": 9,
             "max": 17
           },
-          "calculation": "Min: Hamburger singolo da sito ufficiale McDonald's Italia (253 kcal, P 13.0g, C 30.0g, F 8.8g; https://www.mcdonalds.it/prodotti/burger/hamburger, consultato il 04/10/2026). Max: Porzione standard di Cheese burger da CREA 119020 (peso porzione 130g, 300.0 kcal/100g: 130*3.00 = 390.0 kcal, P: 130*0.163 = 21.2g, C: 130*0.302 = 39.3g, F: 130*0.131 = 17.0g; https://www.alimentinutrizione.it/tabelle-nutrizionali/119020).",
+          "calculation": "Min: Hamburger singolo da sito ufficiale McDonald's Italia (258 kcal, P 13.0g, C 29.0g, F 9.4g; https://www.mcdonalds.it/prodotti/panini/hamburger, consultato il 05/10/2026). Max: Porzione standard di Cheese burger da CREA 119020 (peso porzione 130g, 300.0 kcal/100g: 130*3.00 = 390.0 kcal, P: 130*0.163 = 21.2g, C: 130*0.302 = 39.3g, F: 130*0.131 = 17.0g; https://www.alimentinutrizione.it/tabelle-nutrizionali/119020).",
           "sources": [
             {
               "source": "CREA",
@@ -921,22 +1103,24 @@
             {
               "source": "McDonald's Italia",
               "product": "Hamburger",
-              "kcal": 253,
+              "kcal": 258,
               "protein_g": 13.0,
-              "carbs_g": 30.0,
-              "fat_g": 8.8,
-              "source_url": "https://www.mcdonalds.it/prodotti/burger/hamburger",
-              "consultation_date": "2026-10-04"
+              "carbs_g": 29.0,
+              "fat_g": 9.4,
+              "source_url": "https://www.mcdonalds.it/prodotti/panini/hamburger",
+              "consulted": "2026-10-05",
+              "consultation_date": "2026-10-05"
             },
             {
               "source": "McDonald's Italia",
               "product": "Cheeseburger",
-              "kcal": 302,
+              "kcal": 306,
               "protein_g": 16.0,
-              "carbs_g": 31.0,
-              "fat_g": 12.0,
-              "source_url": "https://www.mcdonalds.it/prodotti/burger/cheeseburger",
-              "consultation_date": "2026-10-04"
+              "carbs_g": 30.0,
+              "fat_g": 13.0,
+              "source_url": "https://www.mcdonalds.it/prodotti/panini/cheeseburger",
+              "consulted": "2026-10-05",
+              "consultation_date": "2026-10-05"
             }
           ]
         },
@@ -945,21 +1129,21 @@
           "portion_description": "Menu standard: burger iconico (Cheese burger o Big Mac) + porzione media di patatine fritte con acqua o bibita zero.",
           "calories_kcal": {
             "min": 639,
-            "max": 833
+            "max": 871
           },
           "protein_g": {
             "min": 24,
-            "max": 30
+            "max": 31
           },
           "carbs_g": {
             "min": 72,
-            "max": 84
+            "max": 81
           },
           "fat_g": {
             "min": 29,
-            "max": 41
+            "max": 45
           },
-          "calculation": "Min: Porzione CREA 119020 Cheese burger 130g (390.0 kcal, P 21.2g, C 39.3g, F 17.0g) + Porzione CREA 119080 Patatine, fritte, fast food 88g (283.0 kcal/100g: 88*2.83 = 249.0 kcal, P: 88*0.033 = 2.9g, C: 88*0.376 = 33.1g, F: 88*0.137 = 12.1g) = 639.0 kcal, P 24.1g, C 72.4g, F 29.1g. Max: Big Mac da sito ufficiale McDonald's Italia (503 kcal, P 26.0g, C 42.0g, F 25.0g; https://www.mcdonalds.it/prodotti/burger/big-mac, consultato il 04/10/2026) + Patatine medie da sito ufficiale McDonald's Italia (330 kcal, P 4.4g, C 42.0g, F 16.0g; https://www.mcdonalds.it/prodotti/patatine/patatine-medie, consultato il 04/10/2026) = 833.0 kcal, P 30.4g, C 84.0g, F 41.0g (con acqua o bibita zero a 0 kcal).",
+          "calculation": "Min: Porzione CREA 119020 Cheese burger 130g (390.0 kcal, P 21.2g, C 39.3g, F 17.0g) + Porzione CREA 119080 Patatine, fritte, fast food 88g (283.0 kcal/100g: 88*2.83 = 249.0 kcal, P: 88*0.033 = 2.9g, C: 88*0.376 = 33.1g, F: 88*0.137 = 12.1g) = 639.0 kcal, P 24.1g, C 72.4g, F 29.1g. Max: Big Mac da sito ufficiale McDonald's Italia (544 kcal, P 27.0g, C 42.0g, F 29.0g; https://www.mcdonalds.it/prodotti/panini/big-mac, consultato il 05/10/2026) + Patatine medie da sito ufficiale McDonald's Italia (327 kcal, P 4.3g, C 39.0g, F 16.0g; https://www.mcdonalds.it/prodotti/patatine/patatine, consultato il 05/10/2026) = 871.0 kcal, P 31.3g, C 81.0g, F 45.0g (con acqua o bibita zero a 0 kcal).",
           "sources": [
             {
               "source": "CREA",
@@ -984,22 +1168,24 @@
             {
               "source": "McDonald's Italia",
               "product": "Big Mac",
-              "kcal": 503,
-              "protein_g": 26.0,
+              "kcal": 544,
+              "protein_g": 27.0,
               "carbs_g": 42.0,
-              "fat_g": 25.0,
-              "source_url": "https://www.mcdonalds.it/prodotti/burger/big-mac",
-              "consultation_date": "2026-10-04"
+              "fat_g": 29.0,
+              "source_url": "https://www.mcdonalds.it/prodotti/panini/big-mac",
+              "consulted": "2026-10-05",
+              "consultation_date": "2026-10-05"
             },
             {
               "source": "McDonald's Italia",
               "product": "Patatine Medie",
-              "kcal": 330,
-              "protein_g": 4.4,
-              "carbs_g": 42.0,
+              "kcal": 327,
+              "protein_g": 4.3,
+              "carbs_g": 39.0,
               "fat_g": 16.0,
-              "source_url": "https://www.mcdonalds.it/prodotti/patatine/patatine-medie",
-              "consultation_date": "2026-10-04"
+              "source_url": "https://www.mcdonalds.it/prodotti/patatine/patatine",
+              "consulted": "2026-10-05",
+              "consultation_date": "2026-10-05"
             }
           ]
         },
@@ -1007,42 +1193,55 @@
           "label": "Grande",
           "portion_description": "Menu Maxi: doppio burger farcito (Gran Crispy McBacon) + patatine grandi con bibita analcolica (acqua/zero o zuccherata 500ml).",
           "calories_kcal": {
-            "min": 1224,
-            "max": 1434
+            "min": 1178,
+            "max": 1388
           },
           "protein_g": {
-            "min": 46,
-            "max": 46
+            "min": 47,
+            "max": 47
           },
           "carbs_g": {
-            "min": 98,
-            "max": 151
+            "min": 91,
+            "max": 144
           },
           "fat_g": {
-            "min": 71,
-            "max": 71
+            "min": 68,
+            "max": 68
           },
-          "calculation": "Min (con acqua o bibita zero): Gran Crispy McBacon da sito ufficiale McDonald's Italia (790 kcal, P 40.0g, C 43.0g, F 50.0g; https://www.mcdonalds.it/prodotti/burger/gran-crispy-mcbacon, consultato il 04/10/2026) + Patatine grandi da sito ufficiale McDonald's Italia (434 kcal, P 5.8g, C 55.0g, F 21.0g; https://www.mcdonalds.it/prodotti/patatine/patatine-grandi, consultato il 04/10/2026) = 1224.0 kcal, P 45.8g, C 98.0g, F 71.0g. Max (con bibita zuccherata 500ml, 210 kcal e 53g carboidrati): 1224.0 + 210.0 = 1434.0 kcal, P 45.8g, C 151.0g, F 71.0g.",
+          "calculation": "Min (con acqua o bibita zero): Gran Crispy McBacon da sito ufficiale McDonald's Italia (750 kcal, P 41.0g, C 40.0g, F 47.0g; https://www.mcdonalds.it/prodotti/panini/gran-crispy-mcbacon, consultato il 05/10/2026) + Patatine grandi da sito ufficiale McDonald's Italia (428 kcal, P 5.6g, C 51.0g, F 21.0g; https://www.mcdonalds.it/prodotti/patatine/patatine-grandi, consultato il 05/10/2026) = 1178.0 kcal, P 46.6g, C 91.0g, F 68.0g. Max (con bibita zuccherata 500ml: Coca-Cola Original Taste, 42 kcal e 10,6 g carboidrati per 100 ml da https://www.coca-cola.com/it/it/brands/coca-cola/coca-cola-classic, consultato il 05/10/2026: 500*0.42 = 210 kcal, C 500*0.106 = 53 g): 1178.0 + 210.0 = 1388.0 kcal, P 46.6g, C 144.0g, F 68.0g.",
           "sources": [
             {
               "source": "McDonald's Italia",
               "product": "Gran Crispy McBacon",
-              "kcal": 790,
-              "protein_g": 40.0,
-              "carbs_g": 43.0,
-              "fat_g": 50.0,
-              "source_url": "https://www.mcdonalds.it/prodotti/burger/gran-crispy-mcbacon",
-              "consultation_date": "2026-10-04"
+              "kcal": 750,
+              "protein_g": 41.0,
+              "carbs_g": 40.0,
+              "fat_g": 47.0,
+              "source_url": "https://www.mcdonalds.it/prodotti/panini/gran-crispy-mcbacon",
+              "consulted": "2026-10-05",
+              "consultation_date": "2026-10-05"
             },
             {
               "source": "McDonald's Italia",
               "product": "Patatine Grandi",
-              "kcal": 434,
-              "protein_g": 5.8,
-              "carbs_g": 55.0,
+              "kcal": 428,
+              "protein_g": 5.6,
+              "carbs_g": 51.0,
               "fat_g": 21.0,
               "source_url": "https://www.mcdonalds.it/prodotti/patatine/patatine-grandi",
-              "consultation_date": "2026-10-04"
+              "consulted": "2026-10-05",
+              "consultation_date": "2026-10-05"
+            },
+            {
+              "source": "Coca-Cola Italia",
+              "source_id": null,
+              "name": "Coca-Cola Original Taste",
+              "kcal_100ml": 42.0,
+              "carbs_g_100ml": 10.6,
+              "protein_g_100ml": 0.0,
+              "fat_g_100ml": 0.0,
+              "consulted": "2026-10-05",
+              "source_url": "https://www.coca-cola.com/it/it/brands/coca-cola/coca-cola-classic"
             }
           ]
         }
