@@ -91,3 +91,16 @@ In **Oggi** ogni pasto non ancora registrato della settimana corrente (fino a og
 |---|---|---|
 | B11 | Il bandit (6.1) impara dai voti, ma `DayView` non espone il piano della giornata: la UI non può offrire «Com'è andata la giornata?» in Oggi | aggiungere a `DayView` `plan_id` (o un riferimento valutabile) e la valutazione già data, così la UI chiama `POST /api/plans/{id}/feedback` |
 | B12 | **Bloccante per l'uso reale.** L'anteprima minimizza solo le calorie: per togliere 61 kcal in sei giorni ha prodotto 71 modifiche ai pasti, sostituendo pasti interi (riso → pizza il giorno dopo una pizza, barretta → banane a colazione) | minimizzare lo scostamento dal piano esistente (stessi alimenti, solo grammi; poi, se serve, sostituzioni con un costo), lasciando colazione e spuntini come ultima leva; test: con un surplus piccolo cambiano solo grammi |
+
+### B13 — Rientro da qualunque scostamento registrato (richiesta di Paolo, 2026-10-05)
+
+Lo scostamento non è solo uno «sgarro» con preset: può essere pasta 120 g invece di 100, una mela non prevista, un ingrediente sostituito, un alimento tolto, un pasto saltato. Il diario lo registra già con valori esatti (modifica grammi, aggiungi, togli e, dal 6.3, «⇄ Sostituisci» nella modifica del pasto). Manca il rientro.
+
+| Requisito | Dettaglio |
+|---|---|
+| Fonte dello scostamento | Differenza fra consumato e previsto dei pasti già registrati della settimana corrente (esatta dove nota; intervallo per i pasti stimati), oltre all'eventuale pasto fuori programma in anteprima. Nessun valore inventato: pasti senza nutrienti noti ⇒ indisponibile con motivo |
+| Endpoint | `POST /api/rebalance/preview {"date":"…","from_diary":true}` (o un endpoint dedicato), stessa risposta e stesse decisioni `apply`/`keep` del 6.2; `keep` qui non registra nulla, chiude soltanto |
+| Simmetria | Se si è mangiato **meno** del previsto, proporre di restituire parte delle calorie nei giorni successivi entro i massimi dei target (stessa distribuzione e stessi limiti per giorno); mai oltre lo scostamento minimo stimato |
+| Cambio minimo (B12) | Prima i grammi degli stessi alimenti, poi sostituzioni con un costo; colazione e spuntini come ultima leva; mai lo stesso piatto dello sgarro nei giorni successivi |
+| Soglia | Sotto una soglia dichiarata (es. ±100 kcal sulla settimana) stato `unchanged` con spiegazione: piccoli scostamenti non vanno compensati |
+| Test | Pasta +20 g ⇒ `unchanged` o solo grammi; mela aggiunta + cena saltata si compensano; scostamento negativo restituisce kcal senza superare i massimi; pasti registrati e passati intatti |

@@ -3090,3 +3090,15 @@ label > .chip.todo {
   font-weight: 650;
   color: var(--good);
 }
+.swap-box {
+  display: grid;
+  gap: 6px;
+  justify-items: start;
+  margin: 2px 0 10px;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+.swap-box .food-search {
+  width: 100%;
+}

@@ -21,6 +21,7 @@ const modeNames = { sedentary: 'Dieta sedentaria', training: 'Dieta palestra', f
 let homeDate = isoDate(new Date());
 let currentDay = null;
 let editSlot = null;
+let swapEntry = null;
 const mealAlternatives = {};
 
 async function waitJob(jobId, onTick) {
@@ -109,8 +110,16 @@ function itemRow(item, editable) {
     remove.title = 'Togli';
     remove.setAttribute('aria-label', 'Togli ' + (item.name || 'alimento'));
     remove.onclick = () => mutate('diary/entries/' + item.id, 'DELETE');
+    const swap = element('button', '⇄', 'icon-button small swap');
+    swap.type = 'button';
+    swap.title = 'Sostituisci con un altro alimento';
+    swap.setAttribute('aria-label', 'Sostituisci ' + (item.name || 'alimento'));
+    swap.onclick = () => {
+      swapEntry = swapEntry === item.id ? null : item.id;
+      renderDay(currentDay);
+    };
     const qty = element('span', undefined, 'item-edit');
-    qty.append(input, unit, remove);
+    qty.append(input, unit, swap, remove);
     row.append(qty);
   } else {
     row.append(element('span', fmt0(item.grams) + ' g' + (item.units ? ' · ' + item.units + ' conf.' : ''), 'item-qty'));
@@ -118,11 +127,38 @@ function itemRow(item, editable) {
   return row;
 }
 
-function foodSearch(day, slot) {
+// Replace one diary item keeping its quantity: add the new food first, then remove the old one.
+function swapBox(item, day, slot) {
+  const box = element('div', undefined, 'swap-box');
+  const search = foodSearch(
+    day,
+    slot,
+    async (f) => {
+      try {
+        await api('diary/entries', 'POST', { date: day.date, slot, food: f.food, ...(f.unit_g ? { units: item.units || 1 } : { grams: item.grams || 100 }) });
+        swapEntry = null;
+        renderDay(await api('diary/entries/' + item.id, 'DELETE'));
+        refreshWeek();
+        message((item.name || 'Alimento') + ' sostituito con ' + f.name);
+      } catch (e) {
+        message(e.message);
+      }
+    },
+    'Sostituisci ' + String(item.name || 'alimento').split(',')[0] + ' con…',
+  );
+  const cancel = element('button', 'Annulla', 'ghost small');
+  cancel.type = 'button';
+  cancel.onclick = () => ((swapEntry = null), renderDay(currentDay));
+  box.append(search, cancel);
+  setTimeout(() => search.querySelector('input')?.focus(), 0);
+  return box;
+}
+
+function foodSearch(day, slot, onPick, placeholder) {
   const box = element('div', undefined, 'food-search');
   const input = element('input');
   input.type = 'search';
-  input.placeholder = 'Aggiungi un alimento: es. yogurt, mela, ricotta…';
+  input.placeholder = placeholder || 'Aggiungi un alimento: es. yogurt, mela, ricotta…';
   input.setAttribute('aria-label', 'Cerca un alimento da aggiungere');
   const results = element('div', undefined, 'food-results');
   let timer = null;
@@ -140,7 +176,7 @@ function foodSearch(day, slot) {
             b.type = 'button';
             b.append(element('strong', f.name), element('span', [f.brand, f.source_label, f.per_100g.kcal != null ? fmt0(f.per_100g.kcal) + ' kcal/100 g' : 'senza valori nutrizionali: il totale resterà incompleto'].filter(Boolean).join(' · '), 'muted'));
             if (f.per_100g.kcal == null) b.classList.add('incomplete');
-            b.onclick = () => mutate('diary/entries', 'POST', { date: day.date, slot, food: f.food, ...(f.unit_g ? { units: 1 } : { grams: 100 }) });
+            b.onclick = () => (onPick ? onPick(f) : mutate('diary/entries', 'POST', { date: day.date, slot, food: f.food, ...(f.unit_g ? { units: 1 } : { grams: 100 }) }));
             return b;
           }),
         );
@@ -174,7 +210,11 @@ function mealCard(m, day) {
     list.append(element('p', 'Fuori programma: ' + name + '. Registrato come intervallo, i totali del giorno restano stimati.', 'muted'));
   } else if (m.state === 'skipped') list.append(element('p', 'Pasto saltato: conta come zero calorie.', 'muted'));
   else if (!items.length) list.append(element('p', m.planned ? 'Nessun alimento' : 'Niente di previsto per questo pasto.', 'muted'));
-  else items.forEach((i) => list.append(itemRow(i, editing)));
+  else
+    items.forEach((i) => {
+      list.append(itemRow(i, editing));
+      if (editing && swapEntry === i.id) list.append(swapBox(i, day, m.slot));
+    });
   card.append(list);
   if (editing) card.append(foodSearch(day, m.slot));
   if (m.state === 'modified' && m.planned) {
@@ -193,7 +233,7 @@ function mealCard(m, day) {
     actions.append(b);
   };
   const has = (a) => m.actions.includes(a) && !(m.consumed_estimate && a === 'edit');
-  if (editing) add('Fine', 'primary small', () => ((editSlot = null), renderDay(currentDay)));
+  if (editing) add('Fine', 'primary small', () => ((editSlot = null), (swapEntry = null), renderDay(currentDay)));
   else {
     if (has('confirm')) add('✓ Come previsto', 'primary small', () => mutate('diary/confirm', 'POST', { date: day.date, slot: m.slot }));
     if (has('edit'))
