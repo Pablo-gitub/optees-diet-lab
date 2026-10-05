@@ -4,7 +4,7 @@
     "canonical_name": "Cipolle, crude",
     "occurrences": 368,
     "recipes_count": 368,
-    "primary_status": "ambiguous",
+    "primary_status": "proposed_proxy",
     "raw_names": [
       "Large onions",
       "Mint and white onion to serve",
@@ -28,22 +28,6 @@
         "state_checked": true,
         "approved_by": "claude_review_batch01",
         "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
-      },
-      {
-        "source": "CREA",
-        "id": "005305",
-        "name": "Cipolle, cotte, bollite",
-        "match_type": "cooked_alternate",
-        "confidence": "low",
-        "state": "cotto / bollito",
-        "reason": "Possibile alternativa cotta (Cipolle, cotte, bollite) - stato non specificato nella ricetta",
-        "is_ambiguous": true,
-        "nutrients": {
-          "kcal_100g": 39.0,
-          "protein_g_100g": 1.4,
-          "fat_g_100g": 0.1,
-          "carbs_available_g_100g": 7.8
-        }
       }
     ],
     "sample_recipes": [
@@ -88,7 +72,7 @@
         "quantity_status": "resolved"
       }
     ],
-    "ambiguity_count": 2
+    "ambiguity_count": 0
   },
   {
     "canonical_id": "olio_oliva_extravergine",
@@ -176,6 +160,17 @@
     ],
     "candidates": [
       {
+        "source": "condiment",
+        "id": "trace",
+        "label": "Salt",
+        "category": "condimento",
+        "state": "in traccia, 0 kcal dichiarate",
+        "reviewed": true,
+        "state_checked": true,
+        "declared_kcal": 0,
+        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+      },
+      {
         "source": "Open Food Facts",
         "id": "0000720656334",
         "name": "Sale Marino Grosso Iodato · Selex",
@@ -198,7 +193,7 @@
         "ingredient_key": "10",
         "original_name": "Salt",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:ajiaco-bogotano",
@@ -206,7 +201,7 @@
         "ingredient_key": "12",
         "original_name": "Salt",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:ajvar",
@@ -214,7 +209,7 @@
         "ingredient_key": "6",
         "original_name": "Salt",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:alfajores",
@@ -222,7 +217,7 @@
         "ingredient_key": "12",
         "original_name": "Salt",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:anzac-biscuits",
@@ -230,7 +225,7 @@
         "ingredient_key": "9",
         "original_name": "Salt",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       }
     ],
     "ambiguity_count": 0
@@ -414,7 +409,7 @@
         "quantity_status": "resolved"
       }
     ],
-    "ambiguity_count": 124
+    "ambiguity_count": 123
   },
   {
     "canonical_id": "olio_vegetale_neutro",
@@ -573,7 +568,7 @@
     "canonical_name": "Farina di frumento, tipo 00",
     "occurrences": 168,
     "recipes_count": 168,
-    "primary_status": "proposed_exact",
+    "primary_status": "proposed_proxy",
     "raw_names": [
       "Buckwheat flour",
       "Flour",
@@ -599,21 +594,6 @@
         "state_checked": true,
         "approved_by": "claude_review_batch01",
         "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
-      },
-      {
-        "source": "CREA",
-        "id": "000230",
-        "name": "Farina di frumento, tipo 0",
-        "match_type": "proxy",
-        "confidence": "medium",
-        "state": "Farina di frumento, tipo 0",
-        "reason": "Farina tipo 0 CREA 000230",
-        "nutrients": {
-          "kcal_100g": 321.0,
-          "protein_g_100g": 11.5,
-          "fat_g_100g": 1.0,
-          "carbs_available_g_100g": 69.5
-        }
       }
     ],
     "sample_recipes": [
@@ -665,7 +645,7 @@
     "canonical_name": "Patate, crude",
     "occurrences": 150,
     "recipes_count": 150,
-    "primary_status": "ambiguous",
+    "primary_status": "proposed_exact",
     "raw_names": [
       "Boiled potatoes",
       "Floury potatoes",
@@ -747,14 +727,14 @@
         "quantity_status": "resolved"
       }
     ],
-    "ambiguity_count": 1
+    "ambiguity_count": 0
   },
   {
     "canonical_id": "succo_limone",
     "canonical_name": "Limoni, succo",
     "occurrences": 132,
     "recipes_count": 132,
-    "primary_status": "proposed_exact",
+    "primary_status": "proposed_proxy",
     "raw_names": [
       "Amchur or lemon juice",
       "Lemon",
@@ -1242,7 +1222,7 @@
     "canonical_name": "Latte di vacca, pastorizzato, parzialmente scremato",
     "occurrences": 114,
     "recipes_count": 114,
-    "primary_status": "approved",
+    "primary_status": "proposed_proxy",
     "raw_names": [
       "Cold milk",
       "Milk",
@@ -1406,14 +1386,14 @@
         "quantity_status": "resolved"
       }
     ],
-    "ambiguity_count": 56
+    "ambiguity_count": 44
   },
   {
     "canonical_id": "zucchero",
     "canonical_name": "Zucchero, saccarosio",
     "occurrences": 102,
     "recipes_count": 102,
-    "primary_status": "approved",
+    "primary_status": "proposed_proxy",
     "raw_names": [
       "Brown sugar",
       "Cane sugar",
@@ -1646,7 +1626,7 @@
     "canonical_name": "Peperoni, crudi",
     "occurrences": 89,
     "recipes_count": 89,
-    "primary_status": "proposed_exact",
+    "primary_status": "proposed_proxy",
     "raw_names": [
       "Bell pepper",
       "Bell peppers",
@@ -1676,21 +1656,6 @@
         "state_checked": true,
         "approved_by": "claude_review_batch01",
         "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
-      },
-      {
-        "source": "CREA",
-        "id": "005606",
-        "name": "Peperoni, cotti, in padella",
-        "match_type": "exact",
-        "confidence": "high",
-        "state": "cotto / bollito",
-        "reason": "Corrispondenza esatta per stato cotto (Peperoni, cotti, in padella)",
-        "nutrients": {
-          "kcal_100g": 143.0,
-          "protein_g_100g": 5.2,
-          "fat_g_100g": 1.5,
-          "carbs_available_g_100g": 24.3
-        }
       }
     ],
     "sample_recipes": [
@@ -1892,6 +1857,17 @@
     ],
     "candidates": [
       {
+        "source": "condiment",
+        "id": "trace",
+        "label": "Ground cumin",
+        "category": "condimento",
+        "state": "in traccia, 0 kcal dichiarate",
+        "reviewed": true,
+        "state_checked": true,
+        "declared_kcal": 0,
+        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+      },
+      {
         "source": "Open Food Facts",
         "id": "9100000770208",
         "name": "Cumino · Spar",
@@ -1914,7 +1890,7 @@
         "ingredient_key": "7",
         "original_name": "Ground cumin",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:arroz-con-pollo-cubano",
@@ -1922,7 +1898,7 @@
         "ingredient_key": "10",
         "original_name": "Ground cumin",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "foodose:R329",
@@ -1938,7 +1914,7 @@
         "ingredient_key": "13",
         "original_name": "Ground cumin",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:bhuna-khichuri",
@@ -1946,7 +1922,7 @@
         "ingredient_key": "7",
         "original_name": "Ground cumin",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       }
     ],
     "ambiguity_count": 0
@@ -1965,18 +1941,24 @@
     ],
     "candidates": [
       {
-        "source": "CREA",
-        "id": "503010",
-        "name": "Dadi da brodo",
-        "match_type": "proxy",
-        "confidence": "medium",
-        "state": "Dadi da brodo",
-        "reason": "Dadi da brodo concentrati CREA 503010 (richiede fattore di diluizione ~1:50, non equiparabile tal quale)",
-        "nutrients": {
-          "kcal_100g": 250.0,
-          "protein_g_100g": 15.7,
-          "fat_g_100g": 18.7,
-          "carbs_available_g_100g": 5.0
+        "source": "stock",
+        "id": "cube_1_50",
+        "label": "Brodo liquido da dado diluito 1:50",
+        "category": "brodo",
+        "state": "liquido, diluizione dichiarata 1:50",
+        "reviewed": true,
+        "state_checked": true,
+        "reason": "Proxy dichiarato, diluizione 1:50: 1 g di dado generico + 49 g di acqua = 50 g di brodo pronto. Densità 1 g/ml euristica per liquido acquoso. Non certifica la composizione vegetale o di pollo né la reale preparazione della ricetta; si sostituisce con un brodo liquido specifico revisionato quando disponibile.",
+        "dilution": {
+          "source": "stock",
+          "id": "cube_1_50",
+          "category": "brodo",
+          "base_source": "CREA",
+          "base_id": "503010",
+          "cube_g_per_100g_liquid": 2,
+          "water_g_per_100g_liquid": 98,
+          "density_g_per_ml": 1,
+          "note": "Proxy dichiarato, diluizione 1:50: 1 g di dado generico + 49 g di acqua = 50 g di brodo pronto. Densità 1 g/ml euristica per liquido acquoso. Non certifica la composizione vegetale o di pollo né la reale preparazione della ricetta; si sostituisce con un brodo liquido specifico revisionato quando disponibile."
         }
       }
     ],
@@ -2129,18 +2111,24 @@
     ],
     "candidates": [
       {
-        "source": "CREA",
-        "id": "503010",
-        "name": "Dadi da brodo",
-        "match_type": "proxy",
-        "confidence": "medium",
-        "state": "Dadi da brodo",
-        "reason": "Dadi da brodo concentrati CREA 503010 (richiede fattore di diluizione ~1:50, non equiparabile tal quale)",
-        "nutrients": {
-          "kcal_100g": 250.0,
-          "protein_g_100g": 15.7,
-          "fat_g_100g": 18.7,
-          "carbs_available_g_100g": 5.0
+        "source": "stock",
+        "id": "cube_1_50",
+        "label": "Brodo liquido da dado diluito 1:50",
+        "category": "brodo",
+        "state": "liquido, diluizione dichiarata 1:50",
+        "reviewed": true,
+        "state_checked": true,
+        "reason": "Proxy dichiarato, diluizione 1:50: 1 g di dado generico + 49 g di acqua = 50 g di brodo pronto. Densità 1 g/ml euristica per liquido acquoso. Non certifica la composizione vegetale o di pollo né la reale preparazione della ricetta; si sostituisce con un brodo liquido specifico revisionato quando disponibile.",
+        "dilution": {
+          "source": "stock",
+          "id": "cube_1_50",
+          "category": "brodo",
+          "base_source": "CREA",
+          "base_id": "503010",
+          "cube_g_per_100g_liquid": 2,
+          "water_g_per_100g_liquid": 98,
+          "density_g_per_ml": 1,
+          "note": "Proxy dichiarato, diluizione 1:50: 1 g di dado generico + 49 g di acqua = 50 g di brodo pronto. Densità 1 g/ml euristica per liquido acquoso. Non certifica la composizione vegetale o di pollo né la reale preparazione della ricetta; si sostituisce con un brodo liquido specifico revisionato quando disponibile."
         }
       }
     ],
@@ -2159,7 +2147,7 @@
         "ingredient_key": "4",
         "original_name": "Chicken stock",
         "grams": 700.0,
-        "quantity_status": "proposed_conversion"
+        "quantity_status": "resolved"
       },
       {
         "recipe_id": "foodose:R121",
@@ -2356,7 +2344,19 @@
       "paprika",
       "smoked paprika"
     ],
-    "candidates": [],
+    "candidates": [
+      {
+        "source": "condiment",
+        "id": "trace",
+        "label": "Sweet paprika",
+        "category": "condimento",
+        "state": "in traccia, 0 kcal dichiarate",
+        "reviewed": true,
+        "state_checked": true,
+        "declared_kcal": 0,
+        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+      }
+    ],
     "sample_recipes": [
       {
         "recipe_id": "unitools:empanadas-argentinas",
@@ -2364,7 +2364,7 @@
         "ingredient_key": "6",
         "original_name": "Sweet paprika",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "foodose:R121",
@@ -2396,7 +2396,7 @@
         "ingredient_key": "7",
         "original_name": "Paprika",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       }
     ],
     "ambiguity_count": 0
@@ -2406,7 +2406,7 @@
     "canonical_name": "Spinaci, crudi",
     "occurrences": 49,
     "recipes_count": 49,
-    "primary_status": "ambiguous",
+    "primary_status": "proposed_proxy",
     "raw_names": [
       "Spinach",
       "Spinach or mustard greens",
@@ -2424,22 +2424,6 @@
         "state_checked": true,
         "approved_by": "claude_review_batch01",
         "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
-      },
-      {
-        "source": "CREA",
-        "id": "005705",
-        "name": "Spinaci, cotti, bolliti",
-        "match_type": "cooked_alternate",
-        "confidence": "low",
-        "state": "cotto / bollito",
-        "reason": "Possibile alternativa cotta (Spinaci, cotti, bolliti) - stato non specificato nella ricetta",
-        "is_ambiguous": true,
-        "nutrients": {
-          "kcal_100g": 41.0,
-          "protein_g_100g": 4.0,
-          "fat_g_100g": 0.8,
-          "carbs_available_g_100g": 3.5
-        }
       }
     ],
     "sample_recipes": [
@@ -2484,7 +2468,7 @@
         "quantity_status": "resolved"
       }
     ],
-    "ambiguity_count": 3
+    "ambiguity_count": 0
   },
   {
     "canonical_id": "lime_fresco",
@@ -2548,7 +2532,7 @@
     "canonical_name": "Peperoncini piccanti, freschi",
     "occurrences": 48,
     "recipes_count": 48,
-    "primary_status": "proposed_exact",
+    "primary_status": "proposed_proxy",
     "raw_names": [
       "Bird's eye chillies",
       "Chilli",
@@ -2637,6 +2621,17 @@
     ],
     "candidates": [
       {
+        "source": "condiment",
+        "id": "trace",
+        "label": "Turmeric",
+        "category": "condimento",
+        "state": "in traccia, 0 kcal dichiarate",
+        "reviewed": true,
+        "state_checked": true,
+        "declared_kcal": 0,
+        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+      },
+      {
         "source": "Open Food Facts",
         "id": "02772217",
         "name": "Curcuma in polvere bio · Sottolestelle",
@@ -2659,7 +2654,7 @@
         "ingredient_key": "9",
         "original_name": "Turmeric",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:bhuna-khichuri",
@@ -2667,7 +2662,7 @@
         "ingredient_key": "6",
         "original_name": "Turmeric",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:bobotie",
@@ -2675,7 +2670,7 @@
         "ingredient_key": "6",
         "original_name": "Turmeric",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:murgh-makhani",
@@ -2683,7 +2678,7 @@
         "ingredient_key": "7",
         "original_name": "Turmeric",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "foodose:R325",
@@ -2764,6 +2759,17 @@
     ],
     "candidates": [
       {
+        "source": "condiment",
+        "id": "trace",
+        "label": "Oregano",
+        "category": "condimento",
+        "state": "in traccia, 0 kcal dichiarate",
+        "reviewed": true,
+        "state_checked": true,
+        "declared_kcal": 0,
+        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+      },
+      {
         "source": "Open Food Facts",
         "id": "8002330020644",
         "name": "Origano · Esselunga",
@@ -2808,7 +2814,7 @@
         "ingredient_key": "11",
         "original_name": "Oregano",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:asado-argentino",
@@ -3141,12 +3147,24 @@
     "canonical_name": "Alloro, foglie",
     "occurrences": 39,
     "recipes_count": 39,
-    "primary_status": "missing",
+    "primary_status": "approved",
     "raw_names": [
       "Bay leaf",
       "Bay leaves"
     ],
-    "candidates": [],
+    "candidates": [
+      {
+        "source": "condiment",
+        "id": "trace",
+        "label": "Bay leaves",
+        "category": "condimento",
+        "state": "in traccia, 0 kcal dichiarate",
+        "reviewed": true,
+        "state_checked": true,
+        "declared_kcal": 0,
+        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+      }
+    ],
     "sample_recipes": [
       {
         "recipe_id": "unitools:asado-negro",
@@ -3154,7 +3172,7 @@
         "ingredient_key": "11",
         "original_name": "Bay leaves",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:guinness-beef-stew",
@@ -3162,7 +3180,7 @@
         "ingredient_key": "11",
         "original_name": "Bay leaves",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:beshbarmak",
@@ -3170,7 +3188,7 @@
         "ingredient_key": "7",
         "original_name": "Bay leaf",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:bhuna-khichuri",
@@ -3178,7 +3196,7 @@
         "ingredient_key": "8",
         "original_name": "Bay leaves",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:bigos",
@@ -3186,7 +3204,7 @@
         "ingredient_key": "13",
         "original_name": "Bay leaves",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       }
     ],
     "ambiguity_count": 0
@@ -3196,7 +3214,7 @@
     "canonical_name": "Cetrioli, freschi",
     "occurrences": 38,
     "recipes_count": 38,
-    "primary_status": "proposed_exact",
+    "primary_status": "proposed_proxy",
     "raw_names": [
       "Cucumber",
       "Cucumber and fried shallots",
@@ -3491,7 +3509,7 @@
     "canonical_name": "Menta, fresca",
     "occurrences": 36,
     "recipes_count": 36,
-    "primary_status": "proposed_exact",
+    "primary_status": "proposed_proxy",
     "raw_names": [
       "Dried mint",
       "Fresh mint",
@@ -3503,18 +3521,12 @@
       {
         "source": "CREA",
         "id": "006810",
-        "name": "Menta, fresca",
-        "match_type": "exact",
-        "confidence": "high",
-        "state": "fresco, parte edibile",
-        "reason": "Menta fresca CREA 006810 (49 kcal/100g)",
-        "is_ambiguous": false,
-        "nutrients": {
-          "kcal_100g": 49.0,
-          "protein_g_100g": 3.8,
-          "fat_g_100g": 0.7,
-          "carbs_available_g_100g": 5.3
-        }
+        "label": "Menta, fresca",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch01",
+        "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
       }
     ],
     "sample_recipes": [
@@ -3566,7 +3578,7 @@
     "canonical_name": "Piselli, surgelati",
     "occurrences": 35,
     "recipes_count": 35,
-    "primary_status": "proposed_exact",
+    "primary_status": "proposed_proxy",
     "raw_names": [
       "Fried split peas",
       "Green peas",
@@ -3584,21 +3596,6 @@
         "state_checked": true,
         "approved_by": "claude_review_batch01",
         "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
-      },
-      {
-        "source": "CREA",
-        "id": "004720",
-        "name": "Piselli, in scatola, scolati",
-        "match_type": "proxy",
-        "confidence": "medium",
-        "state": "Piselli, in scatola, scolati",
-        "reason": "Piselli in scatola CREA 004720",
-        "nutrients": {
-          "kcal_100g": 78.0,
-          "protein_g_100g": 5.3,
-          "fat_g_100g": 0.6,
-          "carbs_available_g_100g": 11.1
-        }
       }
     ],
     "sample_recipes": [
@@ -3925,7 +3922,7 @@
     "canonical_name": "Tacchino, fesa / petto, crudo",
     "occurrences": 31,
     "recipes_count": 31,
-    "primary_status": "ambiguous",
+    "primary_status": "proposed_proxy",
     "raw_names": [
       "Turkey",
       "Turkey or chicken",
@@ -3943,22 +3940,6 @@
         "state_checked": true,
         "approved_by": "claude_review_batch01",
         "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
-      },
-      {
-        "source": "CREA",
-        "id": "106719",
-        "name": "Tacchino intero, senza pelle, cotto, al forno",
-        "match_type": "proxy",
-        "confidence": "medium",
-        "state": "cotto / bollito",
-        "reason": "Taglio o composizione non equivalente: proxy da verificare per ricetta.",
-        "is_ambiguous": true,
-        "nutrients": {
-          "kcal_100g": 117.0,
-          "protein_g_100g": 23.3,
-          "fat_g_100g": 2.6,
-          "carbs_available_g_100g": 0.0
-        }
       }
     ],
     "sample_recipes": [
@@ -4003,7 +3984,7 @@
         "quantity_status": "resolved"
       }
     ],
-    "ambiguity_count": 1
+    "ambiguity_count": 0
   },
   {
     "canonical_id": "vaniglia",
@@ -4016,7 +3997,19 @@
       "Vanilla pod",
       "vanilla extract"
     ],
-    "candidates": [],
+    "candidates": [
+      {
+        "source": "condiment",
+        "id": "trace",
+        "label": "Vanilla",
+        "category": "condimento",
+        "state": "in traccia, 0 kcal dichiarate",
+        "reviewed": true,
+        "state_checked": true,
+        "declared_kcal": 0,
+        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+      }
+    ],
     "sample_recipes": [
       {
         "recipe_id": "unitools:alfajores",
@@ -4024,7 +4017,7 @@
         "ingredient_key": "8",
         "original_name": "Vanilla",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:ballokume",
@@ -4032,7 +4025,7 @@
         "ingredient_key": "6",
         "original_name": "Vanilla",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:butter-tarts",
@@ -4040,7 +4033,7 @@
         "ingredient_key": "8",
         "original_name": "Vanilla",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:creme-brulee",
@@ -4048,7 +4041,7 @@
         "ingredient_key": "4",
         "original_name": "Vanilla pod",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:dobos-torta",
@@ -4056,7 +4049,7 @@
         "ingredient_key": "11",
         "original_name": "Vanilla",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       }
     ],
     "ambiguity_count": 0
@@ -4695,12 +4688,24 @@
     "canonical_name": "Cannella in stecche",
     "occurrences": 24,
     "recipes_count": 24,
-    "primary_status": "missing",
+    "primary_status": "approved",
     "raw_names": [
       "Cinnamon stick",
       "Cinnamon sticks"
     ],
-    "candidates": [],
+    "candidates": [
+      {
+        "source": "condiment",
+        "id": "trace",
+        "label": "Cinnamon sticks",
+        "category": "condimento",
+        "state": "in traccia, 0 kcal dichiarate",
+        "reviewed": true,
+        "state_checked": true,
+        "declared_kcal": 0,
+        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+      }
+    ],
     "sample_recipes": [
       {
         "recipe_id": "unitools:api-morado",
@@ -4708,7 +4713,7 @@
         "ingredient_key": "3",
         "original_name": "Cinnamon sticks",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:bhuna-khichuri",
@@ -4716,7 +4721,7 @@
         "ingredient_key": "9",
         "original_name": "Cinnamon stick",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:bunny-chow",
@@ -4724,7 +4729,7 @@
         "ingredient_key": "8",
         "original_name": "Cinnamon stick",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:chorba-frik",
@@ -4732,7 +4737,7 @@
         "ingredient_key": "10",
         "original_name": "Cinnamon stick",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:harees",
@@ -4740,7 +4745,7 @@
         "ingredient_key": "3",
         "original_name": "Cinnamon stick",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       }
     ],
     "ambiguity_count": 0
@@ -4819,7 +4824,7 @@
     "canonical_name": "Porri, crudi",
     "occurrences": 23,
     "recipes_count": 23,
-    "primary_status": "ambiguous",
+    "primary_status": "proposed_proxy",
     "raw_names": [
       "Leek",
       "Leeks",
@@ -4836,22 +4841,6 @@
         "state_checked": true,
         "approved_by": "claude_review_batch01",
         "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
-      },
-      {
-        "source": "CREA",
-        "id": "005655",
-        "name": "Porri, cotti, bolliti",
-        "match_type": "cooked_alternate",
-        "confidence": "low",
-        "state": "cotto / bollito",
-        "reason": "Possibile alternativa cotta (Porri, cotti, bolliti) - stato non specificato nella ricetta",
-        "is_ambiguous": true,
-        "nutrients": {
-          "kcal_100g": 35.0,
-          "protein_g_100g": 2.1,
-          "fat_g_100g": 0.1,
-          "carbs_available_g_100g": 5.3
-        }
       }
     ],
     "sample_recipes": [
@@ -4896,7 +4885,7 @@
         "quantity_status": "resolved"
       }
     ],
-    "ambiguity_count": 1
+    "ambiguity_count": 0
   },
   {
     "canonical_id": "uvetta_secca",
@@ -5549,16 +5538,28 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:saffron",
+    "canonical_id": "trace:saffron",
     "canonical_name": "Saffron",
     "occurrences": 21,
     "recipes_count": 21,
-    "primary_status": "missing",
+    "primary_status": "approved",
     "raw_names": [
       "Saffron",
       "saffron"
     ],
-    "candidates": [],
+    "candidates": [
+      {
+        "source": "condiment",
+        "id": "trace",
+        "label": "Saffron",
+        "category": "condimento",
+        "state": "in traccia, 0 kcal dichiarate",
+        "reviewed": true,
+        "state_checked": true,
+        "declared_kcal": 0,
+        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+      }
+    ],
     "sample_recipes": [
       {
         "recipe_id": "unitools:arroz-con-pollo-cubano",
@@ -5566,7 +5567,7 @@
         "ingredient_key": "9",
         "original_name": "Saffron",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:pakhlava-baku",
@@ -5574,7 +5575,7 @@
         "ingredient_key": "9",
         "original_name": "Saffron",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:bouillabaisse",
@@ -5582,7 +5583,7 @@
         "ingredient_key": "8",
         "original_name": "Saffron",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:chebakia",
@@ -5590,7 +5591,7 @@
         "ingredient_key": "7",
         "original_name": "Saffron",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:chicken-biryani",
@@ -5598,7 +5599,7 @@
         "ingredient_key": "11",
         "original_name": "Saffron",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       }
     ],
     "ambiguity_count": 0
@@ -5957,60 +5958,6 @@
         "original_name": "fresh dill",
         "grams": 5.0,
         "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:cinnamon",
-    "canonical_name": "Cinnamon",
-    "occurrences": 19,
-    "recipes_count": 19,
-    "primary_status": "missing",
-    "raw_names": [
-      "Cinnamon"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:apfelstrudel",
-        "recipe_title": "Apfelstrudel",
-        "ingredient_key": "6",
-        "original_name": "Cinnamon",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:dolma-azerbaijani",
-        "recipe_title": "Azerbaijani dolma",
-        "ingredient_key": "11",
-        "original_name": "Cinnamon",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:chebakia",
-        "recipe_title": "Chebakia",
-        "ingredient_key": "6",
-        "original_name": "Cinnamon",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:fesenjan",
-        "recipe_title": "Fesenjan",
-        "ingredient_key": "7",
-        "original_name": "Cinnamon",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:ghapama",
-        "recipe_title": "Ghapama",
-        "ingredient_key": "10",
-        "original_name": "Cinnamon",
-        "grams": null,
-        "quantity_status": "needs_review"
       }
     ],
     "ambiguity_count": 0
@@ -6498,6 +6445,72 @@
     "ambiguity_count": 0
   },
   {
+    "canonical_id": "trace:cinnamon",
+    "canonical_name": "Cinnamon",
+    "occurrences": 16,
+    "recipes_count": 16,
+    "primary_status": "approved",
+    "raw_names": [
+      "Cinnamon"
+    ],
+    "candidates": [
+      {
+        "source": "condiment",
+        "id": "trace",
+        "label": "Cinnamon",
+        "category": "condimento",
+        "state": "in traccia, 0 kcal dichiarate",
+        "reviewed": true,
+        "state_checked": true,
+        "declared_kcal": 0,
+        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:apfelstrudel",
+        "recipe_title": "Apfelstrudel",
+        "ingredient_key": "6",
+        "original_name": "Cinnamon",
+        "grams": null,
+        "quantity_status": "trace"
+      },
+      {
+        "recipe_id": "unitools:dolma-azerbaijani",
+        "recipe_title": "Azerbaijani dolma",
+        "ingredient_key": "11",
+        "original_name": "Cinnamon",
+        "grams": null,
+        "quantity_status": "trace"
+      },
+      {
+        "recipe_id": "unitools:fesenjan",
+        "recipe_title": "Fesenjan",
+        "ingredient_key": "7",
+        "original_name": "Cinnamon",
+        "grams": null,
+        "quantity_status": "trace"
+      },
+      {
+        "recipe_id": "unitools:ghapama",
+        "recipe_title": "Ghapama",
+        "ingredient_key": "10",
+        "original_name": "Cinnamon",
+        "grams": null,
+        "quantity_status": "trace"
+      },
+      {
+        "recipe_id": "unitools:harira",
+        "recipe_title": "Harira",
+        "ingredient_key": "9",
+        "original_name": "Cinnamon",
+        "grams": null,
+        "quantity_status": "trace"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
     "canonical_id": "unmapped:fish sauce",
     "canonical_name": "Fish sauce",
     "occurrences": 16,
@@ -6564,6 +6577,17 @@
     ],
     "candidates": [
       {
+        "source": "condiment",
+        "id": "trace",
+        "label": "Black pepper",
+        "category": "condimento",
+        "state": "in traccia, 0 kcal dichiarate",
+        "reviewed": true,
+        "state_checked": true,
+        "declared_kcal": 0,
+        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+      },
+      {
         "source": "CREA",
         "id": "006820",
         "name": "Pepe nero",
@@ -6587,7 +6611,7 @@
         "ingredient_key": "10",
         "original_name": "Black pepper",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:bun-cha",
@@ -6595,7 +6619,7 @@
         "ingredient_key": "14",
         "original_name": "Black pepper",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:kranjska-klobasa",
@@ -6603,7 +6627,7 @@
         "ingredient_key": "5",
         "original_name": "Ground black pepper",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:adobo",
@@ -6611,7 +6635,7 @@
         "ingredient_key": "6",
         "original_name": "Black peppercorns",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:ciorba-de-burta",
@@ -7751,71 +7775,28 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:dried thyme",
-    "canonical_name": "dried thyme",
-    "occurrences": 14,
-    "recipes_count": 14,
-    "primary_status": "missing",
-    "raw_names": [
-      "Dried thyme",
-      "dried thyme"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R135",
-        "recipe_title": "Chicken and vegetable cobbler",
-        "ingredient_key": "6",
-        "original_name": "dried thyme",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:jollof-rice",
-        "recipe_title": "Jollof rice",
-        "ingredient_key": "8",
-        "original_name": "Dried thyme",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "foodose:R187",
-        "recipe_title": "Lentil, chestnut and thyme soup",
-        "ingredient_key": "6",
-        "original_name": "dried thyme",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "foodose:R047",
-        "recipe_title": "Mushroom and lentil cottage pie",
-        "ingredient_key": "9",
-        "original_name": "dried thyme",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "foodose:R177",
-        "recipe_title": "Mushroom and white bean polenta bake",
-        "ingredient_key": "7",
-        "original_name": "dried thyme",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:ground cinnamon",
+    "canonical_id": "trace:ground cinnamon",
     "canonical_name": "ground cinnamon",
     "occurrences": 14,
     "recipes_count": 14,
-    "primary_status": "missing",
+    "primary_status": "approved",
     "raw_names": [
       "Ground cinnamon",
       "ground cinnamon"
     ],
-    "candidates": [],
+    "candidates": [
+      {
+        "source": "condiment",
+        "id": "trace",
+        "label": "ground cinnamon",
+        "category": "condimento",
+        "state": "in traccia, 0 kcal dichiarate",
+        "reviewed": true,
+        "state_checked": true,
+        "declared_kcal": 0,
+        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+      }
+    ],
     "sample_recipes": [
       {
         "recipe_id": "foodose:R004",
@@ -7855,7 +7836,7 @@
         "ingredient_key": "7",
         "original_name": "Ground cinnamon",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       }
     ],
     "ambiguity_count": 0
@@ -8061,6 +8042,60 @@
         "original_name": "silken tofu",
         "grams": 150.0,
         "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "unmapped:dried thyme",
+    "canonical_name": "dried thyme",
+    "occurrences": 13,
+    "recipes_count": 13,
+    "primary_status": "missing",
+    "raw_names": [
+      "dried thyme"
+    ],
+    "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "foodose:R135",
+        "recipe_title": "Chicken and vegetable cobbler",
+        "ingredient_key": "6",
+        "original_name": "dried thyme",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "foodose:R187",
+        "recipe_title": "Lentil, chestnut and thyme soup",
+        "ingredient_key": "6",
+        "original_name": "dried thyme",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "foodose:R047",
+        "recipe_title": "Mushroom and lentil cottage pie",
+        "ingredient_key": "9",
+        "original_name": "dried thyme",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "foodose:R177",
+        "recipe_title": "Mushroom and white bean polenta bake",
+        "ingredient_key": "7",
+        "original_name": "dried thyme",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "foodose:R083",
+        "recipe_title": "Mushroom, tofu and thyme soup",
+        "ingredient_key": "5",
+        "original_name": "dried thyme",
+        "grams": null,
+        "quantity_status": "needs_review"
       }
     ],
     "ambiguity_count": 0
@@ -8834,60 +8869,6 @@
     "ambiguity_count": 11
   },
   {
-    "canonical_id": "unmapped:curry powder",
-    "canonical_name": "Curry powder",
-    "occurrences": 11,
-    "recipes_count": 11,
-    "primary_status": "missing",
-    "raw_names": [
-      "Curry powder"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:bobotie",
-        "recipe_title": "Bobotie",
-        "ingredient_key": "5",
-        "original_name": "Curry powder",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:chakalaka",
-        "recipe_title": "Chakalaka",
-        "ingredient_key": "6",
-        "original_name": "Curry powder",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:doubles",
-        "recipe_title": "Doubles",
-        "ingredient_key": "9",
-        "original_name": "Curry powder",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:jamaican-patty",
-        "recipe_title": "Jamaican patties",
-        "ingredient_key": "3",
-        "original_name": "Curry powder",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:jollof-rice",
-        "recipe_title": "Jollof rice",
-        "ingredient_key": "7",
-        "original_name": "Curry powder",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:lemon zest",
     "canonical_name": "Lemon zest",
     "occurrences": 11,
@@ -9399,15 +9380,27 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:nutmeg",
+    "canonical_id": "trace:nutmeg",
     "canonical_name": "Nutmeg",
     "occurrences": 10,
     "recipes_count": 10,
-    "primary_status": "missing",
+    "primary_status": "approved",
     "raw_names": [
       "Nutmeg"
     ],
-    "candidates": [],
+    "candidates": [
+      {
+        "source": "condiment",
+        "id": "trace",
+        "label": "Nutmeg",
+        "category": "condimento",
+        "state": "in traccia, 0 kcal dichiarate",
+        "reviewed": true,
+        "state_checked": true,
+        "declared_kcal": 0,
+        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+      }
+    ],
     "sample_recipes": [
       {
         "recipe_id": "unitools:bitterballen",
@@ -9415,7 +9408,7 @@
         "ingredient_key": "7",
         "original_name": "Nutmeg",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:croquetas-de-jamon",
@@ -9423,7 +9416,7 @@
         "ingredient_key": "7",
         "original_name": "Nutmeg",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:kjottkaker",
@@ -9431,7 +9424,7 @@
         "ingredient_key": "6",
         "original_name": "Nutmeg",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:kaesespaetzle",
@@ -9439,7 +9432,7 @@
         "ingredient_key": "7",
         "original_name": "Nutmeg",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:lasagne-alla-bolognese",
@@ -9447,7 +9440,7 @@
         "ingredient_key": "14",
         "original_name": "Nutmeg",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       }
     ],
     "ambiguity_count": 0
@@ -10183,6 +10176,60 @@
         "recipe_title": "Lagman",
         "ingredient_key": "11",
         "original_name": "Cumin seed",
+        "grams": null,
+        "quantity_status": "needs_review"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "unmapped:curry powder",
+    "canonical_name": "Curry powder",
+    "occurrences": 8,
+    "recipes_count": 8,
+    "primary_status": "missing",
+    "raw_names": [
+      "Curry powder"
+    ],
+    "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:bobotie",
+        "recipe_title": "Bobotie",
+        "ingredient_key": "5",
+        "original_name": "Curry powder",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:chakalaka",
+        "recipe_title": "Chakalaka",
+        "ingredient_key": "6",
+        "original_name": "Curry powder",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:doubles",
+        "recipe_title": "Doubles",
+        "ingredient_key": "9",
+        "original_name": "Curry powder",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:khao-soi",
+        "recipe_title": "Khao soi",
+        "ingredient_key": "5",
+        "original_name": "Curry powder",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:masgouf",
+        "recipe_title": "Masgouf",
+        "ingredient_key": "8",
+        "original_name": "Curry powder",
         "grams": null,
         "quantity_status": "needs_review"
       }
@@ -11889,60 +11936,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:cumin seeds",
-    "canonical_name": "Cumin seeds",
-    "occurrences": 6,
-    "recipes_count": 6,
-    "primary_status": "missing",
-    "raw_names": [
-      "Cumin seeds"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:dal-bhat",
-        "recipe_title": "Dal bhat",
-        "ingredient_key": "6",
-        "original_name": "Cumin seeds",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:dal-tadka",
-        "recipe_title": "Dal tadka",
-        "ingredient_key": "4",
-        "original_name": "Cumin seeds",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:palak-paneer",
-        "recipe_title": "Palak paneer",
-        "ingredient_key": "8",
-        "original_name": "Cumin seeds",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:samosa",
-        "recipe_title": "Samosa",
-        "ingredient_key": "7",
-        "original_name": "Cumin seeds",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:samsa",
-        "recipe_title": "Samsa",
-        "ingredient_key": "6",
-        "original_name": "Cumin seeds",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:dark chocolate",
     "canonical_name": "Dark chocolate",
     "occurrences": 6,
@@ -12559,15 +12552,27 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:ground nutmeg",
+    "canonical_id": "trace:ground nutmeg",
     "canonical_name": "ground nutmeg",
     "occurrences": 6,
     "recipes_count": 6,
-    "primary_status": "missing",
+    "primary_status": "approved",
     "raw_names": [
       "ground nutmeg"
     ],
-    "candidates": [],
+    "candidates": [
+      {
+        "source": "condiment",
+        "id": "trace",
+        "label": "ground nutmeg",
+        "category": "condimento",
+        "state": "in traccia, 0 kcal dichiarate",
+        "reviewed": true,
+        "state_checked": true,
+        "declared_kcal": 0,
+        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+      }
+    ],
     "sample_recipes": [
       {
         "recipe_id": "foodose:R006",
@@ -12988,6 +12993,72 @@
         "original_name": "Cocoa powder",
         "grams": null,
         "quantity_status": "needs_review"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "trace:cumin seeds",
+    "canonical_name": "Cumin seeds",
+    "occurrences": 5,
+    "recipes_count": 5,
+    "primary_status": "approved",
+    "raw_names": [
+      "Cumin seeds"
+    ],
+    "candidates": [
+      {
+        "source": "condiment",
+        "id": "trace",
+        "label": "Cumin seeds",
+        "category": "condimento",
+        "state": "in traccia, 0 kcal dichiarate",
+        "reviewed": true,
+        "state_checked": true,
+        "declared_kcal": 0,
+        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:dal-bhat",
+        "recipe_title": "Dal bhat",
+        "ingredient_key": "6",
+        "original_name": "Cumin seeds",
+        "grams": null,
+        "quantity_status": "trace"
+      },
+      {
+        "recipe_id": "unitools:dal-tadka",
+        "recipe_title": "Dal tadka",
+        "ingredient_key": "4",
+        "original_name": "Cumin seeds",
+        "grams": null,
+        "quantity_status": "trace"
+      },
+      {
+        "recipe_id": "unitools:palak-paneer",
+        "recipe_title": "Palak paneer",
+        "ingredient_key": "8",
+        "original_name": "Cumin seeds",
+        "grams": null,
+        "quantity_status": "trace"
+      },
+      {
+        "recipe_id": "unitools:samosa",
+        "recipe_title": "Samosa",
+        "ingredient_key": "7",
+        "original_name": "Cumin seeds",
+        "grams": null,
+        "quantity_status": "trace"
+      },
+      {
+        "recipe_id": "unitools:samsa",
+        "recipe_title": "Samsa",
+        "ingredient_key": "6",
+        "original_name": "Cumin seeds",
+        "grams": null,
+        "quantity_status": "trace"
       }
     ],
     "ambiguity_count": 0
@@ -14577,15 +14648,27 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:ground cloves",
+    "canonical_id": "trace:ground cloves",
     "canonical_name": "Ground cloves",
     "occurrences": 4,
     "recipes_count": 4,
-    "primary_status": "missing",
+    "primary_status": "approved",
     "raw_names": [
       "Ground cloves"
     ],
-    "candidates": [],
+    "candidates": [
+      {
+        "source": "condiment",
+        "id": "trace",
+        "label": "Ground cloves",
+        "category": "condimento",
+        "state": "in traccia, 0 kcal dichiarate",
+        "reviewed": true,
+        "state_checked": true,
+        "declared_kcal": 0,
+        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+      }
+    ],
     "sample_recipes": [
       {
         "recipe_id": "unitools:rellenitos",
@@ -14593,7 +14676,7 @@
         "ingredient_key": "6",
         "original_name": "Ground cloves",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:satsivi",
@@ -14601,7 +14684,7 @@
         "ingredient_key": "9",
         "original_name": "Ground cloves",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:sel-roti",
@@ -14609,7 +14692,7 @@
         "ingredient_key": "7",
         "original_name": "Ground cloves",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:tourtiere",
@@ -14617,7 +14700,7 @@
         "ingredient_key": "7",
         "original_name": "Ground cloves",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       }
     ],
     "ambiguity_count": 0
@@ -16566,6 +16649,44 @@
     "ambiguity_count": 0
   },
   {
+    "canonical_id": "unmapped:cinnamon",
+    "canonical_name": "Cinnamon",
+    "occurrences": 3,
+    "recipes_count": 3,
+    "primary_status": "missing",
+    "raw_names": [
+      "Cinnamon"
+    ],
+    "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:chebakia",
+        "recipe_title": "Chebakia",
+        "ingredient_key": "6",
+        "original_name": "Cinnamon",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:kanelbullar",
+        "recipe_title": "Kanelbullar",
+        "ingredient_key": "9",
+        "original_name": "Cinnamon",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:pastilla",
+        "recipe_title": "Pastilla",
+        "ingredient_key": "9",
+        "original_name": "Cinnamon",
+        "grams": null,
+        "quantity_status": "needs_review"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
     "canonical_id": "unmapped:corn cobs",
     "canonical_name": "Corn cobs",
     "occurrences": 3,
@@ -16675,6 +16796,56 @@
         "original_name": "Culantro or coriander",
         "grams": 40.0,
         "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "trace:curry powder",
+    "canonical_name": "Curry powder",
+    "occurrences": 3,
+    "recipes_count": 3,
+    "primary_status": "approved",
+    "raw_names": [
+      "Curry powder"
+    ],
+    "candidates": [
+      {
+        "source": "condiment",
+        "id": "trace",
+        "label": "Curry powder",
+        "category": "condimento",
+        "state": "in traccia, 0 kcal dichiarate",
+        "reviewed": true,
+        "state_checked": true,
+        "declared_kcal": 0,
+        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:jamaican-patty",
+        "recipe_title": "Jamaican patties",
+        "ingredient_key": "3",
+        "original_name": "Curry powder",
+        "grams": null,
+        "quantity_status": "trace"
+      },
+      {
+        "recipe_id": "unitools:jollof-rice",
+        "recipe_title": "Jollof rice",
+        "ingredient_key": "7",
+        "original_name": "Curry powder",
+        "grams": null,
+        "quantity_status": "trace"
+      },
+      {
+        "recipe_id": "unitools:kottu-roti",
+        "recipe_title": "Kottu roti",
+        "ingredient_key": "10",
+        "original_name": "Curry powder",
+        "grams": null,
+        "quantity_status": "trace"
       }
     ],
     "ambiguity_count": 0
@@ -19392,36 +19563,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:dried mint",
-    "canonical_name": "Dried mint",
-    "occurrences": 2,
-    "recipes_count": 2,
-    "primary_status": "missing",
-    "raw_names": [
-      "Dried mint"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:ashak",
-        "recipe_title": "Ashak",
-        "ingredient_key": "9",
-        "original_name": "Dried mint",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:kibbeh-nayyeh",
-        "recipe_title": "Kibbeh nayyeh",
-        "ingredient_key": "5",
-        "original_name": "Dried mint",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:dried porcini",
     "canonical_name": "Dried porcini",
     "occurrences": 2,
@@ -21419,15 +21560,27 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:white pepper",
+    "canonical_id": "trace:white pepper",
     "canonical_name": "White pepper",
     "occurrences": 2,
     "recipes_count": 2,
-    "primary_status": "missing",
+    "primary_status": "approved",
     "raw_names": [
       "White pepper"
     ],
-    "candidates": [],
+    "candidates": [
+      {
+        "source": "condiment",
+        "id": "trace",
+        "label": "White pepper",
+        "category": "condimento",
+        "state": "in traccia, 0 kcal dichiarate",
+        "reviewed": true,
+        "state_checked": true,
+        "declared_kcal": 0,
+        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+      }
+    ],
     "sample_recipes": [
       {
         "recipe_id": "unitools:kaya-toast",
@@ -21435,7 +21588,7 @@
         "ingredient_key": "9",
         "original_name": "White pepper",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       },
       {
         "recipe_id": "unitools:rechta",
@@ -21443,7 +21596,7 @@
         "ingredient_key": "9",
         "original_name": "White pepper",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       }
     ],
     "ambiguity_count": 0
@@ -24490,6 +24643,28 @@
     "ambiguity_count": 0
   },
   {
+    "canonical_id": "unmapped:cumin seeds",
+    "canonical_name": "Cumin seeds",
+    "occurrences": 1,
+    "recipes_count": 1,
+    "primary_status": "missing",
+    "raw_names": [
+      "Cumin seeds"
+    ],
+    "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:plov-uzbekskiy",
+        "recipe_title": "Uzbek plov",
+        "ingredient_key": "7",
+        "original_name": "Cumin seeds",
+        "grams": null,
+        "quantity_status": "needs_review"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
     "canonical_id": "unmapped:curd cheese gjize",
     "canonical_name": "Curd cheese gjizë",
     "occurrences": 1,
@@ -25040,15 +25215,27 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:dried herbs",
+    "canonical_id": "trace:dried herbs",
     "canonical_name": "Dried herbs",
     "occurrences": 1,
     "recipes_count": 1,
-    "primary_status": "missing",
+    "primary_status": "approved",
     "raw_names": [
       "Dried herbs"
     ],
-    "candidates": [],
+    "candidates": [
+      {
+        "source": "condiment",
+        "id": "trace",
+        "label": "Dried herbs",
+        "category": "condimento",
+        "state": "in traccia, 0 kcal dichiarate",
+        "reviewed": true,
+        "state_checked": true,
+        "declared_kcal": 0,
+        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+      }
+    ],
     "sample_recipes": [
       {
         "recipe_id": "unitools:kjotsupa",
@@ -25056,7 +25243,7 @@
         "ingredient_key": "8",
         "original_name": "Dried herbs",
         "grams": null,
-        "quantity_status": "needs_review"
+        "quantity_status": "trace"
       }
     ],
     "ambiguity_count": 0
@@ -25101,6 +25288,62 @@
         "original_name": "Dried marjoram",
         "grams": null,
         "quantity_status": "needs_review"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "unmapped:dried mint",
+    "canonical_name": "Dried mint",
+    "occurrences": 1,
+    "recipes_count": 1,
+    "primary_status": "missing",
+    "raw_names": [
+      "Dried mint"
+    ],
+    "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:ashak",
+        "recipe_title": "Ashak",
+        "ingredient_key": "9",
+        "original_name": "Dried mint",
+        "grams": null,
+        "quantity_status": "needs_review"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "trace:dried mint",
+    "canonical_name": "Dried mint",
+    "occurrences": 1,
+    "recipes_count": 1,
+    "primary_status": "approved",
+    "raw_names": [
+      "Dried mint"
+    ],
+    "candidates": [
+      {
+        "source": "condiment",
+        "id": "trace",
+        "label": "Dried mint",
+        "category": "condimento",
+        "state": "in traccia, 0 kcal dichiarate",
+        "reviewed": true,
+        "state_checked": true,
+        "declared_kcal": 0,
+        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:kibbeh-nayyeh",
+        "recipe_title": "Kibbeh nayyeh",
+        "ingredient_key": "5",
+        "original_name": "Dried mint",
+        "grams": null,
+        "quantity_status": "trace"
       }
     ],
     "ambiguity_count": 0
@@ -25211,6 +25454,40 @@
         "original_name": "Dried sour plums",
         "grams": null,
         "quantity_status": "needs_review"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "trace:dried thyme",
+    "canonical_name": "Dried thyme",
+    "occurrences": 1,
+    "recipes_count": 1,
+    "primary_status": "approved",
+    "raw_names": [
+      "Dried thyme"
+    ],
+    "candidates": [
+      {
+        "source": "condiment",
+        "id": "trace",
+        "label": "Dried thyme",
+        "category": "condimento",
+        "state": "in traccia, 0 kcal dichiarate",
+        "reviewed": true,
+        "state_checked": true,
+        "declared_kcal": 0,
+        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:jollof-rice",
+        "recipe_title": "Jollof rice",
+        "ingredient_key": "8",
+        "original_name": "Dried thyme",
+        "grams": null,
+        "quantity_status": "trace"
       }
     ],
     "ambiguity_count": 0

@@ -1,0 +1,61 @@
+{
+  "version": "recipe-special-sources-v1",
+  "trace_condiment": {
+    "source": "condiment",
+    "id": "trace",
+    "category": "condimento",
+    "declared_kcal": 0,
+    "max_g_per_serving": 2,
+    "max_tsp_per_serving": 0.5,
+    "max_count_per_serving": 1,
+    "qualitative_units": [
+      "totaste",
+      "pinch"
+    ],
+    "canonical_ids": [
+      "sale",
+      "pepe_nero",
+      "origano_secco",
+      "cumino_polvere",
+      "curcuma_polvere",
+      "alloro_foglie",
+      "paprika_polvere",
+      "vaniglia",
+      "cannella_stecca"
+    ],
+    "exact_names": [
+      "white pepper",
+      "ground white pepper",
+      "cinnamon",
+      "ground cinnamon",
+      "nutmeg",
+      "ground nutmeg",
+      "dried thyme",
+      "dried basil",
+      "dried parsley",
+      "dried rosemary",
+      "dried mint",
+      "coriander powder",
+      "ground coriander",
+      "ground cumin",
+      "cumin seeds",
+      "curry powder",
+      "cloves",
+      "ground cloves",
+      "saffron",
+      "dried herbs"
+    ],
+    "note": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+  },
+  "stock": {
+    "source": "stock",
+    "id": "cube_1_50",
+    "category": "brodo",
+    "base_source": "CREA",
+    "base_id": "503010",
+    "cube_g_per_100g_liquid": 2,
+    "water_g_per_100g_liquid": 98,
+    "density_g_per_ml": 1,
+    "note": "Proxy dichiarato, diluizione 1:50: 1 g di dado generico + 49 g di acqua = 50 g di brodo pronto. Densità 1 g/ml euristica per liquido acquoso. Non certifica la composizione vegetale o di pollo né la reale preparazione della ricetta; si sostituisce con un brodo liquido specifico revisionato quando disponibile."
+  }
+}

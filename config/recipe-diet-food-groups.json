@@ -55,7 +55,9 @@
     "Open Food Facts:8004708082094": "aroma",
     "Open Food Facts:8051499550332": "aroma",
     "Open Food Facts:8000633014766": "capers",
-    "water:water": "water"
+    "water:water": "water",
+    "condiment:trace": "condimento",
+    "stock:cube_1_50": "brodo"
   },
   "unresolved": {
     "CREA:000220": "Farina come componente di un piatto composto: ruolo da verificare",

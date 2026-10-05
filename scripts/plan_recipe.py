@@ -5,6 +5,7 @@ import asyncio
 import json
 import math
 from pathlib import Path
+from recipe_special_sources import special_food,POLICY
 from optees_command import optees_command
 from calculate_recipe_nutrients import food_lookup, NUTRIENTS
 from plan_diet_day import solve_problem
@@ -34,6 +35,8 @@ def formulate_recipe(recipe, config, lookup=food_lookup):
     upper = number(config.get('scale_max', 1.8), lower, 3, 'porzione massima')
     variables = []
     rows = []
+    for trace in recipe.get('trace_condiments',[]):
+        if trace.get('source')!='condiment' or trace.get('id')!='trace' or trace.get('declared_kcal')!=0 or trace.get('category')!='condimento' or trace.get('reviewed') is not True or trace.get('state_checked') is not True:raise ValueError('Condimento in traccia non dichiarato o non verificato')
     choices = []
     ratios = {}
     objective = {}
@@ -97,7 +100,7 @@ def formulate_recipe(recipe, config, lookup=food_lookup):
                 else (
                     cache[identifier]
                     if source == 'Open Food Facts' and identifier in cache
-                    else lookup(source, identifier)
+                    else special_food(source,identifier,lookup) if source in ('condiment','stock') else lookup(source, identifier)
                 )
             )
             if (
@@ -106,6 +109,7 @@ def formulate_recipe(recipe, config, lookup=food_lookup):
                 or any(f.startswith(('implausible', 'inconsistent')) for f in food.get('quality_flags', []))
             ):
                 continue
+            if source=='condiment' and base>POLICY['trace_condiment']['max_g_per_serving']:raise ValueError('Condimento oltre il limite in traccia')
             values = {}
             for n, col in NUTRIENTS.items():
                 try:
@@ -212,6 +216,7 @@ def decode_recipe(recipe, config, problem, choices, result):
         source_url=recipe.get('source_url'),
         license=recipe.get('license'),
         selections=[],
+        trace_condiments=[dict(t) for t in recipe.get('trace_condiments',[])],
         nutrients={},
         note='Pesi degli ingredienti, non peso finale dopo cottura. Tutti gli ingredienti sono conteggiati come consumati. Gli abbinamenti delle diete personali non sono verificati.',
     )

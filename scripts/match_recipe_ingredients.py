@@ -24,6 +24,8 @@ DEFAULT_RECIPES = ROOT / 'dataset/recipes/catalog.sqlite'
 DEFAULT_DICT = ROOT / 'config/ingredient-dictionary.json'
 DEFAULT_APPROVED = ROOT / 'config/ingredient-approved-mappings.json'
 
+from recipe_special_sources import POLICY,trace_allowed,liquid_stock,special_food
+
 NUTRIENTS = ['kcal_100g', 'protein_g_100g', 'fat_g_100g', 'carbs_available_g_100g']
 
 
@@ -98,17 +100,24 @@ def load_dictionary(dict_path: Path) -> dict:
     return json.loads(dict_path.read_text(encoding='utf-8'))
 
 
-def load_approved_mappings(approved_path: Path) -> dict:
+def load_approved_mappings(approved_path: Path, proposals_dir=None) -> dict:
     """Load explicit approved mappings."""
-    if not approved_path.exists():
-        return {'version': '1.0', 'canonical_approvals': {}, 'recipe_overrides': {}}
-    return json.loads(approved_path.read_text(encoding='utf-8'))
+    data=json.loads(approved_path.read_text(encoding='utf-8')) if approved_path.exists() else {'version':'1.0','canonical_approvals':{},'recipe_overrides':{}}
+    exclusions=collections.defaultdict(set)
+    directory=Path(proposals_dir) if proposals_dir is not None else approved_path.parent/'ingredient-proposals'
+    for path in sorted(directory.glob('batch-*.json')):
+        for proposal in json.loads(path.read_text()).get('proposals',[]):
+            for raw in proposal.get('raw_names_excluded',[]):
+                name=raw.get('name') if isinstance(raw,dict) else raw
+                if name:exclusions[proposal['canonical_id']].add(re.sub(r'\s+',' ',fold(name)))
+    data['_raw_names_excluded']={k:sorted(v) for k,v in exclusions.items()}
+    return data
 
 
 def save_approved_mappings(data: dict, approved_path: Path):
     """Save approved mappings."""
     approved_path.parent.mkdir(parents=True, exist_ok=True)
-    approved_path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    approved_path.write_text(json.dumps({k:v for k,v in data.items() if not k.startswith('_')}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
 
 def find_canonical_ingredient(ing: dict, dictionary: dict) -> dict:
@@ -229,9 +238,13 @@ def match_crea_candidates(canonical: dict, qualifiers: dict, crea_foods: dict) -
                 reason='Taglio o composizione non equivalente: proxy da verificare per ricetta.',
             )
 
+    # A liquid stock must never be proposed as undiluted concentrate.
+    if canonical.get('flags',{}).get('requires_dilution'):candidates=[c for c in candidates if c['id']!='503010']
+
     # Add proxies if available
     for proxy in cm.get('proxies', []):
         p_id = proxy['id']
+        if p_id=='503010' and canonical.get('flags',{}).get('requires_dilution'):continue
         food = crea_foods.get(p_id)
         if food and all(c['id'] != p_id for c in candidates):
             candidates.append(
@@ -303,11 +316,19 @@ def evaluate_quantity(ing: dict, canonical: dict, dictionary: dict) -> tuple:
         except (ValueError, TypeError):
             pass
 
+    if unit in ('l','liter','litre') and liquid_stock(ing,canonical) and qty is not None:
+        try:
+            amount=float(qty)*1000
+            if math.isfinite(amount) and amount>0:return amount,'resolved','Brodo liquido: litri -> ml, densità dichiarata 1 g/ml'
+        except (ValueError,TypeError):pass
+
     # Milliliters for water or known liquid densities
     if unit == 'ml' and qty is not None:
         try:
             q_num = float(qty)
             density = canonical.get('density_g_per_ml') if canonical else None
+            if canonical and canonical.get('flags',{}).get('requires_dilution') and liquid_stock(ing,canonical):
+                if math.isfinite(q_num) and q_num>0:return q_num*POLICY['stock']['density_g_per_ml'],'resolved','Brodo liquido: densità 1 g/ml dichiarata nella policy (euristica)'
             if canonical and canonical.get('special_source') == 'water':
                 return q_num * 1.0, 'resolved', 'Conversione ml -> g per acqua (densità 1.0 g/ml)'
             elif density and density > 0:
@@ -355,10 +376,14 @@ def evaluate_quantity(ing: dict, canonical: dict, dictionary: dict) -> tuple:
     return None, 'needs_review', f'Quantità non convertibile (qty={qty}, unit={unit})'
 
 
-def approval_compatible(ing, canonical, qualifiers, approval, crea_foods, specific=False):
+def approval_compatible(ing, canonical, qualifiers, approval, crea_foods, specific=False, recipe=None):
     """A shared approval cannot override evidence from the actual occurrence."""
+    if (canonical or {}).get('flags',{}).get('requires_dilution') and approval.get('source')=='CREA' and approval.get('id')=='503010':return False
     if approval.get('reviewed') is not True or approval.get('state_checked') is not True:
         return False
+    if approval.get('source')=='condiment':return approval.get('id')=='trace' and trace_allowed(ing,canonical,recipe or {},approval.get('grams_override',ing.get('grams_whole_recipe')))
+    if approval.get('source')=='stock':return approval.get('id')=='cube_1_50' and liquid_stock(ing,canonical)
+    if (canonical or {}).get('flags',{}).get('requires_dilution') and approval.get('source')=='water':return False
     text = fold(
         ' '.join(
             str(x or '')
@@ -404,7 +429,7 @@ def approval_compatible(ing, canonical, qualifiers, approval, crea_foods, specif
     return True
 
 
-def process_ingredient(
+def _process_ingredient(
     ing: dict, recipe: dict, dictionary: dict, approved_data: dict, crea_foods: dict, db_off: sqlite3.Connection
 ) -> dict:
     """Process a single ingredient occurrence."""
@@ -423,7 +448,7 @@ def process_ingredient(
     # 1. Check Recipe Override in approved mappings
     rec_overrides = approved_data.get('recipe_overrides', {}).get(rec_id, {})
     if ing_key in rec_overrides and approval_compatible(
-        ing, canonical, qualifiers, rec_overrides[ing_key], crea_foods, specific=True
+        ing, canonical, qualifiers, rec_overrides[ing_key], crea_foods, specific=True, recipe=recipe
     ):
         appr = rec_overrides[ing_key]
         return {
@@ -456,11 +481,25 @@ def process_ingredient(
             'note': 'Approvato da override specifico di ricetta',
         }
 
+    excluded=bool(canonical and re.sub(r'\s+',' ',fold(name)) in approved_data.get('_raw_names_excluded',{}).get(canonical['id'],[]))
+    if excluded:
+        return dict(ingredient_key=ing_key,original_name=name,canonical_id=canonical['id'],canonical_name=canonical['display_name_it'],qualifiers=qualifiers,match_status='needs_review',confidence='none',reviewed=False,state_checked=False,selected_candidate=None,candidates=[],grams=grams,quantity_status=qty_status,quantity_note=qty_note,note='Nome escluso esplicitamente dai batch: non eredita approvazione canonica.',approval_excluded=True)
+    if trace_allowed(ing,canonical,recipe,grams):
+        candidate=dict(source='condiment',id='trace',label=name,category='condimento',state='in traccia, 0 kcal dichiarate',reviewed=True,state_checked=True,declared_kcal=0,reason=POLICY['trace_condiment']['note'])
+        return dict(ingredient_key=ing_key,original_name=name,canonical_id=(canonical or {}).get('id','trace:'+fold(name)),canonical_name=(canonical or {}).get('display_name_it',name),qualifiers=qualifiers,match_status='approved',confidence='declared',reviewed=True,state_checked=True,selected_candidate=candidate,candidates=[candidate],grams=grams,quantity_status='resolved' if grams is not None else 'trace',quantity_note=qty_note,note=candidate['reason'],category='condimento',declared_kcal=0)
+    if liquid_stock(ing,canonical):
+        candidate=dict(source='stock',id='cube_1_50',label='Brodo liquido da dado diluito 1:50',category='brodo',state='liquido, diluizione dichiarata 1:50',reviewed=True,state_checked=True,reason=POLICY['stock']['note'],dilution=POLICY['stock'])
+        # A dedicated explicitly reviewed liquid source takes precedence.
+        specific=rec_overrides.get(ing_key)
+        generic=approved_data.get('canonical_approvals',{}).get(canonical['id'])
+        if not generic or not approval_compatible(ing,canonical,qualifiers,generic,crea_foods,recipe=recipe):
+            return dict(ingredient_key=ing_key,original_name=name,canonical_id=canonical['id'],canonical_name=canonical['display_name_it'],qualifiers=qualifiers,match_status='approved',confidence='declared_proxy',reviewed=True,state_checked=True,selected_candidate=candidate,candidates=[candidate],grams=grams,quantity_status=qty_status,quantity_note=qty_note,note=candidate['reason'],category='brodo')
+
     # 2. Check Canonical Approval
     if canonical:
         cid = canonical['id']
         can_approvals = approved_data.get('canonical_approvals', {})
-        if cid in can_approvals and approval_compatible(ing, canonical, qualifiers, can_approvals[cid], crea_foods):
+        if cid in can_approvals and approval_compatible(ing, canonical, qualifiers, can_approvals[cid], crea_foods, recipe=recipe):
             appr = can_approvals[cid]
             return {
                 'ingredient_key': ing_key,
@@ -681,6 +720,22 @@ def process_ingredient(
     }
 
 
+def process_ingredient(ing,recipe,dictionary,approved_data,crea_foods,db_off):
+    result=_process_ingredient(ing,recipe,dictionary,approved_data,crea_foods,db_off)
+    candidate=result.get('selected_candidate')
+    if candidate and candidate['source'] in ('condiment','stock'):
+        policy=POLICY['trace_condiment' if candidate['source']=='condiment' else 'stock']
+        metadata=dict(category=policy['category'],reason=policy['note'])
+        if candidate['source']=='condiment':
+            metadata['declared_kcal']=0
+            if result['grams'] is None:result['quantity_status']='trace'
+        else:metadata['dilution']=policy
+        candidate.update(metadata)
+        result['candidates']=[dict(c,**metadata) if (c['source'],c['id'])==(candidate['source'],candidate['id']) else c for c in result['candidates']]
+        result.update(category=policy['category'],source_quantity=ing.get('quantity'),source_unit=ing.get('unit'))
+    return result
+
+
 def process_recipes(
     recipes_db_path: Path,
     crea_path: Path,
@@ -721,7 +776,7 @@ def process_recipes(
                 i['match_status'] in ['approved', 'proposed_exact', 'proposed_proxy'] for i in ingredients_results
             )
             all_quantities_resolved = bool(ingredients_results) and all(
-                i['quantity_status'] == 'resolved' and i['grams'] is not None for i in ingredients_results
+                (i['quantity_status'] == 'resolved' and i['grams'] is not None) or (i['quantity_status']=='trace' and i['selected_candidate']['source']=='condiment') for i in ingredients_results
             )
             solver_ready = all_approved and all_quantities_resolved
 
@@ -856,6 +911,10 @@ def build_report(processed_recipes: list, review_queue: list) -> dict:
         'recipes_all_quantities_resolved': recipes_all_quantities_resolved,
         'recipes_solver_ready': recipes_solver_ready,
         'recipes_pending_review': total_recipes - recipes_solver_ready,
+        'recipes_with_trace_condiments':sum(any(i['selected_candidate'] and i['selected_candidate']['source']=='condiment' for i in r['ingredients']) for r in processed_recipes),
+        'recipes_with_declared_stock_dilution':sum(any(i['selected_candidate'] and i['selected_candidate']['source']=='stock' for i in r['ingredients']) for r in processed_recipes),
+        'excluded_occurrences':sum(i.get('approval_excluded',False) for r in processed_recipes for i in r['ingredients']),
+        'special_sources_policy':POLICY,
     }
 
 
@@ -908,10 +967,13 @@ def export_solver_recipes(processed_recipes: list, output_path: Path):
             'attribution': r.get('attribution'),
             'reference_note': f"Ricetta approvata offline con tutte le associazioni controllate e pesi verificati. Servings: {servings}.",
             'ingredients': [],
+            'trace_condiments': [],
         }
         for ing in r['ingredients']:
-            grams = float(ing['grams'])
             cand = ing['selected_candidate']
+            if ing.get('quantity_status')=='trace':
+                recipe_entry['trace_condiments'].append(dict(key=ing['ingredient_key'],name=ing['original_name'],source='condiment',id='trace',category='condimento',declared_kcal=0,grams=None,source_quantity=ing.get('source_quantity'),source_unit=ing.get('source_unit'),reviewed=True,state_checked=True,note=ing['note']));continue
+            grams = float(ing['grams'])
             recipe_entry['ingredients'].append(
                 {
                     'key': ing['ingredient_key'],
@@ -925,6 +987,7 @@ def export_solver_recipes(processed_recipes: list, output_path: Path):
                             'reviewed': True,
                             'state_checked': True,
                             'label': cand.get('label') or cand.get('name', ''),
+                            **{k:cand[k] for k in ('category','declared_kcal','reason','dilution') if k in cand},
                         }
                     ],
                 }
@@ -948,9 +1011,11 @@ def export_recipe_mappings(processed_recipes: list, output_dir: Path):
                 mapping[ing['ingredient_key']] = {
                     'source': cand['source'],
                     'id': cand['id'],
-                    'reviewed': ing['reviewed'] and ing.get('quantity_status') == 'resolved',
+                    'reviewed': ing['reviewed'] and ing.get('quantity_status') in ('resolved','trace'),
                     'state_checked': ing['state_checked'],
                     'grams_override': ing.get('grams'),
+                    'quantity_status': ing.get('quantity_status'),
+                    **{k:cand[k] for k in ('category','declared_kcal','reason','dilution') if k in cand},
                 }
         safe_id = r['id'].replace(':', '_').replace('/', '_')
         target_file = output_dir / f"{safe_id}.json"

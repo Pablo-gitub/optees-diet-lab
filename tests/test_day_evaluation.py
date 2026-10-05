@@ -35,8 +35,11 @@ class DayEvaluation(base.ContextualBandit):
 
     def test_replaced_plan_is_not_evaluable_and_other_owners_are_invisible(self):
         self.apply();self.feedback(5)
+        # Applying on Tuesday can create the Monday-based active week; the
+        # original fixture's meal id may belong to a different week.
+        active_meal=next(m['planned']['planned_meal_id'] for m in self.view()['meals'] if m['slot']=='lunch')
         with self.app.connect() as db:
-            db.execute('UPDATE planned_meal SET items=? WHERE id=?',(json.dumps([dict(food=dict(source='CREA',id='000800'),grams=100,units=None)]),self.meal))
+            db.execute('UPDATE planned_meal SET items=? WHERE id=?',(json.dumps([dict(food=dict(source='CREA',id='000800'),grams=100,units=None)]),active_meal))
         view=self.view();self.assertIsNone(view['plan_id']);self.assertEqual(view['plan_evaluation']['plans'],[])
         self.assertIn('sostituito',view['plan_evaluation']['reason'])
         with self.app.connect() as db:

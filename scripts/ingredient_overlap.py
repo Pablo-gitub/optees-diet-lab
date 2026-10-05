@@ -15,7 +15,7 @@ def canonical(identifier,foods,profile=None):
     source=row.get('source','CREA');source={'OFF':'Open Food Facts'}.get(source,source)
     code=row.get('source_id',identifier)
     name=row.get('name','')
-    if source=='water' or GROUPS.get(source+':'+code)=='oil' or EXCLUDED.search(name):return None
+    if source in ('water','condiment','stock') or row.get('category') in ('condimento','brodo') or GROUPS.get(source+':'+code)=='oil' or EXCLUDED.search(name):return None
     for generic,ref in (profile or {}).get('food_preferences',{}).get('preferred_products',{}).items():
         if ref['id']==code and {'OFF':'Open Food Facts'}.get(ref['source'],ref['source'])==source:
             group=GROUPS.get('CREA:'+generic,'CREA:'+generic)

@@ -444,8 +444,10 @@ class RecipeMatchingTests(unittest.TestCase):
         appr_empty = {'canonical_approvals': {}, 'recipe_overrides': {}}
 
         res = process_ingredient(stock_ing, recipe, self.dictionary, appr_empty, self.crea_foods, self.db_off)
-        self.assertEqual(res['match_status'], 'needs_review')
-        self.assertFalse(res['reviewed'])
+        self.assertEqual(res['match_status'], 'approved')
+        self.assertTrue(res['reviewed'])
+        self.assertEqual(res['selected_candidate']['source'],'stock')
+        self.assertEqual(res['selected_candidate']['id'],'cube_1_50')
         self.assertIn('diluizione', res['note'].lower())
 
 

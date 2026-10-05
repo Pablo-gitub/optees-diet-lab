@@ -1,30 +1,95 @@
 {
   "total_recipes": 834,
   "total_ingredient_occurrences": 7843,
-  "total_canonical_groups": 967,
+  "total_canonical_groups": 972,
   "ingredient_statuses": {
-    "missing": 2483,
-    "approved": 3110,
-    "proposed_exact": 935,
-    "proposed_proxy": 715,
-    "ambiguous": 439,
-    "needs_review": 161
+    "missing": 2277,
+    "approved": 3695,
+    "proposed_exact": 856,
+    "proposed_proxy": 345,
+    "needs_review": 252,
+    "ambiguous": 418
   },
   "ingredient_quantities": {
-    "resolved": 4503,
-    "proposed_conversion": 915,
-    "needs_review": 2425
+    "resolved": 4513,
+    "proposed_conversion": 905,
+    "needs_review": 1958,
+    "trace": 467
   },
   "canonical_group_statuses": {
-    "ambiguous": 15,
-    "approved": 18,
-    "proposed_proxy": 16,
-    "proposed_exact": 52,
-    "missing": 866
+    "proposed_proxy": 29,
+    "approved": 30,
+    "ambiguous": 10,
+    "proposed_exact": 46,
+    "missing": 857
   },
-  "recipes_all_associations_approved": 24,
-  "recipes_all_associations_proposed": 50,
+  "recipes_all_associations_approved": 26,
+  "recipes_all_associations_proposed": 73,
   "recipes_all_quantities_resolved": 300,
   "recipes_solver_ready": 24,
-  "recipes_pending_review": 810
+  "recipes_pending_review": 810,
+  "recipes_with_trace_condiments": 412,
+  "recipes_with_declared_stock_dilution": 113,
+  "excluded_occurrences": 207,
+  "special_sources_policy": {
+    "version": "recipe-special-sources-v1",
+    "trace_condiment": {
+      "source": "condiment",
+      "id": "trace",
+      "category": "condimento",
+      "declared_kcal": 0,
+      "max_g_per_serving": 2,
+      "max_tsp_per_serving": 0.5,
+      "max_count_per_serving": 1,
+      "qualitative_units": [
+        "totaste",
+        "pinch"
+      ],
+      "canonical_ids": [
+        "sale",
+        "pepe_nero",
+        "origano_secco",
+        "cumino_polvere",
+        "curcuma_polvere",
+        "alloro_foglie",
+        "paprika_polvere",
+        "vaniglia",
+        "cannella_stecca"
+      ],
+      "exact_names": [
+        "white pepper",
+        "ground white pepper",
+        "cinnamon",
+        "ground cinnamon",
+        "nutmeg",
+        "ground nutmeg",
+        "dried thyme",
+        "dried basil",
+        "dried parsley",
+        "dried rosemary",
+        "dried mint",
+        "coriander powder",
+        "ground coriander",
+        "ground cumin",
+        "cumin seeds",
+        "curry powder",
+        "cloves",
+        "ground cloves",
+        "saffron",
+        "dried herbs"
+      ],
+      "note": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+    },
+    "stock": {
+      "source": "stock",
+      "id": "cube_1_50",
+      "category": "brodo",
+      "base_source": "CREA",
+      "base_id": "503010",
+      "cube_g_per_100g_liquid": 2,
+      "water_g_per_100g_liquid": 98,
+      "density_g_per_ml": 1,
+      "note": "Proxy dichiarato, diluizione 1:50: 1 g di dado generico + 49 g di acqua = 50 g di brodo pronto. Densità 1 g/ml euristica per liquido acquoso. Non certifica la composizione vegetale o di pollo né la reale preparazione della ricetta; si sostituisce con un brodo liquido specifico revisionato quando disponibile."
+    }
+  }
 }
