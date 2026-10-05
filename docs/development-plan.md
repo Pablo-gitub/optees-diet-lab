@@ -129,7 +129,7 @@ Consegna preparata per i passi 0.3–0.5: [prompt per Gemini](gemini-handoff-pha
 |---|---|---|---|---|---|
 | 6.1 | Bandit contestuale sui bracci-caratteristica con ricompensa da voto + aderenza (S6 completo) | Codex | M | test: solo piani provati; contesti separati | **fatto** — `3f78cfc`; 236 test verdi; ricompensa voto + aderenza, provenienza delle applicazioni, UCB1 contestuale per dieta e protocolli; [consegna backend](backend-handoff-bandit.md) |
 | 6.2 | **Ribilanciamento**: «Ho sgarrato» → stima a intervallo del pasto → riottimizzazione dei giorni rimanenti con il consumato bloccato; deficit giornaliero massimo, proteine protette, correzione distribuita; palestra solo come opzione aggiuntiva | Codex | L | la settimana rientra nei confini quando possibile; altrimenti lo dice, senza punire | **fatto** — `d0d701a`; 228 test verdi alla chiusura, 237 nella verifica finale (anche spuntino pomeridiano facoltativo disattivato); anteprima Optees senza scritture, limiti fissi, consumato bloccato, azioni CSRF/409; [contratto 6.3](backend-handoff-rebalance.md) |
-| 6.3 | UI sgarro: scelta tipo (pizzeria, ristorante, aperitivo, dolce, libero) e taglia, impatto sul budget, anteprima del diff sui giorni successivi, Accetta/Modifica/Non compensare; tono non colpevolizzante | Claude | M | flusso completo in meno di 4 tocchi | **fatto con riserva** — «Fuori programma» su ogni pasto non registrato della settimana: 7 tipi con taglie e kcal, «Altro» con intervalli, anteprima Optees (≈7 s) con stato, margine residuo e giorni toccati, Accetta il rientro / Lascia il piano com’è; pasto mostrato come intervallo con provenienza. 3 tocchi. Verificato su piano reale con scenari Salute sintetici. Riserva: B12 (il rientro riscrive pasti interi) |
+| 6.3 | UI sgarro: scelta tipo (pizzeria, ristorante, aperitivo, dolce, libero) e taglia, impatto sul budget, anteprima del diff sui giorni successivi, Accetta/Modifica/Non compensare; tono non colpevolizzante | Claude | M | flusso completo in meno di 4 tocchi | **fatto con riserva** — «Fuori programma» su ogni pasto non registrato della settimana: 7 tipi con taglie e kcal, «Altro» con intervalli, anteprima Optees (≈7 s) con stato, margine residuo e giorni toccati, Accetta il rientro / Lascia il piano com’è; pasto mostrato come intervallo con provenienza. 3 tocchi. Verificato su piano reale con scenari Salute sintetici. Riserva B12 chiusa dal backend; nuovi collegamenti B13/B11 da integrare nella UI |
 | 6.4 | Catalogo preset degli sgarri con intervalli di kcal e macro e fonti citate | Gemini | S | `config/meal-presets.json` con fonti; rivisto da Claude | **fatto** — 53 fonti CREA; McDonald's verificati il 2026-10-05 (URL corretti da Claude); sushi da USDA FoodData Central; kebab senza fonte verificabile, resta indisponibile |
 
 ### Fase 7 — Rifinitura → **M3**
@@ -162,3 +162,11 @@ Riconoscimento dei pasti da foto, sincronizzazione live con Withings/HealthKit (
 | B10 | **fatto** — `919e014` | 222 test verdi; riepilogo del lunedì sull’ultima settimana conclusa, week_start esplicito nei tre riquadri |
 
 Verifica finale T12 (2026-10-05): **237 test unittest verdi**, compresa anteprima HTTP con Optees reale e database identico prima/dopo. B9, B10, 6.2 e 6.1 hanno commit distinti; ulteriore regressione del ribilanciamento corretta per lo spuntino facoltativo. `web/static/` intatto. UI 6.3 da completare con [contratto ribilanciamento](backend-handoff-rebalance.md); [bandit v2](backend-handoff-bandit.md). Le modifiche concorrenti Gemini a preset e report restano fuori dai commit backend.
+
+### Correzioni backend successive a T12
+
+| Punto | Stato | Verifica |
+|---|---|---|
+| B12 | **fatto** — porzioni degli stessi prodotti prima delle sostituzioni; colazione/spuntini ultima leva; pizza esclusa; diff e applicazione solo dei pasti cambiati | 239 test verdi; [audit prima/dopo](rebalance-b12-audit.md), Optees reale incluso |
+| B13 | da fare — scostamenti registrati, simmetria e soglia | — |
+| B11 | da fare — riferimento valutabile in DayView | — |

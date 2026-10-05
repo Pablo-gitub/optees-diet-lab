@@ -133,23 +133,37 @@ async def preview(session,profile,meal,snap,make_config,foods):
     start=dt.date.fromisoformat(snap['start'])
     def configuration(_profile,index):return copy.deepcopy(configs[(start+dt.timedelta(days=index)).isoformat()])
     request=dict(week_start=snap['start'],day_index=0,locked=locks,_active_dates=list(by_date),_prior_frequencies=prior,solve_time_limit=30)
-    foods=copy.deepcopy(foods)
-    try:problem,blocks,choices,maximum=weekly_model(profile,request,configuration,foods)
-    except (ValueError,KeyError) as e:return unavailable('Il modello dei pasti bloccati non è verificabile: '+str(e))
-    size=len(problem['variables']);rows={date:[0.]*size for date in by_date}
-    for choice in choices:rows[choice['date']][choice['q']]+=choice['nutrients'][0]
-    total=[sum(row[i] for row in rows.values()) for i in range(size)];baseline={d:by_date[d]['totals']['planned']['kcal'] for d in by_date}
-    problem['constraints'].append(dict(coefficients=total,relation='>=',rhs=sum(baseline.values())-surplus))
-    dates=list(rows)
-    for i,date in enumerate(dates):
-        for other in dates[i+1:]:
-            row=[a-b for a,b in zip(rows[date],rows[other])];delta=baseline[date]-baseline[other]
-            for relation,rhs in (('<=',delta+25),('>=',delta-25)):problem['constraints'].append(dict(coefficients=row,relation=relation,rhs=rhs))
-    problem.pop('preference_coefficients',None);problem['objective']=dict(sense='min',coefficients=total)
+    from rebalance_model import build,excluded_dishes,changed
     from plan_diet_day import solve_problem
-    result=await solve_problem(session,problem)
-    if result.get('mathematical_status')!='optimal':return unavailable('Non è disponibile una soluzione ottima verificata entro i limiti e il tempo di calcolo.')
-    values_verified(problem,result);plan=decode_week(problem,blocks,foods,result,maximum)
+    foods=copy.deepcopy(foods);forbidden=excluded_dishes(meal,foods)
+    baseline={d:by_date[d]['totals']['planned']['kcal'] for d in by_date}
+    plan=None;stage_used=None
+    for stage in ('grams','main_meals','all_meals'):
+        try:problem,blocks,choices,maximum,costs=build(profile,request,configuration,foods,active,stage,forbidden)
+        except (ValueError,KeyError):continue
+        size=len(problem['variables']);rows={date:[0.]*size for date in by_date}
+        for choice in choices:rows[choice['date']][choice['q']]+=choice['nutrients'][0]
+        total=[sum(row[i] for row in rows.values()) for i in range(size)]
+        problem['constraints'].append(dict(coefficients=total,relation='>=',rhs=sum(baseline.values())-surplus))
+        dates=list(rows)
+        for i,date in enumerate(dates):
+            for other in dates[i+1:]:
+                row=[a-b for a,b in zip(rows[date],rows[other])];delta=baseline[date]-baseline[other]
+                for relation,rhs in (('<=',delta+25),('>=',delta-25)):problem['constraints'].append(dict(coefficients=row,relation=relation,rhs=rhs))
+        problem['objective']=dict(sense='min',coefficients=total)
+        result=await solve_problem(session,problem)
+        if result.get('mathematical_status')!='optimal':continue
+        values=values_verified(problem,result);intake=sum(a*b for a,b in zip(total,values))
+        if sum(baseline.values())-intake<=1e-3:continue
+        # Within the first feasible level, attain its maximum safe correction,
+        # then minimize actual food/portion changes, not calorie intake alone.
+        problem['constraints'].append(dict(coefficients=total,relation='<=',rhs=intake+.001))
+        problem['objective']['coefficients']=[costs.get(i,0.) for i in range(size)]
+        result=await solve_problem(session,problem)
+        if result.get('mathematical_status')!='optimal':continue
+        values_verified(problem,result);plan=decode_week(problem,blocks,foods,result,maximum);stage_used=stage;break
+    if plan is None:return unavailable('Non è disponibile una soluzione ottima verificata entro i limiti e il tempo di calcolo.')
+    response['change_policy']=dict(version='portion-first-v1',stage=stage_used,portion_fraction=.2,step_g=5,substitution_cost=10000,snack_change_cost=100000,excluded_food_ids=sorted(forbidden))
     correction=0
     for day in plan['days']:
         date=day['date'];before=baseline[date];after=day['nutrients']['kcal'];reduction=before-after
@@ -157,7 +171,7 @@ async def preview(session,profile,meal,snap,make_config,foods):
         changes=[]
         for m in by_date[date]['meals']:
             selections=[s for s in day['selections'] if s['meal']==m['slot']]
-            if m['planned'] and m['state']=='unknown' and not m['planned']['locked']:changes.append(dict(slot=m['slot'],before=m['planned']['items'],after=selections))
+            if m['planned'] and m['state']=='unknown' and not m['planned']['locked'] and changed(m['planned']['items'],selections):changes.append(dict(slot=m['slot'],before=m['planned']['items'],after=selections))
         response['days'].append(dict(date=date,before_kcal=before,after_kcal=after,reduction_kcal=round(reduction,3),changes=changes,nutrients=day['nutrients'],constraint_report=day['constraint_report']))
         correction+=reduction
     response['budget'].update(correction_kcal=round(correction,3),remaining_excess_kcal={k:round(v-correction,3) for k,v in excess.items()})
@@ -175,9 +189,12 @@ def decide(db,user,profile,token,proposal,action):
     diary.set_state(db,user,meal['date'],meal['slot'],'modified' if diary.planned(db,user,meal['date'],meal['slot']) else 'unplanned')
     changed=[]
     if action=='apply':
+        diffs={d['date']:d['changes'] for d in result['days']}
         for day in result['_plan']['days']:
-            applied=diary.apply_plan(db,user,profile,dict(week_start=proposal['start']),dict(day,id=0),dict(plan_id=0,scope='day',date=day['date']))
-            changed.extend(sorted({x['date'] for x in applied['applied_slots']}))
+            for change in diffs[day['date']]:
+                applied=diary.apply_plan(db,user,profile,dict(week_start=proposal['start']),dict(day,id=0),dict(plan_id=0,scope='meal',date=day['date'],slot=change['slot']))
+                changed.extend(x['date'] for x in applied['applied_slots'])
+        changed=sorted(set(changed))
     from progress_analysis import invalidate_forecast
     invalidate_forecast(db,user,meal['date'],'consumed_interval_estimate')
     answer=dict(decision=action,recorded=dict(date=meal['date'],slot=meal['slot']),changed_days=changed,status='recorded')

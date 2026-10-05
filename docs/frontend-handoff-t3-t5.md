@@ -104,3 +104,7 @@ Lo scostamento non è solo uno «sgarro» con preset: può essere pasta 120 g in
 | Cambio minimo (B12) | Prima i grammi degli stessi alimenti, poi sostituzioni con un costo; colazione e spuntini come ultima leva; mai lo stesso piatto dello sgarro nei giorni successivi |
 | Soglia | Sotto una soglia dichiarata (es. ±100 kcal sulla settimana) stato `unchanged` con spiegazione: piccoli scostamenti non vanno compensati |
 | Test | Pasta +20 g ⇒ `unchanged` o solo grammi; mela aggiunta + cena saltata si compensano; scostamento negativo restituisce kcal senza superare i massimi; pasti registrati e passati intatti |
+
+### Chiusura backend B12
+
+239 test verdi. `change_policy` espone il livello scelto e i costi; il diff e l’applicazione comprendono solo i pasti cambiati. Grammi degli stessi prodotti prioritari, porzioni personali e minimi protetti, colazione/spuntini fissi nel primo livello; tutte le pizze escluse dopo il preset pizzeria. [Audit prima/dopo](rebalance-b12-audit.md). Nessuna modifica a web/static/.

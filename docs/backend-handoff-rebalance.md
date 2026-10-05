@@ -51,3 +51,13 @@ Mostrare stima min–max e fonte, surplus min–max, correzione proposta e resid
 Il budget espone anche `reference_week_kcal` e `after_week_kcal` come intervalli: consumi registrati quando disponibili, altrimenti pasti pianificati (`reference_scope`). Il residuo riguarda questo pasto, non compensa retroattivamente scostamenti di altri pasti.
 
 Un profilo con spuntino pomeridiano disattivato resta una giornata intera: la completezza si valuta sui pasti previsti dal profilo, senza inventare pasti o nutrienti mancanti.
+
+## B12 — Cambiamenti minimi (portion-first-v1)
+
+Il solver prova nell'ordine: porzioni degli alimenti già pianificati (marca e codice conservati), sostituzioni dei soli pasti principali, infine colazione e spuntini. Una soluzione sicura con soli grammi ha precedenza anche quando il rientro è parziale: la proposta non forza sostituzioni per recuperare le ultime calorie. Entro il primo livello fattibile massimizza il rientro sicuro e minimizza poi il costo dei cambiamenti. I livelli successivi si usano quando il precedente non permette alcuna correzione verificata.
+
+Porzioni: passi di 5 g rispetto alla porzione originale, entro ±20%; si rispettano anche i limiti configurati quando contengono la porzione originale. Un piano precedente con porzioni fuori dai nuovi limiti conserva il riferimento originale e il limite ±20%: non viene riscritto per adeguarlo alla nuova configurazione. Prodotti contati in confezioni restano fissi nel primo livello. Minimi nutrizionali, deficit, massimi e distribuzione restano vincoli rigidi.
+
+`change_policy` dichiara versione, livello scelto (`grams`, `main_meals`, `all_meals`), passo, flessibilità, costo delle sostituzioni (10000 per alimento nuovo), costo aggiuntivo delle modifiche agli spuntini (100000) e codici esclusi. All'interno del livello si penalizzano anche il numero di alimenti modificati e la distanza in grammi. `days[].changes` comprende solo pasti realmente cambiati; applicare la proposta scrive solo questi pasti. Il preset pizzeria esclude tutte le pizze del catalogo dai pasti modificabili successivi. Senza identificazione del piatto (valori liberi senza nome/codice), il backend non può inferirne l'identità dai soli macro; non inventa un'associazione.
+
+Prima/dopo e distinzione fra osservazione UI e prova riproducibile: [audit B12](rebalance-b12-audit.md).

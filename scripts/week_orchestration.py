@@ -55,7 +55,7 @@ def weekly_model(profile,request,make_config,foods):
             candidates=[other['group'] for other in choices if other['meal']==c['meal'] and other['combination']==c['combination'] and other['branch_index']==c['branch_index'] and family(other['food_id'])]
             c['principal_protein']=bool(family(c['food_id'])) and c['group']==max(candidates,default=-1)
             if c.get('locked'):
-                fixed=[other for other in choices if other['meal']==c['meal'] and other.get('locked')]
+                fixed=[other for other in choices if other['meal']==c['meal'] and other.get('locked') and family(other['food_id'])]
                 principal=max(fixed,key=lambda other:(other['nutrients'][1]*other.get('locked_grams',p['variables'][other['q']]['lb']),other['food_id']),default=None)
                 c['principal_protein']=c is principal and c['nutrients'][1]>0
         all_choices.extend(dict(c,q=c['q']+shift,y=c['y']+shift,date=date,day=offset) for c in choices)

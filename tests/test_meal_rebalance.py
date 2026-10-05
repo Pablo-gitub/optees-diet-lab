@@ -114,6 +114,38 @@ class RebalanceAPI(base.DiaryTests):
         self.assertIsNotNone(result['budget']['reference_week_kcal'])
         self.assertTrue(all('afternoon_snack' not in [c['slot'] for c in d['changes']] for d in result['days']))
 
+    def test_small_surplus_changes_only_main_meal_grams(self):
+        with self.app.connect() as db:base=rebalance.snapshot(db,self.user,self.profile,self.meal)['original_kcal']
+        meal=rebalance.estimate(dict(date=self.start,slot='dinner',custom=dict(kcal=base+61,protein_g=80,fat_g=100,carbs_available_g=300)),self.today)
+        result=self.proposal(meal)['result']
+        self.assertIn(result['status'],('full','partial'),result)
+        self.assertEqual(result['change_policy']['stage'],'grams')
+        self.assertGreater(result['budget']['correction_kcal'],50)
+        from rebalance_model import quantities
+        for day in result['days']:
+            for change in day['changes']:
+                self.assertIn(change['slot'],('lunch','dinner'))
+                before=quantities(change['before']);after=quantities(change['after'])
+                self.assertEqual(set(before),set(after))
+                for key in before:self.assertAlmostEqual((after[key]-before[key])%5,0,places=3)
+        self.assertLessEqual(sum(len(d['changes']) for d in result['days']),6)
+
+    def test_pizza_preset_retains_products_and_excludes_future_pizza(self):
+        meal=rebalance.estimate(dict(date=self.start,slot='dinner',preset=dict(id='pizzeria',size='medio')),self.today)
+        result=self.proposal(meal)['result']
+        self.assertIn(result['status'],('partial','full'),result)
+        self.assertEqual(result['change_policy']['stage'],'grams')
+        self.assertIn('000720',result['change_policy']['excluded_food_ids'])
+        for day in result['_plan']['days']:
+            self.assertTrue(all('pizza' not in s['food'].lower() for s in day['selections']))
+        # The policy applies to all model levels, including substitutions.
+        from rebalance_model import build,excluded_dishes
+        foods=load_foods();excluded=excluded_dishes(meal,foods)
+        with self.app.connect() as db:snap=rebalance.snapshot(db,self.user,self.profile,meal)
+        views=snap['views'][1:];dates=[v['date'] for v in views]
+        p,_,choices,_,_=build(self.profile,dict(week_start=self.start,locked=[],_active_dates=dates),self.app.make_config,foods,views,'all_meals',excluded)
+        self.assertTrue(all(p['variables'][c['y']]['ub']==0 for c in choices if c['food_id'] in excluded))
+
     def test_missing_preset_refused_before_solver_and_catalog_explicit(self):
         cat=self.client.get('/api/rebalance/presets').json()
         self.assertTrue(all(isinstance(size['available'],bool) for preset in cat['presets'].values() for size in preset['sizes'].values()))
