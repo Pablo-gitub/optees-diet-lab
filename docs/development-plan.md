@@ -41,8 +41,8 @@ Il lavoro di Gemini viene sempre **rivisto** da Claude (dati e media) o da Codex
 | T8 | Codex | 4.1 · 4.2 | **fatto** — W1–W3 `652da35`, `a8c411a`, `ee2fa5b` |
 | T9 | Claude | 4.3 · 5.3 (UI su dati demo) | **fatto** — 4.3 `c732350`; 5.3 (vedi riga 5.3); Gemini 5.4 rivisto `21c128a` |
 | T10 | Codex | 5.1 · 5.2 | **fatto** — B6 `72f9660`, B7 `882f5cf`, 5.1 `dc4df6b`, `824daba`; Gemini 5.4 separato |
-| T11 | Claude | revisione 5.x · 6.3 (UI sgarro) | Gemini: 6.4 · **fatto** — Gemini 6.4 `c2bc4dd`; B12 chiuso nel backend, collegamenti UI B13/B11 da completare |
-| T12 | Codex | 6.2 → 6.1 → **M2** | **backend fatto** — B9/B10 e B11–B13 chiusi, 254 test verdi; nuovi collegamenti UI B13/B11 a Claude |
+| T11 | Claude | revisione 5.x · 6.3 (UI sgarro) | Gemini: 6.4 · **fatto** — Gemini 6.4 `c2bc4dd`; UI B11/B13 collegata (handoff); B14/B15 corretti nel backend |
+| T12 | Codex | 6.2 → 6.1 → **M2** | **backend fatto** — B9/B10 e B11–B15 chiusi, 263 test verdi; UI B11/B13 collegata, correzioni compatibili B14/B15 consegnate |
 | T13 | Claude | 7.1 · 7.3 | Gemini: 7.4 · QA visiva |
 | T14 | Codex | 7.2 → **M3** | — |
 
@@ -178,4 +178,6 @@ Verifica finale correzioni B12 → B13 → B11: **254 test verdi** con il comand
 | Punto | Stato | Verifica |
 |---|---|---|
 | B14 | **fatto** — verifiche Optees, decodifica e sicurezza restituiscono unavailable leggibile; diagnostica del limite; riferimenti correnti e griglia coerenti nei due modelli | 257 test verdi; due rientri applicati via HTTP con Optees reale su porzioni legacy già modificate; anteprime senza scritture |
-| B15 | da fare — mantenere la valutabilità dello stesso piano dopo il rientro | — |
+| B15 | **fatto** — rientro come revisione atomica dello stesso piano: plan_id, voto e contesto conservati; storico originale e nutrienti attesi aggiornati | 263 test verdi; settimana applicata → rientro → giorno valutabile, doppia revisione, aderenza sul ribilanciato dopo prova/conferma, isolamento utenti e veri cambi di piano |
+
+Verifica finale B14 → B15: **263 test verdi** con il comando completo richiesto. B14 e B15 chiusi con commit separati. Il rientro non accetta risultati Optees non verificabili e mantiene la traccia valutabile delle nuove revisioni del piano. Indagine del vecchio vettore non conservato e contratto aggiornati in [handoff rientro](backend-handoff-rebalance.md). Nessuna modifica a `web/static/`.

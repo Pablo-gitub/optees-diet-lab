@@ -114,3 +114,26 @@ Esempio ridotto:
 Il ±20% si calcola sulle porzioni **attualmente** pianificate, quindi dopo un rientro usa il riferimento aggiornato; non sulle porzioni del primo piano della settimana. I limiti delle variabili di quantità vengono ora espressi direttamente sugli estremi raggiungibili a passi di 5 g, identici nel modello settimanale e nelle verifiche giornaliere. Una porzione preesistente inferiore a 5 g resta fissa se non ammette un passo; non si genera un intervallo invertito. Restano fermi i limiti calorici cumulativi e i target approvati.
 
 La copia della settimana di prova della UI, con target personali abilitati e scenari Salute sintetici, permette due applicazioni consecutive con Optees reale senza violare il margine aggiornato. Il test HTTP riproducibile parte da pasta 45 g fuori dagli attuali limiti configurati (simulazione del piano pre-B12), registra due scostamenti e applica entrambi i rientri; verifica ±20%, passi di 5 g, limiti cumulativi e anteprime senza scritture. Il risultato originale che generò «Variabile fuori limite» non è conservato: non si attribuisce quella specifica violazione al margine senza poter osservare il vettore. La nuova diagnostica conserva nome, valore, limiti e riferimento per identificarla se ricompare. Non si allargano le tolleranze di verifica per accettare un risultato fuori limite.
+
+
+## B15 — Rientro come revisione dello stesso piano
+
+`apply` acquisisce prima della modifica i riferimenti applicati ancora corrispondenti al piano, del solo proprietario. Nella stessa transazione aggiorna porzioni, nutrienti attesi e caratteristiche degli alimenti nelle esposizioni del bandit, **senza creare un nuovo piano né una nuova prova**. Restano lo stesso `plan_id`, contesto, data dell'applicazione originale e voto salvato; si conserva anche il ruolo del pasto (best/varied/…). Le sessioni e le loro caratteristiche restano intatte.
+
+Lo snapshot conserva `original_application` e `rebalance_history` con token dell'anteprima, data e pasti prima/dopo. Questi dati rimangono nella traccia backend; il payload originale del piano non viene riscritto. Solo i componenti realmente modificati dal diff vengono aggiornati. `keep` non modifica alcuna esposizione. Applicazione, revisione e decisione sono atomiche: un errore annulla l'intera transazione.
+
+La decisione aggiunge:
+
+```json
+{"decision":"apply","changed_days":["2026-10-06"],"evaluation_revisions":[{"date":"2026-10-06","plan_id":42,"rebalance_count":1}]}
+```
+
+DayView continua a presentare `plan_id` e voto del piano; ogni riferimento in `plan_evaluation.plans` aggiunge:
+
+```json
+{"plan_id":42,"rating":4,"rating_scope":"plan","applied_at":1791200000,"rebalance_count":1,"last_rebalanced_at":1791210000}
+```
+
+Il voto precedente resta visibile, ma non costituisce una prova delle nuove porzioni. Il bandit richiede consumi/allenamenti effettivi e una conferma del voto successiva all'ultima revisione, nella data del giorno provato o più tardi; altrimenti `insufficient_data`. L'aderenza si calcola sui **nutrienti ribilanciati**, non sul piano originario, senza duplicare le prove.
+
+Riferimenti estranei, esposizioni già sostituite prima dell'anteprima o vecchi rientri senza una traccia ricostruibile non vengono ricollegati per supposizione. È conservata la valutabilità dei rientri applicati con questa revisione del backend; una precedente indisponibilità dovuta a un vecchio backend non viene trasformata automaticamente in una nuova prova.

@@ -277,17 +277,23 @@ def decide(db,user,profile,token,proposal,action):
         if diary.state(db,user,meal['date'],meal['slot'])!='unknown':raise diary.DomainError('Pasto già registrato','slot_already_logged',409)
         db.execute('INSERT INTO consumed_estimate VALUES(?,?,?,?,?)',(user,meal['date'],meal['slot'],json.dumps(meal),time.time()))
         diary.set_state(db,user,meal['date'],meal['slot'],'modified' if diary.planned(db,user,meal['date'],meal['slot']) else 'unplanned')
-    changed=[]
+    changed=[];evaluation_revisions=[]
     if action=='apply':
+        import contextual_bandit as bandit
         diffs={d['date']:d['changes'] for d in result['days']}
+        applications=bandit.capture_rebalance_applications(db,user,{date for date,changes in diffs.items() if changes})
+        applied_slots=[]
         for day in result['_plan']['days']:
             for change in diffs[day['date']]:
-                applied=diary.apply_plan(db,user,profile,dict(week_start=proposal['start']),dict(day,id=0),dict(plan_id=0,scope='meal',date=day['date'],slot=change['slot']))
+                original=diary.planned(db,user,day['date'],change['slot'])
+                applied=diary.apply_plan(db,user,profile,dict(week_start=proposal['start']),dict(day,id=0,role=original['role']),dict(plan_id=0,scope='meal',date=day['date'],slot=change['slot']))
+                applied_slots.extend(applied['applied_slots'])
                 changed.extend(x['date'] for x in applied['applied_slots'])
+        evaluation_revisions=bandit.revise_rebalance_applications(db,user,profile,applications,result['_plan']['days'],applied_slots,token)
         changed=sorted(set(changed))
     from progress_analysis import invalidate_forecast
     if not from_diary:invalidate_forecast(db,user,meal['date'],'consumed_interval_estimate')
     week=db.execute("SELECT id FROM week_plan WHERE user_id=? AND week_start=? AND status='active'",(user,proposal['start'])).fetchone()
-    answer=dict(decision=action,recorded=None if from_diary else dict(date=meal['date'],slot=meal['slot']),changed_days=changed,status='closed' if from_diary else 'recorded',week_start=proposal['start'],week_plan_id=week['id'] if week else None,correction_kcal=result['budget']['correction_kcal'] if action=='apply' else 0,daily_corrections=[dict(date=d['date'],reduction_kcal=d['reduction_kcal']) for d in result['days']] if action=='apply' else [])
+    answer=dict(decision=action,recorded=None if from_diary else dict(date=meal['date'],slot=meal['slot']),changed_days=changed,status='closed' if from_diary else 'recorded',week_start=proposal['start'],week_plan_id=week['id'] if week else None,correction_kcal=result['budget']['correction_kcal'] if action=='apply' else 0,daily_corrections=[dict(date=d['date'],reduction_kcal=d['reduction_kcal']) for d in result['days']] if action=='apply' else [],evaluation_revisions=evaluation_revisions)
     db.execute('INSERT INTO rebalance_decision(user_id,preview_id,decision,created,payload) VALUES(?,?,?,?,?)',(user,token,action,time.time(),json.dumps(answer)))
     return answer

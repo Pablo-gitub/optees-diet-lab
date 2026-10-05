@@ -126,6 +126,8 @@ Nessuna applicazione verificabile o piano successivamente sostituito: `status = 
 
 Per «Com'è andata la giornata?» usare `POST feedback_endpoint` con `{ "rating": 1..5, "tried": true }` e CSRF. Il voto è **del piano**, condiviso tra i giorni di una sua applicazione settimanale (`rating_scope`), non una nuova valutazione autonoma per giorno: aggiornarlo sostituisce quello esistente. Il backend continua ad apprendere solo dai componenti effettivamente provati con dati sufficienti; salvare un voto non promette un aggiornamento del bandit (vedere `learning` nella risposta).
 
+Dal B15, un rientro applicato conserva lo stesso riferimento valutabile: `plan_evaluation.plans[].rebalance_count` indica il numero di revisioni e `last_rebalanced_at` la più recente (0/null senza rientri). `applied_at`, piano originale e voto restano conservati. Il backend aggiorna il bilancio atteso del bandit; serve una nuova conferma dopo aver provato la versione ribilanciata per renderla eleggibile all'apprendimento. [Dettagli del rientro](backend-handoff-rebalance.md).
+
 ### 4.2 `GET /api/week?start=2026-10-06` — striscia Settimana
 
 ```json

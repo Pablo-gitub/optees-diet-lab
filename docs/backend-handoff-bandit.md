@@ -21,3 +21,8 @@ Per la UI, mostrare «Valutazione salvata» e, se learning è insufficiente, il 
 ## B11 — Domanda sul giorno
 
 DayView espone `plan_id`, `rating` e `plan_evaluation` con componenti applicati, voto già salvato, data del voto, endpoint e disponibilità. [JSON e indisponibilità nel contratto §4.1](api-contract.md). La UI può chiedere «Com’è andata la giornata?» dopo la prova, mostrando l’ambito dei pasti/allenamenti coperti. Il voto resta per piano, condiviso se lo stesso piano è applicato alla settimana; con più riferimenti scegliere esplicitamente i componenti. Un piano sostituito non riceve più un riferimento valutabile in DayView. Nessuna modifica a web/static/.
+
+
+## B15 — Revisione delle porzioni
+
+Un rientro applicato mantiene il piano originale valutabile: stesso `plan_id`, voto e ambito; DayView aggiunge `rebalance_count` e `last_rebalanced_at` al riferimento. Nelle esposizioni si conservano versione originale e storico delle revisioni, aggiornando nutrienti attesi e caratteristiche dei prodotti effettivamente applicati. Nessuna nuova prova viene creata; l'aderenza usa le nuove quantità. Per apprendere serve una prova reale e la conferma del voto dopo l'ultima revisione (`insufficient_data` prima della conferma), anche se le stelle precedenti restano visibili. Veri cambi di piano o riferimenti di altri utenti non vengono ripristinati. [Contratto e JSON](backend-handoff-rebalance.md).
