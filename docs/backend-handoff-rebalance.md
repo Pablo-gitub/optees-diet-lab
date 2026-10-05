@@ -95,3 +95,22 @@ Esempio sotto soglia:
 I rientri già applicati nella stessa settimana/piano sono conservati nel registro delle decisioni e sottratti dallo scostamento: ripetere l'analisi può considerare soltanto il residuo, senza compensare due volte il totale. Anche il limite giornaliero di 200 kcal resta cumulativo rispetto al piano prima dei rientri, non si riparte da zero a ogni clic. `previous_correction_kcal` rende esplicito questo conto. Una decisione è monouso anche quando `keep` non modifica il diario; un secondo clic risponde 409. Un vecchio rientro privo di quantità verificabile rende indisponibile una nuova compensazione, invece di inventare il recupero già effettuato.
 
 La UI deve mostrare «Calorie da recuperare» per il segno positivo e «Calorie da restituire» per quello negativo, quantità garantita/intervallo, soglia, residuo e motivo dell'indisponibilità. `deviations` espone le fonti dei pasti utilizzati. Il budget `after_week_kcal` conta i consumi già registrati una sola volta. `change_policy` resta quella di B12.
+
+
+## B14 — Risultati non verificabili
+
+Gli errori nella verifica del vettore Optees (prima ottimizzazione e minimo cambiamento), nella decodifica settimanale/giornaliera e nei controlli finali di sicurezza restituiscono **HTTP 200**, `status: "unavailable"`, `reason` leggibile, `days: []`, correzione zero e nessun piano applicabile. Anche un risultato incompleto, non finito o un errore di calcolo viene rifiutato. L'anteprima non scrive nel database e l'azione `apply` su questo risultato risponde 400. CSRF e conflitti 409 restano invariati.
+
+Esempio ridotto:
+
+```json
+{"status":"unavailable","reason":"Il risultato di Optees non è verificabile: una quantità o variabile è fuori dai limiti ammessi.","days":[],"budget":{"correction_kcal":0},"verification":{"status":"failed","stage":"grams","phase":"result","code":"variable_out_of_bounds","error_type":"ValueError","variables":[{"name":"d0_locked_q3","value":155,"lower":100,"upper":150,"integrality":"C","date":"2026-10-06","slot":"lunch","food_id":"000800","reference_grams":125}]}}
+```
+
+`verification` offre diagnostica limitata (massimo 12 variabili); per valori mancanti/non finiti `value` è null. Non è una deroga ai vincoli: la soluzione rimane rifiutata. La UI mostra `reason`, senza trattare il risultato come un'anteprima applicabile.
+
+### Indagine del limite e doppio rientro
+
+Il ±20% si calcola sulle porzioni **attualmente** pianificate, quindi dopo un rientro usa il riferimento aggiornato; non sulle porzioni del primo piano della settimana. I limiti delle variabili di quantità vengono ora espressi direttamente sugli estremi raggiungibili a passi di 5 g, identici nel modello settimanale e nelle verifiche giornaliere. Una porzione preesistente inferiore a 5 g resta fissa se non ammette un passo; non si genera un intervallo invertito. Restano fermi i limiti calorici cumulativi e i target approvati.
+
+La copia della settimana di prova della UI, con target personali abilitati e scenari Salute sintetici, permette due applicazioni consecutive con Optees reale senza violare il margine aggiornato. Il test HTTP riproducibile parte da pasta 45 g fuori dagli attuali limiti configurati (simulazione del piano pre-B12), registra due scostamenti e applica entrambi i rientri; verifica ±20%, passi di 5 g, limiti cumulativi e anteprime senza scritture. Il risultato originale che generò «Variabile fuori limite» non è conservato: non si attribuisce quella specifica violazione al margine senza poter osservare il vettore. La nuova diagnostica conserva nome, valore, limiti e riferimento per identificarla se ricompare. Non si allargano le tolleranze di verifica per accettare un risultato fuori limite.

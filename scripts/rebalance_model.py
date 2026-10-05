@@ -70,13 +70,17 @@ def build(profile,request,configuration,foods,views,stage,forbidden):
                 if (block['date'],local['meal']) in protected or local['meal'] not in ('lunch','dinner') or local.get('units') is not None:continue
                 if local['food_id'] in forbidden:raise ValueError('Il piatto fuori programma richiede una sostituzione.')
                 index=local['q'];global_index=index+block['shift'];original=local['locked_grams']
-                low=max(5,original*(1-PORTION_FRACTION));high=original*(1+PORTION_FRACTION)
+                low=min(original,max(5,original*(1-PORTION_FRACTION)));high=min(3000,original*(1+PORTION_FRACTION))
                 configured=block['config'].get('portion_bounds_g',{}).get(local['food_id'])
                 if configured and configured[0]<=original<=configured[1]:
                     low=max(low,configured[0]);high=min(high,configured[1])
+                first_step=math.ceil((low-original)/5);last_step=math.floor((high-original)/5)
+                # Encode the actual grid endpoints, relative to the current reference,
+                # in both the weekly model and the independently verified day.
+                low=original+5*first_step;high=original+5*last_step
                 for model,q in ((block['problem'],index),(problem,global_index)):
                     _remove_fixed_quantity(model,q);model['variables'][q].update(lb=low,ub=high)
-                steps=extend(problem,dict(name=f'portion_step_{global_index}',lb=math.ceil((low-original)/5),ub=math.floor((high-original)/5),integrality='I'))
+                steps=extend(problem,dict(name=f'portion_step_{global_index}',lb=first_step,ub=last_step,integrality='I'))
                 row=[0.]*len(problem['variables']);row[global_index]=1;row[steps]=-5
                 problem['constraints'].append(dict(coefficients=row,relation='=',rhs=original))
                 local['locked']=False

@@ -128,3 +128,7 @@ Lo scostamento non è solo uno «sgarro» con preset: può essere pasta 120 g in
 |---|---|---|
 | B14 | `POST /api/rebalance/preview` con `from_diary` risponde **500**: `values_verified` solleva «Variabile fuori limite» sul risultato di Optees reale. Riprodotto su una settimana i cui giorni successivi erano già stati riscritti da un rientro precedente (applicato con il backend pre-B12) | ogni errore di verifica del risultato deve diventare `status: unavailable` con motivo, mai 500; indagare il limite violato (porzioni fuori dal ±20% rispetto a un riferimento già modificato?) |
 | B15 | Dopo un rientro applicato, i giorni modificati risultano «Piano sostituito dopo l'applicazione» e non sono più valutabili | un rientro è una modifica dello stesso piano: conservare il riferimento valutabile (o legarlo al piano originale) |
+
+### Chiusura backend B14
+
+257 test verdi. Errori di verifica del risultato (prima/seconda ottimizzazione, decodifica giornaliera/settimanale, sicurezza) ⇒ HTTP 200, `status: unavailable`, `reason`, diff vuoto e correzione zero; `apply` rifiutato. `verification` aggiunge variabile/valore/limiti e riferimento quando identificabili. La regressione HTTP applica due rientri con Optees reale partendo da pasta 45 g già fuori dai limiti configurati del nuovo profilo, con margine ±20% riferito ogni volta al piano corrente, passi 5 g e limiti calorici cumulativi. Il vettore originale del 500 non è conservato: il caso specifico non è attribuito al margine senza evidenza; [indagine e contratto](backend-handoff-rebalance.md). web/static/ intatto.

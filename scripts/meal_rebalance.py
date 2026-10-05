@@ -213,35 +213,58 @@ async def preview(session,profile,meal,snap,make_config,foods):
             for other in dates[i+1:]:
                 row=[a-b for a,b in zip(rows[date],rows[other])];delta=baseline[date]-baseline[other]+snap.get('previous_daily_correction',{}).get(date,0)-snap.get('previous_daily_correction',{}).get(other,0)
                 for relation,rhs in (('<=',delta+25),('>=',delta-25)):problem['constraints'].append(dict(coefficients=row,relation=relation,rhs=rhs))
-        problem['objective']=dict(sense='min',coefficients=[direction*v for v in total])
-        result=await solve_problem(session,problem)
-        if result.get('mathematical_status')!='optimal':continue
-        values=values_verified(problem,result);intake=sum(a*b for a,b in zip(total,values))
-        if direction*(sum(baseline.values())-intake)<=1e-3:continue
-        # Within the first feasible level, attain its maximum safe correction,
-        # then minimize actual food/portion changes, not calorie intake alone.
-        problem['constraints'].append(dict(coefficients=total,relation='<=' if direction==1 else '>=',rhs=intake+direction*.001))
-        problem['objective']['coefficients']=[costs.get(i,0.) for i in range(size)]
-        result=await solve_problem(session,problem)
-        if result.get('mathematical_status')!='optimal':continue
-        values_verified(problem,result);plan=decode_week(problem,blocks,foods,result,maximum);stage_used=stage;break
+        result=None;phase='result'
+        try:
+            problem['objective']=dict(sense='min',coefficients=[direction*v for v in total])
+            phase='solver'
+            result=await solve_problem(session,problem)
+            phase='result'
+            if result.get('mathematical_status')!='optimal':continue
+            values=values_verified(problem,result);intake=sum(a*b for a,b in zip(total,values))
+            if direction*(sum(baseline.values())-intake)<=1e-3:continue
+            # Within the first feasible level, attain its maximum safe correction,
+            # then minimize actual food/portion changes, not calorie intake alone.
+            problem['constraints'].append(dict(coefficients=total,relation='<=' if direction==1 else '>=',rhs=intake+direction*.001))
+            problem['objective']['coefficients']=[costs.get(i,0.) for i in range(size)]
+            phase='solver'
+            result=await solve_problem(session,problem)
+            phase='result'
+            if result.get('mathematical_status')!='optimal':continue
+            values_verified(problem,result)
+            phase='days'
+            plan=decode_week(problem,blocks,foods,result,maximum);stage_used=stage;break
+        except Exception as error:
+            from rebalance_verification import failure
+            reason,details=failure(error,stage,phase,problem,result,choices)
+            response['verification']=details
+            return unavailable(reason)
     if plan is None:return unavailable('Non è disponibile una soluzione ottima verificata entro i limiti e il tempo di calcolo.')
     response['change_policy']=dict(version='portion-first-v1',stage=stage_used,portion_fraction=.2,step_g=5,substitution_cost=10000,snack_change_cost=100000,excluded_food_ids=sorted(forbidden))
-    correction=0
-    for day in plan['days']:
-        date=day['date'];before=baseline[date];after=day['nutrients']['kcal'];reduction=before-after
-        if direction*reduction<-1e-3 or direction*reduction>200+1e-3:raise diary.DomainError('Limiti non verificati','unsafe_proposal',422)
-        changes=[]
-        for m in by_date[date]['meals']:
-            selections=[s for s in day['selections'] if s['meal']==m['slot']]
-            if m['planned'] and m['state']=='unknown' and not m['planned']['locked'] and changed(m['planned']['items'],selections):changes.append(dict(slot=m['slot'],before=m['planned']['items'],after=selections))
-        response['days'].append(dict(date=date,before_kcal=before,after_kcal=after,reduction_kcal=round(reduction,3),changes=changes,nutrients=day['nutrients'],constraint_report=day['constraint_report']))
-        correction+=reduction
-    response['budget'].update(correction_kcal=round(correction,3),remaining_excess_kcal={k:round(v-correction,3) for k,v in excess.items()})
-    if reference_known:response['budget']['after_week_kcal']={k:round(reference[k]+optional[k]-correction,3) for k in reference}
-    complete=max(abs(v-correction) for v in excess.values())<1
-    response.update(status='full' if complete else 'partial' if abs(correction)>1e-3 else 'unchanged',explanation='Rientro completo entro i limiti.' if complete else 'È possibile solo un rientro parziale entro i limiti. Puoi anche lasciare invariato il piano.',_plan=plan)
-    return response
+    try:
+        correction=0
+        for day in plan['days']:
+            date=day['date'];before=baseline[date];after=day['nutrients']['kcal'];reduction=before-after
+            if direction*reduction<-1e-3 or direction*reduction>200+1e-3:raise diary.DomainError('Limiti non verificati','unsafe_proposal',422)
+            changes=[]
+            for m in by_date[date]['meals']:
+                selections=[s for s in day['selections'] if s['meal']==m['slot']]
+                if m['planned'] and m['state']=='unknown' and not m['planned']['locked'] and changed(m['planned']['items'],selections):changes.append(dict(slot=m['slot'],before=m['planned']['items'],after=selections))
+            response['days'].append(dict(date=date,before_kcal=before,after_kcal=after,reduction_kcal=round(reduction,3),changes=changes,nutrients=day['nutrients'],constraint_report=day['constraint_report']))
+            correction+=reduction
+        response['budget'].update(correction_kcal=round(correction,3),remaining_excess_kcal={k:round(v-correction,3) for k,v in excess.items()})
+        if reference_known:response['budget']['after_week_kcal']={k:round(reference[k]+optional[k]-correction,3) for k in reference}
+        complete=max(abs(v-correction) for v in excess.values())<1
+        response.update(status='full' if complete else 'partial' if abs(correction)>1e-3 else 'unchanged',explanation='Rientro completo entro i limiti.' if complete else 'È possibile solo un rientro parziale entro i limiti. Puoi anche lasciare invariato il piano.',_plan=plan)
+        return response
+    except Exception as error:
+        from rebalance_verification import failure
+        reason,details=failure(error,stage_used,'safety',problem,result,choices)
+        response.update(status='unavailable',days=[],verification=details)
+        response['budget'].update(correction_kcal=0,remaining_excess_kcal=excess.copy())
+        response.pop('_plan',None)
+        if reference_known:response['budget']['after_week_kcal']={k:round(reference[k]+optional[k],3) for k in reference}
+        return unavailable(reason)
+
 
 
 def decide(db,user,profile,token,proposal,action):

@@ -172,3 +172,10 @@ Verifica finale T12 (2026-10-05): **237 test unittest verdi**, compresa anteprim
 | B11 | **fatto** — DayView espone piano applicato, voto salvato e riferimenti dei componenti; piani sostituiti/estranei esclusi, casi multipli e futuri espliciti | 254 test verdi; [contratto §4.1](api-contract.md); lettura senza apprendimento |
 
 Verifica finale correzioni B12 → B13 → B11: **254 test verdi** con il comando completo del piano, inclusa anteprima HTTP con Optees reale. Un commit per punto; contratto del rientro v2 e riferimenti DayView consegnati alla UI. `web/static/` non modificato. README, report Gemini e screenshot esterni al lavoro backend restano fuori dai commit.
+
+### Correzioni dopo B11/B13 nella UI
+
+| Punto | Stato | Verifica |
+|---|---|---|
+| B14 | **fatto** — verifiche Optees, decodifica e sicurezza restituiscono unavailable leggibile; diagnostica del limite; riferimenti correnti e griglia coerenti nei due modelli | 257 test verdi; due rientri applicati via HTTP con Optees reale su porzioni legacy già modificate; anteprime senza scritture |
+| B15 | da fare — mantenere la valutabilità dello stesso piano dopo il rientro | — |
