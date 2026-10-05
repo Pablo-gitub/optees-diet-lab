@@ -112,3 +112,7 @@ Lo scostamento non è solo uno «sgarro» con preset: può essere pasta 120 g in
 ### Chiusura backend B13
 
 248 test verdi. `POST /api/rebalance/preview {"date":"…","from_diary":true}` disponibile con CSRF, stessa anteprima e decisioni del 6.2. Scostamenti registrati più eventuale nuovo pasto, segni simmetrici, soglia 100 kcal garantite, nutrienti mancanti espliciti, precedenti rientri e limiti giornalieri cumulativi. Sul percorso diario `keep` chiude soltanto (nessun nuovo pasto), `apply` modifica solo il diff futuro, secondo clic o stato cambiato ⇒ 409. [Contratto v2 con JSON](backend-handoff-rebalance.md). Per il caso +61 kcal, ora nessuna modifica; [audit](rebalance-b12-audit.md). UI B13 ancora da collegare; web/static/ intatto.
+
+### Chiusura backend B11
+
+254 test verdi. DayView (GET e risposte delle mutazioni) espone `plan_id`, `rating`, `plan_evaluation`: fonte = applicazione v2 ancora corrispondente al piano attuale e del proprietario. Riferimenti multipli distinti per pasti/allenamenti, nessun alias arbitrario; futuri non richiedono il voto, sostituiti/legacy senza traccia hanno indisponibilità esplicita. Il voto è per piano (condiviso tra i suoi giorni), non un voto quotidiano separato: mostrarne l’ambito. [JSON, endpoint e casi limite](api-contract.md), [bandit](backend-handoff-bandit.md). Nuovi collegamenti frontend B13/B11 da realizzare in un turno UI; web/static/ intatto.

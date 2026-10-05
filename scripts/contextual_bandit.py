@@ -128,3 +128,34 @@ def ucb(plan,observed):
         if arm in counts:counts[arm].append(reward)
     score=sum(sum(v)/len(v)+math.sqrt(2*math.log(max(total,1))/len(v)) if v else 0 for v in counts.values())/max(len(counts),1)
     return (sum(not v for v in counts.values()),score,-sum(map(len,counts.values())))
+
+
+def day_evaluation(db,user,date):
+    """Expose current applied provenance and existing votes; reading never learns."""
+    refs=[];stale=False
+    if not db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='plans'").fetchone():
+        return dict(status='unavailable',reason='Nessun piano applicato con riferimento valutabile.',plans=[])
+    rows=db.execute('''SELECT e.*,p.payload AS plan_payload,f.rating,f.tried_at
+        FROM bandit_exposure e JOIN plans p ON p.id=e.plan_id AND p.user_id=e.user_id
+        LEFT JOIN plan_feedback f ON f.user_id=e.user_id AND f.plan_id=e.plan_id
+        WHERE e.user_id=? AND e.date=? ORDER BY e.created DESC,e.plan_id DESC''',(user,date)).fetchall()
+    for row in rows:
+        snapshot=json.loads(row['snapshot'])
+        if json.loads(row['plan_payload']).get('status') not in ('optimal','feasible'):continue
+        current=True
+        for meal in snapshot['meals']:
+            planned=diary.planned(db,user,date,meal['slot'])
+            if not planned or planned['id']!=meal['id'] or json.loads(planned['items'])!=meal['items']:
+                current=False;break
+        for identifier in snapshot['workout_ids']:
+            if not db.execute('SELECT 1 FROM planned_session s JOIN week_plan w ON w.id=s.week_plan_id WHERE s.id=? AND w.user_id=? AND s.date=? AND w.status=?',(identifier,user,date,'active')).fetchone():current=False;break
+        if not current:stale=True;continue
+        future=date>diary.local_today().isoformat()
+        refs.append(dict(plan_id=row['plan_id'],rating=row['rating'],rated_at=row['tried_at'],
+                         slots=[m['slot'] for m in snapshot['meals']],workout_ids=snapshot['workout_ids'],scope=snapshot['scope'],
+                         feedback_endpoint='/api/plans/'+str(row['plan_id'])+'/feedback',feedback_available=not future,
+                         reason='Giornata futura: chiedi il voto dopo la prova.' if future else None,
+                         rating_scope='plan',applied_at=row['created']))
+    status='available' if len(refs)==1 else 'multiple' if refs else 'unavailable'
+    reason='Più piani applicati: valuta il riferimento dei componenti provati.' if len(refs)>1 else None if refs else 'Piano sostituito dopo l’applicazione.' if stale else 'Nessun piano applicato con riferimento valutabile.'
+    return dict(status=status,reason=reason,plans=refs)

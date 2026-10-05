@@ -154,7 +154,10 @@ def day_view(db,user,profile,date):
     workout=max(workouts,key=lambda x:(x["workout_log_id"] or 0,x["planned_session_id"] or 0)) if workouts else None
     eaten_totals=totals(all_eaten) if any_logged else None
     if eaten_totals is not None and any(m['consumed_estimate'] for m in meals):eaten_totals.update({key:None for key in KEYS})
-    return dict(date=date,day_type='training' if any(w['status']!='skipped' for w in workouts) else context.get('day_type','unknown'),mode=context.get('mode',week['mode']) if week else profile['mode'],week_plan_id=week['id'] if week else None,targets={k.replace('_100g',''):v for k,v in targets.items()},totals=dict(planned=totals(all_planned) if planned_count else None,eaten=eaten_totals,coverage=dict(logged_slots=logged,planned_slots=planned_count)),meals=meals,workout=workout,workouts=workouts,warnings=[])
+    from contextual_bandit import day_evaluation
+    evaluation=day_evaluation(db,user,date)
+    single=evaluation['plans'][0] if len(evaluation['plans'])==1 else None
+    return dict(plan_id=single['plan_id'] if single else None,rating=single['rating'] if single else None,plan_evaluation=evaluation,date=date,day_type='training' if any(w['status']!='skipped' for w in workouts) else context.get('day_type','unknown'),mode=context.get('mode',week['mode']) if week else profile['mode'],week_plan_id=week['id'] if week else None,targets={k.replace('_100g',''):v for k,v in targets.items()},totals=dict(planned=totals(all_planned) if planned_count else None,eaten=eaten_totals,coverage=dict(logged_slots=logged,planned_slots=planned_count)),meals=meals,workout=workout,workouts=workouts,warnings=[])
 
 def diary_mutation(db,user,profile,action,data,entry_id=None):
     entry=None

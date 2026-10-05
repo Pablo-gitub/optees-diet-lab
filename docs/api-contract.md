@@ -112,6 +112,20 @@ L'app si apre su **una sola pagina che scorre**, in quest'ordine:
 - `eaten` è `null` se il pasto non è registrato; se è registrato contiene `items` dal diario e i relativi totali.
 - `actions` dice alla UI quali pulsanti mostrare: per esempio niente `alternatives` su un pasto già consumato.
 
+#### B11 — Riferimento valutabile e voto in DayView
+
+Campi aggiuntivi, presenti anche nelle risposte aggiornate delle mutazioni del diario:
+
+```json
+{"plan_id":42,"rating":4,"plan_evaluation":{"status":"available","reason":null,"plans":[{"plan_id":42,"rating":4,"rated_at":1791219600,"rating_scope":"plan","slots":["lunch","dinner"],"workout_ids":[],"scope":"lunch_and_dinner_only","feedback_endpoint":"/api/plans/42/feedback","feedback_available":true,"reason":null,"applied_at":1791200000}]}}
+```
+
+`plan_id` è l'id di `plans`, distinto da `week_plan_id` e `planned_meal_id`. Proviene dalla traccia di applicazione v2 del proprietario, verificando che i pasti/sessioni corrispondano ancora. `rating` è null se manca un voto, mai zero. Con più piani applicati ai componenti della giornata, `plan_evaluation.status = "multiple"`, `plans` contiene i riferimenti e gli alias superiori `plan_id`/`rating` sono null: la UI deve indicare pasti/allenamenti coperti, senza attribuire un voto arbitrario all'intera giornata.
+
+Nessuna applicazione verificabile o piano successivamente sostituito: `status = "unavailable"`, `reason` esplicito, `plans = []`, alias null. Per giorni futuri il riferimento rimane visibile ma `feedback_available = false` e `reason` lo spiega. Una semplice generazione/selezione non crea un riferimento applicato. Leggere DayView non modifica voti, prove o ricompense.
+
+Per «Com'è andata la giornata?» usare `POST feedback_endpoint` con `{ "rating": 1..5, "tried": true }` e CSRF. Il voto è **del piano**, condiviso tra i giorni di una sua applicazione settimanale (`rating_scope`), non una nuova valutazione autonoma per giorno: aggiornarlo sostituisce quello esistente. Il backend continua ad apprendere solo dai componenti effettivamente provati con dati sufficienti; salvare un voto non promette un aggiornamento del bandit (vedere `learning` nella risposta).
+
 ### 4.2 `GET /api/week?start=2026-10-06` — striscia Settimana
 
 ```json

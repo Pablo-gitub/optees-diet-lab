@@ -17,3 +17,7 @@ I contesti includono versione v2, programma, tipo di giornata (training/rest), t
 Aggiornare un voto sostituisce il voto del piano: non crea prove duplicate. Le ricompense sono ricalcolate dai registri attuali: azzerare un pasto, sostituire il piano o rendere incompleti i dati revoca l'eleggibilità. Le vecchie valutazioni senza traccia di applicazione v2 rimangono nello storico e non alimentano il bandit.
 
 Per la UI, mostrare «Valutazione salvata» e, se learning è insufficiente, il motivo; evitare «algoritmo aggiornato» finché non ci sono dati eleggibili. Nessuna modifica frontend in questo turno.
+
+## B11 — Domanda sul giorno
+
+DayView espone `plan_id`, `rating` e `plan_evaluation` con componenti applicati, voto già salvato, data del voto, endpoint e disponibilità. [JSON e indisponibilità nel contratto §4.1](api-contract.md). La UI può chiedere «Com’è andata la giornata?» dopo la prova, mostrando l’ambito dei pasti/allenamenti coperti. Il voto resta per piano, condiviso se lo stesso piano è applicato alla settimana; con più riferimenti scegliere esplicitamente i componenti. Un piano sostituito non riceve più un riferimento valutabile in DayView. Nessuna modifica a web/static/.
