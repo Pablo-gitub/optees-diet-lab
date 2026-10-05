@@ -1,0 +1,270 @@
+// Pasto fuori programma: stima a intervallo, anteprima del rientro, decisione (passo 6.3, docs/backend-handoff-rebalance.md).
+const presetIcons = { pizzeria: '🍕', ristorante_italiano: '🍝', sushi: '🍣', kebab: '🥙', aperitivo: '🍹', dolce: '🍰', fast_food: '🍔' };
+const sizeNames = { piccolo: 'Piccolo', medio: 'Medio', grande: 'Grande' };
+const rangeText = (r, unit = 'kcal') => (!r ? '—' : Math.round(r.min) === Math.round(r.max) ? fmt0(r.min) + ' ' + unit : fmt0(r.min) + '–' + fmt0(r.max) + ' ' + unit);
+let rebalanceCatalog = null;
+// One open panel at a time: {date, slot, preset, size, custom, preview, loading, error}.
+let rebalance = null;
+
+async function openRebalance(m, day) {
+  rebalance = { date: day.date, slot: m.slot, preset: null, size: 'medio', custom: null, preview: null, loading: false };
+  try {
+    rebalanceCatalog = rebalanceCatalog || (await api('rebalance/presets'));
+  } catch (e) {
+    rebalance = null;
+    return message(e.message);
+  }
+  renderDay(currentDay);
+}
+function closeRebalance() {
+  rebalance = null;
+  renderDay(currentDay);
+}
+function canRebalance(m, day) {
+  const today = isoDate(new Date());
+  return m.state === 'unknown' && day.date <= today && day.date >= mondayOf(today);
+}
+
+async function runRebalancePreview() {
+  const r = rebalance;
+  const body = { date: r.date, slot: r.slot, ...(r.custom ? { custom: r.custom } : { preset: { id: r.preset, size: r.size } }) };
+  r.loading = true;
+  r.preview = null;
+  r.error = null;
+  renderDay(currentDay);
+  try {
+    const preview = await api('rebalance/preview', 'POST', body);
+    if (rebalance !== r) return;
+    r.preview = preview;
+  } catch (e) {
+    if (rebalance !== r) return;
+    r.error = e.status === 409 && e.code === 'solver_busy' ? 'Optees sta già calcolando: riprova fra qualche secondo.' : e.message;
+  } finally {
+    if (rebalance === r) {
+      r.loading = false;
+      renderDay(currentDay);
+    }
+  }
+}
+
+async function decideRebalance(action) {
+  const r = rebalance;
+  try {
+    const res = await api('rebalance/' + r.preview.preview_id + '/' + action, 'POST', {});
+    rebalance = null;
+    const days = res.changed_days?.length || 0;
+    message(action === 'apply' ? 'Pasto registrato · ' + days + (days === 1 ? ' giorno ribilanciato' : ' giorni ribilanciati') : 'Pasto registrato · piano invariato');
+    await loadHome();
+  } catch (e) {
+    if (e.status === 409 || e.status === 404) {
+      r.preview = null;
+      r.error = (e.code === 'slot_already_logged' ? 'Questo pasto è già stato registrato.' : 'Qualcosa è cambiato dopo il calcolo: ricalcola l’impatto.') + ' ';
+      renderDay(currentDay);
+    } else message(e.message);
+  }
+}
+
+function presetPicker(r) {
+  const grid = element('div', undefined, 'preset-grid');
+  Object.values(rebalanceCatalog.presets).forEach((p) => {
+    const available = Object.values(p.sizes).some((s) => s.available);
+    const b = element('button', undefined, 'preset-tile' + (r.preset === p.id && !r.custom ? ' on' : ''));
+    b.type = 'button';
+    b.disabled = !available;
+    b.append(element('span', presetIcons[p.id] || '🍽', 'preset-icon'), element('span', p.name.replace(/\s*\(.*\)$/, ''), 'preset-name'));
+    if (!available) {
+      b.append(element('span', 'senza dati verificati', 'muted small'));
+      b.title = p.note || 'Nessuna fonte nutrizionale verificabile';
+    }
+    b.onclick = () => {
+      r.preset = p.id;
+      r.custom = null;
+      if (!p.sizes[r.size]?.available) r.size = Object.keys(p.sizes).find((k) => p.sizes[k].available);
+      runRebalancePreview();
+    };
+    grid.append(b);
+  });
+  const other = element('button', undefined, 'preset-tile' + (r.custom || r.preset === 'custom' ? ' on' : ''));
+  other.type = 'button';
+  other.append(element('span', '✎', 'preset-icon'), element('span', 'Altro: lo stimo io', 'preset-name'));
+  other.onclick = () => {
+    r.preset = 'custom';
+    r.custom = null;
+    r.preview = null;
+    renderDay(currentDay);
+  };
+  grid.append(other);
+  return grid;
+}
+
+function sizePicker(r) {
+  const preset = rebalanceCatalog.presets[r.preset];
+  const seg = element('div', undefined, 'segmented size-seg');
+  Object.entries(preset.sizes).forEach(([key, s]) => {
+    const b = element('button', undefined, 'seg' + (r.size === key ? ' active' : ''));
+    b.type = 'button';
+    b.disabled = !s.available || r.loading;
+    b.append(element('strong', sizeNames[key] || s.label || key), element('span', s.available ? rangeText(s.calories_kcal) : 'n.d.', 'seg-sub'));
+    if (s.portion_description) b.title = s.portion_description;
+    b.onclick = () => {
+      r.size = key;
+      runRebalancePreview();
+    };
+    seg.append(b);
+  });
+  const box = element('div');
+  box.append(seg);
+  const desc = preset.sizes[r.size]?.portion_description;
+  if (desc) box.append(element('p', desc, 'muted small'));
+  return box;
+}
+
+// Numbers or ranges like "450-550"; all four nutrients are required by the API.
+function customForm(r) {
+  const form = element('form', undefined, 'custom-meal');
+  const fields = [
+    ['kcal', 'Calorie (kcal)', 'es. 900-1100'],
+    ['protein_g', 'Proteine (g)', 'es. 30-40'],
+    ['carbs_available_g', 'Carboidrati (g)', 'es. 100-130'],
+    ['fat_g', 'Grassi (g)', 'es. 35-45'],
+  ];
+  fields.forEach(([key, label, hint]) => {
+    const l = element('label', label);
+    const input = element('input');
+    input.name = key;
+    input.placeholder = hint;
+    input.inputMode = 'decimal';
+    input.required = true;
+    l.append(input);
+    form.append(l);
+  });
+  const go = element('button', 'Calcola l’impatto', 'primary');
+  form.append(go);
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    const custom = {};
+    for (const [key, label] of fields) {
+      const raw = form.elements[key].value.trim().replace(/,/g, '.');
+      const parts = raw.split(/\s*[-–]\s*/).map(Number);
+      if (!parts.length || parts.length > 2 || parts.some((v) => !Number.isFinite(v) || v < 0)) return message(label + ': inserisci un numero o un intervallo, es. 450-550');
+      custom[key] = { min: Math.min(...parts), max: Math.max(...parts) };
+    }
+    r.custom = custom;
+    runRebalancePreview();
+  };
+  return form;
+}
+
+function itemName(x) {
+  return String(x.name || (typeof x.food === 'string' ? x.food : x.food?.name || x.food?.id || '')).split(',')[0];
+}
+function slotChanges(change) {
+  const before = {},
+    after = {};
+  (change.before || []).forEach((x) => (before[itemName(x)] = (before[itemName(x)] || 0) + (x.grams || 0)));
+  (change.after || []).forEach((x) => (after[itemName(x)] = (after[itemName(x)] || 0) + (x.grams || 0)));
+  const chips = [];
+  Object.keys({ ...before, ...after }).forEach((name) => {
+    if (!(name in after)) chips.push(['− ' + name, 'diff-remove']);
+    else if (!(name in before)) chips.push(['+ ' + name + ' ' + fmt0(after[name]) + ' g', 'diff-add']);
+    else if (Math.round(before[name]) !== Math.round(after[name])) chips.push([name + ' ' + fmt0(before[name]) + '→' + fmt0(after[name]) + ' g', 'diff-change']);
+  });
+  return chips;
+}
+
+function previewView(r) {
+  const p = r.preview;
+  const box = element('div', undefined, 'rebalance-preview');
+  const est = p.estimate || {};
+  const prov = est.provenance || {};
+  const what = prov.source === 'preset' ? (rebalanceCatalog.presets[prov.preset_id]?.name || prov.preset_id) + ' · ' + (sizeNames[prov.size] || prov.size) : 'Stima tua';
+  const head = element('div', undefined, 'rb-estimate');
+  head.append(element('strong', rangeText(est.nutrients?.kcal)), element('span', what, 'muted'));
+  box.append(head);
+  if (prov.source === 'preset' && (prov.calculation || prov.sources?.length)) {
+    const src = element('details', undefined, 'rb-source');
+    src.append(element('summary', 'Da dove vengono i numeri'));
+    if (prov.calculation) src.append(element('p', prov.calculation, 'small'));
+    const names = [...new Set((prov.sources || []).map((s) => s.source + (s.name ? ' · ' + s.name : '')))];
+    if (names.length) src.append(element('p', 'Fonti: ' + names.join('; '), 'muted small'));
+    box.append(src);
+  }
+  const b = p.budget || {};
+  const excess = b.excess_kcal;
+  const status = element('div', undefined, 'rb-status rb-' + p.status);
+  const title = { full: 'Rientro possibile', partial: 'Rientro parziale', unchanged: 'Nessun rientro necessario', unavailable: 'Rientro non calcolabile' }[p.status] || p.status;
+  status.append(element('strong', title));
+  if (excess && excess.max > 0) status.append(element('p', 'Rispetto al pasto previsto: ' + (excess.min < 0 ? 'fino a +' + fmt0(excess.max) + ' kcal' : '+' + rangeText(excess)) + '.', 'small'));
+  if (p.status === 'full' || p.status === 'partial') {
+    const n = p.days.filter((d) => d.reduction_kcal > 0.5).length;
+    status.append(element('p', 'I prossimi ' + n + (n === 1 ? ' giorno scende' : ' giorni scendono') + ' in tutto di ' + fmt0(b.correction_kcal) + ' kcal, distribuite' + (n > 1 ? ' in modo uniforme' : '') + '.', 'small'));
+    const rest = b.remaining_excess_kcal || {};
+    const restText = rest.min > 0.5 ? rangeText(rest) : 'fino a ' + fmt0(rest.max) + ' kcal';
+    if (p.status === 'partial') status.append(element('p', 'Resta un margine di ' + restText + ' sulla settimana: va bene così, una settimana non si giudica da un pasto.', 'small'));
+  } else status.append(element('p', p.reason || p.explanation || '', 'small'));
+  box.append(status);
+  const days = (p.days || []).filter((d) => d.reduction_kcal > 0.5 || d.changes?.some((c) => slotChanges(c).length));
+  if (days.length) {
+    const list = element('div', undefined, 'rb-days');
+    days.forEach((d) => {
+      const row = element('div', undefined, 'rb-day');
+      const top = element('div', undefined, 'rb-day-head');
+      top.append(element('strong', parseDate(d.date).toLocaleDateString('it-IT', { weekday: 'short', day: 'numeric' })), element('span', fmt0(d.before_kcal) + ' → ' + fmt0(d.after_kcal) + ' kcal', 'muted'), element('span', '−' + fmt0(d.reduction_kcal), 'rb-cut'));
+      row.append(top);
+      const chips = element('div', undefined, 'diff-chips');
+      (d.changes || []).forEach((c) => slotChanges(c).forEach(([text, cls]) => chips.append(element('span', (mealMeta[c.slot]?.[0] || c.slot) + ': ' + text, 'chip ' + cls))));
+      if (chips.childElementCount) {
+        const more = element('details', undefined, 'diff-more');
+        more.append(element('summary', chips.childElementCount + (chips.childElementCount === 1 ? ' modifica ai pasti' : ' modifiche ai pasti')), chips);
+        row.append(more);
+      }
+      list.append(row);
+    });
+    box.append(list);
+  }
+  const lim = p.limits || {};
+  box.append(
+    element(
+      'p',
+      'Al massimo ' + fmt0(lim.maximum_daily_reduction_kcal) + ' kcal in meno al giorno, mai sotto ' + fmt0(lim.minimum_kcal) + ' kcal e ' + fmt0(lim.minimum_protein_g) + ' g di proteine. ' + (p.workout?.explanation || 'Nessun allenamento obbligatorio.'),
+      'muted small',
+    ),
+  );
+  const actions = element('div', undefined, 'actions');
+  if (p.status === 'full' || p.status === 'partial') {
+    const ok = element('button', 'Accetta il rientro', 'primary');
+    ok.type = 'button';
+    ok.onclick = () => ((ok.disabled = true), decideRebalance('apply'));
+    actions.append(ok);
+  }
+  const keep = element('button', 'Lascia il piano com’è', p.status === 'full' || p.status === 'partial' ? 'secondary' : 'primary');
+  keep.type = 'button';
+  keep.onclick = () => ((keep.disabled = true), decideRebalance('keep'));
+  actions.append(keep);
+  box.append(actions);
+  return box;
+}
+
+function rebalancePanel(m, day) {
+  const r = rebalance;
+  const panel = element('div', undefined, 'rebalance-panel');
+  const head = element('div', undefined, 'rb-head');
+  head.append(element('strong', 'Pasto fuori programma'));
+  const close = element('button', '✕', 'icon-button small');
+  close.type = 'button';
+  close.setAttribute('aria-label', 'Chiudi');
+  close.onclick = closeRebalance;
+  head.append(close);
+  panel.append(head, element('p', 'Capita. Scegli cosa hai mangiato: Optees stima un intervallo e ti mostra come rientrare nei prossimi giorni, se vuoi.', 'muted small'));
+  panel.append(presetPicker(r));
+  if (r.preset && r.preset !== 'custom') panel.append(sizePicker(r));
+  if (r.preset === 'custom' && !r.preview && !r.loading) panel.append(customForm(r));
+  if (r.loading) {
+    const job = element('div', undefined, 'job');
+    job.append(element('div', undefined, 'progress-indeterminate'), element('p', 'Optees ricalcola i prossimi giorni…', 'job-text'));
+    panel.append(job);
+  }
+  if (r.error) panel.append(element('p', r.error, 'error'));
+  if (r.preview) panel.append(previewView(r));
+  return panel;
+}

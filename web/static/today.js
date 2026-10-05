@@ -45,6 +45,11 @@ async function loadHome() {
   renderDay(day);
   renderWeek(week);
   renderStats($('stats-tiles'), stats, week);
+  // Names of out-of-plan presets come from the catalog: load it only when a meal needs it.
+  if (!rebalanceCatalog && day.meals.some((m) => m.consumed_estimate))
+    api('rebalance/presets')
+      .then((c) => ((rebalanceCatalog = c), renderDay(currentDay)))
+      .catch(() => {});
 }
 async function refreshWeek() {
   try {
@@ -151,18 +156,23 @@ function foodSearch(day, slot) {
 
 function mealCard(m, day) {
   const meta = mealMeta[m.slot] || [m.slot, '•'];
-  const state = stateMeta[m.state] || [m.state, ''];
+  const state = m.consumed_estimate ? ['Fuori programma', 'state-extra'] : stateMeta[m.state] || [m.state, ''];
   const card = element('article', undefined, 'meal-card ' + state[1]);
   const head = element('div', undefined, 'meal-head');
   head.append(element('span', meta[1], 'meal-icon'), element('h3', meta[0]), element('span', state[0], 'chip state-chip'));
   const kcal = m.eaten ? m.eaten.kcal : m.planned?.kcal;
-  head.append(element('span', kcalText(kcal), 'meal-kcal'));
+  head.append(element('span', m.consumed_estimate ? '≈ ' + rangeText(m.eaten_range?.kcal) : kcalText(kcal), 'meal-kcal'));
   card.append(head);
 
   const editing = editSlot === m.slot && m.state !== 'skipped' && (m.state !== 'unknown' || !m.planned);
   const list = element('div', undefined, 'meal-items');
   const items = m.eaten ? m.eaten.items : m.planned ? m.planned.items : [];
-  if (m.state === 'skipped') list.append(element('p', 'Pasto saltato: conta come zero calorie.', 'muted'));
+  const est = m.consumed_estimate;
+  if (est) {
+    const prov = est.provenance || {};
+    const name = prov.source === 'preset' ? (rebalanceCatalog?.presets[prov.preset_id]?.name || prov.preset_id) + ' · ' + (sizeNames[prov.size] || prov.size) : 'stima tua';
+    list.append(element('p', 'Fuori programma: ' + name + '. Registrato come intervallo, i totali del giorno restano stimati.', 'muted'));
+  } else if (m.state === 'skipped') list.append(element('p', 'Pasto saltato: conta come zero calorie.', 'muted'));
   else if (!items.length) list.append(element('p', m.planned ? 'Nessun alimento' : 'Niente di previsto per questo pasto.', 'muted'));
   else items.forEach((i) => list.append(itemRow(i, editing)));
   card.append(list);
@@ -182,7 +192,7 @@ function mealCard(m, day) {
     b.onclick = fn;
     actions.append(b);
   };
-  const has = (a) => m.actions.includes(a);
+  const has = (a) => m.actions.includes(a) && !(m.consumed_estimate && a === 'edit');
   if (editing) add('Fine', 'primary small', () => ((editSlot = null), renderDay(currentDay)));
   else {
     if (has('confirm')) add('✓ Come previsto', 'primary small', () => mutate('diary/confirm', 'POST', { date: day.date, slot: m.slot }));
@@ -193,12 +203,14 @@ function mealCard(m, day) {
         else renderDay(currentDay);
       }, m.state === 'unknown' && m.planned ? 'Registra il previsto e poi modificalo' : undefined);
     if (has('alternatives')) add('⇄ Alternative', 'ghost small', () => startAlternatives(m.slot), 'Altre soluzioni ottime per questo pasto, a parità del resto della giornata');
+    if (canRebalance(m, day) && !(rebalance && rebalance.date === day.date && rebalance.slot === m.slot)) add('Fuori programma', 'ghost small', () => openRebalance(m, day), 'Pizza, cena fuori, aperitivo… registralo e scegli se rientrare nei prossimi giorni');
     if (has('skip')) add('Salta', 'ghost small', () => mutate('diary/skip', 'POST', { date: day.date, slot: m.slot }));
     if (has('reset')) add('Annulla registrazione', 'ghost small', () => mutate('diary/reset', 'POST', { date: day.date, slot: m.slot }));
   }
   card.append(actions);
   const alt = mealAlternatives[day.date + '|' + m.slot];
   if (alt) card.append(alternativesPanel(alt, day, m.slot));
+  if (rebalance && rebalance.date === day.date && rebalance.slot === m.slot && rebalanceCatalog) card.append(rebalancePanel(m, day));
   return card;
 }
 
@@ -325,6 +337,7 @@ function renderDayProgress(day) {
     ['fat_g', 'Grassi', 'g'],
   ].forEach(([k, label, unit]) => box.append(dualMeter(label, unit, day.totals.eaten ? eaten[k] : null, day.totals.planned ? planned[k] : null, day.targets?.[k])));
   if (!day.totals.eaten) box.append(element('p', 'Ancora nessun pasto registrato oggi.', 'muted small'));
+  else if (day.meals.some((m) => m.consumed_estimate)) box.append(element('p', 'Un pasto fuori programma è registrato come intervallo: il consumato del giorno non è un numero esatto.', 'muted small'));
 }
 
 function renderWorkout(day) {

@@ -2951,3 +2951,142 @@ label > .chip.todo {
     overflow-x: auto;
   }
 }
+
+/* Pasto fuori programma (6.3) */
+.rebalance-panel {
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  display: grid;
+  gap: 10px;
+}
+.rb-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.rebalance-panel p {
+  margin: 0;
+}
+.preset-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  gap: 8px;
+}
+.preset-tile {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 10px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 12.5px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+}
+.preset-tile.on {
+  border-color: var(--brand);
+  background: var(--brand-softer);
+  box-shadow: 0 0 0 1px var(--brand) inset;
+}
+.preset-tile:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.preset-icon {
+  font-size: 22px;
+  line-height: 1.2;
+}
+.size-seg {
+  width: 100%;
+}
+.size-seg .seg {
+  flex: 1;
+  display: grid;
+  gap: 1px;
+  padding: 7px 6px;
+}
+.seg-sub {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-3);
+}
+.custom-meal {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px 12px;
+  align-items: end;
+}
+.custom-meal label {
+  margin: 0;
+}
+.rebalance-preview {
+  display: grid;
+  gap: 10px;
+}
+.rb-estimate {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+}
+.rb-estimate strong {
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.rb-source {
+  margin: 0;
+}
+.rb-source summary {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  cursor: pointer;
+}
+.rb-source p {
+  margin-top: 6px;
+}
+.rb-status {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border-left: 3px solid var(--line-strong);
+  display: grid;
+  gap: 4px;
+}
+.rb-status.rb-full {
+  border-left-color: var(--good);
+}
+.rb-status.rb-partial {
+  border-left-color: var(--warn);
+}
+.rb-days {
+  display: grid;
+  gap: 6px;
+}
+.rb-day {
+  display: grid;
+  gap: 6px;
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+}
+.rb-day-head {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: baseline;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.rb-day-head strong {
+  text-transform: capitalize;
+}
+.rb-cut {
+  font-weight: 650;
+  color: var(--good);
+}

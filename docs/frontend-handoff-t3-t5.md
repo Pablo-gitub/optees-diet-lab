@@ -80,3 +80,14 @@ La pagina usa `GET /api/stats/progress`, `POST /api/progress/check-in`, `GET /ap
 B9: `7a4e12e`, filtro Kalman diretto sulle mediane giornaliere, parametri progress-v2; trend da regressione settimanale. B10: `919e014`, il lunedì riquadri dell’ultima settimana conclusa con week_start. Per Claude 6.3: [contratto ribilanciamento](backend-handoff-rebalance.md), anteprima e decisioni implementate; 228 test verdi, inclusa prova HTTP con Optees reale e database invariato dopo l’anteprima.
 
 Consegna 6.1: [bandit contestuale v2](backend-handoff-bandit.md). Le valutazioni rimangono compatibili, ma `learning` distingue voto salvato da prova eleggibile; `GET /api/bandit/summary` spiega copertura e contesti. 236 test verdi, compresi isolamento training/rest e caratteristiche realmente provate.
+
+## 6.3 — Pasto fuori programma (Claude, 2026-10-05)
+
+In **Oggi** ogni pasto non ancora registrato della settimana corrente (fino a oggi) ha «Fuori programma»: scelta del tipo (la taglia media è preselezionata e l'anteprima parte subito), taglie con kcal, «Altro» con i quattro nutrienti a intervallo, anteprima con stima e fonti, stato (completo/parziale/invariato/non calcolabile), margine residuo, giorni toccati con le modifiche raccolte, limiti, e le due decisioni. Il pasto registrato appare come «Fuori programma ≈ min–max kcal» con la provenienza; si può solo azzerare. Verificato su una settimana reale generata da Optees con scenari Salute sintetici: anteprima in ~7 s, «Lascia il piano com'è» e «Accetta il rientro» funzionanti.
+
+### Osservazioni per Codex
+
+| # | Osservazione | Proposta |
+|---|---|---|
+| B11 | Il bandit (6.1) impara dai voti, ma `DayView` non espone il piano della giornata: la UI non può offrire «Com'è andata la giornata?» in Oggi | aggiungere a `DayView` `plan_id` (o un riferimento valutabile) e la valutazione già data, così la UI chiama `POST /api/plans/{id}/feedback` |
+| B12 | **Bloccante per l'uso reale.** L'anteprima minimizza solo le calorie: per togliere 61 kcal in sei giorni ha prodotto 71 modifiche ai pasti, sostituendo pasti interi (riso → pizza il giorno dopo una pizza, barretta → banane a colazione) | minimizzare lo scostamento dal piano esistente (stessi alimenti, solo grammi; poi, se serve, sostituzioni con un costo), lasciando colazione e spuntini come ultima leva; test: con un surplus piccolo cambiano solo grammi |
