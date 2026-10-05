@@ -168,5 +168,5 @@ Verifica finale T12 (2026-10-05): **237 test unittest verdi**, compresa anteprim
 | Punto | Stato | Verifica |
 |---|---|---|
 | B12 | **fatto** — porzioni degli stessi prodotti prima delle sostituzioni; colazione/spuntini ultima leva; pizza esclusa; diff e applicazione solo dei pasti cambiati | 239 test verdi; [audit prima/dopo](rebalance-b12-audit.md), Optees reale incluso |
-| B13 | da fare — scostamenti registrati, simmetria e soglia | — |
+| B13 | **fatto** — diario settimanale aggregato, restituzione entro i massimi, soglia 100 kcal, decisioni monouso e limiti cumulativi | 248 test verdi; [contratto v2 e JSON](backend-handoff-rebalance.md); nessuna nuova registrazione sul percorso dal diario |
 | B11 | da fare — riferimento valutabile in DayView | — |

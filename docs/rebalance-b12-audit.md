@@ -12,3 +12,7 @@ Prova riproducibile: `tests/test_meal_rebalance.py`, sette giornate, lunedì 5 o
 Il preset corrente v1.2 è un intervallo: il solver non può recuperare 357,7 kcal se il surplus garantito è 179,7. Il residuo resta 9,2–187,2 kcal (`partial`). Il diff esclude gli alimenti e i pasti invariati. È verificata anche l'esclusione delle pizze nel livello che permette sostituzioni, non soltanto nella soluzione con grammi.
 
 Questi conteggi sono misurati con il solver MILP di test (SciPy); la suite include inoltre un'anteprima HTTP con Optees reale, controllo del database invariato e applicazione esplicita.
+
+## Stato finale dopo B13
+
+Il limite minimo settimanale è ora 100 kcal garantite: il caso +61 kcal torna `unchanged`, **0 pasti e 0 alimenti modificati**. Il test B12 disattiva la soglia solo internamente per continuare a verificare la proprietà del solver con un surplus piccolo. Il preset medio con surplus garantito 179,7 kcal resta sopra soglia e conserva il comportamento con soli grammi della tabella.

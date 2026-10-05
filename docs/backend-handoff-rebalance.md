@@ -1,6 +1,6 @@
 # Consegna backend — ribilanciamento 6.2 / UI 6.3
 
-Contratto v1, scritto prima dell'implementazione. Nessuna modifica a web/static/.
+Contratto v2 (B13), aggiornato prima dell'implementazione; conserva il percorso preset/custom della versione 1. Nessuna modifica a web/static/.
 
 ## Endpoint e flusso
 
@@ -36,7 +36,7 @@ I target personali non cambiano. Si modificano soltanto le porzioni/pasti futuri
 
 ## Decisioni
 
-`POST /api/rebalance/{preview_id}/apply` e `POST /api/rebalance/{preview_id}/keep`, corpo `{}`, CSRF obbligatorio. Entrambi registrano il pasto come consumato con provenienza; `keep` lascia invariati tutti i pasti futuri. `apply` è disponibile solo per una proposta verificata (`full`/`partial`). Risposta:
+`POST /api/rebalance/{preview_id}/apply` e `POST /api/rebalance/{preview_id}/keep`, corpo `{}`, CSRF obbligatorio. Nel percorso preset/custom entrambi registrano il nuovo pasto come consumato con provenienza; nel percorso dal diario non aggiungono consumi. `keep` lascia invariati tutti i pasti futuri. `apply` è disponibile solo per una proposta verificata (`full`/`partial`). Risposta:
 
 ```json
 {"decision":"keep","recorded":{"date":"2026-10-05","slot":"dinner"},"changed_days":[],"status":"recorded"}
@@ -48,7 +48,7 @@ Anteprime in memoria, durata 30 minuti; riavvio/scadenza richiede nuova anteprim
 
 Mostrare stima min–max e fonte, surplus min–max, correzione proposta e residuo min–max, date e porzioni cambiate, limiti applicati, motivo del rientro parziale/indisponibilità. Etichette consigliate: «Pasto fuori programma», «Rientro possibile», «Lascia il piano com'è». Nessun messaggio punitivo; nessuna promessa di peso perso derivata da un singolo pasto.
 
-Il budget espone anche `reference_week_kcal` e `after_week_kcal` come intervalli: consumi registrati quando disponibili, altrimenti pasti pianificati (`reference_scope`). Il residuo riguarda questo pasto, non compensa retroattivamente scostamenti di altri pasti.
+Il budget espone anche `reference_week_kcal` e `after_week_kcal` come intervalli: consumi registrati quando disponibili, altrimenti pasti pianificati (`reference_scope`). Il residuo riguarda lo scostamento settimanale aggregato dei pasti registrati e del nuovo pasto eventuale, al netto dei rientri già applicati.
 
 Un profilo con spuntino pomeridiano disattivato resta una giornata intera: la completezza si valuta sui pasti previsti dal profilo, senza inventare pasti o nutrienti mancanti.
 
@@ -61,3 +61,37 @@ Porzioni: passi di 5 g rispetto alla porzione originale, entro ±20%; si rispett
 `change_policy` dichiara versione, livello scelto (`grams`, `main_meals`, `all_meals`), passo, flessibilità, costo delle sostituzioni (10000 per alimento nuovo), costo aggiuntivo delle modifiche agli spuntini (100000) e codici esclusi. All'interno del livello si penalizzano anche il numero di alimenti modificati e la distanza in grammi. `days[].changes` comprende solo pasti realmente cambiati; applicare la proposta scrive solo questi pasti. Il preset pizzeria esclude tutte le pizze del catalogo dai pasti modificabili successivi. Senza identificazione del piatto (valori liberi senza nome/codice), il backend non può inferirne l'identità dai soli macro; non inventa un'associazione.
 
 Prima/dopo e distinzione fra osservazione UI e prova riproducibile: [audit B12](rebalance-b12-audit.md).
+
+## B13 — Contratto v2: scostamenti settimanali e rientro simmetrico
+
+Prima dell'implementazione: la stessa anteprima può partire dal diario già registrato. Corpo esclusivo (senza slot, preset o custom):
+
+```json
+{"date":"2026-10-05","from_diary":true}
+```
+
+Si sommano gli scostamenti consumato − previsto dei pasti registrati fino a oggi nella settimana corrente. Un pasto saltato è un consumo zero esplicitamente registrato, un pasto sconosciuto non è zero e non entra nel conto. Un pasto aggiunto senza previsione ha previsto zero, con provenienza esplicita. Macro/calorie mancanti in un pasto registrato rendono l'analisi indisponibile. Le stime restano intervalli. Anche il percorso preset/custom include gli altri scostamenti già registrati; il nuovo pasto viene contato una volta soltanto.
+
+La soglia minima è **100 kcal settimanali garantite**: fino a 100 inclusi, oppure con intervallo che attraversa zero, `unchanged`. Uno scostamento positivo permette una riduzione, uno negativo una restituzione. Il segno di `correction_kcal` e `days[].reduction_kcal` segue la riduzione: positivo = togliere kcal, negativo = aggiungerle. Restituire non supera mai il deficit garantito (estremo negativo più vicino a zero), 200 kcal/giorno o i massimi dei target approvati. La differenza fra correzioni giornaliere resta al massimo 25 kcal, con gli stessi minimi protetti. Nessun allenamento obbligatorio.
+
+Esempio ridotto di restituzione (gli array reali includono i prodotti e tutti i nutrienti):
+
+```json
+{"preview_id":"token","status":"full","source":"diary","estimate":{"date":"2026-10-05","from_diary":true},"deviations":[{"date":"2026-10-05","slot":"dinner","planned_kcal":650,"consumed_kcal":{"min":300,"max":300},"difference_kcal":{"min":-350,"max":-350},"provenance":{"source":"diary"}}],"budget":{"excess_kcal":{"min":-350,"max":-350},"previous_correction_kcal":0,"correction_kcal":-350,"remaining_excess_kcal":{"min":0,"max":0}},"limits":{"minimum_weekly_deviation_kcal":100,"maximum_daily_reduction_kcal":200,"maximum_daily_addition_kcal":200,"maximum_reduction_spread_kcal":25},"days":[{"date":"2026-10-06","before_kcal":1800,"after_kcal":1860,"reduction_kcal":-60,"changes":[{"slot":"lunch","before":[],"after":[]}]}]}
+```
+
+Esempio sotto soglia:
+
+```json
+{"status":"unchanged","source":"diary","budget":{"excess_kcal":{"min":70,"max":70},"correction_kcal":0,"remaining_excess_kcal":{"min":70,"max":70}},"days":[],"explanation":"Lo scostamento settimanale garantito non supera 100 kcal: il piano resta invariato."}
+```
+
+`apply`/`keep` mantengono endpoint, corpo `{}`, CSRF e controllo atomico 409. Sul percorso `from_diary`, **non si registra nuovamente alcun pasto**: `keep` chiude soltanto l'anteprima; `apply` modifica esclusivamente il diff dei pasti futuri. Risposta:
+
+```json
+{"decision":"keep","recorded":null,"changed_days":[],"status":"closed","week_start":"2026-10-05","correction_kcal":0}
+```
+
+I rientri già applicati nella stessa settimana/piano sono conservati nel registro delle decisioni e sottratti dallo scostamento: ripetere l'analisi può considerare soltanto il residuo, senza compensare due volte il totale. Anche il limite giornaliero di 200 kcal resta cumulativo rispetto al piano prima dei rientri, non si riparte da zero a ogni clic. `previous_correction_kcal` rende esplicito questo conto. Una decisione è monouso anche quando `keep` non modifica il diario; un secondo clic risponde 409. Un vecchio rientro privo di quantità verificabile rende indisponibile una nuova compensazione, invece di inventare il recupero già effettuato.
+
+La UI deve mostrare «Calorie da recuperare» per il segno positivo e «Calorie da restituire» per quello negativo, quantità garantita/intervallo, soglia, residuo e motivo dell'indisponibilità. `deviations` espone le fonti dei pasti utilizzati. Il budget `after_week_kcal` conta i consumi già registrati una sola volta. `change_policy` resta quella di B12.

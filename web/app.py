@@ -935,7 +935,7 @@ def rebalance_presets(request:Request):
 async def rebalance_preview(request:Request):
     import meal_rebalance
     user=identity(request,True);profile=owner_profile(user)
-    meal=meal_rebalance.estimate(await request.json(),diary.local_today())
+    meal=meal_rebalance.diary_request(await request.json(),diary.local_today())
     with connect() as db:snapshot=meal_rebalance.snapshot(db,user['id'],profile,meal)
     if solver_lock.locked():raise diary.DomainError('Calcolo già in corso','solver_busy',409)
     async with solver_lock:

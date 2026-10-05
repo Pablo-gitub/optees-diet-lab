@@ -108,3 +108,7 @@ Lo scostamento non è solo uno «sgarro» con preset: può essere pasta 120 g in
 ### Chiusura backend B12
 
 239 test verdi. `change_policy` espone il livello scelto e i costi; il diff e l’applicazione comprendono solo i pasti cambiati. Grammi degli stessi prodotti prioritari, porzioni personali e minimi protetti, colazione/spuntini fissi nel primo livello; tutte le pizze escluse dopo il preset pizzeria. [Audit prima/dopo](rebalance-b12-audit.md). Nessuna modifica a web/static/.
+
+### Chiusura backend B13
+
+248 test verdi. `POST /api/rebalance/preview {"date":"…","from_diary":true}` disponibile con CSRF, stessa anteprima e decisioni del 6.2. Scostamenti registrati più eventuale nuovo pasto, segni simmetrici, soglia 100 kcal garantite, nutrienti mancanti espliciti, precedenti rientri e limiti giornalieri cumulativi. Sul percorso diario `keep` chiude soltanto (nessun nuovo pasto), `apply` modifica solo il diff futuro, secondo clic o stato cambiato ⇒ 409. [Contratto v2 con JSON](backend-handoff-rebalance.md). Per il caso +61 kcal, ora nessuna modifica; [audit](rebalance-b12-audit.md). UI B13 ancora da collegare; web/static/ intatto.

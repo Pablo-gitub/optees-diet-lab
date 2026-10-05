@@ -117,7 +117,7 @@ class RebalanceAPI(base.DiaryTests):
     def test_small_surplus_changes_only_main_meal_grams(self):
         with self.app.connect() as db:base=rebalance.snapshot(db,self.user,self.profile,self.meal)['original_kcal']
         meal=rebalance.estimate(dict(date=self.start,slot='dinner',custom=dict(kcal=base+61,protein_g=80,fat_g=100,carbs_available_g=300)),self.today)
-        result=self.proposal(meal)['result']
+        with patch.dict(rebalance.LIMITS,minimum_weekly_deviation_kcal=0):result=self.proposal(meal)['result']
         self.assertIn(result['status'],('full','partial'),result)
         self.assertEqual(result['change_policy']['stage'],'grams')
         self.assertGreater(result['budget']['correction_kcal'],50)
