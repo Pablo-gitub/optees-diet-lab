@@ -26,7 +26,7 @@ Il lavoro di Gemini viene sempre **rivisto** da Claude (dati e media) o da Codex
 - **M1 — Utilizzabile** (fine fase 3, **raggiunto il 2026-10-04**): settimana pianificata, alternative davvero diverse, diario con conferma rapida, palestra con registro delle sessioni.
 - **M2 — Fatta bene** (fine fase 6): ottimizzazione congiunta dieta + palestra, check-in del lunedì con ricalibrazione, bandit sulle prove reali, ribilanciamento dopo uno sgarro.
 - **M3 — Rifinita** (fine fase 7): app installabile sul telefono, job in background, QA completa.
-- **M4 — Personale** (fine fase 8): intervista iniziale con obiettivi, attività anche fuori dalla palestra, carichi personali, calorie che seguono l'attività, rientro anche con una passeggiata, ricette nel solver.
+- **M4 — Personale** (fine fase 8): intervista iniziale con obiettivi, attività anche fuori dalla palestra, carichi personali, calorie che seguono l'attività, rientro anche con una passeggiata, ricette preferite nel solver, alternative diverse almeno al 90%, codice a barre, prodotti del supermercato e lista della spesa.
 
 ## Sequenza dei turni
 
@@ -47,11 +47,12 @@ Il lavoro di Gemini viene sempre **rivisto** da Claude (dati e media) o da Codex
 | T13 | Claude | 7.1 · 7.3 | Gemini: 7.4 · QA visiva |
 | T14 | Codex | 7.2 → **M3** | — |
 | T15 | Claude | 8.0 specifica · 8.2 matrice obiettivi → dosi con fonti | Gemini: 8.3a catalogo attività · 8.8 sessione 1 |
-| T16 | Codex | 8.1 backend · 8.3 attività nella settimana congiunta | Gemini: 8.8 sessione 2; Claude rivede le sessioni 8.8 |
-| T17 | Claude | 8.1 UI intervista · UI attività | Gemini: 8.8 sessione 3 |
-| T18 | Codex | 8.4 carichi, durata, poco tempo · 8.5 calorie dall'attività | Gemini: 8.8 sessione 4 |
-| T19 | Claude | UI 8.4–8.5 · specifica di dettaglio 8.6–8.7 | Gemini: 8.8 sessioni successive |
-| T20 | Codex | 8.6 rientro con attività · 8.7 piatti bloccati, ricette nel solver, varietà → **M4** | — |
+| T16 | Codex | 8.1 backend · 8.10 API codice a barre e prodotti personali · 8.9 alternative diverse | Gemini: 8.8 sessione 2; Claude rivede le sessioni 8.8 |
+| T17 | Claude | UI 8.1 intervista · 8.10 scanner · 8.9 «Calcola altre» | Gemini: 8.8 sessione 3 |
+| T18 | Codex | 8.3 attività · 8.4 carichi, durata, poco tempo · 8.5 calorie dall'attività | Gemini: 8.8 sessione 4 · equivalenti supermercato (S1) |
+| T19 | Claude | UI 8.3–8.5 | Gemini: 8.8 sessioni successive |
+| T20 | Codex | 8.6 rientro con attività · 8.7 piatti bloccati e preferite · 8.11 supermercati e lista della spesa | Gemini: equivalenti supermercato (S2…) |
+| T21 | Claude | UI 8.6, 8.7, 8.11 · QA della fase → **M4** | — |
 
 ## Passi
 
@@ -161,8 +162,11 @@ Specifica: [phase8-spec.md](phase8-spec.md). Consegna a Gemini a sessioni: [gemi
 | 8.4 | Palestra personalizzata: curva carico–ripetizioni personale aggiornata dai registri, durata massima e sedute doppie, efficienza dei protocolli e due protocolli per poco tempo | Codex | L | nessuna seduta oltre il limite; carichi arrotondati per difetto al disponibile; test | da fare |
 | 8.5 | Obiettivi del giorno proposti dall'attività pianificata (base + attività + bilancio) | Codex · Claude (UI) | M | «Usa i valori proposti» in Piano; soglie rispettate; stima dichiarata senza Salute | da fare |
 | 8.6 | Rientro con attività facoltativa: solo dieta (predefinito), dieta + passeggiata, dieta + attività gradita; limiti fissi; scenario prudente | Codex · Claude (UI) | M | mai attività senza richiesta; attività non fatta torna nel rientro senza doppia compensazione | da fare |
-| 8.7 | Varietà: piatto bloccato in un pasto futuro, ricette approvate come elementi del solver, termine di varietà settimanale | Codex · Claude (UI) | L | «lasagne giovedì» compensata nella settimana; misura della ripetitività prima/dopo | da fare |
-| 8.8 | Ingredienti delle ricette → CREA → prodotti: dizionario e proposte a sessioni, approvazioni verificate | Gemini (proposte) · Claude (approvazione) | L | ricette con tutti gli ingredienti approvati in crescita a ogni sessione; nessun id inesistente | da fare |
+| 8.7 | Piatti scelti e ricette preferite: piatto bloccato in un pasto futuro, cuore sulle ricette, preferite premiate nel solver (max 2/settimana), ricette approvate come elementi del solver | Codex · Claude (UI) | L | «lasagne giovedì» compensata nella settimana; preferita non inseribile spiegata | da fare |
+| 8.8 | Ingredienti delle ricette → CREA → prodotti: dizionario e proposte a sessioni (preferite per prime), approvazioni verificate | Gemini (proposte) · Claude (approvazione) | L | ricette con tutti gli ingredienti approvati in crescita a ogni sessione; nessun id inesistente | da fare |
+| 8.9 | Alternative davvero diverse: sovrapposizione pesata sui grammi ≤ 10% per ingrediente canonico, condimenti esclusi per categoria; minimo 3 alternative; «Calcola altre alternative»; nelle diete strette massima diversità possibile dichiarata | Codex · Claude (UI) | L | test: coppie di alternative entro la soglia o sovrapposizione minimizzata e mostrata; vincoli nutrizionali mai rilassati | da fare |
+| 8.10 | Codice a barre: ricerca nel catalogo locale, registrazione dall'etichetta (per 100 g, 100 ml o per porzione → ricalcolo per 100 g), controllo di coerenza delle kcal, prodotti personali; lettura da fotocamera (HTTPS con `tailscale serve`) o da foto | Codex (API) · Claude (UI, libreria di decodifica locale) | M | scansione → diario in 3 tocchi; prodotto registrato ritrovato alla scansione successiva; GTIN validato | da fare |
+| 8.11 | Supermercati preferiti: prodotto da comprare accanto a ogni alimento generico, «uso sempre questo» porta il prodotto nel solver, lista della spesa settimanale con confezioni | Codex · Claude (UI) · Gemini (proposte di equivalenti) | L | lista della spesa dalla settimana applicata; prodotti nel solver solo se coerenti | da fare |
 
 ## Fuori da questo piano
 

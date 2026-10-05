@@ -1,6 +1,17 @@
 # Fase 8 — Obiettivi, attività e varietà
 
-Specifica del 2026-10-05. Nasce dalla richiesta di Paolo: un'intervista iniziale, carichi personali, obiettivi di allenamento con punteggi per il solver, sedute di durata limitata, attività anche fuori dalla palestra, calorie che seguono l'attività, rientro dagli sgarri anche con il movimento, dieta più varia e ricette collegate ai prodotti reali.
+Specifica del 2026-10-05. Nasce dalle richieste di Paolo:
+
+- un'intervista iniziale;
+- carichi personali;
+- obiettivi di allenamento con punteggi per il solver;
+- sedute di durata limitata;
+- attività anche fuori dalla palestra;
+- calorie che seguono l'attività;
+- rientro dagli sgarri anche con il movimento;
+- ricette preferite inserite dal solver;
+- alternative davvero diverse;
+- codice a barre, prodotti dei supermercati e lista della spesa.
 
 Oggi il sistema ottimizza bene, ma rispetto a obiettivi che nessuno gli ha dato: il bilancio calorico si sceglie a mano, gli obiettivi riposo/allenamento si scrivono a mano, la palestra è l'unica attività pianificabile e le ricette non entrano nel solver.
 
@@ -39,6 +50,7 @@ Peso, massa grassa e circonferenze attuali **non** si salvano nel profilo: sono 
 | `max_session_minutes` | intero, 20–240, predefinito 90 | euristica dell'utente, non limite fisiologico (§4.2) |
 | `max_sessions_per_day` | 1 \| 2, predefinito 1 | con 2 una seduta lunga si può dividere (§4.2) |
 | `min_gap_hours` | intero, predefinito 4 | distanza minima fra due sedute dello stesso giorno |
+| `preferred_stores` | elenco ordinato di marche di supermercato | per prodotti da comprare e lista della spesa (§10) |
 
 Le disponibilità per giorno (minuti, giorni esclusi) restano quelle già inserite in Piano/Allenamento: l'intervista ne propone solo i valori iniziali.
 
@@ -219,7 +231,7 @@ Estende `POST /api/rebalance/preview` con un campo facoltativo:
 
 **Risposta.** Ai giorni dell'anteprima si aggiunge `activities: [{ activity_id, minutes, energy_kcal: {low, central, high}, source }]`. Nel budget compaiono `correction_diet_kcal` e `correction_activity_kcal`. Il testo di `workout.explanation` cambia di conseguenza.
 
-## 7. Varietà della dieta e piatti scelti (8.7)
+## 7. Piatti scelti e ricette preferite (8.7)
 
 1. **Piatto bloccato.** «Giovedì a cena voglio le lasagne»: l'utente fissa un piatto in un pasto futuro della settimana prima di generarla. Il piatto può essere:
    - una ricetta del solver, in porzioni;
@@ -227,8 +239,14 @@ Estende `POST /api/rebalance/preview` con un campo facoltativo:
    - una stima libera.
 
    Il solver costruisce il resto della settimana intorno al piatto. È il rientro fatto in anticipo, quindi riusa la stessa logica e gli stessi limiti.
-2. **Ricette nel solver.** Una ricetta approvata diventa un elemento con il suo vettore nutrizionale per porzione (variabile intera di porzioni), completabile con contorni e alimenti singoli fino al bersaglio. Entrano solo le ricette con **tutti** gli ingredienti approvati (§8).
-3. **Varietà nella settimana.** Si aggiunge un termine che penalizza la ripetizione dello stesso alimento o piatto principale oltre una soglia, oltre alla diversità fra alternative che esiste già. Prima va misurato quanto si somigliano oggi le settimane: Codex lo verifica su una settimana demo e sulle diete personali, senza pubblicare dati personali.
+2. **Ricette preferite.** Nella pagina Ricette un cuore segna le ricette che piacciono. Alla generazione della settimana il solver prova a inserirle:
+   - premio nell'obiettivo per ogni preferita inserita;
+   - al massimo 2 volte a settimana per ricetta, euristica configurabile;
+   - porzione scelta dal solver;
+   - contorni e altri pasti che compensano.
+
+   Una preferita non è un vincolo: se non entra nei limiti della dieta, il piano lo dice («Le lasagne non entrano questa settimana: superano i grassi della cena anche con la porzione minima»). Le preferite ancora non utilizzabili dal solver, perché hanno ingredienti non approvati, passano **in testa** alla coda di Gemini (§8).
+3. **Ricette nel solver.** Una ricetta approvata diventa un elemento con il suo vettore nutrizionale per porzione (variabile intera di porzioni), completabile con contorni e alimenti singoli fino al bersaglio. Entrano solo le ricette con **tutti** gli ingredienti approvati (§8).
 
 ## 8. Ricette → alimenti CREA → prodotti del supermercato (8.8)
 
@@ -240,15 +258,129 @@ Estende `POST /api/rebalance/preview` con un campo facoltativo:
 **Strumento.** C'è già: `scripts/match_recipe_ingredients.py`, con dizionario, coda di revisione e approvazioni esplicite. Manca il lavoro lungo e ripetitivo: estendere il dizionario e proporre le associazioni, gruppo per gruppo. È il compito di Gemini, a sessioni, secondo [gemini-handoff-phase8.md](gemini-handoff-phase8.md).
 
 **Ordine di lavoro.**
-1. Gli ingredienti più frequenti, che sbloccano più ricette.
-2. Le ricette italiane.
-3. Il resto.
+1. Gli ingredienti delle ricette preferite.
+2. Gli ingredienti più frequenti, che sbloccano più ricette.
+3. Le ricette italiane.
+4. Il resto.
 
-**Chi fa cosa.** Gemini **propone**; Claude **approva** con `--approve` dopo la verifica, ingrediente per ingrediente e stato per stato (crudo/cotto, secco/cotto, fresco/in scatola). Per i prodotti del supermercato, l'associazione a un record Open Food Facts locale è facoltativa e serve per «quale prodotto compro», non per i valori nutrizionali, che restano CREA quando esiste la voce corretta.
+**Chi fa cosa.** Gemini **propone**; Claude **approva** con `--approve` dopo la verifica, ingrediente per ingrediente e stato per stato (crudo/cotto, secco/cotto, fresco/in scatola). I prodotti del supermercato corrispondenti si propongono insieme, secondo il §10.
 
-## 9. Cosa resta fuori
+## 9. Alternative davvero diverse (8.9)
+
+Oggi due alternative devono differire per almeno 3 alimenti (`min_distance`). Conta il numero, non la quantità, e i condimenti contano come un piatto principale. La nuova regola:
+
+**Sovrapposizione pesata.** Per due piani A e B:
+
+```
+sovrapposizione(A, B) = grammi in B di ingredienti presenti anche in A / grammi totali di B
+```
+
+- Gli ingredienti si confrontano a livello di **ingrediente canonico**, non di prodotto: penne Conad e spaghetti Barilla sono entrambi «pasta di semola».
+- Sono **esclusi per categoria** condimenti, sale, spezie, erbe, aceto, olio e brodo, non per quantità piccola: dieci grammi d'olio contano zero, come chiesto.
+- **Obiettivo:** sovrapposizione ≤ **10%** fra ogni coppia di alternative, cioè almeno il 90% degli ingredienti diversi, pesati sulle quantità. Si misura per pasto (alternative del pasto in Oggi) e per settimana (alternative della settimana).
+
+**Formulazione.** I grammi di A sono costanti quando si genera B, quindi il vincolo è lineare:
+
+```
+Σ_{i ∈ ingredienti di A, non esclusi} q_i^B ≤ 0,10 · Σ_{i non esclusi} q_i^B
+```
+
+Si aggiunge un vincolo per ogni alternativa già nel pool.
+
+**Quando i vincoli della dieta non lo permettono** (diete personali con pochi alimenti ammessi): invece di ridurre la soglia a passi, il solver **minimizza** la sovrapposizione massima rispetto alle alternative già trovate, restando dentro i vincoli nutrizionali, che non si rilassano mai. Il piano dice quanto è diverso: «Questa alternativa cambia il 72% degli ingredienti: la tua dieta non ne permette di più».
+
+**Quante alternative.**
+- Almeno **3** per pasto e per settimana, quando i vincoli lo permettono.
+- Un pulsante **«Calcola altre alternative»** chiede un nuovo solve con i vincoli di sovrapposizione verso **tutte** le alternative già mostrate.
+- Quando non si trova un'alternativa con sovrapposizione ≤ 10%, o il solver è impossibile, il pulsante risponde «Non ci sono altre alternative abbastanza diverse» e mostra la migliore trovata solo se cambia almeno il 50% degli ingredienti.
+- **Risposta:** ogni piano porta `overlap_pct` verso le altre alternative; il pool registra `overlap_target` e `overlap_achieved` al posto di `min_distance` e `diversity_relaxed`, che restano solo per compatibilità.
+
+**Varietà dentro la settimana.** È un'altra cosa rispetto alle alternative: anche un singolo piano non deve ripetere troppo lo stesso piatto principale. Un termine dell'obiettivo penalizza ogni ripetizione oltre una soglia, e il limite già esistente sulla fonte proteica principale resta. Prima di tarare la soglia, Codex misura quanto si somigliano oggi le settimane, su una settimana demo e sulle diete personali, senza pubblicare dati personali.
+
+## 10. Prodotti del supermercato, codice a barre e lista della spesa (8.10–8.11)
+
+### 10.1 Cosa abbiamo
+
+Nel catalogo locale di Open Food Facts ci sono 266.320 prodotti venduti in Italia: 57.324 hanno i quattro nutrienti principali completi e senza anomalie, e tutti hanno il **codice a barre**. Le marche dei supermercati ci sono:
+
+| Marca | Prodotti | Con nutrienti completi |
+|---|---|---|
+| Coop | 3.775 | 1.723 |
+| Carrefour | 3.762 | 2.110 |
+| Eurospin | 3.346 | 1.311 |
+| Conad | 2.941 | 1.325 |
+| Despar | 2.367 | 882 |
+| Esselunga | 2.257 | 990 |
+| Pam | 1.834 | 629 |
+| Lidl | 1.812 | 595 |
+
+Limiti da dichiarare:
+- sono le **marche del supermercato** e i prodotti segnalati in Italia, non l'assortimento completo né la disponibilità di oggi in un negozio;
+- i prezzi non ci sono;
+- le etichette sono inserite da volontari: `numeric_candidate` non certifica l'etichetta.
+
+Oggi nel solver i prodotti di marca non entrano mai (`solver_eligible: 0`): si usano solo nella ricerca del diario.
+
+### 10.2 Supermercati preferiti e prodotti usati dal solver (8.11)
+
+- Nell'intervista (§1.2) si aggiunge `preferred_stores`, l'elenco delle marche di supermercato, in ordine.
+- **Due livelli.**
+  - **Generico:** il piano resta costruito su alimenti generici CREA, robusti come valori nutrizionali. Accanto a ogni alimento compare il **prodotto da comprare**: il prodotto della marca preferita con categoria corrispondente e nutrienti compatibili con la voce CREA (scarto entro ±15% sulle kcal e ±20% sui macro principali, soglie da tarare).
+  - **Prodotto scelto:** se l'utente indica «uso sempre questo» (per esempio lo yogurt greco di Esselunga), quel prodotto **entra nel solver** con i valori della sua etichetta, al posto della voce generica. Lo stesso vale per i prodotti scansionati (§10.3). Condizione: `numeric_candidate` vero e controllo di coerenza delle kcal (sotto).
+- **Controllo di coerenza delle kcal:** `kcal ≈ 4·proteine + 4·carboidrati + 9·grassi (+ 2·fibre)`. Scarto oltre il 15% → il prodotto non entra nel solver finché l'utente non conferma i valori.
+
+### 10.3 Codice a barre e registrazione dall'etichetta (8.10)
+
+**Flusso.** Diario o «Aggiungi alimento» → **Scansiona**:
+
+1. Il codice letto si cerca nel catalogo locale, poi tra i prodotti personali dell'utente.
+2. **Trovato con nutrienti completi:** scheda del prodotto, valori per 100 g, quantità da inserire. Con la porzione nota («1 barretta = 35 g») si inserisce con un tocco.
+3. **Trovato incompleto, o non trovato:** modulo **«Registra dall'etichetta»** con:
+   - nome e marca;
+   - **base dei valori:** per 100 g (predefinita), per 100 ml (con la densità, oppure resta in ml), oppure **per porzione** con il peso della porzione in grammi;
+   - kcal (oppure kJ, convertiti con ÷ 4,184), proteine, carboidrati, grassi; facoltativi zuccheri, fibre, sale;
+   - peso della confezione e della porzione, se indicati.
+4. Il backend **ricalcola tutto per 100 g** (valore × 100 / peso della porzione), applica il controllo di coerenza del §10.2 e salva un **prodotto personale** con il suo codice a barre. Alla scansione successiva il prodotto si trova subito. La conversione esiste già per le etichette personali in `daily_meals.products()`: va riusata, non riscritta.
+5. Un prodotto personale ha `source: user_label`: entra nel diario subito, e nel solver se l'utente lo indica come «uso sempre questo».
+
+**Ricerca online.** Su richiesta esplicita, un pulsante «Cerca anche online» può interrogare l'API pubblica di Open Food Facts con il solo codice a barre. Mai in automatico.
+
+**Lettura del codice.** Due strade, per l'iPhone:
+
+- **Fotocamera dal vivo:** richiede HTTPS, quindi va servita con `tailscale serve` sul nome `<host>.<tailnet>.ts.net`, con un certificato valido; con HTTPS il cookie può diventare `Secure`. Safari non garantisce un lettore nativo dei codici a barre, quindi serve una libreria di decodifica **inclusa nel progetto**, perché il CSP accetta solo script locali, e con licenza compatibile.
+- **Foto del codice:** con `<input type="file" accept="image/*" capture>` funziona anche senza HTTPS, perché la decodifica avviene sulla foto. È il percorso di riserva, e anche la digitazione manuale delle cifre resta sempre possibile.
+
+**Contratto API.**
+
+```
+GET  /api/foods/barcode/{code}     → { status: found|incomplete|not_found, food?: <come la ricerca>, label?: {...},
+                                       serving_g?, package_g?, source: OFF|user_label }
+POST /api/foods/personal           ← { barcode?, name, brand?, basis: per_100g|per_100ml|per_serving, serving_g?,
+                                       density_g_per_ml?, kcal?|kj?, protein_g, carbs_g, fat_g, sugars_g?, fiber_g?,
+                                       salt_g?, package_g? }
+                                   → { food, per_100g, coherence: {ok, expected_kcal, declared_kcal, deviation_pct} }
+PUT  /api/foods/personal/{id}      ← stessi campi; DELETE solo se il prodotto non è mai stato usato nel diario
+PUT  /api/foods/preferred          ← { generic: {source:CREA,id}, product: {source:OFF|user_label,id} | null }
+```
+
+Il codice si valida per GTIN-8/12/13/14 con la cifra di controllo; resta una stringa, compresi gli zeri iniziali.
+
+### 10.4 Lista della spesa (8.11)
+
+Dalla settimana applicata si ricava una **lista della spesa** per il supermercato scelto:
+
+- **Somma:** grammi per prodotto da comprare, con gli alimenti generici risolti nel prodotto preferito (§10.2) e le ricette scomposte nei loro ingredienti (§8).
+- **Confezioni:** si ricava quante confezioni comprare dal campo `quantity` del prodotto, quando è in grammi; altrimenti solo i grammi.
+- **Raggruppamento:** per reparto, dalla categoria del prodotto.
+- **Spunta:** si possono spuntare le voci già in casa.
+- **Esclusioni:** i pasti già consumati non entrano.
+
+Senza un prodotto corrispondente, la voce resta generica («Petto di pollo, 600 g»).
+
+## 11. Cosa resta fuori
 
 - Programmazione periodizzata su mesi (blocchi, scarichi).
 - Stima del massimale da video.
-- Ricerca generale in tutto Open Food Facts in tempo reale.
-- Prezzi.
+- Prezzi e assortimento reale del singolo negozio.
+- Lettura automatica della tabella nutrizionale da foto (OCR).
+- Invio dei prodotti registrati a Open Food Facts.

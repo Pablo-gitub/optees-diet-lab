@@ -71,6 +71,7 @@ Bozza di `config/activity-catalog.json` secondo [phase8-spec.md](phase8-spec.md)
    ```
 2. **Scegliere i 60 gruppi successivi.**
    - Ordine: `recipes_count` decrescente, esclusi i gruppi già approvati o già presenti in un batch precedente.
+   - Quando esisteranno le ricette preferite (passo 8.7), Claude passerà all'inizio della sessione l'elenco dei loro gruppi mancanti: quelli vanno per primi.
    - Dalla sessione 3 in poi: prima i gruppi che compaiono nelle ricette italiane (`--cuisine Italian` per vederli), poi gli altri.
 3. **Per ogni gruppo:**
    - se manca la voce, aggiungere o estendere la voce nel dizionario: `display_name_it`, sinonimi it/en, `expected_qualifiers`, `crea_matches`;
@@ -85,6 +86,17 @@ Bozza di `config/activity-catalog.json` secondo [phase8-spec.md](phase8-spec.md)
 5. **Chiudere la sessione** con il registro: lotto, gruppi trattati, ambigui con il motivo, dubbi per Claude.
 
 **Dimensione della sessione:** 60 gruppi è un riferimento. Se una sessione si allunga, chiudere prima con meno gruppi fatti bene.
+
+### Sessioni S1…SN — equivalenti nei supermercati (dopo il passo 8.11)
+
+Per gli alimenti generici CREA più usati nei piani (Claude fornisce l'elenco, circa 50 per sessione), proporre i prodotti delle marche dei supermercati (Conad, Esselunga, Coop, Carrefour, Eurospin, Lidl, Despar, Pam…) presi dal catalogo locale `dataset/open_food_facts/catalog.sqlite`.
+
+- **File:** `config/store-equivalents/batch-NN.json`. Per ogni alimento generico, i candidati con:
+  - `barcode`, `name`, `brands`, `quantity`;
+  - i quattro nutrienti per 100 g e lo scarto percentuale dalla voce CREA;
+  - `rationale` e `check_query`, la query SQL sul codice a barre.
+- **Requisiti:** solo prodotti con `numeric_candidate = 1` e categoria coerente. Uno scarto oltre ±15% sulle kcal o oltre ±20% sui macro si segnala, non si scarta in silenzio: per esempio la ricotta light rispetto alla ricotta intera è un altro prodotto.
+- **Mai un prodotto con stato diverso:** surgelato impanato contro fresco, sott'olio contro al naturale, pasta fresca contro secca.
 
 ## Cosa fa Claude dopo ogni sessione
 
