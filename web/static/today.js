@@ -84,6 +84,46 @@ function renderDay(day) {
   $('day-meals').replaceChildren(...day.meals.map((m) => mealCard(m, day)));
   renderDayProgress(day);
   renderWorkout(day);
+  renderDayRating(day);
+}
+
+// «Com'è andata?» (B11): the rating belongs to the applied plan and is shared by its days.
+function renderDayRating(day) {
+  const box = $('day-rating');
+  const plans = (day.plan_evaluation?.plans || []).filter((p) => p.feedback_available && p.feedback_endpoint);
+  box.hidden = !plans.length;
+  if (!plans.length) return box.replaceChildren();
+  box.replaceChildren(element('h3', 'Com’è andata?'));
+  plans.forEach((p) => {
+    const slots = p.slots || [];
+    const parts = slots.length >= Object.keys(mealMeta).length ? ['tutti i pasti'] : Object.keys(mealMeta).filter((k) => slots.includes(k)).map((k) => mealMeta[k][0].toLowerCase());
+    if (p.workout_ids?.length) parts.push(p.workout_ids.length === 1 ? 'allenamento' : p.workout_ids.length + ' allenamenti');
+    const scope = parts.length ? parts.join(', ').replace(/, ([^,]*)$/, ' e $1') : 'piano della giornata';
+    const item = element('div', undefined, 'feedback day-feedback');
+    item.append(element('span', (p.rating ? 'Il tuo voto' : 'Ti è piaciuto?') + ' · ' + scope, 'feedback-label'));
+    const stars = element('div', undefined, 'stars');
+    stars.setAttribute('role', 'group');
+    stars.setAttribute('aria-label', 'Voto del piano: ' + scope);
+    for (let i = 1; i <= 5; i++) {
+      const star = element('button', '★', 'star' + (p.rating >= i ? ' on' : ''));
+      star.type = 'button';
+      star.title = i + ' su 5';
+      star.setAttribute('aria-label', 'Voto ' + i + ' su 5');
+      star.onclick = async () => {
+        try {
+          const r = await api(p.feedback_endpoint.replace(/^\/api\//, ''), 'POST', { rating: i, tried: true });
+          message('Valutazione salvata: ' + i + ' su 5' + (r.learning?.status === 'eligible' ? '' : ' · conterà per le proposte quando la giornata sarà registrata completa'));
+          renderDay(await api('day?date=' + day.date));
+        } catch (e) {
+          message(e.message);
+        }
+      };
+      stars.append(star);
+    }
+    item.append(stars);
+    box.append(item);
+  });
+  box.append(element('p', plans.length > 1 ? 'Ogni voto vale per tutti i giorni del piano a cui appartiene.' : 'Il voto vale per tutti i giorni di questo piano e aiuta Optees a proporti piani simili.', 'muted small'));
 }
 
 function itemRow(item, editable) {
@@ -434,6 +474,7 @@ function dayWorkoutItem(w, day) {
 
 // ---------- Settimana ----------
 function renderWeek(week) {
+  renderWeekRebalance(week);
   const start = week.week_start;
   $('week-range').textContent = shortDate(start) + ' – ' + shortDate(addDays(start, 6));
   const today = isoDate(new Date());

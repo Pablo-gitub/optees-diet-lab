@@ -24,7 +24,14 @@ async function api(path, method = 'GET', data) {
     headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrf },
     body: data === undefined ? undefined : JSON.stringify(data),
   });
-  const value = await response.json();
+  let value;
+  try {
+    value = await response.json();
+  } catch {
+    // Non-JSON body (e.g. an unhandled server error): keep the message readable.
+    value = { detail: response.ok ? 'Risposta non valida dal server' : 'Errore del server (' + response.status + '): riprova fra poco.' };
+    if (response.ok) throw Error(value.detail);
+  }
   if (!response.ok) {
     const error = Error(typeof value.detail === 'string' ? value.detail : 'Richiesta non valida');
     error.status = response.status;

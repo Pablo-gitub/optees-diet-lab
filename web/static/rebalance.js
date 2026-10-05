@@ -1,13 +1,23 @@
-// Pasto fuori programma: stima a intervallo, anteprima del rientro, decisione (passo 6.3, docs/backend-handoff-rebalance.md).
+// Rientro: pasto fuori programma (6.3) o scostamenti registrati nella settimana (B13), docs/backend-handoff-rebalance.md.
 const presetIcons = { pizzeria: '🍕', ristorante_italiano: '🍝', sushi: '🍣', kebab: '🥙', aperitivo: '🍹', dolce: '🍰', fast_food: '🍔' };
 const sizeNames = { piccolo: 'Piccolo', medio: 'Medio', grande: 'Grande' };
 const rangeText = (r, unit = 'kcal') => (!r ? '—' : Math.round(r.min) === Math.round(r.max) ? fmt0(r.min) + ' ' + unit : fmt0(r.min) + '–' + fmt0(r.max) + ' ' + unit);
 let rebalanceCatalog = null;
-// One open panel at a time: {date, slot, preset, size, custom, preview, loading, error}.
+// One open panel at a time: {mode: 'meal'|'diary', date, slot, preset, size, custom, preview, loading, error}.
 let rebalance = null;
+const signedKcal = (v) => {
+  const n = Math.round(v);
+  return (n > 0 ? '+' : n < 0 ? '−' : '') + fmt0(Math.abs(n)) + ' kcal';
+};
+const signedRange = (r) => (!r ? '—' : Math.round(r.min) === Math.round(r.max) ? signedKcal(r.min) : signedKcal(r.min).replace(' kcal', '') + ' … ' + signedKcal(r.max));
+function rerenderRebalance() {
+  if (rebalance?.mode === 'diary' || !rebalance) renderWeekRebalance();
+  if (rebalance?.mode !== 'diary') renderDay(currentDay);
+}
 
 async function openRebalance(m, day) {
-  rebalance = { date: day.date, slot: m.slot, preset: null, size: 'medio', custom: null, preview: null, loading: false };
+  rebalance = { mode: 'meal', date: day.date, slot: m.slot, preset: null, size: 'medio', custom: null, preview: null, loading: false };
+  renderWeekRebalance();
   try {
     rebalanceCatalog = rebalanceCatalog || (await api('rebalance/presets'));
   } catch (e) {
@@ -17,8 +27,10 @@ async function openRebalance(m, day) {
   renderDay(currentDay);
 }
 function closeRebalance() {
+  const mode = rebalance?.mode;
   rebalance = null;
-  renderDay(currentDay);
+  if (mode === 'diary') renderWeekRebalance();
+  else renderDay(currentDay);
 }
 function canRebalance(m, day) {
   const today = isoDate(new Date());
@@ -27,11 +39,11 @@ function canRebalance(m, day) {
 
 async function runRebalancePreview() {
   const r = rebalance;
-  const body = { date: r.date, slot: r.slot, ...(r.custom ? { custom: r.custom } : { preset: { id: r.preset, size: r.size } }) };
+  const body = r.mode === 'diary' ? { date: r.date, from_diary: true } : { date: r.date, slot: r.slot, ...(r.custom ? { custom: r.custom } : { preset: { id: r.preset, size: r.size } }) };
   r.loading = true;
   r.preview = null;
   r.error = null;
-  renderDay(currentDay);
+  rerenderRebalance();
   try {
     const preview = await api('rebalance/preview', 'POST', body);
     if (rebalance !== r) return;
@@ -42,7 +54,7 @@ async function runRebalancePreview() {
   } finally {
     if (rebalance === r) {
       r.loading = false;
-      renderDay(currentDay);
+      rerenderRebalance();
     }
   }
 }
@@ -53,13 +65,15 @@ async function decideRebalance(action) {
     const res = await api('rebalance/' + r.preview.preview_id + '/' + action, 'POST', {});
     rebalance = null;
     const days = res.changed_days?.length || 0;
-    message(action === 'apply' ? 'Pasto registrato · ' + days + (days === 1 ? ' giorno ribilanciato' : ' giorni ribilanciati') : 'Pasto registrato · piano invariato');
+    const balanced = days + (days === 1 ? ' giorno ribilanciato' : ' giorni ribilanciati');
+    if (r.mode === 'diary') message(action === 'apply' ? 'Settimana ribilanciata · ' + balanced : 'Piano lasciato com’è');
+    else message(action === 'apply' ? 'Pasto registrato · ' + balanced : 'Pasto registrato · piano invariato');
     await loadHome();
   } catch (e) {
     if (e.status === 409 || e.status === 404) {
       r.preview = null;
       r.error = (e.code === 'slot_already_logged' ? 'Questo pasto è già stato registrato.' : 'Qualcosa è cambiato dopo il calcolo: ricalcola l’impatto.') + ' ';
-      renderDay(currentDay);
+      rerenderRebalance();
     } else message(e.message);
   }
 }
@@ -175,41 +189,70 @@ function slotChanges(change) {
 function previewView(r) {
   const p = r.preview;
   const box = element('div', undefined, 'rebalance-preview');
-  const est = p.estimate || {};
-  const prov = est.provenance || {};
-  const what = prov.source === 'preset' ? (rebalanceCatalog.presets[prov.preset_id]?.name || prov.preset_id) + ' · ' + (sizeNames[prov.size] || prov.size) : 'Stima tua';
-  const head = element('div', undefined, 'rb-estimate');
-  head.append(element('strong', rangeText(est.nutrients?.kcal)), element('span', what, 'muted'));
-  box.append(head);
-  if (prov.source === 'preset' && (prov.calculation || prov.sources?.length)) {
-    const src = element('details', undefined, 'rb-source');
-    src.append(element('summary', 'Da dove vengono i numeri'));
-    if (prov.calculation) src.append(element('p', prov.calculation, 'small'));
-    const names = [...new Set((prov.sources || []).map((s) => s.source + (s.name ? ' · ' + s.name : '')))];
-    if (names.length) src.append(element('p', 'Fonti: ' + names.join('; '), 'muted small'));
-    box.append(src);
-  }
   const b = p.budget || {};
-  const excess = b.excess_kcal;
+  const diary = r.mode === 'diary' || p.source === 'diary';
+  if (!diary) {
+    const est = p.estimate || {};
+    const prov = est.provenance || {};
+    const what = prov.source === 'preset' ? (rebalanceCatalog.presets[prov.preset_id]?.name || prov.preset_id) + ' · ' + (sizeNames[prov.size] || prov.size) : 'Stima tua';
+    const head = element('div', undefined, 'rb-estimate');
+    head.append(element('strong', rangeText(est.nutrients?.kcal)), element('span', what, 'muted'));
+    box.append(head);
+    if (prov.source === 'preset' && (prov.calculation || prov.sources?.length)) {
+      const src = element('details', undefined, 'rb-source');
+      src.append(element('summary', 'Da dove vengono i numeri'));
+      if (prov.calculation) src.append(element('p', prov.calculation, 'small'));
+      const names = [...new Set((prov.sources || []).map((s) => s.source + (s.name ? ' · ' + s.name : '')))];
+      if (names.length) src.append(element('p', 'Fonti: ' + names.join('; '), 'muted small'));
+      box.append(src);
+    }
+  }
+  // Recorded deviations of the week (B13): exact where known, intervals for estimates.
+  const devs = (p.deviations || []).filter((d) => d.difference_kcal && (Math.abs(d.difference_kcal.min) > 0.5 || Math.abs(d.difference_kcal.max) > 0.5));
+  if (b.excess_kcal) {
+    const head = element('div', undefined, 'rb-estimate');
+    head.append(element('strong', signedRange(b.excess_kcal)), element('span', 'scostamento della settimana' + (diary ? '' : ', questo pasto compreso'), 'muted'));
+    box.append(head);
+  }
+  if (devs.length) {
+    const list = element('details', undefined, 'rb-source');
+    list.append(element('summary', devs.length + (devs.length === 1 ? ' pasto diverso dal previsto' : ' pasti diversi dal previsto')));
+    devs.forEach((d) =>
+      list.append(
+        element(
+          'p',
+          parseDate(d.date).toLocaleDateString('it-IT', { weekday: 'short', day: 'numeric' }) + ' · ' + (mealMeta[d.slot]?.[0] || d.slot) + ': previsto ' + fmt0(d.planned_kcal) + ', mangiato ' + rangeText(d.consumed_kcal) + ' (' + signedRange(d.difference_kcal) + ')',
+          'small',
+        ),
+      ),
+    );
+    box.append(list);
+  }
+  const correction = b.correction_kcal || 0;
+  const giving = correction < 0 || (b.excess_kcal && b.excess_kcal.max < 0);
   const status = element('div', undefined, 'rb-status rb-' + p.status);
-  const title = { full: 'Rientro possibile', partial: 'Rientro parziale', unchanged: 'Nessun rientro necessario', unavailable: 'Rientro non calcolabile' }[p.status] || p.status;
-  status.append(element('strong', title));
-  if (excess && excess.max > 0) status.append(element('p', 'Rispetto al pasto previsto: ' + (excess.min < 0 ? 'fino a +' + fmt0(excess.max) + ' kcal' : '+' + rangeText(excess)) + '.', 'small'));
+  const titles = giving
+    ? { full: 'Calorie da restituire', partial: 'Restituzione parziale', unchanged: 'Nessuna modifica necessaria', unavailable: 'Rientro non calcolabile' }
+    : { full: 'Rientro possibile', partial: 'Rientro parziale', unchanged: 'Nessun rientro necessario', unavailable: 'Rientro non calcolabile' };
+  status.append(element('strong', titles[p.status] || p.status));
+  if (b.previous_correction_kcal) status.append(element('p', 'Già ' + (b.previous_correction_kcal > 0 ? 'recuperate ' : 'restituite ') + fmt0(Math.abs(b.previous_correction_kcal)) + ' kcal con rientri precedenti di questa settimana.', 'small'));
   if (p.status === 'full' || p.status === 'partial') {
-    const n = p.days.filter((d) => d.reduction_kcal > 0.5).length;
-    status.append(element('p', 'I prossimi ' + n + (n === 1 ? ' giorno scende' : ' giorni scendono') + ' in tutto di ' + fmt0(b.correction_kcal) + ' kcal, distribuite' + (n > 1 ? ' in modo uniforme' : '') + '.', 'small'));
+    const n = p.days.filter((d) => Math.abs(d.reduction_kcal) > 0.5).length;
+    status.append(element('p', 'I prossimi ' + n + (n === 1 ? ' giorno ' : ' giorni ') + (giving ? (n === 1 ? 'sale' : 'salgono') : n === 1 ? 'scende' : 'scendono') + ' in tutto di ' + fmt0(Math.abs(correction)) + ' kcal, distribuite' + (n > 1 ? ' in modo uniforme' : '') + '.', 'small'));
     const rest = b.remaining_excess_kcal || {};
-    const restText = rest.min > 0.5 ? rangeText(rest) : 'fino a ' + fmt0(rest.max) + ' kcal';
-    if (p.status === 'partial') status.append(element('p', 'Resta un margine di ' + restText + ' sulla settimana: va bene così, una settimana non si giudica da un pasto.', 'small'));
+    const restAbs = { min: Math.min(Math.abs(rest.min || 0), Math.abs(rest.max || 0)), max: Math.max(Math.abs(rest.min || 0), Math.abs(rest.max || 0)) };
+    const restText = restAbs.min > 0.5 ? rangeText(restAbs) : 'fino a ' + fmt0(restAbs.max) + ' kcal';
+    if (p.status === 'partial') status.append(element('p', 'Resta uno scarto di ' + restText + ' sulla settimana: va bene così, una settimana non si giudica da un pasto.', 'small'));
   } else status.append(element('p', p.reason || p.explanation || '', 'small'));
   box.append(status);
-  const days = (p.days || []).filter((d) => d.reduction_kcal > 0.5 || d.changes?.some((c) => slotChanges(c).length));
+  const days = (p.days || []).filter((d) => Math.abs(d.reduction_kcal) > 0.5 || d.changes?.some((c) => slotChanges(c).length));
   if (days.length) {
     const list = element('div', undefined, 'rb-days');
     days.forEach((d) => {
       const row = element('div', undefined, 'rb-day');
       const top = element('div', undefined, 'rb-day-head');
-      top.append(element('strong', parseDate(d.date).toLocaleDateString('it-IT', { weekday: 'short', day: 'numeric' })), element('span', fmt0(d.before_kcal) + ' → ' + fmt0(d.after_kcal) + ' kcal', 'muted'), element('span', '−' + fmt0(d.reduction_kcal), 'rb-cut'));
+      const delta = -d.reduction_kcal;
+      top.append(element('strong', parseDate(d.date).toLocaleDateString('it-IT', { weekday: 'short', day: 'numeric' })), element('span', fmt0(d.before_kcal) + ' → ' + fmt0(d.after_kcal) + ' kcal', 'muted'), element('span', (delta > 0 ? '+' : '−') + fmt0(Math.abs(delta)), delta > 0 ? 'rb-add' : 'rb-cut'));
       row.append(top);
       const chips = element('div', undefined, 'diff-chips');
       (d.changes || []).forEach((c) => slotChanges(c).forEach(([text, cls]) => chips.append(element('span', (mealMeta[c.slot]?.[0] || c.slot) + ': ' + text, 'chip ' + cls))));
@@ -223,26 +266,69 @@ function previewView(r) {
     box.append(list);
   }
   const lim = p.limits || {};
-  box.append(
-    element(
-      'p',
-      'Al massimo ' + fmt0(lim.maximum_daily_reduction_kcal) + ' kcal in meno al giorno, mai sotto ' + fmt0(lim.minimum_kcal) + ' kcal e ' + fmt0(lim.minimum_protein_g) + ' g di proteine. ' + (p.workout?.explanation || 'Nessun allenamento obbligatorio.'),
-      'muted small',
-    ),
-  );
+  const limits = ['Al massimo ' + fmt0(lim.maximum_daily_reduction_kcal ?? 200) + ' kcal di differenza al giorno, mai sotto ' + fmt0(lim.minimum_kcal ?? 1400) + ' kcal e ' + fmt0(lim.minimum_protein_g ?? 45) + ' g di proteine.'];
+  if (lim.minimum_weekly_deviation_kcal) limits.push('Scostamenti fino a ' + fmt0(lim.minimum_weekly_deviation_kcal) + ' kcal nella settimana non si compensano.');
+  limits.push(p.workout?.explanation || 'Nessun allenamento obbligatorio.');
+  box.append(element('p', limits.join(' '), 'muted small'));
   const actions = element('div', undefined, 'actions');
-  if (p.status === 'full' || p.status === 'partial') {
-    const ok = element('button', 'Accetta il rientro', 'primary');
+  const can = p.status === 'full' || p.status === 'partial';
+  if (can) {
+    const ok = element('button', giving ? 'Aggiungi le calorie' : 'Accetta il rientro', 'primary');
     ok.type = 'button';
     ok.onclick = () => ((ok.disabled = true), decideRebalance('apply'));
     actions.append(ok);
   }
-  const keep = element('button', 'Lascia il piano com’è', p.status === 'full' || p.status === 'partial' ? 'secondary' : 'primary');
+  // On the diary path 'keep' only closes the preview: nothing new is recorded.
+  const keep = element('button', diary && !can ? 'Chiudi' : 'Lascia il piano com’è', can ? 'secondary' : 'primary');
   keep.type = 'button';
   keep.onclick = () => ((keep.disabled = true), decideRebalance('keep'));
   actions.append(keep);
   box.append(actions);
   return box;
+}
+
+// Week-level entry point in Oggi: rebalance from everything recorded so far (B13).
+let rebalanceWeek = null;
+function renderWeekRebalance(week) {
+  if (week) rebalanceWeek = week;
+  const box = $('week-rebalance');
+  const w = rebalanceWeek;
+  const today = isoDate(new Date());
+  box.replaceChildren();
+  if (!w || w.plan_status !== 'active' || w.week_start !== mondayOf(today) || addDays(w.week_start, 6) === today) return;
+  const r = rebalance?.mode === 'diary' ? rebalance : null;
+  const panel = element('div', undefined, 'panel compact week-rebalance' + (r ? ' open' : ''));
+  const head = element('div', undefined, 'rb-head');
+  const text = element('div');
+  text.append(element('strong', 'Rientro della settimana'), element('p', 'Grammi diversi, alimenti aggiunti, tolti o sostituiti, pasti saltati: Optees somma le differenze registrate e propone come rientrare nei prossimi giorni, in più o in meno.', 'muted small'));
+  head.append(text);
+  if (r) {
+    const close = element('button', '✕', 'icon-button small');
+    close.type = 'button';
+    close.setAttribute('aria-label', 'Chiudi');
+    close.onclick = closeRebalance;
+    head.append(close);
+  }
+  panel.append(head);
+  if (!r) {
+    const go = element('button', 'Ribilancia i prossimi giorni', 'secondary small');
+    go.type = 'button';
+    go.onclick = () => {
+      rebalance = { mode: 'diary', date: today, preview: null, loading: false };
+      renderDay(currentDay);
+      runRebalancePreview();
+    };
+    panel.append(go);
+  } else {
+    if (r.loading) {
+      const job = element('div', undefined, 'job');
+      job.append(element('div', undefined, 'progress-indeterminate'), element('p', 'Optees confronta previsto e mangiato e ricalcola i prossimi giorni…', 'job-text'));
+      panel.append(job);
+    }
+    if (r.error) panel.append(element('p', r.error, 'error'));
+    if (r.preview) panel.append(previewView(r));
+  }
+  box.append(panel);
 }
 
 function rebalancePanel(m, day) {

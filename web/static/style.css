@@ -3102,3 +3102,27 @@ label > .chip.todo {
 .swap-box .food-search {
   width: 100%;
 }
+.rb-add {
+  font-weight: 650;
+  color: var(--accent-ink);
+}
+.week-rebalance {
+  margin-top: 12px;
+  display: grid;
+  gap: 10px;
+}
+.week-rebalance p {
+  margin: 4px 0 0;
+}
+.week-rebalance > button {
+  justify-self: start;
+}
+#day-rating h3 {
+  margin-bottom: 8px;
+}
+.day-feedback {
+  flex-wrap: wrap;
+  margin: 0 0 6px;
+  padding: 0;
+  border: 0;
+}

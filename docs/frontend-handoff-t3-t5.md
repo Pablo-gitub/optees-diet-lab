@@ -116,3 +116,15 @@ Lo scostamento non è solo uno «sgarro» con preset: può essere pasta 120 g in
 ### Chiusura backend B11
 
 254 test verdi. DayView (GET e risposte delle mutazioni) espone `plan_id`, `rating`, `plan_evaluation`: fonte = applicazione v2 ancora corrispondente al piano attuale e del proprietario. Riferimenti multipli distinti per pasti/allenamenti, nessun alias arbitrario; futuri non richiedono il voto, sostituiti/legacy senza traccia hanno indisponibilità esplicita. Il voto è per piano (condiviso tra i suoi giorni), non un voto quotidiano separato: mostrarne l’ambito. [JSON, endpoint e casi limite](api-contract.md), [bandit](backend-handoff-bandit.md). Nuovi collegamenti frontend B13/B11 da realizzare in un turno UI; web/static/ intatto.
+
+## B11/B13 nella UI (Claude, 2026-10-05)
+
+- **Rientro della settimana** in Oggi, sotto la striscia della settimana corrente: «Ribilancia i prossimi giorni» chiama `from_diary`, mostra lo scostamento settimanale con i pasti che lo compongono, i rientri già fatti, la proposta in più o in meno e le due decisioni. Verificato su una settimana reale generata da Optees con scenari Salute sintetici: riso 80→110 g e una mela in più ⇒ +181 kcal, rientro completo in 6 giorni con **una sola modifica al giorno**; ripetendo l'analisi «Già recuperate 181 kcal», nessuna doppia compensazione.
+- **Com'è andata?** in Oggi: stelle 1–5 per ogni piano valutabile, con l'ambito (pasti/allenamenti) e la nota che il voto vale per tutti i giorni del piano.
+
+### Osservazioni per Codex
+
+| # | Osservazione | Proposta |
+|---|---|---|
+| B14 | `POST /api/rebalance/preview` con `from_diary` risponde **500**: `values_verified` solleva «Variabile fuori limite» sul risultato di Optees reale. Riprodotto su una settimana i cui giorni successivi erano già stati riscritti da un rientro precedente (applicato con il backend pre-B12) | ogni errore di verifica del risultato deve diventare `status: unavailable` con motivo, mai 500; indagare il limite violato (porzioni fuori dal ±20% rispetto a un riferimento già modificato?) |
+| B15 | Dopo un rientro applicato, i giorni modificati risultano «Piano sostituito dopo l'applicazione» e non sono più valutabili | un rientro è una modifica dello stesso piano: conservare il riferimento valutabile (o legarlo al piano originale) |
