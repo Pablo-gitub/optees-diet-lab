@@ -276,6 +276,9 @@ async def update_profile(request: Request):
     ):
         raise HTTPException(400, 'Cucine non valide')
     old['preferred_cuisines'] = list(dict.fromkeys(preferred))
+    if 'goals' in data:
+        import personal_goals
+        old['goals']=personal_goals.validate(data['goals'])
     if 'energy_balance_target_kcal' in data:
         old['energy_balance_target_kcal']=workouts.finite(data['energy_balance_target_kcal'],'Bilancio calorico',-1000,1000,True)
     if 'day_type_targets' in data:
@@ -975,3 +978,53 @@ def bandit_summary(request:Request):
     with connect() as db:
         trials=bandit.trials(db,user['id'],profile);observations=bandit.observations(db,user['id'],profile)
     return dict(parameters=bandit.PARAMETERS,eligible_days=sum(t['reward'] is not None for t in trials),pending_days=sum(t['reward'] is None for t in trials),contexts={key:dict(observations=len(value),arms=sorted({a for a,_ in value})) for key,value in observations.items()},trials=trials)
+
+
+@app.get('/api/goals')
+def read_goals(request:Request):
+    import personal_goals
+    user=identity(request)
+    return personal_goals.view(json.loads(user['profile']))
+
+@app.put('/api/goals/{block}')
+async def save_goals(block:str,request:Request):
+    import personal_goals
+    user=identity(request,True);data=await request.json()
+    field={'body':'body','activity':'activity','training':'training_priorities','strength-anchors':'strength_anchors'}.get(block)
+    if not field:raise diary.DomainError('Blocco non trovato','not_found',404)
+    if field in ('training_priorities','strength_anchors'):
+        key='priorities' if field=='training_priorities' else 'anchors'
+        if not isinstance(data,dict) or set(data)!={key}:raise diary.DomainError('Blocco non valido')
+        data=data[key]
+    value=personal_goals.validate_block(field,data)
+    with connect() as db:
+        db.execute('BEGIN IMMEDIATE')
+        stored=json.loads(db.execute('SELECT profile FROM users WHERE id=?',(user['id'],)).fetchone()[0])
+        if field=='body' and value.get('pace')=='custom' and value['pace_pct_per_week']>.5:
+            series=personal_goals.analysis.weight_series(measurement_values(db,user['id']),diary.local_today())
+            if series['status']=='available' and value.get('target_weight_kg',0)>series['daily_points'][-1]['filtered_kg']:raise diary.DomainError('Ritmo in aumento massimo 0,5% a settimana')
+        stored.setdefault('goals',{})[field]=value
+        db.execute('UPDATE users SET profile=? WHERE id=?',(json.dumps(stored),user['id']))
+    return personal_goals.view(stored)
+
+@app.post('/api/goals/energy-proposal')
+async def goals_energy_proposal(request:Request):
+    import personal_goals
+    user=identity(request,True)
+    if await request.json()!={}:raise diary.DomainError('Corpo non valido')
+    with connect() as db:
+        db.execute('BEGIN IMMEDIATE')
+        fresh=dict(db.execute('SELECT * FROM users WHERE id=?',(user['id'],)).fetchone());profile=owner_profile(fresh)
+        report=load_health_report(health_directory(user['id']));values=measurement_values(db,user['id'],report=report)
+        return personal_goals.propose(db,user['id'],profile,values,report,diary.local_today())
+
+@app.post('/api/goals/energy-proposal/{identifier}/{decision}')
+async def goals_energy_decide(identifier:int,decision:str,request:Request):
+    import personal_goals
+    user=identity(request,True);data=await request.json()
+    if decision not in ('approve','reject'):raise diary.DomainError('Decisione non trovata','not_found',404)
+    with connect() as db:
+        db.execute('BEGIN IMMEDIATE')
+        fresh=dict(db.execute('SELECT * FROM users WHERE id=?',(user['id'],)).fetchone());profile=owner_profile(fresh)
+        report=load_health_report(health_directory(user['id']));values=measurement_values(db,user['id'],report=report)
+        return personal_goals.decide(db,user['id'],profile,values,report,identifier,data,decision)

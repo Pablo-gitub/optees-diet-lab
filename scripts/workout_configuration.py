@@ -18,7 +18,10 @@ def defaults():
 
 def read(db,user):
     row=db.execute('SELECT settings FROM workout_configuration WHERE user_id=?',(user,)).fetchone()
-    return dict(defaults(),**json.loads(row['settings'])) if row else defaults()
+    settings=dict(defaults(),**json.loads(row['settings'])) if row else defaults()
+    owner=db.execute('SELECT profile FROM users WHERE id=?',(user,)).fetchone()
+    settings['strength_anchors']=copy.deepcopy(json.loads(owner['profile']).get('goals',{}).get('strength_anchors',[])) if owner else []
+    return settings
 
 
 def seed_legacy_equipment(db,user,path):

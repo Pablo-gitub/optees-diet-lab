@@ -75,7 +75,11 @@ def fingerprint(db,user,profile,report,measurements):
 
 def cooldown(db,user):
     last=db.execute("SELECT decided FROM recalibration_proposal WHERE user_id=? AND state='approved' ORDER BY decided DESC LIMIT 1",(user,)).fetchone()
-    return bool(last and time.time()-last['decided']<7*86400)
+    recent=bool(last and time.time()-last['decided']<7*86400)
+    if db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='goal_energy_proposal'").fetchone():
+        goal=db.execute("SELECT max(decided) FROM goal_energy_proposal WHERE user_id=? AND state='approved'",(user,)).fetchone()[0]
+        recent=recent or goal is not None and time.time()-goal<7*86400
+    return recent
 
 
 def make_proposal(db,user,profile,report,measurements,checkin,today):

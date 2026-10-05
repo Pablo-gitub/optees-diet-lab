@@ -20,6 +20,8 @@ class DomainError(ValueError):
     def __init__(self,message,code='invalid_input',status=400):super().__init__(message);self.code=code;self.status=status
 
 def migrate(db):
+    import personal_goals
+    personal_goals.migrate(db)
     db.executescript('''
     CREATE TABLE IF NOT EXISTS schema_migration(version INTEGER PRIMARY KEY,applied REAL);
     CREATE TABLE IF NOT EXISTS week_plan(id INTEGER PRIMARY KEY,user_id INTEGER,week_start TEXT,mode TEXT,status TEXT,plan_set_run_id INTEGER,created REAL,targets TEXT);
@@ -287,7 +289,7 @@ def search_foods(db,user,profile,q,limit):
 
 def add_measurement(db,user,data):
     date=valid_date(data.get('date'),True);kind=data.get('kind');unit=data.get('unit');value=data.get('value')
-    definitions={'weight':('kg',1,500),'waist':('cm',10,300),'height':('cm',30,250),'body_fat':('%',0,100)}
+    definitions={'weight':('kg',1,500),'waist':('cm',10,300),**{k:('cm',10,300) for k in ('hip','chest','arm','thigh')},'height':('cm',30,250),'body_fat':('%',0,100)}
     if kind not in definitions:raise DomainError('Misura non supportata')
     expected,low,high=definitions[kind]
     if unit!=expected or isinstance(value,bool) or not isinstance(value,(int,float)) or not math.isfinite(value) or not low<=value<=high:raise DomainError('Valore o unità della misura non validi')

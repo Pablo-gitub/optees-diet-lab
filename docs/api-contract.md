@@ -245,3 +245,37 @@ Fino al 5.1, `GET /api/stats/summary` può restituire solo peso (da Salute) e al
 5. Isolamento: un utente non legge né modifica diario, piani o misure di un altro.
 6. CSRF obbligatorio su tutte le mutazioni.
 7. Date oltre domani, grammi fuori intervallo e `food` inesistenti sono rifiutati con `invalid_input`.
+
+
+## Fase 8.1 — Obiettivi personali e proposta di bilancio
+
+GET `/api/goals` e ciascun PUT `/api/goals/body|activity|training|strength-anchors` restituiscono la stessa vista completa (blocchi indipendenti; `{}` e `[]` consentono di saltare). Esempio sintetico:
+
+```json
+{"body":{"target_weight_kg":75,"pace":"moderate","circumferences":["waist","hip"]},"activity":{"gym":"maybe","preferred_stores":["Conad","Coop"]},"training_priorities":{"strength":3,"health":2},"strength_anchors":[{"exercise_key":"dumbbell-deadlift","heavy":{"kg":20,"reps":3,"date":"2026-10-05"}}],"missing":[],"warnings":[],"activity_defaults":{"max_session_minutes":90,"max_sessions_per_day":1,"min_gap_hours":4}}
+```
+
+`missing` contiene solo domande realmente senza risposta, per esempio `{"field":"body.target_weight_kg","prompt":"Senza peso obiettivo o obiettivo di massa grassa il bilancio resta quello scelto da te."}`. PUT training riceve `{"priorities":{"strength":3}}`; PUT strength-anchors riceve `{"anchors":[...]}`. Valori e limiti: [specifica §1](phase8-spec.md). Al massimo tre priorità 3; conflitti forza/resistenza sono warning. Il catalogo attività è in attesa di revisione 8.3: elenchi vuoti consentiti, id non verificabili rifiutati con `activity_catalog_pending`. `gym:no` impedisce richieste con sessioni palestra; resta disponibile la settimana dieta. `preferred_stores` è una lista ordinata di nomi, non una promessa di assortimento.
+
+`PUT /api/profile` conserva `goals` se omesso; se presente sostituisce il campo previa validazione. Carichi manuali `starting_loads_kg` invariati. GET `/api/workouts/config` espone in `settings.strength_anchors` le serie del profilo; sono dati di partenza, senza curva o carichi dedotti (8.4). Date serie non future, heavy 2–6 ripetizioni, light 10–15; almeno una serie. Misure `hip`, `chest`, `arm`, `thigh` via POST `/api/measurements`, unità cm, 10–300; la risposta è DayView con `measurements`, per esempio `{"measurements":[{"date":"2026-10-05","kind":"hip","value":98,"unit":"cm","source":"manual"}]}` oltre ai campi del giorno.
+
+POST `/api/goals/energy-proposal`, corpo `{}`, CSRF. Esempio di risposta:
+
+```json
+{"status":"available","proposal":{"id":7,"state_token":"hash-opaco","current_kcal":null,"proposed_kcal":-450,"requested_kcal":-450,"pace_pct_per_week":0.5,"effective_pace_pct_per_week":0.5,"expected_date":"2027-01-10","reasoning":["Bilancio da peso filtrato e ritmo, arrotondato a 50 kcal; i target nutrizionali non cambiano in questo passo."],"uncertainty":["7700 kcal/kg è un’approssimazione; la ricalibrazione del lunedì resta il correttore.","Soglie provvisorie da verificare in 8.2."],"limits_applied":["absolute_balance_1000","weekly_cooldown_7_days"],"weight":{"value_kg":82,"date":"2026-10-05","filter":"progress-v2 scalar Kalman","variance_kg2":0.03},"target_weight_kg":75}}
+```
+
+Numeri illustrativi. Almeno due giorni di peso, andamento recente filtrato Kalman; mai l'ultima pesata grezza. Senza peso obiettivo si può suggerire il peso dalla massa magra: almeno due giorni di massa grassa, EMA delle mediane giornaliere alpha 0,5 esplicitamente euristica. Nessun peso suggerito viene salvato automaticamente. `current_kcal:null` indica nessun bilancio precedente: non uno zero inventato. Se il bilancio era già esplicito, la variazione rispetta 100 kcal o 5% del target calorico giornaliero, arrotondata verso un passo sicuro di 50; la prima impostazione resta entro ±1000. Data attesa usa il bilancio proposto dopo i limiti e può essere null se la variazione graduale ha ancora segno opposto all'obiettivo.
+
+Indisponibilità: `{"status":"insufficient_data","reason":"Servono almeno due giornate di peso per un andamento filtrato recente."}`. Nessuna proposta né modifica del profilo in questo caso. I minimi dei target nutrizionali non vengono cambiati: il passo 8.5 proporrà separatamente i target del giorno.
+
+POST `/api/goals/energy-proposal/7/approve|reject`, corpo `{"state_token":"hash-opaco"}`, CSRF, proprietà, transazione atomica e monouso. Risposte:
+
+```json
+{"id":7,"status":"approved","balance_changed":true}
+```
+```json
+{"id":7,"status":"rejected","balance_changed":false}
+```
+
+409 `goals_state_changed` su dati/profilo/piano/misure/Salute cambiati; 409 su proposta chiusa, scaduta (7 giorni) o cooldown condiviso con ricalibrazione (7 giorni). Rifiuto registrato, nessun target modificato. Un'anteprima più recente sostituisce quella pendente. 404 per id di altro utente; 400 per dati non validi; 403 senza CSRF.
