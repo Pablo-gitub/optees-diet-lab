@@ -377,7 +377,111 @@ Dalla settimana applicata si ricava una **lista della spesa** per il supermercat
 
 Senza un prodotto corrispondente, la voce resta generica («Petto di pollo, 600 g»).
 
-## 11. Cosa resta fuori
+## 12. Abbinamenti a scorrimento (8.12)
+
+Obiettivo: imparare in fretta cosa piace mangiare, con pasti già calcolati sugli
+obiettivi e fatti di alimenti CREA o prodotti del supermercato. Sono subito
+utilizzabili dal solver: niente mapping di ricette.
+
+### 12.1 La scheda
+
+Una scheda è **un pasto** (colazione, metà mattina, pranzo, merenda, cena) per
+un tipo di giorno (riposo/allenamento):
+- 2–4 alimenti con grammi;
+- kcal e macro;
+- i grammi sono calcolati da Optees sui target del pasto di quel tipo di giorno.
+
+Nomi:
+- prodotto di marca quando l'utente ha supermercati preferiti e il prodotto
+  equivalente è approvato (es. «Pasta Molisana 100 g»);
+- altrimenti nome generico CREA.
+
+La foto del prodotto si mostra solo se la licenza è nota (OFF: CC BY-SA, con
+attribuzione); senza licenza nota, un'icona.
+
+Struttura dal profilo dei pasti già esistente:
+- pranzo e cena: carboidrato + proteina + verdura (+ condimento);
+- colazione e spuntini: gli schemi attuali.
+
+Gli abbinamenti tipici italiani e mediterranei (tabella proposta da Gemini,
+revisionata) orientano le proposte: sono un premio, non un obbligo. Esclusi:
+- alimenti nelle esclusioni del profilo;
+- alimenti segnati «non mi piace» e confermati (§12.3).
+
+### 12.2 Gesti e scelte
+
+| Gesto | Pulsante | Significato |
+|---|---|---|
+| destra | «Mi piace» | abbinamento gradito |
+| sinistra | «No» | abbinamento sgradito |
+| ♥ | «Lo adoro» | gradito molto |
+| su | «Salta» | dipende, non oggi: nessun segnale |
+
+- I pulsanti sono sempre presenti: computer, accessibilità, mancini.
+- «Annulla» sull'ultima scelta.
+- Un mazzo è di 10 schede: si possono fare anche solo 3 schede e uscire.
+
+### 12.3 Cosa si impara
+
+- **Abbinamento gradito**: diventa un elemento del solver come le ricette
+  preferite (§7):
+  - premio morbido, ♥ = premio doppio;
+  - massimo 2 presenze a settimana per abbinamento;
+  - grammi ricalcolati sui target del giorno;
+  - si conservano i rapporti tra gli alimenti, entro ±30%.
+- **Abbinamento sgradito**: penalità morbida su quella combinazione
+  (stessi alimenti principali). Non esclude i singoli alimenti.
+- **Singolo alimento**: se compare in ≥ 3 schede scartate e in nessuna gradita,
+  si chiede esplicitamente «X non ti piace?»:
+  - sì → esclusione nel profilo;
+  - no → nessun effetto e la domanda non torna per 60 giorni.
+
+  Mai esclusioni silenziose.
+- **Scelta delle schede**: prima molto diverse fra loro (copertura delle
+  famiglie di alimenti), poi varianti vicine a quelle gradite. Ogni mazzo
+  contiene almeno il 30% di proposte nuove, per non chiudersi.
+- I voti alimentano anche il bandit esistente come contesto, senza sostituire
+  i voti delle settimane provate.
+
+### 12.4 Varietà
+
+Il premio degli abbinamenti graditi si somma ai vincoli di varietà esistenti
+(ripetizioni, sovrapposizione delle alternative): più abbinamenti graditi
+diversi = più scelta, non lo stesso piatto ripetuto.
+
+## 13. Pasti attorno agli allenamenti lunghi (8.13)
+
+Il totale del giorno (8.5) conta più della distribuzione. La distribuzione
+attorno all'allenamento ha evidenza soprattutto oltre i 60 minuti ad alta
+intensità ed è costante dai 90 minuti
+([ISSN, Kerksick et al. 2017](https://pmc.ncbi.nlm.nih.gov/articles/PMC5596471/), verificato 2026-10-07).
+
+Come comportarsi:
+- **Opzione proposta solo** se una sessione pianificata dura **più di 60
+  minuti** e ha un orario di inizio.
+- **Altrimenti** distribuzione attuale, salvo richiesta esplicita
+  nell'interfaccia.
+- **Presentazione**: comfort e qualità dell'allenamento, non dimagrimento o
+  massa in più.
+
+Regole, tutte morbide nel MILP (mai motivo di infattibilità; se non rispettate,
+spiegate):
+- **Pasto prima**: il pasto che finisce 1–4 h prima dell'inizio.
+  - Carboidrati ≥ quota indicata dalla matrice 8.2 (ISSN: 1–4 g/kg nelle 1–4 h
+    prima: valore da fissare in 8.2 con il peso filtrato).
+  - Grassi e fibre sotto la media del giorno.
+- **Pasto dopo**: il primo pasto entro 2 h dalla fine.
+  - Proteine 0,25–0,40 g/kg (ISSN) più carboidrati.
+  - Dopo il cardio lungo, carboidrati prioritari.
+- **Proteine distribuite**: nei pasti principali almeno 0,25 g/kg ciascuno.
+  Vale solo quando l'opzione è attiva; in generale resta materia della 8.2.
+- **Durante** (bevanda con carboidrati, 30–60 g/h): solo indicato come
+  suggerimento oltre i 90 minuti, non pianificato.
+
+Le kcal del giorno non cambiano: si spostano fra i pasti entro gli intervalli
+dei pasti del profilo.
+
+## 14. Cosa resta fuori
 
 - Programmazione periodizzata su mesi (blocchi, scarichi).
 - Stima del massimale da video.
