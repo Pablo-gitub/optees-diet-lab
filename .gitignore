@@ -10,3 +10,4 @@ dataset/repdb/raw/
 dataset/open_food_facts/raw_italy.jsonl.gz
 dataset/open_food_facts/products.jsonl
 dataset/open_food_facts/*.tmp
+dataset/usda/

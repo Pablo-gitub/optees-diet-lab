@@ -1,4 +1,339 @@
 {
   "version": "ingredient-unit-conversions-v1",
-  "conversions": {}
+  "conversions": {
+    "olio_oliva_extravergine": {
+      "tbsp": {
+        "grams": 13.5,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 171413 «Oil, olive, salad or cooking», 1 tablespoon = 13.5 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:00.942224+00:00"
+      },
+      "tsp": {
+        "grams": 4.5,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 171413 «Oil, olive, salad or cooking», 1 tsp = 4.5 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:00.946872+00:00"
+      },
+      "cup": {
+        "grams": 216.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 171413 «Oil, olive, salad or cooking», 1 cup = 216 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:00.950968+00:00"
+      }
+    },
+    "cipolla_cruda": {
+      "piece": {
+        "grams": 110.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 170000 «Onions, raw», 1 medium (2-1/2\" dia) = 110 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:00.955010+00:00"
+      },
+      "count": {
+        "grams": 110.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 170000 «Onions, raw», 1 medium (2-1/2\" dia) = 110 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:00.958940+00:00"
+      },
+      "slice": {
+        "grams": 14.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 170000 «Onions, raw», 1 slice, medium (1/8\" thick) = 14 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:00.962711+00:00"
+      },
+      "tbsp": {
+        "grams": 10.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 170000 «Onions, raw», 1 tbsp chopped = 10 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:00.966475+00:00"
+      }
+    },
+    "olio_vegetale_neutro": {
+      "tbsp": {
+        "grams": 14.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 172336 «Oil, canola», 1 tbsp = 14 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:00.970362+00:00"
+      },
+      "cup": {
+        "grams": 218.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 172336 «Oil, canola», 1 cup = 218 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:00.974431+00:00"
+      }
+    },
+    "aglio": {
+      "clove": {
+        "grams": 3.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 169230 «Garlic, raw», 1 clove = 3 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:00.978257+00:00"
+      },
+      "count": {
+        "grams": 3.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 169230 «Garlic, raw», 1 clove = 3 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:00.982171+00:00"
+      },
+      "tsp": {
+        "grams": 2.8,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 169230 «Garlic, raw», 1 tsp = 2.8 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:00.985979+00:00"
+      }
+    },
+    "sale": {
+      "tsp": {
+        "grams": 6.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 173468 «Salt, table», 1 tsp = 6 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:00.989960+00:00"
+      },
+      "tbsp": {
+        "grams": 18.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 173468 «Salt, table», 1 tbsp = 18 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:00.994159+00:00"
+      }
+    },
+    "latte_vacca_parz_scremato": {
+      "cup": {
+        "grams": 245.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 171269 «Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)», 1 cup = 245 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:00.997949+00:00"
+      }
+    },
+    "pomodori_freschi": {
+      "piece": {
+        "grams": 123.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 170457 «Tomatoes, red, ripe, raw, year round average», 1 medium whole (2-3/5\" dia) = 123 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.001757+00:00"
+      },
+      "cup": {
+        "grams": 180.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 170457 «Tomatoes, red, ripe, raw, year round average», 1 cup, chopped or sliced = 180 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.005561+00:00"
+      },
+      "slice": {
+        "grams": 20.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 170457 «Tomatoes, red, ripe, raw, year round average», 1 slice, medium (1/4\" thick) = 20 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.009600+00:00"
+      }
+    },
+    "peperoni_crudi": {
+      "piece": {
+        "grams": 119.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 170108 «Peppers, sweet, red, raw», 1 medium (approx 2-3/4\" long, 2-1/2 dia.) = 119 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.013842+00:00"
+      }
+    },
+    "carote_crude": {
+      "piece": {
+        "grams": 61.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 170393 «Carrots, raw», 1 medium = 61 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.018305+00:00"
+      }
+    },
+    "curcuma_polvere": {
+      "tsp": {
+        "grams": 3.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 172231 «Spices, turmeric, ground», 1 tsp = 3 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.022521+00:00"
+      },
+      "tbsp": {
+        "grams": 9.4,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 172231 «Spices, turmeric, ground», 1 tbsp = 9.4 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.026950+00:00"
+      }
+    },
+    "zucchero": {
+      "tsp": {
+        "grams": 4.2,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 169655 «Sugars, granulated», 1 tsp = 4.2 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.031062+00:00"
+      }
+    },
+    "farina_grano_00": {
+      "cup": {
+        "grams": 125.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 169761 «Wheat flour, white, all-purpose, unenriched», 1 cup = 125 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.035425+00:00"
+      }
+    },
+    "pane_integrale": {
+      "slice": {
+        "grams": 32.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 172688 «Bread, whole-wheat, commercially prepared», 1 slice = 32 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.039743+00:00"
+      }
+    },
+    "patate_crude": {
+      "piece": {
+        "grams": 213.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 170026 «Potatoes, flesh and skin, raw», 1 Potato medium (2-1/4\" to 3-1/4\" dia) = 213 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.044096+00:00"
+      },
+      "cup": {
+        "grams": 150.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 170026 «Potatoes, flesh and skin, raw», 0.5 cup, diced = 75 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.048353+00:00"
+      }
+    },
+    "salsa_soia": {
+      "tbsp": {
+        "grams": 16.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 174277 «Soy sauce made from soy and wheat (shoyu)», 1 tbsp = 16 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.052709+00:00"
+      },
+      "tsp": {
+        "grams": 5.3,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 174277 «Soy sauce made from soy and wheat (shoyu)», 1 tsp = 5.3 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.056740+00:00"
+      },
+      "cup": {
+        "grams": 255.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 174277 «Soy sauce made from soy and wheat (shoyu)», 1 cup = 255 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.060696+00:00"
+      }
+    },
+    "yogurt_intero": {
+      "cup": {
+        "grams": 245.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 171284 «Yogurt, plain, whole milk», 1 cup (8 fl oz) = 245 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.064456+00:00"
+      }
+    },
+    "melanzane_crude": {
+      "cup": {
+        "grams": 82.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 169228 «Eggplant, raw», 1 cup, cubes = 82 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.068387+00:00"
+      }
+    },
+    "pane_segale": {
+      "slice": {
+        "grams": 32.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 172684 «Bread, rye», 1 slice, regular = 32 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.072235+00:00"
+      }
+    },
+    "pepe_nero": {
+      "tbsp": {
+        "grams": 6.9,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 170931 «Spices, pepper, black», 1 tbsp, ground = 6.9 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.076298+00:00"
+      }
+    },
+    "menta_fresca": {
+      "tbsp": {
+        "grams": 1.6,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 173474 «Peppermint, fresh», 2 tbsp = 3.2 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.080698+00:00"
+      }
+    },
+    "sedano_crudo": {
+      "cup": {
+        "grams": 101.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 169988 «Celery, raw», 1 cup chopped = 101 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.084716+00:00"
+      },
+      "tbsp": {
+        "grams": 7.5,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 169988 «Celery, raw», 1 tbsp = 7.5 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.088556+00:00"
+      }
+    },
+    "porri_crudi": {
+      "cup": {
+        "grams": 89.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 169246 «Leeks, (bulb and lower leaf-portion), raw», 1 cup = 89 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.092454+00:00"
+      }
+    },
+    "miele": {
+      "tbsp": {
+        "grams": 21.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 169640 «Honey», 1 tbsp = 21 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.096449+00:00"
+      },
+      "cup": {
+        "grams": 339.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 169640 «Honey», 1 cup = 339 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.100354+00:00"
+      }
+    },
+    "mele_fresche": {
+      "count": {
+        "grams": 182.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 171688 «Apples, raw, with skin (Includes foods for USDA's Food Distribution Program)», 1 medium (3\" dia) = 182 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.104292+00:00"
+      },
+      "cup": {
+        "grams": 109.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 171688 «Apples, raw, with skin (Includes foods for USDA's Food Distribution Program)», 1 cup slices = 109 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.108171+00:00"
+      }
+    },
+    "burro_arachidi": {
+      "tbsp": {
+        "grams": 16.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 174266 «Peanut butter, smooth style, with salt (Includes foods for USDA's Food Distribution Program)», 2 tbsp = 32 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.112560+00:00"
+      },
+      "cup": {
+        "grams": 258.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 174266 «Peanut butter, smooth style, with salt (Includes foods for USDA's Food Distribution Program)», 1 cup = 258 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.116741+00:00"
+      }
+    },
+    "zucchine_crude": {
+      "piece": {
+        "grams": 196.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 169291 «Squash, summer, zucchini, includes skin, raw», 1 medium = 196 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.120780+00:00"
+      },
+      "cup": {
+        "grams": 113.0,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 169291 «Squash, summer, zucchini, includes skin, raw», 1 cup, sliced = 113 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.124746+00:00"
+      },
+      "slice": {
+        "grams": 9.9,
+        "source": "USDA FoodData Central SR Legacy 2018-04, fdc_id 169291 «Squash, summer, zucchini, includes skin, raw», 1 slice = 9.9 g",
+        "approved_by": "claude (verifica su archivio USDA SR Legacy locale)",
+        "approved_at": "2026-10-06T20:20:01.128867+00:00"
+      }
+    }
+  }
 }
