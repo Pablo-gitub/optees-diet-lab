@@ -401,6 +401,496 @@
       "state_checked": true,
       "approved_by": "claude_review_batch01",
       "note": "Batch 01 Gemini, verificato da Claude il 2026-10-06: id e stato CREA coerenti"
+    },
+    "pollo_coscia_cruda": {
+      "source": "CREA",
+      "id": "106610",
+      "label": "Pollo, sovracoscia, senza pelle, crudo",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "manzo_magro_crudo": {
+      "source": "CREA",
+      "id": "101160",
+      "label": "Bovino adulto o vitellone, fesa, crudo",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "manzo_macinato_crudo": {
+      "source": "CREA",
+      "id": "101120",
+      "label": "Bovino adulto o vitellone, tagli anteriori, crudo",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "manzo_brasato_crudo": {
+      "source": "CREA",
+      "id": "101230",
+      "label": "Bovino adulto o vitellone, copertina di sotto, copertina di spalla, sottospalla e collo, crudo",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "maiale_lombo_crudo": {
+      "source": "CREA",
+      "id": "105210",
+      "label": "Maiale, lombo, crudo",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "maiale_spalla_cruda": {
+      "source": "CREA",
+      "id": "105220",
+      "label": "Maiale, spalla, crudo",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "fagioli_cannellini_scatola": {
+      "source": "CREA",
+      "id": "004210",
+      "label": "Fagioli, Cannellini in scatola, scolati",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "ceci_scatola": {
+      "source": "CREA",
+      "id": "004010",
+      "label": "Ceci, in scatola, scolati",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "ceci_secchi": {
+      "source": "CREA",
+      "id": "004000",
+      "label": "Ceci, secchi",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "pancetta_affettata": {
+      "source": "CREA",
+      "id": "110310",
+      "label": "Pancetta tesa",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "feta": {
+      "source": "CREA",
+      "id": "162000",
+      "label": "Feta",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "noci": {
+      "source": "CREA",
+      "id": "008570",
+      "label": "Noci, secche",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "ricotta_vacca": {
+      "source": "CREA",
+      "id": "166820",
+      "label": "Ricotta di vacca",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "avena_fiocchi": {
+      "source": "CREA",
+      "id": "003030",
+      "label": "Fiocchi d'avena",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "fiocchi_di_latte": {
+      "source": "CREA",
+      "id": "170010",
+      "label": "Fiocchi di formaggio magro",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "lenticchie_cotte_scatola": {
+      "source": "CREA",
+      "id": "004510",
+      "label": "Lenticchie, in scatola, scolate",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "pane_integrale": {
+      "source": "CREA",
+      "id": "000550",
+      "label": "Pane di tipo integrale",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "pepe_nero": {
+      "source": "condiment",
+      "id": "trace",
+      "label": "Condimento in traccia",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_trace",
+      "note": "Sorgente speciale 0 kcal dichiarate, solo entro i limiti per porzione della policy"
+    },
+    "sedano_crudo": {
+      "source": "CREA",
+      "id": "005680",
+      "label": "Sedano, crudo",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "zucchero_a_velo": {
+      "source": "CREA",
+      "id": "201500",
+      "label": "Zucchero, saccarosio",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "mandorle_secche": {
+      "source": "CREA",
+      "id": "008540",
+      "label": "Mandorle dolci, secche",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "mele_fresche": {
+      "source": "CREA",
+      "id": "007110",
+      "label": "Mele, fresche, senza buccia",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "orzo_perlato": {
+      "source": "CREA",
+      "id": "000090",
+      "label": "Orzo perlato",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "miele": {
+      "source": "CREA",
+      "id": "210010",
+      "label": "Miele",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "pane_segale": {
+      "source": "CREA",
+      "id": "000510",
+      "label": "Pane di segale",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "riso_cotto": {
+      "source": "CREA",
+      "id": "000105",
+      "label": "Riso, brillato, cotto, bollito",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "formaggio_cheddar": {
+      "source": "CREA",
+      "id": "160880",
+      "label": "Cheddar",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "fagiolini_freschi": {
+      "source": "CREA",
+      "id": "004310",
+      "label": "Fagiolini, freschi",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "zucca_cruda": {
+      "source": "CREA",
+      "id": "005720",
+      "label": "Zucca gialla, fresca",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "sedano_rapa_crudo": {
+      "source": "CREA",
+      "id": "005690",
+      "label": "Sedano rapa, crudo",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "merluzzo_fresco": {
+      "source": "CREA",
+      "id": "121410",
+      "label": "Merluzzo o nasello",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "burro_arachidi": {
+      "source": "CREA",
+      "id": "009010",
+      "label": "Burro d'arachidi",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "couscous_crudo": {
+      "source": "CREA",
+      "id": "000045",
+      "label": "Couscous, crudo",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "peperoncino_scotch_bonnet": {
+      "source": "CREA",
+      "id": "006830",
+      "label": "Peperoncini piccanti, freschi",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "mais_dolce": {
+      "source": "CREA",
+      "id": "000070",
+      "label": "Mais, dolce, in scatola, sgocciolato",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "avocado_fresco": {
+      "source": "CREA",
+      "id": "007490",
+      "label": "Avocado, fresco",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "cavolfiore_crudo": {
+      "source": "CREA",
+      "id": "005160",
+      "label": "Cavolfiore, crudo",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "polenta_cruda": {
+      "source": "CREA",
+      "id": "000075",
+      "label": "Polenta, cruda",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "broccoli_crudi": {
+      "source": "CREA",
+      "id": "005110",
+      "label": "Broccolo a testa, crudo",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_batch02",
+      "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+    },
+    "sale": {
+      "source": "condiment",
+      "id": "trace",
+      "label": "Condimento in traccia",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_trace",
+      "note": "Sorgente speciale 0 kcal dichiarate, solo entro i limiti per porzione della policy"
+    },
+    "origano_secco": {
+      "source": "condiment",
+      "id": "trace",
+      "label": "Condimento in traccia",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_trace",
+      "note": "Sorgente speciale 0 kcal dichiarate, solo entro i limiti per porzione della policy"
+    },
+    "cumino_polvere": {
+      "source": "condiment",
+      "id": "trace",
+      "label": "Condimento in traccia",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_trace",
+      "note": "Sorgente speciale 0 kcal dichiarate, solo entro i limiti per porzione della policy"
+    },
+    "curcuma_polvere": {
+      "source": "condiment",
+      "id": "trace",
+      "label": "Condimento in traccia",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_trace",
+      "note": "Sorgente speciale 0 kcal dichiarate, solo entro i limiti per porzione della policy"
+    },
+    "alloro_foglie": {
+      "source": "condiment",
+      "id": "trace",
+      "label": "Condimento in traccia",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_trace",
+      "note": "Sorgente speciale 0 kcal dichiarate, solo entro i limiti per porzione della policy"
+    },
+    "paprika_polvere": {
+      "source": "condiment",
+      "id": "trace",
+      "label": "Condimento in traccia",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_trace",
+      "note": "Sorgente speciale 0 kcal dichiarate, solo entro i limiti per porzione della policy"
+    },
+    "vaniglia": {
+      "source": "condiment",
+      "id": "trace",
+      "label": "Condimento in traccia",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_trace",
+      "note": "Sorgente speciale 0 kcal dichiarate, solo entro i limiti per porzione della policy"
+    },
+    "cannella_stecca": {
+      "source": "condiment",
+      "id": "trace",
+      "label": "Condimento in traccia",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_trace",
+      "note": "Sorgente speciale 0 kcal dichiarate, solo entro i limiti per porzione della policy"
+    },
+    "brodo_vegetale": {
+      "source": "stock",
+      "id": "cube_1_50",
+      "label": "Brodo liquido da dado 1:50",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_trace",
+      "note": "Solo brodo liquido; dado tal quale escluso dalla policy"
+    },
+    "brodo_pollo": {
+      "source": "stock",
+      "id": "cube_1_50",
+      "label": "Brodo liquido da dado 1:50",
+      "state": "verificato",
+      "reviewed": true,
+      "state_checked": true,
+      "approved_by": "claude_review_trace",
+      "note": "Solo brodo liquido; dado tal quale escluso dalla policy"
     }
   },
   "recipe_overrides": {

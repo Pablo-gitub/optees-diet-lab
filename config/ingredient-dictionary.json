@@ -1199,10 +1199,7 @@
         "cooking_state": "cooked"
       },
       "synonyms_en": [
-        "white beans",
-        "canned white beans",
         "cannellini beans",
-        "butter beans",
         "canned cannellini"
       ],
       "synonyms_it": [
@@ -1975,11 +1972,14 @@
         "cooking_state": "raw"
       },
       "synonyms_en": [
-        "beef",
-        "minced beef",
-        "ground beef",
+        "beef fillet",
         "lean beef",
-        "beef steak"
+        "beef steak",
+        "beef sirloin",
+        "beef tenderloin",
+        "beef topside",
+        "beef rump",
+        "beef, thinly sliced"
       ],
       "synonyms_it": [
         "manzo",
@@ -2014,11 +2014,9 @@
         "cooking_state": "raw"
       },
       "synonyms_en": [
-        "pork",
         "pork loin",
-        "minced pork",
-        "ground pork",
-        "pork chops"
+        "pork chops",
+        "pork tenderloin"
       ],
       "synonyms_it": [
         "maiale",
@@ -2048,11 +2046,7 @@
       "category": "Carni trasformate e conservate",
       "state": "salume stagionato da cuocere / pronto",
       "synonyms_en": [
-        "bacon",
-        "smoked bacon",
-        "pancetta",
-        "guanciale",
-        "streaky bacon"
+        "pancetta"
       ],
       "synonyms_it": [
         "pancetta",
@@ -3273,7 +3267,14 @@
       "unitools_ids": [
         "cottagecheese"
       ],
-      "crea_matches": {},
+      "crea_matches": {
+        "primary": {
+          "id": "170010",
+          "name": "Fiocchi di formaggio magro",
+          "match_type": "exact",
+          "reason": "Fiocchi di formaggio magro (cottage cheese) CREA 170010"
+        }
+      },
       "off_brand_candidates": [
         {
           "barcode": "0865239599875",
@@ -4234,6 +4235,866 @@
           "match_type": "brand_candidate",
           "reason": "Uvetta SweetValley in OFF (328 kcal, 3.4g prot, 0.5g fat, 76g carbs)"
         }
+      ]
+    },
+    "pollo_coscia_cruda": {
+      "id": "pollo_coscia_cruda",
+      "display_name_it": "Pollo, sovracoscia o fuso, crudo",
+      "display_name_en": "Chicken thigh / drumstick, raw",
+      "category": "Carni fresche",
+      "state": "crudo, parte edibile senza pelle",
+      "synonyms_en": [
+        "chicken thigh",
+        "chicken thighs",
+        "boneless chicken thigh",
+        "chicken drumstick",
+        "chicken drumsticks",
+        "chicken legs"
+      ],
+      "synonyms_it": [
+        "coscia di pollo",
+        "cosce di pollo",
+        "sovracoscia di pollo",
+        "fuso di pollo"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "106610",
+          "name": "Pollo, sovracoscia, senza pelle, crudo",
+          "match_type": "exact",
+          "reason": "Pollo sovracoscia senza pelle crudo CREA 106610"
+        },
+        "cooked_alternate": {
+          "id": "106613",
+          "name": "Pollo, sovracoscia, senza pelle, cotto, al forno",
+          "match_type": "cooked_alternate",
+          "reason": "Pollo sovracoscia cotto al forno CREA 106613"
+        }
+      }
+    },
+    "pollo_macinato_crudo": {
+      "id": "pollo_macinato_crudo",
+      "display_name_it": "Pollo, macinato, crudo",
+      "display_name_en": "Minced chicken, raw",
+      "category": "Carni fresche",
+      "state": "crudo, macinato",
+      "synonyms_en": [
+        "minced chicken",
+        "ground chicken",
+        "chicken mince"
+      ],
+      "synonyms_it": [
+        "macinato di pollo",
+        "carne macinata di pollo"
+      ],
+      "flags": {
+        "proxy_only": true
+      }
+    },
+    "pollo_con_osso_crudo": {
+      "id": "pollo_con_osso_crudo",
+      "display_name_it": "Pollo intero o a pezzi con osso, crudo",
+      "display_name_en": "Chicken on the bone / jointed, raw",
+      "category": "Carni fresche",
+      "state": "crudo, tagli con osso o pelle",
+      "synonyms_en": [
+        "chicken, jointed",
+        "chicken, in pieces",
+        "whole chicken",
+        "chicken on the bone",
+        "chicken breasts on the bone",
+        "chicken",
+        "chicken for the curry"
+      ],
+      "synonyms_it": [
+        "pollo a pezzi",
+        "pollo intero",
+        "pollo con osso"
+      ],
+      "flags": {
+        "proxy_only": true
+      }
+    },
+    "manzo_macinato_crudo": {
+      "id": "manzo_macinato_crudo",
+      "display_name_it": "Manzo, macinato, crudo",
+      "display_name_en": "Minced beef, raw",
+      "category": "Carni fresche",
+      "state": "crudo, macinato",
+      "synonyms_en": [
+        "minced beef",
+        "ground beef",
+        "beef mince"
+      ],
+      "synonyms_it": [
+        "macinato di manzo",
+        "carne macinata di manzo",
+        "macinato di vitellone"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "101120",
+          "name": "Bovino adulto o vitellone, tagli anteriori, crudo",
+          "match_type": "proxy",
+          "reason": "Vitellone tagli anteriori crudo CREA 101120 come base carne macinata"
+        }
+      }
+    },
+    "manzo_brasato_crudo": {
+      "id": "manzo_brasato_crudo",
+      "display_name_it": "Manzo, tagli da brasato/stufato, crudo",
+      "display_name_en": "Beef chuck / shin / stewing, raw",
+      "category": "Carni fresche",
+      "state": "crudo, tagli per cottura lunga",
+      "synonyms_en": [
+        "beef chuck",
+        "beef shin",
+        "beef shin or shoulder",
+        "beef shoulder",
+        "stewing beef",
+        "braising beef"
+      ],
+      "synonyms_it": [
+        "spalla di manzo",
+        "muscolo di manzo",
+        "carne da brasato",
+        "spezzatino di manzo"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "101230",
+          "name": "Bovino adulto o vitellone, copertina di sotto, copertina di spalla, sottospalla e collo, crudo",
+          "match_type": "exact",
+          "reason": "Copertina di spalla e sottospalla CREA 101230 corrispondente al chuck/shoulder"
+        }
+      }
+    },
+    "maiale_spalla_cruda": {
+      "id": "maiale_spalla_cruda",
+      "display_name_it": "Maiale, spalla o coppa, cruda",
+      "display_name_en": "Pork shoulder / butt, raw",
+      "category": "Carni fresche",
+      "state": "crudo, parte edibile",
+      "synonyms_en": [
+        "pork shoulder",
+        "pork butt",
+        "pork neck"
+      ],
+      "synonyms_it": [
+        "spalla di maiale",
+        "coppa di maiale"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "105220",
+          "name": "Maiale, spalla, crudo",
+          "match_type": "exact",
+          "reason": "Maiale spalla crudo CREA 105220"
+        }
+      }
+    },
+    "maiale_macinato_crudo": {
+      "id": "maiale_macinato_crudo",
+      "display_name_it": "Maiale, macinato, crudo",
+      "display_name_en": "Minced pork, raw",
+      "category": "Carni fresche",
+      "state": "crudo, macinato",
+      "synonyms_en": [
+        "minced pork",
+        "ground pork",
+        "pork mince"
+      ],
+      "synonyms_it": [
+        "macinato di maiale",
+        "carne macinata di maiale"
+      ],
+      "flags": {
+        "proxy_only": true
+      }
+    },
+    "butter_beans": {
+      "id": "butter_beans",
+      "display_name_it": "Fagioli di Lima (butter beans)",
+      "display_name_en": "Butter beans / Lima beans",
+      "category": "Legumi",
+      "state": "in scatola, scolati",
+      "synonyms_en": [
+        "butter beans",
+        "lima beans",
+        "canned butter beans"
+      ],
+      "synonyms_it": [
+        "fagioli di lima",
+        "fagioli bianchi di spagna"
+      ],
+      "flags": {
+        "proxy_only": true
+      }
+    },
+    "bacon_affettato": {
+      "id": "bacon_affettato",
+      "display_name_it": "Bacon affumicato",
+      "display_name_en": "Bacon / Smoked bacon",
+      "category": "Carni trasformate e conservate",
+      "state": "affumicato, affettato",
+      "synonyms_en": [
+        "bacon",
+        "smoked bacon",
+        "back bacon",
+        "streaky bacon",
+        "smoked pork belly"
+      ],
+      "synonyms_it": [
+        "bacon",
+        "bacon affumicato"
+      ],
+      "flags": {
+        "proxy_only": true
+      }
+    },
+    "senape_dijon": {
+      "id": "senape_dijon",
+      "display_name_it": "Senape di Digione",
+      "display_name_en": "Dijon mustard",
+      "category": "Condimenti e salse",
+      "state": "salsa pronta",
+      "synonyms_en": [
+        "dijon mustard",
+        "french mustard"
+      ],
+      "synonyms_it": [
+        "senape di digione",
+        "senape francese"
+      ]
+    },
+    "aneto_fresco": {
+      "id": "aneto_fresco",
+      "display_name_it": "Aneto, fresco",
+      "display_name_en": "Dill, fresh",
+      "category": "Erbe e spezie",
+      "state": "fresco, parte edibile",
+      "synonyms_en": [
+        "dill",
+        "fresh dill"
+      ],
+      "synonyms_it": [
+        "aneto",
+        "aneto fresco"
+      ]
+    },
+    "panna_fresca": {
+      "id": "panna_fresca",
+      "display_name_it": "Panna fresca",
+      "display_name_en": "Cream / Single cream",
+      "category": "Latte e derivati",
+      "state": "fresca",
+      "synonyms_en": [
+        "cream",
+        "fresh cream",
+        "single cream"
+      ],
+      "synonyms_it": [
+        "panna",
+        "panna fresca"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "140300",
+          "name": "Panna da montare, 35% di lipidi",
+          "match_type": "proxy",
+          "reason": "Panna da montare 35% CREA 140300 come proxy panna da cucina fresca"
+        }
+      }
+    },
+    "cipollotto_fresco": {
+      "id": "cipollotto_fresco",
+      "display_name_it": "Cipollotto, fresco",
+      "display_name_en": "Spring onion / Scallion",
+      "category": "Verdure e ortaggi",
+      "state": "crudo, parte edibile",
+      "synonyms_en": [
+        "spring onions",
+        "spring onion",
+        "scallion",
+        "scallions",
+        "green onion",
+        "green onions"
+      ],
+      "synonyms_it": [
+        "cipollotto",
+        "cipollotti",
+        "cipolline fresche"
+      ]
+    },
+    "amido_mais": {
+      "id": "amido_mais",
+      "display_name_it": "Mais, amido (maizena)",
+      "display_name_en": "Cornflour / Cornstarch",
+      "category": "Cereali e derivati",
+      "state": "secco, polvere",
+      "synonyms_en": [
+        "cornflour",
+        "corn starch",
+        "cornstarch"
+      ],
+      "synonyms_it": [
+        "amido di mais",
+        "maizena"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "000300",
+          "name": "Mais, amido",
+          "match_type": "exact",
+          "reason": "Mais amido CREA 000300"
+        }
+      }
+    },
+    "salsa_pesce": {
+      "id": "salsa_pesce",
+      "display_name_it": "Salsa di pesce",
+      "display_name_en": "Fish sauce",
+      "category": "Condimenti e salse",
+      "state": "salsa liquida",
+      "synonyms_en": [
+        "fish sauce",
+        "nam pla"
+      ],
+      "synonyms_it": [
+        "salsa di pesce"
+      ]
+    },
+    "scalogno": {
+      "id": "scalogno",
+      "display_name_it": "Scalogno, crudo",
+      "display_name_en": "Shallot, raw",
+      "category": "Verdure e ortaggi",
+      "state": "crudo, parte edibile",
+      "synonyms_en": [
+        "shallots",
+        "shallot",
+        "french shallots"
+      ],
+      "synonyms_it": [
+        "scalogno",
+        "scalogni"
+      ]
+    },
+    "timo_fresco": {
+      "id": "timo_fresco",
+      "display_name_it": "Timo, fresco",
+      "display_name_en": "Thyme, fresh",
+      "category": "Erbe e spezie",
+      "state": "fresco, foglie",
+      "synonyms_en": [
+        "thyme",
+        "fresh thyme",
+        "fresh thyme leaves"
+      ],
+      "synonyms_it": [
+        "timo",
+        "timo fresco"
+      ]
+    },
+    "timo_secco": {
+      "id": "timo_secco",
+      "display_name_it": "Timo, essiccato",
+      "display_name_en": "Thyme, dried",
+      "category": "Erbe e spezie",
+      "state": "essiccato",
+      "synonyms_en": [
+        "dried thyme",
+        "dry thyme"
+      ],
+      "synonyms_it": [
+        "timo secco",
+        "timo essiccato"
+      ]
+    },
+    "zucchero_a_velo": {
+      "id": "zucchero_a_velo",
+      "display_name_it": "Zucchero a velo",
+      "display_name_en": "Icing sugar / Confectioners sugar",
+      "category": "Zuccheri e dolci",
+      "state": "polvere",
+      "synonyms_en": [
+        "icing sugar",
+        "confectioners sugar",
+        "powdered sugar"
+      ],
+      "synonyms_it": [
+        "zucchero a velo"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "201500",
+          "name": "Zucchero, saccarosio",
+          "match_type": "proxy",
+          "reason": "Saccarosio puro CREA 201500 chimicamente identico"
+        }
+      }
+    },
+    "orzo_perlato": {
+      "id": "orzo_perlato",
+      "display_name_it": "Orzo perlato",
+      "display_name_en": "Pearl barley",
+      "category": "Cereali e derivati",
+      "state": "secco, crudo",
+      "synonyms_en": [
+        "pearl barley",
+        "barley"
+      ],
+      "synonyms_it": [
+        "orzo perlato",
+        "orzo"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "000090",
+          "name": "Orzo perlato",
+          "match_type": "exact",
+          "reason": "Orzo perlato CREA 000090"
+        },
+        "cooked_alternate": {
+          "id": "000095",
+          "name": "Orzo perlato, cotto, bollito",
+          "match_type": "cooked_alternate",
+          "reason": "Orzo perlato cotto bollito CREA 000095"
+        }
+      }
+    },
+    "formaggio_quark": {
+      "id": "formaggio_quark",
+      "display_name_it": "Formaggio Quark",
+      "display_name_en": "Quark cheese",
+      "category": "Latte e derivati",
+      "state": "formaggio fresco magro",
+      "synonyms_en": [
+        "quark",
+        "quark cheese"
+      ],
+      "synonyms_it": [
+        "quark",
+        "formaggio quark"
+      ]
+    },
+    "aceto_vino": {
+      "id": "aceto_vino",
+      "display_name_it": "Aceto di vino",
+      "display_name_en": "Wine vinegar",
+      "category": "Condimenti e salse",
+      "state": "liquido",
+      "synonyms_en": [
+        "vinegar",
+        "white wine vinegar",
+        "wine vinegar"
+      ],
+      "synonyms_it": [
+        "aceto",
+        "aceto di vino",
+        "aceto di vino bianco"
+      ]
+    },
+    "formaggio_cheddar": {
+      "id": "formaggio_cheddar",
+      "display_name_it": "Cheddar",
+      "display_name_en": "Cheddar cheese",
+      "category": "Latte e derivati",
+      "state": "formaggio stagionato",
+      "synonyms_en": [
+        "cheddar",
+        "cheddar cheese"
+      ],
+      "synonyms_it": [
+        "cheddar",
+        "formaggio cheddar"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "160880",
+          "name": "Cheddar",
+          "match_type": "exact",
+          "reason": "Cheddar formaggio CREA 160880"
+        }
+      }
+    },
+    "lievito_chimico_polvere": {
+      "id": "lievito_chimico_polvere",
+      "display_name_it": "Lievito chimico in polvere",
+      "display_name_en": "Baking powder",
+      "category": "Ingredienti per dolci",
+      "state": "polvere secca",
+      "synonyms_en": [
+        "baking powder"
+      ],
+      "synonyms_it": [
+        "lievito per dolci",
+        "lievito chimico",
+        "lievito in polvere"
+      ]
+    },
+    "zucca_cruda": {
+      "id": "zucca_cruda",
+      "display_name_it": "Zucca gialla, fresca",
+      "display_name_en": "Pumpkin / Squash, raw",
+      "category": "Verdure e ortaggi",
+      "state": "crudo, parte edibile",
+      "synonyms_en": [
+        "pumpkin",
+        "butternut squash",
+        "squash"
+      ],
+      "synonyms_it": [
+        "zucca",
+        "zucca gialla"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "005720",
+          "name": "Zucca gialla, fresca",
+          "match_type": "exact",
+          "reason": "Zucca gialla fresca CREA 005720"
+        }
+      }
+    },
+    "brodo_manzo": {
+      "id": "brodo_manzo",
+      "display_name_it": "Brodo di manzo",
+      "display_name_en": "Beef stock / broth",
+      "category": "Brodi e fondi",
+      "state": "liquido diluito",
+      "synonyms_en": [
+        "beef stock",
+        "beef broth"
+      ],
+      "synonyms_it": [
+        "brodo di manzo",
+        "brodo di carne"
+      ],
+      "flags": {
+        "requires_dilution": true
+      }
+    },
+    "sedano_rapa_crudo": {
+      "id": "sedano_rapa_crudo",
+      "display_name_it": "Sedano rapa, crudo",
+      "display_name_en": "Celeriac, raw",
+      "category": "Verdure e ortaggi",
+      "state": "crudo, parte edibile",
+      "synonyms_en": [
+        "celeriac",
+        "celery root"
+      ],
+      "synonyms_it": [
+        "sedano rapa"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "005690",
+          "name": "Sedano rapa, crudo",
+          "match_type": "exact",
+          "reason": "Sedano rapa crudo CREA 005690"
+        }
+      }
+    },
+    "panna_doppia": {
+      "id": "panna_doppia",
+      "display_name_it": "Panna doppia (double cream)",
+      "display_name_en": "Double cream",
+      "category": "Latte e derivati",
+      "state": "fresca ad alto tenore lipidico (~48%)",
+      "synonyms_en": [
+        "double cream",
+        "heavy cream"
+      ],
+      "synonyms_it": [
+        "panna doppia"
+      ]
+    },
+    "cardamomo_polvere": {
+      "id": "cardamomo_polvere",
+      "display_name_it": "Cardamomo",
+      "display_name_en": "Cardamom / Ground cardamom",
+      "category": "Erbe e spezie",
+      "state": "polvere o baccelli",
+      "synonyms_en": [
+        "ground cardamom",
+        "cardamom",
+        "cardamom pods"
+      ],
+      "synonyms_it": [
+        "cardamomo",
+        "cardamomo in polvere"
+      ]
+    },
+    "semi_sesamo": {
+      "id": "semi_sesamo",
+      "display_name_it": "Semi di sesamo",
+      "display_name_en": "Sesame seeds",
+      "category": "Semi oleaginosi",
+      "state": "secchi",
+      "synonyms_en": [
+        "sesame seeds",
+        "white sesame seeds"
+      ],
+      "synonyms_it": [
+        "semi di sesamo",
+        "sesamo"
+      ]
+    },
+    "pasta_fillo": {
+      "id": "pasta_fillo",
+      "display_name_it": "Pasta fillo",
+      "display_name_en": "Filo pastry",
+      "category": "Cereali e derivati",
+      "state": "sfoglia cruda",
+      "synonyms_en": [
+        "filo pastry",
+        "phyllo pastry"
+      ],
+      "synonyms_it": [
+        "pasta fillo"
+      ]
+    },
+    "burro_arachidi": {
+      "id": "burro_arachidi",
+      "display_name_it": "Burro d'arachidi",
+      "display_name_en": "Peanut butter",
+      "category": "Oli e grassi",
+      "state": "crema spalmabile 100% arachidi",
+      "synonyms_en": [
+        "peanut butter"
+      ],
+      "synonyms_it": [
+        "burro d'arachidi",
+        "burro di arachidi"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "009010",
+          "name": "Burro d'arachidi",
+          "match_type": "exact",
+          "reason": "Burro d arachidi CREA 009010"
+        }
+      }
+    },
+    "bicarbonato_sodio": {
+      "id": "bicarbonato_sodio",
+      "display_name_it": "Bicarbonato di sodio",
+      "display_name_en": "Bicarbonate of soda / Baking soda",
+      "category": "Ingredienti per dolci",
+      "state": "sale minerale, polvere",
+      "synonyms_en": [
+        "bicarbonate of soda",
+        "baking soda"
+      ],
+      "synonyms_it": [
+        "bicarbonato di sodio",
+        "bicarbonato"
+      ]
+    },
+    "scorza_limone": {
+      "id": "scorza_limone",
+      "display_name_it": "Limone, scorza grattugiata",
+      "display_name_en": "Lemon zest",
+      "category": "Frutta",
+      "state": "fresco, scorza",
+      "synonyms_en": [
+        "lemon zest",
+        "lemon peel"
+      ],
+      "synonyms_it": [
+        "scorza di limone",
+        "buccia di limone"
+      ]
+    },
+    "senape": {
+      "id": "senape",
+      "display_name_it": "Senape",
+      "display_name_en": "Mustard",
+      "category": "Condimenti e salse",
+      "state": "salsa",
+      "synonyms_en": [
+        "mustard",
+        "yellow mustard",
+        "prepared mustard"
+      ],
+      "synonyms_it": [
+        "senape"
+      ]
+    },
+    "maiale_pancetta_fresca": {
+      "id": "maiale_pancetta_fresca",
+      "display_name_it": "Maiale, pancetta fresca (pork belly), cruda",
+      "display_name_en": "Pork belly, fresh raw",
+      "category": "Carni fresche",
+      "state": "crudo, parte edibile",
+      "synonyms_en": [
+        "pork belly",
+        "fresh pork belly"
+      ],
+      "synonyms_it": [
+        "pancetta fresca",
+        "pancia di maiale"
+      ]
+    },
+    "peperoncino_scotch_bonnet": {
+      "id": "peperoncino_scotch_bonnet",
+      "display_name_it": "Peperoncino Scotch Bonnet, fresco",
+      "display_name_en": "Scotch Bonnet chilli, fresh",
+      "category": "Verdure e ortaggi",
+      "state": "crudo, parte edibile",
+      "synonyms_en": [
+        "scotch bonnet",
+        "habanero"
+      ],
+      "synonyms_it": [
+        "peperoncino scotch bonnet"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "006830",
+          "name": "Peperoncini piccanti, freschi",
+          "match_type": "proxy",
+          "reason": "Peperoncino piccante fresco CREA 006830"
+        }
+      }
+    },
+    "mais_dolce": {
+      "id": "mais_dolce",
+      "display_name_it": "Mais dolce, in scatola",
+      "display_name_en": "Sweetcorn, canned",
+      "category": "Cereali e derivati",
+      "state": "in scatola, sgocciolato",
+      "synonyms_en": [
+        "sweetcorn",
+        "canned sweetcorn",
+        "corn kernels"
+      ],
+      "synonyms_it": [
+        "mais dolce",
+        "mais in scatola"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "000070",
+          "name": "Mais, dolce, in scatola, sgocciolato",
+          "match_type": "exact",
+          "reason": "Mais dolce in scatola sgocciolato CREA 000070"
+        }
+      }
+    },
+    "avocado_fresco": {
+      "id": "avocado_fresco",
+      "display_name_it": "Avocado, fresco",
+      "display_name_en": "Avocado, fresh",
+      "category": "Frutta",
+      "state": "crudo, parte edibile",
+      "synonyms_en": [
+        "avocado",
+        "fresh avocado"
+      ],
+      "synonyms_it": [
+        "avocado",
+        "avocado fresco"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "007490",
+          "name": "Avocado, fresco",
+          "match_type": "exact",
+          "reason": "Avocado fresco CREA 007490"
+        }
+      }
+    },
+    "cavolfiore_crudo": {
+      "id": "cavolfiore_crudo",
+      "display_name_it": "Cavolfiore, crudo",
+      "display_name_en": "Cauliflower, raw",
+      "category": "Verdure e ortaggi",
+      "state": "crudo, parte edibile",
+      "synonyms_en": [
+        "cauliflower",
+        "fresh cauliflower"
+      ],
+      "synonyms_it": [
+        "cavolfiore",
+        "cavolfiore crudo"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "005160",
+          "name": "Cavolfiore, crudo",
+          "match_type": "exact",
+          "reason": "Cavolfiore crudo CREA 005160"
+        },
+        "cooked_alternate": {
+          "id": "005165",
+          "name": "Cavolfiore, cotto, bollito",
+          "match_type": "cooked_alternate",
+          "reason": "Cavolfiore cotto bollito CREA 005165"
+        }
+      }
+    },
+    "peperoncino_secco_fiocchi": {
+      "id": "peperoncino_secco_fiocchi",
+      "display_name_it": "Peperoncino secco in fiocchi",
+      "display_name_en": "Chilli flakes",
+      "category": "Erbe e spezie",
+      "state": "essiccato, fiocchi",
+      "synonyms_en": [
+        "chilli flakes",
+        "red pepper flakes"
+      ],
+      "synonyms_it": [
+        "peperoncino in fiocchi",
+        "peperoncino secco frantumato"
+      ]
+    },
+    "broccoli_crudi": {
+      "id": "broccoli_crudi",
+      "display_name_it": "Broccolo a testa, crudo",
+      "display_name_en": "Broccoli, raw",
+      "category": "Verdure e ortaggi",
+      "state": "crudo, parte edibile",
+      "synonyms_en": [
+        "broccoli",
+        "fresh broccoli",
+        "calabrese"
+      ],
+      "synonyms_it": [
+        "broccoli",
+        "broccolo",
+        "cimette di broccolo"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "005110",
+          "name": "Broccolo a testa, crudo",
+          "match_type": "exact",
+          "reason": "Broccolo a testa crudo CREA 005110"
+        },
+        "cooked_alternate": {
+          "id": "005105",
+          "name": "Broccolo a testa, cotto, bollito",
+          "match_type": "cooked_alternate",
+          "reason": "Broccolo a testa cotto bollito CREA 005105"
+        }
+      }
+    },
+    "tahina": {
+      "id": "tahina",
+      "display_name_it": "Tahina (pasta di sesamo)",
+      "display_name_en": "Tahini",
+      "category": "Condimenti e salse",
+      "state": "pasta di semi tostati",
+      "synonyms_en": [
+        "tahini",
+        "sesame paste"
+      ],
+      "synonyms_it": [
+        "tahina",
+        "pasta di sesamo"
       ]
     }
   }

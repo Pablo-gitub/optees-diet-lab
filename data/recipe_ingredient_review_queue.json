@@ -2,8 +2,8 @@
   {
     "canonical_id": "cipolla_cruda",
     "canonical_name": "Cipolle, crude",
-    "occurrences": 368,
-    "recipes_count": 368,
+    "occurrences": 366,
+    "recipes_count": 366,
     "primary_status": "proposed_proxy",
     "raw_names": [
       "Large onions",
@@ -15,7 +15,6 @@
       "Onions",
       "Red onion",
       "Red onions",
-      "Spring onion",
       "onion"
     ],
     "candidates": [
@@ -1287,118 +1286,15 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "pollo_petto_crudo",
-    "canonical_name": "Pollo, petto, crudo",
-    "occurrences": 107,
-    "recipes_count": 107,
-    "primary_status": "ambiguous",
-    "raw_names": [
-      "Boneless chicken thigh",
-      "Chicken",
-      "Chicken breast",
-      "Chicken breasts on the bone",
-      "Chicken drumsticks",
-      "Chicken for the curry",
-      "Chicken on the bone",
-      "Chicken thigh",
-      "Chicken thighs",
-      "Chicken, in pieces",
-      "Chicken, jointed",
-      "Cooked chicken",
-      "Minced chicken",
-      "Whole chicken",
-      "chicken breast",
-      "cooked chicken"
-    ],
-    "candidates": [
-      {
-        "source": "CREA",
-        "id": "106500",
-        "name": "Pollo, petto, crudo",
-        "match_type": "exact",
-        "confidence": "low",
-        "state": "crudo, parte edibile senza pelle",
-        "reason": "Pollo petto crudo CREA 106500",
-        "is_ambiguous": true,
-        "nutrients": {
-          "kcal_100g": 100.0,
-          "protein_g_100g": 23.3,
-          "fat_g_100g": 0.8,
-          "carbs_available_g_100g": 0.0
-        }
-      },
-      {
-        "source": "CREA",
-        "id": "106506",
-        "name": "Pollo, petto, cotto, in padella",
-        "match_type": "cooked_alternate",
-        "confidence": "low",
-        "state": "cotto / bollito",
-        "reason": "Possibile alternativa cotta (Pollo, petto, cotto, in padella) - stato non specificato nella ricetta",
-        "is_ambiguous": true,
-        "nutrients": {
-          "kcal_100g": 129.0,
-          "protein_g_100g": 30.2,
-          "fat_g_100g": 0.9,
-          "carbs_available_g_100g": 0.0
-        }
-      }
-    ],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:ajiaco-bogotano",
-        "recipe_title": "Ajiaco bogotano",
-        "ingredient_key": "1",
-        "original_name": "Chicken breasts on the bone",
-        "grams": 800.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:aji-de-gallina",
-        "recipe_title": "Ají de gallina",
-        "ingredient_key": "1",
-        "original_name": "Chicken breast",
-        "grams": 800.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R123",
-        "recipe_title": "Apricot chicken with couscous",
-        "ingredient_key": "4",
-        "original_name": "chicken breast",
-        "grams": 280.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:arroz-con-pollo-cubano",
-        "recipe_title": "Arroz con pollo",
-        "ingredient_key": "1",
-        "original_name": "Chicken",
-        "grams": 1500.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:avgolemono",
-        "recipe_title": "Avgolemono",
-        "ingredient_key": "1",
-        "original_name": "Chicken",
-        "grams": 1300.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 44
-  },
-  {
     "canonical_id": "zucchero",
     "canonical_name": "Zucchero, saccarosio",
-    "occurrences": 102,
-    "recipes_count": 102,
+    "occurrences": 101,
+    "recipes_count": 101,
     "primary_status": "proposed_proxy",
     "raw_names": [
       "Brown sugar",
       "Cane sugar",
       "Caster sugar",
-      "Icing sugar",
       "Palm sugar",
       "Sugar",
       "Sugar for the caramel",
@@ -1427,14 +1323,6 @@
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "unitools:alfajores",
-        "recipe_title": "Alfajores",
-        "ingredient_key": "4",
-        "original_name": "Icing sugar",
-        "grams": 150.0,
-        "quantity_status": "resolved"
-      },
-      {
         "recipe_id": "unitools:apfelstrudel",
         "recipe_title": "Apfelstrudel",
         "ingredient_key": "5",
@@ -1456,6 +1344,14 @@
         "ingredient_key": "4",
         "original_name": "Sugar",
         "grams": 500.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:pakhlava-baku",
+        "recipe_title": "Baku pakhlava",
+        "ingredient_key": "7",
+        "original_name": "Sugar",
+        "grams": 400.0,
         "quantity_status": "resolved"
       }
     ],
@@ -1703,93 +1599,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "manzo_magro_crudo",
-    "canonical_name": "Bovino adulto o vitellone, fesa, crudo",
-    "occurrences": 68,
-    "recipes_count": 68,
-    "primary_status": "proposed_exact",
-    "raw_names": [
-      "Beef",
-      "Beef chuck",
-      "Beef fillet",
-      "Beef flank",
-      "Beef on the bone",
-      "Beef or lamb",
-      "Beef rump",
-      "Beef shin",
-      "Beef shin or shoulder",
-      "Beef shoulder",
-      "Beef sirloin",
-      "Beef sirloin or topside",
-      "Beef tenderloin",
-      "Beef topside",
-      "Beef, thinly sliced",
-      "Lean beef",
-      "Minced beef"
-    ],
-    "candidates": [
-      {
-        "source": "CREA",
-        "id": "101160",
-        "name": "Bovino adulto o vitellone, fesa, crudo",
-        "match_type": "exact",
-        "confidence": "high",
-        "state": "carne bovina magra cruda",
-        "reason": "Vitellone fesa crudo CREA 101160",
-        "is_ambiguous": false,
-        "nutrients": {
-          "kcal_100g": 103.0,
-          "protein_g_100g": 21.8,
-          "fat_g_100g": 1.8,
-          "carbs_available_g_100g": 0.0
-        }
-      }
-    ],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:mantu-afghan",
-        "recipe_title": "Afghan mantu",
-        "ingredient_key": "3",
-        "original_name": "Minced beef",
-        "grams": 500.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:empanadas-argentinas",
-        "recipe_title": "Argentinian empanadas",
-        "ingredient_key": "1",
-        "original_name": "Beef",
-        "grams": 600.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:asado-negro",
-        "recipe_title": "Asado negro",
-        "ingredient_key": "1",
-        "original_name": "Beef rump",
-        "grams": 2000.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:ashak",
-        "recipe_title": "Ashak",
-        "ingredient_key": "4",
-        "original_name": "Minced beef",
-        "grams": 400.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:meat-pie-australian",
-        "recipe_title": "Australian meat pie",
-        "ingredient_key": "1",
-        "original_name": "Beef",
-        "grams": 800.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "zenzero_fresco",
     "canonical_name": "Zenzero fresco",
     "occurrences": 67,
@@ -1943,11 +1752,13 @@
       {
         "source": "stock",
         "id": "cube_1_50",
-        "label": "Brodo liquido da dado diluito 1:50",
-        "category": "brodo",
-        "state": "liquido, diluizione dichiarata 1:50",
+        "label": "Brodo liquido da dado 1:50",
+        "state": "verificato",
         "reviewed": true,
         "state_checked": true,
+        "approved_by": "claude_review_trace",
+        "note": "Solo brodo liquido; dado tal quale escluso dalla policy",
+        "category": "brodo",
         "reason": "Proxy dichiarato, diluizione 1:50: 1 g di dado generico + 49 g di acqua = 50 g di brodo pronto. Densità 1 g/ml euristica per liquido acquoso. Non certifica la composizione vegetale o di pollo né la reale preparazione della ricetta; si sostituisce con un brodo liquido specifico revisionato quando disponibile.",
         "dilution": {
           "source": "stock",
@@ -2005,6 +1816,96 @@
       }
     ],
     "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "pollo_petto_crudo",
+    "canonical_name": "Pollo, petto, crudo",
+    "occurrences": 57,
+    "recipes_count": 57,
+    "primary_status": "ambiguous",
+    "raw_names": [
+      "Chicken breast",
+      "Cooked chicken",
+      "chicken breast",
+      "cooked chicken"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "106500",
+        "name": "Pollo, petto, crudo",
+        "match_type": "exact",
+        "confidence": "low",
+        "state": "crudo, parte edibile senza pelle",
+        "reason": "Pollo petto crudo CREA 106500",
+        "is_ambiguous": true,
+        "nutrients": {
+          "kcal_100g": 100.0,
+          "protein_g_100g": 23.3,
+          "fat_g_100g": 0.8,
+          "carbs_available_g_100g": 0.0
+        }
+      },
+      {
+        "source": "CREA",
+        "id": "106506",
+        "name": "Pollo, petto, cotto, in padella",
+        "match_type": "cooked_alternate",
+        "confidence": "low",
+        "state": "cotto / bollito",
+        "reason": "Possibile alternativa cotta (Pollo, petto, cotto, in padella) - stato non specificato nella ricetta",
+        "is_ambiguous": true,
+        "nutrients": {
+          "kcal_100g": 129.0,
+          "protein_g_100g": 30.2,
+          "fat_g_100g": 0.9,
+          "carbs_available_g_100g": 0.0
+        }
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:aji-de-gallina",
+        "recipe_title": "Ají de gallina",
+        "ingredient_key": "1",
+        "original_name": "Chicken breast",
+        "grams": 800.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R123",
+        "recipe_title": "Apricot chicken with couscous",
+        "ingredient_key": "4",
+        "original_name": "chicken breast",
+        "grams": 280.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R299",
+        "recipe_title": "Baked chicken schnitzel with green beans and lemon",
+        "ingredient_key": "1",
+        "original_name": "chicken breast",
+        "grams": 300.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R121",
+        "recipe_title": "Basque-style chicken and pepper rice",
+        "ingredient_key": "4",
+        "original_name": "chicken breast",
+        "grams": 280.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:casado",
+        "recipe_title": "Casado",
+        "ingredient_key": "1",
+        "original_name": "Chicken breast",
+        "grams": 600.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 6
   },
   {
     "canonical_id": "yogurt_intero",
@@ -2113,11 +2014,13 @@
       {
         "source": "stock",
         "id": "cube_1_50",
-        "label": "Brodo liquido da dado diluito 1:50",
-        "category": "brodo",
-        "state": "liquido, diluizione dichiarata 1:50",
+        "label": "Brodo liquido da dado 1:50",
+        "state": "verificato",
         "reviewed": true,
         "state_checked": true,
+        "approved_by": "claude_review_trace",
+        "note": "Solo brodo liquido; dado tal quale escluso dalla policy",
+        "category": "brodo",
         "reason": "Proxy dichiarato, diluizione 1:50: 1 g di dado generico + 49 g di acqua = 50 g di brodo pronto. Densità 1 g/ml euristica per liquido acquoso. Non certifica la composizione vegetale o di pollo né la reale preparazione della ricetta; si sostituisce con un brodo liquido specifico revisionato quando disponibile.",
         "dilution": {
           "source": "stock",
@@ -2171,87 +2074,6 @@
         "ingredient_key": "2",
         "original_name": "chicken stock",
         "grams": 421.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "fagioli_cannellini_scatola",
-    "canonical_name": "Fagioli, Cannellini in scatola, scolati",
-    "occurrences": 51,
-    "recipes_count": 51,
-    "primary_status": "proposed_exact",
-    "raw_names": [
-      "Large white beans",
-      "White beans",
-      "butter beans",
-      "cannellini beans",
-      "white beans"
-    ],
-    "candidates": [
-      {
-        "source": "CREA",
-        "id": "004210",
-        "label": "Fagioli, Cannellini in scatola, scolati",
-        "reviewed": true,
-        "state_checked": true,
-        "state": "Fagioli, Cannellini in scatola, scolati",
-        "approved_by": "codex_catalog_review",
-        "note": "Cannellini in scatola scolati come variante dei fagioli bianchi della fonte.",
-        "evidence": {
-          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-caponata-white-beans",
-          "source_reference": {
-            "source": "USDA FoodData Central",
-            "id": "175204",
-            "description": "Beans, white, mature seeds, canned"
-          },
-          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004210",
-          "catalog_ingredients": null,
-          "basis": "per_100_g"
-        },
-        "grams_override": 400.0
-      }
-    ],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R328",
-        "recipe_title": "Aubergine caponata with white beans",
-        "ingredient_key": "8",
-        "original_name": "white beans",
-        "grams": 400.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R227",
-        "recipe_title": "Baked aubergine with feta, tomato and mint",
-        "ingredient_key": "5",
-        "original_name": "butter beans",
-        "grams": 250.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R230",
-        "recipe_title": "Beetroot, goat's cheese and walnut barley",
-        "ingredient_key": "5",
-        "original_name": "white beans",
-        "grams": 260.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R293",
-        "recipe_title": "Beetroot, white bean and dill soup with quark",
-        "ingredient_key": "5",
-        "original_name": "white beans",
-        "grams": 300.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R087",
-        "recipe_title": "Broccoli and white bean soup with cheddar",
-        "ingredient_key": "4",
-        "original_name": "white beans",
-        "grams": 250.0,
         "quantity_status": "resolved"
       }
     ],
@@ -2610,6 +2432,161 @@
     "ambiguity_count": 0
   },
   {
+    "canonical_id": "manzo_magro_crudo",
+    "canonical_name": "Bovino adulto o vitellone, fesa, crudo",
+    "occurrences": 47,
+    "recipes_count": 47,
+    "primary_status": "proposed_exact",
+    "raw_names": [
+      "Beef",
+      "Beef fillet",
+      "Beef flank",
+      "Beef on the bone",
+      "Beef or lamb",
+      "Beef rump",
+      "Beef sirloin",
+      "Beef sirloin or topside",
+      "Beef tenderloin",
+      "Beef topside",
+      "Beef, thinly sliced",
+      "Lean beef"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "101160",
+        "label": "Bovino adulto o vitellone, fesa, crudo",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:empanadas-argentinas",
+        "recipe_title": "Argentinian empanadas",
+        "ingredient_key": "1",
+        "original_name": "Beef",
+        "grams": 600.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:asado-negro",
+        "recipe_title": "Asado negro",
+        "ingredient_key": "1",
+        "original_name": "Beef rump",
+        "grams": 2000.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:meat-pie-australian",
+        "recipe_title": "Australian meat pie",
+        "ingredient_key": "1",
+        "original_name": "Beef",
+        "grams": 800.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:beef-stroganoff",
+        "recipe_title": "Beef Stroganoff",
+        "ingredient_key": "1",
+        "original_name": "Beef fillet",
+        "grams": 700.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:beshbarmak",
+        "recipe_title": "Beshbarmak",
+        "ingredient_key": "1",
+        "original_name": "Beef on the bone",
+        "grams": 1500.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "fagioli_cannellini_scatola",
+    "canonical_name": "Fagioli, Cannellini in scatola, scolati",
+    "occurrences": 46,
+    "recipes_count": 46,
+    "primary_status": "proposed_proxy",
+    "raw_names": [
+      "butter beans",
+      "cannellini beans",
+      "white beans"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "004210",
+        "label": "Fagioli, Cannellini in scatola, scolati",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Fagioli, Cannellini in scatola, scolati",
+        "approved_by": "codex_catalog_review",
+        "note": "Cannellini in scatola scolati come variante dei fagioli bianchi della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-caponata-white-beans",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "175204",
+            "description": "Beans, white, mature seeds, canned"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004210",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 400.0
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "foodose:R328",
+        "recipe_title": "Aubergine caponata with white beans",
+        "ingredient_key": "8",
+        "original_name": "white beans",
+        "grams": 400.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R227",
+        "recipe_title": "Baked aubergine with feta, tomato and mint",
+        "ingredient_key": "5",
+        "original_name": "butter beans",
+        "grams": 250.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R230",
+        "recipe_title": "Beetroot, goat's cheese and walnut barley",
+        "ingredient_key": "5",
+        "original_name": "white beans",
+        "grams": 260.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R293",
+        "recipe_title": "Beetroot, white bean and dill soup with quark",
+        "ingredient_key": "5",
+        "original_name": "white beans",
+        "grams": 300.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R087",
+        "recipe_title": "Broccoli and white bean soup with cheddar",
+        "ingredient_key": "4",
+        "original_name": "white beans",
+        "grams": 250.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
     "canonical_id": "curcuma_polvere",
     "canonical_name": "Curcuma in polvere",
     "occurrences": 44,
@@ -2930,6 +2907,66 @@
     "ambiguity_count": 0
   },
   {
+    "canonical_id": "pollo_con_osso_crudo",
+    "canonical_name": "Pollo intero o a pezzi con osso, crudo",
+    "occurrences": 41,
+    "recipes_count": 41,
+    "primary_status": "missing",
+    "raw_names": [
+      "Chicken",
+      "Chicken breasts on the bone",
+      "Chicken for the curry",
+      "Chicken on the bone",
+      "Chicken, in pieces",
+      "Chicken, jointed",
+      "Whole chicken"
+    ],
+    "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:ajiaco-bogotano",
+        "recipe_title": "Ajiaco bogotano",
+        "ingredient_key": "1",
+        "original_name": "Chicken breasts on the bone",
+        "grams": 800.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:arroz-con-pollo-cubano",
+        "recipe_title": "Arroz con pollo",
+        "ingredient_key": "1",
+        "original_name": "Chicken",
+        "grams": 1500.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:avgolemono",
+        "recipe_title": "Avgolemono",
+        "ingredient_key": "1",
+        "original_name": "Chicken",
+        "grams": 1300.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:begova-corba",
+        "recipe_title": "Begova čorba",
+        "ingredient_key": "1",
+        "original_name": "Chicken",
+        "grams": 1500.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:chakhokhbili",
+        "recipe_title": "Chakhokhbili",
+        "ingredient_key": "1",
+        "original_name": "Chicken",
+        "grams": 1500.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
     "canonical_id": "yogurt_greco",
     "canonical_name": "Yogurt greco, da latte intero",
     "occurrences": 41,
@@ -2997,77 +3034,55 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "maiale_lombo_crudo",
-    "canonical_name": "Maiale, lombo, crudo",
+    "canonical_id": "aneto_fresco",
+    "canonical_name": "Aneto, fresco",
     "occurrences": 40,
     "recipes_count": 40,
-    "primary_status": "proposed_exact",
+    "primary_status": "missing",
     "raw_names": [
-      "Minced pork",
-      "Pork",
-      "Pork belly",
-      "Pork loin",
-      "Pork neck",
-      "Pork ribs",
-      "Pork shoulder"
+      "Dill",
+      "fresh dill"
     ],
-    "candidates": [
-      {
-        "source": "CREA",
-        "id": "105210",
-        "name": "Maiale, lombo, crudo",
-        "match_type": "exact",
-        "confidence": "high",
-        "state": "carne suina cruda",
-        "reason": "Maiale lombo crudo CREA 105210",
-        "is_ambiguous": false,
-        "nutrients": {
-          "kcal_100g": 146.0,
-          "protein_g_100g": 20.7,
-          "fat_g_100g": 7.0,
-          "carbs_available_g_100g": 0.0
-        }
-      }
-    ],
+    "candidates": [],
     "sample_recipes": [
       {
-        "recipe_id": "unitools:bigos",
-        "recipe_title": "Bigos",
-        "ingredient_key": "3",
-        "original_name": "Pork shoulder",
-        "grams": 600.0,
+        "recipe_id": "unitools:avgolemono",
+        "recipe_title": "Avgolemono",
+        "ingredient_key": "8",
+        "original_name": "Dill",
+        "grams": 20.0,
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "unitools:banh-mi",
-        "recipe_title": "Bánh mì",
-        "ingredient_key": "2",
-        "original_name": "Pork shoulder",
-        "grams": 400.0,
+        "recipe_id": "unitools:dolma-azerbaijani",
+        "recipe_title": "Azerbaijani dolma",
+        "ingredient_key": "7",
+        "original_name": "Dill",
+        "grams": 30.0,
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "unitools:bun-cha",
-        "recipe_title": "Bún chả",
-        "ingredient_key": "2",
-        "original_name": "Minced pork",
-        "grams": 400.0,
+        "recipe_id": "foodose:R035",
+        "recipe_title": "Baked salmon cakes with dill yoghurt",
+        "ingredient_key": "5",
+        "original_name": "fresh dill",
+        "grams": 5.0,
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "unitools:kranjska-klobasa",
-        "recipe_title": "Carniolan sausage",
-        "ingredient_key": "1",
-        "original_name": "Pork shoulder",
-        "grams": 1600.0,
+        "recipe_id": "foodose:R230",
+        "recipe_title": "Beetroot, goat's cheese and walnut barley",
+        "ingredient_key": "9",
+        "original_name": "fresh dill",
+        "grams": 10.0,
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "unitools:cepelinai",
-        "recipe_title": "Cepelinai",
-        "ingredient_key": "3",
-        "original_name": "Minced pork",
-        "grams": 500.0,
+        "recipe_id": "foodose:R293",
+        "recipe_title": "Beetroot, white bean and dill soup with quark",
+        "ingredient_key": "8",
+        "original_name": "fresh dill",
+        "grams": 10.0,
         "quantity_status": "resolved"
       }
     ],
@@ -3429,6 +3444,62 @@
     "ambiguity_count": 0
   },
   {
+    "canonical_id": "cipollotto_fresco",
+    "canonical_name": "Cipollotto, fresco",
+    "occurrences": 37,
+    "recipes_count": 37,
+    "primary_status": "missing",
+    "raw_names": [
+      "Coriander, spring onion, Thai basil",
+      "Spring onion",
+      "Spring onions"
+    ],
+    "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:ackee-and-saltfish",
+        "recipe_title": "Ackee and saltfish",
+        "ingredient_key": "6",
+        "original_name": "Spring onion",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:ajiaco-bogotano",
+        "recipe_title": "Ajiaco bogotano",
+        "ingredient_key": "7",
+        "original_name": "Spring onion",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:empanadas-argentinas",
+        "recipe_title": "Argentinian empanadas",
+        "ingredient_key": "3",
+        "original_name": "Spring onion",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:ashak",
+        "recipe_title": "Ashak",
+        "ingredient_key": "3",
+        "original_name": "Spring onions",
+        "grams": 500.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:bolani",
+        "recipe_title": "Bolani",
+        "ingredient_key": "4",
+        "original_name": "Spring onions",
+        "grams": 200.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
     "canonical_id": "ghee",
     "canonical_name": "Ghee / Burro chiarificato",
     "occurrences": 36,
@@ -3726,18 +3797,12 @@
       {
         "source": "CREA",
         "id": "004010",
-        "name": "Ceci, in scatola, scolati",
-        "match_type": "exact",
-        "confidence": "high",
-        "state": "in scatola, scolati, pronti al consumo",
-        "reason": "Ceci in scatola scolati CREA 004010",
-        "is_ambiguous": false,
-        "nutrients": {
-          "kcal_100g": 111.0,
-          "protein_g_100g": 6.7,
-          "fat_g_100g": 2.3,
-          "carbs_available_g_100g": 13.9
-        }
+        "label": "Ceci, in scatola, scolati",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
       }
     ],
     "sample_recipes": [
@@ -4542,6 +4607,61 @@
     "ambiguity_count": 0
   },
   {
+    "canonical_id": "timo_fresco",
+    "canonical_name": "Timo, fresco",
+    "occurrences": 26,
+    "recipes_count": 26,
+    "primary_status": "missing",
+    "raw_names": [
+      "Thyme",
+      "fresh thyme leaves"
+    ],
+    "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:ackee-and-saltfish",
+        "recipe_title": "Ackee and saltfish",
+        "ingredient_key": "7",
+        "original_name": "Thyme",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "foodose:R206",
+        "recipe_title": "Baked eggs with spinach, Gruyère and thyme",
+        "ingredient_key": "5",
+        "original_name": "fresh thyme leaves",
+        "grams": 0.8,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R256",
+        "recipe_title": "Baked ricotta with roasted tomatoes and thyme on rye",
+        "ingredient_key": "3",
+        "original_name": "fresh thyme leaves",
+        "grams": 0.8,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:guinness-beef-stew",
+        "recipe_title": "Beef and stout stew",
+        "ingredient_key": "10",
+        "original_name": "Thyme",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:callaloo",
+        "recipe_title": "Callaloo",
+        "ingredient_key": "8",
+        "original_name": "Thyme",
+        "grams": null,
+        "quantity_status": "needs_review"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
     "canonical_id": "latte_cocco",
     "canonical_name": "Latte di cocco",
     "occurrences": 25,
@@ -4746,6 +4866,63 @@
         "original_name": "Cinnamon stick",
         "grams": null,
         "quantity_status": "trace"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "cardamomo_polvere",
+    "canonical_name": "Cardamomo",
+    "occurrences": 24,
+    "recipes_count": 24,
+    "primary_status": "missing",
+    "raw_names": [
+      "Cardamom",
+      "Cardamom pods",
+      "Ground cardamom",
+      "ground cardamom"
+    ],
+    "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:pakhlava-baku",
+        "recipe_title": "Baku pakhlava",
+        "ingredient_key": "8",
+        "original_name": "Ground cardamom",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:bhuna-khichuri",
+        "recipe_title": "Bhuna khichuri",
+        "ingredient_key": "10",
+        "original_name": "Cardamom pods",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:bunny-chow",
+        "recipe_title": "Bunny chow",
+        "ingredient_key": "9",
+        "original_name": "Cardamom pods",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:kuwaiti-darabeel",
+        "recipe_title": "Darabeel",
+        "ingredient_key": "8",
+        "original_name": "Ground cardamom",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:harees",
+        "recipe_title": "Harees",
+        "ingredient_key": "4",
+        "original_name": "Cardamom pods",
+        "grams": null,
+        "quantity_status": "needs_review"
       }
     ],
     "ambiguity_count": 0
@@ -5022,78 +5199,73 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "pancetta_affettata",
-    "canonical_name": "Pancetta tesa",
+    "canonical_id": "panna_fresca",
+    "canonical_name": "Panna fresca",
     "occurrences": 22,
     "recipes_count": 22,
     "primary_status": "proposed_proxy",
     "raw_names": [
-      "Bacon",
-      "Guanciale",
-      "Pancetta",
-      "Smoked bacon",
-      "Smoked bacon fat",
-      "Smoked pork belly",
-      "Smoked pork fat"
+      "Cream",
+      "Single cream"
     ],
     "candidates": [
       {
         "source": "CREA",
-        "id": "110310",
-        "name": "Pancetta tesa",
+        "id": "140300",
+        "name": "Panna da montare, 35% di lipidi",
         "match_type": "proxy",
         "confidence": "medium",
-        "state": "salume stagionato da cuocere / pronto",
-        "reason": "Pancetta tesa CREA 110310 come proxy di guanciale e bacon",
+        "state": "fresca",
+        "reason": "Panna da montare 35% CREA 140300 come proxy panna da cucina fresca",
         "is_ambiguous": false,
         "nutrients": {
           "kcal_100g": 337.0,
-          "protein_g_100g": 20.9,
-          "fat_g_100g": 28.1,
-          "carbs_available_g_100g": 0.0
+          "protein_g_100g": 2.3,
+          "fat_g_100g": 35.0,
+          "carbs_available_g_100g": 3.4
         }
       }
     ],
     "sample_recipes": [
       {
-        "recipe_id": "unitools:bigos",
-        "recipe_title": "Bigos",
+        "recipe_id": "unitools:ajiaco-bogotano",
+        "recipe_title": "Ajiaco bogotano",
+        "ingredient_key": "9",
+        "original_name": "Cream",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:birchermuesli",
+        "recipe_title": "Bircher muesli",
         "ingredient_key": "5",
-        "original_name": "Smoked bacon",
-        "grams": 300.0,
-        "quantity_status": "resolved"
+        "original_name": "Cream",
+        "grams": null,
+        "quantity_status": "needs_review"
       },
       {
-        "recipe_id": "unitools:bosanski-lonac",
-        "recipe_title": "Bosanski lonac",
-        "ingredient_key": "11",
-        "original_name": "Smoked pork fat",
-        "grams": 150.0,
-        "quantity_status": "resolved"
+        "recipe_id": "unitools:ciorba-de-burta",
+        "recipe_title": "Ciorbă de burtă",
+        "ingredient_key": "8",
+        "original_name": "Cream",
+        "grams": null,
+        "quantity_status": "needs_review"
       },
       {
-        "recipe_id": "unitools:bryndzove-halusky",
-        "recipe_title": "Bryndzové halušky",
-        "ingredient_key": "4",
-        "original_name": "Smoked bacon",
-        "grams": 200.0,
-        "quantity_status": "resolved"
+        "recipe_id": "unitools:colcannon",
+        "recipe_title": "Colcannon",
+        "ingredient_key": "6",
+        "original_name": "Cream",
+        "grams": null,
+        "quantity_status": "needs_review"
       },
       {
-        "recipe_id": "unitools:bucatini-all-amatriciana",
-        "recipe_title": "Bucatini all'amatriciana",
-        "ingredient_key": "2",
-        "original_name": "Guanciale",
-        "grams": 150.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:buseca",
-        "recipe_title": "Buseca",
-        "ingredient_key": "4",
-        "original_name": "Pancetta",
-        "grams": 150.0,
-        "quantity_status": "resolved"
+        "recipe_id": "unitools:fanesca",
+        "recipe_title": "Fanesca",
+        "ingredient_key": "14",
+        "original_name": "Cream",
+        "grams": null,
+        "quantity_status": "needs_review"
       }
     ],
     "ambiguity_count": 0
@@ -5170,55 +5342,56 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:dijon mustard",
-    "canonical_name": "Dijon mustard",
+    "canonical_id": "aceto_vino",
+    "canonical_name": "Aceto di vino",
     "occurrences": 21,
     "recipes_count": 21,
     "primary_status": "missing",
     "raw_names": [
-      "Dijon mustard"
+      "Vinegar",
+      "Wine vinegar"
     ],
     "candidates": [],
     "sample_recipes": [
       {
-        "recipe_id": "foodose:R297",
-        "recipe_title": "Baked beans with a poached egg on toast",
-        "ingredient_key": "4",
-        "original_name": "Dijon mustard",
-        "grams": 10.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R318",
-        "recipe_title": "Bread, egg and cheddar strata with spinach",
-        "ingredient_key": "6",
-        "original_name": "Dijon mustard",
-        "grams": 10.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R266",
-        "recipe_title": "Cauliflower cheese with white beans and mustard",
+        "recipe_id": "unitools:ajvar",
+        "recipe_title": "Ajvar",
         "ingredient_key": "5",
-        "original_name": "Dijon mustard",
-        "grams": 10.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:yassa-poulet",
-        "recipe_title": "Chicken yassa",
-        "ingredient_key": "4",
-        "original_name": "Dijon mustard",
+        "original_name": "Wine vinegar",
         "grams": null,
         "quantity_status": "needs_review"
       },
       {
-        "recipe_id": "foodose:R203",
-        "recipe_title": "Chickpea and egg picnic rolls",
-        "ingredient_key": "5",
-        "original_name": "Dijon mustard",
-        "grams": 5.0,
-        "quantity_status": "resolved"
+        "recipe_id": "unitools:bobotie",
+        "recipe_title": "Bobotie",
+        "ingredient_key": "10",
+        "original_name": "Vinegar",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:burek-bosanski",
+        "recipe_title": "Bosnian burek",
+        "ingredient_key": "6",
+        "original_name": "Vinegar",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:buseca",
+        "recipe_title": "Buseca",
+        "ingredient_key": "10",
+        "original_name": "Vinegar",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:butter-tarts",
+        "recipe_title": "Butter tarts",
+        "ingredient_key": "9",
+        "original_name": "Vinegar",
+        "grams": null,
+        "quantity_status": "needs_review"
       }
     ],
     "ambiguity_count": 0
@@ -5241,18 +5414,12 @@
       {
         "source": "CREA",
         "id": "162000",
-        "name": "Feta",
-        "match_type": "exact",
-        "confidence": "high",
-        "state": "formaggio in salamoia sbriciolato",
-        "reason": "Feta greca CREA 162000",
-        "is_ambiguous": false,
-        "nutrients": {
-          "kcal_100g": 250.0,
-          "protein_g_100g": 15.6,
-          "fat_g_100g": 20.2,
-          "carbs_available_g_100g": 1.5
-        }
+        "label": "Feta",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
       }
     ],
     "sample_recipes": [
@@ -5397,7 +5564,7 @@
     "canonical_name": "Noci, secche",
     "occurrences": 21,
     "recipes_count": 21,
-    "primary_status": "proposed_exact",
+    "primary_status": "approved",
     "raw_names": [
       "Walnut halves",
       "Walnuts",
@@ -5407,18 +5574,12 @@
       {
         "source": "CREA",
         "id": "008570",
-        "name": "Noci, secche",
-        "match_type": "exact",
-        "confidence": "high",
-        "state": "secco sgusciato",
-        "reason": "Noci secche CREA 008570",
-        "is_ambiguous": false,
-        "nutrients": {
-          "kcal_100g": 702.0,
-          "protein_g_100g": 14.3,
-          "fat_g_100g": 68.1,
-          "carbs_available_g_100g": 5.1
-        }
+        "label": "Noci, secche",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
       }
     ],
     "sample_recipes": [
@@ -5470,7 +5631,7 @@
     "canonical_name": "Ricotta di vacca",
     "occurrences": 21,
     "recipes_count": 21,
-    "primary_status": "proposed_exact",
+    "primary_status": "approved",
     "raw_names": [
       "Ricotta",
       "ricotta"
@@ -5479,18 +5640,12 @@
       {
         "source": "CREA",
         "id": "166820",
-        "name": "Ricotta di vacca",
-        "match_type": "exact",
-        "confidence": "high",
-        "state": "latticino fresco pronto al consumo",
-        "reason": "Ricotta di vacca CREA 166820",
-        "is_ambiguous": false,
-        "nutrients": {
-          "kcal_100g": 146.0,
-          "protein_g_100g": 8.8,
-          "fat_g_100g": 10.9,
-          "carbs_available_g_100g": 3.5
-        }
+        "label": "Ricotta di vacca",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
       }
     ],
     "sample_recipes": [
@@ -5605,54 +5760,54 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:dill",
-    "canonical_name": "Dill",
-    "occurrences": 20,
-    "recipes_count": 20,
+    "canonical_id": "senape_dijon",
+    "canonical_name": "Senape di Digione",
+    "occurrences": 21,
+    "recipes_count": 21,
     "primary_status": "missing",
     "raw_names": [
-      "Dill"
+      "Dijon mustard"
     ],
     "candidates": [],
     "sample_recipes": [
       {
-        "recipe_id": "unitools:avgolemono",
-        "recipe_title": "Avgolemono",
-        "ingredient_key": "8",
-        "original_name": "Dill",
-        "grams": 20.0,
+        "recipe_id": "foodose:R297",
+        "recipe_title": "Baked beans with a poached egg on toast",
+        "ingredient_key": "4",
+        "original_name": "Dijon mustard",
+        "grams": 10.0,
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "unitools:dolma-azerbaijani",
-        "recipe_title": "Azerbaijani dolma",
-        "ingredient_key": "7",
-        "original_name": "Dill",
-        "grams": 30.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:byrek-me-spinaq",
-        "recipe_title": "Byrek me spinaq",
+        "recipe_id": "foodose:R318",
+        "recipe_title": "Bread, egg and cheddar strata with spinach",
         "ingredient_key": "6",
-        "original_name": "Dill",
-        "grams": 30.0,
+        "original_name": "Dijon mustard",
+        "grams": 10.0,
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "unitools:chakka",
-        "recipe_title": "Chakka",
-        "ingredient_key": "3",
-        "original_name": "Dill",
-        "grams": 40.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:draniki",
-        "recipe_title": "Draniki",
+        "recipe_id": "foodose:R266",
+        "recipe_title": "Cauliflower cheese with white beans and mustard",
         "ingredient_key": "5",
-        "original_name": "Dill",
-        "grams": 20.0,
+        "original_name": "Dijon mustard",
+        "grams": 10.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:yassa-poulet",
+        "recipe_title": "Chicken yassa",
+        "ingredient_key": "4",
+        "original_name": "Dijon mustard",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "foodose:R203",
+        "recipe_title": "Chickpea and egg picnic rolls",
+        "ingredient_key": "5",
+        "original_name": "Dijon mustard",
+        "grams": 5.0,
         "quantity_status": "resolved"
       }
     ],
@@ -5663,7 +5818,7 @@
     "canonical_name": "Fiocchi d avena",
     "occurrences": 20,
     "recipes_count": 20,
-    "primary_status": "proposed_exact",
+    "primary_status": "approved",
     "raw_names": [
       "Rolled oats",
       "rolled oats"
@@ -5672,18 +5827,12 @@
       {
         "source": "CREA",
         "id": "003030",
-        "name": "Fiocchi d'avena",
-        "match_type": "exact",
-        "confidence": "high",
-        "state": "fiocchi secchi pronti al consumo/cottura",
-        "reason": "Fiocchi di avena CREA 003030",
-        "is_ambiguous": false,
-        "nutrients": {
-          "kcal_100g": 367.0,
-          "protein_g_100g": 8.0,
-          "fat_g_100g": 7.5,
-          "carbs_available_g_100g": 66.8
-        }
+        "label": "Fiocchi d'avena",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
       }
     ],
     "sample_recipes": [
@@ -5735,40 +5884,42 @@
     "canonical_name": "Fiocchi di latte",
     "occurrences": 20,
     "recipes_count": 20,
-    "primary_status": "proposed_proxy",
+    "primary_status": "approved",
     "raw_names": [
       "cottage cheese"
     ],
     "candidates": [
       {
-        "source": "Open Food Facts",
-        "id": "0865239599875",
-        "name": "Fiocchi di latte · Vita well",
-        "brands": "Vita well",
-        "match_type": "brand_candidate",
-        "confidence": "high",
-        "reason": "Fiocchi di latte Vita well in OFF (67 kcal, 12g prot per 100g)",
-        "nutrients": {
-          "kcal_100g": 67.0,
-          "protein_g_100g": 12.0,
-          "fat_g_100g": 0.2,
-          "carbs_available_g_100g": 4.3
-        }
+        "source": "CREA",
+        "id": "170010",
+        "label": "Fiocchi di formaggio magro",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
       },
       {
         "source": "Open Food Facts",
-        "id": "17311632",
-        "name": "Fiocchi di latte · Milbona",
-        "brands": "Milbona",
-        "match_type": "brand_candidate",
-        "confidence": "high",
-        "reason": "Fiocchi di latte Milbona in OFF (98 kcal, 11.5g prot per 100g)",
-        "nutrients": {
-          "kcal_100g": 98.0,
-          "protein_g_100g": 11.5,
-          "fat_g_100g": 4.5,
-          "carbs_available_g_100g": 2.8
-        }
+        "id": "0865239599875",
+        "label": "Fiocchi di latte · Vita well",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Fiocchi di latte",
+        "approved_by": "codex_catalog_review",
+        "note": "Fiocchi di latte Vita well scremati come variante dei fiocchi cremosi della fonte.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/aubergine-cottage-cheese-parmigiana",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "172179",
+            "description": "Cheese, cottage, creamed, large or small curd"
+          },
+          "catalog_url": "https://world.openfoodfacts.org/product/0865239599875",
+          "catalog_ingredients": "_Latte_ scremato, sale, caglio microbico, fermenti lattici.",
+          "basis": "per_100_g"
+        },
+        "grams_override": 200.0
       }
     ],
     "sample_recipes": [
@@ -5909,163 +6060,261 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:fresh dill",
-    "canonical_name": "fresh dill",
-    "occurrences": 20,
-    "recipes_count": 20,
-    "primary_status": "missing",
-    "raw_names": [
-      "fresh dill"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R035",
-        "recipe_title": "Baked salmon cakes with dill yoghurt",
-        "ingredient_key": "5",
-        "original_name": "fresh dill",
-        "grams": 5.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R230",
-        "recipe_title": "Beetroot, goat's cheese and walnut barley",
-        "ingredient_key": "9",
-        "original_name": "fresh dill",
-        "grams": 10.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R293",
-        "recipe_title": "Beetroot, white bean and dill soup with quark",
-        "ingredient_key": "8",
-        "original_name": "fresh dill",
-        "grams": 10.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R291",
-        "recipe_title": "Chicken, orzo and lemon soup",
-        "ingredient_key": "6",
-        "original_name": "fresh dill",
-        "grams": 10.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R148",
-        "recipe_title": "Cod and trout fish pie",
-        "ingredient_key": "8",
-        "original_name": "fresh dill",
-        "grams": 5.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:cream",
-    "canonical_name": "Cream",
-    "occurrences": 19,
-    "recipes_count": 19,
-    "primary_status": "missing",
-    "raw_names": [
-      "Cream"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:ajiaco-bogotano",
-        "recipe_title": "Ajiaco bogotano",
-        "ingredient_key": "9",
-        "original_name": "Cream",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:birchermuesli",
-        "recipe_title": "Bircher muesli",
-        "ingredient_key": "5",
-        "original_name": "Cream",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:ciorba-de-burta",
-        "recipe_title": "Ciorbă de burtă",
-        "ingredient_key": "8",
-        "original_name": "Cream",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:colcannon",
-        "recipe_title": "Colcannon",
-        "ingredient_key": "6",
-        "original_name": "Cream",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:fanesca",
-        "recipe_title": "Fanesca",
-        "ingredient_key": "14",
-        "original_name": "Cream",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:spring onions",
-    "canonical_name": "Spring onions",
+    "canonical_id": "amido_mais",
+    "canonical_name": "Mais, amido (maizena)",
     "occurrences": 18,
     "recipes_count": 18,
-    "primary_status": "missing",
+    "primary_status": "proposed_exact",
     "raw_names": [
-      "Spring onions"
+      "Cornflour",
+      "Cornstarch"
     ],
-    "candidates": [],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "000300",
+        "name": "Mais, amido",
+        "match_type": "exact",
+        "confidence": "high",
+        "state": "secco, polvere",
+        "reason": "Mais amido CREA 000300",
+        "is_ambiguous": false,
+        "nutrients": {
+          "kcal_100g": 328.0,
+          "protein_g_100g": 0.3,
+          "carbs_available_g_100g": 87.0
+        }
+      }
+    ],
     "sample_recipes": [
       {
-        "recipe_id": "unitools:ashak",
-        "recipe_title": "Ashak",
+        "recipe_id": "unitools:alfajores",
+        "recipe_title": "Alfajores",
+        "ingredient_key": "1",
+        "original_name": "Cornflour",
+        "grams": 300.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:fondue-moitie-moitie",
+        "recipe_title": "Cheese fondue",
+        "ingredient_key": "4",
+        "original_name": "Cornflour",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:varenyky-z-vyshnyamy",
+        "recipe_title": "Cherry varenyky",
+        "ingredient_key": "7",
+        "original_name": "Cornflour",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:chilli-crab",
+        "recipe_title": "Chilli crab",
+        "ingredient_key": "11",
+        "original_name": "Cornflour",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:fish-and-chips",
+        "recipe_title": "Fish and chips",
+        "ingredient_key": "4",
+        "original_name": "Cornflour",
+        "grams": 50.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "manzo_macinato_crudo",
+    "canonical_name": "Manzo, macinato, crudo",
+    "occurrences": 18,
+    "recipes_count": 18,
+    "primary_status": "approved",
+    "raw_names": [
+      "Minced beef"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "101120",
+        "label": "Bovino adulto o vitellone, tagli anteriori, crudo",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:mantu-afghan",
+        "recipe_title": "Afghan mantu",
         "ingredient_key": "3",
-        "original_name": "Spring onions",
+        "original_name": "Minced beef",
         "grams": 500.0,
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "unitools:bolani",
-        "recipe_title": "Bolani",
+        "recipe_id": "unitools:ashak",
+        "recipe_title": "Ashak",
         "ingredient_key": "4",
-        "original_name": "Spring onions",
-        "grams": 200.0,
+        "original_name": "Minced beef",
+        "grams": 400.0,
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "unitools:byrek-me-spinaq",
-        "recipe_title": "Byrek me spinaq",
+        "recipe_id": "unitools:bandeja-paisa",
+        "recipe_title": "Bandeja paisa",
+        "ingredient_key": "3",
+        "original_name": "Minced beef",
+        "grams": 400.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:bobotie",
+        "recipe_title": "Bobotie",
+        "ingredient_key": "1",
+        "original_name": "Minced beef",
+        "grams": 900.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:burek-bosanski",
+        "recipe_title": "Bosnian burek",
+        "ingredient_key": "3",
+        "original_name": "Minced beef",
+        "grams": 600.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "salsa_pesce",
+    "canonical_name": "Salsa di pesce",
+    "occurrences": 18,
+    "recipes_count": 18,
+    "primary_status": "missing",
+    "raw_names": [
+      "Fish sauce",
+      "Padaek or fish sauce",
+      "Prahok or fish sauce"
+    ],
+    "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:banh-mi",
+        "recipe_title": "Bánh mì",
+        "ingredient_key": "9",
+        "original_name": "Fish sauce",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:bun-cha",
+        "recipe_title": "Bún chả",
         "ingredient_key": "4",
-        "original_name": "Spring onions",
+        "original_name": "Fish sauce",
         "grams": null,
         "quantity_status": "needs_review"
       },
       {
-        "recipe_id": "unitools:qingzheng-yu",
-        "recipe_title": "Cantonese steamed fish",
-        "ingredient_key": "3",
-        "original_name": "Spring onions",
+        "recipe_id": "unitools:fish-amok",
+        "recipe_title": "Fish amok",
+        "ingredient_key": "11",
+        "original_name": "Fish sauce",
         "grams": null,
         "quantity_status": "needs_review"
       },
       {
-        "recipe_id": "unitools:colcannon",
-        "recipe_title": "Colcannon",
-        "ingredient_key": "3",
-        "original_name": "Spring onions",
+        "recipe_id": "unitools:khao-soi",
+        "recipe_title": "Khao soi",
+        "ingredient_key": "7",
+        "original_name": "Fish sauce",
         "grams": null,
         "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:lahpet-thoke",
+        "recipe_title": "Lahpet thoke",
+        "ingredient_key": "10",
+        "original_name": "Fish sauce",
+        "grams": null,
+        "quantity_status": "needs_review"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "zucca_cruda",
+    "canonical_name": "Zucca gialla, fresca",
+    "occurrences": 18,
+    "recipes_count": 18,
+    "primary_status": "approved",
+    "raw_names": [
+      "Pumpkin",
+      "Squash",
+      "butternut squash",
+      "pumpkin"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "005720",
+        "label": "Zucca gialla, fresca",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:couscous-algerien",
+        "recipe_title": "Algerian couscous",
+        "ingredient_key": "7",
+        "original_name": "Pumpkin",
+        "grams": 400.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R287",
+        "recipe_title": "Butternut squash, sage and ricotta pasta",
+        "ingredient_key": "1",
+        "original_name": "butternut squash",
+        "grams": 400.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R077",
+        "recipe_title": "Butternut, white bean and sage soup",
+        "ingredient_key": "1",
+        "original_name": "butternut squash",
+        "grams": 400.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:callaloo",
+        "recipe_title": "Callaloo",
+        "ingredient_key": "6",
+        "original_name": "Pumpkin",
+        "grams": 300.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R133",
+        "recipe_title": "Chicken and chestnut stuffed squash",
+        "ingredient_key": "1",
+        "original_name": "butternut squash",
+        "grams": 500.0,
+        "quantity_status": "resolved"
       }
     ],
     "ambiguity_count": 0
@@ -6152,60 +6401,6 @@
         "ingredient_key": "4",
         "original_name": "capers",
         "grams": 15.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:cornflour",
-    "canonical_name": "Cornflour",
-    "occurrences": 17,
-    "recipes_count": 17,
-    "primary_status": "missing",
-    "raw_names": [
-      "Cornflour"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:alfajores",
-        "recipe_title": "Alfajores",
-        "ingredient_key": "1",
-        "original_name": "Cornflour",
-        "grams": 300.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:fondue-moitie-moitie",
-        "recipe_title": "Cheese fondue",
-        "ingredient_key": "4",
-        "original_name": "Cornflour",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:varenyky-z-vyshnyamy",
-        "recipe_title": "Cherry varenyky",
-        "ingredient_key": "7",
-        "original_name": "Cornflour",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:chilli-crab",
-        "recipe_title": "Chilli crab",
-        "ingredient_key": "11",
-        "original_name": "Cornflour",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:fish-and-chips",
-        "recipe_title": "Fish and chips",
-        "ingredient_key": "4",
-        "original_name": "Cornflour",
-        "grams": 50.0,
         "quantity_status": "resolved"
       }
     ],
@@ -6309,7 +6504,7 @@
     "canonical_name": "Pane di tipo integrale",
     "occurrences": 17,
     "recipes_count": 17,
-    "primary_status": "proposed_exact",
+    "primary_status": "approved",
     "raw_names": [
       "wholemeal bread"
     ],
@@ -6317,18 +6512,12 @@
       {
         "source": "CREA",
         "id": "000550",
-        "name": "Pane di tipo integrale",
-        "match_type": "exact",
-        "confidence": "high",
-        "state": "pane integrale pronto al consumo",
-        "reason": "Pane integrale CREA 000550",
-        "is_ambiguous": false,
-        "nutrients": {
-          "kcal_100g": 224.0,
-          "protein_g_100g": 8.5,
-          "fat_g_100g": 1.3,
-          "carbs_available_g_100g": 44.1
-        }
+        "label": "Pane di tipo integrale",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
       }
     ],
     "sample_recipes": [
@@ -6371,6 +6560,61 @@
         "original_name": "wholemeal bread",
         "grams": 140.0,
         "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "scalogno",
+    "canonical_name": "Scalogno, crudo",
+    "occurrences": 17,
+    "recipes_count": 17,
+    "primary_status": "missing",
+    "raw_names": [
+      "Shallot",
+      "Shallots"
+    ],
+    "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:bun-cha",
+        "recipe_title": "Bún chả",
+        "ingredient_key": "8",
+        "original_name": "Shallots",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:fish-amok",
+        "recipe_title": "Fish amok",
+        "ingredient_key": "8",
+        "original_name": "Shallots",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:gromperekichelcher",
+        "recipe_title": "Gromperekichelcher",
+        "ingredient_key": "6",
+        "original_name": "Shallots",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:laksa-singapore",
+        "recipe_title": "Katong laksa",
+        "ingredient_key": "6",
+        "original_name": "Shallots",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:khao-soi",
+        "recipe_title": "Khao soi",
+        "ingredient_key": "9",
+        "original_name": "Shallots",
+        "grams": null,
+        "quantity_status": "needs_review"
       }
     ],
     "ambiguity_count": 0
@@ -6511,60 +6755,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:fish sauce",
-    "canonical_name": "Fish sauce",
-    "occurrences": 16,
-    "recipes_count": 16,
-    "primary_status": "missing",
-    "raw_names": [
-      "Fish sauce"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:banh-mi",
-        "recipe_title": "Bánh mì",
-        "ingredient_key": "9",
-        "original_name": "Fish sauce",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:bun-cha",
-        "recipe_title": "Bún chả",
-        "ingredient_key": "4",
-        "original_name": "Fish sauce",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:fish-amok",
-        "recipe_title": "Fish amok",
-        "ingredient_key": "11",
-        "original_name": "Fish sauce",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:khao-soi",
-        "recipe_title": "Khao soi",
-        "ingredient_key": "7",
-        "original_name": "Fish sauce",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:lahpet-thoke",
-        "recipe_title": "Lahpet thoke",
-        "ingredient_key": "10",
-        "original_name": "Fish sauce",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "pepe_nero",
     "canonical_name": "Pepe nero",
     "occurrences": 16,
@@ -6653,7 +6843,7 @@
     "canonical_name": "Sedano, crudo",
     "occurrences": 16,
     "recipes_count": 16,
-    "primary_status": "ambiguous",
+    "primary_status": "approved",
     "raw_names": [
       "Celery",
       "Celery sticks",
@@ -6681,22 +6871,6 @@
           "basis": "per_100_g"
         },
         "grams_override": 150.0
-      },
-      {
-        "source": "CREA",
-        "id": "005684",
-        "name": "Sedano, cotto, al microonde",
-        "match_type": "cooked_alternate",
-        "confidence": "low",
-        "state": "cotto / bollito",
-        "reason": "Possibile alternativa cotta (Sedano, cotto, al microonde) - stato non specificato nella ricetta",
-        "is_ambiguous": true,
-        "nutrients": {
-          "kcal_100g": 24.0,
-          "protein_g_100g": 2.4,
-          "fat_g_100g": 0.2,
-          "carbs_available_g_100g": 2.4
-        }
       }
     ],
     "sample_recipes": [
@@ -6741,180 +6915,29 @@
         "quantity_status": "resolved"
       }
     ],
-    "ambiguity_count": 8
-  },
-  {
-    "canonical_id": "unmapped:shallots",
-    "canonical_name": "Shallots",
-    "occurrences": 16,
-    "recipes_count": 16,
-    "primary_status": "missing",
-    "raw_names": [
-      "Shallots"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:bun-cha",
-        "recipe_title": "Bún chả",
-        "ingredient_key": "8",
-        "original_name": "Shallots",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:fish-amok",
-        "recipe_title": "Fish amok",
-        "ingredient_key": "8",
-        "original_name": "Shallots",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:gromperekichelcher",
-        "recipe_title": "Gromperekichelcher",
-        "ingredient_key": "6",
-        "original_name": "Shallots",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:laksa-singapore",
-        "recipe_title": "Katong laksa",
-        "ingredient_key": "6",
-        "original_name": "Shallots",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:khao-soi",
-        "recipe_title": "Khao soi",
-        "ingredient_key": "9",
-        "original_name": "Shallots",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:spring onion",
-    "canonical_name": "Spring onion",
+    "canonical_id": "zucchero_a_velo",
+    "canonical_name": "Zucchero a velo",
     "occurrences": 16,
     "recipes_count": 16,
-    "primary_status": "missing",
-    "raw_names": [
-      "Spring onion"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:ackee-and-saltfish",
-        "recipe_title": "Ackee and saltfish",
-        "ingredient_key": "6",
-        "original_name": "Spring onion",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:ajiaco-bogotano",
-        "recipe_title": "Ajiaco bogotano",
-        "ingredient_key": "7",
-        "original_name": "Spring onion",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:empanadas-argentinas",
-        "recipe_title": "Argentinian empanadas",
-        "ingredient_key": "3",
-        "original_name": "Spring onion",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:chakka",
-        "recipe_title": "Chakka",
-        "ingredient_key": "6",
-        "original_name": "Spring onion",
-        "grams": 50.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:galbijjim",
-        "recipe_title": "Galbijjim",
-        "ingredient_key": "15",
-        "original_name": "Spring onion",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:thyme",
-    "canonical_name": "Thyme",
-    "occurrences": 16,
-    "recipes_count": 16,
-    "primary_status": "missing",
-    "raw_names": [
-      "Thyme"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:ackee-and-saltfish",
-        "recipe_title": "Ackee and saltfish",
-        "ingredient_key": "7",
-        "original_name": "Thyme",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:guinness-beef-stew",
-        "recipe_title": "Beef and stout stew",
-        "ingredient_key": "10",
-        "original_name": "Thyme",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:callaloo",
-        "recipe_title": "Callaloo",
-        "ingredient_key": "8",
-        "original_name": "Thyme",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:french-onion-soup",
-        "recipe_title": "French onion soup",
-        "ingredient_key": "8",
-        "original_name": "Thyme",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:jamaican-patty",
-        "recipe_title": "Jamaican patties",
-        "ingredient_key": "9",
-        "original_name": "Thyme",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:icing sugar",
-    "canonical_name": "Icing sugar",
-    "occurrences": 15,
-    "recipes_count": 15,
-    "primary_status": "missing",
+    "primary_status": "approved",
     "raw_names": [
       "Icing sugar"
     ],
-    "candidates": [],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "201500",
+        "label": "Zucchero, saccarosio",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+      }
+    ],
     "sample_recipes": [
       {
         "recipe_id": "unitools:afghan-biscuits",
@@ -6922,6 +6945,14 @@
         "ingredient_key": "6",
         "original_name": "Icing sugar",
         "grams": 200.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:alfajores",
+        "recipe_title": "Alfajores",
+        "ingredient_key": "4",
+        "original_name": "Icing sugar",
+        "grams": 150.0,
         "quantity_status": "resolved"
       },
       {
@@ -6947,13 +6978,247 @@
         "original_name": "Icing sugar",
         "grams": 150.0,
         "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "formaggio_cheddar",
+    "canonical_name": "Cheddar",
+    "occurrences": 15,
+    "recipes_count": 15,
+    "primary_status": "approved",
+    "raw_names": [
+      "Cheddar cheese curds",
+      "cheddar"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "160880",
+        "label": "Cheddar",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "foodose:R318",
+        "recipe_title": "Bread, egg and cheddar strata with spinach",
+        "ingredient_key": "3",
+        "original_name": "cheddar",
+        "grams": 80.0,
+        "quantity_status": "resolved"
       },
       {
-        "recipe_id": "unitools:fritule",
-        "recipe_title": "Fritule",
-        "ingredient_key": "12",
-        "original_name": "Icing sugar",
+        "recipe_id": "foodose:R049",
+        "recipe_title": "Broccoli and cheddar potato cakes",
+        "ingredient_key": "3",
+        "original_name": "cheddar",
+        "grams": 60.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R087",
+        "recipe_title": "Broccoli and white bean soup with cheddar",
+        "ingredient_key": "7",
+        "original_name": "cheddar",
         "grams": 50.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R292",
+        "recipe_title": "Broccoli, white bean and cheddar soup",
+        "ingredient_key": "6",
+        "original_name": "cheddar",
+        "grams": 50.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R158",
+        "recipe_title": "Butter bean and leek savoury crumble",
+        "ingredient_key": "9",
+        "original_name": "cheddar",
+        "grams": 30.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "formaggio_quark",
+    "canonical_name": "Formaggio Quark",
+    "occurrences": 15,
+    "recipes_count": 15,
+    "primary_status": "missing",
+    "raw_names": [
+      "quark"
+    ],
+    "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "foodose:R233",
+        "recipe_title": "Asparagus and egg tartine with quark and chives",
+        "ingredient_key": "4",
+        "original_name": "quark",
+        "grams": 200.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R293",
+        "recipe_title": "Beetroot, white bean and dill soup with quark",
+        "ingredient_key": "7",
+        "original_name": "quark",
+        "grams": 200.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R298",
+        "recipe_title": "Buckwheat pancakes with cherries and quark",
+        "ingredient_key": "6",
+        "original_name": "quark",
+        "grams": 200.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R307",
+        "recipe_title": "Celery, apple and walnut spelt salad with quark",
+        "ingredient_key": "5",
+        "original_name": "quark",
+        "grams": 200.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R208",
+        "recipe_title": "Chickpea pancakes with smoked paprika and quark",
+        "ingredient_key": "6",
+        "original_name": "quark",
+        "grams": 200.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "maiale_lombo_crudo",
+    "canonical_name": "Maiale, lombo, crudo",
+    "occurrences": 15,
+    "recipes_count": 15,
+    "primary_status": "proposed_proxy",
+    "raw_names": [
+      "Pork",
+      "Pork loin",
+      "Pork ribs",
+      "pork tenderloin"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "105210",
+        "label": "Maiale, lombo, crudo",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:curanto-en-olla",
+        "recipe_title": "Curanto en olla",
+        "ingredient_key": "3",
+        "original_name": "Pork ribs",
+        "grams": 800.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:sancocho-dominicano",
+        "recipe_title": "Dominican sancocho",
+        "ingredient_key": "2",
+        "original_name": "Pork",
+        "grams": 500.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:tamales-guatemaltecos",
+        "recipe_title": "Guatemalan tamales",
+        "ingredient_key": "2",
+        "original_name": "Pork",
+        "grams": 800.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:hallaca",
+        "recipe_title": "Hallaca",
+        "ingredient_key": "3",
+        "original_name": "Pork",
+        "grams": 500.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:katsudon",
+        "recipe_title": "Katsudon",
+        "ingredient_key": "1",
+        "original_name": "Pork loin",
+        "grams": null,
+        "quantity_status": "needs_review"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "maiale_macinato_crudo",
+    "canonical_name": "Maiale, macinato, crudo",
+    "occurrences": 15,
+    "recipes_count": 15,
+    "primary_status": "missing",
+    "raw_names": [
+      "Minced pork"
+    ],
+    "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:bun-cha",
+        "recipe_title": "Bún chả",
+        "ingredient_key": "2",
+        "original_name": "Minced pork",
+        "grams": 400.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:cepelinai",
+        "recipe_title": "Cepelinai",
+        "ingredient_key": "3",
+        "original_name": "Minced pork",
+        "grams": 500.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:frikadeller",
+        "recipe_title": "Frikadeller",
+        "ingredient_key": "1",
+        "original_name": "Minced pork",
+        "grams": 400.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:jiaozi",
+        "recipe_title": "Jiaozi dumplings",
+        "ingredient_key": "3",
+        "original_name": "Minced pork",
+        "grams": 400.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:kolduny",
+        "recipe_title": "Kalduny",
+        "ingredient_key": "2",
+        "original_name": "Minced pork",
+        "grams": 400.0,
         "quantity_status": "resolved"
       }
     ],
@@ -6964,7 +7229,7 @@
     "canonical_name": "Mandorle dolci, secche",
     "occurrences": 15,
     "recipes_count": 15,
-    "primary_status": "proposed_exact",
+    "primary_status": "approved",
     "raw_names": [
       "Almonds",
       "flaked almonds"
@@ -6973,18 +7238,12 @@
       {
         "source": "CREA",
         "id": "008540",
-        "name": "Mandorle dolci, secche",
-        "match_type": "exact",
-        "confidence": "high",
-        "state": "secco sgusciato",
-        "reason": "Mandorle secche CREA 008540",
-        "is_ambiguous": false,
-        "nutrients": {
-          "kcal_100g": 628.0,
-          "protein_g_100g": 22.0,
-          "fat_g_100g": 55.3,
-          "carbs_available_g_100g": 4.6
-        }
+        "label": "Mandorle dolci, secche",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
       }
     ],
     "sample_recipes": [
@@ -7036,7 +7295,7 @@
     "canonical_name": "Mele, fresche, con buccia",
     "occurrences": 15,
     "recipes_count": 15,
-    "primary_status": "proposed_exact",
+    "primary_status": "approved",
     "raw_names": [
       "Apples",
       "apples"
@@ -7044,18 +7303,13 @@
     "candidates": [
       {
         "source": "CREA",
-        "id": "007120",
-        "name": "Mele, fresche, con buccia",
-        "match_type": "exact",
-        "confidence": "high",
-        "state": "fresco, parte edibile con buccia",
-        "reason": "Mele fresche con buccia CREA 007120",
-        "is_ambiguous": false,
-        "nutrients": {
-          "kcal_100g": 44.0,
-          "protein_g_100g": 0.2,
-          "carbs_available_g_100g": 10.0
-        }
+        "id": "007110",
+        "label": "Mele, fresche, senza buccia",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
       }
     ],
     "sample_recipes": [
@@ -7103,16 +7357,27 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:pearl barley",
-    "canonical_name": "Pearl barley",
+    "canonical_id": "orzo_perlato",
+    "canonical_name": "Orzo perlato",
     "occurrences": 15,
     "recipes_count": 15,
-    "primary_status": "missing",
+    "primary_status": "approved",
     "raw_names": [
       "Pearl barley",
       "pearl barley"
     ],
-    "candidates": [],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "000090",
+        "label": "Orzo perlato",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+      }
+    ],
     "sample_recipes": [
       {
         "recipe_id": "foodose:R230",
@@ -7158,54 +7423,56 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:quark",
-    "canonical_name": "quark",
-    "occurrences": 15,
-    "recipes_count": 15,
+    "canonical_id": "bacon_affettato",
+    "canonical_name": "Bacon affumicato",
+    "occurrences": 14,
+    "recipes_count": 14,
     "primary_status": "missing",
     "raw_names": [
-      "quark"
+      "Smoked bacon",
+      "Smoked bacon fat",
+      "Smoked pork belly"
     ],
     "candidates": [],
     "sample_recipes": [
       {
-        "recipe_id": "foodose:R233",
-        "recipe_title": "Asparagus and egg tartine with quark and chives",
-        "ingredient_key": "4",
-        "original_name": "quark",
-        "grams": 200.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R293",
-        "recipe_title": "Beetroot, white bean and dill soup with quark",
-        "ingredient_key": "7",
-        "original_name": "quark",
-        "grams": 200.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R298",
-        "recipe_title": "Buckwheat pancakes with cherries and quark",
-        "ingredient_key": "6",
-        "original_name": "quark",
-        "grams": 200.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R307",
-        "recipe_title": "Celery, apple and walnut spelt salad with quark",
+        "recipe_id": "unitools:bigos",
+        "recipe_title": "Bigos",
         "ingredient_key": "5",
-        "original_name": "quark",
+        "original_name": "Smoked bacon",
+        "grams": 300.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:bryndzove-halusky",
+        "recipe_title": "Bryndzové halušky",
+        "ingredient_key": "4",
+        "original_name": "Smoked bacon",
         "grams": 200.0,
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "foodose:R208",
-        "recipe_title": "Chickpea pancakes with smoked paprika and quark",
-        "ingredient_key": "6",
-        "original_name": "quark",
-        "grams": 200.0,
+        "recipe_id": "unitools:coq-au-vin",
+        "recipe_title": "Coq au vin",
+        "ingredient_key": "3",
+        "original_name": "Smoked bacon",
+        "grams": 150.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:pelekie-zirni-ar-speki",
+        "recipe_title": "Grey peas with speck",
+        "ingredient_key": "2",
+        "original_name": "Smoked pork belly",
+        "grams": 300.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:judd-mat-gaardebounen",
+        "recipe_title": "Judd mat Gaardebounen",
+        "ingredient_key": "3",
+        "original_name": "Smoked bacon",
+        "grams": 150.0,
         "quantity_status": "resolved"
       }
     ],
@@ -7369,14 +7636,136 @@
         "quantity_status": "resolved"
       }
     ],
-    "ambiguity_count": 5
+    "ambiguity_count": 2
+  },
+  {
+    "canonical_id": "maiale_pancetta_fresca",
+    "canonical_name": "Maiale, pancetta fresca (pork belly), cruda",
+    "occurrences": 14,
+    "recipes_count": 14,
+    "primary_status": "missing",
+    "raw_names": [
+      "Cured pork belly",
+      "Pork belly",
+      "Pork belly with skin"
+    ],
+    "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:bandeja-paisa",
+        "recipe_title": "Bandeja paisa",
+        "ingredient_key": "2",
+        "original_name": "Pork belly with skin",
+        "grams": 600.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:bun-cha",
+        "recipe_title": "Bún chả",
+        "ingredient_key": "1",
+        "original_name": "Pork belly",
+        "grams": 400.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:erwtensoep",
+        "recipe_title": "Erwtensoep",
+        "ingredient_key": "3",
+        "original_name": "Pork belly",
+        "grams": 300.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:fabada-asturiana",
+        "recipe_title": "Fabada asturiana",
+        "ingredient_key": "4",
+        "original_name": "Cured pork belly",
+        "grams": 200.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:feijoada",
+        "recipe_title": "Feijoada",
+        "ingredient_key": "5",
+        "original_name": "Pork belly",
+        "grams": 300.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "maiale_spalla_cruda",
+    "canonical_name": "Maiale, spalla o coppa, cruda",
+    "occurrences": 14,
+    "recipes_count": 14,
+    "primary_status": "approved",
+    "raw_names": [
+      "Pork neck",
+      "Pork shoulder"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "105220",
+        "label": "Maiale, spalla, crudo",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:bigos",
+        "recipe_title": "Bigos",
+        "ingredient_key": "3",
+        "original_name": "Pork shoulder",
+        "grams": 600.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:banh-mi",
+        "recipe_title": "Bánh mì",
+        "ingredient_key": "2",
+        "original_name": "Pork shoulder",
+        "grams": 400.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:kranjska-klobasa",
+        "recipe_title": "Carniolan sausage",
+        "ingredient_key": "1",
+        "original_name": "Pork shoulder",
+        "grams": 1600.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:cochinita-pibil",
+        "recipe_title": "Cochinita pibil",
+        "ingredient_key": "1",
+        "original_name": "Pork shoulder",
+        "grams": 2500.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:kavarma",
+        "recipe_title": "Kavarma",
+        "ingredient_key": "1",
+        "original_name": "Pork shoulder",
+        "grams": 700.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
   },
   {
     "canonical_id": "miele",
     "canonical_name": "Miele",
     "occurrences": 14,
     "recipes_count": 14,
-    "primary_status": "proposed_exact",
+    "primary_status": "approved",
     "raw_names": [
       "Honey"
     ],
@@ -7384,18 +7773,12 @@
       {
         "source": "CREA",
         "id": "210010",
-        "name": "Miele",
-        "match_type": "exact",
-        "confidence": "high",
-        "state": "miele fluido",
-        "reason": "Miele CREA 210010",
-        "is_ambiguous": false,
-        "nutrients": {
-          "kcal_100g": 304.0,
-          "protein_g_100g": 0.6,
-          "fat_g_100g": 0.0,
-          "carbs_available_g_100g": 80.3
-        }
+        "label": "Miele",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
       }
     ],
     "sample_recipes": [
@@ -7526,7 +7909,7 @@
     "canonical_name": "Pane di segale",
     "occurrences": 14,
     "recipes_count": 14,
-    "primary_status": "proposed_exact",
+    "primary_status": "approved",
     "raw_names": [
       "Dark rye bread",
       "Rye bread",
@@ -7536,18 +7919,12 @@
       {
         "source": "CREA",
         "id": "000510",
-        "name": "Pane di segale",
-        "match_type": "exact",
-        "confidence": "high",
-        "state": "pane di segale pronto al consumo",
-        "reason": "Pane di segale CREA 000510 (228 kcal, 8.3g proteine)",
-        "is_ambiguous": false,
-        "nutrients": {
-          "kcal_100g": 228.0,
-          "protein_g_100g": 8.3,
-          "fat_g_100g": 1.7,
-          "carbs_available_g_100g": 45.4
-        }
+        "label": "Pane di segale",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
       }
     ],
     "sample_recipes": [
@@ -7595,11 +7972,68 @@
     "ambiguity_count": 0
   },
   {
+    "canonical_id": "pasta_fillo",
+    "canonical_name": "Pasta fillo",
+    "occurrences": 14,
+    "recipes_count": 14,
+    "primary_status": "missing",
+    "raw_names": [
+      "Filo pastry",
+      "Warqa or filo pastry",
+      "Yufka or filo pastry",
+      "filo pastry"
+    ],
+    "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:baklava",
+        "recipe_title": "Baklava",
+        "ingredient_key": "1",
+        "original_name": "Yufka or filo pastry",
+        "grams": 500.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:banitsa",
+        "recipe_title": "Banitsa",
+        "ingredient_key": "1",
+        "original_name": "Filo pastry",
+        "grams": 500.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R157",
+        "recipe_title": "Broccoli and ricotta filo pie",
+        "ingredient_key": "5",
+        "original_name": "filo pastry",
+        "grams": 60.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:byrek-me-spinaq",
+        "recipe_title": "Byrek me spinaq",
+        "ingredient_key": "1",
+        "original_name": "Filo pastry",
+        "grams": 500.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R020",
+        "recipe_title": "Chicken pot pie with filo",
+        "ingredient_key": "9",
+        "original_name": "filo pastry",
+        "grams": 40.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
     "canonical_id": "riso_cotto",
     "canonical_name": "Riso, brillato, cotto, bollito",
     "occurrences": 14,
     "recipes_count": 14,
-    "primary_status": "proposed_exact",
+    "primary_status": "proposed_proxy",
     "raw_names": [
       "Cooked rice",
       "risotto rice"
@@ -7608,18 +8042,12 @@
       {
         "source": "CREA",
         "id": "000105",
-        "name": "Riso, brillato, cotto, bollito",
-        "match_type": "exact",
-        "confidence": "high",
-        "state": "cotto, bollito, pronto al consumo",
-        "reason": "Riso bollito CREA 000105",
-        "is_ambiguous": false,
-        "nutrients": {
-          "kcal_100g": 100.0,
-          "protein_g_100g": 2.0,
-          "fat_g_100g": 0.1,
-          "carbs_available_g_100g": 24.2
-        }
+        "label": "Riso, brillato, cotto, bollito",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
       }
     ],
     "sample_recipes": [
@@ -7667,109 +8095,68 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:vinegar",
-    "canonical_name": "Vinegar",
+    "canonical_id": "timo_secco",
+    "canonical_name": "Timo, essiccato",
     "occurrences": 14,
     "recipes_count": 14,
     "primary_status": "missing",
     "raw_names": [
-      "Vinegar"
+      "Dried thyme",
+      "dried thyme"
     ],
-    "candidates": [],
-    "sample_recipes": [
+    "candidates": [
       {
-        "recipe_id": "unitools:bobotie",
-        "recipe_title": "Bobotie",
-        "ingredient_key": "10",
-        "original_name": "Vinegar",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:burek-bosanski",
-        "recipe_title": "Bosnian burek",
-        "ingredient_key": "6",
-        "original_name": "Vinegar",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:buseca",
-        "recipe_title": "Buseca",
-        "ingredient_key": "10",
-        "original_name": "Vinegar",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:butter-tarts",
-        "recipe_title": "Butter tarts",
-        "ingredient_key": "9",
-        "original_name": "Vinegar",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:chebakia",
-        "recipe_title": "Chebakia",
-        "ingredient_key": "9",
-        "original_name": "Vinegar",
-        "grams": null,
-        "quantity_status": "needs_review"
+        "source": "condiment",
+        "id": "trace",
+        "label": "Dried thyme",
+        "category": "condimento",
+        "state": "in traccia, 0 kcal dichiarate",
+        "reviewed": true,
+        "state_checked": true,
+        "declared_kcal": 0,
+        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
       }
     ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:cheddar",
-    "canonical_name": "cheddar",
-    "occurrences": 14,
-    "recipes_count": 14,
-    "primary_status": "missing",
-    "raw_names": [
-      "cheddar"
-    ],
-    "candidates": [],
     "sample_recipes": [
       {
-        "recipe_id": "foodose:R318",
-        "recipe_title": "Bread, egg and cheddar strata with spinach",
-        "ingredient_key": "3",
-        "original_name": "cheddar",
-        "grams": 80.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R049",
-        "recipe_title": "Broccoli and cheddar potato cakes",
-        "ingredient_key": "3",
-        "original_name": "cheddar",
-        "grams": 60.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R087",
-        "recipe_title": "Broccoli and white bean soup with cheddar",
-        "ingredient_key": "7",
-        "original_name": "cheddar",
-        "grams": 50.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R292",
-        "recipe_title": "Broccoli, white bean and cheddar soup",
+        "recipe_id": "foodose:R135",
+        "recipe_title": "Chicken and vegetable cobbler",
         "ingredient_key": "6",
-        "original_name": "cheddar",
-        "grams": 50.0,
-        "quantity_status": "resolved"
+        "original_name": "dried thyme",
+        "grams": null,
+        "quantity_status": "needs_review"
       },
       {
-        "recipe_id": "foodose:R158",
-        "recipe_title": "Butter bean and leek savoury crumble",
+        "recipe_id": "unitools:jollof-rice",
+        "recipe_title": "Jollof rice",
+        "ingredient_key": "8",
+        "original_name": "Dried thyme",
+        "grams": null,
+        "quantity_status": "trace"
+      },
+      {
+        "recipe_id": "foodose:R187",
+        "recipe_title": "Lentil, chestnut and thyme soup",
+        "ingredient_key": "6",
+        "original_name": "dried thyme",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "foodose:R047",
+        "recipe_title": "Mushroom and lentil cottage pie",
         "ingredient_key": "9",
-        "original_name": "cheddar",
-        "grams": 30.0,
-        "quantity_status": "resolved"
+        "original_name": "dried thyme",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "foodose:R177",
+        "recipe_title": "Mushroom and white bean polenta bake",
+        "ingredient_key": "7",
+        "original_name": "dried thyme",
+        "grams": null,
+        "quantity_status": "needs_review"
       }
     ],
     "ambiguity_count": 0
@@ -7842,8 +8229,164 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:baking powder",
-    "canonical_name": "Baking powder",
+    "canonical_id": "fagioli_cannellini_secchi",
+    "canonical_name": "Fagioli, Cannellini, secchi",
+    "occurrences": 13,
+    "recipes_count": 13,
+    "primary_status": "proposed_exact",
+    "raw_names": [
+      "Baked beans",
+      "Beans",
+      "Black beans",
+      "Black-eyed beans",
+      "Kidney beans",
+      "Red beans",
+      "White beans"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "004200",
+        "name": "Fagioli, Cannellini, secchi",
+        "match_type": "exact",
+        "confidence": "high",
+        "state": "secco, prima dell ammollo e cottura",
+        "reason": "Fagioli cannellini secchi CREA 004200",
+        "is_ambiguous": false,
+        "nutrients": {
+          "kcal_100g": 314.0,
+          "protein_g_100g": 23.4,
+          "fat_g_100g": 1.6,
+          "carbs_available_g_100g": 45.5
+        }
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:baleadas",
+        "recipe_title": "Baleadas",
+        "ingredient_key": "4",
+        "original_name": "Red beans",
+        "grams": 400.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:casado",
+        "recipe_title": "Casado",
+        "ingredient_key": "3",
+        "original_name": "Black beans",
+        "grams": 400.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:chakalaka",
+        "recipe_title": "Chakalaka",
+        "ingredient_key": "4",
+        "original_name": "Baked beans",
+        "grams": 400.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:fanesca",
+        "recipe_title": "Fanesca",
+        "ingredient_key": "6",
+        "original_name": "White beans",
+        "grams": 150.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:feijoada",
+        "recipe_title": "Feijoada",
+        "ingredient_key": "1",
+        "original_name": "Black beans",
+        "grams": 700.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "fagiolini_freschi",
+    "canonical_name": "Fagiolini, freschi",
+    "occurrences": 13,
+    "recipes_count": 13,
+    "primary_status": "approved",
+    "raw_names": [
+      "Flat green beans",
+      "Green beans",
+      "green beans"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "004310",
+        "label": "Fagiolini, freschi",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Fagiolini, freschi",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/baked-chicken-schnitzel-green-beans-lemon",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "169961",
+            "description": "Beans, snap, green, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004310",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 250.0
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "foodose:R299",
+        "recipe_title": "Baked chicken schnitzel with green beans and lemon",
+        "ingredient_key": "6",
+        "original_name": "green beans",
+        "grams": 250.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R159",
+        "recipe_title": "Beetroot and ricotta wonton ravioli",
+        "ingredient_key": "5",
+        "original_name": "green beans",
+        "grams": 150.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R224",
+        "recipe_title": "Cod under a parsley and almond crust with green beans",
+        "ingredient_key": "6",
+        "original_name": "green beans",
+        "grams": 250.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R031",
+        "recipe_title": "Dijon-dill salmon with crushed potatoes",
+        "ingredient_key": "2",
+        "original_name": "green beans",
+        "grams": 200.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:lagman",
+        "recipe_title": "Lagman",
+        "ingredient_key": "5",
+        "original_name": "Green beans",
+        "grams": 200.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "lievito_chimico_polvere",
+    "canonical_name": "Lievito chimico in polvere",
     "occurrences": 13,
     "recipes_count": 13,
     "primary_status": "missing",
@@ -7897,99 +8440,71 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "fagiolini_freschi",
-    "canonical_name": "Fagiolini, freschi",
+    "canonical_id": "peperoncino_scotch_bonnet",
+    "canonical_name": "Peperoncino Scotch Bonnet, fresco",
     "occurrences": 13,
     "recipes_count": 13,
-    "primary_status": "ambiguous",
+    "primary_status": "approved",
     "raw_names": [
-      "Flat green beans",
-      "Green beans",
-      "green beans"
+      "Habanero",
+      "Scotch bonnet",
+      "Scotch bonnet chillies"
     ],
     "candidates": [
       {
         "source": "CREA",
-        "id": "004310",
-        "label": "Fagiolini, freschi",
+        "id": "006830",
+        "label": "Peperoncini piccanti, freschi",
+        "state": "verificato",
         "reviewed": true,
         "state_checked": true,
-        "state": "Fagiolini, freschi",
-        "approved_by": "codex_catalog_review",
-        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
-        "evidence": {
-          "source_recipe_url": "https://www.foodose.co/glp1-recipes/baked-chicken-schnitzel-green-beans-lemon",
-          "source_reference": {
-            "source": "USDA FoodData Central",
-            "id": "169961",
-            "description": "Beans, snap, green, raw"
-          },
-          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/004310",
-          "catalog_ingredients": null,
-          "basis": "per_100_g"
-        },
-        "grams_override": 250.0
-      },
-      {
-        "source": "CREA",
-        "id": "004305",
-        "name": "Fagiolini a corallo, cotti, bolliti",
-        "match_type": "cooked_alternate",
-        "confidence": "low",
-        "state": "cotto / bollito",
-        "reason": "Possibile alternativa cotta (Fagiolini a corallo, cotti, bolliti) - stato non specificato nella ricetta",
-        "is_ambiguous": true,
-        "nutrients": {
-          "kcal_100g": 31.0,
-          "protein_g_100g": 1.7,
-          "fat_g_100g": 0.1,
-          "carbs_available_g_100g": 4.6
-        }
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
       }
     ],
     "sample_recipes": [
       {
-        "recipe_id": "foodose:R299",
-        "recipe_title": "Baked chicken schnitzel with green beans and lemon",
-        "ingredient_key": "6",
-        "original_name": "green beans",
-        "grams": 250.0,
-        "quantity_status": "resolved"
+        "recipe_id": "unitools:ackee-and-saltfish",
+        "recipe_title": "Ackee and saltfish",
+        "ingredient_key": "8",
+        "original_name": "Scotch bonnet",
+        "grams": null,
+        "quantity_status": "needs_review"
       },
       {
-        "recipe_id": "foodose:R159",
-        "recipe_title": "Beetroot and ricotta wonton ravioli",
-        "ingredient_key": "5",
-        "original_name": "green beans",
-        "grams": 150.0,
-        "quantity_status": "resolved"
+        "recipe_id": "unitools:callaloo",
+        "recipe_title": "Callaloo",
+        "ingredient_key": "7",
+        "original_name": "Scotch bonnet",
+        "grams": null,
+        "quantity_status": "needs_review"
       },
       {
-        "recipe_id": "foodose:R224",
-        "recipe_title": "Cod under a parsley and almond crust with green beans",
-        "ingredient_key": "6",
-        "original_name": "green beans",
-        "grams": 250.0,
-        "quantity_status": "resolved"
+        "recipe_id": "unitools:cochinita-pibil",
+        "recipe_title": "Cochinita pibil",
+        "ingredient_key": "11",
+        "original_name": "Habanero",
+        "grams": null,
+        "quantity_status": "needs_review"
       },
       {
-        "recipe_id": "foodose:R031",
-        "recipe_title": "Dijon-dill salmon with crushed potatoes",
-        "ingredient_key": "2",
-        "original_name": "green beans",
-        "grams": 200.0,
-        "quantity_status": "resolved"
+        "recipe_id": "unitools:doubles",
+        "recipe_title": "Doubles",
+        "ingredient_key": "10",
+        "original_name": "Scotch bonnet",
+        "grams": null,
+        "quantity_status": "needs_review"
       },
       {
-        "recipe_id": "unitools:lagman",
-        "recipe_title": "Lagman",
-        "ingredient_key": "5",
-        "original_name": "Green beans",
-        "grams": 200.0,
-        "quantity_status": "resolved"
+        "recipe_id": "unitools:egusi-soup",
+        "recipe_title": "Egusi soup",
+        "ingredient_key": "8",
+        "original_name": "Scotch bonnet",
+        "grams": null,
+        "quantity_status": "needs_review"
       }
     ],
-    "ambiguity_count": 6
+    "ambiguity_count": 0
   },
   {
     "canonical_id": "tofu_morbido",
@@ -8047,53 +8562,66 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:dried thyme",
-    "canonical_name": "dried thyme",
-    "occurrences": 13,
-    "recipes_count": 13,
-    "primary_status": "missing",
+    "canonical_id": "avocado_fresco",
+    "canonical_name": "Avocado, fresco",
+    "occurrences": 12,
+    "recipes_count": 12,
+    "primary_status": "approved",
     "raw_names": [
-      "dried thyme"
+      "Avocado",
+      "Avocados",
+      "avocado"
     ],
-    "candidates": [],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "007490",
+        "label": "Avocado, fresco",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+      }
+    ],
     "sample_recipes": [
       {
-        "recipe_id": "foodose:R135",
-        "recipe_title": "Chicken and vegetable cobbler",
-        "ingredient_key": "6",
-        "original_name": "dried thyme",
+        "recipe_id": "unitools:ajiaco-bogotano",
+        "recipe_title": "Ajiaco bogotano",
+        "ingredient_key": "11",
+        "original_name": "Avocado",
         "grams": null,
         "quantity_status": "needs_review"
       },
       {
-        "recipe_id": "foodose:R187",
-        "recipe_title": "Lentil, chestnut and thyme soup",
-        "ingredient_key": "6",
-        "original_name": "dried thyme",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "foodose:R047",
-        "recipe_title": "Mushroom and lentil cottage pie",
+        "recipe_id": "unitools:baleadas",
+        "recipe_title": "Baleadas",
         "ingredient_key": "9",
-        "original_name": "dried thyme",
+        "original_name": "Avocado",
         "grams": null,
         "quantity_status": "needs_review"
       },
       {
-        "recipe_id": "foodose:R177",
-        "recipe_title": "Mushroom and white bean polenta bake",
+        "recipe_id": "unitools:bandeja-paisa",
+        "recipe_title": "Bandeja paisa",
+        "ingredient_key": "10",
+        "original_name": "Avocado",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "foodose:R239",
+        "recipe_title": "Black bean and sweetcorn tacos with avocado and lime",
         "ingredient_key": "7",
-        "original_name": "dried thyme",
-        "grams": null,
-        "quantity_status": "needs_review"
+        "original_name": "avocado",
+        "grams": 150.0,
+        "quantity_status": "resolved"
       },
       {
-        "recipe_id": "foodose:R083",
-        "recipe_title": "Mushroom, tofu and thyme soup",
-        "ingredient_key": "5",
-        "original_name": "dried thyme",
+        "recipe_id": "unitools:causa-limena",
+        "recipe_title": "Causa limeña",
+        "ingredient_key": "8",
+        "original_name": "Avocado",
         "grams": null,
         "quantity_status": "needs_review"
       }
@@ -8101,108 +8629,251 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:pumpkin",
-    "canonical_name": "pumpkin",
-    "occurrences": 13,
-    "recipes_count": 13,
-    "primary_status": "missing",
-    "raw_names": [
-      "Pumpkin",
-      "pumpkin"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:couscous-algerien",
-        "recipe_title": "Algerian couscous",
-        "ingredient_key": "7",
-        "original_name": "Pumpkin",
-        "grams": 400.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:callaloo",
-        "recipe_title": "Callaloo",
-        "ingredient_key": "6",
-        "original_name": "Pumpkin",
-        "grams": 300.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R125",
-        "recipe_title": "Chicken, pumpkin and basil orzo",
-        "ingredient_key": "1",
-        "original_name": "pumpkin",
-        "grams": 250.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:fanesca",
-        "recipe_title": "Fanesca",
-        "ingredient_key": "3",
-        "original_name": "Pumpkin",
-        "grams": 500.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:ghapama",
-        "recipe_title": "Ghapama",
-        "ingredient_key": "1",
-        "original_name": "Pumpkin",
-        "grams": 3000.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:beef stock",
-    "canonical_name": "Beef stock",
+    "canonical_id": "bicarbonato_sodio",
+    "canonical_name": "Bicarbonato di sodio",
     "occurrences": 12,
     "recipes_count": 12,
     "primary_status": "missing",
     "raw_names": [
-      "Beef stock"
+      "Baking soda",
+      "Bicarbonate of soda"
     ],
     "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:anzac-biscuits",
+        "recipe_title": "Anzac biscuits",
+        "ingredient_key": "7",
+        "original_name": "Bicarbonate of soda",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:ballokume",
+        "recipe_title": "Ballokume",
+        "ingredient_key": "5",
+        "original_name": "Bicarbonate of soda",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:banitsa",
+        "recipe_title": "Banitsa",
+        "ingredient_key": "5",
+        "original_name": "Bicarbonate of soda",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:varenyky-z-vyshnyamy",
+        "recipe_title": "Cherry varenyky",
+        "ingredient_key": "4",
+        "original_name": "Bicarbonate of soda",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:hummus",
+        "recipe_title": "Hummus",
+        "ingredient_key": "2",
+        "original_name": "Bicarbonate of soda",
+        "grams": null,
+        "quantity_status": "needs_review"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "brodo_manzo",
+    "canonical_name": "Brodo di manzo",
+    "occurrences": 12,
+    "recipes_count": 12,
+    "primary_status": "approved",
+    "raw_names": [
+      "Beef stock"
+    ],
+    "candidates": [
+      {
+        "source": "stock",
+        "id": "cube_1_50",
+        "label": "Brodo liquido da dado diluito 1:50",
+        "category": "brodo",
+        "state": "liquido, diluizione dichiarata 1:50",
+        "reviewed": true,
+        "state_checked": true,
+        "reason": "Proxy dichiarato, diluizione 1:50: 1 g di dado generico + 49 g di acqua = 50 g di brodo pronto. Densità 1 g/ml euristica per liquido acquoso. Non certifica la composizione vegetale o di pollo né la reale preparazione della ricetta; si sostituisce con un brodo liquido specifico revisionato quando disponibile.",
+        "dilution": {
+          "source": "stock",
+          "id": "cube_1_50",
+          "category": "brodo",
+          "base_source": "CREA",
+          "base_id": "503010",
+          "cube_g_per_100g_liquid": 2,
+          "water_g_per_100g_liquid": 98,
+          "density_g_per_ml": 1,
+          "note": "Proxy dichiarato, diluizione 1:50: 1 g di dado generico + 49 g di acqua = 50 g di brodo pronto. Densità 1 g/ml euristica per liquido acquoso. Non certifica la composizione vegetale o di pollo né la reale preparazione della ricetta; si sostituisce con un brodo liquido specifico revisionato quando disponibile."
+        }
+      }
+    ],
     "sample_recipes": [
       {
         "recipe_id": "unitools:meat-pie-australian",
         "recipe_title": "Australian meat pie",
         "ingredient_key": "3",
         "original_name": "Beef stock",
-        "grams": null,
-        "quantity_status": "needs_review"
+        "grams": 500.0,
+        "quantity_status": "resolved"
       },
       {
         "recipe_id": "unitools:beef-stroganoff",
         "recipe_title": "Beef Stroganoff",
         "ingredient_key": "7",
         "original_name": "Beef stock",
-        "grams": null,
-        "quantity_status": "needs_review"
+        "grams": 200.0,
+        "quantity_status": "resolved"
       },
       {
         "recipe_id": "unitools:guinness-beef-stew",
         "recipe_title": "Beef and stout stew",
         "ingredient_key": "9",
         "original_name": "Beef stock",
-        "grams": null,
-        "quantity_status": "needs_review"
+        "grams": 400.0,
+        "quantity_status": "resolved"
       },
       {
         "recipe_id": "unitools:bitterballen",
         "recipe_title": "Bitterballen",
         "ingredient_key": "4",
         "original_name": "Beef stock",
-        "grams": null,
-        "quantity_status": "needs_review"
+        "grams": 600.0,
+        "quantity_status": "resolved"
       },
       {
         "recipe_id": "unitools:french-onion-soup",
         "recipe_title": "French onion soup",
         "ingredient_key": "5",
         "original_name": "Beef stock",
+        "grams": 1200.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "burro_arachidi",
+    "canonical_name": "Burro d'arachidi",
+    "occurrences": 12,
+    "recipes_count": 12,
+    "primary_status": "approved",
+    "raw_names": [
+      "Peanut butter",
+      "peanut butter"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "009010",
+        "label": "Burro d'arachidi",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:asida-sudanese",
+        "recipe_title": "Asida with mulah",
+        "ingredient_key": "7",
+        "original_name": "Peanut butter",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "foodose:R319",
+        "recipe_title": "Chicken satay skewers with peanut sauce",
+        "ingredient_key": "4",
+        "original_name": "peanut butter",
+        "grams": 30.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:goi-cuon",
+        "recipe_title": "Gỏi cuốn",
+        "ingredient_key": "8",
+        "original_name": "Peanut butter",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:kare-kare",
+        "recipe_title": "Kare-kare",
+        "ingredient_key": "2",
+        "original_name": "Peanut butter",
+        "grams": 250.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:llapingachos",
+        "recipe_title": "Llapingachos",
+        "ingredient_key": "5",
+        "original_name": "Peanut butter",
+        "grams": 150.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "scorza_limone",
+    "canonical_name": "Limone, scorza grattugiata",
+    "occurrences": 12,
+    "recipes_count": 12,
+    "primary_status": "missing",
+    "raw_names": [
+      "Lemon peel",
+      "Lemon zest"
+    ],
+    "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:alfajores",
+        "recipe_title": "Alfajores",
+        "ingredient_key": "7",
+        "original_name": "Lemon zest",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:sladke-buchty",
+        "recipe_title": "Buchty",
+        "ingredient_key": "9",
+        "original_name": "Lemon zest",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:fritule",
+        "recipe_title": "Fritule",
+        "ingredient_key": "8",
+        "original_name": "Lemon zest",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:imqaret",
+        "recipe_title": "Imqaret",
+        "ingredient_key": "7",
+        "original_name": "Lemon zest",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:leche-flan",
+        "recipe_title": "Leche flan",
+        "ingredient_key": "6",
+        "original_name": "Lemon zest",
         "grams": null,
         "quantity_status": "needs_review"
       }
@@ -8210,63 +8881,161 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:celeriac",
-    "canonical_name": "Celeriac",
+    "canonical_id": "mais_dolce",
+    "canonical_name": "Mais dolce, in scatola",
     "occurrences": 12,
     "recipes_count": 12,
-    "primary_status": "missing",
+    "primary_status": "proposed_exact",
     "raw_names": [
-      "Celeriac",
-      "celeriac"
+      "Corn kernels",
+      "Sweetcorn",
+      "sweetcorn"
     ],
-    "candidates": [],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "000070",
+        "name": "Mais, dolce, in scatola, sgocciolato",
+        "match_type": "exact",
+        "confidence": "high",
+        "state": "in scatola, sgocciolato",
+        "reason": "Mais dolce in scatola sgocciolato CREA 000070",
+        "is_ambiguous": false,
+        "nutrients": {
+          "kcal_100g": 105.0,
+          "protein_g_100g": 3.4,
+          "fat_g_100g": 1.3,
+          "carbs_available_g_100g": 20.5
+        }
+      }
+    ],
     "sample_recipes": [
       {
-        "recipe_id": "unitools:begova-corba",
-        "recipe_title": "Begova čorba",
+        "recipe_id": "foodose:R239",
+        "recipe_title": "Black bean and sweetcorn tacos with avocado and lime",
         "ingredient_key": "5",
-        "original_name": "Celeriac",
-        "grams": 150.0,
+        "original_name": "sweetcorn",
+        "grams": 200.0,
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "foodose:R155",
-        "recipe_title": "Celeriac and white bean mash with eggs",
+        "recipe_id": "unitools:cachapas",
+        "recipe_title": "Cachapas",
         "ingredient_key": "1",
-        "original_name": "celeriac",
-        "grams": 300.0,
+        "original_name": "Sweetcorn",
+        "grams": 800.0,
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "foodose:R182",
-        "recipe_title": "Celeriac, pear and white bean soup",
-        "ingredient_key": "3",
-        "original_name": "celeriac",
-        "grams": 300.0,
+        "recipe_id": "foodose:R085",
+        "recipe_title": "Chicken and sweetcorn noodle soup",
+        "ingredient_key": "6",
+        "original_name": "sweetcorn",
+        "grams": 120.0,
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "foodose:R219",
-        "recipe_title": "Chicken, chestnut and sage braise with celeriac",
+        "recipe_id": "foodose:R271",
+        "recipe_title": "Chicken, sweetcorn and egg drop soup",
         "ingredient_key": "4",
-        "original_name": "celeriac",
-        "grams": 300.0,
+        "original_name": "sweetcorn",
+        "grams": 200.0,
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "unitools:ciorba-de-burta",
-        "recipe_title": "Ciorbă de burtă",
-        "ingredient_key": "4",
-        "original_name": "Celeriac",
-        "grams": 150.0,
+        "recipe_id": "foodose:R034",
+        "recipe_title": "Cod and sweetcorn chowder",
+        "ingredient_key": "6",
+        "original_name": "sweetcorn",
+        "grams": 120.0,
         "quantity_status": "resolved"
       }
     ],
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:double cream",
-    "canonical_name": "Double cream",
+    "canonical_id": "merluzzo_fresco",
+    "canonical_name": "Merluzzo o nasello, fresco",
+    "occurrences": 12,
+    "recipes_count": 12,
+    "primary_status": "approved",
+    "raw_names": [
+      "Cod",
+      "Cod fillet",
+      "cod",
+      "hake"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "121410",
+        "label": "Merluzzo o nasello",
+        "reviewed": true,
+        "state_checked": true,
+        "state": "Merluzzo o nasello",
+        "approved_by": "codex_catalog_review",
+        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
+        "evidence": {
+          "source_recipe_url": "https://www.foodose.co/glp1-recipes/cod-chickpea-fritters",
+          "source_reference": {
+            "source": "USDA FoodData Central",
+            "id": "171955",
+            "description": "Fish, cod, Atlantic, raw"
+          },
+          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/121410",
+          "catalog_ingredients": null,
+          "basis": "per_100_g"
+        },
+        "grams_override": 250.0
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "foodose:R144",
+        "recipe_title": "Cod and chickpea fritters",
+        "ingredient_key": "1",
+        "original_name": "cod",
+        "grams": 250.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R034",
+        "recipe_title": "Cod and sweetcorn chowder",
+        "ingredient_key": "7",
+        "original_name": "cod",
+        "grams": 280.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R148",
+        "recipe_title": "Cod and trout fish pie",
+        "ingredient_key": "5",
+        "original_name": "cod",
+        "grams": 150.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R032",
+        "recipe_title": "Cod en papillote with fennel",
+        "ingredient_key": "5",
+        "original_name": "cod",
+        "grams": 280.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R224",
+        "recipe_title": "Cod under a parsley and almond crust with green beans",
+        "ingredient_key": "5",
+        "original_name": "cod",
+        "grams": 320.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "panna_doppia",
+    "canonical_name": "Panna doppia (double cream)",
     "occurrences": 12,
     "recipes_count": 12,
     "primary_status": "missing",
@@ -8319,158 +9088,74 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:ground cardamom",
-    "canonical_name": "Ground cardamom",
+    "canonical_id": "sedano_rapa_crudo",
+    "canonical_name": "Sedano rapa, crudo",
     "occurrences": 12,
     "recipes_count": 12,
-    "primary_status": "missing",
+    "primary_status": "approved",
     "raw_names": [
-      "Ground cardamom",
-      "ground cardamom"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:pakhlava-baku",
-        "recipe_title": "Baku pakhlava",
-        "ingredient_key": "8",
-        "original_name": "Ground cardamom",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:kuwaiti-darabeel",
-        "recipe_title": "Darabeel",
-        "ingredient_key": "8",
-        "original_name": "Ground cardamom",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:kleicha",
-        "recipe_title": "Kleicha",
-        "ingredient_key": "6",
-        "original_name": "Ground cardamom",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:luqaimat",
-        "recipe_title": "Luqaimat",
-        "ingredient_key": "7",
-        "original_name": "Ground cardamom",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:mandazi",
-        "recipe_title": "Mandazi",
-        "ingredient_key": "6",
-        "original_name": "Ground cardamom",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "merluzzo_fresco",
-    "canonical_name": "Merluzzo o nasello, fresco",
-    "occurrences": 12,
-    "recipes_count": 12,
-    "primary_status": "proposed_exact",
-    "raw_names": [
-      "Cod",
-      "Cod fillet",
-      "cod",
-      "hake"
+      "Celeriac",
+      "celeriac"
     ],
     "candidates": [
       {
         "source": "CREA",
-        "id": "121410",
-        "label": "Merluzzo o nasello",
+        "id": "005690",
+        "label": "Sedano rapa, crudo",
+        "state": "verificato",
         "reviewed": true,
         "state_checked": true,
-        "state": "Merluzzo o nasello",
-        "approved_by": "codex_catalog_review",
-        "note": "Corrispondenza tra ingrediente, stato del riferimento e alimento del catalogo.",
-        "evidence": {
-          "source_recipe_url": "https://www.foodose.co/glp1-recipes/cod-chickpea-fritters",
-          "source_reference": {
-            "source": "USDA FoodData Central",
-            "id": "171955",
-            "description": "Fish, cod, Atlantic, raw"
-          },
-          "catalog_url": "https://www.alimentinutrizione.it/tabelle-nutrizionali/121410",
-          "catalog_ingredients": null,
-          "basis": "per_100_g"
-        },
-        "grams_override": 250.0
-      },
-      {
-        "source": "CREA",
-        "id": "121420",
-        "name": "Merluzzo o nasello, surgelato",
-        "match_type": "proxy",
-        "confidence": "medium",
-        "state": "Merluzzo o nasello, surgelato",
-        "reason": "Merluzzo surgelato CREA 121420 (75 kcal, 17.3g proteine)",
-        "nutrients": {
-          "kcal_100g": 75.0,
-          "protein_g_100g": 17.3,
-          "fat_g_100g": 0.6,
-          "carbs_available_g_100g": 0.0
-        }
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
       }
     ],
     "sample_recipes": [
       {
-        "recipe_id": "foodose:R144",
-        "recipe_title": "Cod and chickpea fritters",
-        "ingredient_key": "1",
-        "original_name": "cod",
-        "grams": 250.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R034",
-        "recipe_title": "Cod and sweetcorn chowder",
-        "ingredient_key": "7",
-        "original_name": "cod",
-        "grams": 280.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R148",
-        "recipe_title": "Cod and trout fish pie",
+        "recipe_id": "unitools:begova-corba",
+        "recipe_title": "Begova čorba",
         "ingredient_key": "5",
-        "original_name": "cod",
+        "original_name": "Celeriac",
         "grams": 150.0,
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "foodose:R032",
-        "recipe_title": "Cod en papillote with fennel",
-        "ingredient_key": "5",
-        "original_name": "cod",
-        "grams": 280.0,
+        "recipe_id": "foodose:R155",
+        "recipe_title": "Celeriac and white bean mash with eggs",
+        "ingredient_key": "1",
+        "original_name": "celeriac",
+        "grams": 300.0,
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "foodose:R224",
-        "recipe_title": "Cod under a parsley and almond crust with green beans",
-        "ingredient_key": "5",
-        "original_name": "cod",
-        "grams": 320.0,
+        "recipe_id": "foodose:R182",
+        "recipe_title": "Celeriac, pear and white bean soup",
+        "ingredient_key": "3",
+        "original_name": "celeriac",
+        "grams": 300.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R219",
+        "recipe_title": "Chicken, chestnut and sage braise with celeriac",
+        "ingredient_key": "4",
+        "original_name": "celeriac",
+        "grams": 300.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:ciorba-de-burta",
+        "recipe_title": "Ciorbă de burtă",
+        "ingredient_key": "4",
+        "original_name": "Celeriac",
+        "grams": 150.0,
         "quantity_status": "resolved"
       }
     ],
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:sesame seeds",
-    "canonical_name": "Sesame seeds",
+    "canonical_id": "semi_sesamo",
+    "canonical_name": "Semi di sesamo",
     "occurrences": 12,
     "recipes_count": 12,
     "primary_status": "missing",
@@ -8617,165 +9302,67 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:filo pastry",
-    "canonical_name": "filo pastry",
-    "occurrences": 12,
-    "recipes_count": 12,
-    "primary_status": "missing",
+    "canonical_id": "cavolfiore_crudo",
+    "canonical_name": "Cavolfiore, crudo",
+    "occurrences": 11,
+    "recipes_count": 11,
+    "primary_status": "approved",
     "raw_names": [
-      "Filo pastry",
-      "filo pastry"
+      "Cauliflower",
+      "cauliflower"
     ],
-    "candidates": [],
-    "sample_recipes": [
+    "candidates": [
       {
-        "recipe_id": "unitools:banitsa",
-        "recipe_title": "Banitsa",
-        "ingredient_key": "1",
-        "original_name": "Filo pastry",
-        "grams": 500.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R157",
-        "recipe_title": "Broccoli and ricotta filo pie",
-        "ingredient_key": "5",
-        "original_name": "filo pastry",
-        "grams": 60.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:byrek-me-spinaq",
-        "recipe_title": "Byrek me spinaq",
-        "ingredient_key": "1",
-        "original_name": "Filo pastry",
-        "grams": 500.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R020",
-        "recipe_title": "Chicken pot pie with filo",
-        "ingredient_key": "9",
-        "original_name": "filo pastry",
-        "grams": 40.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:gibanica",
-        "recipe_title": "Gibanica",
-        "ingredient_key": "1",
-        "original_name": "Filo pastry",
-        "grams": 500.0,
-        "quantity_status": "resolved"
+        "source": "CREA",
+        "id": "005160",
+        "label": "Cavolfiore, crudo",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
       }
     ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:peanut butter",
-    "canonical_name": "peanut butter",
-    "occurrences": 12,
-    "recipes_count": 12,
-    "primary_status": "missing",
-    "raw_names": [
-      "Peanut butter",
-      "peanut butter"
-    ],
-    "candidates": [],
     "sample_recipes": [
       {
-        "recipe_id": "unitools:asida-sudanese",
-        "recipe_title": "Asida with mulah",
-        "ingredient_key": "7",
-        "original_name": "Peanut butter",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "foodose:R319",
-        "recipe_title": "Chicken satay skewers with peanut sauce",
-        "ingredient_key": "4",
-        "original_name": "peanut butter",
-        "grams": 30.0,
+        "recipe_id": "foodose:R164",
+        "recipe_title": "Cauliflower and cheese stuffed potatoes",
+        "ingredient_key": "2",
+        "original_name": "cauliflower",
+        "grams": 200.0,
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "unitools:goi-cuon",
-        "recipe_title": "Gỏi cuốn",
-        "ingredient_key": "8",
-        "original_name": "Peanut butter",
-        "grams": null,
-        "quantity_status": "needs_review"
+        "recipe_id": "foodose:R056",
+        "recipe_title": "Cauliflower and chickpea couscous with mint yoghurt",
+        "ingredient_key": "1",
+        "original_name": "cauliflower",
+        "grams": 300.0,
+        "quantity_status": "resolved"
       },
       {
-        "recipe_id": "unitools:kare-kare",
-        "recipe_title": "Kare-kare",
-        "ingredient_key": "2",
-        "original_name": "Peanut butter",
+        "recipe_id": "foodose:R190",
+        "recipe_title": "Cauliflower and red lentil soup",
+        "ingredient_key": "3",
+        "original_name": "cauliflower",
+        "grams": 350.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R171",
+        "recipe_title": "Cauliflower and tofu orzo",
+        "ingredient_key": "1",
+        "original_name": "cauliflower",
         "grams": 250.0,
         "quantity_status": "resolved"
       },
       {
-        "recipe_id": "unitools:llapingachos",
-        "recipe_title": "Llapingachos",
-        "ingredient_key": "5",
-        "original_name": "Peanut butter",
-        "grams": 150.0,
+        "recipe_id": "foodose:R266",
+        "recipe_title": "Cauliflower cheese with white beans and mustard",
+        "ingredient_key": "1",
+        "original_name": "cauliflower",
+        "grams": 600.0,
         "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:bicarbonate of soda",
-    "canonical_name": "Bicarbonate of soda",
-    "occurrences": 11,
-    "recipes_count": 11,
-    "primary_status": "missing",
-    "raw_names": [
-      "Bicarbonate of soda"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:anzac-biscuits",
-        "recipe_title": "Anzac biscuits",
-        "ingredient_key": "7",
-        "original_name": "Bicarbonate of soda",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:ballokume",
-        "recipe_title": "Ballokume",
-        "ingredient_key": "5",
-        "original_name": "Bicarbonate of soda",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:banitsa",
-        "recipe_title": "Banitsa",
-        "ingredient_key": "5",
-        "original_name": "Bicarbonate of soda",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:varenyky-z-vyshnyamy",
-        "recipe_title": "Cherry varenyky",
-        "ingredient_key": "4",
-        "original_name": "Bicarbonate of soda",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:hummus",
-        "recipe_title": "Hummus",
-        "ingredient_key": "2",
-        "original_name": "Bicarbonate of soda",
-        "grams": null,
-        "quantity_status": "needs_review"
       }
     ],
     "ambiguity_count": 0
@@ -8785,7 +9372,7 @@
     "canonical_name": "Couscous, crudo",
     "occurrences": 11,
     "recipes_count": 11,
-    "primary_status": "ambiguous",
+    "primary_status": "approved",
     "raw_names": [
       "Couscous",
       "couscous"
@@ -8794,34 +9381,12 @@
       {
         "source": "CREA",
         "id": "000045",
-        "name": "Couscous, crudo",
-        "match_type": "exact",
-        "confidence": "low",
-        "state": "secco, prima della reidratazione",
-        "reason": "Couscous crudo secco CREA 000045 (361 kcal, 13.7g proteine)",
-        "is_ambiguous": true,
-        "nutrients": {
-          "kcal_100g": 361.0,
-          "protein_g_100g": 13.7,
-          "fat_g_100g": 1.1,
-          "carbs_available_g_100g": 76.5
-        }
-      },
-      {
-        "source": "CREA",
-        "id": "000046",
-        "name": "Couscous, cotto",
-        "match_type": "cooked_alternate",
-        "confidence": "low",
-        "state": "cotto / bollito",
-        "reason": "Possibile alternativa cotta (Couscous, cotto) - stato non specificato nella ricetta",
-        "is_ambiguous": true,
-        "nutrients": {
-          "kcal_100g": 179.0,
-          "protein_g_100g": 3.6,
-          "fat_g_100g": 1.1,
-          "carbs_available_g_100g": 39.7
-        }
+        "label": "Couscous, crudo",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
       }
     ],
     "sample_recipes": [
@@ -8866,56 +9431,57 @@
         "quantity_status": "resolved"
       }
     ],
-    "ambiguity_count": 11
+    "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:lemon zest",
-    "canonical_name": "Lemon zest",
+    "canonical_id": "peperoncino_secco_fiocchi",
+    "canonical_name": "Peperoncino secco in fiocchi",
     "occurrences": 11,
     "recipes_count": 11,
     "primary_status": "missing",
     "raw_names": [
-      "Lemon zest"
+      "Chilli flakes",
+      "Toasted chilli flakes"
     ],
     "candidates": [],
     "sample_recipes": [
       {
-        "recipe_id": "unitools:alfajores",
-        "recipe_title": "Alfajores",
-        "ingredient_key": "7",
-        "original_name": "Lemon zest",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:sladke-buchty",
-        "recipe_title": "Buchty",
-        "ingredient_key": "9",
-        "original_name": "Lemon zest",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:fritule",
-        "recipe_title": "Fritule",
+        "recipe_id": "unitools:empanadas-argentinas",
+        "recipe_title": "Argentinian empanadas",
         "ingredient_key": "8",
-        "original_name": "Lemon zest",
+        "original_name": "Chilli flakes",
         "grams": null,
         "quantity_status": "needs_review"
       },
       {
-        "recipe_id": "unitools:imqaret",
-        "recipe_title": "Imqaret",
-        "ingredient_key": "7",
-        "original_name": "Lemon zest",
+        "recipe_id": "unitools:asado-argentino",
+        "recipe_title": "Asado",
+        "ingredient_key": "11",
+        "original_name": "Chilli flakes",
         "grams": null,
         "quantity_status": "needs_review"
       },
       {
-        "recipe_id": "unitools:leche-flan",
-        "recipe_title": "Leche flan",
+        "recipe_id": "unitools:ashak",
+        "recipe_title": "Ashak",
+        "ingredient_key": "10",
+        "original_name": "Chilli flakes",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:bolani",
+        "recipe_title": "Bolani",
         "ingredient_key": "6",
-        "original_name": "Lemon zest",
+        "original_name": "Chilli flakes",
+        "grams": null,
+        "quantity_status": "needs_review"
+      },
+      {
+        "recipe_id": "unitools:chimichurri",
+        "recipe_title": "Chimichurri",
+        "ingredient_key": "4",
+        "original_name": "Chilli flakes",
         "grams": null,
         "quantity_status": "needs_review"
       }
@@ -8923,8 +9489,8 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:mustard",
-    "canonical_name": "Mustard",
+    "canonical_id": "senape",
+    "canonical_name": "Senape",
     "occurrences": 11,
     "recipes_count": 11,
     "primary_status": "missing",
@@ -8977,403 +9543,65 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:pork belly",
-    "canonical_name": "Pork belly",
-    "occurrences": 11,
-    "recipes_count": 11,
-    "primary_status": "missing",
-    "raw_names": [
-      "Pork belly"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:bun-cha",
-        "recipe_title": "Bún chả",
-        "ingredient_key": "1",
-        "original_name": "Pork belly",
-        "grams": 400.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:erwtensoep",
-        "recipe_title": "Erwtensoep",
-        "ingredient_key": "3",
-        "original_name": "Pork belly",
-        "grams": 300.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:feijoada",
-        "recipe_title": "Feijoada",
-        "ingredient_key": "5",
-        "original_name": "Pork belly",
-        "grams": 300.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:gua-bao",
-        "recipe_title": "Gua bao",
-        "ingredient_key": "5",
-        "original_name": "Pork belly",
-        "grams": 900.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:goi-cuon",
-        "recipe_title": "Gỏi cuốn",
-        "ingredient_key": "3",
-        "original_name": "Pork belly",
-        "grams": 300.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:scotch bonnet",
-    "canonical_name": "Scotch bonnet",
-    "occurrences": 11,
-    "recipes_count": 11,
-    "primary_status": "missing",
-    "raw_names": [
-      "Scotch bonnet"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:ackee-and-saltfish",
-        "recipe_title": "Ackee and saltfish",
-        "ingredient_key": "8",
-        "original_name": "Scotch bonnet",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:callaloo",
-        "recipe_title": "Callaloo",
-        "ingredient_key": "7",
-        "original_name": "Scotch bonnet",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:doubles",
-        "recipe_title": "Doubles",
-        "ingredient_key": "10",
-        "original_name": "Scotch bonnet",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:egusi-soup",
-        "recipe_title": "Egusi soup",
-        "ingredient_key": "8",
-        "original_name": "Scotch bonnet",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:jamaican-patty",
-        "recipe_title": "Jamaican patties",
-        "ingredient_key": "8",
-        "original_name": "Scotch bonnet",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:sweetcorn",
-    "canonical_name": "Sweetcorn",
-    "occurrences": 11,
-    "recipes_count": 11,
-    "primary_status": "missing",
-    "raw_names": [
-      "Sweetcorn",
-      "sweetcorn"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R239",
-        "recipe_title": "Black bean and sweetcorn tacos with avocado and lime",
-        "ingredient_key": "5",
-        "original_name": "sweetcorn",
-        "grams": 200.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:cachapas",
-        "recipe_title": "Cachapas",
-        "ingredient_key": "1",
-        "original_name": "Sweetcorn",
-        "grams": 800.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R085",
-        "recipe_title": "Chicken and sweetcorn noodle soup",
-        "ingredient_key": "6",
-        "original_name": "sweetcorn",
-        "grams": 120.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R271",
-        "recipe_title": "Chicken, sweetcorn and egg drop soup",
-        "ingredient_key": "4",
-        "original_name": "sweetcorn",
-        "grams": 200.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R034",
-        "recipe_title": "Cod and sweetcorn chowder",
-        "ingredient_key": "6",
-        "original_name": "sweetcorn",
-        "grams": 120.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:avocado",
-    "canonical_name": "avocado",
-    "occurrences": 11,
-    "recipes_count": 11,
-    "primary_status": "missing",
-    "raw_names": [
-      "Avocado",
-      "avocado"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:ajiaco-bogotano",
-        "recipe_title": "Ajiaco bogotano",
-        "ingredient_key": "11",
-        "original_name": "Avocado",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:baleadas",
-        "recipe_title": "Baleadas",
-        "ingredient_key": "9",
-        "original_name": "Avocado",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:bandeja-paisa",
-        "recipe_title": "Bandeja paisa",
-        "ingredient_key": "10",
-        "original_name": "Avocado",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "foodose:R239",
-        "recipe_title": "Black bean and sweetcorn tacos with avocado and lime",
-        "ingredient_key": "7",
-        "original_name": "avocado",
-        "grams": 150.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:causa-limena",
-        "recipe_title": "Causa limeña",
-        "ingredient_key": "8",
-        "original_name": "Avocado",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:cauliflower",
-    "canonical_name": "cauliflower",
-    "occurrences": 11,
-    "recipes_count": 11,
-    "primary_status": "missing",
-    "raw_names": [
-      "Cauliflower",
-      "cauliflower"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R164",
-        "recipe_title": "Cauliflower and cheese stuffed potatoes",
-        "ingredient_key": "2",
-        "original_name": "cauliflower",
-        "grams": 200.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R056",
-        "recipe_title": "Cauliflower and chickpea couscous with mint yoghurt",
-        "ingredient_key": "1",
-        "original_name": "cauliflower",
-        "grams": 300.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R190",
-        "recipe_title": "Cauliflower and red lentil soup",
-        "ingredient_key": "3",
-        "original_name": "cauliflower",
-        "grams": 350.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R171",
-        "recipe_title": "Cauliflower and tofu orzo",
-        "ingredient_key": "1",
-        "original_name": "cauliflower",
-        "grams": 250.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R266",
-        "recipe_title": "Cauliflower cheese with white beans and mustard",
-        "ingredient_key": "1",
-        "original_name": "cauliflower",
-        "grams": 600.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:chilli flakes",
-    "canonical_name": "Chilli flakes",
+    "canonical_id": "broccoli_crudi",
+    "canonical_name": "Broccolo a testa, crudo",
     "occurrences": 10,
     "recipes_count": 10,
-    "primary_status": "missing",
+    "primary_status": "approved",
     "raw_names": [
-      "Chilli flakes"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:empanadas-argentinas",
-        "recipe_title": "Argentinian empanadas",
-        "ingredient_key": "8",
-        "original_name": "Chilli flakes",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:asado-argentino",
-        "recipe_title": "Asado",
-        "ingredient_key": "11",
-        "original_name": "Chilli flakes",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:ashak",
-        "recipe_title": "Ashak",
-        "ingredient_key": "10",
-        "original_name": "Chilli flakes",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:bolani",
-        "recipe_title": "Bolani",
-        "ingredient_key": "6",
-        "original_name": "Chilli flakes",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:chimichurri",
-        "recipe_title": "Chimichurri",
-        "ingredient_key": "4",
-        "original_name": "Chilli flakes",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "fagioli_cannellini_secchi",
-    "canonical_name": "Fagioli, Cannellini, secchi",
-    "occurrences": 10,
-    "recipes_count": 10,
-    "primary_status": "proposed_exact",
-    "raw_names": [
-      "Baked beans",
-      "Beans",
-      "Black beans",
-      "Black-eyed beans",
-      "Kidney beans",
-      "Red beans"
+      "broccoli"
     ],
     "candidates": [
       {
         "source": "CREA",
-        "id": "004200",
-        "name": "Fagioli, Cannellini, secchi",
-        "match_type": "exact",
-        "confidence": "high",
-        "state": "secco, prima dell ammollo e cottura",
-        "reason": "Fagioli cannellini secchi CREA 004200",
-        "is_ambiguous": false,
-        "nutrients": {
-          "kcal_100g": 314.0,
-          "protein_g_100g": 23.4,
-          "fat_g_100g": 1.6,
-          "carbs_available_g_100g": 45.5
-        }
+        "id": "005110",
+        "label": "Broccolo a testa, crudo",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
       }
     ],
     "sample_recipes": [
       {
-        "recipe_id": "unitools:baleadas",
-        "recipe_title": "Baleadas",
-        "ingredient_key": "4",
-        "original_name": "Red beans",
-        "grams": 400.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:casado",
-        "recipe_title": "Casado",
-        "ingredient_key": "3",
-        "original_name": "Black beans",
-        "grams": 400.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:chakalaka",
-        "recipe_title": "Chakalaka",
-        "ingredient_key": "4",
-        "original_name": "Baked beans",
-        "grams": 400.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:feijoada",
-        "recipe_title": "Feijoada",
-        "ingredient_key": "1",
-        "original_name": "Black beans",
-        "grams": 700.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:gallo-pinto",
-        "recipe_title": "Gallo pinto",
+        "recipe_id": "foodose:R049",
+        "recipe_title": "Broccoli and cheddar potato cakes",
         "ingredient_key": "2",
-        "original_name": "Black beans",
+        "original_name": "broccoli",
+        "grams": 150.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R157",
+        "recipe_title": "Broccoli and ricotta filo pie",
+        "ingredient_key": "1",
+        "original_name": "broccoli",
+        "grams": 180.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R087",
+        "recipe_title": "Broccoli and white bean soup with cheddar",
+        "ingredient_key": "3",
+        "original_name": "broccoli",
+        "grams": 300.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R292",
+        "recipe_title": "Broccoli, white bean and cheddar soup",
+        "ingredient_key": "5",
+        "original_name": "broccoli",
         "grams": 400.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "foodose:R281",
+        "recipe_title": "Chicken and broccoli noodles with soy and almond",
+        "ingredient_key": "7",
+        "original_name": "broccoli",
+        "grams": 250.0,
         "quantity_status": "resolved"
       }
     ],
@@ -9450,7 +9678,7 @@
     "canonical_name": "Polenta (farina di mais), cruda",
     "occurrences": 10,
     "recipes_count": 10,
-    "primary_status": "ambiguous",
+    "primary_status": "approved",
     "raw_names": [
       "Cornmeal",
       "polenta"
@@ -9459,34 +9687,12 @@
       {
         "source": "CREA",
         "id": "000075",
-        "name": "Polenta, cruda",
-        "match_type": "exact",
-        "confidence": "low",
-        "state": "farina di mais bramata secca cruda",
-        "reason": "Polenta cruda CREA 000075 (323 kcal, 8.0g proteine)",
-        "is_ambiguous": true,
-        "nutrients": {
-          "kcal_100g": 323.0,
-          "protein_g_100g": 8.0,
-          "fat_g_100g": 0.7,
-          "carbs_available_g_100g": 72.7
-        }
-      },
-      {
-        "source": "CREA",
-        "id": "000076",
-        "name": "Polenta, cotta",
-        "match_type": "cooked_alternate",
-        "confidence": "low",
-        "state": "cotto / bollito",
-        "reason": "Possibile alternativa cotta (Polenta, cotta) - stato non specificato nella ricetta",
-        "is_ambiguous": true,
-        "nutrients": {
-          "kcal_100g": 73.0,
-          "protein_g_100g": 0.9,
-          "fat_g_100g": 0.04,
-          "carbs_available_g_100g": 17.8
-        }
+        "label": "Polenta, cruda",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
       }
     ],
     "sample_recipes": [
@@ -9531,119 +9737,11 @@
         "quantity_status": "resolved"
       }
     ],
-    "ambiguity_count": 10
-  },
-  {
-    "canonical_id": "unmapped:broccoli",
-    "canonical_name": "broccoli",
-    "occurrences": 10,
-    "recipes_count": 10,
-    "primary_status": "missing",
-    "raw_names": [
-      "broccoli"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R049",
-        "recipe_title": "Broccoli and cheddar potato cakes",
-        "ingredient_key": "2",
-        "original_name": "broccoli",
-        "grams": 150.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R157",
-        "recipe_title": "Broccoli and ricotta filo pie",
-        "ingredient_key": "1",
-        "original_name": "broccoli",
-        "grams": 180.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R087",
-        "recipe_title": "Broccoli and white bean soup with cheddar",
-        "ingredient_key": "3",
-        "original_name": "broccoli",
-        "grams": 300.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R292",
-        "recipe_title": "Broccoli, white bean and cheddar soup",
-        "ingredient_key": "5",
-        "original_name": "broccoli",
-        "grams": 400.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R281",
-        "recipe_title": "Chicken and broccoli noodles with soy and almond",
-        "ingredient_key": "7",
-        "original_name": "broccoli",
-        "grams": 250.0,
-        "quantity_status": "resolved"
-      }
-    ],
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:fresh thyme leaves",
-    "canonical_name": "fresh thyme leaves",
-    "occurrences": 10,
-    "recipes_count": 10,
-    "primary_status": "missing",
-    "raw_names": [
-      "fresh thyme leaves"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R206",
-        "recipe_title": "Baked eggs with spinach, Gruyère and thyme",
-        "ingredient_key": "5",
-        "original_name": "fresh thyme leaves",
-        "grams": 0.8,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R256",
-        "recipe_title": "Baked ricotta with roasted tomatoes and thyme on rye",
-        "ingredient_key": "3",
-        "original_name": "fresh thyme leaves",
-        "grams": 0.8,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R213",
-        "recipe_title": "Chicken poached in lemon and thyme with white beans",
-        "ingredient_key": "2",
-        "original_name": "fresh thyme leaves",
-        "grams": 0.8,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R231",
-        "recipe_title": "Courgette and Gruyère frittata",
-        "ingredient_key": "4",
-        "original_name": "fresh thyme leaves",
-        "grams": 0.8,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R232",
-        "recipe_title": "Mushroom and barley risotto",
-        "ingredient_key": "7",
-        "original_name": "fresh thyme leaves",
-        "grams": 0.8,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:tahini",
-    "canonical_name": "tahini",
+    "canonical_id": "tahina",
+    "canonical_name": "Tahina (pasta di sesamo)",
     "occurrences": 10,
     "recipes_count": 10,
     "primary_status": "missing",
@@ -9746,60 +9844,6 @@
         "original_name": "vegetarian hard cheese",
         "grams": 30.0,
         "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:cardamom pods",
-    "canonical_name": "Cardamom pods",
-    "occurrences": 9,
-    "recipes_count": 9,
-    "primary_status": "missing",
-    "raw_names": [
-      "Cardamom pods"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:bhuna-khichuri",
-        "recipe_title": "Bhuna khichuri",
-        "ingredient_key": "10",
-        "original_name": "Cardamom pods",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:bunny-chow",
-        "recipe_title": "Bunny chow",
-        "ingredient_key": "9",
-        "original_name": "Cardamom pods",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:harees",
-        "recipe_title": "Harees",
-        "ingredient_key": "4",
-        "original_name": "Cardamom pods",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:kabsa",
-        "recipe_title": "Kabsa",
-        "ingredient_key": "9",
-        "original_name": "Cardamom pods",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:kitfo",
-        "recipe_title": "Kitfo",
-        "ingredient_key": "5",
-        "original_name": "Cardamom pods",
-        "grams": null,
-        "quantity_status": "needs_review"
       }
     ],
     "ambiguity_count": 0
@@ -10501,6 +10545,74 @@
         "ingredient_key": "6",
         "original_name": "Pine nuts",
         "grams": 80.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "pollo_coscia_cruda",
+    "canonical_name": "Pollo, sovracoscia o fuso, crudo",
+    "occurrences": 8,
+    "recipes_count": 8,
+    "primary_status": "approved",
+    "raw_names": [
+      "Boneless chicken thigh",
+      "Chicken drumsticks",
+      "Chicken thigh",
+      "Chicken thighs"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "106610",
+        "label": "Pollo, sovracoscia, senza pelle, crudo",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:murgh-makhani",
+        "recipe_title": "Butter chicken",
+        "ingredient_key": "1",
+        "original_name": "Boneless chicken thigh",
+        "grams": 700.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:adobo",
+        "recipe_title": "Chicken adobo",
+        "ingredient_key": "1",
+        "original_name": "Chicken thighs",
+        "grams": 1000.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:joojeh-kabab",
+        "recipe_title": "Joojeh kabab",
+        "ingredient_key": "1",
+        "original_name": "Boneless chicken thigh",
+        "grams": 1200.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:khao-soi",
+        "recipe_title": "Khao soi",
+        "ingredient_key": "2",
+        "original_name": "Chicken drumsticks",
+        "grams": 800.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:montucas",
+        "recipe_title": "Montucas",
+        "ingredient_key": "2",
+        "original_name": "Chicken thighs",
+        "grams": 800.0,
         "quantity_status": "resolved"
       }
     ],
@@ -11495,60 +11607,6 @@
         "recipe_title": "Kimchi jjigae",
         "ingredient_key": "10",
         "original_name": "Sesame oil",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:wine vinegar",
-    "canonical_name": "Wine vinegar",
-    "occurrences": 7,
-    "recipes_count": 7,
-    "primary_status": "missing",
-    "raw_names": [
-      "Wine vinegar"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:ajvar",
-        "recipe_title": "Ajvar",
-        "ingredient_key": "5",
-        "original_name": "Wine vinegar",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:carbonade-flamande",
-        "recipe_title": "Carbonade flamande",
-        "ingredient_key": "7",
-        "original_name": "Wine vinegar",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:moros-y-cristianos",
-        "recipe_title": "Moros y cristianos",
-        "ingredient_key": "9",
-        "original_name": "Wine vinegar",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:sardinhas-assadas",
-        "recipe_title": "Sardinhas assadas",
-        "ingredient_key": "8",
-        "original_name": "Wine vinegar",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:satsivi",
-        "recipe_title": "Satsivi",
-        "ingredient_key": "10",
-        "original_name": "Wine vinegar",
         "grams": null,
         "quantity_status": "needs_review"
       }
@@ -13550,6 +13608,74 @@
     "ambiguity_count": 0
   },
   {
+    "canonical_id": "manzo_brasato_crudo",
+    "canonical_name": "Manzo, tagli da brasato/stufato, crudo",
+    "occurrences": 5,
+    "recipes_count": 5,
+    "primary_status": "proposed_exact",
+    "raw_names": [
+      "Beef chuck",
+      "Beef shin",
+      "Beef shin or shoulder",
+      "Beef shoulder"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "101230",
+        "label": "Bovino adulto o vitellone, copertina di sotto, copertina di spalla, sottospalla e collo, crudo",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:guinness-beef-stew",
+        "recipe_title": "Beef and stout stew",
+        "ingredient_key": "1",
+        "original_name": "Beef chuck",
+        "grams": 1500.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:carbonade-flamande",
+        "recipe_title": "Carbonade flamande",
+        "ingredient_key": "1",
+        "original_name": "Beef shoulder",
+        "grams": 1200.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:goulash",
+        "recipe_title": "Goulash",
+        "ingredient_key": "1",
+        "original_name": "Beef shin or shoulder",
+        "grams": 1000.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:nihari",
+        "recipe_title": "Nihari",
+        "ingredient_key": "1",
+        "original_name": "Beef shin",
+        "grams": 1200.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:rendang",
+        "recipe_title": "Rendang",
+        "ingredient_key": "1",
+        "original_name": "Beef shin",
+        "grams": 1200.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
     "canonical_id": "unmapped:marjoram",
     "canonical_name": "Marjoram",
     "occurrences": 5,
@@ -13599,6 +13725,73 @@
         "original_name": "Marjoram",
         "grams": null,
         "quantity_status": "needs_review"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "pancetta_affettata",
+    "canonical_name": "Pancetta tesa",
+    "occurrences": 5,
+    "recipes_count": 5,
+    "primary_status": "proposed_proxy",
+    "raw_names": [
+      "Bacon",
+      "Guanciale",
+      "Pancetta"
+    ],
+    "candidates": [
+      {
+        "source": "CREA",
+        "id": "110310",
+        "label": "Pancetta tesa",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
+      }
+    ],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:bucatini-all-amatriciana",
+        "recipe_title": "Bucatini all'amatriciana",
+        "ingredient_key": "2",
+        "original_name": "Guanciale",
+        "grams": 150.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:buseca",
+        "recipe_title": "Buseca",
+        "ingredient_key": "4",
+        "original_name": "Pancetta",
+        "grams": 150.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:chivito",
+        "recipe_title": "Chivito",
+        "ingredient_key": "4",
+        "original_name": "Bacon",
+        "grams": 150.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:lasagne-alla-bolognese",
+        "recipe_title": "Lasagne alla bolognese",
+        "ingredient_key": "3",
+        "original_name": "Pancetta",
+        "grams": 100.0,
+        "quantity_status": "resolved"
+      },
+      {
+        "recipe_id": "unitools:spaghetti-carbonara",
+        "recipe_title": "Spaghetti carbonara",
+        "ingredient_key": "2",
+        "original_name": "Guanciale",
+        "grams": 100.0,
+        "quantity_status": "resolved"
       }
     ],
     "ambiguity_count": 0
@@ -15780,52 +15973,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:butternut squash",
-    "canonical_name": "butternut squash",
-    "occurrences": 4,
-    "recipes_count": 4,
-    "primary_status": "missing",
-    "raw_names": [
-      "butternut squash"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R287",
-        "recipe_title": "Butternut squash, sage and ricotta pasta",
-        "ingredient_key": "1",
-        "original_name": "butternut squash",
-        "grams": 400.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R077",
-        "recipe_title": "Butternut, white bean and sage soup",
-        "ingredient_key": "1",
-        "original_name": "butternut squash",
-        "grams": 400.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R133",
-        "recipe_title": "Chicken and chestnut stuffed squash",
-        "ingredient_key": "1",
-        "original_name": "butternut squash",
-        "grams": 500.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R259",
-        "recipe_title": "Chicken and squash traybake with sage and haricot beans",
-        "ingredient_key": "1",
-        "original_name": "butternut squash",
-        "grams": 400.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:cooked chestnuts",
     "canonical_name": "cooked chestnuts",
     "occurrences": 4,
@@ -16491,44 +16638,6 @@
         "original_name": "Brined white cheese",
         "grams": 400.0,
         "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:cardamom",
-    "canonical_name": "Cardamom",
-    "occurrences": 3,
-    "recipes_count": 3,
-    "primary_status": "missing",
-    "raw_names": [
-      "Cardamom"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:kabuli-pulao",
-        "recipe_title": "Kabuli pulao",
-        "ingredient_key": "11",
-        "original_name": "Cardamom",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:kanelbullar",
-        "recipe_title": "Kanelbullar",
-        "ingredient_key": "5",
-        "original_name": "Cardamom",
-        "grams": null,
-        "quantity_status": "needs_review"
-      },
-      {
-        "recipe_id": "unitools:mansaf",
-        "recipe_title": "Mansaf",
-        "ingredient_key": "8",
-        "original_name": "Cardamom",
-        "grams": null,
-        "quantity_status": "needs_review"
       }
     ],
     "ambiguity_count": 0
@@ -17649,44 +17758,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:pork shoulder",
-    "canonical_name": "Pork shoulder",
-    "occurrences": 3,
-    "recipes_count": 3,
-    "primary_status": "missing",
-    "raw_names": [
-      "Pork shoulder"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:cochinita-pibil",
-        "recipe_title": "Cochinita pibil",
-        "ingredient_key": "1",
-        "original_name": "Pork shoulder",
-        "grams": 2500.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:vepro-knedlo-zelo",
-        "recipe_title": "Pork with dumplings and cabbage",
-        "ingredient_key": "1",
-        "original_name": "Pork shoulder",
-        "grams": 1500.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "unitools:pulled-pork",
-        "recipe_title": "Pulled pork",
-        "ingredient_key": "1",
-        "original_name": "Pork shoulder",
-        "grams": 4000.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:sake",
     "canonical_name": "Sake",
     "occurrences": 3,
@@ -17839,39 +17910,39 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:single cream",
-    "canonical_name": "Single cream",
+    "canonical_id": "unmapped:smoked pork fat",
+    "canonical_name": "Smoked pork fat",
     "occurrences": 3,
     "recipes_count": 3,
     "primary_status": "missing",
     "raw_names": [
-      "Single cream"
+      "Smoked pork fat"
     ],
     "candidates": [],
     "sample_recipes": [
       {
-        "recipe_id": "unitools:lohikeitto",
-        "recipe_title": "Lohikeitto",
-        "ingredient_key": "6",
-        "original_name": "Single cream",
-        "grams": null,
-        "quantity_status": "needs_review"
+        "recipe_id": "unitools:bosanski-lonac",
+        "recipe_title": "Bosanski lonac",
+        "ingredient_key": "11",
+        "original_name": "Smoked pork fat",
+        "grams": 150.0,
+        "quantity_status": "resolved"
       },
       {
-        "recipe_id": "unitools:clam-chowder",
-        "recipe_title": "New England clam chowder",
-        "ingredient_key": "6",
-        "original_name": "Single cream",
-        "grams": null,
-        "quantity_status": "needs_review"
+        "recipe_id": "unitools:cepelinai",
+        "recipe_title": "Cepelinai",
+        "ingredient_key": "5",
+        "original_name": "Smoked pork fat",
+        "grams": 200.0,
+        "quantity_status": "resolved"
       },
       {
-        "recipe_id": "unitools:zurek",
-        "recipe_title": "Żurek",
-        "ingredient_key": "8",
-        "original_name": "Single cream",
-        "grams": null,
-        "quantity_status": "needs_review"
+        "recipe_id": "unitools:sarma-serbian",
+        "recipe_title": "Sarma",
+        "ingredient_key": "7",
+        "original_name": "Smoked pork fat",
+        "grams": 150.0,
+        "quantity_status": "resolved"
       }
     ],
     "ambiguity_count": 0
@@ -21932,36 +22003,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:pork tenderloin",
-    "canonical_name": "pork tenderloin",
-    "occurrences": 2,
-    "recipes_count": 2,
-    "primary_status": "missing",
-    "raw_names": [
-      "pork tenderloin"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "foodose:R092",
-        "recipe_title": "Pork tenderloin with apple, sage and polenta",
-        "ingredient_key": "2",
-        "original_name": "pork tenderloin",
-        "grams": 280.0,
-        "quantity_status": "resolved"
-      },
-      {
-        "recipe_id": "foodose:R194",
-        "recipe_title": "Pork, pear and mustard pita",
-        "ingredient_key": "1",
-        "original_name": "pork tenderloin",
-        "grams": 220.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:tortellini",
     "canonical_name": "tortellini",
     "occurrences": 2,
@@ -22492,28 +22533,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:avocados",
-    "canonical_name": "Avocados",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Avocados"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:completo-italiano",
-        "recipe_title": "Completo",
-        "ingredient_key": "3",
-        "original_name": "Avocados",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:ayib or fresh curd",
     "canonical_name": "Ayib or fresh curd",
     "occurrences": 1,
@@ -22573,28 +22592,6 @@
         "recipe_title": "Kuwaiti gereesh",
         "ingredient_key": "6",
         "original_name": "Baharat spice mix",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:baking soda",
-    "canonical_name": "Baking soda",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Baking soda"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:waakye",
-        "recipe_title": "Waakye",
-        "ingredient_key": "4",
-        "original_name": "Baking soda",
         "grams": null,
         "quantity_status": "needs_review"
       }
@@ -22838,50 +22835,6 @@
         "ingredient_key": "3",
         "original_name": "Beef or chicken",
         "grams": 500.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:beef rump",
-    "canonical_name": "Beef rump",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Beef rump"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:tafelspitz",
-        "recipe_title": "Tafelspitz",
-        "ingredient_key": "1",
-        "original_name": "Beef rump",
-        "grams": 1800.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:beef shin",
-    "canonical_name": "Beef shin",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Beef shin"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:nihari",
-        "recipe_title": "Nihari",
-        "ingredient_key": "1",
-        "original_name": "Beef shin",
-        "grams": 1200.0,
         "quantity_status": "resolved"
       }
     ],
@@ -23728,7 +23681,7 @@
     "canonical_name": "Ceci, secchi",
     "occurrences": 1,
     "recipes_count": 1,
-    "primary_status": "proposed_exact",
+    "primary_status": "approved",
     "raw_names": [
       "Dried chickpeas"
     ],
@@ -23736,18 +23689,12 @@
       {
         "source": "CREA",
         "id": "004000",
-        "name": "Ceci, secchi",
-        "match_type": "exact",
-        "confidence": "high",
-        "state": "secco, prima dell ammollo e cottura",
-        "reason": "Ceci secchi CREA 004000",
-        "is_ambiguous": false,
-        "nutrients": {
-          "kcal_100g": 343.0,
-          "protein_g_100g": 20.9,
-          "fat_g_100g": 6.3,
-          "carbs_available_g_100g": 46.9
-        }
+        "label": "Ceci, secchi",
+        "state": "verificato",
+        "reviewed": true,
+        "state_checked": true,
+        "approved_by": "claude_review_batch02",
+        "note": "Batch 02 Gemini, verificato da Claude il 2026-10-06"
       }
     ],
     "sample_recipes": [
@@ -23844,28 +23791,6 @@
         "recipe_title": "Casado",
         "ingredient_key": "5",
         "original_name": "Chayote or courgette",
-        "grams": 300.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:cheddar cheese curds",
-    "canonical_name": "Cheddar cheese curds",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Cheddar cheese curds"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:poutine",
-        "recipe_title": "Poutine",
-        "ingredient_key": "2",
-        "original_name": "Cheddar cheese curds",
         "grams": 300.0,
         "quantity_status": "resolved"
       }
@@ -24379,28 +24304,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:coriander, spring onion, thai basil",
-    "canonical_name": "Coriander, spring onion, Thai basil",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Coriander, spring onion, Thai basil"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:pho-bo",
-        "recipe_title": "Phở bò",
-        "ingredient_key": "13",
-        "original_name": "Coriander, spring onion, Thai basil",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:corn",
     "canonical_name": "Corn",
     "occurrences": 1,
@@ -24418,28 +24321,6 @@
         "original_name": "Corn",
         "grams": null,
         "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:corn kernels",
-    "canonical_name": "Corn kernels",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Corn kernels"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:fanesca",
-        "recipe_title": "Fanesca",
-        "ingredient_key": "5",
-        "original_name": "Corn kernels",
-        "grams": 200.0,
-        "quantity_status": "resolved"
       }
     ],
     "ambiguity_count": 0
@@ -24505,28 +24386,6 @@
         "ingredient_key": "5",
         "original_name": "Cornflakes",
         "grams": 60.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:cornstarch",
-    "canonical_name": "Cornstarch",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Cornstarch"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:omani-halwa",
-        "recipe_title": "Omani halwa",
-        "ingredient_key": "1",
-        "original_name": "Cornstarch",
-        "grams": 300.0,
         "quantity_status": "resolved"
       }
     ],
@@ -24726,28 +24585,6 @@
         "original_name": "Curdled milk or buttermilk",
         "grams": null,
         "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:cured pork belly",
-    "canonical_name": "Cured pork belly",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Cured pork belly"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:fabada-asturiana",
-        "recipe_title": "Fabada asturiana",
-        "ingredient_key": "4",
-        "original_name": "Cured pork belly",
-        "grams": 200.0,
-        "quantity_status": "resolved"
       }
     ],
     "ambiguity_count": 0
@@ -25454,40 +25291,6 @@
         "original_name": "Dried sour plums",
         "grams": null,
         "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "trace:dried thyme",
-    "canonical_name": "Dried thyme",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "approved",
-    "raw_names": [
-      "Dried thyme"
-    ],
-    "candidates": [
-      {
-        "source": "condiment",
-        "id": "trace",
-        "label": "Dried thyme",
-        "category": "condimento",
-        "state": "in traccia, 0 kcal dichiarate",
-        "reviewed": true,
-        "state_checked": true,
-        "declared_kcal": 0,
-        "reason": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
-      }
-    ],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:jollof-rice",
-        "recipe_title": "Jollof rice",
-        "ingredient_key": "8",
-        "original_name": "Dried thyme",
-        "grams": null,
-        "quantity_status": "trace"
       }
     ],
     "ambiguity_count": 0
@@ -27089,28 +26892,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:habanero",
-    "canonical_name": "Habanero",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Habanero"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:cochinita-pibil",
-        "recipe_title": "Cochinita pibil",
-        "ingredient_key": "11",
-        "original_name": "Habanero",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:hard cheese",
     "canonical_name": "Hard cheese",
     "occurrences": 1,
@@ -28035,6 +27816,28 @@
     "ambiguity_count": 0
   },
   {
+    "canonical_id": "unmapped:large white beans",
+    "canonical_name": "Large white beans",
+    "occurrences": 1,
+    "recipes_count": 1,
+    "primary_status": "missing",
+    "raw_names": [
+      "Large white beans"
+    ],
+    "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:paella-valenciana",
+        "recipe_title": "Paella valenciana",
+        "ingredient_key": "5",
+        "original_name": "Large white beans",
+        "grams": 100.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
     "canonical_id": "unmapped:lasagne sheets",
     "canonical_name": "Lasagne sheets",
     "occurrences": 1,
@@ -28094,28 +27897,6 @@
         "recipe_title": "Grilled barramundi",
         "ingredient_key": "2",
         "original_name": "Lemon myrtle",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:lemon peel",
-    "canonical_name": "Lemon peel",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Lemon peel"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:pastel-de-nata",
-        "recipe_title": "Pastel de nata",
-        "ingredient_key": "9",
-        "original_name": "Lemon peel",
         "grams": null,
         "quantity_status": "needs_review"
       }
@@ -29619,28 +29400,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:padaek or fish sauce",
-    "canonical_name": "Padaek or fish sauce",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Padaek or fish sauce"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:tam-mak-hoong",
-        "recipe_title": "Tam mak hoong",
-        "ingredient_key": "2",
-        "original_name": "Padaek or fish sauce",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:pale beer",
     "canonical_name": "Pale beer",
     "occurrences": 1,
@@ -30191,6 +29950,28 @@
     "ambiguity_count": 0
   },
   {
+    "canonical_id": "pollo_macinato_crudo",
+    "canonical_name": "Pollo, macinato, crudo",
+    "occurrences": 1,
+    "recipes_count": 1,
+    "primary_status": "missing",
+    "raw_names": [
+      "Minced chicken"
+    ],
+    "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:shan-noodles",
+        "recipe_title": "Shan noodles",
+        "ingredient_key": "2",
+        "original_name": "Minced chicken",
+        "grams": 500.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
     "canonical_id": "unmapped:pomegranate seeds",
     "canonical_name": "Pomegranate seeds",
     "occurrences": 1,
@@ -30251,28 +30032,6 @@
         "ingredient_key": "9",
         "original_name": "Poppy seeds",
         "grams": 100.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:pork belly with skin",
-    "canonical_name": "Pork belly with skin",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Pork belly with skin"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:bandeja-paisa",
-        "recipe_title": "Bandeja paisa",
-        "ingredient_key": "2",
-        "original_name": "Pork belly with skin",
-        "grams": 600.0,
         "quantity_status": "resolved"
       }
     ],
@@ -30404,28 +30163,6 @@
         "recipe_title": "Samlor korko",
         "ingredient_key": "7",
         "original_name": "Prahok",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:prahok or fish sauce",
-    "canonical_name": "Prahok or fish sauce",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Prahok or fish sauce"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:num-banh-chok",
-        "recipe_title": "Num banh chok",
-        "ingredient_key": "8",
-        "original_name": "Prahok or fish sauce",
         "grams": null,
         "quantity_status": "needs_review"
       }
@@ -31506,28 +31243,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:scotch bonnet chillies",
-    "canonical_name": "Scotch bonnet chillies",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Scotch bonnet chillies"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:jerk-chicken",
-        "recipe_title": "Jerk chicken",
-        "ingredient_key": "2",
-        "original_name": "Scotch bonnet chillies",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:sea bass or bream",
     "canonical_name": "Sea bass or bream",
     "occurrences": 1,
@@ -31565,28 +31280,6 @@
         "recipe_title": "Kibbeh nayyeh",
         "ingredient_key": "4",
         "original_name": "Seven-spice mix",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:shallot",
-    "canonical_name": "Shallot",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Shallot"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:pad-thai",
-        "recipe_title": "Pad thai",
-        "ingredient_key": "9",
-        "original_name": "Shallot",
         "grams": null,
         "quantity_status": "needs_review"
       }
@@ -32160,28 +31853,6 @@
         "ingredient_key": "1",
         "original_name": "Split peas",
         "grams": 500.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:squash",
-    "canonical_name": "Squash",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Squash"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:olla-de-carne",
-        "recipe_title": "Olla de carne",
-        "ingredient_key": "3",
-        "original_name": "Squash",
-        "grams": 400.0,
         "quantity_status": "resolved"
       }
     ],
@@ -32936,28 +32607,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:toasted chilli flakes",
-    "canonical_name": "Toasted chilli flakes",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Toasted chilli flakes"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:larb-lao",
-        "recipe_title": "Larb",
-        "ingredient_key": "5",
-        "original_name": "Toasted chilli flakes",
-        "grams": null,
-        "quantity_status": "needs_review"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:toasted coconut",
     "canonical_name": "Toasted coconut",
     "occurrences": 1,
@@ -33354,28 +33003,6 @@
     "ambiguity_count": 0
   },
   {
-    "canonical_id": "unmapped:warqa or filo pastry",
-    "canonical_name": "Warqa or filo pastry",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Warqa or filo pastry"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:pastilla",
-        "recipe_title": "Pastilla",
-        "ingredient_key": "2",
-        "original_name": "Warqa or filo pastry",
-        "grams": 400.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
     "canonical_id": "unmapped:water lily stems",
     "canonical_name": "Water lily stems",
     "occurrences": 1,
@@ -33458,6 +33085,28 @@
         "ingredient_key": "2",
         "original_name": "Watermelon",
         "grams": 800.0,
+        "quantity_status": "resolved"
+      }
+    ],
+    "ambiguity_count": 0
+  },
+  {
+    "canonical_id": "unmapped:white beans",
+    "canonical_name": "White beans",
+    "occurrences": 1,
+    "recipes_count": 1,
+    "primary_status": "missing",
+    "raw_names": [
+      "White beans"
+    ],
+    "candidates": [],
+    "sample_recipes": [
+      {
+        "recipe_id": "unitools:buseca",
+        "recipe_title": "Buseca",
+        "ingredient_key": "2",
+        "original_name": "White beans",
+        "grams": 300.0,
         "quantity_status": "resolved"
       }
     ],
@@ -33700,28 +33349,6 @@
         "ingredient_key": "3",
         "original_name": "Young salted cheese",
         "grams": 300.0,
-        "quantity_status": "resolved"
-      }
-    ],
-    "ambiguity_count": 0
-  },
-  {
-    "canonical_id": "unmapped:yufka or filo pastry",
-    "canonical_name": "Yufka or filo pastry",
-    "occurrences": 1,
-    "recipes_count": 1,
-    "primary_status": "missing",
-    "raw_names": [
-      "Yufka or filo pastry"
-    ],
-    "candidates": [],
-    "sample_recipes": [
-      {
-        "recipe_id": "unitools:baklava",
-        "recipe_title": "Baklava",
-        "ingredient_key": "1",
-        "original_name": "Yufka or filo pastry",
-        "grams": 500.0,
         "quantity_status": "resolved"
       }
     ],

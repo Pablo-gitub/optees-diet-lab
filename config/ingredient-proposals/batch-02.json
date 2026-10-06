@@ -1,0 +1,1710 @@
+{
+  "batch": 2,
+  "created": "2026-10-06",
+  "group_selection": "revisione delle 8 proposte non approvate della sessione 1 con suddivisione dei gruppi (parte a, 19 proposte) e successivi 60 gruppi per numero di ricette (parte b, 60 proposte)",
+  "proposals": [
+    {
+      "canonical_id": "pollo_petto_crudo",
+      "raw_names_covered": [
+        "Chicken breast",
+        "Chicken breasts",
+        "chicken breast",
+        "Cooked chicken",
+        "cooked chicken"
+      ],
+      "raw_names_excluded": [
+        {
+          "name": "Boneless chicken thigh",
+          "reason": "Coscia di pollo disossata: taglio scuro più grasso, gruppo pollo_coscia_cruda"
+        },
+        {
+          "name": "Chicken thigh",
+          "reason": "Coscia di pollo: gruppo pollo_coscia_cruda"
+        },
+        {
+          "name": "Chicken thighs",
+          "reason": "Cosce di pollo: gruppo pollo_coscia_cruda"
+        },
+        {
+          "name": "Chicken drumsticks",
+          "reason": "Fusi di pollo: gruppo pollo_coscia_cruda"
+        },
+        {
+          "name": "Minced chicken",
+          "reason": "Carne macinata di pollo: gruppo pollo_macinato_crudo"
+        },
+        {
+          "name": "Chicken, jointed",
+          "reason": "Pollo a pezzi con osso e pelle: gruppo pollo_con_osso_crudo"
+        },
+        {
+          "name": "Chicken, in pieces",
+          "reason": "Pollo in pezzi con osso: gruppo pollo_con_osso_crudo"
+        },
+        {
+          "name": "Whole chicken",
+          "reason": "Pollo intero con carcassa e pelle: gruppo pollo_con_osso_crudo"
+        },
+        {
+          "name": "Chicken on the bone",
+          "reason": "Pollo con osso: scarto osseo non determinato"
+        },
+        {
+          "name": "Chicken breasts on the bone",
+          "reason": "Petti di pollo con osso: scarto osseo non separato"
+        },
+        {
+          "name": "Chicken",
+          "reason": "Denominazione generica: include tagli con osso o misti"
+        },
+        {
+          "name": "Chicken for the curry",
+          "reason": "Denominazione generica da ricetta"
+        }
+      ],
+      "recipes_count": 107,
+      "proposed": {
+        "source": "CREA",
+        "id": "106500",
+        "name": "Pollo, petto, crudo",
+        "state": "crudo, parte edibile"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Petto di pollo crudo, taglio magro di riferimento (100 kcal, 23.3g proteine, 0.8g grassi, 0.0g carboidrati). Esclusi tagli con pelle/osso, cosce e macinato.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,106500' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "pollo_coscia_cruda",
+      "raw_names_covered": [
+        "Boneless chicken thigh",
+        "Chicken thigh",
+        "Chicken thighs",
+        "Chicken drumsticks"
+      ],
+      "raw_names_excluded": [
+        {
+          "name": "Chicken breast",
+          "reason": "Petto di pollo (taglio magro separato)"
+        },
+        {
+          "name": "Minced chicken",
+          "reason": "Macinato di pollo"
+        },
+        {
+          "name": "Whole chicken",
+          "reason": "Pollo intero con osso"
+        }
+      ],
+      "recipes_count": 35,
+      "proposed": {
+        "source": "CREA",
+        "id": "106610",
+        "name": "Pollo, sovracoscia, senza pelle, crudo",
+        "state": "crudo, parte edibile senza pelle"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Sovracoscia/fuso di pollo senza pelle crudo CREA 106610 (132 kcal, 18.7g proteine, 6.3g grassi, 0.0g carboidrati). Taglio scuro con profilo lipidico significativamente diverso dal petto.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,106610' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "pollo_macinato_crudo",
+      "raw_names_covered": [
+        "Minced chicken"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 5,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "In CREA non è presente alcuna voce specifica per macinato di pollo (la composizione varia secondo il taglio macinato). Lasciato ambiguo.",
+      "off_candidates": [],
+      "check_query": "grep -i 'macinat.*pollo' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "pollo_con_osso_crudo",
+      "raw_names_covered": [
+        "Chicken, jointed",
+        "Chicken, in pieces",
+        "Whole chicken",
+        "Chicken on the bone",
+        "Chicken breasts on the bone",
+        "Chicken",
+        "Chicken for the curry"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 67,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "Pollo intero o a pezzi con osso/pelle. Le ricette indicano peso lordo con osso (scarto osseo 30-40% non standardizzabile) o misto pelle/carne. In CREA 106200/106210 le tabelle indicano parte edibile: l'uso del peso lordo della ricetta falserebbe i nutrienti.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,106210' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "manzo_magro_crudo",
+      "raw_names_covered": [
+        "Beef fillet",
+        "Beef sirloin",
+        "Beef tenderloin",
+        "Beef topside",
+        "Beef rump",
+        "Lean beef",
+        "Beef, thinly sliced"
+      ],
+      "raw_names_excluded": [
+        {
+          "name": "Minced beef",
+          "reason": "Carne macinata di manzo (tenore di grasso differente, gruppo manzo_macinato_crudo)"
+        },
+        {
+          "name": "Beef chuck",
+          "reason": "Sottospalla/collo da brasato (gruppo manzo_brasato_crudo)"
+        },
+        {
+          "name": "Beef shin",
+          "reason": "Geretto/muscolo da stufato (gruppo manzo_brasato_crudo)"
+        },
+        {
+          "name": "Beef shin or shoulder",
+          "reason": "Taglio anteriore da stufato (gruppo manzo_brasato_crudo)"
+        },
+        {
+          "name": "Beef shoulder",
+          "reason": "Spalla da stufato (gruppo manzo_brasato_crudo)"
+        },
+        {
+          "name": "Beef on the bone",
+          "reason": "Taglio con osso (scarto non determinato)"
+        },
+        {
+          "name": "Beef flank",
+          "reason": "Bavetta/pancia (taglio semigrasso)"
+        },
+        {
+          "name": "Beef or lamb",
+          "reason": "Ingrediente alternativo ambiguo (manzo o agnello)"
+        },
+        {
+          "name": "Beef",
+          "reason": "Denominazione generica: taglio non specificato"
+        }
+      ],
+      "recipes_count": 68,
+      "proposed": {
+        "source": "CREA",
+        "id": "101160",
+        "name": "Bovino adulto o vitellone, fesa, crudo",
+        "state": "crudo, parte edibile"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Fesa di bovino adulto cruda CREA 101160 (103 kcal, 21.8g proteine, 1.8g grassi, 0.0g carboidrati). Taglio magro di prima qualità; esclusi macinato e tagli da brasato ricchi di connettivo/grasso.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,101160' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "manzo_macinato_crudo",
+      "raw_names_covered": [
+        "Minced beef"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 24,
+      "proposed": {
+        "source": "CREA",
+        "id": "101120",
+        "name": "Bovino adulto o vitellone, tagli anteriori, crudo",
+        "state": "crudo, macinato/tagli anteriori"
+      },
+      "status": "proposed",
+      "confidence": "medium",
+      "rationale": "Tagli anteriori di vitellone crudo CREA 101120 (145 kcal, 20.5g proteine, 7.0g grassi, 0.0g carboidrati), corrispondenti alla tipica miscela di carne macinata di manzo (10-15% grassi). Proposto come proxy.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,101120' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "manzo_brasato_crudo",
+      "raw_names_covered": [
+        "Beef chuck",
+        "Beef shin",
+        "Beef shin or shoulder",
+        "Beef shoulder"
+      ],
+      "raw_names_excluded": [
+        {
+          "name": "Beef on the bone",
+          "reason": "Taglio con osso"
+        },
+        {
+          "name": "Beef or lamb",
+          "reason": "Alternativa ambigua"
+        }
+      ],
+      "recipes_count": 18,
+      "proposed": {
+        "source": "CREA",
+        "id": "101230",
+        "name": "Bovino adulto o vitellone, copertina di sotto, copertina di spalla, sottospalla e collo, crudo",
+        "state": "crudo, tagli per cottura lunga"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Sottospalla, copertina di spalla e collo CREA 101230 (132 kcal, 20.3g proteine, 5.7g grassi, 0.0g carboidrati), corrispondenti esattamente al taglio chuck/shoulder inglese per brasati e stufati.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,101230' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "maiale_lombo_crudo",
+      "raw_names_covered": [
+        "Pork loin"
+      ],
+      "raw_names_excluded": [
+        {
+          "name": "Pork shoulder",
+          "reason": "Spalla di maiale: taglio più grasso da cottura lenta, gruppo maiale_spalla_cruda"
+        },
+        {
+          "name": "Minced pork",
+          "reason": "Macinato di maiale: gruppo maiale_macinato_crudo"
+        },
+        {
+          "name": "Pork belly",
+          "reason": "Pancetta fresca: taglio ad altissimo tenore lipidico, gruppo separato"
+        },
+        {
+          "name": "Pork neck",
+          "reason": "Coppa/collo di maiale: più grasso della lonza"
+        },
+        {
+          "name": "Pork ribs",
+          "reason": "Costine con osso: scarto osseo non determinato"
+        },
+        {
+          "name": "Pork",
+          "reason": "Denominazione generica: taglio non specificato"
+        }
+      ],
+      "recipes_count": 40,
+      "proposed": {
+        "source": "CREA",
+        "id": "105210",
+        "name": "Maiale, lombo, crudo",
+        "state": "crudo, parte edibile"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Lombo/lonza di maiale leggero crudo CREA 105210 (146 kcal, 20.7g proteine, 7.0g grassi, 0.0g carboidrati). Taglio magro primario; esclusi spalla, macinato e pancetta.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,105210' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "maiale_spalla_cruda",
+      "raw_names_covered": [
+        "Pork shoulder",
+        "Pork neck"
+      ],
+      "raw_names_excluded": [
+        {
+          "name": "Pork loin",
+          "reason": "Lombo magro"
+        },
+        {
+          "name": "Minced pork",
+          "reason": "Macinato di maiale"
+        },
+        {
+          "name": "Pork belly",
+          "reason": "Pancetta fresca"
+        },
+        {
+          "name": "Pork ribs",
+          "reason": "Costine con osso"
+        }
+      ],
+      "recipes_count": 14,
+      "proposed": {
+        "source": "CREA",
+        "id": "105220",
+        "name": "Maiale, spalla, crudo",
+        "state": "crudo, parte edibile"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Spalla di maiale leggero cruda CREA 105220 (133 kcal, 19.0g proteine, 6.3g grassi, 0.0g carboidrati). Taglio per cotture lente (stufati, pulled pork).",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,105220' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "maiale_macinato_crudo",
+      "raw_names_covered": [
+        "Minced pork"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 8,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "In CREA non esiste una voce per carne macinata di maiale cruda. La percentuale di grasso varia ampiamente a seconda del taglio macinato.",
+      "off_candidates": [],
+      "check_query": "grep -i 'macinat.*maiale' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "fagioli_cannellini_scatola",
+      "raw_names_covered": [
+        "cannellini beans"
+      ],
+      "raw_names_excluded": [
+        {
+          "name": "butter beans",
+          "reason": "Fagioli di Lima: cultivar diversa (Phaseolus lunatus), gruppo butter_beans separato"
+        },
+        {
+          "name": "White beans",
+          "reason": "Fagioli bianchi generici: non specificato se secchi o cultivar cannellini"
+        },
+        {
+          "name": "white beans",
+          "reason": "Fagioli bianchi generici"
+        },
+        {
+          "name": "Large white beans",
+          "reason": "Fagioli bianchi grandi: cultivar diversa (Spagna/Lima) o secchi"
+        }
+      ],
+      "recipes_count": 51,
+      "proposed": {
+        "source": "CREA",
+        "id": "004210",
+        "name": "Fagioli, Cannellini in scatola, scolati",
+        "state": "in scatola, scolati"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Fagioli cannellini in scatola scolati CREA 004210 (86 kcal, 6.0g proteine, 0.6g grassi, 12.5g carboidrati). Valori per legume idratato e cotto in barattolo, pronto all'uso.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,004210' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "fagioli_cannellini_secchi",
+      "raw_names_covered": [
+        "Large white beans",
+        "White beans",
+        "white beans"
+      ],
+      "raw_names_excluded": [
+        {
+          "name": "butter beans",
+          "reason": "Fagioli di Lima"
+        },
+        {
+          "name": "cannellini beans",
+          "reason": "Fagioli cannellini in scatola precotti"
+        }
+      ],
+      "recipes_count": 10,
+      "proposed": {
+        "source": "CREA",
+        "id": "004200",
+        "name": "Fagioli, Cannellini, secchi",
+        "state": "secchi, crudi"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Fagioli cannellini secchi crudi CREA 004200 (314 kcal, 23.4g proteine, 1.6g grassi, 45.5g carboidrati). Riferimento per legumi secchi da reidratare e bollire.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,004200' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "ceci_scatola",
+      "raw_names_covered": [
+        "Chickpeas",
+        "chickpeas"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 32,
+      "proposed": {
+        "source": "CREA",
+        "id": "004010",
+        "name": "Ceci, in scatola, scolati",
+        "state": "in scatola, scolati"
+      },
+      "status": "proposed",
+      "confidence": "medium",
+      "rationale": "Ceci in scatola scolati CREA 004010 (111 kcal, 6.7g proteine, 2.3g grassi, 13.9g carboidrati). La maggioranza delle ricette occidentali rapide intende ceci precotti in scatola, ma se la ricetta richiede ammollo prolungato va usato ceci_secchi (CREA 004000).",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,004010' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "ceci_secchi",
+      "raw_names_covered": [
+        "Dry chickpeas",
+        "Dried chickpeas"
+      ],
+      "raw_names_excluded": [
+        {
+          "name": "chickpeas",
+          "reason": "Ceci precotti in scatola"
+        }
+      ],
+      "recipes_count": 4,
+      "proposed": {
+        "source": "CREA",
+        "id": "004000",
+        "name": "Ceci, secchi",
+        "state": "secchi, crudi"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Ceci secchi crudi CREA 004000 (343 kcal, 20.9g proteine, 6.3g grassi, 46.9g carboidrati). Valido per ricette tradizionali che richiedono ammollo e bollitura.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,004000' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "butter_beans",
+      "raw_names_covered": [
+        "butter beans"
+      ],
+      "raw_names_excluded": [
+        {
+          "name": "cannellini beans",
+          "reason": "Fagioli cannellini"
+        },
+        {
+          "name": "white beans",
+          "reason": "Fagioli bianchi comuni"
+        }
+      ],
+      "recipes_count": 7,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "I butter beans sono fagioli di Lima (Phaseolus lunatus), cultivar a seme gigante differente dai fagioli comuni (Phaseolus vulgaris, cannellini/borlotti). In CREA non esiste alcuna voce per fagioli di Lima.",
+      "off_candidates": [],
+      "check_query": "grep -i 'lima' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "pancetta_affettata",
+      "raw_names_covered": [
+        "Pancetta"
+      ],
+      "raw_names_excluded": [
+        {
+          "name": "Bacon",
+          "reason": "Bacon affumicato: lombo o taglio diverso, gruppo bacon_affettato"
+        },
+        {
+          "name": "Smoked bacon",
+          "reason": "Bacon affumicato: gruppo bacon_affettato"
+        },
+        {
+          "name": "Smoked bacon fat",
+          "reason": "Grasso di bacon fuso (grasso puro)"
+        },
+        {
+          "name": "Smoked pork belly",
+          "reason": "Pancetta affumicata nordica"
+        },
+        {
+          "name": "Smoked pork fat",
+          "reason": "Grasso di maiale affumicato"
+        },
+        {
+          "name": "Guanciale",
+          "reason": "Guanciale di maiale: guancia stagionata, composizione differente"
+        }
+      ],
+      "recipes_count": 22,
+      "proposed": {
+        "source": "CREA",
+        "id": "110310",
+        "name": "Pancetta tesa",
+        "state": "stagionata, affettata"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Pancetta tesa italiana CREA 110310 (337 kcal, 20.9g proteine, 28.1g grassi, 0.0g carboidrati). Escluso il bacon anglosassone affumicato (da lombo) e il guanciale.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,110310' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "bacon_affettato",
+      "raw_names_covered": [
+        "Bacon",
+        "Smoked bacon",
+        "Smoked pork belly"
+      ],
+      "raw_names_excluded": [
+        {
+          "name": "Pancetta",
+          "reason": "Pancetta tesa italiana"
+        },
+        {
+          "name": "Guanciale",
+          "reason": "Guanciale stagionato"
+        },
+        {
+          "name": "Smoked bacon fat",
+          "reason": "Grasso di bacon fuso"
+        },
+        {
+          "name": "Smoked pork fat",
+          "reason": "Grasso puro"
+        }
+      ],
+      "recipes_count": 18,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "Il bacon britannico/anglosassone (back bacon) è ricavato da lombo disossato affumicato, con profilo calorico e lipidico molto diverso dalla pancetta tesa italiana (CREA 110310). Non esiste voce per bacon affumicato in CREA.",
+      "off_candidates": [],
+      "check_query": "grep -i 'bacon' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "uovo_gallina_intero",
+      "raw_names_covered": [
+        "Egg",
+        "Eggs",
+        "Whole egg",
+        "eggs",
+        "Egg for coating",
+        "Egg for glazing",
+        "Eggs for coating",
+        "Eggs for the broth"
+      ],
+      "raw_names_excluded": [
+        {
+          "name": "Eggs for the kaya",
+          "reason": "Uova per crema dolce kaya (preparazione composta)"
+        }
+      ],
+      "recipes_count": 215,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "La voce CREA 181100 ('Uova di gallina, intero') è priva del dato dei carboidrati disponibili ('carbs_available_g_100g' vuoto). Come da regola, non si inserisce 0 al posto del dato mancante. Esistono prodotti commerciali OFF completi a marchio (Esselunga 8002330008048, Conad 8003170063525).",
+      "off_candidates": [
+        {
+          "barcode": "8002330008048",
+          "brand": "Esselunga Smart",
+          "name": "10 Uova fresche medie da allevamento a terra",
+          "kcal_100g": 136.0,
+          "protein_g_100g": 12.4,
+          "fat_g_100g": 9.5,
+          "carbs_available_g_100g": 0.1,
+          "match_type": "brand_candidate",
+          "reason": "Uova fresche Esselunga in OFF con tutti e 4 i macro completi"
+        }
+      ],
+      "check_query": "grep '^CREA,181100' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "prezzemolo_fresco",
+      "raw_names_covered": [
+        "Flat-leaf parsley",
+        "Parsley",
+        "parsley"
+      ],
+      "raw_names_excluded": [
+        {
+          "name": "Parsley root",
+          "reason": "Radice di prezzemolo (ortaggio a radice diverso dalle foglie)"
+        }
+      ],
+      "recipes_count": 117,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "La voce CREA 006840 ('Prezzemolo, fresco') è priva del dato dei carboidrati disponibili ('carbs_available_g_100g' vuoto). Non si inserisce 0 al posto del dato mancante; in OFF sono presenti solo prodotti surgelati industriali (Esselunga 8002330000141). Lasciato ambiguo.",
+      "off_candidates": [
+        {
+          "barcode": "8002330000141",
+          "brand": "Esselunga",
+          "name": "Prezzemolo tritato congelato",
+          "kcal_100g": 32.0,
+          "protein_g_100g": 3.7,
+          "fat_g_100g": 0.6,
+          "carbs_available_g_100g": 0.5,
+          "match_type": "brand_candidate",
+          "reason": "Prezzemolo congelato in OFF con tutti e 4 i macro completi"
+        }
+      ],
+      "check_query": "grep '^CREA,006840' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "uovo_tuorlo",
+      "raw_names_covered": [
+        "Egg yolk",
+        "Egg yolks"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 22,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "La voce CREA 183010 ('Uova di gallina, tuorlo') è priva del dato dei carboidrati disponibili ('carbs_available_g_100g' vuoto). Come da regola, non si inserisce 0.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,183010' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "senape_dijon",
+      "raw_names_covered": [
+        "Dijon mustard"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 21,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "La senape di Digione (salsa preparata francese con aceto e sale) è assente in CREA. Necessita di candidato commerciale OFF.",
+      "off_candidates": [],
+      "check_query": "grep -i 'senape' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "feta",
+      "raw_names_covered": [
+        "Brined white cheese",
+        "Datshi or feta cheese",
+        "Feta",
+        "White cheese",
+        "feta"
+      ],
+      "raw_names_excluded": [
+        {
+          "name": "Feta and coriander",
+          "reason": "Ingrediente composto / condimento misto (feta e coriandolo fresco)"
+        }
+      ],
+      "recipes_count": 21,
+      "proposed": {
+        "source": "CREA",
+        "id": "162000",
+        "name": "Feta",
+        "state": "formaggio in salamoia"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Feta greca tradizionale DOP CREA 162000 (250 kcal, 15.6g proteine, 20.2g grassi, 1.5g carboidrati). Tutti e 4 i macro completi.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,162000' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "grana_padano",
+      "raw_names_covered": [
+        "Parmesan"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 21,
+      "proposed": {
+        "source": "CREA",
+        "id": "162410",
+        "name": "Grana Padano, DOP",
+        "state": "formaggio stagionato"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Grana Padano DOP CREA 162410 (392 kcal, 33.9g proteine, 28.5g grassi, 0.0g carboidrati). Voce standard per formaggi duri italiani a pasta grana (Parmigiano / Grana).",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,162410' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "noci",
+      "raw_names_covered": [
+        "Walnut halves",
+        "Walnuts",
+        "walnuts"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 21,
+      "proposed": {
+        "source": "CREA",
+        "id": "008570",
+        "name": "Noci, secche",
+        "state": "secco, sgusciato"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Noci secche sgusciate CREA 008570 (702 kcal, 14.3g proteine, 68.1g grassi, 5.1g carboidrati). Profilo completo dei 4 macronutrienti.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,008570' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "ricotta_vacca",
+      "raw_names_covered": [
+        "Ricotta",
+        "ricotta"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 21,
+      "proposed": {
+        "source": "CREA",
+        "id": "166820",
+        "name": "Ricotta di vacca",
+        "state": "latticino fresco"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Ricotta fresca di latte vaccino CREA 166820 (146 kcal, 8.8g proteine, 10.9g grassi, 3.5g carboidrati). Valori completi per tutti e 4 i macronutrienti.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,166820' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "aneto_fresco",
+      "raw_names_covered": [
+        "Dill",
+        "fresh dill"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 20,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "L'aneto fresco (Anethum graveolens) è un'erba aromatica assente nelle tabelle nutrizionali CREA.",
+      "off_candidates": [],
+      "check_query": "grep -i 'aneto' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "avena_fiocchi",
+      "raw_names_covered": [
+        "Rolled oats",
+        "rolled oats"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 20,
+      "proposed": {
+        "source": "CREA",
+        "id": "003030",
+        "name": "Fiocchi d'avena",
+        "state": "secco, fiocchi"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Fiocchi d'avena integrali CREA 003030 (367 kcal, 8.0g proteine, 7.5g grassi, 66.8g carboidrati). Riferimento esatto per fiocchi d'avena (rolled oats) usati a colazione e nei dolci.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,003030' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "fiocchi_di_latte",
+      "raw_names_covered": [
+        "cottage cheese"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 20,
+      "proposed": {
+        "source": "CREA",
+        "id": "170010",
+        "name": "Fiocchi di formaggio magro",
+        "state": "formaggio fresco magro"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Fiocchi di formaggio magro CREA 170010 (115 kcal, 9.7g proteine, 7.1g grassi, 3.2g carboidrati). Corrispondenza esatta per cottage cheese.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,170010' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "panna_fresca",
+      "raw_names_covered": [
+        "Cream"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 19,
+      "proposed": {
+        "source": "CREA",
+        "id": "140300",
+        "name": "Panna da montare, 35% di lipidi",
+        "state": "fresca"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Panna da montare 35% lipidi CREA 140300 (337 kcal, 2.3g proteine, 35.0g grassi, 3.4g carboidrati). Valore standard per panna fresca intera usata in cucina.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,140300' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "cipollotto_fresco",
+      "raw_names_covered": [
+        "Spring onions",
+        "Spring onion"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 18,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "Il cipollotto fresco (Allium fistulosum o Allium cepa giovane con foglie verdi) è assente in CREA come voce distinta dalla cipolla a bulbo maturo.",
+      "off_candidates": [],
+      "check_query": "grep -i 'cipollott' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "capperi_sottaceto",
+      "raw_names_covered": [
+        "Capers",
+        "capers"
+      ],
+      "raw_names_excluded": [
+        {
+          "name": "Capers and lemon",
+          "reason": "Ingrediente composto (capperi e limone)"
+        }
+      ],
+      "recipes_count": 17,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "I capperi (in salamoia o sotto sale) sono assenti nel catalogo CREA.",
+      "off_candidates": [],
+      "check_query": "grep -i 'capper' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "amido_mais",
+      "raw_names_covered": [
+        "Cornflour"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 17,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "La voce CREA 000300 ('Mais, amido') è priva del valore dei lipidi ('fat_g_100g' vuoto). Sebbene i grassi nell'amido puro siano trascurabili, la regola vieta di sostituire il dato mancante con 0.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,000300' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "lenticchie_cotte_scatola",
+      "raw_names_covered": [
+        "cooked lentils"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 17,
+      "proposed": {
+        "source": "CREA",
+        "id": "004510",
+        "name": "Lenticchie, in scatola, scolate",
+        "state": "in scatola, scolate"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Lenticchie in scatola scolate CREA 004510 (91 kcal, 5.0g proteine, 0.5g grassi, 15.4g carboidrati). Tutti e 4 i macro completi per legume cotto idratato.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,004510' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "pane_integrale",
+      "raw_names_covered": [
+        "wholemeal bread"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 17,
+      "proposed": {
+        "source": "CREA",
+        "id": "000550",
+        "name": "Pane di tipo integrale",
+        "state": "cotto da forno"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Pane di tipo integrale CREA 000550 (224 kcal, 8.5g proteine, 1.3g grassi, 44.1g carboidrati). Valori completi per pane 100% farina integrale.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,000550' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "vino_bianco",
+      "raw_names_covered": [
+        "Dry white wine"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 16,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "La voce CREA 405010 ('Bevanda alcolica, Vino da pasto bianco') è priva dei dati di proteine e carboidrati disponibili. Inoltre in cottura l'alcol evapora parzialmente. Lasciato ambiguo.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,405010' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "salsa_pesce",
+      "raw_names_covered": [
+        "Fish sauce"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 16,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "La salsa di pesce fermentata asiatica (nam pla) è assente in CREA.",
+      "off_candidates": [],
+      "check_query": "grep -i 'salsa.*pesce' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "pepe_nero",
+      "raw_names_covered": [
+        "Black pepper",
+        "Black peppercorns",
+        "Ground black pepper"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 16,
+      "proposed": {
+        "source": "CREA",
+        "id": "006820",
+        "name": "Pepe nero",
+        "state": "secco, macinato"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Pepe nero CREA 006820 (311 kcal, 11.4g proteine, 3.3g grassi, 49.0g carboidrati). Tutti e 4 i macro completi. Nota: per quantità minime (≤0.5g) si applica la policy dei condimenti in traccia a 0 kcal.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,006820' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "sedano_crudo",
+      "raw_names_covered": [
+        "Celery",
+        "Celery sticks",
+        "celery"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 16,
+      "proposed": {
+        "source": "CREA",
+        "id": "005680",
+        "name": "Sedano, crudo",
+        "state": "crudo, parte edibile"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Sedano a coste crudo CREA 005680 (23 kcal, 2.3g proteine, 0.2g grassi, 2.4g carboidrati). Tutti e 4 i macro completi.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,005680' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "scalogno",
+      "raw_names_covered": [
+        "Shallots"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 16,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "Lo scalogno (Allium ascalonicum) è assente in CREA.",
+      "off_candidates": [],
+      "check_query": "grep -i 'scalogno' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "timo_fresco",
+      "raw_names_covered": [
+        "Thyme",
+        "fresh thyme leaves"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 16,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "Il timo fresco è assente in CREA come erba aromatica fresca.",
+      "off_candidates": [],
+      "check_query": "grep -i 'timo' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "zucchero_a_velo",
+      "raw_names_covered": [
+        "Icing sugar"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 15,
+      "proposed": {
+        "source": "CREA",
+        "id": "201500",
+        "name": "Zucchero, saccarosio",
+        "state": "polvere"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Zucchero a velo (saccarosio polverizzato al 97-100%): chimicamente equivalente allo zucchero bianco semolato CREA 201500 (392 kcal, 100% carboidrati).",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,201500' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "mandorle_secche",
+      "raw_names_covered": [
+        "Almonds",
+        "flaked almonds"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 15,
+      "proposed": {
+        "source": "CREA",
+        "id": "008540",
+        "name": "Mandorle dolci, secche",
+        "state": "secco, sgusciato"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Mandorle dolci secche sgusciate CREA 008540 (628 kcal, 22.0g proteine, 55.3g grassi, 4.6g carboidrati). Tutti e 4 i macro completi.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,008540' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "mele_fresche",
+      "raw_names_covered": [
+        "Apples",
+        "apples"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 15,
+      "proposed": {
+        "source": "CREA",
+        "id": "007110",
+        "name": "Mele, fresche, senza buccia",
+        "state": "fresco, sbucciato"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Mele fresche senza buccia CREA 007110 (57 kcal, 0.3g proteine, 0.1g grassi, 13.7g carboidrati). Tutti e 4 i macro completi (la voce con buccia 007120 ha i grassi mancanti).",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,007110' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "orzo_perlato",
+      "raw_names_covered": [
+        "Pearl barley",
+        "pearl barley"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 15,
+      "proposed": {
+        "source": "CREA",
+        "id": "000090",
+        "name": "Orzo perlato",
+        "state": "secco, crudo"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Orzo perlato secco crudo CREA 000090 (346 kcal, 9.4g proteine, 1.5g grassi, 73.7g carboidrati). Tutti e 4 i macro completi.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,000090' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "formaggio_quark",
+      "raw_names_covered": [
+        "quark"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 15,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "Il formaggio Quark (latticino magro fresco di tradizione mitteleuropea) è assente in CREA.",
+      "off_candidates": [],
+      "check_query": "grep -i 'quark' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "vino_rosso",
+      "raw_names_covered": [
+        "Dry red wine",
+        "Red wine",
+        "Red wine or tej"
+      ],
+      "raw_names_excluded": [
+        {
+          "name": "Red wine vinegar",
+          "reason": "Aceto di vino rosso: condimento acido, non vino da bere/sfumare"
+        }
+      ],
+      "recipes_count": 14,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "La voce CREA 405020 ('Bevanda alcolica, Vino da pasto rosso') è priva dei dati di proteine e carboidrati disponibili ('protein_g_100g' e 'carbs_available_g_100g' vuoti). Lasciato ambiguo.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,405020' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "finocchi_crudi",
+      "raw_names_covered": [
+        "Fennel",
+        "fennel"
+      ],
+      "raw_names_excluded": [
+        {
+          "name": "Fennel seeds",
+          "reason": "Semi di finocchio: spezia/seme oleaginoso, non ortaggio fresco a grumolo"
+        },
+        {
+          "name": "Ground fennel",
+          "reason": "Finocchio in polvere (spezia macinata)"
+        }
+      ],
+      "recipes_count": 14,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "La voce CREA 005320 ('Finocchi, crudi') è priva del dato dei lipidi ('fat_g_100g' vuoto). Come da regola, non si sostituisce con 0.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,005320' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "miele",
+      "raw_names_covered": [
+        "Honey"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 14,
+      "proposed": {
+        "source": "CREA",
+        "id": "210010",
+        "name": "Miele",
+        "state": "naturale"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Miele millefiori naturale CREA 210010 (304 kcal, 0.6g proteine, 0.0g grassi, 80.3g carboidrati). Tutti e 4 i macro completi.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,210010' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "pane_segale",
+      "raw_names_covered": [
+        "Dark rye bread",
+        "Rye bread",
+        "rye bread"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 14,
+      "proposed": {
+        "source": "CREA",
+        "id": "000510",
+        "name": "Pane di segale",
+        "state": "cotto da forno"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Pane di segale CREA 000510 (228 kcal, 8.3g proteine, 1.7g grassi, 45.4g carboidrati). Tutti e 4 i macro completi.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,000510' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "riso_cotto",
+      "raw_names_covered": [
+        "Cooked rice"
+      ],
+      "raw_names_excluded": [
+        {
+          "name": "risotto rice",
+          "reason": "Riso crudo da risotto (varietà Carnaroli/Arborio cruda per cottura, non riso già bollito)"
+        }
+      ],
+      "recipes_count": 14,
+      "proposed": {
+        "source": "CREA",
+        "id": "000105",
+        "name": "Riso, brillato, cotto, bollito",
+        "state": "cotto, bollito"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Riso brillato cotto bollito CREA 000105 (100 kcal, 2.0g proteine, 0.1g grassi, 24.2g carboidrati). Riferimento esatto per ricette che richiedono riso già cotto avanzato.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,000105' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "aceto_vino",
+      "raw_names_covered": [
+        "Vinegar"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 14,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "L'aceto di vino è assente nelle tabelle nutrizionali CREA (presente solo aceto balsamico o sintetici in altri database).",
+      "off_candidates": [],
+      "check_query": "grep -i 'aceto' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "formaggio_cheddar",
+      "raw_names_covered": [
+        "cheddar"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 14,
+      "proposed": {
+        "source": "CREA",
+        "id": "160880",
+        "name": "Cheddar",
+        "state": "formaggio stagionato"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Formaggio Cheddar tradizionale CREA 160880 (388 kcal, 26.7g proteine, 31.0g grassi, 0.5g carboidrati). Tutti e 4 i macro completi.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,160880' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "lievito_chimico_polvere",
+      "raw_names_covered": [
+        "Baking powder",
+        "baking powder"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 13,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "Il lievito chimico in polvere (bicarbonato + pirofosfato + amido) è assente in CREA (è presente solo il lievito di birra compresso 200010).",
+      "off_candidates": [],
+      "check_query": "grep -i 'lievito.*polvere' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "fagiolini_freschi",
+      "raw_names_covered": [
+        "Flat green beans",
+        "Green beans",
+        "green beans"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 13,
+      "proposed": {
+        "source": "CREA",
+        "id": "004310",
+        "name": "Fagiolini, freschi",
+        "state": "fresco, crudo"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Fagiolini freschi crudi CREA 004310 (24 kcal, 2.1g proteine, 0.1g grassi, 2.4g carboidrati). Tutti e 4 i macro completi.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,004310' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "tofu_morbido",
+      "raw_names_covered": [
+        "Soft tofu",
+        "silken tofu"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 13,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "Il silken tofu / tofu morbido ad alto contenuto d'acqua è assente in CREA.",
+      "off_candidates": [],
+      "check_query": "grep -i 'tofu' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "timo_secco",
+      "raw_names_covered": [
+        "dried thyme"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 13,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "Il timo essiccato è assente nelle tabelle CREA.",
+      "off_candidates": [],
+      "check_query": "grep -i 'timo' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "zucca_cruda",
+      "raw_names_covered": [
+        "Pumpkin",
+        "pumpkin"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 13,
+      "proposed": {
+        "source": "CREA",
+        "id": "005720",
+        "name": "Zucca gialla, fresca",
+        "state": "fresco, crudo"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Zucca gialla fresca cruda CREA 005720 (29 kcal, 1.1g proteine, 0.1g grassi, 3.5g carboidrati). Tutti e 4 i macro completi.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,005720' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "brodo_manzo",
+      "raw_names_covered": [
+        "Beef stock"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 12,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "Il brodo liquido di manzo (beef stock) non diluito è assente in CREA. Richiede la policy di diluizione dado 1:50 approvata per i brodi.",
+      "off_candidates": [],
+      "check_query": "grep -i 'brodo.*manzo' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "sedano_rapa_crudo",
+      "raw_names_covered": [
+        "Celeriac",
+        "celeriac"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 12,
+      "proposed": {
+        "source": "CREA",
+        "id": "005690",
+        "name": "Sedano rapa, crudo",
+        "state": "crudo, parte edibile"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Sedano rapa crudo CREA 005690 (29 kcal, 1.9g proteine, 0.1g grassi, 3.8g carboidrati). Tutti e 4 i macro completi.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,005690' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "panna_doppia",
+      "raw_names_covered": [
+        "Double cream"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 12,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "La panna doppia (double cream britannica, tenore lipidico ~48-50%) è assente in CREA (è presente solo panna al 35% CREA 140300). Come da regola 3, non si sceglie la voce più vicina senza segnalare la discrepanza.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,140300' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "cardamomo_polvere",
+      "raw_names_covered": [
+        "Ground cardamom",
+        "ground cardamom"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 12,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "Il cardamomo (Elettaria cardamomum) in polvere o in semi è assente nelle tabelle nutrizionali CREA.",
+      "off_candidates": [],
+      "check_query": "grep -i 'cardamomo' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "merluzzo_fresco",
+      "raw_names_covered": [
+        "Cod",
+        "Cod fillet",
+        "cod",
+        "hake"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 12,
+      "proposed": {
+        "source": "CREA",
+        "id": "121410",
+        "name": "Merluzzo o nasello",
+        "state": "fresco, crudo"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Merluzzo o nasello fresco crudo CREA 121410 (71 kcal, 17.0g proteine, 0.3g grassi, 0.0g carboidrati). Tutti e 4 i macro completi.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,121410' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "semi_sesamo",
+      "raw_names_covered": [
+        "Sesame seeds"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 12,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "I semi di sesamo sono assenti nelle tabelle nutrizionali CREA (è presente solo l'olio di sesamo 009770).",
+      "off_candidates": [],
+      "check_query": "grep -i 'sesamo' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "tonno_scatola_olio",
+      "raw_names_covered": [
+        "Tinned tuna",
+        "tinned tuna"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 12,
+      "proposed": {
+        "source": "CREA",
+        "id": "123610",
+        "name": "Tonno sott'olio, sgocciolato",
+        "state": "sott'olio, sgocciolato"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Tonno sott'olio sgocciolato CREA 123610 (192 kcal, 25.2g proteine, 10.1g grassi, 0.0g carboidrati). Tutti e 4 i macro completi.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,123610' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "pasta_fillo",
+      "raw_names_covered": [
+        "Filo pastry",
+        "filo pastry"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 12,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "La pasta fillo (sfoglia sottilissima di sola farina e acqua) è assente in CREA.",
+      "off_candidates": [],
+      "check_query": "grep -i 'fillo' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "burro_arachidi",
+      "raw_names_covered": [
+        "Peanut butter",
+        "peanut butter"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 12,
+      "proposed": {
+        "source": "CREA",
+        "id": "009010",
+        "name": "Burro d'arachidi",
+        "state": "crema spalmabile"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Burro d'arachidi CREA 009010 (625 kcal, 24.9g proteine, 53.7g grassi, 8.0g carboidrati). Tutti e 4 i macro completi.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,009010' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "bicarbonato_sodio",
+      "raw_names_covered": [
+        "Bicarbonate of soda"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 11,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "Il bicarbonato di sodio è un sale minerale puro privo di calorie e macronutrienti organici. Assente in CREA.",
+      "off_candidates": [],
+      "check_query": "grep -i 'bicarbonato' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "couscous_crudo",
+      "raw_names_covered": [
+        "Couscous",
+        "couscous"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 11,
+      "proposed": {
+        "source": "CREA",
+        "id": "000045",
+        "name": "Couscous, crudo",
+        "state": "secco, crudo"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Couscous crudo a base di semola CREA 000045 (361 kcal, 13.7g proteine, 1.1g grassi, 76.5g carboidrati). Tutti e 4 i macro completi.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,000045' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "scorza_limone",
+      "raw_names_covered": [
+        "Lemon zest"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 11,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "La scorza di limone fresca grattugiata è assente in CREA come voce distinta dalla polpa e dal succo.",
+      "off_candidates": [],
+      "check_query": "grep -i 'scorza' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "senape",
+      "raw_names_covered": [
+        "Mustard"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 11,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "La senape come condimento pronto generico è assente nelle tabelle nutrizionali CREA.",
+      "off_candidates": [],
+      "check_query": "grep -i 'senape' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "maiale_pancetta_fresca",
+      "raw_names_covered": [
+        "Pork belly"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 11,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "La pancetta fresca di maiale cruda (pork belly, carne fresca da cuocere ad alto tenore lipidico) è assente in CREA (è presente solo la pancetta tesa stagionata 110310).",
+      "off_candidates": [],
+      "check_query": "grep -i 'maiale.*pancia' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "peperoncino_scotch_bonnet",
+      "raw_names_covered": [
+        "Scotch bonnet"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 11,
+      "proposed": {
+        "source": "CREA",
+        "id": "006830",
+        "name": "Peperoncini piccanti, freschi",
+        "state": "crudo, fresco"
+      },
+      "status": "proposed",
+      "confidence": "medium",
+      "rationale": "Peperoncini piccanti freschi CREA 006830 (30 kcal, 1.8g proteine, 0.5g grassi, 3.8g carboidrati). Proposto come proxy biologico per varietà piccanti fresche (Scotch Bonnet/Habanero).",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,006830' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "mais_dolce",
+      "raw_names_covered": [
+        "Sweetcorn",
+        "sweetcorn"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 11,
+      "proposed": {
+        "source": "CREA",
+        "id": "000070",
+        "name": "Mais, dolce, in scatola, sgocciolato",
+        "state": "in scatola, sgocciolato"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Mais dolce in scatola sgocciolato CREA 000070 (105 kcal, 3.4g proteine, 1.3g grassi, 20.5g carboidrati). Tutti e 4 i macro completi.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,000070' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "avocado_fresco",
+      "raw_names_covered": [
+        "Avocado",
+        "avocado"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 11,
+      "proposed": {
+        "source": "CREA",
+        "id": "007490",
+        "name": "Avocado, fresco",
+        "state": "fresco, crudo"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Avocado fresco crudo CREA 007490 (238 kcal, 4.4g proteine, 23.0g grassi, 1.8g carboidrati). Tutti e 4 i macro completi.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,007490' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "cavolfiore_crudo",
+      "raw_names_covered": [
+        "Cauliflower",
+        "cauliflower"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 11,
+      "proposed": {
+        "source": "CREA",
+        "id": "005160",
+        "name": "Cavolfiore, crudo",
+        "state": "crudo, parte edibile"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Cavolfiore crudo CREA 005160 (30 kcal, 3.2g proteine, 0.2g grassi, 2.7g carboidrati). Tutti e 4 i macro completi.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,005160' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "peperoncino_secco_fiocchi",
+      "raw_names_covered": [
+        "Chilli flakes"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 10,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "I fiocchi di peperoncino secco macinato sono assenti in CREA (è presente solo il peperoncino fresco 006830).",
+      "off_candidates": [],
+      "check_query": "grep -i 'peperoncin.*secco' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "polenta_cruda",
+      "raw_names_covered": [
+        "Cornmeal",
+        "polenta"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 10,
+      "proposed": {
+        "source": "CREA",
+        "id": "000075",
+        "name": "Polenta, cruda",
+        "state": "secco, crudo"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Farina di mais per polenta cruda CREA 000075 (323 kcal, 8.0g proteine, 0.7g grassi, 72.7g carboidrati). Tutti e 4 i macro completi.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,000075' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "broccoli_crudi",
+      "raw_names_covered": [
+        "broccoli"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 10,
+      "proposed": {
+        "source": "CREA",
+        "id": "005110",
+        "name": "Broccolo a testa, crudo",
+        "state": "crudo, parte edibile"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Broccolo a testa crudo CREA 005110 (33 kcal, 3.0g proteine, 0.4g grassi, 3.1g carboidrati). Tutti e 4 i macro completi.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,005110' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "tahina",
+      "raw_names_covered": [
+        "Tahini",
+        "tahini"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 10,
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "La pasta di sesamo tostata (tahina) è assente in CREA.",
+      "off_candidates": [],
+      "check_query": "grep -i 'tahina' dataset/crea/foods.csv"
+    }
+  ]
+}

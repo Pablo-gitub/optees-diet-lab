@@ -190,3 +190,193 @@ Tutti i 38 id CREA esistono, con il nome dichiarato. Esistono anche gli 8 codici
 **Limite dello strumento.** `--approve` vale per tutto il gruppo canonico del matcher e non rispetta `raw_names_excluded`. Per esempio «Spring onion» resta nel gruppo della cipolla. Va chiesto a Codex di far rispettare le esclusioni.
 
 **Effetto.** Le ricette pronte restano 24. Quasi tutte le altre sono bloccate da sale, pepe, spezie, erbe e brodi. Serve una regola: un condimento in traccia vale 0 kcal, con una sorgente speciale come già avviene per `acqua`. I brodi vanno trattati come liquido diluito.
+
+
+## Sessione 2 — Revisione 8 gruppi (Parte a) e successivi 60 gruppi (Parte b)
+
+Data: **2026-10-06**  
+File proposte: `config/ingredient-proposals/batch-02.json`  
+Totale proposte nel lotto: **79 proposte** (19 revisioni Parte a + 60 nuovi gruppi Parte b).  
+Stato proposte: **44 proposed**, **35 ambiguous**.  
+Regole rispettate: nessun uso di `--approve`, nessun commit git, nessuna modifica a `scripts/` o `web/`. Ogni id CREA verificato con query esatta `grep '^CREA,<id>' dataset/crea/foods.csv`.
+
+---
+
+### Parte (a) — Revisione delle 8 proposte non approvate di Sessione 1
+
+In conformità ai rilievi di Claude nella revisione del batch 01, i gruppi complessi sono stati disaggregati nel dizionario e nel batch delle proposte:
+
+1. **Pollo (4 gruppi distinti):**
+   - `pollo_petto_crudo`: taglio magro puro, fesa/petto senza pelle crudo (**CREA 106500**). *Proposed (high)*.
+   - `pollo_coscia_cruda`: cosce, fusi e sovracosce senza pelle (**CREA 106610**). *Proposed (high)*.
+   - `pollo_macinato_crudo`: macinato di pollo. In CREA non esiste carne macinata di pollo -> *Ambiguous*.
+   - `pollo_con_osso_crudo`: pollo intero o a pezzi con osso/pelle. Le ricette indicano peso lordo con osso (scarto osseo 30–40% non standardizzabile) -> *Ambiguous*.
+
+2. **Manzo (3 gruppi distinti):**
+   - `manzo_magro_crudo`: tagli magri nobili (fesa, filetto, controfiletto, scamone) (**CREA 101160**). *Proposed (high)*.
+   - `manzo_macinato_crudo`: carne macinata di manzo (10–15% lipidi). Associata come proxy ai tagli anteriori di vitellone (**CREA 101120**). *Proposed (medium, proxy)*.
+   - `manzo_brasato_crudo`: tagli da cottura lunga e spezzatino (sottospalla, collo, chuck, shin, geretto) (**CREA 101230**). *Proposed (high)*.
+
+3. **Maiale (3 gruppi distinti):**
+   - `maiale_lombo_crudo`: lombo e lonza magra cruda (**CREA 105210**). *Proposed (high)*.
+   - `maiale_spalla_cruda`: spalla e coppa cruda per cotture lente (**CREA 105220**). *Proposed (high)*.
+   - `maiale_macinato_crudo`: macinato di maiale. Assente in CREA -> *Ambiguous*.
+
+4. **Legumi (4 gruppi distinti: scatola vs secchi):**
+   - `fagioli_cannellini_scatola`: cannellini in scatola scolati (**CREA 004210**). *Proposed (high)*.
+   - `fagioli_cannellini_secchi`: cannellini secchi crudi da reidratare (**CREA 004200**). *Proposed (high)*.
+   - `ceci_scatola`: ceci in scatola scolati precotti (**CREA 004010**). *Proposed (medium)*.
+   - `ceci_secchi`: ceci secchi crudi (**CREA 004000**). *Proposed (high)*.
+
+5. **Butter beans (separati):**
+   - `butter_beans`: fagioli di Lima (*Phaseolus lunatus*), cultivar gigante distinta dai cannellini. Assente in CREA -> *Ambiguous*.
+
+6. **Bacon separato da pancetta (2 gruppi distinti):**
+   - `pancetta_affettata`: pancetta tesa italiana stagionata (**CREA 110310**). *Proposed (high)*.
+   - `bacon_affettato`: back bacon britannico affumicato da lombo salato. Assente in CREA -> *Ambiguous*.
+
+7. **Uova e prezzemolo (verifica macronutrienti completi):**
+   - `uovo_gallina_intero`: la voce generica CREA 181100 è priva dei carboidrati disponibili (`carbs_available_g_100g` vuoto). Rispettando il divieto di sostituire con 0, è marcata *Ambiguous*. Documentati candidati OFF a marchio completi (Esselunga Smart `8002330008048`: 136 kcal, 12.4g P, 9.5g F, 0.1g C).
+   - `prezzemolo_fresco`: la voce generica CREA 006840 è priva dei carboidrati disponibili. Rispettando il divieto di sostituire con 0, è marcata *Ambiguous*. In OFF sono presenti solo referenze surgelate industriali (Esselunga `8002330000141`).
+
+---
+
+### Raw names esclusi per ciascuna approvazione proposta
+
+Come da specifica, per ogni proposta con stato `proposed` vengono documentati tassativamente i nomi grezzi del corpus che **NON rientrano** nell'approvazione e che il matcher esclude:
+
+| Gruppo canonico | ID CREA | Nomi grezzi ESCLUSI (`raw_names_excluded`) | Motivo esclusione |
+|---|---|---|---|
+| **`pollo_petto_crudo`** | `106500` | `Boneless chicken thigh`, `Chicken thigh`, `Chicken thighs`, `Chicken drumsticks`<br>`Minced chicken`<br>`Chicken, jointed`, `Chicken, in pieces`, `Whole chicken`, `Chicken on the bone`, `Chicken breasts on the bone`<br>`Chicken`, `Chicken for the curry` | Tagli scuri più grassi (gruppo `pollo_coscia_cruda`)<br>Carne macinata (gruppo `pollo_macinato_crudo`)<br>Tagli con osso e pelle (gruppo `pollo_con_osso_crudo`)<br>Denominazioni generiche a taglio non specificato |
+| **`pollo_coscia_cruda`** | `106610` | `Chicken breast`<br>`Minced chicken`<br>`Whole chicken` | Petto di pollo magro (gruppo separato)<br>Macinato di pollo<br>Pollo intero con osso |
+| **`manzo_magro_crudo`** | `101160` | `Minced beef`<br>`Beef chuck`, `Beef shin`, `Beef shin or shoulder`, `Beef shoulder`<br>`Beef on the bone`<br>`Beef flank`<br>`Beef or lamb`<br>`Beef` | Macinato di manzo (gruppo `manzo_macinato_crudo`)<br>Tagli anteriori da stufato (gruppo `manzo_brasato_crudo`)<br>Taglio con osso<br>Bavetta/pancia semigrassa<br>Ingrediente alternativo ambiguo<br>Denominazione generica non specificata |
+| **`manzo_brasato_crudo`** | `101230` | `Beef on the bone`<br>`Beef or lamb` | Taglio con osso non separabile<br>Alternativa ambigua manzo/agnello |
+| **`maiale_lombo_crudo`** | `105210` | `Pork shoulder`<br>`Minced pork`<br>`Pork belly`<br>`Pork neck`<br>`Pork ribs`<br>`Pork` | Spalla di maiale (gruppo `maiale_spalla_cruda`)<br>Macinato di maiale (gruppo `maiale_macinato_crudo`)<br>Pancetta fresca (gruppo separato ad alto tenore lipidico)<br>Coppa di maiale<br>Costine con osso<br>Denominazione generica |
+| **`maiale_spalla_cruda`** | `105220` | `Pork loin`<br>`Minced pork`<br>`Pork belly`<br>`Pork ribs` | Lombo magro<br>Macinato di maiale<br>Pancetta fresca<br>Costine con osso |
+| **`fagioli_cannellini_scatola`** | `004210` | `butter beans`<br>`White beans`, `white beans`<br>`Large white beans` | Fagioli di Lima (gruppo `butter_beans` separato)<br>Fagioli bianchi generici a cultivar non specificata<br>Possibile cultivar gigante o secca |
+| **`fagioli_cannellini_secchi`** | `004200` | `butter beans`<br>`cannellini beans` | Fagioli di Lima<br>Cannellini in scatola già idratati |
+| **`ceci_secchi`** | `004000` | `chickpeas` | Ceci precotti in scatola |
+| **`pancetta_affettata`** | `110310` | `Bacon`, `Smoked bacon`<br>`Smoked bacon fat`, `Smoked pork fat`<br>`Smoked pork belly`<br>`Guanciale` | Bacon britannico affumicato da lombo (gruppo `bacon_affettato`)<br>Grasso fuso puro<br>Pancetta affumicata nordica<br>Guanciale di maiale (guancia stagionata) |
+| **`feta`** | `162000` | `Feta and coriander` | Ingrediente composto / condimento misto |
+| **`riso_cotto`** | `000105` | `risotto rice` | Riso crudo da risotto (Carnaroli/Arborio per cottura, non riso già cotto) |
+
+---
+
+### Parte (b) — Successivi 60 gruppi per numero di ricette
+
+Trattati in ordine strettamente decrescente di `recipes_count` (da 22 a 10 ricette), escludendo approvati, batch 01 e condimenti in traccia (`trace:*`):
+
+| N. | Gruppo canonico | Ricette | Stato | Fonte / ID | Denominazione / Motivazione se ambiguo | Query verifica (`check_query`) |
+|---|---|---|---|---|---|---|
+| 1 | `uovo_tuorlo` | 22 | `ambiguous` | — | CREA 183010 privo di carboidrati disponibili | `grep '^CREA,183010' dataset/crea/foods.csv` |
+| 2 | `senape_dijon` | 21 | `ambiguous` | — | Senape di Digione assente in CREA | `grep -i 'senape' dataset/crea/foods.csv` |
+| 3 | `feta` | 21 | `proposed` | CREA 162000 | Feta DOP greca (250 kcal, 15.6g P, 20.2g F, 1.5g C) | `grep '^CREA,162000' dataset/crea/foods.csv` |
+| 4 | `grana_padano` | 21 | `proposed` | CREA 162410 | Grana Padano DOP (392 kcal, 33.9g P, 28.5g F, 0.0g C) | `grep '^CREA,162410' dataset/crea/foods.csv` |
+| 5 | `noci` | 21 | `proposed` | CREA 008570 | Noci, secche (702 kcal, 14.3g P, 68.1g F, 5.1g C) | `grep '^CREA,008570' dataset/crea/foods.csv` |
+| 6 | `ricotta_vacca` | 21 | `proposed` | CREA 166820 | Ricotta di vacca (146 kcal, 8.8g P, 10.9g F, 3.5g C) | `grep '^CREA,166820' dataset/crea/foods.csv` |
+| 7 | `aneto_fresco` | 20 | `ambiguous` | — | Aneto fresco assente in CREA | `grep -i 'aneto' dataset/crea/foods.csv` |
+| 8 | `avena_fiocchi` | 20 | `proposed` | CREA 003030 | Fiocchi d'avena (367 kcal, 8.0g P, 7.5g F, 66.8g C) | `grep '^CREA,003030' dataset/crea/foods.csv` |
+| 9 | `fiocchi_di_latte` | 20 | `proposed` | CREA 170010 | Fiocchi di formaggio magro (115 kcal, 9.7g P, 7.1g F, 3.2g C) | `grep '^CREA,170010' dataset/crea/foods.csv` |
+| 10 | `panna_fresca` | 19 | `proposed` | CREA 140300 | Panna da montare 35% lipidi (337 kcal, 2.3g P, 35.0g F, 3.4g C) | `grep '^CREA,140300' dataset/crea/foods.csv` |
+| 11 | `cipollotto_fresco` | 18 | `ambiguous` | — | Cipollotto assente in CREA come ortaggio autonomo | `grep -i 'cipollott' dataset/crea/foods.csv` |
+| 12 | `capperi_sottaceto` | 17 | `ambiguous` | — | Capperi assenti in CREA | `grep -i 'capper' dataset/crea/foods.csv` |
+| 13 | `amido_mais` | 17 | `ambiguous` | — | CREA 000300 privo del valore dei lipidi | `grep '^CREA,000300' dataset/crea/foods.csv` |
+| 14 | `lenticchie_cotte_scatola` | 17 | `proposed` | CREA 004510 | Lenticchie in scatola scolate (91 kcal, 5.0g P, 0.5g F, 15.4g C) | `grep '^CREA,004510' dataset/crea/foods.csv` |
+| 15 | `pane_integrale` | 17 | `proposed` | CREA 000550 | Pane di tipo integrale (224 kcal, 8.5g P, 1.3g F, 44.1g C) | `grep '^CREA,000550' dataset/crea/foods.csv` |
+| 16 | `vino_bianco` | 16 | `ambiguous` | — | CREA 405010 privo di proteine e carboidrati | `grep '^CREA,405010' dataset/crea/foods.csv` |
+| 17 | `salsa_pesce` | 16 | `ambiguous` | — | Salsa di pesce asiatica assente in CREA | `grep -i 'salsa.*pesce' dataset/crea/foods.csv` |
+| 18 | `pepe_nero` | 16 | `proposed` | CREA 006820 | Pepe nero (311 kcal, 11.4g P, 3.3g F, 49.0g C) | `grep '^CREA,006820' dataset/crea/foods.csv` |
+| 19 | `sedano_crudo` | 16 | `proposed` | CREA 005680 | Sedano, crudo (23 kcal, 2.3g P, 0.2g F, 2.4g C) | `grep '^CREA,005680' dataset/crea/foods.csv` |
+| 20 | `scalogno` | 16 | `ambiguous` | — | Scalogno assente in CREA | `grep -i 'scalogno' dataset/crea/foods.csv` |
+| 21 | `timo_fresco` | 16 | `ambiguous` | — | Timo fresco assente in CREA | `grep -i 'timo' dataset/crea/foods.csv` |
+| 22 | `zucchero_a_velo` | 15 | `proposed` | CREA 201500 | Zucchero, saccarosio (392 kcal, 100% C, identico chimico) | `grep '^CREA,201500' dataset/crea/foods.csv` |
+| 23 | `mandorle_secche` | 15 | `proposed` | CREA 008540 | Mandorle dolci, secche (628 kcal, 22.0g P, 55.3g F, 4.6g C) | `grep '^CREA,008540' dataset/crea/foods.csv` |
+| 24 | `mele_fresche` | 15 | `proposed` | CREA 007110 | Mele fresche senza buccia (57 kcal, 0.3g P, 0.1g F, 13.7g C) | `grep '^CREA,007110' dataset/crea/foods.csv` |
+| 25 | `orzo_perlato` | 15 | `proposed` | CREA 000090 | Orzo perlato (346 kcal, 9.4g P, 1.5g F, 73.7g C) | `grep '^CREA,000090' dataset/crea/foods.csv` |
+| 26 | `formaggio_quark` | 15 | `ambiguous` | — | Formaggio Quark assente in CREA | `grep -i 'quark' dataset/crea/foods.csv` |
+| 27 | `vino_rosso` | 14 | `ambiguous` | — | CREA 405020 privo di proteine e carboidrati | `grep '^CREA,405020' dataset/crea/foods.csv` |
+| 28 | `finocchi_crudi` | 14 | `ambiguous` | — | CREA 005320 privo del valore dei lipidi | `grep '^CREA,005320' dataset/crea/foods.csv` |
+| 29 | `miele` | 14 | `proposed` | CREA 210010 | Miele naturale (304 kcal, 0.6g P, 0.0g F, 80.3g C) | `grep '^CREA,210010' dataset/crea/foods.csv` |
+| 30 | `pane_segale` | 14 | `proposed` | CREA 000510 | Pane di segale (228 kcal, 8.3g P, 1.7g F, 45.4g C) | `grep '^CREA,000510' dataset/crea/foods.csv` |
+| 31 | `riso_cotto` | 14 | `proposed` | CREA 000105 | Riso brillato cotto bollito (100 kcal, 2.0g P, 0.1g F, 24.2g C) | `grep '^CREA,000105' dataset/crea/foods.csv` |
+| 32 | `aceto_vino` | 14 | `ambiguous` | — | Aceto di vino assente in CREA | `grep -i 'aceto' dataset/crea/foods.csv` |
+| 33 | `formaggio_cheddar` | 14 | `proposed` | CREA 160880 | Cheddar formaggio (388 kcal, 26.7g P, 31.0g F, 0.5g C) | `grep '^CREA,160880' dataset/crea/foods.csv` |
+| 34 | `lievito_chimico_polvere` | 13 | `ambiguous` | — | Lievito chimico per dolci assente in CREA | `grep -i 'lievito.*polvere' dataset/crea/foods.csv` |
+| 35 | `fagiolini_freschi` | 13 | `proposed` | CREA 004310 | Fagiolini, freschi (24 kcal, 2.1g P, 0.1g F, 2.4g C) | `grep '^CREA,004310' dataset/crea/foods.csv` |
+| 36 | `tofu_morbido` | 13 | `ambiguous` | — | Silken tofu morbido assente in CREA | `grep -i 'tofu' dataset/crea/foods.csv` |
+| 37 | `timo_secco` | 13 | `ambiguous` | — | Timo essiccato assente in CREA | `grep -i 'timo' dataset/crea/foods.csv` |
+| 38 | `zucca_cruda` | 13 | `proposed` | CREA 005720 | Zucca gialla, fresca (29 kcal, 1.1g P, 0.1g F, 3.5g C) | `grep '^CREA,005720' dataset/crea/foods.csv` |
+| 39 | `brodo_manzo` | 12 | `ambiguous` | — | Brodo di manzo liquido non diluito assente in CREA | `grep -i 'brodo.*manzo' dataset/crea/foods.csv` |
+| 40 | `sedano_rapa_crudo` | 12 | `proposed` | CREA 005690 | Sedano rapa, crudo (29 kcal, 1.9g P, 0.1g F, 3.8g C) | `grep '^CREA,005690' dataset/crea/foods.csv` |
+| 41 | `panna_doppia` | 12 | `ambiguous` | — | Double cream (~48% lipidi) assente in CREA (regola 3) | `grep '^CREA,140300' dataset/crea/foods.csv` |
+| 42 | `cardamomo_polvere` | 12 | `ambiguous` | — | Cardamomo spezia assente in CREA | `grep -i 'cardamomo' dataset/crea/foods.csv` |
+| 43 | `merluzzo_fresco` | 12 | `proposed` | CREA 121410 | Merluzzo o nasello (71 kcal, 17.0g P, 0.3g F, 0.0g C) | `grep '^CREA,121410' dataset/crea/foods.csv` |
+| 44 | `semi_sesamo` | 12 | `ambiguous` | — | Semi di sesamo assenti in CREA | `grep -i 'sesamo' dataset/crea/foods.csv` |
+| 45 | `tonno_scatola_olio` | 12 | `proposed` | CREA 123610 | Tonno sott'olio sgocciolato (192 kcal, 25.2g P, 10.1g F, 0.0g C) | `grep '^CREA,123610' dataset/crea/foods.csv` |
+| 46 | `pasta_fillo` | 12 | `ambiguous` | — | Pasta fillo sfoglia assente in CREA | `grep -i 'fillo' dataset/crea/foods.csv` |
+| 47 | `burro_arachidi` | 12 | `proposed` | CREA 009010 | Burro d'arachidi 100% (625 kcal, 24.9g P, 53.7g F, 8.0g C) | `grep '^CREA,009010' dataset/crea/foods.csv` |
+| 48 | `bicarbonato_sodio` | 11 | `ambiguous` | — | Sale minerale acalorico assente in CREA | `grep -i 'bicarbonato' dataset/crea/foods.csv` |
+| 49 | `couscous_crudo` | 11 | `proposed` | CREA 000045 | Couscous, crudo (361 kcal, 13.7g P, 1.1g F, 76.5g C) | `grep '^CREA,000045' dataset/crea/foods.csv` |
+| 50 | `scorza_limone` | 11 | `ambiguous` | — | Scorza di limone assente come voce distinta in CREA | `grep -i 'scorza' dataset/crea/foods.csv` |
+| 51 | `senape` | 11 | `ambiguous` | — | Senape salsa pronta assente in CREA | `grep -i 'senape' dataset/crea/foods.csv` |
+| 52 | `maiale_pancetta_fresca` | 11 | `ambiguous` | — | Pork belly crudo fresco assente in CREA | `grep -i 'maiale.*pancia' dataset/crea/foods.csv` |
+| 53 | `peperoncino_scotch_bonnet` | 11 | `proposed` | CREA 006830 | Peperoncini piccanti freschi (30 kcal, proxy piccante fresco) | `grep '^CREA,006830' dataset/crea/foods.csv` |
+| 54 | `mais_dolce` | 11 | `proposed` | CREA 000070 | Mais dolce in scatola sgocciolato (105 kcal, 3.4g P, 1.3g F, 20.5g C) | `grep '^CREA,000070' dataset/crea/foods.csv` |
+| 55 | `avocado_fresco` | 11 | `proposed` | CREA 007490 | Avocado, fresco (238 kcal, 4.4g P, 23.0g F, 1.8g C) | `grep '^CREA,007490' dataset/crea/foods.csv` |
+| 56 | `cavolfiore_crudo` | 11 | `proposed` | CREA 005160 | Cavolfiore, crudo (30 kcal, 3.2g P, 0.2g F, 2.7g C) | `grep '^CREA,005160' dataset/crea/foods.csv` |
+| 57 | `peperoncino_secco_fiocchi` | 10 | `ambiguous` | — | Peperoncino secco in fiocchi assente in CREA | `grep -i 'peperoncin.*secco' dataset/crea/foods.csv` |
+| 58 | `polenta_cruda` | 10 | `proposed` | CREA 000075 | Polenta, cruda (323 kcal, 8.0g P, 0.7g F, 72.7g C) | `grep '^CREA,000075' dataset/crea/foods.csv` |
+| 59 | `broccoli_crudi` | 10 | `proposed` | CREA 005110 | Broccolo a testa, crudo (33 kcal, 3.0g P, 0.4g F, 3.1g C) | `grep '^CREA,005110' dataset/crea/foods.csv` |
+| 60 | `tahina` | 10 | `ambiguous` | — | Pasta di sesamo tostata assente in CREA | `grep -i 'tahina' dataset/crea/foods.csv` |
+
+---
+
+### Confronto metriche matcher: Prima vs Dopo Sessione 2
+
+Rilevazione effettuata con:
+`python scripts/match_recipe_ingredients.py --report-file data/recipe_matching_report.json --review-queue data/recipe_ingredient_review_queue.json`
+
+| Metrica | Baseline inizio Sess. 2 | Dopo Sessione 2 | Variazione |
+|---|---|---|---|
+| **Ricette totali esaminate** | 834 | 834 | = |
+| **Istanze totali ingredienti** | 7.843 | 7.843 | = |
+| **Gruppi canonici / equivalenze** | 972 | 952 | **-20** (consolidamento unmapped nel dizionario) |
+| **Istanze `missing`** | 2.277 (29,0%) | 2.151 (27,4%) | **-126** (-1,6%) |
+| **Istanze `approved`** | 3.695 (47,1%) | 3.706 (47,3%) | +11 *(regola: niente `--approve`)* |
+| **Istanze `proposed_exact`** | 856 (10,9%) | 895 (11,4%) | **+39** (+0,5%) |
+| **Istanze `proposed_proxy`** | 345 (4,4%) | 380 (4,8%) | **+35** (+0,4%) |
+| **Istanze `ambiguous`** | 418 (5,3%) | 392 (5,0%) | -26 (-0,3%) |
+| **Istanze `needs_review`** | 252 (3,2%) | 319 (4,1%) | +67 (+0,9%) |
+| **Gruppi canonici `missing`** | 857 | 820 | **-37** |
+| **Gruppi canonici `proposed_exact`** | 46 | 57 | **+11** |
+| **Gruppi canonici `proposed_proxy`** | 29 | 32 | **+3** |
+| **Gruppi canonici `ambiguous`** | 10 | 13 | +3 |
+| **Gruppi canonici `approved`** | 30 | 30 | = *(regola: niente `--approve`)* |
+| **Ricette con tutte le associazioni proposte** | 73 | 75 | **+2 ricette** |
+| **Ricette pronte per il solver (100% OK)** | 24 | 24 | = *(richiede approvazione Claude)* |
+
+---
+
+### Note e dubbi per la revisione di Claude
+
+1. **Uova e prezzemolo (prodotti a marchio vs CREA):** In CREA 181100 (uova) e 006840 (prezzemolo) il valore `carbs_available_g_100g` è nullo nel dataset ufficiale. Per non violare la regola 4 ("mai zero al posto di un dato mancante"), sono stati lasciati `ambiguous` registrando nei candidati OFF referenze commerciali a marchio del supermercato (Esselunga Smart per le uova fresche, Esselunga per il prezzemolo surgelato) che possiedono tutti e 4 i macro completi. Spetta a Claude decidere se approvare formalmente i barcode OFF oppure adottare un proxy standardizzato.
+2. **Macinato di manzo:** In assenza di una voce "macinato" in CREA, è stato proposto come proxy `101120` ("tagli anteriori, crudi", 145 kcal, 7% grassi), che riflette fedelmente il profilo medio del macinato da banco bovino (10–15% grasso).
+3. **Double cream britannica:** La panna doppia inglese ha circa il 48–50% di lipidi. La panna più ricca in CREA è al 35% (`140300`). Applicando rigorosamente la regola 3 ("non scegliere la voce più vicina"), `panna_doppia` è stata marcata `ambiguous`.
+4. **Vini da cucina (bianco e rosso):** Le voci CREA `405010` e `405020` hanno i campi carboidrati e proteine vuoti. In aggiunta, durante la cottura l'alcol evapora in percentuale variabile dal 15% all'85% a seconda del tempo di ebollizione. Restano pertanto `ambiguous`.
+
+### Revisione Claude della sessione 2 (2026-10-06)
+
+Gli id CREA esistono tutti e i nomi corrispondono. Nel dizionario Gemini ha aggiunto 43 voci nuove. Ha cambiato anche voci esistenti, ma solo per aggiungere sinonimi o per riempire `fiocchi_di_latte`, che prima era vuota.
+
+**Approvate: 39 proposte CREA.**
+
+**Non approvate:**
+- `pollo_petto_crudo`: comprende ancora «Cooked chicken», cioè il valore crudo applicato al pollo cotto.
+- `grana_padano`: «Parmesan» va al Parmigiano Reggiano, secondo la decisione della verifica delle ricette candidate.
+- `tonno_scatola_olio`: «Tinned tuna» nelle ricette britanniche è spesso al naturale (CREA 123550).
+- `panna_fresca`: «Cream» non dice se è panna leggera o da montare.
+- `fagioli_cannellini_secchi`: «White beans» non indica lo stato.
+
+**Sorgenti speciali di Codex (`5e55730`).** I condimenti in traccia della policy sono approvati come `condiment:trace`; `pepe_nero` passa da CREA a traccia. I brodi liquidi sono approvati come `stock:cube_1_50`.
+
+**Effetto.** Le ricette pronte salgono da 24 a 26, quelle con tutte le associazioni approvate a 29. Il collo di bottiglia ora sono i **pesi**: solo 300 ricette su 834 hanno pesi espliciti; le altre usano cucchiai, pezzi e spicchi da convertire.
