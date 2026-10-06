@@ -259,3 +259,13 @@ Chiusura delle quattro correzioni UI fase 8: **333 test verdi** con il comando
 richiesto e database temporanei, anche dopo la verifica aggiuntiva della stima
 energetica della palestra senza Salute. Un commit per punto; contratto API e
 consegna del rientro aggiornati. `web/static/` non modificato.
+
+| Punto ricette | Stato | Verifica |
+|---|---|---|
+| 3 — Aromatici in traccia | **fatto** | Policy configurabile con soglie per porzione, unità qualitative prioritarie, conversioni approvate e ingredienti esclusi. Cinque casi richiesti, soglie, ricalcolo e spesa verificati. Audit: 834 ricette, quantità utilizzabili 310→311, pronte nel matcher 26→34; 693 occorrenze aromatiche in 459 ricette, esclusioni 275→275. Tutte le 34 esportate complete nel calcolatore. Suite finale: 337 test verdi. |
+
+Consegna aromatici (2026-10-07): regole e comandi riproducibili in
+[ingredient-aromatic-audit.md](ingredient-aromatic-audit.md), conteggi e ID
+pubblici in `data/ingredient-aromatic-audit.json`. Contratto della spesa
+aggiornato; `web/static/` invariato. L'audit del matcher non sovrascrive gli
+adattamenti già revisionati del catalogo solver.

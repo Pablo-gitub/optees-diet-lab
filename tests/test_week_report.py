@@ -36,6 +36,15 @@ class WeekReportTests(unittest.TestCase):
             self.assertEqual(values,{'CREA:000800':600,'CREA:006670':200});self.assertEqual(len(result['trace_condiments']),1);self.assertIsNone(result['trace_condiments'][0]['grams'])
             whole=shopping_list.shopping_list(db,self.user,self.profile,self.start,True,self.today)
             self.assertEqual(next(i['grams'] for i in whole['items'] if i['food']['id']=='000800'),800)
+    def test_aromatic_only_in_shopping_traces_and_not_primary_grams(self):
+        self.profile['_recipe_runs']['run:1']['trace_condiments'].append(dict(name='1 bunch parsley',trace_class='aromatic',category='condimento',declared_kcal=0,grams=None))
+        with self.web.connect() as db:
+            result=shopping_list.shopping_list(db,self.user,self.profile,self.start,True,self.today)
+        primary={i['canonical_id']:i['grams'] for i in result['items']}
+        self.assertEqual(primary,{'CREA:000800':800,'CREA:006670':200})
+        parsley=next(i for i in result['trace_condiments'] if i['name']=='1 bunch parsley')
+        self.assertIsNone(parsley['grams']);self.assertEqual(parsley['department'],'Condimenti in traccia')
+
     def test_package_units_and_preferred_merge(self):
         self.assertEqual(shopping_list.package_grams('1,5 kg'),1500);self.assertIsNone(shopping_list.package_grams('500 ml'));self.assertIsNone(shopping_list.package_grams('2 x 250g'))
         profile={'food_preferences':{'preferred_products':{'000800':dict(source='OFF',id='synthetic-product')}}}

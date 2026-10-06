@@ -918,3 +918,25 @@ non un consumo nullo. Restano i minimi nutrizionali, il deficit massimo di
 ```json
 {"status":"unavailable","reason":"Serve un consumo verificabile da Salute o una stima 8.5 approvata e recente per 2026-10-07. Base Salute senza allenamenti insufficiente o non recente."}
 ```
+
+### Aromatici in traccia — policy del matcher
+
+Classe `aromatic` in `config/recipe-special-sources.json`: 0 kcal dichiarate per
+decisione utente, categoria `condimento` esclusa dalla sovrapposizione. Si
+riusa `source: condiment`, `id: trace`; nessuna modifica ai corpi delle API.
+Gli aromatici ammessi sono in `trace_condiments`, fuori dai grammi primari:
+
+```json
+{"trace_condiments":[{"name":"1 bunch parsley","source":"condiment","id":"trace","trace_class":"aromatic","category":"condimento","declared_kcal":0,"grams":null,"source_quantity":1,"source_unit":"bunch","reviewed":true,"state_checked":true}]}
+```
+
+La lista della spesa li mostra nella sezione finale esistente:
+
+```json
+{"trace_condiments":[{"name":"1 bunch parsley","grams":null,"department":"Condimenti in traccia"}]}
+```
+
+Soglie, unità, caso succo di limone e audit prima/dopo in
+[ingredient-aromatic-audit.md](ingredient-aromatic-audit.md). Sopra soglia,
+oppure senza conversione approvata quando necessaria, l'ingrediente rimane
+normale; se peso o associazione non sono verificati la ricetta resta in revisione.

@@ -38,7 +38,7 @@ class RecipeSpecialSourcesTests(unittest.TestCase):
         r=self.process('Salt',grams=4,unit='g');self.assertEqual(r['match_status'],'approved')
         for name in ['Salt','Vanilla extract']:
             self.assertNotEqual((self.process(name,grams=50,unit='g').get('selected_candidate') or {}).get('source'),'condiment')
-        self.assertNotEqual((self.process('Fresh mint',grams=4,unit='g').get('selected_candidate') or {}).get('source'),'condiment')
+        self.assertEqual(self.process('Fresh mint',grams=4,unit='g')['selected_candidate']['trace_class'],'aromatic')
         self.assertEqual(self.process('Salt and pepper')['selected_candidate']['source'],'condiment')
         self.approved['recipe_overrides']={'test:special':{'1':dict(source='condiment',id='trace',reviewed=True,state_checked=True)}}
         override=self.process('Salt')
@@ -97,3 +97,52 @@ class RecipeSpecialSourcesTests(unittest.TestCase):
             self.assertNotEqual(self.process('Onion',unit='piece',quantity=2)['quantity_status'],'resolved')
             for args in [('missing','piece',100,'source','author'),('cipolla_cruda','piece',float('nan'),'source','author'),('cipolla_cruda','piece',100,None,'author'),('cipolla_cruda','piece',100,'source',None)]:
                 with self.assertRaises(ValueError):matching.approve_conversion(*args,path,approved)
+
+    def test_aromatic_requested_examples_and_thresholds(self):
+        for name,unit,quantity,servings in [('3 cloves garlic','clove',3,4),('1 bunch parsley','bunch',1,1),('juice of 1 lemon',None,None,4)]:
+            row=self.process(name,unit=unit,quantity=quantity,servings=servings)
+            self.assertEqual(row['selected_candidate']['trace_class'],'aromatic',name)
+            self.assertEqual(row['declared_kcal'],0);self.assertEqual(row['quantity_status'],'trace')
+        for name,unit,quantity,servings in [('1 head garlic','head',1,2),('2 tbsp pesto','tbsp',2,1),('juice of 1 lemon',None,None,1)]:
+            row=self.process(name,unit=unit,quantity=quantity,servings=servings)
+            self.assertNotEqual((row.get('selected_candidate') or {}).get('source'),'condiment',name)
+        for name,limit in [('fresh basil',20),('garlic',10),('fresh ginger',15),('fresh chilli',25),('lemon juice',30),('lemongrass',10),('kaffir lime leaves',10)]:
+            self.assertEqual(self.process(name,grams=limit*2)['selected_candidate']['trace_class'],'aromatic',name)
+            self.assertNotEqual((self.process(name,grams=limit*2+.1).get('selected_candidate') or {}).get('source'),'condiment',name)
+        for name in ('olive oil','butter','cream','sugar','honey','curry paste','nuts','cumin seeds','cheese','sweet pepper','onion'):
+            self.assertNotEqual((self.process(name,grams=1).get('selected_candidate') or {}).get('source'),'condiment',name)
+        self.assertEqual(self.process('soy sauce',unit='tbsp',quantity=1,servings=1)['selected_candidate']['trace_class'],'aromatic')
+        self.assertNotEqual((self.process('soy sauce',unit='tbsp',quantity=2,servings=1).get('selected_candidate') or {}).get('source'),'condiment')
+
+    def test_aromatic_units_and_approved_conversion(self):
+        for unit in ('sprig','leaf','bunch','handful'):
+            self.assertEqual(self.process('parsley',unit=unit,quantity=2,servings=1)['quantity_status'],'trace')
+        self.assertEqual(self.process('parsley',grams=100,unit='bunch',quantity=1,servings=1)['quantity_status'],'trace')
+        for unit in ('pinch','q.b.','to taste'):
+            self.assertEqual(self.process('fresh basil',unit=unit)['quantity_status'],'trace')
+        from recipe_special_sources import aromatic_trace
+        ingredient=dict(name='garlic',quantity=3,unit='clove')
+        conversions={'aglio':{'clove':dict(grams=3,source='Fonte sintetica',approved_by='Test')}}
+        trace=aromatic_trace(ingredient,{'id':'aglio'},{'servings':4},None,conversions)
+        self.assertEqual(trace['conversion']['grams'],3)
+        self.assertIsNone(aromatic_trace(dict(ingredient,quantity=20),{'id':'aglio'},{'servings':4},None,conversions))
+        self.assertIsNone(aromatic_trace(ingredient,{'id':'aglio'},{'servings':4},None,{}))
+        self.dictionary['_approved_conversions']={}
+        self.assertNotEqual((self.process('garlic',unit='clove',quantity=3,servings=4).get('selected_candidate') or {}).get('source'),'condiment')
+        self.assertIsNone(aromatic_trace(dict(name='ginger',unit='piece',quantity=1),{'id':'zenzero_fresco'},{'servings':2},None,{}))
+
+    def test_aromatic_export_ignores_mass_but_keeps_shopping_trace_and_calculator_guard(self):
+        herb=self.process('fresh basil',grams=30,servings=2)
+        stock=self.process('Vegetable stock',grams=500);stock['ingredient_key']='2'
+        recipe=dict(id='test:aromatic',title='Sintetica',servings=2,source='test',cuisine='Italian',solver_ready=True,ingredients=[herb,stock])
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);matching.export_solver_recipes([recipe],root/'solver.json');matching.export_recipe_mappings([recipe],root)
+            model=json.loads((root/'solver.json').read_text())['recipes'][0]
+            self.assertEqual(len(model['ingredients']),1)
+            self.assertEqual(model['trace_condiments'][0]['trace_class'],'aromatic')
+            self.assertIsNone(model['trace_condiments'][0]['grams'])
+            source=dict(id='test:aromatic',servings=2,ingredients=[dict(key='1',name='fresh basil',grams_whole_recipe=30),dict(key='2',name='Vegetable stock',grams_whole_recipe=500)])
+            mappings=json.loads((root/'test_aromatic.json').read_text());values=calc.calculate(source,mappings)
+            self.assertTrue(values['complete']);self.assertEqual(values['ingredient_sources'][0]['declared_kcal'],0)
+            mappings['1']['grams_override']=41
+            self.assertFalse(calc.calculate(source,mappings)['complete'])

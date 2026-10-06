@@ -1,5 +1,5 @@
 {
-  "version": "recipe-special-sources-v2",
+  "version": "recipe-special-sources-v3",
   "trace_condiment": {
     "source": "condiment",
     "id": "trace",
@@ -42,7 +42,6 @@
       "coriander powder",
       "ground coriander",
       "ground cumin",
-      "cumin seeds",
       "curry powder",
       "cloves",
       "ground cloves",
@@ -66,10 +65,6 @@
       "ground allspice",
       "allspice",
       "star anise",
-      "fennel seeds",
-      "mustard seeds",
-      "coriander seeds",
-      "fenugreek seeds",
       "ground cardamom",
       "cardamom pods",
       "dried chilli",
@@ -101,5 +96,228 @@
     "water_g_per_100g_liquid": 98,
     "density_g_per_ml": 1,
     "note": "Proxy dichiarato, diluizione 1:50: 1 g di dado generico + 49 g di acqua = 50 g di brodo pronto. Densità 1 g/ml euristica per liquido acquoso. Non certifica la composizione vegetale o di pollo né la reale preparazione della ricetta; si sostituisce con un brodo liquido specifico revisionato quando disponibile."
-  }
+  },
+  "aromatic": {
+    "source": "condiment",
+    "id": "trace",
+    "category": "condimento",
+    "declared_kcal": 0,
+    "entries": {
+      "basil": {
+        "exact_names": [
+          "basil",
+          "basilico"
+        ],
+        "canonical_ids": [
+          "basilico_fresco"
+        ],
+        "max_g_per_serving": 20
+      },
+      "parsley": {
+        "exact_names": [
+          "parsley",
+          "prezzemolo"
+        ],
+        "canonical_ids": [
+          "prezzemolo_fresco"
+        ],
+        "max_g_per_serving": 20
+      },
+      "coriander": {
+        "exact_names": [
+          "coriander",
+          "cilantro",
+          "coriandolo"
+        ],
+        "canonical_ids": [
+          "coriandolo_fresco"
+        ],
+        "max_g_per_serving": 20
+      },
+      "mint": {
+        "exact_names": [
+          "mint",
+          "menta"
+        ],
+        "canonical_ids": [
+          "menta_fresca"
+        ],
+        "max_g_per_serving": 20
+      },
+      "thyme": {
+        "exact_names": [
+          "thyme",
+          "timo"
+        ],
+        "canonical_ids": [
+          "timo_fresco"
+        ],
+        "max_g_per_serving": 20
+      },
+      "rosemary": {
+        "exact_names": [
+          "rosemary",
+          "rosmarino"
+        ],
+        "canonical_ids": [
+          "rosmarino_fresco"
+        ],
+        "max_g_per_serving": 20
+      },
+      "dill": {
+        "exact_names": [
+          "dill",
+          "aneto"
+        ],
+        "canonical_ids": [
+          "aneto_fresco"
+        ],
+        "max_g_per_serving": 20
+      },
+      "chives": {
+        "exact_names": [
+          "chives",
+          "chive",
+          "erba cipollina"
+        ],
+        "canonical_ids": [
+          "erba_cipollina"
+        ],
+        "max_g_per_serving": 20
+      },
+      "garlic": {
+        "exact_names": [
+          "garlic",
+          "aglio"
+        ],
+        "canonical_ids": [
+          "aglio"
+        ],
+        "max_g_per_serving": 10
+      },
+      "ginger": {
+        "exact_names": [
+          "ginger",
+          "fresh ginger",
+          "zenzero",
+          "zenzero fresco"
+        ],
+        "canonical_ids": [
+          "zenzero_fresco"
+        ],
+        "max_g_per_serving": 15
+      },
+      "chilli": {
+        "exact_names": [
+          "chilli",
+          "chili",
+          "chilli pepper",
+          "chili pepper",
+          "fresh chilli",
+          "fresh chili",
+          "red chilli",
+          "green chilli",
+          "peperoncino",
+          "peperoncino fresco"
+        ],
+        "canonical_ids": [
+          "peperoncino_fresco"
+        ],
+        "max_g_per_serving": 25
+      },
+      "citrus": {
+        "exact_names": [
+          "lemon juice",
+          "lime juice",
+          "lemon zest",
+          "lime zest",
+          "lemon rind",
+          "lime rind",
+          "succo di limone",
+          "succo di lime",
+          "scorza di limone",
+          "scorza di lime"
+        ],
+        "canonical_ids": [
+          "succo_limone",
+          "scorza_limone"
+        ],
+        "max_g_per_serving": 30
+      },
+      "lemongrass": {
+        "exact_names": [
+          "lemongrass",
+          "lemon grass",
+          "citronella"
+        ],
+        "canonical_ids": [],
+        "max_g_per_serving": 10
+      },
+      "kaffir_lime": {
+        "exact_names": [
+          "kaffir lime leaf",
+          "kaffir lime leaves",
+          "lime kaffir leaves",
+          "foglie di lime kaffir"
+        ],
+        "canonical_ids": [],
+        "max_g_per_serving": 10
+      },
+      "bay": {
+        "exact_names": [
+          "bay leaf",
+          "bay leaves",
+          "alloro"
+        ],
+        "canonical_ids": [
+          "alloro_foglie"
+        ],
+        "max_g_per_serving": 10
+      },
+      "soy_sauce": {
+        "exact_names": [
+          "soy sauce",
+          "salsa di soia"
+        ],
+        "canonical_ids": [
+          "salsa_soia"
+        ],
+        "max_g_per_serving": 16
+      }
+    },
+    "accepted_units": [
+      "tsp",
+      "tbsp",
+      "clove",
+      "sprig",
+      "leaf",
+      "bunch",
+      "handful",
+      "slice",
+      "piece",
+      "ml"
+    ],
+    "always_trace_units": [
+      "sprig",
+      "leaf",
+      "bunch",
+      "handful"
+    ],
+    "qualitative_units": [
+      "pinch",
+      "q.b.",
+      "qb",
+      "to taste",
+      "totaste"
+    ],
+    "volume_unit_ml": {
+      "tsp": 5,
+      "tbsp": 15,
+      "ml": 1
+    },
+    "volume_density_g_per_ml": 1,
+    "max_juice_fruits_per_serving": 0.25,
+    "note": "Decisione utente: aromatici moderati = 0 kcal dichiarate, presenti solo nella spesa. Soglie per porzione; sopra soglia resta ingrediente normale. Sprig/leaf/bunch/handful sono traccia per costruzione per decisione utente (unità qualitative prioritarie). Conversioni di pezzi solo approvate; volumi senza conversione specifica: proxy dichiarato 1 g/ml. Juice of 1 lemon/lime in almeno 4 porzioni ammesso per regola esplicita sul conteggio dei frutti, senza inventare il peso del succo. Salsa di soia semplice: massimo 1 tbsp (15 ml; 16 g nella conversione approvata) per porzione, sola eccezione alle salse composte."
+  },
+  "never_trace_pattern": "\\b(oil|oils|olio|oli|butter|burro|cream|panna|sugar|zucchero|honey|miele|pesto|paste|nuts|nut|seed|seeds|semi|seme|cheese|formaggio|formaggi|onion|onions|cipolla|cipolle|bell|sweet pepper|peperone|peperoni)\\b"
 }

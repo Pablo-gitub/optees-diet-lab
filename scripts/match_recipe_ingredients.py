@@ -25,7 +25,7 @@ DEFAULT_DICT = ROOT / 'config/ingredient-dictionary.json'
 DEFAULT_CONVERSIONS = ROOT / 'config/ingredient-unit-conversions.json'
 DEFAULT_APPROVED = ROOT / 'config/ingredient-approved-mappings.json'
 
-from recipe_special_sources import POLICY,trace_allowed,liquid_stock,special_food
+from recipe_special_sources import POLICY,trace_allowed,aromatic_trace,liquid_stock,special_food
 
 NUTRIENTS = ['kcal_100g', 'protein_g_100g', 'fat_g_100g', 'carbs_available_g_100g']
 
@@ -497,9 +497,11 @@ def _process_ingredient(
     excluded=bool(canonical and re.sub(r'\s+',' ',fold(name)) in approved_data.get('_raw_names_excluded',{}).get(canonical['id'],[]))
     if excluded:
         return dict(ingredient_key=ing_key,original_name=name,canonical_id=canonical['id'],canonical_name=canonical['display_name_it'],qualifiers=qualifiers,match_status='needs_review',confidence='none',reviewed=False,state_checked=False,selected_candidate=None,candidates=[],grams=grams,quantity_status=qty_status,quantity_note=qty_note,note='Nome escluso esplicitamente dai batch: non eredita approvazione canonica.',approval_excluded=True)
-    if trace_allowed(ing,canonical,recipe,grams):
-        candidate=dict(source='condiment',id='trace',label=name,category='condimento',state='in traccia, 0 kcal dichiarate',reviewed=True,state_checked=True,declared_kcal=0,reason=POLICY['trace_condiment']['note'])
-        return dict(ingredient_key=ing_key,original_name=name,canonical_id=(canonical or {}).get('id','trace:'+fold(name)),canonical_name=(canonical or {}).get('display_name_it',name),qualifiers=qualifiers,match_status='approved',confidence='declared',reviewed=True,state_checked=True,selected_candidate=candidate,candidates=[candidate],grams=grams,quantity_status='resolved' if grams is not None else 'trace',quantity_note=qty_note,note=candidate['reason'],category='condimento',declared_kcal=0)
+    trace_grams=grams if qty_status=='resolved' else None
+    aromatic=aromatic_trace(ing,canonical,recipe,trace_grams,dictionary.get('_approved_conversions'))
+    if aromatic or trace_allowed(ing,canonical,recipe,trace_grams,dictionary.get('_approved_conversions')):
+        candidate=dict(source='condiment',id='trace',label=name,category='condimento',state='in traccia, 0 kcal dichiarate',reviewed=True,state_checked=True,declared_kcal=0,reason=(aromatic or {}).get('reason',POLICY['trace_condiment']['note']),**({k:v for k,v in aromatic.items() if k!='reason'} if aromatic else {}))
+        return dict(ingredient_key=ing_key,original_name=name,canonical_id=(canonical or {}).get('id','trace:'+fold(name)),canonical_name=(canonical or {}).get('display_name_it',name),qualifiers=qualifiers,match_status='approved',confidence='declared',reviewed=True,state_checked=True,selected_candidate=candidate,candidates=[candidate],grams=trace_grams,quantity_status='trace' if aromatic or trace_grams is None else 'resolved',quantity_note=qty_note,note=candidate['reason'],category='condimento',declared_kcal=0)
     if liquid_stock(ing,canonical):
         candidate=dict(source='stock',id='cube_1_50',label='Brodo liquido da dado diluito 1:50',category='brodo',state='liquido, diluizione dichiarata 1:50',reviewed=True,state_checked=True,reason=POLICY['stock']['note'],dilution=POLICY['stock'])
         # A dedicated explicitly reviewed liquid source takes precedence.
@@ -737,11 +739,18 @@ def process_ingredient(ing,recipe,dictionary,approved_data,crea_foods,db_off):
     result=_process_ingredient(ing,recipe,dictionary,approved_data,crea_foods,db_off)
     candidate=result.get('selected_candidate')
     if candidate and candidate['source'] in ('condiment','stock'):
-        policy=POLICY['trace_condiment' if candidate['source']=='condiment' else 'stock']
+        if candidate['source']=='condiment':
+            checked_grams=result['grams'] if result['quantity_status'] not in ('proposed_conversion','needs_review') else None
+            if not trace_allowed(ing,find_canonical_ingredient(ing,dictionary),recipe,checked_grams,dictionary.get('_approved_conversions')):
+                result.update(match_status='needs_review',reviewed=False,state_checked=False,selected_candidate=None,candidates=[],note='La traccia non rispetta la policy e le conversioni approvate selezionate.')
+                return result
+            aromatic=aromatic_trace(ing,find_canonical_ingredient(ing,dictionary),recipe,checked_grams,dictionary.get('_approved_conversions'))
+            if aromatic:candidate.update(aromatic)
+        policy=POLICY['aromatic' if candidate.get('trace_class')=='aromatic' else 'trace_condiment' if candidate['source']=='condiment' else 'stock']
         metadata=dict(category=policy['category'],reason=policy['note'])
         if candidate['source']=='condiment':
             metadata['declared_kcal']=0
-            if result['grams'] is None:result['quantity_status']='trace'
+            if result['grams'] is None or candidate.get('trace_class')=='aromatic':result['quantity_status']='trace'
         else:metadata['dilution']=policy
         candidate.update(metadata)
         result['candidates']=[dict(c,**metadata) if (c['source'],c['id'])==(candidate['source'],candidate['id']) else c for c in result['candidates']]
@@ -931,6 +940,8 @@ def build_report(processed_recipes: list, review_queue: list) -> dict:
         'recipes_solver_ready': recipes_solver_ready,
         'recipes_pending_review': total_recipes - recipes_solver_ready,
         'recipes_with_trace_condiments':sum(any(i['selected_candidate'] and i['selected_candidate']['source']=='condiment' for i in r['ingredients']) for r in processed_recipes),
+        'recipes_with_aromatic_traces':sum(any((i.get('selected_candidate') or {}).get('trace_class')=='aromatic' for i in r['ingredients']) for r in processed_recipes),
+        'aromatic_trace_occurrences':sum((i.get('selected_candidate') or {}).get('trace_class')=='aromatic' for r in processed_recipes for i in r['ingredients']),
         'recipes_with_declared_stock_dilution':sum(any(i['selected_candidate'] and i['selected_candidate']['source']=='stock' for i in r['ingredients']) for r in processed_recipes),
         'excluded_occurrences':sum(i.get('approval_excluded',False) for r in processed_recipes for i in r['ingredients']),
         'special_sources_policy':POLICY,
@@ -991,7 +1002,7 @@ def export_solver_recipes(processed_recipes: list, output_path: Path):
         for ing in r['ingredients']:
             cand = ing['selected_candidate']
             if ing.get('quantity_status')=='trace':
-                recipe_entry['trace_condiments'].append(dict(key=ing['ingredient_key'],name=ing['original_name'],source='condiment',id='trace',category='condimento',declared_kcal=0,grams=None,source_quantity=ing.get('source_quantity'),source_unit=ing.get('source_unit'),reviewed=True,state_checked=True,note=ing['note']));continue
+                recipe_entry['trace_condiments'].append(dict(key=ing['ingredient_key'],name=ing['original_name'],source='condiment',id='trace',category='condimento',declared_kcal=0,grams=None,source_quantity=ing.get('source_quantity'),source_unit=ing.get('source_unit'),reviewed=True,state_checked=True,note=ing['note'],trace_class=cand.get('trace_class','trace_condiment'),**{k:cand[k] for k in ('max_g_per_serving','conversion','quantity_assumption') if k in cand}));continue
             grams = float(ing['grams'])
             recipe_entry['ingredients'].append(
                 {
@@ -1006,7 +1017,7 @@ def export_solver_recipes(processed_recipes: list, output_path: Path):
                             'reviewed': True,
                             'state_checked': True,
                             'label': cand.get('label') or cand.get('name', ''),
-                            **{k:cand[k] for k in ('category','declared_kcal','reason','dilution') if k in cand},
+                            **{k:cand[k] for k in ('category','declared_kcal','reason','dilution','trace_class','max_g_per_serving','conversion','quantity_assumption') if k in cand},
                         }
                     ],
                 }
@@ -1034,7 +1045,8 @@ def export_recipe_mappings(processed_recipes: list, output_dir: Path):
                     'state_checked': ing['state_checked'],
                     'grams_override': ing.get('grams'),
                     'quantity_status': ing.get('quantity_status'),
-                    **{k:cand[k] for k in ('category','declared_kcal','reason','dilution') if k in cand},
+                    'canonical_id': ing.get('canonical_id'),
+                    **{k:cand[k] for k in ('category','declared_kcal','reason','dilution','trace_class','max_g_per_serving','conversion','quantity_assumption') if k in cand},
                 }
         safe_id = r['id'].replace(':', '_').replace('/', '_')
         target_file = output_dir / f"{safe_id}.json"

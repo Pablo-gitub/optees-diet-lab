@@ -4,10 +4,11 @@ import argparse
 import csv
 import json
 import math
+import re
 import sqlite3
 from pathlib import Path
 
-from recipe_special_sources import special_food,POLICY
+from recipe_special_sources import aromatic_trace, special_food,POLICY
 
 ROOT = Path(__file__).resolve().parents[1]
 NUTRIENTS = {
@@ -59,11 +60,13 @@ def calculate(recipe, mappings, lookup=food_lookup):
             continue
         if mapping.get('source')=='condiment':
             grams=finite(mapping.get('grams_override',ingredient.get('grams_whole_recipe')))
-            if mapping.get('id')!='trace' or mapping.get('declared_kcal')!=0 or mapping.get('category')!='condimento' or (grams is None and mapping.get('quantity_status')!='trace') or (grams is not None and grams/servings>POLICY['trace_condiment']['max_g_per_serving']):
+            aromatic=mapping.get('trace_class')=='aromatic'
+            valid_aromatic=aromatic_trace(ingredient,{'id':mapping.get('canonical_id')},recipe,grams) if aromatic else None
+            if re.search(POLICY.get('never_trace_pattern',r'(?!)'),str(ingredient.get('name','')).casefold()) or mapping.get('id')!='trace' or mapping.get('declared_kcal')!=0 or mapping.get('category')!='condimento' or (grams is None and mapping.get('quantity_status')!='trace') or (aromatic and not valid_aromatic) or (not aromatic and grams is not None and grams/servings>POLICY['trace_condiment']['max_g_per_serving']):
                 blocked.append(dict(ingredient=key,reason='trace_condiment_policy_required'))
                 for nutrient in missing:missing[nutrient].append(key)
                 continue
-            used.append(dict(ingredient=key,source='condiment',source_id='trace',category='condimento',grams=grams,declared_kcal=0,approximation=POLICY['trace_condiment']['note']))
+            used.append(dict(ingredient=key,source='condiment',source_id='trace',category='condimento',grams=grams,declared_kcal=0,trace_class=mapping.get('trace_class','trace_condiment'),approximation=POLICY['aromatic' if aromatic else 'trace_condiment']['note']))
             continue
         grams = finite(mapping.get('grams_override', ingredient['grams_whole_recipe']))
         if grams is None:

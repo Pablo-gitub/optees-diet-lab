@@ -1,0 +1,34 @@
+{
+  "policy_version": "recipe-special-sources-v3",
+  "before": {
+    "total_recipes": 834,
+    "total_ingredient_occurrences": 7843,
+    "recipes_all_quantities_resolved": 310,
+    "recipes_solver_ready": 26,
+    "recipes_with_trace_condiments": 545,
+    "excluded_occurrences": 275
+  },
+  "after": {
+    "total_recipes": 834,
+    "total_ingredient_occurrences": 7843,
+    "recipes_all_quantities_resolved": 311,
+    "recipes_solver_ready": 34,
+    "recipes_with_trace_condiments": 712,
+    "excluded_occurrences": 275
+  },
+  "new_solver_ready_ids": [
+    "foodose:R021",
+    "foodose:R050",
+    "foodose:R078",
+    "foodose:R145",
+    "foodose:R164",
+    "foodose:R248",
+    "foodose:R324",
+    "foodose:R334"
+  ],
+  "no_longer_ready_ids": [],
+  "aromatic_trace_occurrences": 693,
+  "recipes_with_aromatic_traces": 459,
+  "calculator_complete": 34,
+  "calculator_blocked": []
+}
