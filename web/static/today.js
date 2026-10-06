@@ -447,7 +447,42 @@ function renderWorkout(day) {
   }
   workouts.forEach((w) => box.append(dayWorkoutItem(w, day)));
 }
+function dayActivityItem(w, day) {
+  const item = element('div', undefined, 'day-workout-item');
+  const st = w.status === 'done' ? 'Fatta ✓' : w.status === 'skipped' ? 'Saltata' : 'Da fare';
+  const e = w.energy_estimate;
+  item.append(
+    element('strong', '🚶 ' + (activityNames[w.activity_id] || w.title || w.activity_id)),
+    element('p', [w.minutes && Math.round(w.minutes) + ' min', w.start_time, st].filter(Boolean).join(' · '), 'muted'),
+  );
+  if (e?.status === 'available') item.append(element('p', 'Circa ' + fmt0(e.energy_kcal.low) + '–' + fmt0(e.energy_kcal.high) + ' kcal in più del riposo (stima)', 'muted small'));
+  else if (e?.reason) item.append(element('p', e.reason, 'muted small'));
+  if (w.status === 'chosen' || w.status === 'proposed') {
+    const actions = element('div', undefined, 'actions');
+    [
+      ['Fatta', 'primary small', 'activities/confirm'],
+      ['Saltata', 'ghost small', 'workouts/skip'],
+    ].forEach(([label, cls, path]) => {
+      const b = element('button', label, cls);
+      b.type = 'button';
+      b.onclick = async () => {
+        actions.querySelectorAll('button').forEach((x) => (x.disabled = true));
+        try {
+          renderDay(await api(path, 'POST', { planned_session_id: w.planned_session_id }));
+          refreshWeek();
+        } catch (err) {
+          message(err.message);
+          actions.querySelectorAll('button').forEach((x) => (x.disabled = false));
+        }
+      };
+      actions.append(b);
+    });
+    item.append(actions);
+  }
+  return item;
+}
 function dayWorkoutItem(w, day) {
+  if (w.kind === 'activity') return dayActivityItem(w, day);
   const item = element('div', undefined, 'day-workout-item');
   const row = element('div', undefined, 'workout-row');
   if (w.media?.thumbnail) {
@@ -668,6 +703,7 @@ $('joint-ranges').onchange = () => $('joint-targets').classList.toggle('show-ran
 function syncJointMode() {
   const on = $('week-joint').checked;
   $('joint-options').hidden = !on;
+  if (on) renderJointActivities();
   $('week-mode-label').hidden = on;
   $('week-hint').textContent = on
     ? 'Optees combina più schede di allenamento con la dieta di 7 giorni e verifica ogni combinazione. Pasti e allenamenti già registrati restano bloccati. Obiettivi e bilancio scelti vengono salvati nel profilo. Il calcolo può richiedere un paio di minuti.'
@@ -951,6 +987,23 @@ function sameTargets(a, b) {
     );
   return flat(a) === flat(b);
 }
+// 8.3 — activities beyond the gym; empty = server uses liked activities from the goals interview.
+let jointActivities = null;
+async function renderJointActivities() {
+  const box = $('joint-activities');
+  if (box.childElementCount) return;
+  try {
+    const g = goals || (await api('goals'));
+    const excluded = new Set(g.activity?.disliked_activities || []);
+    const options = Object.fromEntries(Object.entries(activityNames).filter(([id]) => !excluded.has(id)));
+    const chips = chipToggles(options, jointActivities || g.activity?.liked_activities || []);
+    jointActivities = chips.value();
+    chips.addEventListener('click', () => (jointActivities = chips.value()));
+    box.replaceChildren(chips);
+  } catch (e) {
+    box.replaceChildren(element('p', e.message, 'error'));
+  }
+}
 async function jointRequest() {
   const day_targets = readJointTargets();
   const energy_balance_target_kcal = readBalance();
@@ -964,7 +1017,7 @@ async function jointRequest() {
     week_start: $('week-start').value,
     ...(approvedPerDate ? {} : { day_targets }),
     energy_balance_target_kcal,
-    workout: { ...readAvailability($('joint-availability')), demo: true },
+    workout: { ...readAvailability($('joint-availability')), ...(jointActivities?.length ? { activities: jointActivities } : {}), demo: true },
   };
 }
 $('week-generate').onclick = async () => {
