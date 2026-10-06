@@ -13,9 +13,11 @@ def positive(value):
 
 def trace_allowed(ing,canonical,recipe,grams):
     policy=POLICY['trace_condiment'];name=str(ing.get('name','')).strip().casefold()
+    mixture=re.sub(r'\s+',' ',name) in ('salt and pepper','salt & pepper','salt and black pepper')
     evidence=' '.join(str(v or '') for v in (name,ing.get('note'),(ing.get('source_nutrition_reference') or {}).get('description'))).casefold()
-    if re.search(r'\b(and|or|fresh|sugar|paste|sauce|oil|fresco|fresca|zucchero)\b',evidence):return False
-    eligible=(canonical or {}).get('id') in policy['canonical_ids'] or name in policy['exact_names']
+    checked=evidence[len(name):] if mixture else evidence
+    if '&' in checked or re.search(r'\b(and|or|fresh|sugar|paste|sauce|oil|fresco|fresca|zucchero)\b',checked):return False
+    eligible=mixture or (canonical or {}).get('id') in policy['canonical_ids'] or name in policy['exact_names']
     if not eligible:return False
     servings=recipe.get('servings')
     if not positive(servings):return False

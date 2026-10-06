@@ -1,5 +1,5 @@
 {
-  "version": "recipe-special-sources-v1",
+  "version": "recipe-special-sources-v2",
   "trace_condiment": {
     "source": "condiment",
     "id": "trace",
@@ -45,7 +45,8 @@
       "saffron",
       "dried herbs"
     ],
-    "note": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente."
+    "note": "Approssimazione calorica in traccia richiesta dall'utente, non analisi nutrizionale della spezia. Soglie euristiche configurabili; nessuna stima di sale/sodio o grammi mancanti. Ingredienti composti ed esclusi dai batch non sono approvati automaticamente.",
+    "mixtures_note": "Solo salt and pepper, salt & pepper e salt and black pepper: somma di sale e pepe già ammessi. Soglia combinata conservativa invariata; nessun altro composto con and/&."
   },
   "stock": {
     "source": "stock",

@@ -22,6 +22,7 @@ DEFAULT_CREA = ROOT / 'dataset/crea/foods.csv'
 DEFAULT_OFF = ROOT / 'dataset/open_food_facts/catalog.sqlite'
 DEFAULT_RECIPES = ROOT / 'dataset/recipes/catalog.sqlite'
 DEFAULT_DICT = ROOT / 'config/ingredient-dictionary.json'
+DEFAULT_CONVERSIONS = ROOT / 'config/ingredient-unit-conversions.json'
 DEFAULT_APPROVED = ROOT / 'config/ingredient-approved-mappings.json'
 
 from recipe_special_sources import POLICY,trace_allowed,liquid_stock,special_food
@@ -305,6 +306,14 @@ def evaluate_quantity(ing: dict, canonical: dict, dictionary: dict) -> tuple:
 
     unit = str(ing.get('unit', '')).strip().lower()
     qty = ing.get('quantity')
+    approved=dictionary.get('_approved_conversions',{}).get((canonical or {}).get('id'),{}).get(unit)
+    if approved and (canonical or {}).get('id') in dictionary.get('_approved_conversion_canonicals',set()):
+        try:
+            value=float(qty)*approved['grams']
+            if isinstance(qty,bool):raise ValueError()
+            if math.isfinite(value) and value>0:
+                return value,'resolved','Conversione approvata: '+approved['source']+'; autore '+approved['approved_by']
+        except (TypeError,ValueError):pass
     conversions = dictionary.get('standard_conversions', {})
 
     # Kilograms
@@ -443,7 +452,11 @@ def _process_ingredient(
     qualifiers = extract_qualifiers(name, note, usda_desc, dictionary.get('qualifiers', {}))
     canonical = find_canonical_ingredient(ing, dictionary)
 
-    grams, qty_status, qty_note = evaluate_quantity(ing, canonical, dictionary)
+    safe_dictionary=dict(dictionary)
+    approval=approved_data.get('canonical_approvals',{}).get((canonical or {}).get('id'))
+    excluded_name=canonical and re.sub(r'\s+',' ',fold(name)) in approved_data.get('_raw_names_excluded',{}).get(canonical['id'],[])
+    if not approval or excluded_name or not approval_compatible(ing,canonical,qualifiers,approval,crea_foods,recipe=recipe):safe_dictionary['_approved_conversion_canonicals']=set()
+    grams, qty_status, qty_note = evaluate_quantity(ing, canonical, safe_dictionary)
 
     # 1. Check Recipe Override in approved mappings
     rec_overrides = approved_data.get('recipe_overrides', {}).get(rec_id, {})
@@ -744,11 +757,14 @@ def process_recipes(
     approved_path: Path,
     limit: int = None,
     cuisine_filter: str = None,
+    conversions_path: Path = DEFAULT_CONVERSIONS,
 ) -> list:
     """Stream and process recipes from SQLite database."""
     crea_foods = load_crea(crea_path)
     dictionary = load_dictionary(dict_path)
     approved_data = load_approved_mappings(approved_path)
+    dictionary['_approved_conversions']=load_conversions(conversions_path)
+    dictionary['_approved_conversion_canonicals']=set(approved_data.get('canonical_approvals',{}))
     db_off = sqlite3.connect(off_db_path) if off_db_path.exists() else None
 
     processed = []
@@ -1053,6 +1069,24 @@ def approve_canonical(
     )
 
 
+def load_conversions(path):
+    data=json.loads(Path(path).read_text()) if Path(path).exists() else {'conversions':{}}
+    for canonical,units in data['conversions'].items():
+        for unit,row in units.items():
+            if not isinstance(row.get('grams'),(int,float)) or isinstance(row['grams'],bool) or not math.isfinite(row['grams']) or not 0<row['grams']<=10000 or not row.get('source') or not row.get('approved_by'):raise ValueError('Conversione approvata incompleta: '+canonical+' '+unit)
+    return data['conversions']
+
+
+def approve_conversion(canonical,unit,grams,source,author,path=DEFAULT_CONVERSIONS,approved_path=DEFAULT_APPROVED):
+    if canonical not in load_approved_mappings(approved_path).get('canonical_approvals',{}):raise ValueError('Prima approvare l’associazione del canonico')
+    if unit not in ('ml','l','liter','litre','piece','count','clove','tbsp','tsp','slice','sprig','cup'):raise ValueError('Unità di conversione non supportata')
+    grams=float(grams)
+    if not math.isfinite(grams) or not 0<grams<=10000 or not isinstance(source,str) or not source.strip() or not isinstance(author,str) or not author.strip():raise ValueError('Servono grammi positivi, fonte e autore espliciti')
+    data=load_conversions(path);data.setdefault(canonical,{})[unit]=dict(grams=grams,source=source.strip(),approved_by=author.strip(),approved_at=__import__('datetime').datetime.now(__import__('datetime').timezone.utc).isoformat())
+    path=Path(path);path.parent.mkdir(parents=True,exist_ok=True)
+    temporary=path.with_suffix('.json.tmp');temporary.write_text(json.dumps(dict(version='ingredient-unit-conversions-v1',conversions=data),ensure_ascii=False,indent=2)+'\n');temporary.replace(path)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--recipes-db', type=Path, default=DEFAULT_RECIPES)
@@ -1083,7 +1117,15 @@ def main():
     parser.add_argument('--approve-by', type=str, default='baseline_rule', help='Autore o fonte dell\'approvazione')
     parser.add_argument('--approve-note', type=str, default=None, help='Nota o motivazione dell\'approvazione')
 
+    parser.add_argument('--approve-conversion',nargs=3,metavar=('CANONICO','UNITA','GRAMMI'))
+    parser.add_argument('--conversions-file',type=Path,default=DEFAULT_CONVERSIONS)
+    parser.add_argument('--conversion-source',type=str)
+    parser.add_argument('--conversion-by',type=str)
     args = parser.parse_args()
+    if args.approve_conversion:
+        try:approve_conversion(*args.approve_conversion,args.conversion_source,args.conversion_by,args.conversions_file,args.approved_file)
+        except (ValueError,TypeError) as exc:parser.error(str(exc))
+        return
 
     # Handle approval command
     if args.approve:
@@ -1102,6 +1144,7 @@ def main():
         approved_path=args.approved_file,
         limit=args.sample,
         cuisine_filter=args.cuisine,
+        conversions_path=args.conversions_file,
     )
 
     review_queue = build_review_queue(processed)

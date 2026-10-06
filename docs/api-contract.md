@@ -630,3 +630,30 @@ peso filtrato con data; proteine e loro rapporto mantenuto; motivo ed incertezza
 «Usa i valori proposti» invia l'approvazione, poi rigenera il piano; in caso di
 409 richiede una nuova proposta. Evitare di presentare gli intervalli euristici
 come misure o intervalli di confidenza.
+
+### Matcher: conversioni approvate e spezie in traccia
+
+Interfaccia locale (non HTTP):
+
+```
+python scripts/match_recipe_ingredients.py --approve-conversion CANONICO UNITÀ GRAMMI --conversion-source "Fonte verificata" --conversion-by "Autore"
+```
+
+File `config/ingredient-unit-conversions.json`, formato:
+
+```json
+{"version":"ingredient-unit-conversions-v1","conversions":{"cipolla_cruda":{"piece":{"grams":100,"source":"Fonte verificata","approved_by":"Autore","approved_at":"2026-10-06T10:00:00+00:00"}}}}
+```
+
+I grammi sono per unità; la quantità deve essere esplicita e positiva. Fonte e
+autore sono obbligatori. Il canonico deve essere già approvato; l'occorrenza deve
+anche superare i controlli di compatibilità e non essere esclusa dai batch.
+Un riferimento nel dizionario o una proposta di Gemini non è un'approvazione.
+L'elenco di tracce (`canonical_ids`, `exact_names`) è estendibile nel file
+`config/recipe-special-sources.json`. Sono ammesse solo le tre combinazioni
+`salt and pepper`, `salt & pepper`, `salt and black pepper`, con soglia combinata
+conservativa invariata; altri composti con `and`/`&` non diventano tracce.
+
+Audit locale prima/dopo: 834 ricette; pesi risolti **300 → 300**, pronte
+**26 → 26**. Nessuna conversione nutrizionale è stata approvata in questo turno:
+il nuovo registro è vuoto, in attesa della revisione delle fonti e dei pesi.

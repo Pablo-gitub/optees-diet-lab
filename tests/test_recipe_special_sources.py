@@ -39,7 +39,7 @@ class RecipeSpecialSourcesTests(unittest.TestCase):
         for name in ['Salt','Vanilla extract']:
             self.assertNotEqual((self.process(name,grams=50,unit='g').get('selected_candidate') or {}).get('source'),'condiment')
         self.assertNotEqual((self.process('Fresh mint',grams=4,unit='g').get('selected_candidate') or {}).get('source'),'condiment')
-        self.assertFalse(self.process('Salt and pepper')['reviewed'])
+        self.assertEqual(self.process('Salt and pepper')['selected_candidate']['source'],'condiment')
         self.approved['recipe_overrides']={'test:special':{'1':dict(source='condiment',id='trace',reviewed=True,state_checked=True)}}
         override=self.process('Salt')
         self.assertEqual(override['quantity_status'],'trace');self.assertEqual(override['selected_candidate']['declared_kcal'],0)
@@ -72,3 +72,28 @@ class RecipeSpecialSourcesTests(unittest.TestCase):
             p,choices,ratios=formulate_recipe(model,config);result=solve(p);self.assertEqual(result['mathematical_status'],'optimal')
             decoded=decode_recipe(model,config,p,choices,result);self.assertEqual(len(decoded['trace_condiments']),1)
             mappings['1']['grams_override']=50;self.assertFalse(calc.calculate(source,mappings)['complete'])
+
+    def test_only_three_salt_pepper_compounds_are_traces(self):
+        for name in ('Salt and pepper','salt & pepper','salt and black pepper','  SALT   AND PEPPER  '):
+            row=self.process(name);self.assertEqual(row['selected_candidate']['source'],'condiment');self.assertIsNone(row['grams'])
+        for name in ('salt and sugar','salt & garlic','salt and pepper and sugar','pepper and salt'):
+            self.assertNotEqual((self.process(name).get('selected_candidate') or {}).get('source'),'condiment')
+        self.assertNotEqual((self.process('salt and pepper',note='and sugar').get('selected_candidate') or {}).get('source'),'condiment')
+    def test_trace_whitelist_can_be_extended_without_allowing_compounds(self):
+        from unittest.mock import patch
+        with patch.dict(POLICY['trace_condiment'],exact_names=POLICY['trace_condiment']['exact_names']+['test dried spice','salt and sugar']):
+            self.assertEqual(self.process('test dried spice')['selected_candidate']['source'],'condiment')
+            self.assertNotEqual((self.process('salt and sugar').get('selected_candidate') or {}).get('source'),'condiment')
+    def test_approved_conversions_require_author_source_and_compatible_approval(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/'conversions.json';approved=Path(tmp)/'approved.json'
+            matching.save_approved_mappings(self.approved,approved)
+            matching.approve_conversion('cipolla_cruda','piece',100,'Fonte sintetica verificata','Autore test',path,approved)
+            self.dictionary['_approved_conversions']=matching.load_conversions(path)
+            self.dictionary['_approved_conversion_canonicals']={'cipolla_cruda'}
+            row=self.process('Onion',unit='piece',quantity=2)
+            self.assertEqual(row['grams'],200);self.assertEqual(row['quantity_status'],'resolved');self.assertIn('Autore test',row['quantity_note'])
+            del self.approved['canonical_approvals']['cipolla_cruda']
+            self.assertNotEqual(self.process('Onion',unit='piece',quantity=2)['quantity_status'],'resolved')
+            for args in [('missing','piece',100,'source','author'),('cipolla_cruda','piece',float('nan'),'source','author'),('cipolla_cruda','piece',100,None,'author'),('cipolla_cruda','piece',100,'source',None)]:
+                with self.assertRaises(ValueError):matching.approve_conversion(*args,path,approved)

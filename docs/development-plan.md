@@ -227,3 +227,7 @@ nello stesso giorno. B17 `542bfd4`, 8.3 `30b0c4f`, 8.4 `fcf90f4`; contratto UI
 con esempi e indisponibilità per 8.5 in [api-contract.md](api-contract.md).
 `web/static/` non modificato. Parametri ancora non fissati da 8.2 dichiarati come
 heuristici, senza spacciare proxy di volume o MET per efficacia individuale.
+
+| Punto | Stato | Verifica |
+|---|---|---|
+| Ricette: sblocchi rapidi | **fatto** | Sale/pepe composto con whitelist stretta; approvazioni delle conversioni con fonte/autore e compatibilità; spezie estendibili in config. 834 ricette, pesi risolti 300→300, pronte 26→26; proposte esterne non approvate automaticamente. |
