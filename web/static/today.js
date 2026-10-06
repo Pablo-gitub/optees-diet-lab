@@ -248,6 +248,16 @@ function mealCard(m, day) {
   const card = element('article', undefined, 'meal-card ' + state[1]);
   const head = element('div', undefined, 'meal-head');
   head.append(element('span', meta[1], 'meal-icon'), element('h3', meta[0]), element('span', state[0], 'chip state-chip'));
+  // 8.13: meals shifted around a long workout (comfort, same daily kcal).
+  const timing = day.meal_timing?.status === 'active' ? day.meal_timing : null;
+  const role = timing?.sessions?.some((s) => s.before === m.slot) ? 'Prima dell’allenamento' : timing?.sessions?.some((s) => s.after === m.slot) ? 'Dopo l’allenamento' : null;
+  if (role) {
+    const chip = element('span', '🏋 ' + role, 'chip timing-chip');
+    const rules = timing.rules.filter((r) => r.slot === m.slot && r.satisfied === false);
+    chip.title = role === 'Prima dell’allenamento' ? 'Più carboidrati, meno grassi e fibre: per allenarti leggero.' : 'Proteine e carboidrati per il recupero.';
+    if (rules.length) chip.title += ' Non tutto è stato possibile: ' + rules.map((r) => r.reason).join(' ');
+    head.append(chip);
+  }
   const kcal = m.eaten ? m.eaten.kcal : m.planned?.kcal;
   head.append(element('span', m.consumed_estimate ? '≈ ' + rangeText(m.eaten_range?.kcal) : kcalText(kcal), 'meal-kcal'));
   card.append(head);

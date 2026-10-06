@@ -279,7 +279,7 @@ function renderGoals(open) {
       }, (data) => api('goals/strength-anchors', 'PUT', { anchors: data })),
     );
 
-  panel.append(energyProposalBlock(), dayTargetsBlock());
+  panel.append(energyProposalBlock(), dayTargetsBlock(), mealTimingBlock());
   const missing = goals.missing || [];
   if (missing.length) {
     const box = element('details', undefined, 'goal-missing');
@@ -460,4 +460,28 @@ function dayTargetsCard(p, out) {
   });
   card.append(bar);
   return card;
+}
+
+// 8.13 — pasti attorno agli allenamenti lunghi: automatico (solo sessioni oltre 60 min con orario) o spento.
+function mealTimingBlock() {
+  const box = element('div', undefined, 'goal-energy');
+  box.append(
+    element('h3', 'Pasti attorno agli allenamenti lunghi'),
+    element('p', 'Con un allenamento di oltre un’ora e un orario: pasto prima più leggero e ricco di carboidrati, pasto dopo con proteine. Le calorie del giorno non cambiano; serve al comfort e alla qualità dell’allenamento.', 'muted small'),
+  );
+  const current = profile?.meal_timing?.mode || 'auto';
+  const chips = chipToggles({ auto: 'Automatico', off: 'Spento' }, [current === 'explicit' ? 'auto' : current], true);
+  const out = element('div');
+  chips.addEventListener('click', async () => {
+    const mode = chips.value()[0];
+    if (!mode || mode === (profile.meal_timing?.mode || 'auto')) return;
+    try {
+      await saveProfilePatch({ meal_timing: { ...(profile.meal_timing || {}), mode } });
+      out.replaceChildren(element('p', 'Salvato: vale dalla prossima settimana generata.', 'muted small'));
+    } catch (e) {
+      out.replaceChildren(element('p', e.message, 'error'));
+    }
+  });
+  box.append(chips, out);
+  return box;
 }
