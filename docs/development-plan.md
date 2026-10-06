@@ -252,3 +252,4 @@ rientro anticipato. Cronologia dei test del bandit fissata su date sintetiche.
 |---|---|---|
 | 1 — Ricette preferite nella settimana congiunta | **fatto** | Riprodotto 400 con R048/R054; snapshot presenti, profilo ricaricato prima del commit SQL. Un solo profilo nella transazione, applicazione/rilettura ed esposizioni bandit verificate. Suite completa: 333 test verdi. |
 | 2 — Conferma di attività future | **fatto** | 409 future_activity prima di qualsiasi scrittura; stato chosen e nessun workout_log, conferma odierna ancora idempotente. Suite completa: 333 test verdi. |
+| 3 — Titoli dei preset | **fatto** | Nome italiano e taglia dal catalogo in elenco, solver e diario; vecchi titoli normalizzati senza cambiare gli snapshot. Regressione Pizzeria · medio su lista e piano applicato. Suite completa: 333 test verdi. |

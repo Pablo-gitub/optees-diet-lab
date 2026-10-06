@@ -83,6 +83,25 @@ class RecipeIntentTests(RebalanceAPI):
         self.assertFalse(other.get('/api/recipes/preferences').json()['recipes']);self.assertFalse(other.get('/api/week/'+self.start+'/locked-dishes').json()['locked_dishes'])
         self.assertEqual(self.client.delete('/api/week/'+self.start+'/locked-dishes/2026-10-07/dinner',headers=self.headers).status_code,200)
         self.assertFalse(self.client.get('/api/week/'+self.start+'/locked-dishes').json()['locked_dishes'])
+    def test_intent_preset_title_in_list_and_applied_plan(self):
+        body=dict(date='2026-10-07',slot='dinner',preset=dict(id='pizzeria',size='medio'))
+        with patch.object(self.app.diary,'local_today',return_value=self.today):
+            response=self.client.put('/api/week/'+self.start+'/locked-dishes',json=body,headers=self.headers)
+        self.assertEqual(response.status_code,200,response.text)
+        dish=self.client.get('/api/week/'+self.start+'/locked-dishes').json()['locked_dishes'][0]
+        self.assertEqual(dish['title'],'Pizzeria · medio')
+        self.profile['_dish_estimates']={dish['food_id']:dish}
+        day=self.plan['days'][2]
+        day['selections']=[s for s in day['selections'] if s['meal']!='dinner']+[dict(meal='dinner',source='dish_estimate',reference_id=dish['food_id'],food_id=dish['food_id'],grams=100)]
+        day['_dish_estimates']={dish['food_id']:dish}
+        with self.app.connect() as db:
+            self.app.diary.apply_plan(db,self.user,self.profile,dict(week_start=self.start,mode='free',run_id='0'),self.plan,dict(scope='week',plan_id=0))
+            view=self.app.diary.day_view(db,self.user,self.profile,body['date'])
+        dinner=next(m for m in view['meals'] if m['slot']=='dinner')
+        self.assertEqual(dinner['planned']['items'][0]['name'],'Pizzeria · medio')
+        legacy=dict(dish,title='Piatto da preset: pizzeria')
+        self.assertEqual(recipe_intents.display_title(legacy),'Pizzeria · medio')
+
     def test_intent_unready_queue_and_no_nutritional_relaxation(self):
         with patch.object(recipe_intents,'catalog_recipe',return_value=dict(id='pending',title='Ricetta sintetica',ingredients=[dict(name='Ingrediente da verificare')])):
             data=recipe_intents.preferences(dict(_preferred_recipe_ids=['pending']));self.assertEqual(data['review_queue'][0]['priority'],'preferred_first');self.assertEqual(data['recipes'][0]['solver_status'],'unavailable')

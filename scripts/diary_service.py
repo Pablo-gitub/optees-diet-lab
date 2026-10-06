@@ -100,7 +100,8 @@ def resolve_food(ref,profile):
     elif source=='dish_estimate':
         dish=profile.get('_dish_estimates',{}).get(identifier)
         if not dish:raise DomainError('Piatto stimato non trovato')
-        row=dict(name=dish['title'],**{n:sum(dish['nutrients'][n.replace('_100g','')].values())/2 for n in NUTRIENTS})
+        from recipe_intents import display_title
+        row=dict(name=display_title(dish),**{n:sum(dish['nutrients'][n.replace('_100g','')].values())/2 for n in NUTRIENTS})
         return dict(food=ref,name=row['name'],brand=None,source_label='stima a intervallo',unit_g=None,composition_provenance=None,nutrient_ranges=copy.deepcopy(dish['nutrients']),per_100g={n.replace('_100g',''):row[n] for n in NUTRIENTS})
     elif source=='recipe':
         if identifier=='vegetable_puree':row=crea()['recipe:vegetable_puree']

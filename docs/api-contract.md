@@ -869,3 +869,22 @@ Con un `planned_session_id` appartenente a domani risponde **409**:
 
 La sessione resta `chosen` e non viene creato alcun allenamento eseguito.
 Per oggi e date passate restano validi proprietà, CSRF e idempotenza.
+
+### Correzioni UI fase 8 — titolo italiano dei preset
+
+I piatti fissati da preset usano `presets[id].name` e `sizes[size].label` del
+catalogo locale. La taglia è mostrata in minuscolo. Il titolo è coerente nella
+lista delle intenzioni, nelle selezioni del solver e negli alimenti del diario.
+Anche i vecchi titoli tecnici sono normalizzati in lettura, senza cambiare
+identità, nutrienti o quantità degli snapshot già applicati.
+Esempi parziali di risposta (gli altri campi restano come in 8.7):
+
+```json
+{"locked_dishes":[{"date":"2026-10-08","slot":"dinner","kind":"estimate","title":"Pizzeria · medio","provenance":{"source":"preset","preset_id":"pizzeria","size":"medio"}}]}
+```
+
+```json
+{"selections":[{"meal":"dinner","source":"dish_estimate","food":"Pizzeria · medio","grams":100}]}
+```
+
+I 100 g sono l'unità tecnica della stima dell'intero piatto, come già in 8.7.

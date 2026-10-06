@@ -22,9 +22,21 @@ def migrate(db):
     CREATE TABLE IF NOT EXISTS locked_dish(user_id INTEGER,week_start TEXT,date TEXT,slot TEXT,payload TEXT,updated REAL,PRIMARY KEY(user_id,date,slot));''')
 
 
+def display_title(value):
+    provenance=value.get('provenance',{})
+    if provenance.get('source')=='preset':
+        from meal_rebalance import catalog
+        preset=catalog()['presets'].get(provenance.get('preset_id'),{})
+        size=preset.get('sizes',{}).get(provenance.get('size'),{})
+        if preset.get('name') and size.get('label'):return preset['name']+' · '+size['label'].lower()
+    return value.get('title','Piatto stimato')
+
+
 def attach(db,user,profile):
     profile['_preferred_recipe_ids']=[r[0] for r in db.execute('SELECT recipe_id FROM recipe_preference WHERE user_id=? AND preferred=1 ORDER BY recipe_id',(user,))]
     profile['_locked_dishes']=[dict(json.loads(r['payload']),week_start=r['week_start']) for r in db.execute('SELECT week_start,payload FROM locked_dish WHERE user_id=? ORDER BY date,slot',(user,))]
+    for dish in profile['_locked_dishes']:
+        if dish.get('kind')=='estimate':dish['title']=display_title(dish)
     profile['_dish_estimates']={r['food_id']:r for r in profile['_locked_dishes'] if r.get('food_id')}
     for r in db.execute('SELECT source,id,payload FROM planned_food_snapshot WHERE user_id=?',(user,)):
         profile.setdefault('_recipe_runs' if r['source']=='recipe' else '_dish_estimates',{})[r['id']]=json.loads(r['payload'])
@@ -139,7 +151,7 @@ def validate_lock(start,data,profile,today=None):
     # Reuse the exact preset/interval validation; only the temporal rule differs.
     body=dict(data,date=today.isoformat());body.pop('recipe',None)
     value=estimate(body,today);value['date']=date;value['kind']='estimate'
-    value['title']='Piatto stimato' if 'custom' in data else 'Piatto da preset: '+data['preset']['id']
+    value['title']=display_title(value)
     value['food_id']=hashlib.sha256(json.dumps(value,sort_keys=True).encode()).hexdigest()[:24]
     return value
 
