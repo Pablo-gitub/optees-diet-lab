@@ -1,0 +1,302 @@
+{
+  "batch": 3,
+  "created": "2026-10-06",
+  "description": "Proposte di associazione per gli ingredienti chiave bloccati delle ricette italiane (vino bianco, vino rosso, marsala, concentrato di pomodoro) e per lime, cipollotto, aceto e salsa di pesce.",
+  "proposals": [
+    {
+      "canonical_id": "pomodoro_concentrato",
+      "raw_names_covered": [
+        "Tomato paste",
+        "tomato paste",
+        "Double concentrated tomato paste",
+        "Tomato concentrate",
+        "Concentrato di pomodoro"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 37,
+      "proposed": {
+        "source": "CREA",
+        "id": "006660",
+        "name": "Pomodori, conserva",
+        "state": "conserva / concentrato di pomodoro"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Conserva e concentrato di pomodoro CREA 006660 (100 kcal, 3.9g proteine, 0.4g lipidi, 20.4g carboidrati, 2.0g fibra). Tutti e 4 i macro completi. In alternativa candidati OFF commerciali a marchio verificati con numeric_candidate=1: Mutti 80042518 (127 kcal, 5.7g P, 0.2g F, 23.0g C) e Valfrutta 8001440127007 (109 kcal, 4.3g P, 0.3g F, 19.5g C).",
+      "off_candidates": [
+        {
+          "barcode": "80042518",
+          "name": "Triplo concentrato di pomodoro",
+          "brands": "Mutti",
+          "nutrients": {
+            "kcal_100g": 127.0,
+            "protein_g_100g": 5.7,
+            "fat_g_100g": 0.2,
+            "carbs_available_g_100g": 23.0
+          }
+        },
+        {
+          "barcode": "8001440127007",
+          "name": "Doppio concentrato di pomodoro",
+          "brands": "Conserve Italia, Valfrutta",
+          "nutrients": {
+            "kcal_100g": 109.0,
+            "protein_g_100g": 4.3,
+            "fat_g_100g": 0.3,
+            "carbs_available_g_100g": 19.5
+          }
+        }
+      ],
+      "check_query": "grep '^CREA,006660' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "vino_bianco",
+      "raw_names_covered": [
+        "Dry white wine",
+        "white wine",
+        "White wine",
+        "Cooking white wine"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 16,
+      "proposed": {
+        "source": "Open Food Facts",
+        "id": "8001120907974",
+        "name": "Vino Bianco Coop · coop",
+        "state": "vino bianco da tavola / cottura"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Vino bianco da tavola e da cottura. La voce CREA 405010 ha proteine e carboidrati non dichiarati nel dataset; viene proposto il prodotto verificato OFF 8001120907974 (Vino Bianco Coop) con numeric_candidate=1 e tutti e 4 i macro completi (60.0 kcal, 0.0g proteine, 0.0g lipidi, 0.5g carboidrati).",
+      "off_candidates": [
+        {
+          "barcode": "8001120907974",
+          "name": "Vino Bianco Coop",
+          "brands": "coop",
+          "nutrients": {
+            "kcal_100g": 60.0,
+            "protein_g_100g": 0.0,
+            "fat_g_100g": 0.0,
+            "carbs_available_g_100g": 0.5
+          }
+        }
+      ],
+      "check_query": "sqlite3 dataset/open_food_facts/catalog.sqlite \"SELECT barcode, name, brands FROM products WHERE barcode = '8001120907974'\""
+    },
+    {
+      "canonical_id": "vino_rosso",
+      "raw_names_covered": [
+        "Dry red wine",
+        "red wine",
+        "Red wine",
+        "Cooking red wine"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 14,
+      "proposed": {
+        "source": "Open Food Facts",
+        "id": "80272687",
+        "name": "vino rosso · Tavernello",
+        "state": "vino rosso da tavola / cottura"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Vino rosso da tavola e da cottura. La voce CREA 405020 presenta proteine e carboidrati nulli; viene proposto il prodotto verificato OFF 80272687 (Tavernello, vino da tavola italiano) con numeric_candidate=1 e tutti e 4 i macro completi (82.1 kcal, 0.07g proteine, 0.0g lipidi, 2.63g carboidrati).",
+      "off_candidates": [
+        {
+          "barcode": "80272687",
+          "name": "vino rosso",
+          "brands": "Tavernello",
+          "nutrients": {
+            "kcal_100g": 82.1,
+            "protein_g_100g": 0.07,
+            "fat_g_100g": 0.0,
+            "carbs_available_g_100g": 2.63
+          }
+        }
+      ],
+      "check_query": "sqlite3 dataset/open_food_facts/catalog.sqlite \"SELECT barcode, name, brands FROM products WHERE barcode = '80272687'\""
+    },
+    {
+      "canonical_id": "marsala",
+      "raw_names_covered": [
+        "Marsala",
+        "marsala wine"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 1,
+      "proposed": {
+        "source": "CREA",
+        "id": "406010",
+        "name": "Bevanda alcolica, Marsala tipico",
+        "state": "vino liquoroso da dessert / cucina"
+      },
+      "status": "ambiguous",
+      "confidence": "medium",
+      "rationale": "Vino liquoroso da cucina (presente in Tiramisù). In CREA 406010 il valore delle proteine è nullo (203 kcal, 0.0g grassi, 28.0g carboidrati). Nel catalogo locale Open Food Facts tutti i 21 prodotti Marsala hanno numeric_candidate=0 (assenza di dichiarazione nutrizionale completa obbligatoria sulle bevande alcoliche). Conforme alla regola 4 («mai zero al posto di un dato mancante»), viene registrato come ambiguo in attesa di decisione di policy su bevande alcoliche.",
+      "off_candidates": [],
+      "check_query": "grep '^CREA,406010' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "lime_fresco",
+      "raw_names_covered": [
+        "Lime",
+        "Limes",
+        "lime",
+        "limes",
+        "Fresh lime",
+        "Lime juice",
+        "succo di lime"
+      ],
+      "raw_names_excluded": [
+        {
+          "name": "Kaffir lime leaves",
+          "reason": "Foglie di kaffir lime: aroma da infusione non consumato, gruppo spezie/erbe distinto"
+        }
+      ],
+      "recipes_count": 65,
+      "proposed": {
+        "source": "Open Food Facts",
+        "id": "8026924049705",
+        "name": "Succo di Lime · Aro",
+        "state": "succo di lime / agrume fresco"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Lime agrume fresco / succo di lime. Il frutto è assente come voce autonoma in CREA (esiste solo limone 008040 succo / 008010 frutto). Viene proposto il prodotto verificato OFF 8026924049705 (Succo di Lime Aro, 100% succo) con numeric_candidate=1 e tutti e 4 i macro completi (27.0 kcal, 0.5g proteine, 0.0g lipidi, 2.0g carboidrati). In alternativa proxy CREA 008040 (Limoni, succo, 25 kcal, 0.2g P, 0.0g F, 2.3g C).",
+      "off_candidates": [
+        {
+          "barcode": "8026924049705",
+          "name": "Succo di Lime",
+          "brands": "Aro",
+          "nutrients": {
+            "kcal_100g": 27.0,
+            "protein_g_100g": 0.5,
+            "fat_g_100g": 0.0,
+            "carbs_available_g_100g": 2.0
+          }
+        },
+        {
+          "barcode": "8026924068331",
+          "name": "SUCCO DI LIME",
+          "brands": "Metro",
+          "nutrients": {
+            "kcal_100g": 27.0,
+            "protein_g_100g": 0.5,
+            "fat_g_100g": 0.0,
+            "carbs_available_g_100g": 2.0
+          }
+        }
+      ],
+      "check_query": "sqlite3 dataset/open_food_facts/catalog.sqlite \"SELECT barcode, name, brands FROM products WHERE barcode = '8026924049705'\""
+    },
+    {
+      "canonical_id": "cipollotto_fresco",
+      "raw_names_covered": [
+        "Spring onion",
+        "Spring onions",
+        "spring onion",
+        "spring onions",
+        "Scallion",
+        "scallions",
+        "Green onion",
+        "green onions"
+      ],
+      "raw_names_excluded": [
+        {
+          "name": "Coriander, spring onion, Thai basil",
+          "reason": "Ingrediente composto / misticanza aromatica"
+        }
+      ],
+      "recipes_count": 38,
+      "proposed": {
+        "source": "CREA",
+        "id": "005310",
+        "name": "Cipolline, crude",
+        "state": "ortaggio fresco crudo, parte edibile"
+      },
+      "status": "proposed",
+      "confidence": "high",
+      "rationale": "Cipollotto fresco crudo (Allium fistulosum / Allium cepa giovane). In CREA la voce più affine con tutti i 4 macro completi è 005310 (Cipolline, crude: 42.0 kcal, 1.3g proteine, 0.1g lipidi, 8.5g carboidrati, 1.5g fibra), oppure 005300 (Cipolle crude, 28 kcal). A catalogo OFF è verificato con numeric_candidate=1 il prodotto 8009140011602 (Cipollotte Zuccato: 25.0 kcal, 0.8g P, 0.0g F, 5.5g C).",
+      "off_candidates": [
+        {
+          "barcode": "8009140011602",
+          "name": "Cipollotte",
+          "brands": "Zuccato",
+          "nutrients": {
+            "kcal_100g": 25.0,
+            "protein_g_100g": 0.8,
+            "fat_g_100g": 0.0,
+            "carbs_available_g_100g": 5.5
+          }
+        }
+      ],
+      "check_query": "grep '^CREA,005310' dataset/crea/foods.csv"
+    },
+    {
+      "canonical_id": "aceto_vino",
+      "raw_names_covered": [
+        "Vinegar",
+        "vinegar",
+        "White wine vinegar",
+        "Red wine vinegar",
+        "Wine vinegar",
+        "White vinegar",
+        "Rice vinegar",
+        "Vinegar, 9%"
+      ],
+      "raw_names_excluded": [
+        {
+          "name": "Balsamic vinegar",
+          "reason": "Aceto balsamico di Modena: condimento zuccherino ad alta densità energetica, gruppo distinto"
+        }
+      ],
+      "recipes_count": 43,
+      "proposed": {
+        "source": "Open Food Facts",
+        "id": "8000965016025",
+        "name": "Aceto di vino bianco · Consilia",
+        "state": "condimento liquido da fermentazione acetica"
+      },
+      "status": "ambiguous",
+      "confidence": "medium",
+      "rationale": "Aceto di vino da cucina. L'aceto è assente in CREA. Nel catalogo locale OFF il solo prodotto aceto con numeric_candidate=1 è 8000965016025 (Consilia: 128 kcal, 26g carboidrati per mosto concentrato). L'aceto di vino non zuccherino (6% acido acetico, ~18-20 kcal/100g, USDA FDC 173470) ha tabelle nutrizionali escluse da numeric_candidate per mancata quadratura delle calorie dai soli macronutrienti. Viene registrato come ambiguo raccomandando l'inclusione in condiment:trace dato l'apporto trascurabile (1-2 kcal per cucchiaio).",
+      "off_candidates": [
+        {
+          "barcode": "8000965016025",
+          "name": "Aceto di vino bianco",
+          "brands": "Consilia",
+          "nutrients": {
+            "kcal_100g": 128.0,
+            "protein_g_100g": 1.0,
+            "fat_g_100g": 0.0,
+            "carbs_available_g_100g": 26.0
+          }
+        }
+      ],
+      "check_query": "sqlite3 dataset/open_food_facts/catalog.sqlite \"SELECT barcode, name, brands FROM products WHERE barcode = '8000965016025'\""
+    },
+    {
+      "canonical_id": "salsa_pesce",
+      "raw_names_covered": [
+        "Fish sauce",
+        "fish sauce",
+        "Nam pla",
+        "Nuoc mam"
+      ],
+      "raw_names_excluded": [],
+      "recipes_count": 18,
+      "proposed": {
+        "source": "Open Food Facts",
+        "id": "fish_sauce_unmapped",
+        "name": "Salsa di pesce asiatica",
+        "state": "condimento salino fermentato"
+      },
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "Condimento asiatico fermentato a base di estratto di acciughe e sale. Assente in CREA. Nessun prodotto di salsa di pesce pura presente nel catalogo locale Open Food Facts con numeric_candidate=1. Viene registrato come ambiguo per assenza di riscontro nei cataloghi locali. Riferimento nutrizionale USDA: FDC ID 174276 (35 kcal, 5.1g proteine, 0.0g lipidi, 3.6g carboidrati, 7851mg sodio).",
+      "off_candidates": [],
+      "check_query": "grep -i 'salsa.*pesce' dataset/crea/foods.csv"
+    }
+  ]
+}

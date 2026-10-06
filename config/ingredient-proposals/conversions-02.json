@@ -1,0 +1,197 @@
+{
+  "session": 4,
+  "batch": "conversions-02",
+  "created": "2026-10-06",
+  "description": "Proposte di conversioni in grammi per gli ingredienti italiani bloccati (vino bianco, vino rosso, marsala, concentrato di pomodoro) e per lime, cipollotto, aceto e salsa di pesce, abbinati alle proposte di batch-03.json.",
+  "conversions": [
+    {
+      "canonical_id": "pomodoro_concentrato",
+      "unit": "tbsp",
+      "grams": 16.0,
+      "source": "USDA FoodData Central fdc_id 170457 (Tomato paste, canned) portion: 1 tablespoon = 16.0g",
+      "evidence": "documented",
+      "check": "grep '^CREA,006660' dataset/crea/foods.csv",
+      "requires_review": true
+    },
+    {
+      "canonical_id": "pomodoro_concentrato",
+      "unit": "tsp",
+      "grams": 5.0,
+      "source": "USDA FoodData Central fdc_id 170457 (Tomato paste, canned) portion: 1 teaspoon = 5.3g (~5.0g)",
+      "evidence": "documented",
+      "check": "grep '^CREA,006660' dataset/crea/foods.csv",
+      "requires_review": true
+    },
+    {
+      "canonical_id": "vino_bianco",
+      "unit": "ml",
+      "grams": 0.99,
+      "source": "Densità fisica standard vino bianco secco da tavola / cottura: 0.99 g/ml",
+      "evidence": "documented",
+      "check": "sqlite3 dataset/open_food_facts/catalog.sqlite \"SELECT barcode, name, brands FROM products WHERE barcode = '8001120907974'\"",
+      "requires_review": true
+    },
+    {
+      "canonical_id": "vino_bianco",
+      "unit": "tbsp",
+      "grams": 15.0,
+      "source": "USDA FoodData Central fdc_id 174837 (Alcoholic beverage, wine, table, white) portion: 1 tbsp = 14.7g (~15.0g)",
+      "evidence": "documented",
+      "check": "sqlite3 dataset/open_food_facts/catalog.sqlite \"SELECT barcode, name, brands FROM products WHERE barcode = '8001120907974'\"",
+      "requires_review": true
+    },
+    {
+      "canonical_id": "vino_rosso",
+      "unit": "ml",
+      "grams": 0.99,
+      "source": "Densità fisica standard vino rosso da tavola / cottura: 0.99 g/ml",
+      "evidence": "documented",
+      "check": "sqlite3 dataset/open_food_facts/catalog.sqlite \"SELECT barcode, name, brands FROM products WHERE barcode = '80272687'\"",
+      "requires_review": true
+    },
+    {
+      "canonical_id": "vino_rosso",
+      "unit": "tbsp",
+      "grams": 15.0,
+      "source": "USDA FoodData Central fdc_id 174835 (Alcoholic beverage, wine, table, red) portion: 1 tbsp = 14.7g (~15.0g)",
+      "evidence": "documented",
+      "check": "sqlite3 dataset/open_food_facts/catalog.sqlite \"SELECT barcode, name, brands FROM products WHERE barcode = '80272687'\"",
+      "requires_review": true
+    },
+    {
+      "canonical_id": "marsala",
+      "unit": "tbsp",
+      "grams": 15.0,
+      "source": "Densità fisica vino liquoroso dolce (1.02 g/ml): 1 tbsp = 15.0g",
+      "evidence": "heuristic",
+      "check": "grep '^CREA,406010' dataset/crea/foods.csv",
+      "requires_review": true
+    },
+    {
+      "canonical_id": "marsala",
+      "unit": "ml",
+      "grams": 1.02,
+      "source": "Densità fisica vino liquoroso dolce (Marsala): 1.02 g/ml",
+      "evidence": "heuristic",
+      "check": "grep '^CREA,406010' dataset/crea/foods.csv",
+      "requires_review": true
+    },
+    {
+      "canonical_id": "lime_fresco",
+      "unit": "piece",
+      "grams": 60.0,
+      "source": "USDA FoodData Central fdc_id 168155 (Limes, raw) portion: 1 lime (2\" dia) = 67.0g lordo (~60.0g parte edibile polpa/succo)",
+      "evidence": "documented",
+      "check": "sqlite3 dataset/open_food_facts/catalog.sqlite \"SELECT barcode, name, brands FROM products WHERE barcode = '8026924049705'\"",
+      "requires_review": true
+    },
+    {
+      "canonical_id": "lime_fresco",
+      "unit": "count",
+      "grams": 60.0,
+      "source": "USDA FoodData Central fdc_id 168155 (Limes, raw) portion: 1 lime = 60.0g parte edibile",
+      "evidence": "documented",
+      "check": "sqlite3 dataset/open_food_facts/catalog.sqlite \"SELECT barcode, name, brands FROM products WHERE barcode = '8026924049705'\"",
+      "requires_review": true
+    },
+    {
+      "canonical_id": "lime_fresco",
+      "unit": "tbsp",
+      "grams": 15.0,
+      "source": "USDA FoodData Central fdc_id 168156 (Lime juice, raw) portion: 1 tbsp = 15.4g (~15.0g)",
+      "evidence": "documented",
+      "check": "sqlite3 dataset/open_food_facts/catalog.sqlite \"SELECT barcode, name, brands FROM products WHERE barcode = '8026924049705'\"",
+      "requires_review": true
+    },
+    {
+      "canonical_id": "lime_fresco",
+      "unit": "tsp",
+      "grams": 5.0,
+      "source": "USDA FoodData Central fdc_id 168156 (Lime juice, raw) portion: 1 tsp = 5.1g (~5.0g)",
+      "evidence": "documented",
+      "check": "sqlite3 dataset/open_food_facts/catalog.sqlite \"SELECT barcode, name, brands FROM products WHERE barcode = '8026924049705'\"",
+      "requires_review": true
+    },
+    {
+      "canonical_id": "cipollotto_fresco",
+      "unit": "piece",
+      "grams": 15.0,
+      "source": "USDA FoodData Central fdc_id 170002 (Onions, spring or scallions, raw) portion: 1 medium (4-1/8\" long) = 15.0g / INRAN (2003/2009): 1 cipollina ~15g",
+      "evidence": "documented",
+      "check": "grep '^CREA,005310' dataset/crea/foods.csv",
+      "requires_review": true
+    },
+    {
+      "canonical_id": "cipollotto_fresco",
+      "unit": "count",
+      "grams": 15.0,
+      "source": "USDA FoodData Central fdc_id 170002 portion: 1 medium spring onion = 15.0g",
+      "evidence": "documented",
+      "check": "grep '^CREA,005310' dataset/crea/foods.csv",
+      "requires_review": true
+    },
+    {
+      "canonical_id": "cipollotto_fresco",
+      "unit": "tbsp",
+      "grams": 6.0,
+      "source": "USDA FoodData Central fdc_id 170002 portion: 1 tbsp chopped = 6.0g",
+      "evidence": "documented",
+      "check": "grep '^CREA,005310' dataset/crea/foods.csv",
+      "requires_review": true
+    },
+    {
+      "canonical_id": "aceto_vino",
+      "unit": "tbsp",
+      "grams": 15.0,
+      "source": "USDA FoodData Central fdc_id 173470 (Vinegar, red wine) portion: 1 tbsp = 14.9g (~15.0g)",
+      "evidence": "documented",
+      "check": "sqlite3 dataset/open_food_facts/catalog.sqlite \"SELECT barcode, name, brands FROM products WHERE barcode = '8000965016025'\"",
+      "requires_review": true
+    },
+    {
+      "canonical_id": "aceto_vino",
+      "unit": "tsp",
+      "grams": 5.0,
+      "source": "USDA FoodData Central fdc_id 173470 (Vinegar, red wine) portion: 1 tsp = 5.0g",
+      "evidence": "documented",
+      "check": "sqlite3 dataset/open_food_facts/catalog.sqlite \"SELECT barcode, name, brands FROM products WHERE barcode = '8000965016025'\"",
+      "requires_review": true
+    },
+    {
+      "canonical_id": "aceto_vino",
+      "unit": "ml",
+      "grams": 1.01,
+      "source": "Densità fisica standard aceto di vino (6% acidità): 1.01 g/ml",
+      "evidence": "documented",
+      "check": "sqlite3 dataset/open_food_facts/catalog.sqlite \"SELECT barcode, name, brands FROM products WHERE barcode = '8000965016025'\"",
+      "requires_review": true
+    },
+    {
+      "canonical_id": "salsa_pesce",
+      "unit": "tbsp",
+      "grams": 18.0,
+      "source": "USDA FoodData Central fdc_id 174276 (Fish sauce) portion: 1 tbsp = 17.9g (~18.0g)",
+      "evidence": "documented",
+      "check": "grep -i 'salsa.*pesce' dataset/crea/foods.csv",
+      "requires_review": true
+    },
+    {
+      "canonical_id": "salsa_pesce",
+      "unit": "tsp",
+      "grams": 6.0,
+      "source": "USDA FoodData Central fdc_id 174276 (Fish sauce) portion: 1 tsp = 6.0g",
+      "evidence": "documented",
+      "check": "grep -i 'salsa.*pesce' dataset/crea/foods.csv",
+      "requires_review": true
+    },
+    {
+      "canonical_id": "salsa_pesce",
+      "unit": "ml",
+      "grams": 1.2,
+      "source": "Densità fisica standard salsa di pesce salina fermentata: 1.20 g/ml",
+      "evidence": "documented",
+      "check": "grep -i 'salsa.*pesce' dataset/crea/foods.csv",
+      "requires_review": true
+    }
+  ]
+}

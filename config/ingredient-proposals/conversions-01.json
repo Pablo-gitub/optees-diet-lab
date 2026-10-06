@@ -1,0 +1,692 @@
+{
+  "session": 3,
+  "batch": "conversions-01",
+  "created": "2026-10-06",
+  "description": "Proposte di conversioni in grammi per le unità non ponderali più frequenti abbinate agli ingredienti canonici approvati (CREA pesi medi allineati alle approvazioni, SINU LARN 2014 Tabella 1-2 / INRAN 2003-2009 e USDA FoodData Central portions verificate).",
+  "conversions": [
+    {
+      "canonical_id": "cipolla_cruda",
+      "unit": "piece",
+      "grams": 100.0,
+      "source": "CREA 005300 / SINU, LARN (2014), Tabella 1-2 / INRAN (2003/2009), Tabella \"Pesi ed equivalenze\": 1 cipolla media mondata ~100g",
+      "check": "grep '^CREA,005300' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "cipolla_cruda",
+      "unit": "count",
+      "grams": 100.0,
+      "source": "CREA 005300 / SINU, LARN (2014), Tabella 1-2 / INRAN (2003/2009), Tabella \"Pesi ed equivalenze\": 1 cipolla media mondata ~100g",
+      "check": "grep '^CREA,005300' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "aglio",
+      "unit": "clove",
+      "grams": 4.0,
+      "source": "CREA 005000 / SINU, LARN (2014), Tabella 1-2 / INRAN (2003/2009), Tabella \"Pesi ed equivalenze\": 1 spicchio d'aglio medio ~4g",
+      "check": "grep '^CREA,005000' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "aglio",
+      "unit": "piece",
+      "grams": 40.0,
+      "source": "USDA FoodData Central fdc_id 169230 (Garlic, raw) portion: 1 head ~40g",
+      "check": "grep '^CREA,005000' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "uovo_gallina_intero",
+      "unit": "piece",
+      "grams": 50.0,
+      "source": "CREA 181100 / USDA FoodData Central fdc_id 171287 portion: 1 large egg without shell ~50g",
+      "check": "grep '^CREA,181100' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "uovo_gallina_intero",
+      "unit": "count",
+      "grams": 50.0,
+      "source": "CREA 181100 / USDA FoodData Central fdc_id 171287 portion: 1 large egg without shell ~50g",
+      "check": "grep '^CREA,181100' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "uovo_tuorlo",
+      "unit": "piece",
+      "grams": 18.0,
+      "source": "CREA 183010 / USDA FoodData Central fdc_id 172184 portion: 1 large yolk ~17-18g",
+      "check": "grep '^CREA,183010' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "uovo_albume",
+      "unit": "piece",
+      "grams": 32.0,
+      "source": "CREA 182010 / USDA FoodData Central fdc_id 172183 portion: 1 large white ~32-33g",
+      "check": "grep '^CREA,182010' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "pomodori_freschi",
+      "unit": "piece",
+      "grams": 100.0,
+      "source": "CREA 006610 / SINU, LARN (2014), Tabella 1-2 / INRAN (2003/2009), Tabella \"Pesi ed equivalenze\": 1 pomodoro medio da insalata ~100g",
+      "check": "grep '^CREA,006610' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "pomodori_freschi",
+      "unit": "count",
+      "grams": 100.0,
+      "source": "CREA 006610 / SINU, LARN (2014), Tabella 1-2 / INRAN (2003/2009), Tabella \"Pesi ed equivalenze\": 1 pomodoro medio da insalata ~100g",
+      "check": "grep '^CREA,006610' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "peperoni_crudi",
+      "unit": "piece",
+      "grams": 160.0,
+      "source": "CREA 005600 / SINU, LARN (2014), Tabella 1-2 / INRAN (2003/2009), Tabella \"Pesi ed equivalenze\": 1 peperone medio mondato ~160g",
+      "check": "grep '^CREA,005600' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "carote_crude",
+      "unit": "piece",
+      "grams": 80.0,
+      "source": "CREA 005150 / SINU, LARN (2014), Tabella 1-2 / INRAN (2003/2009), Tabella \"Pesi ed equivalenze\": 1 carota media mondata ~80g",
+      "check": "grep '^CREA,005150' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "succo_limone",
+      "unit": "piece",
+      "grams": 35.0,
+      "source": "CREA 008040 / USDA FoodData Central fdc_id 167746: resa in succo di 1 limone medio ~35g",
+      "check": "grep '^CREA,008040' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "peperoncino_fresco",
+      "unit": "piece",
+      "grams": 5.0,
+      "source": "CREA 006830 / USDA FoodData Central fdc_id 168578 portion: 1 pepper ~5g",
+      "check": "grep '^CREA,006830' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "patate_crude",
+      "unit": "piece",
+      "grams": 150.0,
+      "source": "CREA 006500 / SINU, LARN (2014), Tabella 1-2 / INRAN (2003/2009), Tabella \"Pesi ed equivalenze\": 1 patata media sbucciata ~150g",
+      "check": "grep '^CREA,006500' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "cetrioli_freschi",
+      "unit": "piece",
+      "grams": 200.0,
+      "source": "CREA 005220 / SINU, LARN (2014), Tabella 1-2 / INRAN (2003/2009), Tabella \"Pesi ed equivalenze\": 1 cetriolo medio ~200g",
+      "check": "grep '^CREA,005220' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "melanzane_crude",
+      "unit": "piece",
+      "grams": 300.0,
+      "source": "CREA 005500 / SINU, LARN (2014), Tabella 1-2 / INRAN (2003/2009), Tabella \"Pesi ed equivalenze\": 1 melanzana media mondata ~300g",
+      "check": "grep '^CREA,005500' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "porri_crudi",
+      "unit": "piece",
+      "grams": 100.0,
+      "source": "CREA 005650 / SINU, LARN (2014), Tabella 1-2 / INRAN (2003/2009), Tabella \"Pesi ed equivalenze\": 1 porro medio mondato ~100g",
+      "check": "grep '^CREA,005650' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "sedano_crudo",
+      "unit": "piece",
+      "grams": 50.0,
+      "source": "CREA 005680 (Sedano, crudo) / USDA FoodData Central fdc_id 169988 portion: 1 medium stalk (7.5\" to 8\" long) = 40.0-50.0g",
+      "check": "grep '^CREA,005680' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "avocado_fresco",
+      "unit": "piece",
+      "grams": 150.0,
+      "source": "CREA 007490 (Avocado, fresco) / USDA FoodData Central fdc_id 171705 portion: 1 avocado without skin and seed = 136.0-150.0g",
+      "check": "grep '^CREA,007490' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "zucchine_crude",
+      "unit": "piece",
+      "grams": 150.0,
+      "source": "CREA 005730 / SINU, LARN (2014), Tabella 1-2 / INRAN (2003/2009), Tabella \"Pesi ed equivalenze\": 1 zucchina media ~150g",
+      "check": "grep '^CREA,005730' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "mele_fresche",
+      "unit": "piece",
+      "grams": 180.0,
+      "source": "CREA 007110 (Mele, fresche, senza buccia) / SINU, LARN (2014), Tabella 1: porzione frutta fresca 150g netta (~180g mela media lorda con torsolo); USDA FoodData Central fdc_id 171688 portion: 1 medium (3\" dia) = 182.0g",
+      "check": "grep '^CREA,007110' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "olive_nere",
+      "unit": "piece",
+      "grams": 4.0,
+      "source": "CREA 008810 (Olive, nere) / USDA FoodData Central fdc_id 169094 portion: 1 large olive = 4.4g",
+      "check": "grep '^CREA,008810' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "scalogno",
+      "unit": "piece",
+      "grams": 25.0,
+      "source": "USDA FoodData Central fdc_id 170499 (Shallots, raw) portion: 1 bulb = 25.0g (1 tbsp chopped = 10.0g). Voce scalogno assente in CREA.",
+      "check": "grep -i 'scalogno' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "peperoncino_scotch_bonnet",
+      "unit": "piece",
+      "grams": 15.0,
+      "source": "USDA FoodData Central fdc_id 168579 portion: 1 hot chili pepper ~15g",
+      "check": "grep '^CREA,006830' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "olio_oliva_extravergine",
+      "unit": "tbsp",
+      "grams": 10.0,
+      "source": "CREA porzioni standard INRAN: 1 cucchiaio olio d'oliva extravergine = 10g",
+      "check": "grep '^CREA,009210' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "olio_oliva_extravergine",
+      "unit": "tsp",
+      "grams": 5.0,
+      "source": "CREA porzioni standard INRAN: 1 cucchiaino olio d'oliva extravergine = 5g",
+      "check": "grep '^CREA,009210' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "olio_vegetale_neutro",
+      "unit": "tbsp",
+      "grams": 10.0,
+      "source": "CREA porzioni standard INRAN: 1 cucchiaio olio di semi/vegetale = 10g",
+      "check": "grep '^CREA,009799' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "olio_vegetale_neutro",
+      "unit": "tsp",
+      "grams": 5.0,
+      "source": "CREA porzioni standard INRAN: 1 cucchiaino olio vegetale = 5g",
+      "check": "grep '^CREA,009799' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "zucchero",
+      "unit": "tbsp",
+      "grams": 15.0,
+      "source": "CREA porzioni standard INRAN: 1 cucchiaio raso zucchero saccarosio = 15g",
+      "check": "grep '^CREA,201500' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "zucchero",
+      "unit": "tsp",
+      "grams": 5.0,
+      "source": "CREA porzioni standard INRAN: 1 cucchiaino raso zucchero = 5g",
+      "check": "grep '^CREA,201500' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "farina_grano_00",
+      "unit": "tbsp",
+      "grams": 12.0,
+      "source": "CREA porzioni standard INRAN: 1 cucchiaio raso farina di frumento = 12g",
+      "check": "grep '^CREA,000220' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "farina_grano_00",
+      "unit": "tsp",
+      "grams": 4.0,
+      "source": "CREA porzioni standard INRAN: 1 cucchiaino raso farina = 4g",
+      "check": "grep '^CREA,000220' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "farina_grano_00",
+      "unit": "cup",
+      "grams": 125.0,
+      "source": "USDA FoodData Central fdc_id 168932 portion: 1 cup all-purpose flour = 125g",
+      "check": "grep '^CREA,000220' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "salsa_soia",
+      "unit": "tbsp",
+      "grams": 15.0,
+      "source": "USDA FoodData Central fdc_id 174277 portion: 1 tbsp soy sauce = 15.8g (~15g)",
+      "check": "grep '^CREA,509020' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "salsa_soia",
+      "unit": "tsp",
+      "grams": 5.0,
+      "source": "USDA FoodData Central fdc_id 174277 portion: 1 tsp soy sauce = 5.3g (~5g)",
+      "check": "grep '^CREA,509020' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "miele",
+      "unit": "tbsp",
+      "grams": 20.0,
+      "source": "CREA 210010 (Miele) / SINU, LARN (2014), Tabella 1: porzione dolci 20g (1 cucchiaio raso = 20g) / USDA FoodData Central fdc_id 169640 portion: 1 tbsp = 21.0g",
+      "check": "grep '^CREA,210010' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "miele",
+      "unit": "tsp",
+      "grams": 7.0,
+      "source": "CREA 210010 (Miele) / USDA FoodData Central fdc_id 169640 portion: 1 tsp = 7.0g",
+      "check": "grep '^CREA,210010' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "burro",
+      "unit": "tbsp",
+      "grams": 14.0,
+      "source": "CREA 190010 / USDA FoodData Central fdc_id 173410 portion: 1 tbsp butter = 14.2g",
+      "check": "grep '^CREA,190010' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "burro",
+      "unit": "tsp",
+      "grams": 5.0,
+      "source": "CREA porzioni standard INRAN: 1 cucchiaino burro = 5g",
+      "check": "grep '^CREA,190010' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "succo_limone",
+      "unit": "tbsp",
+      "grams": 15.0,
+      "source": "USDA FoodData Central fdc_id 167746 portion: 1 tbsp lemon juice = 15.2g",
+      "check": "grep '^CREA,008040' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "succo_limone",
+      "unit": "tsp",
+      "grams": 5.0,
+      "source": "USDA FoodData Central fdc_id 167746 portion: 1 tsp lemon juice = 5.1g",
+      "check": "grep '^CREA,008040' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "origano_secco",
+      "unit": "tbsp",
+      "grams": 3.0,
+      "source": "USDA FoodData Central fdc_id 170932 portion: 1 tbsp dried oregano leaves = 2.7g (~3g)",
+      "check": "grep -i 'origano' dataset/crea/foods.csv || echo 'Assente in CREA, fonte USDA'",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "origano_secco",
+      "unit": "tsp",
+      "grams": 1.0,
+      "source": "USDA FoodData Central fdc_id 170932 portion: 1 tsp dried oregano leaves = 1.0g",
+      "check": "grep -i 'origano' dataset/crea/foods.csv || echo 'Assente in CREA, fonte USDA'",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "curcuma_polvere",
+      "unit": "tbsp",
+      "grams": 7.0,
+      "source": "USDA FoodData Central fdc_id 172231 portion: 1 tbsp ground turmeric = 6.8g (~7g)",
+      "check": "grep -i 'curcuma' dataset/crea/foods.csv || echo 'Assente in CREA, fonte USDA'",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "curcuma_polvere",
+      "unit": "tsp",
+      "grams": 3.0,
+      "source": "USDA FoodData Central fdc_id 172231 portion: 1 tsp ground turmeric = 3.0g",
+      "check": "grep -i 'curcuma' dataset/crea/foods.csv || echo 'Assente in CREA, fonte USDA'",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "paprika_polvere",
+      "unit": "tbsp",
+      "grams": 7.0,
+      "source": "USDA FoodData Central fdc_id 170933 portion: 1 tbsp paprika = 6.8g (~7g)",
+      "check": "grep -i 'paprika' dataset/crea/foods.csv || echo 'Assente in CREA, fonte USDA'",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "paprika_polvere",
+      "unit": "tsp",
+      "grams": 2.3,
+      "source": "USDA FoodData Central fdc_id 170933 portion: 1 tsp paprika = 2.3g",
+      "check": "grep -i 'paprika' dataset/crea/foods.csv || echo 'Assente in CREA, fonte USDA'",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "cumino_polvere",
+      "unit": "tbsp",
+      "grams": 6.0,
+      "source": "USDA FoodData Central fdc_id 170923 portion: 1 tbsp cumin seed ground = 6.0g",
+      "check": "grep -i 'cumino' dataset/crea/foods.csv || echo 'Assente in CREA, fonte USDA'",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "cumino_polvere",
+      "unit": "tsp",
+      "grams": 2.0,
+      "source": "USDA FoodData Central fdc_id 170923 portion: 1 tsp cumin seed ground = 2.1g (~2g)",
+      "check": "grep -i 'cumino' dataset/crea/foods.csv || echo 'Assente in CREA, fonte USDA'",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "menta_fresca",
+      "unit": "tbsp",
+      "grams": 3.0,
+      "source": "USDA FoodData Central fdc_id 173473 portion: 1 tbsp fresh spearmint leaves = 3.2g",
+      "check": "grep '^CREA,006810' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "menta_fresca",
+      "unit": "tsp",
+      "grams": 1.0,
+      "source": "USDA FoodData Central fdc_id 173473 portion: 1 tsp fresh spearmint leaves = 1.1g",
+      "check": "grep '^CREA,006810' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "menta_fresca",
+      "unit": "sprig",
+      "grams": 2.0,
+      "source": "USDA FoodData Central fdc_id 173473 portion: 1 sprig fresh mint = 2.0g",
+      "check": "grep '^CREA,006810' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "aneto_fresco",
+      "unit": "sprig",
+      "grams": 1.0,
+      "source": "USDA FoodData Central fdc_id 172233 portion: 1 sprig fresh dill = 1.0g",
+      "check": "grep '^CREA,006840' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "aneto_fresco",
+      "unit": "tbsp",
+      "grams": 3.0,
+      "source": "USDA FoodData Central fdc_id 172233 portion: 1 tbsp fresh dill weed = 2.6g (~3g)",
+      "check": "grep '^CREA,006840' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "timo_fresco",
+      "unit": "sprig",
+      "grams": 1.0,
+      "source": "USDA FoodData Central fdc_id 170938 portion: 1 sprig fresh thyme = 1.0g",
+      "check": "grep '^CREA,006840' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "timo_fresco",
+      "unit": "tsp",
+      "grams": 1.0,
+      "source": "USDA FoodData Central fdc_id 170938 portion: 1 tsp fresh thyme leaves = 1.0g",
+      "check": "grep '^CREA,006840' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "pane_bianco",
+      "unit": "slice",
+      "grams": 30.0,
+      "source": "CREA 000530 (Pane bianco) / SINU, LARN (2014), Tabella 1: porzione pane 50g; INRAN (2003/2009), Tabella \"Pesi ed equivalenze\": 1 fetta pane comune = 30-35g",
+      "check": "grep '^CREA,000530' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "pane_bianco",
+      "unit": "piece",
+      "grams": 50.0,
+      "source": "CREA 000530 (Pane bianco) / SINU, LARN (2014), Tabella 1: 1 panino piccolo = 50.0g",
+      "check": "grep '^CREA,000530' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "pane_integrale",
+      "unit": "slice",
+      "grams": 35.0,
+      "source": "CREA 000550 (Pane di tipo integrale) / SINU, LARN (2014), Tabella 1: porzione pane 50g; INRAN (2003/2009): 1 fetta pane integrale = 35.0g",
+      "check": "grep '^CREA,000550' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "pancetta_affettata",
+      "unit": "slice",
+      "grams": 15.0,
+      "source": "CREA 110310 (Pancetta tesa) / SINU, LARN (2014), Tabella 1: porzione salumi 50g; stima empirica 1 fetta sottile pancetta arrotolata/tesa ~15.0g",
+      "check": "grep '^CREA,110310' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "heuristic"
+    },
+    {
+      "canonical_id": "olio_vegetale_neutro",
+      "unit": "ml",
+      "grams": 0.92,
+      "source": "Densità fisica oli vegetali standard (0.92 g/ml): 1 ml = 0.92g",
+      "check": "grep '^CREA,009799' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "olio_vegetale_neutro",
+      "unit": "l",
+      "grams": 920.0,
+      "source": "Densità fisica oli vegetali standard (0.92 g/ml): 1 litro = 920g",
+      "check": "grep '^CREA,009799' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "latte_vacca_parz_scremato",
+      "unit": "ml",
+      "grams": 1.03,
+      "source": "CREA 135020 densità fisica latte vaccino standard: 1.03 g/ml",
+      "check": "grep '^CREA,135020' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "latte_vacca_parz_scremato",
+      "unit": "l",
+      "grams": 1030.0,
+      "source": "CREA 135020 densità fisica latte vaccino standard (1.03 g/ml): 1 litro = 1030g",
+      "check": "grep '^CREA,135020' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "latte_vacca_parz_scremato",
+      "unit": "tbsp",
+      "grams": 15.0,
+      "source": "USDA FoodData Central fdc_id 171265 portion: 1 tbsp milk = 15.3g (~15g)",
+      "check": "grep '^CREA,135020' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "latte_vacca_parz_scremato",
+      "unit": "cup",
+      "grams": 245.0,
+      "source": "USDA FoodData Central fdc_id 171265 portion: 1 cup milk = 245g",
+      "check": "grep '^CREA,135020' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "olio_oliva_extravergine",
+      "unit": "ml",
+      "grams": 0.916,
+      "source": "CREA 009210 densità fisica olio di oliva: 0.916 g/ml",
+      "check": "grep '^CREA,009210' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "yogurt_intero",
+      "unit": "ml",
+      "grams": 1.04,
+      "source": "CREA 150010 densità fisica yogurt intero naturale: 1.04 g/ml",
+      "check": "grep '^CREA,150010' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "yogurt_intero",
+      "unit": "tbsp",
+      "grams": 15.0,
+      "source": "USDA FoodData Central fdc_id 171284 portion: 1 tbsp yogurt = 15g",
+      "check": "grep '^CREA,150010' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "yogurt_greco",
+      "unit": "ml",
+      "grams": 1.05,
+      "source": "CREA 150020 densità fisica yogurt greco colato: 1.05 g/ml",
+      "check": "grep '^CREA,150020' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "yogurt_greco",
+      "unit": "tbsp",
+      "grams": 15.0,
+      "source": "USDA FoodData Central fdc_id 170903 portion: 1 tbsp greek yogurt = 15g",
+      "check": "grep '^CREA,150020' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "salsa_soia",
+      "unit": "ml",
+      "grams": 1.15,
+      "source": "Densità standard salsa di soia fermentata: 1.15 g/ml",
+      "check": "grep '^CREA,509020' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "succo_limone",
+      "unit": "ml",
+      "grams": 1.03,
+      "source": "CREA 008040 densità fisica succo di limone fresco: 1.03 g/ml",
+      "check": "grep '^CREA,008040' dataset/crea/foods.csv",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "acqua",
+      "unit": "l",
+      "grams": 1000.0,
+      "source": "Densità fisica acqua a 20°C: 1 litro = 1000g",
+      "check": "echo 'Densità fisica acqua 1.0 g/ml'",
+      "requires_review": true,
+      "evidence": "documented"
+    },
+    {
+      "canonical_id": "acqua",
+      "unit": "cup",
+      "grams": 240.0,
+      "source": "USDA FoodData Central fdc_id 170417 portion: 1 standard cup water = 237-240g",
+      "check": "echo 'Densità fisica acqua 1.0 g/ml'",
+      "requires_review": true,
+      "evidence": "documented"
+    }
+  ]
+}

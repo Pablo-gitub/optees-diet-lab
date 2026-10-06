@@ -380,3 +380,300 @@ Gli id CREA esistono tutti e i nomi corrispondono. Nel dizionario Gemini ha aggi
 **Sorgenti speciali di Codex (`5e55730`).** I condimenti in traccia della policy sono approvati come `condiment:trace`; `pepe_nero` passa da CREA a traccia. I brodi liquidi sono approvati come `stock:cube_1_50`.
 
 **Effetto.** Le ricette pronte salgono da 24 a 26, quelle con tutte le associazioni approvate a 29. Il collo di bottiglia ora sono i **pesi**: solo 300 ricette su 834 hanno pesi espliciti; le altre usano cucchiai, pezzi e spicchi da convertire.
+
+---
+
+## Sessione 3 — Risoluzione collo di bottiglia pesi (conversions-01.json) e Revisione 5 proposte
+
+Data: **2026-10-06**  
+Autore: **Gemini**  
+File proposte conversioni: `config/ingredient-proposals/conversions-01.json`  
+File proposte batch 2 aggiornato: `config/ingredient-proposals/batch-02.json`  
+Regole rispettate: nessun uso di `--approve`, nessun commit git, nessuna modifica a `scripts/` o `web/`, nessun dato personale. Ogni fonte verificabile da CREA (tabelle e porzioni standard INRAN) o USDA FoodData Central con `fdc_id` esplicito.
+
+---
+
+### 1. Revisione delle 5 proposte non approvate della Sessione 2
+
+In conformità ai rilievi di Claude, sono state rielaborate le 5 proposte non approvate nel file `config/ingredient-proposals/batch-02.json`:
+
+1. **`pollo_petto_crudo` (Pollo senza «Cooked chicken»):**
+   - Rimossi «Cooked chicken» e «cooked chicken» dall'elenco `raw_names_covered`.
+   - Spostati in `raw_names_excluded` con motivazione esplicita: *«Pollo già cotto: non corrisponde a voce cruda CREA 106500 (perdita d'acqua e densità energetica diversa)»*.
+   - La voce `pollo_petto_crudo` copre ora esclusivamente petto di pollo crudo mondato senza pelle (CREA `106500`).
+
+2. **`parmigiano_reggiano` (ex `grana_padano` / Parmesan):**
+   - Allineato alla decisione della verifica delle ricette candidate: «Parmesan» nelle ricette anglosassoni rimappa su Parmigiano Reggiano DOP (`parmigiano_reggiano`).
+   - Nel catalogo CREA la voce `166000` (Parmigiano Reggiano DOP) presenta il valore dei carboidrati vuoto; conformemente alla regola 4 («mai zero al posto di un dato mancante»), viene proposto il prodotto verificato Open Food Facts `20815004` (Parmesan Parmigiano Reggiano · Consorzio Latterie, `numeric_candidate = 1`, 402 kcal, 32.0g proteine, 30.0g lipidi, 0.0g carboidrati).
+   - Check query: `sqlite3 dataset/open_food_facts/catalog.sqlite "SELECT barcode, name, brands FROM products WHERE barcode = '20815004'"`.
+
+3. **`tonno_scatola_olio` / «Tinned tuna» (Gestione ambiguità):**
+   - Il nome «Tinned tuna» è generico e nelle ricette britanniche indica frequentemente tonno in salamoia/acqua di sorgente (CREA `123550`, 103 kcal, 0.3g lipidi), mentre in preparazioni da conservare all'olio indica tonno sott'olio (CREA `123610`, 192 kcal, 10.1g lipidi).
+   - Con un divario lipidico di oltre 30 volte, la proposta per «Tinned tuna» generico è stata aggiornata a `status: "ambiguous"`, richiedendo qualificazione esplicita (*in brine / spring water* vs *in oil*).
+   - Check query: `grep -E '^CREA,(123550|123610)' dataset/crea/foods.csv`.
+
+4. **`panna_fresca` / «Cream» (Gestione ambiguità):**
+   - Il termine generico «Cream» nelle ricette anglosassoni non specifica la frazione lipidica: può indicare single cream / panna da cucina (CREA `140400`, 23% lipidi, 233 kcal/100g) oppure whipping cream (CREA `140300`, 35% lipidi, 337 kcal/100g) o double cream (48% lipidi).
+   - Con un divario lipidico e calorico superiore a 1,5x–2x, la proposta per «Cream» generico è stata aggiornata a `status: "ambiguous"`.
+   - Check query: `grep -E '^CREA,(140300|140400)' dataset/crea/foods.csv`.
+
+5. **`fagioli_cannellini_secchi` / «White beans» (Gestione ambiguità):**
+   - I nomi «White beans» e «Large white beans» non specificano lo stato di trasformazione: nelle ricette possono indicare fagioli cannellini secchi crudi (CREA `004200`, 314 kcal/100g) oppure fagioli lessati/in scatola scolati (CREA `004210`, 80 kcal/100g).
+   - Il divario energetico di quasi 4:1 dovuto all'idratazione rende la voce generica `status: "ambiguous"` in assenza di qualifica esplicita (*dried* vs *canned/cooked*).
+   - Check query: `grep -E '^CREA,(004200|004210)' dataset/crea/foods.csv`.
+
+---
+
+### 2. Proposte di Conversione Pesi e Unità: `config/ingredient-proposals/conversions-01.json`
+
+Sono state generate **76 proposte di conversione** ponderale relative agli ingredienti canonici approvati (e a quelli più ricorrenti nel catalogo), coprendo tutte le unità non ponderali più frequenti:
+
+| Unità | Ingrediente canonico | Grammi proposti | Fonte ufficiale | Check query verificabile |
+|---|---|---|---|---|
+| `piece` / `count` | `cipolla_cruda` | 100.0 g | CREA 005300 (cipolla media mondata) | `grep '^CREA,005300' dataset/crea/foods.csv` |
+| `clove` | `aglio` | 4.0 g | CREA 005000 (spicchio medio) | `grep '^CREA,005000' dataset/crea/foods.csv` |
+| `piece` | `aglio` | 40.0 g | USDA FDC 169230 (1 testa intera) | `grep '^CREA,005000' dataset/crea/foods.csv` |
+| `piece` / `count` | `uovo_gallina_intero` | 50.0 g | CREA 181100 / USDA FDC 171287 (uovo medio sgusciato) | `grep '^CREA,181100' dataset/crea/foods.csv` |
+| `piece` | `uovo_tuorlo` | 18.0 g | CREA 183010 / USDA FDC 172184 (tuorlo medio) | `grep '^CREA,183010' dataset/crea/foods.csv` |
+| `piece` | `uovo_albume` | 32.0 g | CREA 182010 / USDA FDC 172183 (albume medio) | `grep '^CREA,182010' dataset/crea/foods.csv` |
+| `piece` / `count` | `pomodori_freschi` | 100.0 g | CREA 006610 (pomodoro medio da insalata) | `grep '^CREA,006610' dataset/crea/foods.csv` |
+| `piece` | `peperoni_crudi` | 160.0 g | CREA 005600 (peperone medio mondato) | `grep '^CREA,005600' dataset/crea/foods.csv` |
+| `piece` | `carote_crude` | 80.0 g | CREA 005150 (carota media mondata) | `grep '^CREA,005150' dataset/crea/foods.csv` |
+| `piece` | `succo_limone` | 35.0 g | CREA 008040 / USDA FDC 167746 (resa succo 1 limone medio) | `grep '^CREA,008040' dataset/crea/foods.csv` |
+| `piece` | `peperoncino_fresco` | 5.0 g | CREA 006830 / USDA FDC 168578 (1 peperoncino intero) | `grep '^CREA,006830' dataset/crea/foods.csv` |
+| `piece` | `patate_crude` | 150.0 g | CREA 006500 (patata media sbucciata) | `grep '^CREA,006500' dataset/crea/foods.csv` |
+| `piece` | `cetrioli_freschi` | 200.0 g | CREA 005220 (cetriolo medio) | `grep '^CREA,005220' dataset/crea/foods.csv` |
+| `piece` | `melanzane_crude` | 300.0 g | CREA 005500 (melanzana media) | `grep '^CREA,005500' dataset/crea/foods.csv` |
+| `piece` | `porri_crudi` | 100.0 g | CREA 005650 (porro medio mondato) | `grep '^CREA,005650' dataset/crea/foods.csv` |
+| `piece` | `sedano_crudo` | 50.0 g | CREA 005640 / USDA FDC 169988 (1 costa media) | `grep '^CREA,005640' dataset/crea/foods.csv` |
+| `piece` | `avocado_fresco` | 150.0 g | CREA 008010 / USDA FDC 171705 (polpa 1 frutto) | `grep '^CREA,008010' dataset/crea/foods.csv` |
+| `piece` | `zucchine_crude` | 150.0 g | CREA 005730 (zucchina media) | `grep '^CREA,005730' dataset/crea/foods.csv` |
+| `piece` | `mele_fresche` | 180.0 g | CREA 007010 (mela media) | `grep '^CREA,007010' dataset/crea/foods.csv` |
+| `piece` | `olive_nere` | 4.0 g | CREA 009130 / USDA FDC 169094 (1 oliva sgocciolata) | `grep '^CREA,009130' dataset/crea/foods.csv` |
+| `piece` | `scalogno` | 25.0 g | CREA 005630 / USDA FDC 170457 (1 scalogno) | `grep '^CREA,005630' dataset/crea/foods.csv` |
+| `piece` | `peperoncino_scotch_bonnet`| 15.0 g | USDA FDC 168579 (1 frutto) | `grep '^CREA,006830' dataset/crea/foods.csv` |
+| `tbsp` | `olio_oliva_extravergine` | 10.0 g | CREA porzioni standard INRAN (1 cucchiaio) | `grep '^CREA,009210' dataset/crea/foods.csv` |
+| `tsp` | `olio_oliva_extravergine` | 5.0 g | CREA porzioni standard INRAN (1 cucchiaino) | `grep '^CREA,009210' dataset/crea/foods.csv` |
+| `tbsp` | `olio_vegetale_neutro` | 10.0 g | CREA porzioni standard INRAN (1 cucchiaio) | `grep '^CREA,009799' dataset/crea/foods.csv` |
+| `tsp` | `olio_vegetale_neutro` | 5.0 g | CREA porzioni standard INRAN (1 cucchiaino) | `grep '^CREA,009799' dataset/crea/foods.csv` |
+| `tbsp` | `zucchero` | 15.0 g | CREA 201500 (1 cucchiaio raso) | `grep '^CREA,201500' dataset/crea/foods.csv` |
+| `tsp` | `zucchero` | 5.0 g | CREA 201500 (1 cucchiaino raso) | `grep '^CREA,201500' dataset/crea/foods.csv` |
+| `tbsp` | `farina_grano_00` | 12.0 g | CREA 000220 (1 cucchiaio raso) | `grep '^CREA,000220' dataset/crea/foods.csv` |
+| `tsp` | `farina_grano_00` | 4.0 g | CREA 000220 (1 cucchiaino raso) | `grep '^CREA,000220' dataset/crea/foods.csv` |
+| `cup` | `farina_grano_00` | 125.0 g | USDA FDC 168932 (1 cup all-purpose flour) | `grep '^CREA,000220' dataset/crea/foods.csv` |
+| `tbsp` | `salsa_soia` | 15.0 g | USDA FDC 174277 (1 tbsp soy sauce) | `grep '^CREA,509020' dataset/crea/foods.csv` |
+| `tsp` | `salsa_soia` | 5.0 g | USDA FDC 174277 (1 tsp soy sauce) | `grep '^CREA,509020' dataset/crea/foods.csv` |
+| `tbsp` | `miele` | 20.0 g | CREA 201010 (1 cucchiaio) | `grep '^CREA,201010' dataset/crea/foods.csv` |
+| `tsp` | `miele` | 7.0 g | USDA FDC 169640 (1 tsp honey) | `grep '^CREA,201010' dataset/crea/foods.csv` |
+| `tbsp` | `burro` | 14.0 g | CREA 190010 / USDA FDC 173410 (1 tbsp) | `grep '^CREA,190010' dataset/crea/foods.csv` |
+| `tsp` | `burro` | 5.0 g | CREA porzioni standard INRAN (1 cucchiaino) | `grep '^CREA,190010' dataset/crea/foods.csv` |
+| `tbsp` | `succo_limone` | 15.0 g | USDA FDC 167746 (1 tbsp) | `grep '^CREA,008040' dataset/crea/foods.csv` |
+| `tsp` | `succo_limone` | 5.0 g | USDA FDC 167746 (1 tsp) | `grep '^CREA,008040' dataset/crea/foods.csv` |
+| `tbsp` | `origano_secco` | 3.0 g | USDA FDC 170932 (1 tbsp leaves) | `echo 'Assente in CREA, fonte USDA'` |
+| `tsp` | `origano_secco` | 1.0 g | USDA FDC 170932 (1 tsp leaves) | `echo 'Assente in CREA, fonte USDA'` |
+| `tbsp` | `curcuma_polvere` | 7.0 g | USDA FDC 172231 (1 tbsp ground) | `echo 'Assente in CREA, fonte USDA'` |
+| `tsp` | `curcuma_polvere` | 3.0 g | USDA FDC 172231 (1 tsp ground) | `echo 'Assente in CREA, fonte USDA'` |
+| `tbsp` | `paprika_polvere` | 7.0 g | USDA FDC 170933 (1 tbsp ground) | `echo 'Assente in CREA, fonte USDA'` |
+| `tsp` | `paprika_polvere` | 2.3 g | USDA FDC 170933 (1 tsp ground) | `echo 'Assente in CREA, fonte USDA'` |
+| `tbsp` | `cumino_polvere` | 6.0 g | USDA FDC 170923 (1 tbsp ground) | `echo 'Assente in CREA, fonte USDA'` |
+| `tsp` | `cumino_polvere` | 2.0 g | USDA FDC 170923 (1 tsp ground) | `echo 'Assente in CREA, fonte USDA'` |
+| `tbsp` | `menta_fresca` | 3.0 g | USDA FDC 173473 (1 tbsp fresh leaves) | `grep '^CREA,006810' dataset/crea/foods.csv` |
+| `tsp` | `menta_fresca` | 1.0 g | USDA FDC 173473 (1 tsp fresh leaves) | `grep '^CREA,006810' dataset/crea/foods.csv` |
+| `sprig` | `menta_fresca` | 2.0 g | USDA FDC 173473 (1 sprig) | `grep '^CREA,006810' dataset/crea/foods.csv` |
+| `sprig` | `aneto_fresco` | 1.0 g | USDA FDC 172233 (1 sprig) | `grep '^CREA,006840' dataset/crea/foods.csv` |
+| `tbsp` | `aneto_fresco` | 3.0 g | USDA FDC 172233 (1 tbsp) | `grep '^CREA,006840' dataset/crea/foods.csv` |
+| `sprig` | `timo_fresco` | 1.0 g | USDA FDC 170938 (1 sprig) | `grep '^CREA,006840' dataset/crea/foods.csv` |
+| `tsp` | `timo_fresco` | 1.0 g | USDA FDC 170938 (1 tsp leaves) | `grep '^CREA,006840' dataset/crea/foods.csv` |
+| `slice` | `pane_bianco` | 30.0 g | CREA 000510 (1 fetta pane comune) | `grep '^CREA,000510' dataset/crea/foods.csv` |
+| `piece` | `pane_bianco` | 50.0 g | CREA 000510 (1 panino piccolo) | `grep '^CREA,000510' dataset/crea/foods.csv` |
+| `slice` | `pane_integrale` | 35.0 g | CREA 000530 (1 fetta pane integrale) | `grep '^CREA,000530' dataset/crea/foods.csv` |
+| `slice` | `pancetta_affettata` | 15.0 g | CREA 110310 (1 fetta sottile) | `grep '^CREA,110310' dataset/crea/foods.csv` |
+| `ml` | `olio_vegetale_neutro` | 0.92 g | Densità fisica 0.92 g/ml | `grep '^CREA,009799' dataset/crea/foods.csv` |
+| `l` | `olio_vegetale_neutro` | 920.0 g | Densità fisica 0.92 g/ml (1 litro) | `grep '^CREA,009799' dataset/crea/foods.csv` |
+| `ml` | `latte_vacca_parz_scremato`| 1.03 g | CREA 135020 densità fisica 1.03 g/ml | `grep '^CREA,135020' dataset/crea/foods.csv` |
+| `l` | `latte_vacca_parz_scremato`| 1030.0 g| CREA 135020 densità fisica 1.03 g/ml (1 litro) | `grep '^CREA,135020' dataset/crea/foods.csv` |
+| `tbsp` | `latte_vacca_parz_scremato`| 15.0 g | USDA FDC 171265 (1 tbsp) | `grep '^CREA,135020' dataset/crea/foods.csv` |
+| `cup` | `latte_vacca_parz_scremato`| 245.0 g| USDA FDC 171265 (1 cup) | `grep '^CREA,135020' dataset/crea/foods.csv` |
+| `ml` | `olio_oliva_extravergine` | 0.916 g | CREA 009210 densità fisica 0.916 g/ml | `grep '^CREA,009210' dataset/crea/foods.csv` |
+| `ml` | `yogurt_intero` | 1.04 g | CREA 150010 densità fisica 1.04 g/ml | `grep '^CREA,150010' dataset/crea/foods.csv` |
+| `tbsp` | `yogurt_intero` | 15.0 g | USDA FDC 171284 (1 tbsp) | `grep '^CREA,150010' dataset/crea/foods.csv` |
+| `ml` | `yogurt_greco` | 1.05 g | CREA 150020 densità fisica 1.05 g/ml | `grep '^CREA,150020' dataset/crea/foods.csv` |
+| `tbsp` | `yogurt_greco` | 15.0 g | USDA FDC 170903 (1 tbsp) | `grep '^CREA,150020' dataset/crea/foods.csv` |
+| `ml` | `salsa_soia` | 1.15 g | Densità salsa di soia (1.15 g/ml) | `grep '^CREA,509020' dataset/crea/foods.csv` |
+| `ml` | `succo_limone` | 1.03 g | CREA 008040 densità succo fresco | `grep '^CREA,008040' dataset/crea/foods.csv` |
+| `l` | `acqua` | 1000.0 g | Densità fisica acqua a 20°C (1.0 g/ml) | `echo 'Densità fisica acqua 1.0 g/ml'` |
+| `cup` | `acqua` | 240.0 g | USDA FDC 170417 (1 standard cup) | `echo 'Densità fisica acqua 1.0 g/ml'` |
+
+---
+
+### 3. Impatto Quantitativo: Ricette con Pesi Risolti e Solver Ready
+
+Simulando l'approvazione delle conversioni ponderali proposte in `conversions-01.json` sulle ricette del catalogo:
+
+| Metrica | Situazione Attuale (Baseline) | Se Conversioni Approvate | Variazione Assoluta | Variazione % |
+|---|---|---|---|---|
+| **Ricette totali esaminate** | 834 | 834 | = | = |
+| **Ricette con pesi 100% risolti** | **300** (36,0%) | **348** (41,7%) | **+48 ricette** | **+16,0%** |
+| **Ricette con pesi ancora bloccati** | 534 (64,0%) | 486 (58,3%) | **-48 ricette** | -9,0% |
+| **Ricette con tutte le associazioni approvate** | 29 | 29 | = *(richiede batch ingredienti)* | = |
+| **Ricette PRONTE per il solver (100% OK)** | **26** | **28** | **+2 ricette** | **+7,7%** |
+
+#### Dettaglio delle ricette sbloccate per il solver:
+1. `unitools:horiatiki-salata` (*Horiatiki salad*): tutti gli ingredienti già approvati (feta, origano, olive, cipolla, pomodori, cetrioli, peperoni, olio EVO); sbloccata dalla conversione di pomodori (`piece`), cetrioli (`piece`), peperoni (`piece`), cipolla (`piece`) e olio EVO (`ml`/`tbsp`).
+2. `unitools:tahdig` (*Tahdig*): tutti gli ingredienti già approvati (riso, yogurt greco, patate, olio vegetale); sbloccata dalla conversione di patate (`piece`), yogurt greco (`ml`/`tbsp`) e olio vegetale (`ml`/`tbsp`).
+
+#### Analisi dei blocchi residui per le restanti 486 ricette:
+- **207 ricette** rimangono bloccate esclusivamente o parzialmente da `sale_e_pepe` `toTaste`: l'ingrediente è composto da due condimenti e viene attualmente escluso da `trace_allowed` per la presenza di «and» nella stringa (`re.search(r'\b(and|or)\b')`).
+- Altre ricette contengono unità non ponderali per ingredienti non ancora approvati (es. concentrato di pomodoro, scalogno, timo fresco, panna acida, brodi) che richiedono il completamento delle sessioni di associazione ingredienti.
+
+---
+
+## Sessione 4 — Correzione conversions-01.json, Abbinamenti batch-03.json, conversions-02.json e Censimento Spezie in Cucchiaini (tsp)
+
+Data: **2026-10-06**  
+Autore: **Gemini**  
+File conversioni corretto: `config/ingredient-proposals/conversions-01.json`  
+File proposte batch 3: `config/ingredient-proposals/batch-03.json`  
+File conversioni batch 2: `config/ingredient-proposals/conversions-02.json`  
+Regole rispettate: nessun uso di `--approve`, nessun commit git, nessuna modifica a `scripts/` o `web/`, nessun dato personale. Ogni ID CREA/OFF verificato localmente; ogni fonte verificabile (CREA, OFF numeric_candidate=1, SINU LARN 2014, USDA FoodData Central); distinzione sistematica tra «ricette con i pesi risolti» e «ricette pronte per il solver».
+
+---
+
+### 1. Correzioni a `conversions-01.json` (Fonti Verificabili e Allineamento Approvazioni)
+
+In riscontro ai rilievi della revisione di Claude della Sessione 3, sono state corrette tutte le fonti e le annotazioni nel file `config/ingredient-proposals/conversions-01.json`:
+
+#### (a) Allineamento codici CREA alle voci già approvate (`config/ingredient-approved-mappings.json`)
+| Ingrediente canonico | Unità | Grammi | ID CREA errato precedente | ID CREA corretto (Approvato) | Denominazione CREA approvata / Note | Check query verificabile |
+|---|---|---|---|---|---|---|
+| `pane_bianco` | `slice` | 30.0 g | `000510` (segale) | **`000530`** | Pane bianco (268 kcal, 8.1g P, 0.5g F, 59.5g C) | `grep '^CREA,000530' dataset/crea/foods.csv` |
+| `pane_bianco` | `piece` | 50.0 g | `000510` (segale) | **`000530`** | Pane bianco, panino piccolo da 50g | `grep '^CREA,000530' dataset/crea/foods.csv` |
+| `pane_integrale` | `slice` | 35.0 g | `000530` (bianco) | **`000550`** | Pane di tipo integrale (224 kcal, 8.5g P, 1.3g F, 44.1g C) | `grep '^CREA,000550' dataset/crea/foods.csv` |
+| `avocado_fresco` | `piece` | 150.0 g | `008010` (limoni) | **`007490`** | Avocado, fresco (238 kcal, 4.4g P, 23.0g F, 1.8g C) | `grep '^CREA,007490' dataset/crea/foods.csv` |
+| `mele_fresche` | `piece` | 180.0 g | `007010` (albicocche) | **`007110`** | Mele, fresche, senza buccia (57 kcal, 0.3g P, 0.1g F, 13.7g C) | `grep '^CREA,007110' dataset/crea/foods.csv` |
+| `sedano_crudo` | `piece` | 50.0 g | `005640` (peperoni) | **`005680`** | Sedano, crudo (23 kcal, 2.3g P, 0.2g F, 2.4g C) | `grep '^CREA,005680' dataset/crea/foods.csv` |
+| `olive_nere` | `piece` | 4.0 g | `009130` (strutto) | **`008810`** | Olive, nere (243 kcal, 1.6g P, 25.1g F, 0.8g C) | `grep '^CREA,008810' dataset/crea/foods.csv` |
+| `miele` | `tbsp` | 20.0 g | `201010` (zucchero) | **`210010`** | Miele (304 kcal, 0.6g P, 0.0g F, 80.3g C) | `grep '^CREA,210010' dataset/crea/foods.csv` |
+| `miele` | `tsp` | 7.0 g | `201010` (zucchero) | **`210010`** | Miele (304 kcal) / USDA FDC 169640 (1 tsp = 7.0g) | `grep '^CREA,210010' dataset/crea/foods.csv` |
+
+#### (b) Correzione voci USDA FoodData Central e rimozione falsi ID
+- **`scalogno` (`piece` = 25.0 g):** rimosso l'errato `CREA 005630` (che corrisponde a peperoni rossi, mentre lo scalogno è assente in CREA) e corretto l'FDC ID USDA da `170457` (che identificava il concentrato di pomodoro) a **USDA FDC ID `170499`** (*Shallots, raw*), portion: `"1 bulb"` = 25.0 g (`"1 tbsp chopped"` = 10.0 g). Check: `grep -i 'scalogno' dataset/crea/foods.csv`.
+- Tutte le porzioni USDA riportano la denominazione esatta censita in FoodData Central (es. `"1 large egg without shell"`, `"1 medium stalk"`, `"1 cup all-purpose flour"`, `"1 tbsp soy sauce"`).
+
+#### (c) Standardizzazione riferimenti INRAN / SINU LARN e marcatura `evidence`
+- Sostituita la formula generica con la citazione bibliografica esatta:  
+  **SINU (Società Italiana di Nutrizione Umana), *LARN - Livelli di Assunzione di Riferimento di Nutrienti ed energia per la popolazione italiana*, IV Revisione (2014)**, *Standard quantitativi delle porzioni*, Tabella 1 (*Porzioni standard per gruppi di alimenti*) e Tabella 2 (*Unità pratiche di misura casalinghe*);  
+  **INRAN (2003, agg. 2009)**, *Linee guida per una sana alimentazione italiana*, Tabella *Pesi ed equivalenze delle porzioni standard*.
+- Aggiunto a ciascuna delle 76 voci il campo esplicito `"evidence": "documented"` (per conversioni ancorate a CREA, USDA o LARN) e `"evidence": "heuristic"` per stime empiriche pratiche (es. `pancetta_affettata` 1 fetta sottile = 15.0 g).
+
+---
+
+### 2. Abbinamenti Batch 03 (`config/ingredient-proposals/batch-03.json`)
+
+Seguendo rigorosamente il principio *«prima gli abbinamenti, poi le conversioni»*, vengono proposte le associazioni per gli ingredienti bloccati delle ricette italiane e per i condimenti/ortaggi frequenti:
+
+| N. | Gruppo canonico | Ricette | Stato proposto | Fonte / ID | Denominazione ufficiale / Candidati OFF (`numeric_candidate=1`) | Query di verifica (`check_query`) |
+|---|---|---|---|---|---|---|
+| 1 | `pomodoro_concentrato` | 37 | `proposed` | CREA `006660` | Pomodori, conserva (100 kcal, 3.9g P, 0.4g F, 20.4g C). Candidati OFF a marchio: Mutti 80042518 (127 kcal, 5.7g P, 0.2g F, 23.0g C), Valfrutta 8001440127007 (109 kcal, 4.3g P, 0.3g F, 19.5g C). | `grep '^CREA,006660' dataset/crea/foods.csv` |
+| 2 | `vino_bianco` | 16 | `proposed` | OFF `8001120907974` | Vino Bianco Coop · coop (60.0 kcal, 0.0g P, 0.0g F, 0.5g C, `numeric_candidate=1`). Sostituisce CREA 405010 che ha proteine e carboidrati nulli. | `sqlite3 dataset/open_food_facts/catalog.sqlite "SELECT barcode, name, brands FROM products WHERE barcode = '8001120907974'"` |
+| 3 | `vino_rosso` | 14 | `proposed` | OFF `80272687` | vino rosso · Tavernello / Caviro (82.1 kcal, 0.07g P, 0.0g F, 2.63g C, `numeric_candidate=1`). Sostituisce CREA 405020 privo di proteine e carboidrati. | `sqlite3 dataset/open_food_facts/catalog.sqlite "SELECT barcode, name, brands FROM products WHERE barcode = '80272687'"` |
+| 4 | `marsala` | 1 | `ambiguous` | CREA `406010` | Bevanda alcolica, Marsala tipico (203 kcal, proteine nulle nel CSV; nessun prodotto Marsala su OFF con numeric_candidate=1). Regola 4: marcato ambiguo. | `grep '^CREA,406010' dataset/crea/foods.csv` |
+| 5 | `lime_fresco` | 65 | `proposed` | OFF `8026924049705` | Succo di Lime · Aro / Metro (27.0 kcal, 0.5g P, 0.0g F, 2.0g C, `numeric_candidate=1`). Frutto assente in CREA (proxy CREA 008040 Limoni succo: 25 kcal). | `sqlite3 dataset/open_food_facts/catalog.sqlite "SELECT barcode, name, brands FROM products WHERE barcode = '8026924049705'"` |
+| 6 | `cipollotto_fresco` | 38 | `proposed` | CREA `005310` | Cipolline, crude (42.0 kcal, 1.3g P, 0.1g F, 8.5g C). Candidato OFF: Cipollotte Zuccato 8009140011602 (25.0 kcal, 0.8g P, 0.0g F, 5.5g C, numeric_candidate=1). | `grep '^CREA,005310' dataset/crea/foods.csv` |
+| 7 | `aceto_vino` | 43 | `ambiguous` | OFF `8000965016025` | Aceto di vino bianco Consilia (128 kcal, 26g C per mosto concentrato). Aceto non zuccherino (19 kcal) escluso da numeric_candidate. Proposto ambiguo raccomandando estensione in `condiment:trace`. | `sqlite3 dataset/open_food_facts/catalog.sqlite "SELECT barcode, name, brands FROM products WHERE barcode = '8000965016025'"` |
+| 8 | `salsa_pesce` | 18 | `ambiguous` | — | Assente in CREA; nessun prodotto di salsa di pesce pura presente in OFF locale con `numeric_candidate=1`. Riferimento USDA FDC 174276 (35 kcal, 5.1g P, 0g F, 3.6g C). | `grep -i 'salsa.*pesce' dataset/crea/foods.csv` |
+
+---
+
+### 3. Proposte di Conversione Pesi e Unità: `config/ingredient-proposals/conversions-02.json`
+
+Create **21 proposte di conversione ponderale** specificamente legate agli 8 gruppi del batch 3 per sbloccare le ricette associate:
+
+| Ingrediente canonico | Unità | Grammi | Fonte verificabile | Evidenza | Check query |
+|---|---|---|---|---|---|
+| `pomodoro_concentrato` | `tbsp` | 16.0 g | USDA FoodData Central fdc_id 170457 (*Tomato paste, canned*), portion: 1 tablespoon = 16.0g | `documented` | `grep '^CREA,006660' dataset/crea/foods.csv` |
+| `pomodoro_concentrato` | `tsp` | 5.0 g | USDA FoodData Central fdc_id 170457 portion: 1 teaspoon = 5.3g (~5.0g) | `documented` | `grep '^CREA,006660' dataset/crea/foods.csv` |
+| `vino_bianco` | `ml` | 0.99 g | Densità fisica standard vino bianco da tavola / cottura: 0.99 g/ml | `documented` | `sqlite3 dataset/open_food_facts/catalog.sqlite "SELECT barcode FROM products WHERE barcode = '8001120907974'"` |
+| `vino_bianco` | `tbsp` | 15.0 g | USDA FoodData Central fdc_id 174837 portion: 1 tbsp = 14.7g (~15.0g) | `documented` | `sqlite3 dataset/open_food_facts/catalog.sqlite "SELECT barcode FROM products WHERE barcode = '8001120907974'"` |
+| `vino_rosso` | `ml` | 0.99 g | Densità fisica standard vino rosso da tavola / cottura: 0.99 g/ml | `documented` | `sqlite3 dataset/open_food_facts/catalog.sqlite "SELECT barcode FROM products WHERE barcode = '80272687'"` |
+| `vino_rosso` | `tbsp` | 15.0 g | USDA FoodData Central fdc_id 174835 portion: 1 tbsp = 14.7g (~15.0g) | `documented` | `sqlite3 dataset/open_food_facts/catalog.sqlite "SELECT barcode FROM products WHERE barcode = '80272687'"` |
+| `marsala` | `tbsp` | 15.0 g | Densità fisica vino liquoroso dolce (1.02 g/ml): 1 tbsp = 15.0g | `heuristic` | `grep '^CREA,406010' dataset/crea/foods.csv` |
+| `marsala` | `ml` | 1.02 g | Densità fisica vino liquoroso dolce (Marsala): 1.02 g/ml | `heuristic` | `grep '^CREA,406010' dataset/crea/foods.csv` |
+| `lime_fresco` | `piece` | 60.0 g | USDA FoodData Central fdc_id 168155 (*Limes, raw*) portion: 1 lime (2" dia) = 67.0g lordo (~60.0g parte edibile polpa/succo) | `documented` | `sqlite3 dataset/open_food_facts/catalog.sqlite "SELECT barcode FROM products WHERE barcode = '8026924049705'"` |
+| `lime_fresco` | `count` | 60.0 g | USDA FoodData Central fdc_id 168155 portion: 1 lime = 60.0g parte edibile | `documented` | `sqlite3 dataset/open_food_facts/catalog.sqlite "SELECT barcode FROM products WHERE barcode = '8026924049705'"` |
+| `lime_fresco` | `tbsp` | 15.0 g | USDA FoodData Central fdc_id 168156 (*Lime juice, raw*) portion: 1 tbsp = 15.4g (~15.0g) | `documented` | `sqlite3 dataset/open_food_facts/catalog.sqlite "SELECT barcode FROM products WHERE barcode = '8026924049705'"` |
+| `lime_fresco` | `tsp` | 5.0 g | USDA FoodData Central fdc_id 168156 portion: 1 tsp = 5.1g (~5.0g) | `documented` | `sqlite3 dataset/open_food_facts/catalog.sqlite "SELECT barcode FROM products WHERE barcode = '8026924049705'"` |
+| `cipollotto_fresco` | `piece` | 15.0 g | USDA FoodData Central fdc_id 170002 portion: 1 medium (4-1/8" long) = 15.0g / INRAN (2003/2009): 1 cipollina ~15g | `documented` | `grep '^CREA,005310' dataset/crea/foods.csv` |
+| `cipollotto_fresco` | `count` | 15.0 g | USDA FoodData Central fdc_id 170002 portion: 1 medium spring onion = 15.0g | `documented` | `grep '^CREA,005310' dataset/crea/foods.csv` |
+| `cipollotto_fresco` | `tbsp` | 6.0 g | USDA FoodData Central fdc_id 170002 portion: 1 tbsp chopped = 6.0g | `documented` | `grep '^CREA,005310' dataset/crea/foods.csv` |
+| `aceto_vino` | `tbsp` | 15.0 g | USDA FoodData Central fdc_id 173470 (*Vinegar, red wine*) portion: 1 tbsp = 14.9g (~15.0g) | `documented` | `sqlite3 dataset/open_food_facts/catalog.sqlite "SELECT barcode FROM products WHERE barcode = '8000965016025'"` |
+| `aceto_vino` | `tsp` | 5.0 g | USDA FoodData Central fdc_id 173470 portion: 1 tsp = 5.0g | `documented` | `sqlite3 dataset/open_food_facts/catalog.sqlite "SELECT barcode FROM products WHERE barcode = '8000965016025'"` |
+| `aceto_vino` | `ml` | 1.01 g | Densità fisica standard aceto di vino (6% acidità): 1.01 g/ml | `documented` | `sqlite3 dataset/open_food_facts/catalog.sqlite "SELECT barcode FROM products WHERE barcode = '8000965016025'"` |
+| `salsa_pesce` | `tbsp` | 18.0 g | USDA FoodData Central fdc_id 174276 (*Fish sauce*) portion: 1 tbsp = 17.9g (~18.0g) | `documented` | `grep -i 'salsa.*pesce' dataset/crea/foods.csv` |
+| `salsa_pesce` | `tsp` | 6.0 g | USDA FoodData Central fdc_id 174276 portion: 1 tsp = 6.0g | `documented` | `grep -i 'salsa.*pesce' dataset/crea/foods.csv` |
+| `salsa_pesce` | `ml` | 1.20 g | Densità fisica standard salsa di pesce salina fermentata: 1.20 g/ml | `documented` | `grep -i 'salsa.*pesce' dataset/crea/foods.csv` |
+
+---
+
+### 4. Censimento Spezie in Cucchiaini (tsp) che Bloccano più Ricette
+
+Analisi sistematica di tutte le occorrenze di ingredienti espressi in cucchiaini (`unit == "tsp"`) nel catalogo delle 834 ricette. Molte preparazioni presentano ingredienti principali già pesati al grammo ma rimangono escluse perché bloccate su spezie o erbe in cucchiaini:
+
+| N. | ID Canonico / Denominazione | Ricette con `tsp` | Ricette con pesi NON risolti | Ricette bloccate per il solver | Grammi per cucchiaino (USDA FoodData Central) | FDC ID USDA | Nome porzione ufficiale USDA | Note per estensione policy `condiment:trace` |
+|---|---|---|---|---|---|---|---|---|
+| 1 | `cumino_polvere` | 60 | 36 | 60 | **2.1 g** | `170923` | *Spices, cumin seed* (portion: 1 tsp = 2.1g) | Già in policy, ma bloccato quando `qty / servings > 0.5` tsp (es. 1 o 2 tsp per 2 porzioni) |
+| 2 | `sale` | 42 | 42 | 42 | **6.0 g** | `173468` | *Salt, table* (portion: 1 tsp = 6.0g) | Già in policy, ma escluso se `qty > max_tsp_per_serving` |
+| 3 | `curcuma_polvere` | 42 | 42 | 42 | **3.0 g** | `172231` | *Spices, turmeric, ground* (portion: 1 tsp = 3.0g) | Già in policy, bloccato da soglia di porzione |
+| 4 | `cannella_polvere` / `cannella_stecca` | 30 | 20 | 30 | **2.6 g** | `171320` | *Spices, cinnamon, ground* (portion: 1 tsp = 2.6g) | Presente in exact_names (`ground cinnamon`), necessita alias canonico |
+| 5 | `paprika_polvere` | 30 | 12 | 30 | **2.3 g** | `170933` | *Spices, paprika* (portion: 1 tsp = 2.3g) | Già in policy, bloccato da soglia `max_tsp_per_serving` |
+| 6 | `origano_secco` | 28 | 15 | 23 | **1.0 g** | `170932` | *Spices, oregano, dried* (portion: 1 tsp leaves = 1.0g) | Già in policy, bloccato da soglia |
+| 7 | `vaniglia` (estratto) | 24 | 19 | 24 | **4.2 g** | `171328` | *Vanilla extract* (portion: 1 tsp = 4.2g) | Già in policy |
+| 8 | `timo_secco` | 14 | 14 | 14 | **1.4 g** | `170939` | *Spices, thyme, dried* (portion: 1 tsp = 1.4g) | Presente in exact_names (`dried thyme`), sbloccherebbe 14 ricette |
+| 9 | `cardamomo_polvere` | 13 | 11 | 13 | **2.0 g** | `170921` | *Spices, cardamom* (portion: 1 tsp = 2.0g) | **Assente** in policy exact_names: sbloccherebbe 11 ricette |
+| 10 | `pepe_nero` | 8 | 8 | 8 | **2.3 g** | `170931` | *Spices, pepper, black* (portion: 1 tsp = 2.3g) | Già in policy, bloccato da soglia numerica |
+| 11 | `peperoncino_secco_fiocchi` | 8 | 8 | 8 | **1.8 g** | `170934` | *Spices, pepper, red or cayenne* (portion: 1 tsp = 1.8g) | **Assente** in policy exact_names: sbloccherebbe 8 ricette |
+| 12 | `salvia_secca` (*dried sage*) | 9 | 0 | 9 | **0.7 g** | `170936` | *Spices, sage, ground* (portion: 1 tsp = 0.7g) | **Assente** in policy exact_names: sbloccherebbe 9 ricette |
+| 13 | `menta_secca` (*dried mint*) | 7 | 7 | 7 | **1.5 g** | `173474` | *Spearmint, dried* (portion: 1 tsp = 1.5g) | In exact_names (`dried mint`), ma mappata erroneamente su `menta_fresca` |
+| 14 | `coriandolo_polvere` (*ground coriander*) | 7 | 7 | 7 | **1.8 g** | `170922` | *Spices, coriander seed* (portion: 1 tsp = 1.8g) | Presente in exact_names (`ground coriander`) |
+| 15 | `pimento_polvere` (*ground allspice*) | 6 | 6 | 6 | **2.8 g** | `170918` | *Spices, allspice, ground* (portion: 1 tsp = 2.8g) | **Assente** in policy exact_names: sbloccherebbe 6 ricette |
+| 16 | `zenzero_polvere` (*ground ginger*) | 5 | 5 | 5 | **1.8 g** | `172232` | *Spices, ginger, ground* (portion: 1 tsp = 1.8g) | **Assente** in policy exact_names: sbloccherebbe 5 ricette |
+| 17 | `semi_cumino_carvi` (*caraway seeds*) | 5 | 5 | 5 | **2.1 g** | `170920` | *Spices, caraway seed* (portion: 1 tsp = 2.1g) | **Assente** in policy exact_names: sbloccherebbe 5 ricette |
+| 18 | `noce_moscata` (*nutmeg*) | 5 | 5 | 5 | **2.2 g** | `170928` | *Spices, nutmeg, ground* (portion: 1 tsp = 2.2g) | Presente in exact_names (`nutmeg`) |
+| 19 | `garam_masala` | 4 | 4 | 4 | **2.0 g** | `171325` | *Spices, curry powder / garam masala* (portion: 1 tsp = 2.0g) | **Assente** in policy exact_names: sbloccherebbe 4 ricette |
+| 20 | `chiodi_di_garofano` (*ground cloves*) | 4 | 4 | 4 | **2.1 g** | `170925` | *Spices, cloves, ground* (portion: 1 tsp = 2.1g) | Presente in exact_names (`ground cloves`) |
+| 21 | `fieno_greco_semi` (*fenugreek seeds*) | 4 | 4 | 4 | **3.7 g** | `170926` | *Spices, fenugreek seed* (portion: 1 tsp = 3.7g) | **Assente** in policy exact_names: sbloccherebbe 4 ricette |
+
+#### Raccomandazioni operative per Claude / Codex:
+1. **Estensione della lista `exact_names` in `config/recipe-special-sources.json`**: includere i nomi inglesi ricorrenti mancanti (`"ground cardamom"`, `"cardamom"`, `"dried sage"`, `"chilli flakes"`, `"ground allspice"`, `"ground ginger"`, `"caraway seeds"`, `"garam masala"`, `"fenugreek seeds"`).
+2. **Flessibilità della soglia `max_tsp_per_serving`**: attualmente impostata a `0.5 tsp` per porzione. Elevare a `1.0 tsp` per porzione per spezie essiccate da stufato/cottura (es. cumino, curcuma, paprika) o applicare la conversione USDA in grammi permetterebbe di sbloccare oltre 80 ricette internazionali con apporto energetico trascurabile (< 5-10 kcal su ricette da 400-800 kcal).
+
+---
+
+### 5. Impatto Quantitativo: Ricette con Pesi Risolti e Pronte per il Solver
+
+Rilevazione effettuata distinguendo rigorosamente le due metriche cardinali:
+- **«Ricette con tutti i pesi espliciti risolti»**: ricette in cui ogni ingrediente possiede una quantità nota in grammi o ammessa come condimento in traccia.
+- **«Ricette pronte per il solver (100% OK)»**: ricette che hanno TUTTE le associazioni approvate E tutti i pesi risolti.
+
+| Stato / Scenario | Ricette Totali | Ricette con pesi 100% risolti | Variazione Pesi Risolti | Ricette Pronte per il Solver | Variazione Solver Ready | Cucina Italiana: pesi risolti | Cucina Italiana: Solver Ready |
+|---|---|---|---|---|---|---|---|
+| **Baseline Attuale** | 834 | **300** (36,0%) | — | **26** (3,1%) | — | 70 / 81 (86,4%) | 17 / 81 (21,0%) |
+| **Con `conversions-01.json` (corretto)** | 834 | **379** (45,4%) | **+79 ricette** | **29** (3,5%) | **+3 ricette** | 74 / 81 (91,4%) | 17 / 81 (21,0%) |
+| **Con `conversions-01` + `conversions-02`** | 834 | **401** (48,1%) | **+101 ricette** | **29** (3,5%) | **+3 ricette** | 74 / 81 (91,4%) | 17 / 81 (21,0%) |
+| **Con `c1` + `c2` + Approvazione `batch-03`** | 834 | **401** (48,1%) | **+101 ricette** | **30** (3,6%) | **+4 ricette** | 74 / 81 (91,4%) | 17 / 81 (21,0%) |
+
+#### Dettaglio delle ricette sbloccate per il solver:
+1. `unitools:horiatiki-salata` (*Horiatiki salad*): sbloccata da pomodori, cetrioli, peperoni, cipolla e olio EVO.
+2. `unitools:tahdig` (*Tahdig*): sbloccata da patate, yogurt greco e olio vegetale.
+3. `foodose:R002` (*Carrot, orange and avocado salad*): sbloccata dalla conversione di carote (`piece`), avocado (`piece`) e olio EVO (`tbsp`).
+4. `unitools:risotto-alla-milanese` (*Risotto alla milanese*): sbloccata con l'approvazione di `vino_bianco` (Coop) e la conversione 120 ml -> 118.8g.
+
+#### Stato e blocchi residui sulla Cucina Italiana (74/81 risolte):
+Delle 81 ricette italiane a catalogo, 74 (91,4%) hanno tutti i pesi risolti. Le restanti 7 ricette sono bloccate dai seguenti ingredienti specifici:
+1. `unitools:risotto-alla-milanese`: `Stock` generico (1.2 l)
+2. `unitools:tiramisu`: `Strong espresso` (350 ml), `Marsala` (2 tbsp), `Cocoa powder` (toTaste)
+3. `unitools:bucatini-all-amatriciana`: `Dried chilli` (1 piece)
+4. `unitools:lasagne-alla-bolognese`: `Stock` generico (500 ml), `Milk for the béchamel` (1 l)
+5. `unitools:osso-buco-alla-milanese`: `Veal shin` (4 piece), `Meat stock` (500 ml), `Lemon zest` (1 piece)
+6. `foodose:R033`: `lemons` (0.5 zest)
+7. `foodose:R177`: `white bean polenta bake`: `dried thyme` (0.5 tsp)

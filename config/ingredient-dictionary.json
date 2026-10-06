@@ -5099,6 +5099,30 @@
         "tahina",
         "pasta di sesamo"
       ]
+    },
+    "marsala": {
+      "id": "marsala",
+      "display_name_it": "Marsala (vino liquoroso)",
+      "display_name_en": "Marsala wine",
+      "category": "Bevande alcoliche",
+      "state": "vino liquoroso da dessert / cucina",
+      "synonyms_en": [
+        "marsala",
+        "marsala wine"
+      ],
+      "synonyms_it": [
+        "marsala",
+        "vino marsala"
+      ],
+      "crea_matches": {
+        "primary": {
+          "id": "406010",
+          "name": "Bevanda alcolica, Marsala tipico",
+          "match_type": "proxy",
+          "reason": "Marsala tipico CREA 406010 (proteine non dichiarate nel CSV)"
+        }
+      }
     }
   }
 }
+

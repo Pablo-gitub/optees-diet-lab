@@ -8,11 +8,17 @@
       "raw_names_covered": [
         "Chicken breast",
         "Chicken breasts",
-        "chicken breast",
-        "Cooked chicken",
-        "cooked chicken"
+        "chicken breast"
       ],
       "raw_names_excluded": [
+        {
+          "name": "Cooked chicken",
+          "reason": "Pollo già cotto: non corrisponde a voce cruda CREA 106500 (perdita d'acqua e densità energetica diversa)"
+        },
+        {
+          "name": "cooked chicken",
+          "reason": "Pollo cotto: voce cruda non applicabile"
+        },
         {
           "name": "Boneless chicken thigh",
           "reason": "Coscia di pollo disossata: taglio scuro più grasso, gruppo pollo_coscia_cruda"
@@ -405,17 +411,12 @@
         }
       ],
       "recipes_count": 10,
-      "proposed": {
-        "source": "CREA",
-        "id": "004200",
-        "name": "Fagioli, Cannellini, secchi",
-        "state": "secchi, crudi"
-      },
-      "status": "proposed",
-      "confidence": "high",
-      "rationale": "Fagioli cannellini secchi crudi CREA 004200 (314 kcal, 23.4g proteine, 1.6g grassi, 45.5g carboidrati). Riferimento per legumi secchi da reidratare e bollire.",
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "I nomi «White beans» e «Large white beans» non specificano lo stato di trasformazione: nelle ricette possono indicare fagioli cannellini secchi crudi (CREA 004200, 314 kcal/100g) oppure fagioli lessati/in scatola scolati (CREA 004210, 80 kcal/100g). Con un divario calorico di quasi 4:1 dovuto all'idratazione, la voce resta ambigua in assenza di qualifica esplicita (dried vs canned/cooked).",
       "off_candidates": [],
-      "check_query": "grep '^CREA,004200' dataset/crea/foods.csv"
+      "check_query": "grep -E '^CREA,(004200|004210)' dataset/crea/foods.csv"
     },
     {
       "canonical_id": "ceci_scatola",
@@ -691,23 +692,43 @@
       "check_query": "grep '^CREA,162000' dataset/crea/foods.csv"
     },
     {
-      "canonical_id": "grana_padano",
+      "canonical_id": "parmigiano_reggiano",
       "raw_names_covered": [
-        "Parmesan"
+        "Parmesan",
+        "Parmigiano Reggiano",
+        "Parmigiano-Reggiano",
+        "parmigiano reggiano"
       ],
-      "raw_names_excluded": [],
+      "raw_names_excluded": [
+        {
+          "name": "Grana Padano",
+          "reason": "Grana Padano DOP: formaggio a pasta grana distinto, disciplinare e stagionatura diversi (voce grana_padano)"
+        }
+      ],
       "recipes_count": 21,
       "proposed": {
-        "source": "CREA",
-        "id": "162410",
-        "name": "Grana Padano, DOP",
-        "state": "formaggio stagionato"
+        "source": "Open Food Facts",
+        "id": "20815004",
+        "name": "Parmesan Parmigiano Reggiano · Consorzio Latterie",
+        "state": "formaggio DOP stagionato grattugiato / scaglie"
       },
       "status": "proposed",
       "confidence": "high",
-      "rationale": "Grana Padano DOP CREA 162410 (392 kcal, 33.9g proteine, 28.5g grassi, 0.0g carboidrati). Voce standard per formaggi duri italiani a pasta grana (Parmigiano / Grana).",
-      "off_candidates": [],
-      "check_query": "grep '^CREA,162410' dataset/crea/foods.csv"
+      "rationale": "Conforme alla decisione della verifica delle ricette candidate: «Parmesan» corrisponde al Parmigiano Reggiano DOP. La voce CREA 166000 ha il campo carboidrati disponibili vuoto; viene pertanto proposto il prodotto verificato OFF 20815004 (Consorzio Latterie) con tutti e 4 i macro completi (402 kcal, 32.0g proteine, 30.0g lipidi, 0.0g carboidrati).",
+      "off_candidates": [
+        {
+          "barcode": "20815004",
+          "name": "Parmesan Parmigiano Reggiano",
+          "brands": "Consorzio Latterie",
+          "nutrients": {
+            "kcal_100g": 402.0,
+            "protein_g_100g": 32.0,
+            "fat_g_100g": 30.0,
+            "carbs_available_g_100g": 0.0
+          }
+        }
+      ],
+      "check_query": "sqlite3 dataset/open_food_facts/catalog.sqlite \"SELECT barcode, name, brands FROM products WHERE barcode = '20815004'\""
     },
     {
       "canonical_id": "noci",
@@ -811,17 +832,12 @@
       ],
       "raw_names_excluded": [],
       "recipes_count": 19,
-      "proposed": {
-        "source": "CREA",
-        "id": "140300",
-        "name": "Panna da montare, 35% di lipidi",
-        "state": "fresca"
-      },
-      "status": "proposed",
-      "confidence": "high",
-      "rationale": "Panna da montare 35% lipidi CREA 140300 (337 kcal, 2.3g proteine, 35.0g grassi, 3.4g carboidrati). Valore standard per panna fresca intera usata in cucina.",
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "Il termine generico «Cream» nelle ricette non specifica la tipologia né la frazione lipidica: può riferirsi a panna da cucina/single cream (CREA 140400, 23% lipidi, 233 kcal/100g) oppure a panna da montare/whipping cream (CREA 140300, 35% lipidi, 337 kcal/100g) o double cream britannica (48% lipidi). Con un divario lipidico e calorico marcato, la voce generica resta ambigua senza specifica.",
       "off_candidates": [],
-      "check_query": "grep '^CREA,140300' dataset/crea/foods.csv"
+      "check_query": "grep -E '^CREA,(140300|140400)' dataset/crea/foods.csv"
     },
     {
       "canonical_id": "cipollotto_fresco",
@@ -1436,17 +1452,12 @@
       ],
       "raw_names_excluded": [],
       "recipes_count": 12,
-      "proposed": {
-        "source": "CREA",
-        "id": "123610",
-        "name": "Tonno sott'olio, sgocciolato",
-        "state": "sott'olio, sgocciolato"
-      },
-      "status": "proposed",
-      "confidence": "high",
-      "rationale": "Tonno sott'olio sgocciolato CREA 123610 (192 kcal, 25.2g proteine, 10.1g grassi, 0.0g carboidrati). Tutti e 4 i macro completi.",
+      "proposed": null,
+      "status": "ambiguous",
+      "confidence": "low",
+      "rationale": "Il nome «Tinned tuna» nelle ricette è generico e nelle fonti britanniche indica frequentemente tonno in salamoia o in acqua di sorgente (CREA 123550, 103 kcal, 0.3g grassi), mentre in altre preparazioni sott'olio (CREA 123610, 192 kcal, 10.1g grassi). Il divario lipidico è di oltre 30x; la voce generica rimane ambigua in assenza di liquido di governo specificato (in brine vs in oil).",
       "off_candidates": [],
-      "check_query": "grep '^CREA,123610' dataset/crea/foods.csv"
+      "check_query": "grep -E '^CREA,(123550|123610)' dataset/crea/foods.csv"
     },
     {
       "canonical_id": "pasta_fillo",
