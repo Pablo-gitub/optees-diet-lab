@@ -207,6 +207,60 @@
       ],
       "parameter_provenance": "local_demo_assumptions",
       "notes": "Parametri demo, recupero finale incluso; richiede conferma personale di idoneità agli intervalli intensi."
+    },
+    {
+      "compatible_goals": [
+        "hypertrophy",
+        "muscular_endurance",
+        "health"
+      ],
+      "intensity": {
+        "kind": "rir",
+        "min": 2,
+        "max": 3
+      },
+      "source_refs": [
+        "acsm_rt_2026"
+      ],
+      "parameter_provenance": "local_demo_assumptions",
+      "evidence": "heuristic_pending_8.2",
+      "id": "superset_full_body",
+      "name": "Superserie a corpo intero",
+      "format": "superset",
+      "defaults_demo": {
+        "sets": 2,
+        "reps": 8,
+        "seconds_per_rep": 3,
+        "rest_seconds": 60
+      },
+      "notes": "Push-up e rematore a corpo libero alternati (spinta/trazione), poi squat; dosi e tempi euristici da confermare."
+    },
+    {
+      "compatible_goals": [
+        "hypertrophy",
+        "muscular_endurance",
+        "health"
+      ],
+      "intensity": {
+        "kind": "rir",
+        "min": 2,
+        "max": 3
+      },
+      "source_refs": [
+        "acsm_rt_2026"
+      ],
+      "parameter_provenance": "local_demo_assumptions",
+      "evidence": "heuristic_pending_8.2",
+      "id": "timed_compound_circuit",
+      "name": "Circuito multiarticolare a tempo",
+      "format": "circuit",
+      "defaults_demo": {
+        "rounds": 3,
+        "work_seconds": 40,
+        "station_transition_seconds": 15,
+        "round_rest_seconds": 60
+      },
+      "notes": "Squat, piegamenti e rematore: lavoro a tempo, nessuna equivalenza inventata con serie efficaci."
     }
   ]
 }

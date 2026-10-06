@@ -45,7 +45,7 @@ class WorkoutSessionsTests(unittest.TestCase):
         self.assertTrue(any(x['id']=='emom_bodyweight' for x in missing))
         self.assertFalse(any(x['id']=='emom_bodyweight' for x in sessions))
     def test_generated_sessions_have_nonoverlapping_complete_timelines(self):
-        sessions,missing=build_sessions(self.index);self.assertEqual(len(sessions),11);self.assertEqual(missing,[])
+        sessions,missing=build_sessions(self.index);self.assertEqual(len(sessions),13);self.assertEqual(missing,[])
         for s in sessions:validate_session(s);self.assertEqual(s['duration_seconds'],sum(e['duration_seconds'] for e in s['timeline']))
         broken=copy.deepcopy(sessions[0]);broken['timeline'][1]['start_seconds']+=1
         with self.assertRaises(ValueError):validate_session(broken)

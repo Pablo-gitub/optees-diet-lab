@@ -21,6 +21,14 @@ def read(db,user):
     settings=dict(defaults(),**json.loads(row['settings'])) if row else defaults()
     owner=db.execute('SELECT profile FROM users WHERE id=?',(user,)).fetchone()
     settings['strength_anchors']=copy.deepcopy(json.loads(owner['profile']).get('goals',{}).get('strength_anchors',[])) if owner else []
+    settings['_load_history']=[dict(r) for r in db.execute('SELECT s.exercise_id,s.reps,s.kg,s.rir,s.rpe,w.date FROM set_log s JOIN workout_log w ON w.id=s.workout_log_id WHERE w.user_id=? ORDER BY w.date DESC,s.id DESC LIMIT 500',(user,))][::-1]
+    from diary_service import local_today
+    today=local_today();monday=(today-__import__('datetime').timedelta(days=today.weekday())).isoformat()
+    references={}
+    for row in db.execute('SELECT s.date,s.snapshot FROM planned_session s JOIN week_plan w ON w.id=s.week_plan_id WHERE w.user_id=? AND s.date<? ORDER BY s.date,s.id',(user,monday)):
+        for exercise in json.loads(row['snapshot']).get('exercises',[]):
+            if exercise.get('load_kg') is not None and exercise['load_kg']>0:references[exercise['source_id']]=dict(load_kg=exercise['load_kg'],date=row['date'])
+    settings['_load_references']=references
     return settings
 
 
@@ -92,10 +100,28 @@ def personalize(public,settings):
             if variant is None:pending.append('variants.'+key)
             elif not variant['executable']:feasible=False;reasons.append(dict(exercise_id=key,code='variant_not_executable'))
             load=settings['starting_loads_kg'].get(key)
+            from load_curve import curve,prescribe
+            from diary_service import local_today
+            anchor=next((a for a in settings.get('strength_anchors',[]) if a['exercise_key']==key),None)
+            history=[r for r in settings.get('_load_history',[]) if r['exercise_id']==key]
+            model=curve(anchor,history,local_today())
+            intensity=s['intensity'];rir=intensity.get('target',intensity.get('min',2)) if intensity.get('kind')=='rir' else 2
+            if not isinstance(rir,(int,float)):rir=2
+            prescription=prescribe(model,e.get('repetitions'),rir,settings['available_loads_kg'])
+            reference=settings.get('_load_references',{}).get(key)
+            if prescription['status']=='available' and reference:
+                cap=reference['load_kg']*1.05
+                allowed=[w for w in settings['available_loads_kg'] if w<=min(cap,prescription['estimated_kg'])+1e-9]
+                prescription.update(max_weekly_load_kg=cap,reference=reference)
+                if allowed:prescription['load_kg']=max(allowed)
+                else:prescription.update(status='unavailable',reason='Nessun peso disponibile entro il limite settimanale del 5%.')
+            if load is None and prescription['status']=='available':load=prescription['load_kg']
+            e.update(load_curve=model,load_prescription=prescription,load_source='manual' if key in settings['starting_loads_kg'] and settings['starting_loads_kg'][key] is not None else 'personal_curve')
             if 'manubri' in required:
                 if not settings['available_loads_kg']:pending.append('available_loads_kg')
                 if load is None or load<=0:pending.append('starting_loads_kg.'+key)
             e.update(name=base['name'],exercise_id=key,media=base['media'],load_kg=load,load_basis='kg_per_dumbbell' if 'manubri' in required else 'external_load_kg',variant=variant['variant'] if variant else None,executable=variant['executable'] if variant else None,requirements=sorted(required))
+        s['efficiency']=dict(hard_sets_per_minute=sum(e.get('sets',0) for e in s['exercises'])/s['duration_minutes_assumed'] if s['format'] in ('sets','emom','superset') else None,muscles_per_minute=len({m for key in movements for m in index[key]['primary_muscles']})/s['duration_minutes_assumed'],basis='dose_proxy_not_effectiveness')
         s.update(title=s['name'],equipment_feasible=feasible,high_intensity_ready=settings['high_intensity_ready'],pending_configuration=sorted(set(pending)),personal_configuration_complete=feasible and not pending,personal_level=settings['level'],personal_overrides=copy.deepcopy(overrides),parameter_provenance='user_overrides_with_demo_defaults' if overrides else 'local_demo_assumptions')
         if not feasible:unavailable.append(dict(id=s['id'],reasons=reasons))
         sessions.append(s)
@@ -106,6 +132,7 @@ def personalize(public,settings):
         feasible=required.issubset(equipment) and (key!='inverted-row' or settings['australian_pullups_setup_verified']) and (variant is None or variant['executable'])
         e.update(requirements=sorted(required),equipment_feasible=feasible,variant=variant['variant'] if variant else None,executable=variant['executable'] if variant else None,load_kg=settings['starting_loads_kg'].get(key))
     public['pending_custom_equipment']=[dict(equipment=e,reason='Nessun protocollo con prerequisiti verificati nel catalogo corrente') for e in ('aqua_bag','aqua_tank') if e in equipment]
+    for protocol in public['protocols']:protocol['efficiency_examples']=[dict(session_id=s['id'],**s['efficiency']) for s in sessions if s['protocol_id']==protocol['id']]
     public.update(templates=sessions,unavailable_sessions=unavailable,configuration=copy.deepcopy(settings))
     return public
 
@@ -120,7 +147,7 @@ def view(settings,public):
         if 'manubri' in e['requirements']:
             if not settings['available_loads_kg'] and settings.get('equipment') and 'manubri' in settings['equipment']:
                 if not any(m['field']=='available_loads_kg' for m in missing):missing.append(dict(field='available_loads_kg',prompt='Quali pesi per singolo manubrio hai disponibili?'))
-            if settings['starting_loads_kg'].get(key) is None and settings.get('equipment') and 'manubri' in settings['equipment']:missing.append(dict(field='starting_loads_kg.'+key,prompt='Qual è il carico di partenza per singolo manubrio per '+e['name']+'?'))
+            if settings['starting_loads_kg'].get(key) is None and not any(x.get('load_kg') is not None for s in public['templates'] for x in s['exercises'] if x['source_id']==key) and settings.get('equipment') and 'manubri' in settings['equipment']:missing.append(dict(field='starting_loads_kg.'+key,prompt='Qual è il carico di partenza per singolo manubrio per '+e['name']+'?'))
     if settings.get('equipment') and 'barra_trazioni' in settings['equipment'] and not settings['australian_pullups_setup_verified']:missing.append(dict(field='australian_pullups_setup_verified',prompt='Hai verificato la barra regolabile per trazioni australiane con i piedi a terra?'))
     if settings.get('equipment') and 'cyclette' in settings['equipment'] and not settings['high_intensity_ready']:missing.append(dict(field='high_intensity_ready',prompt='Se vuoi usare intervalli ad alta intensità, hai verificato di poterli eseguire?',protocol_ids=['cardio_hiit'],optional=True))
     return dict(settings=settings,missing_fields=missing,equipment_options=list(EQUIPMENT),variant_options=VARIANTS,protocols=public['protocols'],sessions=[dict(id=s['id'],demo=s['demo'],equipment_feasible=s['equipment_feasible'],personal_configuration_complete=s['personal_configuration_complete'],pending_configuration=s['pending_configuration']) for s in public['templates']])

@@ -918,7 +918,7 @@ async def update_workout_config(request:Request):
         # Compile every overridden protocol before committing; invalid EMOM recovery is rejected.
         profile=owner_profile(user);profile['_workout_settings']=settings
         public=workouts.catalog(profile)
-        db.execute('INSERT INTO workout_configuration(user_id,settings,updated) VALUES(?,?,?) ON CONFLICT(user_id) DO UPDATE SET settings=excluded.settings,updated=excluded.updated',(user['id'],json.dumps(settings),workouts.now()))
+        db.execute('INSERT INTO workout_configuration(user_id,settings,updated) VALUES(?,?,?) ON CONFLICT(user_id) DO UPDATE SET settings=excluded.settings,updated=excluded.updated',(user['id'],json.dumps({k:v for k,v in settings.items() if k in workout_settings.defaults()}),workouts.now()))
         result=diary.day_view(db,user['id'],profile,diary.local_today().isoformat())
         result['workout_configuration']=workout_settings.view(settings,public)
         return result

@@ -27,7 +27,7 @@ def compile_session(identifier, name, protocol, movements, index, overrides=None
     if fmt in ['continuous','intervals'] and any(e['source_id'] not in ['stationary-bike','rowing-machine','incline-treadmill-walk','elliptical-trainer'] for e in exercises):raise ValueError('Cardio protocol needs cardio movements')
     if fmt in ['continuous','intervals','isometric'] and len(exercises)!=1:raise ValueError('This protocol requires one movement')
     if fmt=='isometric' and movements!=['plank']:raise ValueError('Isometric compatibility not reviewed')
-    if fmt in ['sets','circuit','emom'] and any(e['source_id']=='plank' or e['source_id'] in ['stationary-bike','rowing-machine','incline-treadmill-walk','elliptical-trainer'] for e in exercises):raise ValueError('Dynamic protocol compatibility not reviewed')
+    if fmt in ['sets','superset','circuit','emom'] and any(e['source_id']=='plank' or e['source_id'] in ['stationary-bike','rowing-machine','incline-treadmill-walk','elliptical-trainer'] for e in exercises):raise ValueError('Dynamic protocol compatibility not reviewed')
     timeline=[];clock=0
     def event(kind,seconds,exercise=None,**details):
         nonlocal clock
@@ -45,6 +45,17 @@ def compile_session(identifier, name, protocol, movements, index, overrides=None
                 event('hold' if fmt=='isometric' else 'work',work,key,set_number=series+1)
                 if series<params['sets']-1:event('rest',params['rest_seconds'],key)
             if j<len(exercises)-1:event('transition',transition_seconds)
+    elif fmt=='superset':
+        work=params['reps']*params['seconds_per_rep']
+        for e in exercises:dose.append(dict(source_id=e['source_id'],sets=params['sets'],repetitions=params['reps'],work_seconds_per_set=work,rest_seconds_between_sets=params['rest_seconds']))
+        for start in range(0,len(exercises),2):
+            pair=exercises[start:start+2]
+            for series in range(params['sets']):
+                for j,e in enumerate(pair):
+                    event('work',work,e['source_id'],set_number=series+1)
+                    if j<len(pair)-1:event('transition',transition_seconds)
+                if series<params['sets']-1:event('rest',params['rest_seconds'])
+            if start+2<len(exercises):event('transition',transition_seconds)
     elif fmt=='circuit':
         for e in exercises:dose.append(dict(source_id=e['source_id'],rounds=params['rounds'],work_seconds_per_round=params['work_seconds'],repetitions=None))
         for round_ in range(params['rounds']):
@@ -75,7 +86,7 @@ def compile_session(identifier, name, protocol, movements, index, overrides=None
     totals={kind:sum(e['duration_seconds'] for e in timeline if e['kind']==kind) for kind in set(e['kind'] for e in timeline)}
     # Timed circuits/holds do not invent effective hypertrophy sets.
     coverage={}
-    if fmt in ['sets','emom']:
+    if fmt in ['sets','superset','emom']:
         for e in exercises:
             sets=params.get('sets',params.get('rounds'))
             for muscle in e['primary_muscles']:coverage[muscle]=coverage.get(muscle,0)+sets
@@ -83,12 +94,13 @@ def compile_session(identifier, name, protocol, movements, index, overrides=None
     pending=['personal_level_and_variant','personal_intensity_confirmation']
     if any(e['requirements'] and 'manubri' in e['requirements'] for e in exercises):pending.append('load_kg_and_available_weights')
     if fmt=='intervals':pending.append('high_intensity_readiness')
-    return dict(id=identifier,name=name,protocol_id=protocol['id'],format=fmt,compatible_goals=protocol['compatible_goals'],demo=True,status='draft_requires_personal_configuration',equipment_feasible=True,pending_configuration=pending,parameters=params,intensity=copy.deepcopy(protocol['intensity']),exercises=dose,timeline=timeline,time_breakdown_seconds=totals,duration_seconds=clock,duration_minutes_assumed=clock/60,source_refs=protocol['source_refs'],parameter_provenance='local_demo_assumptions',score_vector=dict(muscle_coverage_proxy=coverage,time_cost_minutes=clock/60,energy_kcal=None,adherence=None,performance=None),resistance_session=fmt in ['sets','circuit','emom','isometric'],cardio_work_seconds=sum(e['duration_seconds'] for e in timeline if e['kind']=='work') if fmt in ['continuous','intervals'] else 0)
+    return dict(id=identifier,name=name,protocol_id=protocol['id'],format=fmt,compatible_goals=protocol['compatible_goals'],demo=True,status='draft_requires_personal_configuration',equipment_feasible=True,pending_configuration=pending,parameters=params,intensity=copy.deepcopy(protocol['intensity']),exercises=dose,timeline=timeline,time_breakdown_seconds=totals,duration_seconds=clock,duration_minutes_assumed=clock/60,source_refs=protocol['source_refs'],parameter_provenance='local_demo_assumptions',score_vector=dict(muscle_coverage_proxy=coverage,time_cost_minutes=clock/60,energy_kcal=None,adherence=None,performance=None),resistance_session=fmt in ['sets','superset','circuit','emom','isometric'],cardio_work_seconds=sum(e['duration_seconds'] for e in timeline if e['kind']=='work') if fmt in ['continuous','intervals'] else 0)
 
 
 def build_sessions(index):
     catalog=json.loads((ROOT/'config/workout-protocols.json').read_text());protocols={p['id']:p for p in catalog['protocols']}
     definitions=[('strength_dumbbells','Forza con manubri','strength_sets',['dumbbell-floor-press','dumbbell-deadlift']),('hypertrophy_basic','Massa · corpo libero','hypertrophy_sets',['bodyweight-squat','push-up','inverted-row']),('endurance_basic','Resistenza muscolare','endurance_sets',['bodyweight-squat','push-up','inverted-row']),('circuit_bodyweight','Circuito corpo libero','circuit_basic',['bodyweight-squat','push-up','inverted-row']),('emom_bodyweight','EMOM corpo libero','emom_basic',['bodyweight-squat','push-up','inverted-row']),('isometric_core','Isometria · plank','isometric_basic',['plank'])]
+    definitions.extend([('supersets_full_body','Superserie a corpo intero','superset_full_body',['push-up','inverted-row','bodyweight-squat']),('timed_compound_circuit','Circuito multiarticolare a tempo','timed_compound_circuit',['bodyweight-squat','push-up','inverted-row'])])
     for key,name in [('stationary-bike','Cyclette'),('rowing-machine','Vogatore'),('incline-treadmill-walk','Camminata inclinata'),('elliptical-trainer','Ellittica')]:definitions.append(('continuous_'+key,name+' continuo','cardio_continuous',[key]))
     definitions.append(('interval_bike','Cyclette a intervalli','cardio_hiit',['stationary-bike']))
     sessions=[];unavailable=[]

@@ -447,3 +447,76 @@ netto, non come cibo ingerito. Una voce non ancora confermata non è uno zero:
 ```json
 {"deviations":[{"date":"2026-10-06","slot":"activity","kind":"activity","planned_session_id":42,"planned_expenditure_kcal":{"min":106.4,"max":197.6},"difference_kcal":{"min":106.4,"max":197.6},"provenance":{"source":"skipped_planned_activity","energy_source":"compendium_met_net","net":true}}]}
 ```
+
+### 8.4 — carichi, due sedute e poco tempo
+
+Le risposte di `GET /api/workouts/catalog` aggiungono ad ogni esercizio
+`load_curve`, `load_prescription`, `load_source`. Un carico manuale dichiarato
+resta valido e ha precedenza; in sua assenza il sistema usa la curva e i pesi
+disponibili. La curva non inventa il carico degli esercizi a tempo o senza dati.
+
+```json
+{"exercise_id":"dumbbell-floor-press","load_kg":20,"load_source":"personal_curve","load_curve":{"status":"available","M":30.4347826087,"k":23,"reference_M":30.4347826087,"week_start":"2026-10-05","parameters":{"version":"load-curve-v1","fallback_k":30,"k_min":10,"k_max":60,"ema_alpha":0.3,"last_sets":12,"winsor_fraction":0.2,"max_weekly_increase":0.05,"evidence":"heuristic_pending_8.2"},"warnings":[]},"load_prescription":{"status":"available","load_kg":20,"estimated_kg":21.2121212121,"reps":8,"rir":2,"rounding":"down"}}
+```
+
+Uno o due riferimenti risolvono `carico=M/(1+r/k)`. Con due serie incoerenti o
+`k` fuori da **10–60** si torna a 30 e si avvisa. Questo intervallo, il limite
+5%, l'EMA 0,3 e la winsorizzazione ±20% sono euristiche in attesa di 8.2.
+I registri aggiornano M sulle ultime 12 serie con kg, ripetizioni e RIR/RPE;
+il riferimento della settimana conclusa resta fisso durante la settimana.
+Un'ulteriore protezione usa l'ultimo carico prescritto nella settimana conclusa:
+non si supera il suo 105%, prima dell'arrotondamento. Rigenerare non aumenta il
+limite. Una griglia di pesi troppo larga può quindi mantenere il carico invariato.
+
+```json
+{"load_prescription":{"status":"unavailable","reason":"Nessun carico disponibile per difetto della stima.","estimated_kg":3.8}}
+```
+
+`POST /api/workouts/{log_id}/sets` accetta anche l'RPE della **serie**, salvato
+insieme a `RIR=clamp(10-RPE,0,4)`; un RPE presente prevale sul RIR inviato.
+Senza entrambi, la serie non alimenta la curva. I registri personali restano
+isolati per utente.
+
+```json
+{"exercise_id":"dumbbell-floor-press","set_no":1,"reps":8,"kg":20,"rpe":8}
+```
+
+Risposta `DayView` invariata; `GET /api/workouts/logs/{id}` espone:
+
+```json
+{"sets":[{"exercise_id":"dumbbell-floor-press","set_no":1,"reps":8,"kg":20,"rpe":8,"rir":2}]}
+```
+
+I limiti già salvati in `goals.activity` (`max_session_minutes`,
+`max_sessions_per_day`, `min_gap_hours`) ora vincolano il MILP. Il limite di
+**10 serie per muscolo e seduta** usa il proxy esistente dei protocolli con serie;
+non attribuisce serie efficaci inventate ai circuiti a tempo. Non si propone
+un limite fisiologico alla durata. Le sessioni registrate sono conservate.
+
+Con due sedute ammesse, `workout.start_times[date]` può essere una coppia di orari.
+Il solver controlla il divario fra **fine della prima e inizio della seconda**,
+in Europa/Roma anche nel cambio d'ora. Senza una coppia esplicita assegna 09:00
+(o l'orario singolo fornito), poi massimo di durata + pausa minima. Se non entra
+una seconda fascia nella giornata, resta una sola fascia. Nessun hard bound
+viene rilassato; volume soft non raggiunto compare in `volume_coverage.unmet`
+e `explanation.tradeoffs`. La tabella conserva due sessioni separate e i loro log.
+
+```json
+{"workout":{"start_times":{"2026-10-06":["08:00","14:00"]},"sessions_min":2,"sessions_max":2}}
+```
+
+```json
+{"workout_sessions":[{"date":"2026-10-06","session_id":"strength_dumbbells","start_time":"08:00","duration_seconds":1380},{"date":"2026-10-06","session_id":"strength_dumbbells","start_time":"14:00","duration_seconds":1380}],"volume_coverage":{"unmet":{},"per_session_hard_sets_proxy_limit":10,"evidence":"heuristic_pending_8.2"}}
+```
+
+Il catalogo aggiunge `superset_full_body` («Superserie a corpo intero»,
+spinta/trazione alternate poi squat) e `timed_compound_circuit` («Circuito
+multiarticolare a tempo»). Durate complete, pause e transizioni sono compilate
+come per gli altri protocolli. `efficiency` per sessione e `efficiency_examples`
+per protocollo mostrano serie/minuto (null se non definite) e muscoli/minuto,
+**proxy, non efficacia**. Con meno di 40 minuti disponibili il costo soft del
+solver favorisce questi proxy di efficienza, senza cambiare la durata hard.
+
+```json
+{"protocol_id":"superset_full_body","efficiency":{"hard_sets_per_minute":0.4166666667,"muscles_per_minute":0.4861111111,"basis":"dose_proxy_not_effectiveness"}}
+```

@@ -25,6 +25,15 @@ def migrate(db):
     INSERT OR IGNORE INTO schema_migration VALUES(2,strftime('%s','now'));
     ''')
 
+    if 'rpe' not in {r[1] for r in db.execute('PRAGMA table_info(set_log)')}:db.execute('ALTER TABLE set_log ADD COLUMN rpe REAL')
+    sql=db.execute("SELECT sql FROM sqlite_master WHERE type='table' AND name='planned_session'").fetchone()[0]
+    if 'UNIQUE(week_plan_id,date)' in sql:
+        db.executescript("""ALTER TABLE planned_session RENAME TO planned_session_single;
+        CREATE TABLE planned_session(id INTEGER PRIMARY KEY,week_plan_id INTEGER,date TEXT,session_id TEXT,minutes REAL,start_time TEXT,status TEXT,snapshot TEXT);
+        INSERT INTO planned_session SELECT * FROM planned_session_single;
+        DROP TABLE planned_session_single;
+        CREATE INDEX planned_session_week_day ON planned_session(week_plan_id,date);""")
+
 
 def catalog(profile):
     rows=json.loads((ROOT/'dataset/repdb/raw/exercises.json').read_text())['exercises']
@@ -75,7 +84,8 @@ def week_config(data):
     if cfg.get('goal') is not None and (not isinstance(cfg['goal'],str) or cfg['goal'] not in goals):raise DomainError('Obiettivo non valido')
     protocols={p['id'] for p in json.loads((ROOT/'config/workout-protocols.json').read_text())['protocols']}
     if 'allowed_protocols' in cfg and (not isinstance(cfg['allowed_protocols'],list) or any(not isinstance(p,str) or p not in protocols for p in cfg['allowed_protocols'])):raise DomainError('Protocolli non validi')
-    for key in ('sessions_min','sessions_max','strength_sessions_min','strength_sessions_max','strength_gap_days'):integer(cfg[key],0,7)
+    for key in ('sessions_min','sessions_max','strength_sessions_min','strength_sessions_max'):integer(cfg[key],0,14)
+    integer(cfg['strength_gap_days'],0,7)
     finite(cfg['weekly_minutes_max'],'Minuti settimanali',0,10080);finite(cfg['cardio_minutes_min'],'Minuti cardio',0,10080)
     if cfg['sessions_min']>cfg['sessions_max'] or cfg['strength_sessions_min']>cfg['strength_sessions_max']:raise DomainError('Limiti delle sessioni incoerenti')
     targets=cfg['muscle_targets_proxy']
@@ -85,11 +95,13 @@ def week_config(data):
         finite(value,'Obiettivo muscolare',.01,1000)
     times=data.get('start_times',{})
     if not isinstance(times,dict) or set(times)-set(dates):raise DomainError('Orari non validi')
-    for value in times.values():
+    for entries in times.values():
+      for value in entries if isinstance(entries,list) else [entries]:
         try:
             parsed=dt.time.fromisoformat(value)
             if parsed.strftime('%H:%M')!=value:raise ValueError()
         except (ValueError,TypeError):raise DomainError('Orario non valido; usa HH:MM')
+    if any(isinstance(t,list) and (not 1<=len(t)<=2 or len(t)!=len(set(t))) for t in times.values()):raise DomainError('Indica uno o due orari distinti per giornata')
     return cfg,times
 
 
@@ -108,6 +120,9 @@ async def generate_week(session,profile,data,locked_by_date=None,health=None):
             cfg['sessions_min']=cfg['sessions_max']=0;cfg['cardio_minutes_min']=0
     public['templates'].extend(activity_templates)
     cfg['max_session_minutes']=preferences.get('max_session_minutes',90)
+    cfg['max_sessions_per_day']=preferences.get('max_sessions_per_day',1)
+    cfg['min_gap_hours']=preferences.get('min_gap_hours',4)
+    cfg['start_times']=times
     cfg['health_priority']=profile.get('goals',{}).get('training_priorities',{}).get('health',0)
     cfg['activity_template_ids']=[s['id'] for s in activity_templates]
     if locked_by_date is not None:cfg['locked_by_date']=locked_by_date
@@ -123,21 +138,36 @@ async def generate_week(session,profile,data,locked_by_date=None,health=None):
         if solved['mathematical_status'] not in ('optimal','feasible'):continue
         values_verified(problem,solved)
         values={v['name']:v['value'] for v in solved['result']['variables']}
-        chosen=[dict(date=d,session_id=t['id'],minutes=display_minutes(t['duration_seconds']),duration_seconds=t['duration_seconds'],start_time=times.get(d),session=copy.deepcopy(t)) for i,(d,t) in enumerate(slots) if values[f's{i}']>.5]
+        chosen=[dict(date=d,session_id=t['id'],minutes=display_minutes(t['duration_seconds']),duration_seconds=t['duration_seconds'],start_time=t.get('_start_time',times.get(d)),session=copy.deepcopy(t)) for i,(d,t) in enumerate(slots) if values[f's{i}']>.5]
         for i,(date,template) in enumerate(slots):
             if template.get('kind')!='activity' or values[f's{i}']<=.5:continue
             minutes=round(values[f'activity_units_{i}'])*template['activity_duration']['step']
-            item=next(s for s in chosen if s['date']==date and s['session_id']==template['id'])
+            item=next(s for s in chosen if s['date']==date and s['session_id']==template['id'] and s['start_time']==template.get('_start_time'))
             item['session']=activity_service.materialize(template,minutes,profile,health)
             item.update(minutes=minutes,duration_seconds=minutes*60)
         chosen=[dict(member,date=item['date'],minutes=display_minutes(member['session']['duration_seconds']),duration_seconds=member['session']['duration_seconds'],locked=True) if item['session'].get('locked_observation') else member for item in chosen for member in item['session'].get('locked_members',[item])]
-        signature=tuple((s['date'],s['session_id']) for s in chosen)
+        for item in chosen:
+            if not item.get('locked') and item['duration_seconds']>cfg['max_session_minutes']*60+1e-6:raise DomainError('Durata della sessione oltre il limite personale')
+        for date in cfg['days']:
+            items=sorted([s for s in chosen if s['date']==date and not s.get('locked')],key=lambda s:s['start_time'] or '')
+            if len(items)>cfg['max_sessions_per_day']:raise DomainError('Numero giornaliero di sedute oltre il limite')
+            for a,b in zip(items,items[1:]):
+                if a['start_time'] is None or b['start_time'] is None:raise DomainError('Mancano gli orari delle doppie sedute')
+                start=lambda item:dt.datetime.combine(dt.date.fromisoformat(date),dt.time.fromisoformat(item['start_time']),ZoneInfo('Europe/Rome')).timestamp()
+                if start(b)-start(a)-a['duration_seconds']<cfg['min_gap_hours']*3600-1e-6:raise DomainError('Pausa fra le sedute inferiore al limite personale')
+        signature=tuple((s['date'],s['session_id'],s['start_time']) for s in chosen)
         if signature in signatures:continue
         signatures.add(signature)
         result['plans'].append(dict(role='best' if not result['plans'] else 'varied',workout_sessions=chosen,weekly_minutes=display_minutes(sum(s['duration_seconds'] for s in chosen)),weekly_duration_seconds=sum(s['duration_seconds'] for s in chosen),constraint_report=dict(verified=True,all_respected=True),explanation=dict(headline='Meno tempo' if mode=='time' else 'Maggiore copertura muscolare stimata',reasons=['Vincoli di disponibilità e recupero verificati'],tradeoffs=[])))
         plan=result['plans'][-1]
         equivalent=sum(s['session'].get('health_equivalent_factor',1 if s['session']['cardio_work_seconds'] else 0)*(s['session']['duration_seconds'] if s['session'].get('kind')=='activity' else s['session']['cardio_work_seconds'])/60 for s in chosen)
         strength_days=len({s['date'] for s in chosen if s['session']['resistance_session']})
+        coverage={}
+        for item in chosen:
+            for muscle,value in item['session']['score_vector']['muscle_coverage_proxy'].items():coverage[muscle]=coverage.get(muscle,0)+value
+        missing={m:dict(target=v,achieved=coverage.get(m,0)) for m,v in cfg['muscle_targets_proxy'].items() if coverage.get(m,0)<v}
+        if missing:plan['explanation']['tradeoffs'].append('Volume muscolare parziale con tempo, recupero e durata richiesti; obiettivi di volume sono proxy soft, limiti hard rispettati.')
+        plan['volume_coverage']=dict(unmet=missing,per_session_hard_sets_proxy_limit=10,evidence='heuristic_pending_8.2')
         plan['health_progress']=dict(moderate_equivalent_minutes=equivalent,target_minutes=150,strength_days=strength_days,target_strength_days=2,source=activity_service.HEALTH_SOURCE,score=(min(1,equivalent/150)+min(1,strength_days/2))/2)
         if cfg['health_priority'] and (equivalent<150 or strength_days<2):plan['explanation']['tradeoffs'].append('Obiettivo salute parziale nei limiti disponibili: '+str(round(equivalent))+' minuti equivalenti su 150, '+str(strength_days)+' giorni di forza su 2; nessun vincolo rilassato.')
         for item in chosen:
@@ -246,8 +276,10 @@ def mutation(db,user,profile,action,data,log_id=None):
             series=integer(data.get('set_no'),1,100)
             reps=integer(data['reps'],0,1000) if data.get('reps') is not None else None
             kg=finite(data.get('kg'),'Carico kg',0,1000,True);seconds=finite(data.get('seconds'),'Secondi',0,86400,True);rir=finite(data.get('rir'),'RIR',0,10,True)
+            set_rpe=finite(data.get('rpe'),'RPE della serie',0,10,True)
+            if set_rpe is not None:rir=max(0,min(4,10-set_rpe))
             if reps is None and seconds is None:raise DomainError('Indica ripetizioni o secondi eseguiti')
-            db.execute('INSERT INTO set_log(workout_log_id,exercise_id,set_no,reps,kg,seconds,rir) VALUES(?,?,?,?,?,?,?) ON CONFLICT(workout_log_id,exercise_id,set_no) DO UPDATE SET reps=excluded.reps,kg=excluded.kg,seconds=excluded.seconds,rir=excluded.rir',(log_id,exercise,series,reps,kg,seconds,rir))
+            db.execute('INSERT INTO set_log(workout_log_id,exercise_id,set_no,reps,kg,seconds,rir,rpe) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(workout_log_id,exercise_id,set_no) DO UPDATE SET reps=excluded.reps,kg=excluded.kg,seconds=excluded.seconds,rir=excluded.rir,rpe=excluded.rpe',(log_id,exercise,series,reps,kg,seconds,rir,set_rpe))
         elif action=='finish':
             rpe=finite(data.get('rpe'),'RPE',0,10,True);notes=data.get('notes')
             if notes is not None and (not isinstance(notes,str) or len(notes)>2000):raise DomainError('Note non valide')

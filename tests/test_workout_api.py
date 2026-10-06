@@ -54,6 +54,33 @@ class WorkoutAPI(diary_tests.DiaryTests):
         self.assertEqual(self.client.post('/api/workouts/skip',json=dict(planned_session_id=identifier),headers=headers).status_code,404)
         self.assertEqual(self.client.get('/api/workouts/logs',params=dict(start=self.date,end=self.date)).json(),[])
 
+    def test_double_planned_sessions_apply_and_keep_separate_logs(self):
+        self.seed()
+        snapshot=self.app.workouts.session_by_id({},'hypertrophy_basic')
+        plan=dict(workout_sessions=[dict(date=self.date,session_id=snapshot['id'],start_time=t,session=copy.deepcopy(snapshot)) for t in ('08:00','14:00')])
+        with self.app.connect() as db:
+            owner=db.execute('SELECT * FROM users WHERE id=?',(self.user,)).fetchone();profile=self.app.owner_profile(owner)
+            response=self.app.workouts.apply_week(db,self.user,profile,dict(week_start=self.date,run_id=1,kind='workout'),plan,dict(plan_id=1,scope='week'))
+        self.assertEqual(len(response['applied_slots']),2)
+        identifiers=[s['planned_session_id'] for s in response['applied_slots']]
+        first=self.begin(identifiers[0]).json()['workout_log_id']
+        second=self.begin(identifiers[1]).json()['workout_log_id']
+        self.assertNotEqual(first,second)
+        self.client.post(f'/api/workouts/{first}/finish',json={},headers=self.headers)
+        view=self.client.get('/api/day',params=dict(date=self.date)).json()
+        self.assertEqual(len(view['workouts']),2)
+        self.assertEqual({w['status'] for w in view['workouts']},{'done','in_progress'})
+
+    def test_per_set_rpe_is_saved_and_translated_to_bounded_rir(self):
+        identifier=self.seed();log=self.begin(identifier).json()['workout_log_id']
+        path=f'/api/workouts/{log}/sets'
+        data=dict(exercise_id='bodyweight-squat',set_no=1,reps=10,kg=10,rpe=6)
+        self.assertEqual(self.client.post(path,json=data,headers=self.headers).status_code,200)
+        detail=self.client.get(f'/api/workouts/logs/{log}').json()
+        self.assertEqual(detail['sets'][0]['rpe'],6)
+        self.assertEqual(detail['sets'][0]['rir'],4)
+        self.assertEqual(self.client.post(path,json=dict(data,rpe=11),headers=self.headers).status_code,400)
+
     def test_missing_values_validation_csrf_skip_and_standalone(self):
         identifier=self.seed()
         self.assertEqual(self.client.post('/api/workouts/start',json={}).status_code,403)
@@ -121,7 +148,7 @@ class WorkoutAPI(diary_tests.DiaryTests):
             self.assertEqual(client.get('/api/day',params=dict(date=date)).json()['workout']['planned_session_id'],p['planned_session_id'])
 
     def test_catalog_is_demo_and_week_input_errors_and_infeasibility(self):
-        c=self.client.get('/api/workouts/catalog').json();self.assertEqual(len(c['templates']),11)
+        c=self.client.get('/api/workouts/catalog').json();self.assertEqual(len(c['templates']),13)
         for session in c['templates']:
             self.assertTrue(session['demo']);self.assertTrue(session['pending_configuration'])
             self.assertTrue(all(e['load_kg'] is None for e in session['exercises']))

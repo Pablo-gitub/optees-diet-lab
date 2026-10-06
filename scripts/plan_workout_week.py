@@ -1,6 +1,9 @@
 """Weekly MILP demo, shared service entry point for CLI and future web UI."""
 
 import argparse
+import copy
+import datetime as dt
+from zoneinfo import ZoneInfo
 import asyncio
 import hashlib
 import json
@@ -43,7 +46,24 @@ def formulate(config, catalog, mode):
         from workout_sessions import validate_session
         for t in templates:validate_session(t)
     locked=config.get('locked_by_date',{})
-    slots = [(day,t) for day in days for t in (locked[day] if day in locked else templates) if t['duration_minutes_assumed'] <= config['days'][day]]
+    slots=[];per_day=config.get('max_sessions_per_day',1);cap=config.get('max_session_minutes',90)
+    for day in days:
+        starts=config.get('start_times',{}).get(day)
+        if isinstance(starts,list) and len(starts)>per_day:raise ValueError('Più orari del massimo personale di sedute giornaliere')
+        if starts is None:starts=[None] if per_day==1 else ['09:00']
+        elif isinstance(starts,str):starts=[starts]
+        starts=sorted(starts) if all(isinstance(t,str) for t in starts) else starts
+        if per_day==2 and len(starts)==1:
+            first=starts[0] or '09:00';h,m=map(int,first.split(':'));second=h*60+m+cap+config.get('min_gap_hours',4)*60
+            if second<1440:starts=[first,f'{int(second//60):02d}:{int(second%60):02d}']
+        for position,start in enumerate(starts):
+            if day in locked and position>0:continue
+            for original in (locked[day] if day in locked else templates):
+                t=copy.deepcopy(original);t['_slot']=position;t['_start_time']=start
+                start_minute=sum(v*f for v,f in zip(map(int,start.split(':')),(60,1))) if start else 0
+                limit=1440-start_minute
+                if t.get('locked_observation') or (t['duration_minutes_assumed']<=min(cap,limit) and max(t['score_vector']['muscle_coverage_proxy'].values(),default=0)<=10):
+                    if t['duration_minutes_assumed']<=config['days'][day]:slots.append((day,t))
     if not slots and any(config[k]>0 for k in ('sessions_min','strength_sessions_min','cardio_minutes_min')):
         raise ValueError('No available slots')
     n = len(slots)
@@ -52,9 +72,14 @@ def formulate(config, catalog, mode):
     for i,(day,t) in enumerate(slots):
         if t.get('kind')=='activity':
             limits=t['activity_duration'];step=limits['step']
-            cap=min(limits['max'],config['days'][day],config.get('max_session_minutes',90))
+            cap=min(limits['max'],config['days'][day],config.get('max_session_minutes',90),1440-(sum(v*f for v,f in zip(map(int,t['_start_time'].split(':')),(60,1))) if t.get('_start_time') else 0))
             activity_indices[i]=len(variables)
             variables.append(dict(name=f'activity_units_{i}',lb=0,ub=int(cap//step),integrality='I'))
+    strength_day_indices={}
+    if per_day==2:
+        for day in days:
+            strength_day_indices[day]=len(variables)
+            variables.append(dict(name='strength_day_'+day,lb=0,ub=1,integrality='B'))
     coverage_start=len(variables)
     muscles = list(config['muscle_targets_proxy'])
     variables += [{'name': f'coverage_{i}', 'lb': 0, 'ub': 1, 'integrality': 'C'} for i in range(len(muscles))]
@@ -83,7 +108,24 @@ def formulate(config, catalog, mode):
     variable_dates.update({q:slots[i][0] for i,q in activity_indices.items()})
     for day in days:
         add([duration[j] if variable_dates.get(j)==day else 0 for j in range(size)],'<=',config['days'][day])
-        add([int(d == day) for d, _ in slots], '<=', 1)
+        add([t.get('session_count',1) if d==day else 0 for d,t in slots],'<=' ,max(per_day,max((t.get('session_count',1) for d,t in slots if d==day and t.get('locked_observation')),default=0)))
+        for position in range(per_day):add([int(d==day and t['_slot']==position) for d,t in slots],'<=',1)
+        if per_day==2:
+            z=strength_day_indices[day];indices=[i for i,(d,t) in enumerate(slots) if d==day and strength[i]>0]
+            for i in indices:
+                row=[0.]*size;row[i]=1;row[z]=-1;add(row,'<=',0)
+            row=[0.]*size;row[z]=1
+            for i in indices:row[i]-=1
+            add(row,'<=',0)
+            for i,(d,a) in enumerate(slots):
+                if d!=day or a['_slot']!=0:continue
+                for j,(other,b) in enumerate(slots):
+                    if other!=day or b['_slot']!=1:continue
+                    start=lambda t:dt.datetime.combine(dt.date.fromisoformat(day),dt.time.fromisoformat(t['_start_time']),ZoneInfo('Europe/Rome')).timestamp()/60
+                    gap=start(b)-start(a)-config.get('min_gap_hours',4)*60
+                    row=[0.]*size;row[i]=3000;row[j]=3000
+                    row[activity_indices[i] if i in activity_indices else i]+=a['activity_duration']['step'] if i in activity_indices else a['duration_minutes_assumed']
+                    add(row,'<=',gap+6000)
     add(duration, '<=', config['weekly_minutes_max'])
     counts=[t.get('session_count',1) for _,t in slots]
     add(counts, '>=', config['sessions_min'])
@@ -104,14 +146,21 @@ def formulate(config, catalog, mode):
             elif not strength[i]:row[i]-=t.get('cardio_work_seconds',0)/60/150
         add(row,'<=',0)
         row=[0.]*size;row[health_strength_index]=1
-        for i,value in enumerate(strength):row[i]-=value/2
+        if strength_day_indices:
+            for z in strength_day_indices.values():row[z]-=.5
+        else:
+            for i,value in enumerate(strength):row[i]-=value/2
         add(row,'<=',0)
     gap = config['strength_gap_days']
     if int(gap) != gap:
         raise ValueError('Recovery gap must be an integer')
     for i, day in enumerate(days):
         window = days[i : i + int(gap) + 1]
-        add([s if d in window else 0 for (d, _), s in zip(slots, strength)], '<=', 1)
+        if strength_day_indices:
+            row=[0.]*size
+            for day_in_window in window:row[strength_day_indices[day_in_window]]=1
+            add(row,'<=',1)
+        else:add([s if d in window else 0 for (d, _), s in zip(slots, strength)], '<=', 1)
     for k, muscle in enumerate(muscles):
         row = [
             -t['score_vector']['muscle_coverage_proxy'].get(muscle, 0) / config['muscle_targets_proxy'][muscle]
@@ -121,6 +170,10 @@ def formulate(config, catalog, mode):
         add(row, '<=', 0)
     if mode == 'time':
         objective = duration[:]
+        for i,(d,t) in enumerate(slots):
+            if config['days'][d]<40 and t['resistance_session']:
+                efficiency=t.get('efficiency',{}).get('hard_sets_per_minute') or t.get('efficiency',{}).get('muscles_per_minute',0)
+                objective[i]/=1+min(.25,efficiency)
         sense = 'min'
     else:
         objective = [0] * size
