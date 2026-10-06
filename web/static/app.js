@@ -287,6 +287,8 @@ function explanationBlock(p) {
   const box = element('div', undefined, 'explanation');
   const e = p.explanation || {};
   if (e.headline) box.append(element('p', e.headline, 'headline'));
+  const chip = overlapChip(p);
+  if (chip) box.append(chip);
   if (p.diff) {
     const chips = diffChips(p.diff);
     if (chips.childElementCount) box.append(chips);
@@ -297,6 +299,50 @@ function explanationBlock(p) {
   if (p.status === 'partial') notes.append(element('li', 'Soluzione verificata; ottimo non certificato entro il tempo di calcolo.', 'tradeoff'));
   if (notes.childElementCount) box.append(notes);
   return box;
+}
+// 8.9: overlap_pct is the maximum gram share in common with any other shown alternative.
+function overlapChip(p) {
+  if (p.overlap_pct == null) return null;
+  const changed = Math.max(0, Math.round(100 - p.overlap_pct));
+  const chip = element('p', 'Cambia almeno il ' + changed + '% degli ingredienti rispetto alle altre', 'overlap-chip' + (changed >= 90 ? ' ok' : ''));
+  chip.title = 'Misurato sui grammi, senza sale, olio, spezie e brodo; marche diverse dello stesso alimento contano come uguali.';
+  return chip;
+}
+// Asks Optees for more alternatives far from every plan already shown; onSet receives the updated plan set.
+function moreAlternativesButton(set, onSet) {
+  const wrap = element('div', undefined, 'more-alt');
+  const button = element('button', 'Calcola altre alternative', 'secondary small');
+  button.type = 'button';
+  const note = element('p', '', 'muted small');
+  let budget = null;
+  button.onclick = async () => {
+    button.disabled = true;
+    const started = Date.now();
+    note.textContent = 'Optees cerca soluzioni diverse da tutte quelle mostrate…';
+    const timer = setInterval(() => (note.textContent = 'Optees cerca soluzioni diverse da tutte quelle mostrate… ' + Math.round((Date.now() - started) / 1000) + ' s'), 1000);
+    try {
+      const r = await api('plan-sets/' + set.run_id + '/alternatives', 'POST', budget ? { time_limit: budget } : {});
+      clearInterval(timer);
+      if (r.status === 'extended') {
+        message(r.added_plan_ids.length === 1 ? 'Una nuova alternativa' : r.added_plan_ids.length + ' nuove alternative');
+        return onSet(r.plan_set);
+      }
+      note.textContent = r.reason || 'Non ci sono altre alternative abbastanza diverse.';
+      // An uncertified search stopped on time, not on the diet: offer one longer attempt.
+      const timedOut = (r.pool?.overlap_searches || []).some((x) => x.certified === false);
+      if (timedOut && budget !== 120) {
+        budget = 120;
+        button.textContent = 'Riprova con più tempo (fino a 2 minuti)';
+        button.disabled = false;
+      } else button.hidden = true;
+    } catch (e) {
+      clearInterval(timer);
+      note.textContent = e.status === 409 ? 'Qualcosa è cambiato dopo il calcolo: genera di nuovo.' : e.message;
+      button.disabled = false;
+    }
+  };
+  wrap.append(button, note);
+  return wrap;
 }
 function renderWarnings(target, warnings) {
   target.replaceChildren(...(warnings || []).map((w) => element('p', w.message || w.code, 'notice warn')));
@@ -508,6 +554,7 @@ document.querySelectorAll('[data-page]').forEach(
       if (page === 'workout') loadWorkout().catch((e) => message(e.message));
       if (page === 'progress') Promise.all([loadProgress(), loadHealth()]).catch((e) => message(e.message));
       if (page === 'recipes') Promise.all([loadRecipes(), loadRecipeSolver()]).catch((e) => message(e.message));
+      if (page === 'profile') loadGoals().catch((e) => message(e.message));
     }),
 );
 const names = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'];

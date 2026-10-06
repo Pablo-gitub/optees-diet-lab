@@ -3126,3 +3126,248 @@ label > .chip.todo {
   padding: 0;
   border: 0;
 }
+
+/* 8.9 — diversità delle alternative */
+.overlap-chip {
+  margin: 4px 0 6px;
+  font-size: 0.85rem;
+  color: var(--ink-2);
+}
+.overlap-chip.ok {
+  color: var(--good);
+}
+.more-alt {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-top: 12px;
+}
+.more-alt p {
+  margin: 0;
+}
+
+/* 8.10 — codice a barre ed etichetta */
+.food-search-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.food-search-row input {
+  flex: 1;
+  min-width: 0;
+}
+.barcode-box {
+  margin-top: 8px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+.barcode-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.barcode-row input {
+  flex: 1 1 160px;
+  min-width: 0;
+}
+.file-button {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.file-button input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.barcode-status {
+  margin-top: 8px;
+}
+.barcode-found {
+  display: grid;
+  gap: 4px;
+}
+.grams-input {
+  width: 6rem;
+}
+.label-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px 12px;
+  align-items: end;
+}
+.label-form > p,
+.label-form > fieldset,
+.label-form > details,
+.label-form > div,
+.label-form > button {
+  grid-column: 1 / -1;
+}
+.label-field {
+  display: grid;
+  gap: 2px;
+  font-size: 0.85rem;
+}
+.label-field[hidden] {
+  display: none;
+}
+.label-energy {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px 12px;
+}
+.label-basis {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+.label-basis label {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-weight: 500;
+}
+.label-basis input {
+  width: auto;
+  margin: 0;
+}
+.label-basis legend {
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+.label-more {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px 12px;
+}
+.label-more summary {
+  grid-column: 1 / -1;
+}
+.label-form > button {
+  justify-self: start;
+}
+.scan-live {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.scan-live video {
+  width: 100%;
+  max-height: 280px;
+  border-radius: var(--radius-sm);
+  background: #000;
+  object-fit: cover;
+}
+
+/* 8.1 — intervista */
+.goal-block {
+  border-top: 1px solid var(--line);
+  padding: 12px 0;
+}
+.goal-block summary {
+  cursor: pointer;
+}
+.goal-body {
+  display: grid;
+  gap: 8px;
+  margin: 8px 0;
+}
+.goal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  align-items: start;
+  gap: 12px;
+  margin-top: 8px;
+}
+.goal-field {
+  display: grid;
+  gap: 4px;
+}
+.goal-field[hidden] {
+  display: none;
+}
+.goal-label {
+  margin: 8px 0 0;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.chip-toggle {
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  color: var(--ink-2);
+  font-size: 13px;
+  font-weight: 550;
+}
+.chip-toggle.on {
+  background: var(--brand);
+  color: var(--brand-ink);
+  box-shadow: none;
+}
+.goal-priorities {
+  display: grid;
+  gap: 8px;
+}
+.goal-priority {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.goal-priority > div:first-child {
+  display: grid;
+}
+.goal-seg {
+  margin-bottom: 0;
+}
+.goal-seg .seg {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+.anchor-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  padding: 6px 0;
+}
+.anchor-row > strong {
+  flex: 1 1 180px;
+}
+.anchor-set {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.anchor-set input {
+  width: 4.5rem;
+}
+.goal-energy {
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+.goal-energy h3 {
+  margin: 0 0 4px;
+  font-size: 1rem;
+}
+.goal-missing {
+  margin-top: 12px;
+}
+.proposal-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 16px;
+}

@@ -226,7 +226,19 @@ function foodSearch(day, slot, onPick, placeholder) {
       }
     }, 250);
   };
-  box.append(input, results);
+  const scan = element('button', '▥ Codice a barre', 'ghost small barcode-toggle');
+  scan.type = 'button';
+  scan.title = 'Cerca un prodotto confezionato dal codice a barre, o registralo dall’etichetta';
+  let scanBox = null;
+  scan.onclick = () => {
+    if (scanBox) return (scanBox.remove(), (scanBox = null));
+    scanBox = barcodeBox((f, grams) => (onPick ? onPick(f) : mutate('diary/entries', 'POST', { date: day.date, slot, food: f.food, grams })));
+    box.append(scanBox);
+    scanBox.querySelector('input').focus();
+  };
+  const top = element('div', undefined, 'food-search-row');
+  top.append(input, scan);
+  box.append(top, results);
   return box;
 }
 
@@ -367,6 +379,7 @@ function alternativesPanel(alt, day, slot) {
   });
   if (!set.plans.length) cards.append(element('p', 'Nessuna alternativa ammessa per questo pasto.', 'muted'));
   panel.append(cards);
+  if (set.plans.length) panel.append(moreAlternativesButton(set, (next) => ((mealAlternatives[key] = { state: 'done', set: next }), renderDay(currentDay))));
   const bar = element('div', undefined, 'meal-actions');
   bar.append(close);
   panel.append(bar);
@@ -973,7 +986,13 @@ $('week-generate').onclick = async () => {
     );
     if (joint) robustnessSummary(set);
     const scale = Math.max(1, ...set.plans.map((p) => p.robustness?.max_loss_kcal || 0));
-    $('week-plans').replaceChildren(...set.plans.map((p) => weekPlanCard(p, set, scale)));
+    const show = (s) => {
+      s.week_start = s.week_start || set.week_start;
+      $('week-plans').replaceChildren(...s.plans.map((p) => weekPlanCard(p, s, scale)));
+      // Joint pools need their own generation: the extension endpoint supports diet pools only.
+      if (!joint && s.plans.length) $('week-plans').append(moreAlternativesButton(s, show));
+    };
+    show(set);
     if (set.plans.length === 1) $('week-warnings').append(element('p', 'Con questi vincoli Optees ha trovato una sola proposta valida per la settimana.', 'notice'));
     if (!set.plans.length) $('week-warnings').append(element('p', joint ? 'Nessuna combinazione rispetta tempi, obiettivi e vincoli: aumenta i minuti disponibili o allarga gli intervalli.' : 'Nessuna settimana rispetta i vincoli.', 'error'));
   } catch (e) {
