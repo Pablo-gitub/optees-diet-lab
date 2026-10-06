@@ -604,10 +604,14 @@ function preparePlanning() {
         return o;
       }),
     );
-    select.addEventListener('change', () => availabilityInputs($('joint-availability'), select.value));
+    select.onchange = () => {
+      availabilityInputs($('joint-availability'), select.value);
+      renderLockedDishes();
+    };
     $('week-joint').checked = !!jointSaved().enabled;
     planningReady = true;
   }
+  renderLockedDishes();
   // Balance and day-type targets live in the profile (used by the Monday recalibration too).
   setBalance(profile.energy_balance_target_kcal !== undefined ? profile.energy_balance_target_kcal : jointSaved().balance);
   renderJointTargets();

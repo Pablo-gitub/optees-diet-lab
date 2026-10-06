@@ -777,7 +777,9 @@ async function loadRecipes() {
     } else card.append(element('div', dishIcon(r.title), 'recipe-placeholder tone-' + (hash(r.cuisine_id) % 4)));
     const body = element('div', undefined, 'recipe-body');
     const title = r.title_it || r.title;
-    body.append(element('h3', title));
+    const head = element('div', undefined, 'recipe-head');
+    head.append(element('h3', title), heartButton(r));
+    body.append(head);
     body.append(element('p', (cuisineLabels[r.cuisine_id] || r.cuisine) + (title !== r.title ? ' · ' + r.title : ''), 'muted'));
     const n = r.declared_nutrition;
     const facts = element('div', undefined, 'recipe-facts');
