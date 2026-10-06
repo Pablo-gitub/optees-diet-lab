@@ -253,3 +253,9 @@ rientro anticipato. Cronologia dei test del bandit fissata su date sintetiche.
 | 1 — Ricette preferite nella settimana congiunta | **fatto** | Riprodotto 400 con R048/R054; snapshot presenti, profilo ricaricato prima del commit SQL. Un solo profilo nella transazione, applicazione/rilettura ed esposizioni bandit verificate. Suite completa: 333 test verdi. |
 | 2 — Conferma di attività future | **fatto** | 409 future_activity prima di qualsiasi scrittura; stato chosen e nessun workout_log, conferma odierna ancora idempotente. Suite completa: 333 test verdi. |
 | 3 — Titoli dei preset | **fatto** | Nome italiano e taglia dal catalogo in elenco, solver e diario; vecchi titoli normalizzati senza cambiare gli snapshot. Regressione Pizzeria · medio su lista e piano applicato. Suite completa: 333 test verdi. |
+| 4 — Rientro senza Salute | **fatto** | Base approvata 8.5 con contesto/quantili/data validi (≤14 giorni); minimi e deficit invariati, sessioni nette contate una volta, proxy palestra verificato. Anteprima non cambia il profilo; approvazione vecchia o contesto cambiato indisponibili. Suite finale completa: 333 test verdi. |
+
+Chiusura delle quattro correzioni UI fase 8: **333 test verdi** con il comando
+richiesto e database temporanei, anche dopo la verifica aggiuntiva della stima
+energetica della palestra senza Salute. Un commit per punto; contratto API e
+consegna del rientro aggiornati. `web/static/` non modificato.

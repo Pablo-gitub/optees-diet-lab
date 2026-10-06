@@ -145,3 +145,25 @@ Il campo facoltativo `activity` e i nuovi campi `days[].activities`,
 in [api-contract.md](api-contract.md), sezione 8.6. Nessuna attività preselezionata.
 L'energia bassa dell'attività è aggiunta al recupero, non sottratta ai nutrienti.
 Applicazione/keep restano le stesse azioni con CSRF e stato monouso.
+
+## Correzione fase 8 — rientro senza Salute (2026-10-06)
+
+Il rientro con solo cibo non richiede il modello di una nuova attività. Per
+verificare il deficit massimo giornaliero usa gli scenari del piano oppure
+una base Salute valida o una stima senza allenamenti già approvata in 8.5.
+La stima approvata deve corrispondere al contesto corrente ed essere stata
+approvata negli ultimi 14 giorni (non nel futuro). Nessuna nuova approvazione
+è implicita nell'anteprima. Sessioni non saltate già pianificate si sommano
+come energia netta una sola volta; per la palestra si riusa la stima 8.5 quando
+verificabile con peso filtrato/modello, come nella settimana congiunta.
+
+Il nuovo campo pubblico `energy_basis_by_date` espone fonte, consumo nei tre
+scenari, base senza allenamenti e sessioni considerate. La UI può mostrare
+«Stima approvata» per `user_declared_non_workout_estimate` e
+`current_target_minus_approved_balance_estimate`, evitando di attribuirle a
+Salute. Gli esempi JSON e le condizioni di indisponibilità sono nel contratto
+API, sezione «Correzioni UI fase 8 — rientro senza Salute con base approvata».
+Se mancano dati per aggiungere un'attività si può usare il solo cibo; se manca
+invece il consumo necessario alla verifica del deficit, rimane `unavailable`
+con motivo leggibile. I minimi, il deficit massimo di 500 kcal e la correzione
+distribuita non vengono rilassati.

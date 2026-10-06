@@ -92,7 +92,11 @@ def snapshot(db,user,profile,meal):
             previous+=answer['correction_kcal']
             for day in answer.get('daily_corrections',[]):previous_daily[day['date']]=previous_daily.get(day['date'],0.)+day['reduction_kcal']
         elif answer.get('recorded') and start<=answer['recorded']['date']<=(dt.date.fromisoformat(start)+dt.timedelta(days=6)).isoformat() and 'correction_kcal' not in answer:legacy=True
-    return dict(start=start,views=views,context=json.loads(week['day_context'] or '{}') if week else {},week_id=week['id'] if week else None,original_kcal=original,state=fingerprint(db,user,profile),previous_correction=previous,previous_daily_correction=previous_daily,legacy_correction=legacy)
+    sessions={}
+    if week:
+        for row in db.execute("SELECT * FROM planned_session WHERE week_plan_id=? AND status!='skipped'",(week['id'],)):
+            sessions.setdefault(row['date'],[]).append(dict(session_id=row['session_id'],session=json.loads(row['snapshot'])))
+    return dict(sessions_by_date=sessions,start=start,views=views,context=json.loads(week['day_context'] or '{}') if week else {},week_id=week['id'] if week else None,original_kcal=original,state=fingerprint(db,user,profile),previous_correction=previous,previous_daily_correction=previous_daily,legacy_correction=legacy)
 
 
 def deviations(meal,snap):
@@ -190,7 +194,25 @@ async def preview(session,profile,meal,snap,make_config,foods,health=None):
     for view in active:
         date=view['date'];ctx=snap['context'].get(date,{});energy=ctx.get('progress_forecast',{}).get('energy_scenarios',ctx.get('energy_scenarios',{}))
         low=energy.get('consumption_kcal',{}).get('low')
-        if energy.get('status')!='available' or not isinstance(low,(int,float)) or not math.isfinite(low) or low<=0:return unavailable('Manca lo scenario basso del consumo da Salute per '+date+'.')
+        if energy.get('status')!='available' or not isinstance(low,(int,float)) or isinstance(low,bool) or not math.isfinite(low) or low<=0:
+            from activity_targets import approved_baseline
+            from joint_energy import day_scenarios
+            basis=copy.deepcopy(health or {})
+            approved=approved_baseline(profile)
+            if basis.get('non_workout_consumption_scenarios',{}).get('status')!='available':
+                if approved is not None:basis['non_workout_consumption_scenarios']=approved
+            sessions=copy.deepcopy(snap.get('sessions_by_date',{}).get(date,[]))
+            if approved is not None:
+                from activity_targets import session_energy
+                for item in sessions:
+                    if item['session'].get('kind')!='activity' and not item['session'].get('approved_energy_estimate'):
+                        estimate=session_energy(item,profile.get('_filtered_weight_kg'),health)
+                        if estimate['status']=='available':item['session']['approved_energy_estimate']=estimate
+            energy=day_scenarios(basis,sessions)
+            low=energy.get('consumption_kcal',{}).get('low')
+            if energy.get('status')!='available':return unavailable('Serve un consumo verificabile da Salute o una stima 8.5 approvata e recente per '+date+'. '+energy.get('reason',''))
+        response.setdefault('energy_basis_by_date',{})[date]=copy.deepcopy(energy)
+
         low_by_date[date]=low
         required=set(diary.SLOTS)-({'afternoon_snack'} if not profile['daily_meals']['afternoon_fruit'] else set())
         if not all(m['planned'] for m in view['meals'] if m['slot'] in required):return unavailable('Il piano di '+date+' non copre tutti i pasti previsti dal profilo.')

@@ -72,15 +72,26 @@ def session_energy(session,weight,health=None):
     return estimate
 
 
+def approved_baseline(profile):
+    """Only an explicit, current approval; never infer an unapproved base."""
+    approved=profile.get('approved_activity_targets',{})
+    value=approved.get('baseline',{})
+    if approved.get('context_key')!=context_key(profile) or value.get('source') not in ('user_declared_non_workout_estimate','current_target_minus_approved_balance_estimate'):return None
+    try:
+        from diary_service import local_today
+        age=(local_today()-dt.date.fromisoformat(approved['approved_on'])).days
+    except (KeyError,TypeError,ValueError):return None
+    if not 0<=age<=14 or value.get('status')!='available' or not all(finite(value.get(s+'_kcal')) for s in SCENARIOS):return None
+    if not 1000<=value['central_kcal']<=6000 or not value['low_kcal']<=value['central_kcal']<=value['high_kcal']:return None
+    return copy.deepcopy(value)
+
+
 def baseline(profile,health,override=None):
     value=(health or {}).get('non_workout_consumption_scenarios',{})
     if override is None and value.get('status')=='available' and all(finite(value.get(s+'_kcal')) for s in SCENARIOS) and 1000<=value['central_kcal']<=6000 and value['low_kcal']<=value['central_kcal']<=value['high_kcal']:
         return copy.deepcopy(value)
-    approved=profile.get('approved_activity_targets',{})
-    if override is None and approved.get('context_key')==context_key(profile) and approved.get('baseline',{}).get('source') in ('user_declared_non_workout_estimate','current_target_minus_approved_balance_estimate'):
-        from diary_service import local_today
-        age=(local_today()-dt.date.fromisoformat(approved['approved_on'])).days
-        if 0<=age<=14:return copy.deepcopy(approved['baseline'])
+    approved=approved_baseline(profile) if override is None else None
+    if approved is not None:return approved
     if override is not None:
         if not finite(override) or not 1000<=override<=6000:raise DomainError('Stima della base fuori dall’intervallo 1000–6000 kcal')
         central=override;source='user_declared_non_workout_estimate'

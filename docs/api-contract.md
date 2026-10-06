@@ -888,3 +888,33 @@ Esempi parziali di risposta (gli altri campi restano come in 8.7):
 ```
 
 I 100 g sono l'unità tecnica della stima dell'intero piatto, come già in 8.7.
+
+### Correzioni UI fase 8 — rientro senza Salute con base approvata
+
+L'anteprima del rientro usa gli scenari già disponibili nel piano; se mancano,
+ricostruisce il consumo dalla base Salute oppure dalla **stima approvata in 8.5**.
+Quest'ultima deve avere contesto invariato, data di approvazione non futura e
+non più vecchia di 14 giorni, fonte esplicita e quantili validi. Non si deduce
+una nuova base dai target senza approvazione. Il bilancio e i target personali
+non vengono modificati dall'anteprima.
+
+`energy_basis_by_date` dichiara per ciascun giorno riottimizzato fonte, base,
+consumo e attività considerate. Esempio parziale per il rientro con solo cibo:
+
+```json
+{"status":"partial","energy_basis_by_date":{"2026-10-07":{"status":"available","source":"user_declared_non_workout_estimate","non_workout_kcal":{"low":1900,"central":2100,"high":2300},"consumption_kcal":{"low":1900,"central":2100,"high":2300},"sessions":[],"double_counting_prevented":true,"uncertainty":"Three correlated empirical scenarios; not confidence intervals."}}}}
+```
+
+Le attività e gli allenamenti già pianificati non saltati sono letti dagli
+snapshot della settimana applicata e aggiunti una sola volta, come energia
+netta. Per la palestra con base approvata si riusa la stima 8.5 della sola fase
+di lavoro, se verificabile con peso filtrato/modello; nessun recupero inventato.
+Se mancano dati per aggiungere una nuova attività, rimane possibile il solo
+cibo. Se invece non è verificabile il consumo necessario al limite del deficit,
+la risposta è `unavailable`, con motivo che indica Salute o stima approvata,
+non un consumo nullo. Restano i minimi nutrizionali, il deficit massimo di
+500 kcal/giorno e la distribuzione della correzione.
+
+```json
+{"status":"unavailable","reason":"Serve un consumo verificabile da Salute o una stima 8.5 approvata e recente per 2026-10-07. Base Salute senza allenamenti insufficiente o non recente."}
+```

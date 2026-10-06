@@ -146,6 +146,56 @@ class RebalanceAPI(base.DiaryTests):
         p,_,choices,_,_=build(self.profile,dict(week_start=self.start,locked=[],_active_dates=dates),self.app.make_config,foods,views,'all_meals',excluded)
         self.assertTrue(all(p['variables'][c['y']]['ub']==0 for c in choices if c['food_id'] in excluded))
 
+    def test_approved_energy_base_without_health_keeps_food_rebalance_safe(self):
+        import activity_targets
+        with self.app.connect() as db:db.execute("UPDATE week_plan SET day_context='{}' WHERE user_id=?",(self.user,))
+        self.profile['approved_activity_targets']=dict(context_key=activity_targets.context_key(self.profile),approved_on=self.start,baseline=dict(status='available',source='user_declared_non_workout_estimate',low_kcal=1900,central_kcal=2100,high_kcal=2300))
+        result=self.proposal()['result']
+        self.assertIn(result['status'],('full','partial'),result)
+        self.assertTrue(result['energy_basis_by_date'])
+        for date,energy in result['energy_basis_by_date'].items():
+            self.assertEqual(energy['source'],'user_declared_non_workout_estimate')
+            self.assertEqual(energy['consumption_kcal']['low'],1900)
+        for day in result['_plan']['days']:
+            self.assertGreaterEqual(day['nutrients']['kcal'],1400-.001)
+            self.assertGreaterEqual(day['nutrients']['protein_g'],45-.001)
+        self.profile['approved_activity_targets']['approved_on']='2026-09-01'
+        self.assertEqual(self.proposal()['result']['status'],'unavailable')
+        self.profile['approved_activity_targets']['approved_on']=self.start
+        self.profile['approved_activity_targets']['context_key']='changed'
+        self.assertEqual(self.proposal()['result']['status'],'unavailable')
+
+    def test_approved_base_adds_planned_activity_net_energy_once(self):
+        import activity_targets,activity_service
+        with self.app.connect() as db:
+            db.execute("UPDATE week_plan SET day_context='{}' WHERE user_id=?",(self.user,))
+            week=db.execute("SELECT id FROM week_plan WHERE user_id=? AND status='active'",(self.user,)).fetchone()[0]
+            row=next(a for a in activity_service.catalog()['activities'] if a['id']=='walking_brisk')
+            activity=activity_service.snapshot(row,20,80)
+            db.execute("INSERT INTO planned_session(week_plan_id,date,session_id,minutes,status,snapshot) VALUES(?,?,?,?, 'chosen',?)",(week,'2026-10-06',activity['id'],20,json.dumps(activity)))
+        self.profile['approved_activity_targets']=dict(context_key=activity_targets.context_key(self.profile),approved_on=self.start,baseline=dict(status='available',source='user_declared_non_workout_estimate',low_kcal=1900,central_kcal=2100,high_kcal=2300))
+        result=self.proposal()['result']
+        self.assertIn(result['status'],('full','partial'),result)
+        energy=result['energy_basis_by_date']['2026-10-06']
+        self.assertAlmostEqual(energy['consumption_kcal']['low'],1900+activity['energy_estimate']['energy_kcal']['low'])
+        self.assertEqual(len(energy['sessions']),1)
+        self.assertTrue(energy['double_counting_prevented'])
+        # The same approved basis also supports the workout proxies used by joint-week.
+        from test_workout_sessions import WorkoutSessionsTests
+        from workout_sessions import build_sessions
+        fixture=WorkoutSessionsTests();fixture.setUp()
+        gym=next(s for s in build_sessions(fixture.index)[0] if s['id']=='strength_dumbbells')
+        self.profile['_filtered_weight_kg']=80
+        expected=activity_targets.session_energy(dict(session_id=gym['id'],session=gym),80)
+        self.assertEqual(expected['status'],'available')
+        with self.app.connect() as db:
+            db.execute("INSERT INTO planned_session(week_plan_id,date,session_id,minutes,status,snapshot) VALUES(?,?,?,?, 'chosen',?)",(week,'2026-10-07',gym['id'],gym['duration_seconds']/60,json.dumps(gym)))
+        before=copy.deepcopy(self.profile)
+        result=self.proposal()['result']
+        self.assertIn(result['status'],('full','partial'),result)
+        self.assertEqual(self.profile,before)
+        self.assertAlmostEqual(result['energy_basis_by_date']['2026-10-07']['consumption_kcal']['low'],1900+expected['energy_kcal']['low'])
+
     def test_missing_preset_refused_before_solver_and_catalog_explicit(self):
         cat=self.client.get('/api/rebalance/presets').json()
         self.assertTrue(all(isinstance(size['available'],bool) for preset in cat['presets'].values() for size in preset['sizes'].values()))
