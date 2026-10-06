@@ -49,7 +49,7 @@ class MoreAlternatives(base.DiaryTests):
         async def empty(*args):return dict(plans=[],pool=dict(overlap_target=10))
         with patch.object(self.app,'stdio_client',stream),patch.object(self.app,'ClientSession',session),patch.object(self.app,'orchestrate_day',side_effect=empty):
             response=self.client.post(url,json={},headers=self.headers)
-        self.assertEqual(response.status_code,200);self.assertEqual(response.json()['status'],'no_more_alternatives')
+        self.assertEqual(response.status_code,200);self.assertEqual(response.json()['status'],'no_more_alternatives');self.assertFalse(response.json()['pool']['overlap_searches'][-1]['certified'])
         with self.app.connect() as db:self.assertEqual(db.execute('SELECT payload FROM plan_set WHERE id=?',(identifier,)).fetchone()[0],old)
         self.assertEqual(self.client.post('/api/plan-sets/999999/alternatives',json={},headers=self.headers).status_code,404)
 

@@ -520,3 +520,113 @@ solver favorisce questi proxy di efficienza, senza cambiare la durata hard.
 ```json
 {"protocol_id":"superset_full_body","efficiency":{"hard_sets_per_minute":0.4166666667,"muscles_per_minute":0.4861111111,"basis":"dose_proxy_not_effectiveness"}}
 ```
+
+### 8.5 — proposta dei target quotidiani dall'attività
+
+`POST /api/goals/day-targets/proposal` (CSRF) calcola una proposta **senza cambiare
+il profilo né il diario**. La richiesta seleziona le sessioni già applicate della
+settimana oppure un piano palestra/congiunto posseduto dall'utente:
+
+```json
+{"week_start":"2026-10-05"}
+```
+
+```json
+{"week_start":"2026-10-05","plan_set_id":12,"plan_id":34,"estimated_non_workout_kcal":1800}
+```
+
+`estimated_non_workout_kcal` è facoltativo (1000–6000 kcal, finito). È una base
+**senza allenamenti** dichiarata dall'utente. Altrimenti si usa la base Salute
+senza allenamenti, scenario centrale. Senza Salute valida, si dichiara la base
+stimata dal target di riposo attuale meno il bilancio approvato (oppure dal target
+quotidiano se manca quello di riposo): **non è un consumo misurato**. Una stima
+esplicitamente approvata resta riutilizzabile per 14 giorni; una vecchia base
+Salute non viene resa recente dall'approvazione.
+
+Per ogni data: `requested_kcal = baseline.central_kcal + net_activity_low_kcal +
+energy_balance_target_kcal`. Il bilancio deve essere già approvato o dichiarato
+manualmente, entro ±1000 kcal. Le proteine sono costanti fra i giorni e per kg
+filtrato: il rapporto iniziale deriva dai target proteici già scelti dall'utente,
+non da una nuova dose prescritta; dopo l'approvazione si conserva quel parametro.
+I grassi restano protetti e i carboidrati assorbono il residuo calorico.
+
+La variazione settimanale del **target quotidiano** è limitata a `min(100 kcal,
+5% del target precedente)`, con intervalli del profilo invariati. Restano i minimi
+fissi della ricalibrazione: 1400 kcal, 45 g proteine, 25 g grassi, 90 g carboidrati.
+Se il profilo o il residuo dei macro non li permettono, nessuna proposta viene
+salvata. Una grande differenza viene proposta gradualmente, con `limited:true`.
+
+Risposta (estratto: `days` contiene realmente sette date e nutrienti completi):
+
+```json
+{"status":"available","proposal":{"id":8,"state":"pending","state_token":"TOKEN_OPACO","version":"activity-targets-v1","week_start":"2026-10-05","data_source":"applied_diary_sessions","energy_balance_target_kcal":0,"weight":{"value_kg":80,"date":"2026-10-06","filter":"progress-v2"},"baseline":{"status":"available","source":"current_target_minus_approved_balance_estimate","low_kcal":1440,"central_kcal":1800,"high_kcal":2160,"uncertainty":"Base non misurata; ±20% è un intervallo di sensibilità euristico, non un intervallo di confidenza."},"parameters":{"protein_g_per_kg":1.5,"protein_basis":"existing_approved_protein_target_per_filtered_kg","fat_target_g":50,"energy_scenario":"low","maximum_weekly_change_kcal":100,"maximum_weekly_change_fraction":0.05},"days":[{"date":"2026-10-06","day_type":"training","requested_kcal":1906.4,"proposed_kcal":1890,"delta_kcal":90,"net_activity_low_kcal":106.4,"limited":true,"targets":{"kcal_100g":{"min":1400,"target":1890,"max":3000},"protein_g_100g":{"min":45,"target":120,"max":200},"fat_g_100g":{"min":25,"target":50,"max":100},"carbs_available_g_100g":{"min":90,"target":240,"max":400}},"session_energy":[{"session_id":"activity:walking_brisk","status":"available","source":"compendium_met_net","net":true,"energy_kcal":{"low":106.4,"central":152,"high":197.6}}]}],"limits_applied":["fixed_nutrient_floors","existing_nutrient_intervals","maximum_weekly_change_100_or_5pct","constant_protein_per_kg","no_automatic_target_changes"],"reasoning":["Base senza allenamenti + energia netta prudente delle sessioni + bilancio già approvato."],"uncertainty":["MET e intervalli sono stime; dose proteica mantenuta dal profilo, non una nuova prescrizione della matrice 8.2."]}}
+```
+
+`day_type_targets.rest/training` contiene la media dei giorni pianificati di quel
+tipo, con nutrienti e intervalli completi. Se un tipo non è presente, conserva i
+valori già dichiarati. Le quantità per data sono in `days[].targets`.
+
+I MET di fallback palestra sono locali in `config/workout-energy-estimates.json`,
+con codici e fonti verificati nel [Compendium 2024, esercizi](https://pacompendium.com/conditioning-exercise/)
+e [cyclette](https://pacompendium.com/bicycling/). L'associazione di un protocollo
+all'intensità del MET resta **euristica**: si accredita solo la fase di lavoro,
+non riscaldamento, pause o transizioni. Fonte `compendium_workout_net_work_phase`,
+scenari ±30%. Con almeno tre allenamenti recenti compatibili si preferiscono i
+quantili personali sulla durata completa. Nessuna chiamata di rete automatica.
+
+```json
+{"session_id":"strength_dumbbells","status":"available","source":"compendium_workout_net_work_phase","compendium_code":"02054","mapping_evidence":"heuristic","work_minutes":2,"net":true,"energy_kcal":{"low":4.6666666667,"central":6.6666666667,"high":8.6666666667}}
+```
+
+Indisponibilità (HTTP 200, nessuna riga di proposta e nessun valore zero fittizio):
+
+```json
+{"status":"insufficient_data","reason":"Serve una pesata recente per il peso filtrato.","missing":["weight"]}
+```
+
+Altri motivi leggibili: bilancio non approvato, bilancio completo disabilitato,
+macro incompatibili con i limiti, sessione senza energia/durata verificabile,
+importazione in corso oppure variazione dei target già approvata negli ultimi
+sette giorni. Sessione o piano di un altro utente: 404; input invalido: 400.
+
+Decisioni (CSRF): `POST /api/goals/day-targets/proposal/{id}/approve` oppure
+`.../{id}/reject`. Il token è opaco e va ricopiato dalla proposta:
+
+```json
+{"state_token":"TOKEN_OPACO","reason":"Preferisco mantenere i valori attuali"}
+```
+
+```json
+{"id":8,"status":"approved","targets_changed":true,"diary_changed":false}
+```
+
+```json
+{"id":8,"status":"rejected","targets_changed":false,"diary_changed":false}
+```
+
+L'approvazione verifica di nuovo i limiti e salva atomicamente target per tipo e
+per data; il rifiuto registra la motivazione. Dati, profilo, diario, sessioni,
+modelli Salute o piano selezionato modificati, token diverso, proposta chiusa o
+scaduta (sette giorni): **409**, nessuna modifica parziale.
+
+```json
+{"code":"activity_targets_state_changed","detail":"Dati, programma o profilo cambiati: richiedi una nuova proposta"}
+```
+
+Un bilancio appena approvato in 8.1 può essere tradotto in target nello stesso
+turno; dopo l'approvazione dei target il limite di sette giorni è condiviso con
+la ricalibrazione. L'approvazione non riscrive pasti o allenamenti già applicati.
+
+`POST /api/plans/joint-week` può ora omettere `day_targets` e usare quelli
+approvati nel profilo. Per le date con la stessa firma delle sessioni pianificate
+usa i target puntuali; altrimenti usa i target approvati per tipo. Valori espliciti
+nella richiesta hanno precedenza. Se il profilo cambia, non riusa i target per
+data o la base stimata precedente e avvisa. Le stime approvate senza Salute
+restano riconoscibili dalla loro provenienza anche negli scenari congiunti.
+
+Per la UI mostrare: valore precedente, richiesto e proposto; limite applicato;
+base e sua fonte; energia netta prudente delle sessioni; bilancio approvato;
+peso filtrato con data; proteine e loro rapporto mantenuto; motivo ed incertezza.
+«Usa i valori proposti» invia l'approvazione, poi rigenera il piano; in caso di
+409 richiede una nuova proposta. Evitare di presentare gli intervalli euristici
+come misure o intervalli di confidenza.

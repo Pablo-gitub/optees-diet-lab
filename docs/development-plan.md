@@ -49,7 +49,7 @@ Il lavoro di Gemini viene sempre **rivisto** da Claude (dati e media) o da Codex
 | T15 | Claude | 8.0 specifica · 8.2 matrice obiettivi → dosi con fonti | Gemini: 8.3a catalogo attività · 8.8 sessione 1 |
 | T16 | Codex | 8.1 backend · 8.10 API codice a barre e prodotti personali · 8.9 alternative diverse | Gemini: 8.8 sessione 2; Claude rivede le sessioni 8.8 |
 | T17 | Claude | UI 8.1 intervista · 8.10 scanner · 8.9 «Calcola altre» | Gemini: 8.8 sessione 3 |
-| T18 | Codex | 8.3 attività · 8.4 carichi, durata, poco tempo · 8.5 calorie dall'attività | Gemini: 8.8 sessione 4 · equivalenti supermercato (S1) |
+| T18 | Codex | 8.3 attività · 8.4 carichi, durata, poco tempo · 8.5 calorie dall'attività | **fatto backend** — contratto aggiornato, UI T19 da fare. Gemini: 8.8 sessione 4 · equivalenti supermercato (S1) |
 | T19 | Claude | UI 8.3–8.5 | Gemini: 8.8 sessioni successive |
 | T20 | Codex | 8.6 rientro con attività · 8.7 piatti bloccati e preferite · 8.11 supermercati e lista della spesa | Gemini: equivalenti supermercato (S2…) |
 | T21 | Claude | UI 8.6, 8.7, 8.11 · QA della fase → **M4** | — |
@@ -160,11 +160,11 @@ Specifica: [phase8-spec.md](phase8-spec.md). Consegna a Gemini a sessioni: [gemi
 | 8.2 | Matrice obiettivi → dosi (`config/training-goal-matrix.json`) con fonti verificate; soglie del §1.5, §3.2, §4 confermate o marcate euristiche | Claude | M | ogni grandezza con fonte e `checked_on`; punteggio a trapezio documentato | da fare |
 | 8.3 | Attività oltre la palestra: catalogo (8.3a, Gemini, rivisto da Claude), energia personale o da MET netti, sessioni di attività nella settimana congiunta, conferma «fatta» nel diario | Codex · Gemini (8.3a) | L | settimana con `gym: no` solo attività; nessun doppio conteggio con la base Salute; test | **fatto backend** — attività nel MILP con durata intera, energia netta e provenienza, gym:no, conferma atomica, scostamento B13; contratto UI aggiornato |
 | 8.4 | Palestra personalizzata: curva carico–ripetizioni personale aggiornata dai registri, durata massima e sedute doppie, efficienza dei protocolli e due protocolli per poco tempo | Codex | L | nessuna seduta oltre il limite; carichi arrotondati per difetto al disponibile; test | **fatto backend** — curve dai riferimenti/registri, griglia per difetto, limiti di durata e volume, doppie fasce con pausa effettiva, due protocolli brevi; euristiche esplicite in attesa di 8.2 |
-| 8.5 | Obiettivi del giorno proposti dall'attività pianificata (base + attività + bilancio) | Codex · Claude (UI) | M | «Usa i valori proposti» in Piano; soglie rispettate; stima dichiarata senza Salute | da fare |
+| 8.5 | Obiettivi del giorno proposti dall'attività pianificata (base + attività + bilancio) | Codex · Claude (UI) | M | «Usa i valori proposti» in Piano; soglie rispettate; stima dichiarata senza Salute | **fatto backend** — proposta per data e tipo, base senza allenamenti + energia netta prudente + bilancio approvato, minimi e variazioni protetti, approva/rifiuta atomici con CSRF/409; UI da realizzare |
 | 8.6 | Rientro con attività facoltativa: solo dieta (predefinito), dieta + passeggiata, dieta + attività gradita; limiti fissi; scenario prudente | Codex · Claude (UI) | M | mai attività senza richiesta; attività non fatta torna nel rientro senza doppia compensazione | da fare |
 | 8.7 | Piatti scelti e ricette preferite: piatto bloccato in un pasto futuro, cuore sulle ricette, preferite premiate nel solver (max 2/settimana), ricette approvate come elementi del solver | Codex · Claude (UI) | L | «lasagne giovedì» compensata nella settimana; preferita non inseribile spiegata | da fare |
 | 8.8 | Ingredienti delle ricette → CREA → prodotti: dizionario e proposte a sessioni (preferite per prime), approvazioni verificate | Gemini (proposte) · Claude (approvazione) | L | ricette con tutti gli ingredienti approvati in crescita a ogni sessione; nessun id inesistente | da fare |
-| 8.9 | Alternative davvero diverse: sovrapposizione pesata sui grammi ≤ 10% per ingrediente canonico, condimenti esclusi per categoria; minimo 3 alternative; «Calcola altre alternative»; nelle diete strette massima diversità possibile dichiarata | Codex · Claude (UI) | L | test: coppie di alternative entro la soglia o sovrapposizione minimizzata e mostrata; vincoli nutrizionali mai rilassati | **fatto, da migliorare** — backend `6713e3e`; UI: percentuale di ingredienti cambiati e «Calcola altre alternative» (pasto e settimana). Settimana demo libera: 2 alternative al 22,5% → B16 |
+| 8.9 | Alternative davvero diverse: sovrapposizione pesata sui grammi ≤ 10% per ingrediente canonico, condimenti esclusi per categoria; minimo 3 alternative; «Calcola altre alternative»; nelle diete strette massima diversità possibile dichiarata | Codex · Claude (UI) | L | test: coppie di alternative entro la soglia o sovrapposizione minimizzata e mostrata; vincoli nutrizionali mai rilassati | **fatto con limite documentato B16** — backend `6713e3e`, B16 `ee6ba5a`; UI: percentuale di ingredienti cambiati e «Calcola altre alternative». Con i due frutti del dominio demo, tre settimane al 10% sono impossibili (limite 10,8696%); serve ampliare i candidati liberi. Timeout non certificati. |
 | 8.10 | Codice a barre: ricerca nel catalogo locale, registrazione dall'etichetta (per 100 g, 100 ml o per porzione → ricalcolo per 100 g), controllo di coerenza delle kcal, prodotti personali; lettura da fotocamera (HTTPS con `tailscale serve`) o da foto | Codex (API) · Claude (UI, libreria di decodifica locale) | M | scansione → diario in 3 tocchi; prodotto registrato ritrovato alla scansione successiva; GTIN validato | **fatto** — API `fe2216e`; UI «▥ Codice a barre» nella ricerca alimenti: cifre, foto o fotocamera dove il browser legge i codici, registrazione dall'etichetta con avviso di coerenza. Libreria di decodifica per Safari e HTTPS ancora da fare |
 | 8.11 | Supermercati preferiti: prodotto da comprare accanto a ogni alimento generico, «uso sempre questo» porta il prodotto nel solver, lista della spesa settimanale con confezioni | Codex · Claude (UI) · Gemini (proposte di equivalenti) | L | lista della spesa dalla settimana applicata; prodotti nel solver solo se coerenti | da fare |
 
@@ -215,3 +215,15 @@ Verifica backend Fase 8, ordine 8.1 → 8.10 → 8.9: 267, 272 e **281 test verd
 |---|---|---|
 | B16 | **fatto — limite numerico documentato** | Con i candidati liberi correnti, tre alternative al 10% sono impossibili: limite inferiore 10,8696%. Timeout sempre non certificato, testo UI corretto; verifica su DB demo nuovo e regressioni nella suite completa. |
 | B17 | **fatto** | GET /api/activities autenticato, catalogo locale revisionato e invariato, nessuna rete; regressione API su database temporaneo. |
+
+Verifica finale T18 / B16–B17 (2026-10-06): **313 test verdi** con il comando
+completo richiesto, su database temporanei. Chiusure separate: B16 287 test,
+B17 288, 8.3 294, 8.4 302, 8.5 313. B16 documenta il limite analitico del dominio
+demo (10,8696% minimo per tre alternative); non dichiara un ottimo dal timeout.
+L'API aggiunge una ricerca non certificata anche se un percorso interrotto non
+ha prodotto il certificato, così `no_more_alternatives` non prova impossibilità.
+Optees reale ha inoltre verificato due attività da 20 minuti alle 08:00 e 14:00
+nello stesso giorno. B17 `542bfd4`, 8.3 `30b0c4f`, 8.4 `fcf90f4`; contratto UI
+con esempi e indisponibilità per 8.5 in [api-contract.md](api-contract.md).
+`web/static/` non modificato. Parametri ancora non fissati da 8.2 dichiarati come
+heuristici, senza spacciare proxy di volume o MET per efficacia individuale.

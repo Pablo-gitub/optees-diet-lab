@@ -79,6 +79,9 @@ def cooldown(db,user):
     if db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='goal_energy_proposal'").fetchone():
         goal=db.execute("SELECT max(decided) FROM goal_energy_proposal WHERE user_id=? AND state='approved'",(user,)).fetchone()[0]
         recent=recent or goal is not None and time.time()-goal<7*86400
+    if db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='activity_target_proposal'").fetchone():
+        day_target=db.execute("SELECT max(decided) FROM activity_target_proposal WHERE user_id=? AND state='approved'",(user,)).fetchone()[0]
+        recent=recent or day_target is not None and time.time()-day_target<7*86400
     return recent
 
 

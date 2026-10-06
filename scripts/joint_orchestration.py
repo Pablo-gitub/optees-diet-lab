@@ -19,7 +19,7 @@ def validate_request(profile,data):
     if not isinstance(data,dict):raise DomainError('Corpo della richiesta non valido')
     start=valid_date(data.get('week_start'));integer(data.get('k',4),1,5)
     if not profile.get('daily_meals',{}).get('enabled'):raise DomainError('Attiva colazione e spuntini nel bilancio completo prima della settimana congiunta')
-    targets=data.get('day_targets')
+    targets=data.get('day_targets',profile.get('day_type_targets'))
     if not isinstance(targets,dict) or set(targets)!= {'rest','training'}:raise DomainError('Indica i target completi per riposo e allenamento')
     for target in targets.values():
         try:validate_daily(dict(profile['daily_meals'],targets=target))
@@ -78,7 +78,7 @@ def locked_workouts(db,user,start):
 
 def context_key(profile,data):
     modes,_=validate_request(profile,data)
-    return hashlib.sha256(json.dumps(dict(version='joint-v1',targets=data['day_targets'],modes=modes,goal=data['workout'].get('goal'),settings=profile.get('_workout_settings',{})),sort_keys=True).encode()).hexdigest()
+    return hashlib.sha256(json.dumps(dict(version='joint-v1',targets=data.get('day_targets',profile.get('day_type_targets')),modes=modes,goal=data['workout'].get('goal'),settings=profile.get('_workout_settings',{})),sort_keys=True).encode()).hexdigest()
 
 
 def front(plans):
@@ -125,18 +125,38 @@ def select(result,pool,data,observations=()):
 
 
 async def generate_week(session,profile,data,make_config,foods,health=None,workout_locks=None,observations=(),history=()):
+    data=copy.deepcopy(data);explicit_targets='day_targets' in data
+    data.setdefault('day_targets',copy.deepcopy(profile.get('day_type_targets')))
     modes,balance=validate_request(profile,data);start=data['week_start'];index=data.get('day_index',dt.date.fromisoformat(start).weekday());integer(index,0,13)
     workout_request=dict(data['workout'],week_start=start)
     workout_set=await workout_engine.generate_week(session,profile,workout_request,workout_locks,health)
     result=dict(kind='joint',energy_balance_target_kcal=balance,spec_version='orchestration-v2-joint',mode=profile['mode'],week_start=start,horizon=dict(days=7),status=workout_set['status'],plans=[],pool=dict(candidates=0,front=0),warnings=copy.deepcopy(workout_set['warnings']),configuration_hash=workout_engine.configuration_hash(profile),versions=dict(engine='joint-v1',health=(health or {}).get('version')),request_hash=hashlib.sha256(json.dumps(dict(profile=profile,request=data),sort_keys=True).encode()).hexdigest())
     if not workout_set['plans']:return result
+    from activity_targets import context_key as approved_context_key
+    approved=profile.get('approved_activity_targets',{})
+    if approved and approved.get('context_key')!=approved_context_key(profile):
+        result['warnings'].append(dict(code='activity_targets_profile_changed',message='Profilo modificato dopo l’approvazione: target specifici per data e base stimata non riutilizzati.'))
+        approved={}
+    if (health or {}).get('non_workout_consumption_scenarios',{}).get('status')!='available' and approved.get('baseline',{}).get('status')=='available' and approved['baseline'].get('source') in ('user_declared_non_workout_estimate','current_target_minus_approved_balance_estimate'):
+        age=(__import__('diary_service').local_today()-dt.date.fromisoformat(approved['approved_on'])).days
+        if 0<=age<=14:
+            health=dict(health or {},non_workout_consumption_scenarios=copy.deepcopy(approved['baseline']))
+            result['warnings'].append(dict(code='estimated_non_workout_baseline',message='Base energetica stimata e approvata; non misurata da Salute.'))
+    from activity_targets import session_energy,signature as activity_signature
+    for workout in workout_set['plans']:
+        for item in workout['workout_sessions']:
+            if item['session'].get('kind')!='activity' and approved:
+                estimate=session_energy(item,profile.get('_filtered_weight_kg'),health)
+                if estimate['status']=='available':item['session']['approved_energy_estimate']=estimate
     pool=[];seen=set();context=context_key(profile,data)
     for workout in workout_set['plans']:
         by_date={d:[s for s in workout['workout_sessions'] if s['date']==d] for d in dates(start)}
         day_types={d:'training' if by_date[d] else 'rest' for d in dates(start)}
         offsets={(index+i)%14:d for i,d in enumerate(dates(start))}
         def config_for_day(original,day):
-            date=offsets[day];kind=day_types[date];personal=copy.deepcopy(original);personal['mode']=modes[kind];personal['daily_meals']['targets']=copy.deepcopy(data['day_targets'][kind]);config=make_config(personal,day);config['day_type']=kind;return config
+            date=offsets[day];kind=day_types[date];personal=copy.deepcopy(original);personal['mode']=modes[kind];personal['daily_meals']['targets']=copy.deepcopy(data['day_targets'][kind]);dated=approved.get('days',{}).get(date)
+            if not explicit_targets and dated and dated['session_signature']==activity_signature(by_date[date]):personal['daily_meals']['targets']=copy.deepcopy(dated['targets'])
+            config=make_config(personal,day);config['day_type']=kind;return config
         diet_request=dict(data.get('diet',{}),week_start=start,day_index=index,locked=data.get('locked',[]))
         diet_request.setdefault('pool_size',4);diet_request.setdefault('k',min(4,diet_request['pool_size']))
         diet_set=await diet_engine.generate_week(session,profile,diet_request,config_for_day,foods,history,observations)

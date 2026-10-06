@@ -1,0 +1,93 @@
+{
+  "version": "workout-energy-estimates-v1",
+  "mapping_evidence": "heuristic_pending_8.2",
+  "scope": "net_work_phase_only",
+  "sessions": {
+    "continuous_stationary-bike": {
+      "met": 3.5,
+      "code": "01210",
+      "url": "https://pacompendium.com/bicycling/",
+      "checked_on": "2026-10-06",
+      "assumption": "Associazione del protocollo al MET come proxy euristico; intensità effettiva non misurata."
+    },
+    "interval_bike": {
+      "met": 3.5,
+      "code": "01210",
+      "url": "https://pacompendium.com/bicycling/",
+      "checked_on": "2026-10-06",
+      "assumption": "Associazione del protocollo al MET come proxy euristico; intensità effettiva non misurata."
+    },
+    "continuous_rowing-machine": {
+      "met": 5,
+      "code": "02071",
+      "url": "https://pacompendium.com/conditioning-exercise/",
+      "checked_on": "2026-10-06",
+      "assumption": "Associazione del protocollo al MET come proxy euristico; intensità effettiva non misurata."
+    },
+    "continuous_elliptical-trainer": {
+      "met": 5,
+      "code": "02048",
+      "url": "https://pacompendium.com/conditioning-exercise/",
+      "checked_on": "2026-10-06",
+      "assumption": "Associazione del protocollo al MET come proxy euristico; intensità effettiva non misurata."
+    },
+    "continuous_incline-treadmill-walk": {
+      "met": 3.8,
+      "code": "17190",
+      "url": "https://pacompendium.com/walking/",
+      "checked_on": "2026-10-06",
+      "assumption": "Associazione del protocollo al MET come proxy euristico; intensità effettiva non misurata."
+    },
+    "hypertrophy_basic": {
+      "met": 3,
+      "code": "02056",
+      "url": "https://pacompendium.com/conditioning-exercise/",
+      "checked_on": "2026-10-06",
+      "assumption": "Associazione del protocollo al MET come proxy euristico; intensità effettiva non misurata."
+    },
+    "endurance_basic": {
+      "met": 3,
+      "code": "02056",
+      "url": "https://pacompendium.com/conditioning-exercise/",
+      "checked_on": "2026-10-06",
+      "assumption": "Associazione del protocollo al MET come proxy euristico; intensità effettiva non misurata."
+    }
+  },
+  "formats": {
+    "sets": {
+      "met": 3.5,
+      "code": "02054",
+      "url": "https://pacompendium.com/conditioning-exercise/",
+      "checked_on": "2026-10-06",
+      "assumption": "Associazione del protocollo al MET come proxy euristico; intensità effettiva non misurata."
+    },
+    "emom": {
+      "met": 3,
+      "code": "02056",
+      "url": "https://pacompendium.com/conditioning-exercise/",
+      "checked_on": "2026-10-06",
+      "assumption": "Associazione del protocollo al MET come proxy euristico; intensità effettiva non misurata."
+    },
+    "superset": {
+      "met": 5.8,
+      "code": "02055",
+      "url": "https://pacompendium.com/conditioning-exercise/",
+      "checked_on": "2026-10-06",
+      "assumption": "Associazione del protocollo al MET come proxy euristico; intensità effettiva non misurata."
+    },
+    "circuit": {
+      "met": 6,
+      "code": "02032",
+      "url": "https://pacompendium.com/conditioning-exercise/",
+      "checked_on": "2026-10-06",
+      "assumption": "Associazione del protocollo al MET come proxy euristico; intensità effettiva non misurata."
+    },
+    "isometric": {
+      "met": 2.8,
+      "code": "02024",
+      "url": "https://pacompendium.com/conditioning-exercise/",
+      "checked_on": "2026-10-06",
+      "assumption": "Associazione del protocollo al MET come proxy euristico; intensità effettiva non misurata."
+    }
+  }
+}

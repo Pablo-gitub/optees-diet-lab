@@ -132,6 +132,8 @@ def initialize():
     with connect() as db:
         diary.migrate(db)
         recalibration.migrate(db)
+        import activity_targets
+        activity_targets.migrate(db)
         legacy=db.execute("SELECT id,profile FROM users WHERE username='paolo'").fetchone()
         if legacy and json.loads(legacy['profile']).get('personal_diets'):
             workout_settings.seed_legacy_equipment(db,legacy['id'],ROOT/'data/personal/equipment.json')
@@ -1128,6 +1130,8 @@ async def more_plan_alternatives(set_id:int,request:Request):
             fresh=identity(request);current=owner_profile(fresh)
             saved=db.execute('SELECT payload FROM plan_set WHERE id=? AND user_id=?',(set_id,user['id'])).fetchone()
             if not saved or saved['payload']!=old_payload or recalibration.fingerprint(db,user['id'],current,None,[])!=token:raise diary.DomainError('Diario, piano o profilo cambiati: ripeti il calcolo','plan_set_state_changed',409)
+            if not additions and not result.setdefault('pool',{}).get('overlap_searches'):
+                result['pool']['overlap_searches']=[dict(certified=False,reason='Ricerca senza una certificazione delle alternative; il risultato non dimostra impossibilità.')]
             if not additions:return dict(status='no_more_alternatives',plan_set_id=set_id,added_plan_ids=[],reason=('Non è stata trovata un’altra alternativa entro il tempo disponibile; riprova con un budget maggiore.' if result.get('status')=='partial' or any(not s.get('certified',False) for s in result.get('pool',{}).get('overlap_searches',[])) else 'Non ci sono altre alternative abbastanza diverse: serve almeno il 50% di ingredienti diversi.'),pool=result.get('pool',{}))
             for p in additions:
                 p['rank']=len(payload['plans'])+1
@@ -1159,3 +1163,28 @@ async def activity_confirm(request:Request):
         db.execute('BEGIN IMMEDIATE')
         fresh=dict(db.execute('SELECT * FROM users WHERE id=?',(user['id'],)).fetchone())
         return activity_service.confirm(db,user['id'],owner_profile(fresh),data)
+
+
+@app.post('/api/goals/day-targets/proposal')
+async def propose_activity_targets(request:Request):
+    import activity_targets
+    user=identity(request,True);data=await request.json()
+    with connect() as db:
+        db.execute('BEGIN IMMEDIATE')
+        fresh=dict(db.execute('SELECT * FROM users WHERE id=?',(user['id'],)).fetchone());profile=owner_profile(fresh)
+        if health_updating(user['id']):return dict(status='insufficient_data',reason='Importazione Salute in corso: riprova quando termina.')
+        report=load_health_report(health_directory(user['id']));measurements=measurement_values(db,user['id'],report=report)
+        return activity_targets.propose(db,user['id'],profile,measurements,report,data,diary.local_today())
+
+
+@app.post('/api/goals/day-targets/proposal/{identifier}/{decision}')
+async def decide_activity_targets(identifier:int,decision:str,request:Request):
+    import activity_targets
+    user=identity(request,True);data=await request.json()
+    if decision not in ('approve','reject'):raise diary.DomainError('Decisione non trovata','not_found',404)
+    with connect() as db:
+        db.execute('BEGIN IMMEDIATE')
+        if health_updating(user['id']):raise diary.DomainError('Importazione Salute in corso','health_import_in_progress',409)
+        fresh=dict(db.execute('SELECT * FROM users WHERE id=?',(user['id'],)).fetchone());profile=owner_profile(fresh)
+        report=load_health_report(health_directory(user['id']));measurements=measurement_values(db,user['id'],report=report)
+        return activity_targets.decide(db,user['id'],profile,measurements,report,identifier,data,decision,diary.local_today())

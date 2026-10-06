@@ -46,11 +46,11 @@ def day_scenarios(health,sessions,activity_map=None):
     if baseline.get('status')!='available' or not all(finite(baseline.get(s+'_kcal')) for s in SCENARIOS):return dict(status='unavailable',reason='Base Salute senza allenamenti insufficiente o non recente.')
     values={s:baseline[s+'_kcal'] for s in SCENARIOS};models={m['activity']:m for m in (health or {}).get('workout_energy_models',[])};mapping=dict(ACTIVITIES,**(activity_map or {}));estimates=[]
     for session in sessions:
-        if session['session'].get('kind')=='activity':
-            estimate=session['session'].get('energy_estimate',{})
-            if estimate.get('status')!='available' or not estimate.get('net') or not session['session'].get('additional_activity') or not all(finite(estimate.get('energy_kcal',{}).get(s)) for s in SCENARIOS):return dict(status='unavailable',reason=estimate.get('reason','Stima netta dell’attività non disponibile.'))
+        if session['session'].get('kind')=='activity' or session['session'].get('approved_energy_estimate'):
+            estimate=session['session'].get('approved_energy_estimate',session['session'].get('energy_estimate',{}))
+            if estimate.get('status')!='available' or not estimate.get('net') or (session['session'].get('kind')=='activity' and not session['session'].get('additional_activity')) or not all(finite(estimate.get('energy_kcal',{}).get(s)) for s in SCENARIOS):return dict(status='unavailable',reason=estimate.get('reason','Stima netta dell’attività non disponibile.'))
             for s in SCENARIOS:values[s]+=estimate['energy_kcal'][s]
-            estimates.append(dict(estimate,session_id=session['session_id'],duration_seconds=session['session']['duration_seconds'],assumption='Solo allenamento aggiuntivo pianificato; il movimento abituale è già nella base.'))
+            estimates.append(dict(estimate,session_id=session['session_id'],duration_seconds=session['session']['duration_seconds'],assumption=estimate.get('assumption','')+' Solo allenamento aggiuntivo pianificato; il movimento abituale è già nella base.'))
             continue
         identifier=session['session_id'];activity=mapping.get(identifier);model=models.get(activity)
         keys=('kcal_per_min_p20','kcal_per_min_p50','kcal_per_min_p80')
