@@ -116,6 +116,12 @@ def deviations(meal,snap):
                 reason='Nutrienti mancanti nel pasto registrato '+view['date']+' '+slot['slot']+'.';continue
             interval=nutrients['kcal'];difference={k:round(interval[k]-baseline,3) for k in ('min','max')}
             values.append(dict(date=view['date'],slot=slot['slot'],planned_kcal=baseline,consumed_kcal=interval,difference_kcal=difference,provenance=provenance))
+        for activity in view.get('workouts',[]):
+            if activity.get('kind')!='activity' or activity['status']!='skipped':continue
+            estimate=activity.get('energy_estimate') or {};energy=estimate.get('energy_kcal',{})
+            if estimate.get('status')!='available' or not all(isinstance(energy.get(k),(int,float)) and not isinstance(energy[k],bool) and math.isfinite(energy[k]) and energy[k]>=0 for k in ('low','high')):
+                reason='Stima energetica mancante per l’attività saltata '+view['date']+'.';continue
+            values.append(dict(date=view['date'],slot='activity',kind='activity',planned_session_id=activity['planned_session_id'],planned_expenditure_kcal=dict(min=energy['low'],max=energy['high']),difference_kcal=dict(min=energy['low'],max=energy['high']),provenance=dict(source='skipped_planned_activity',energy_source=estimate['source'],net=True)))
     optional={k:0. for k in ('min','max')}
     if not meal.get('from_diary'):
         original=snap['original_kcal']

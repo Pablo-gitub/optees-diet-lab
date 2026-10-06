@@ -46,6 +46,12 @@ def day_scenarios(health,sessions,activity_map=None):
     if baseline.get('status')!='available' or not all(finite(baseline.get(s+'_kcal')) for s in SCENARIOS):return dict(status='unavailable',reason='Base Salute senza allenamenti insufficiente o non recente.')
     values={s:baseline[s+'_kcal'] for s in SCENARIOS};models={m['activity']:m for m in (health or {}).get('workout_energy_models',[])};mapping=dict(ACTIVITIES,**(activity_map or {}));estimates=[]
     for session in sessions:
+        if session['session'].get('kind')=='activity':
+            estimate=session['session'].get('energy_estimate',{})
+            if estimate.get('status')!='available' or not estimate.get('net') or not session['session'].get('additional_activity') or not all(finite(estimate.get('energy_kcal',{}).get(s)) for s in SCENARIOS):return dict(status='unavailable',reason=estimate.get('reason','Stima netta dell’attività non disponibile.'))
+            for s in SCENARIOS:values[s]+=estimate['energy_kcal'][s]
+            estimates.append(dict(estimate,session_id=session['session_id'],duration_seconds=session['session']['duration_seconds'],assumption='Solo allenamento aggiuntivo pianificato; il movimento abituale è già nella base.'))
+            continue
         identifier=session['session_id'];activity=mapping.get(identifier);model=models.get(activity)
         keys=('kcal_per_min_p20','kcal_per_min_p50','kcal_per_min_p80')
         if model is None or model.get('status')!='provisional' or model.get('observations',0)<3 or not 0<=model.get('age_days',1000)<=90 or not all(finite(model.get(k)) for k in keys):return dict(status='unavailable',reason='Modello energetico recente mancante per '+identifier,missing_session_id=identifier)

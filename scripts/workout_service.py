@@ -62,7 +62,7 @@ def week_config(data):
     excluded=data.get('excluded_days',[])
     if not isinstance(excluded,list) or any(not isinstance(d,str) or d not in dates for d in excluded):raise DomainError('Giorni esclusi non validi')
     cfg=json.loads((ROOT/'config/demo-week.json').read_text())
-    allowed=set(cfg)-{'days'}|{'goal','allowed_protocols','allow_high_intensity_demo'}
+    allowed=set(cfg)-{'days'}|{'goal','allowed_protocols','allow_high_intensity_demo','activities'}
     unknown=set(data)-allowed-{'week_start','days','excluded_days','start_times'}
     if unknown:raise DomainError('Parametri della settimana non riconosciuti')
     cfg.update({k:v for k,v in data.items() if k in allowed})
@@ -93,11 +93,23 @@ def week_config(data):
     return cfg,times
 
 
-async def generate_week(session,profile,data,locked_by_date=None):
+async def generate_week(session,profile,data,locked_by_date=None,health=None):
     from plan_workout_week import formulate
     from plan_diet_day import solve_problem
     from plan_recipe import values_verified
     cfg,times=week_config(data);public=catalog(profile)
+    import activity_service
+    activity_templates=activity_service.candidates(profile,data,health)
+    preferences=profile.get('goals',{}).get('activity',{})
+    if preferences.get('gym')=='no':
+        if data.get('strength_sessions_min',0)>0:raise DomainError('Palestra esclusa: il minimo di sedute di forza deve essere zero')
+        public['templates']=[];cfg['strength_sessions_min']=cfg['strength_sessions_max']=0;cfg['muscle_targets_proxy']={}
+        if not activity_templates:
+            cfg['sessions_min']=cfg['sessions_max']=0;cfg['cardio_minutes_min']=0
+    public['templates'].extend(activity_templates)
+    cfg['max_session_minutes']=preferences.get('max_session_minutes',90)
+    cfg['health_priority']=profile.get('goals',{}).get('training_priorities',{}).get('health',0)
+    cfg['activity_template_ids']=[s['id'] for s in activity_templates]
     if locked_by_date is not None:cfg['locked_by_date']=locked_by_date
     result=dict(kind='workout',mode=profile['mode'],week_start=data['week_start'],horizon=dict(days=7),demo=True,require_personal_configuration=not cfg['demo'],configuration_hash=configuration_hash(profile),status='ok',plans=[],warnings=[dict(code='workout_demo',message='Tempi e volume dei protocolli sono bozze dimostrative; i carichi sono personali solo se dichiarati.')])
     signatures=set()
@@ -112,11 +124,26 @@ async def generate_week(session,profile,data,locked_by_date=None):
         values_verified(problem,solved)
         values={v['name']:v['value'] for v in solved['result']['variables']}
         chosen=[dict(date=d,session_id=t['id'],minutes=display_minutes(t['duration_seconds']),duration_seconds=t['duration_seconds'],start_time=times.get(d),session=copy.deepcopy(t)) for i,(d,t) in enumerate(slots) if values[f's{i}']>.5]
+        for i,(date,template) in enumerate(slots):
+            if template.get('kind')!='activity' or values[f's{i}']<=.5:continue
+            minutes=round(values[f'activity_units_{i}'])*template['activity_duration']['step']
+            item=next(s for s in chosen if s['date']==date and s['session_id']==template['id'])
+            item['session']=activity_service.materialize(template,minutes,profile,health)
+            item.update(minutes=minutes,duration_seconds=minutes*60)
         chosen=[dict(member,date=item['date'],minutes=display_minutes(member['session']['duration_seconds']),duration_seconds=member['session']['duration_seconds'],locked=True) if item['session'].get('locked_observation') else member for item in chosen for member in item['session'].get('locked_members',[item])]
         signature=tuple((s['date'],s['session_id']) for s in chosen)
         if signature in signatures:continue
         signatures.add(signature)
         result['plans'].append(dict(role='best' if not result['plans'] else 'varied',workout_sessions=chosen,weekly_minutes=display_minutes(sum(s['duration_seconds'] for s in chosen)),weekly_duration_seconds=sum(s['duration_seconds'] for s in chosen),constraint_report=dict(verified=True,all_respected=True),explanation=dict(headline='Meno tempo' if mode=='time' else 'Maggiore copertura muscolare stimata',reasons=['Vincoli di disponibilità e recupero verificati'],tradeoffs=[])))
+        plan=result['plans'][-1]
+        equivalent=sum(s['session'].get('health_equivalent_factor',1 if s['session']['cardio_work_seconds'] else 0)*(s['session']['duration_seconds'] if s['session'].get('kind')=='activity' else s['session']['cardio_work_seconds'])/60 for s in chosen)
+        strength_days=len({s['date'] for s in chosen if s['session']['resistance_session']})
+        plan['health_progress']=dict(moderate_equivalent_minutes=equivalent,target_minutes=150,strength_days=strength_days,target_strength_days=2,source=activity_service.HEALTH_SOURCE,score=(min(1,equivalent/150)+min(1,strength_days/2))/2)
+        if cfg['health_priority'] and (equivalent<150 or strength_days<2):plan['explanation']['tradeoffs'].append('Obiettivo salute parziale nei limiti disponibili: '+str(round(equivalent))+' minuti equivalenti su 150, '+str(strength_days)+' giorni di forza su 2; nessun vincolo rilassato.')
+        for item in chosen:
+            if item['session'].get('kind')=='activity' and item['session']['energy_estimate']['status']!='available':
+                warning=dict(code='activity_energy_unavailable',message=item['session']['energy_estimate']['reason'])
+                if warning not in result['warnings']:result['warnings'].append(warning)
         if solved['mathematical_status']=='feasible':result['status']='partial'
     if not result['plans']:result.update(status='infeasible',infeasibility=dict(reason='Limiti settimanali non soddisfatti; nessun vincolo rilassato.'))
     return result
@@ -142,9 +169,9 @@ def day_workouts(db,user,date):
     logs=db.execute('SELECT * FROM workout_log WHERE user_id=? AND date=? ORDER BY id',(user,date)).fetchall()
     linked={log['planned_session_id']:log for log in logs if log['planned_session_id'] is not None}
     def descriptor(row,log):
-        snapshot=json.loads(log['snapshot'] if log else row['snapshot']);first=snapshot['exercises'][0].get('media') or {};image=first.get('illustrative_image') or {}
+        snapshot=json.loads(log['snapshot'] if log else row['snapshot']);first=(snapshot.get('exercises') or [{}])[0].get('media') or {};image=first.get('illustrative_image') or {}
         seconds=snapshot['duration_seconds']
-        return dict(planned_session_id=row['id'] if row else None,session_id=snapshot['id'],title=snapshot['name'],minutes=display_minutes(seconds),duration_seconds=seconds,start_time=row['start_time'] if row else None,status=row['status'] if row else 'done' if log['ended'] else 'in_progress',media=dict(thumbnail=image.get('thumbnail_url')),workout_log_id=log['id'] if log else None,demo=snapshot['demo'],pending_configuration=snapshot['pending_configuration'],configuration_at_start=configuration_at_start(log,snapshot))
+        return dict(kind=snapshot.get('kind','workout'),activity_id=snapshot.get('activity_id'),energy_estimate=snapshot.get('energy_estimate'),planned_session_id=row['id'] if row else None,session_id=snapshot['id'],title=snapshot['name'],minutes=display_minutes(seconds),duration_seconds=seconds,start_time=row['start_time'] if row else None,status=row['status'] if row else 'done' if log['ended'] else 'in_progress',media=dict(thumbnail=image.get('thumbnail_url')),workout_log_id=log['id'] if log else None,demo=snapshot['demo'],pending_configuration=snapshot['pending_configuration'],configuration_at_start=configuration_at_start(log,snapshot))
     results=[descriptor(row,linked.get(row['id'])) for row in rows]
     included={row['id'] for row in rows}
     results.extend(descriptor(None,log) for log in logs if log['planned_session_id'] not in included)
@@ -185,7 +212,7 @@ def now():return dt.datetime.now(ZoneInfo('Europe/Rome')).isoformat()
 
 def configuration_hash(profile):
     from workout_configuration import defaults
-    return hashlib.sha256(json.dumps(dict(defaults(),**profile.get('_workout_settings',{})),sort_keys=True).encode()).hexdigest()
+    return hashlib.sha256(json.dumps(dict(settings=dict(defaults(),**profile.get('_workout_settings',{})),goals=profile.get('goals',{}),filtered_weight_kg=profile.get('_filtered_weight_kg')),sort_keys=True).encode()).hexdigest()
 
 
 def own_log(db,user,identifier):

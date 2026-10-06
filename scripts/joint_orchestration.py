@@ -29,7 +29,8 @@ def validate_request(profile,data):
     workout=data.get('workout')
     if not isinstance(workout,dict) or 'week_start' in workout and workout['week_start']!=start:raise DomainError('Orizzonte palestra non valido')
     cfg,_=workout_engine.week_config(dict(workout,week_start=start))
-    if profile.get('goals',{}).get('activity',{}).get('gym')=='no' and cfg['sessions_max']>0:raise DomainError('Palestra esclusa negli obiettivi: usa la settimana dieta; le altre attività attendono il catalogo 8.3')
+    from activity_service import candidates
+    candidates(profile,workout)
     budget=data.get('energy_balance_target_kcal',profile.get('energy_balance_target_kcal'))
     workout_engine.finite(budget,'Bilancio calorico',-10000,10000,True)
     mapping=data.get('workout_activity_map',{})
@@ -126,7 +127,7 @@ def select(result,pool,data,observations=()):
 async def generate_week(session,profile,data,make_config,foods,health=None,workout_locks=None,observations=(),history=()):
     modes,balance=validate_request(profile,data);start=data['week_start'];index=data.get('day_index',dt.date.fromisoformat(start).weekday());integer(index,0,13)
     workout_request=dict(data['workout'],week_start=start)
-    workout_set=await workout_engine.generate_week(session,profile,workout_request,workout_locks)
+    workout_set=await workout_engine.generate_week(session,profile,workout_request,workout_locks,health)
     result=dict(kind='joint',energy_balance_target_kcal=balance,spec_version='orchestration-v2-joint',mode=profile['mode'],week_start=start,horizon=dict(days=7),status=workout_set['status'],plans=[],pool=dict(candidates=0,front=0),warnings=copy.deepcopy(workout_set['warnings']),configuration_hash=workout_engine.configuration_hash(profile),versions=dict(engine='joint-v1',health=(health or {}).get('version')),request_hash=hashlib.sha256(json.dumps(dict(profile=profile,request=data),sort_keys=True).encode()).hexdigest())
     if not workout_set['plans']:return result
     pool=[];seen=set();context=context_key(profile,data)
@@ -144,11 +145,16 @@ async def generate_week(session,profile,data,make_config,foods,health=None,worko
         if diet_set['status']=='partial':result['status']='partial'
         if not diet_set['plans']:result['warnings'].append(dict(code='infeasible_combination',message='Una scheda palestra non ammette una settimana dieta con i target e vincoli indicati.'));continue
         cfg,_=workout_engine.week_config(workout_request);coverage={}
+        if profile.get('goals',{}).get('activity',{}).get('gym')=='no':cfg['muscle_targets_proxy']={}
         for s in workout['workout_sessions']:
             for key,value in s['session']['score_vector']['muscle_coverage_proxy'].items():coverage[key]=coverage.get(key,0)+value
         fractions=[min(1,coverage.get(k,0)/target) for k,target in cfg['muscle_targets_proxy'].items()]
         cardio=sum(s['session']['cardio_work_seconds'] for s in workout['workout_sessions'])/60
         if cfg['cardio_minutes_min']>0:fractions.append(min(1,cardio/cfg['cardio_minutes_min']))
+        priorities=profile.get('goals',{}).get('training_priorities',{})
+        if priorities.get('health',0):
+            equivalent=sum(s['session'].get('health_equivalent_factor',1 if s['session']['cardio_work_seconds'] else 0)*(s['session']['duration_seconds'] if s['session'].get('kind')=='activity' else s['session']['cardio_work_seconds'])/60 for s in workout['workout_sessions'])
+            fractions.extend([min(1,equivalent/150),min(1,len({s['date'] for s in workout['workout_sessions'] if s['session']['resistance_session']})/2)])
         fit=sum(fractions)/len(fractions) if fractions else None
         for plan in diet_set['plans']:
             signature=json.dumps(dict(days=[[d['date'],[(s['meal'],s['food_id'],s['grams']) for s in d['selections']]] for d in plan['days']],sessions=[(s['date'],s['session_id']) for s in workout['workout_sessions']]),sort_keys=True)

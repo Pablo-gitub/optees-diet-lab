@@ -60,6 +60,9 @@ def owner_profile(user):
     profile=profile_defaults(json.loads(user['profile']))
     with connect() as db:
         profile['_workout_settings']=workout_settings.read(db,user['id'])
+        import progress_analysis
+        weight=progress_analysis.weight_series(measurement_values(db,user['id']),diary.local_today())
+        if weight['status']=='available':profile['_filtered_weight_kg']=weight['daily_points'][-1]['filtered_kg']
         profile['_recipe_runs']={'run:'+str(r['id']):json.loads(r['payload']) for r in db.execute('SELECT id,payload FROM recipe_runs WHERE user_id=?',(user['id'],))}
     return profile
 
@@ -1146,3 +1149,13 @@ def activities_catalog(request:Request):
     identity(request)
     from activity_service import catalog
     return catalog()
+
+
+@app.post('/api/activities/confirm')
+async def activity_confirm(request:Request):
+    user=identity(request,True);data=await request.json()
+    import activity_service
+    with connect() as db:
+        db.execute('BEGIN IMMEDIATE')
+        fresh=dict(db.execute('SELECT * FROM users WHERE id=?',(user['id'],)).fetchone())
+        return activity_service.confirm(db,user['id'],owner_profile(fresh),data)

@@ -386,3 +386,64 @@ personale e non impone alcuna attività.
 ```json
 {"version":"1.0","source":"2024 Adult Compendium of Physical Activities","checked_on":"2026-10-06","activities":[{"id":"walking_slow","name_it":"Camminata lenta","met":2.8,"duration_minutes":{"min":15,"max":90,"step":5},"goals":[{"goal_id":"health","zone":"light"}],"healthkit_types":["HKWorkoutActivityTypeWalking"],"compendium_code":"17152","compendium_url":"https://pacompendium.com/walking","checked_on":"2026-10-06"}]}
 ```
+
+### 8.3 — attività nella settimana congiunta e nel diario
+
+`POST /api/plans/joint-week` e `POST /api/plans/workout-week` accettano
+`workout.activities` (lista facoltativa di ID del catalogo). Altrimenti usano
+le attività gradite coerenti con le priorità; senza priorità non aggiungono
+attività automaticamente. Le attività escluse sono rifiutate (400). Con
+`goals.activity.gym: "no"` entrano solo attività, e un minimo esplicito di sedute
+di forza maggiore di zero è incoerente (400). I limiti settimanali restano hard.
+La durata è una variabile intera di passi del catalogo, collegata al selettore
+binario; la verifica indipendente controlla anche questa durata.
+
+```json
+{"week_start":"2026-10-05","workout":{"activities":["walking_brisk"],"days":{"2026-10-05":30,"2026-10-06":30,"2026-10-07":30,"2026-10-08":30,"2026-10-09":30,"2026-10-10":30,"2026-10-11":30},"sessions_min":0,"sessions_max":7,"strength_sessions_min":0,"strength_sessions_max":0,"cardio_minutes_min":0,"weekly_minutes_max":150}}
+```
+
+I normali `day_targets` completi restano richiesti nel percorso congiunto fino
+all'approvazione della proposta 8.5. Il piano contiene le attività in
+`workout_sessions`, quindi le applica atomicamente insieme ai pasti:
+
+```json
+{"workout_sessions":[{"date":"2026-10-06","session_id":"activity:walking_brisk","minutes":30,"duration_seconds":1800,"start_time":null,"session":{"kind":"activity","activity_id":"walking_brisk","additional_activity":true,"energy_estimate":{"status":"available","source":"compendium_met_net","net":true,"weight_kg":80,"met":4.8,"energy_kcal":{"low":106.4,"central":152,"high":197.6},"uncertainty":"Scenari ±30%, euristica in attesa della matrice 8.2; non intervallo di confidenza."}}}]}
+```
+
+La fonte preferita è `apple_health_activity_quantiles` con almeno 3 osservazioni
+recenti (90 giorni). Senza modello personale: `(MET-1) × peso filtrato × ore`,
+scenari ±30% euristici. Senza peso recente la sessione può essere pianificata,
+ma `energy_estimate` è `{"status":"unavailable","reason":"Manca un peso filtrato recente per stimare l’energia netta dell’attività."}`:
+nessun zero inventato. La base Salute ha già sottratto gli allenamenti osservati;
+contiene i passi abituali. Si aggiunge una sola volta l'attività **aggiuntiva**
+registrata, mai una quota di passi ordinari.
+
+Con priorità `health`, il MILP premia la copertura di 150 minuti moderati
+equivalenti e due giorni di forza, come nelle [raccomandazioni OMS](https://www.who.int/europe/news-room/fact-sheets/item/physical-activity)
+(verificate 2026-10-06). Sono obiettivi soft, non nuovi obblighi; con `gym:no`
+la parte forza può restare incompleta. `health_progress` riporta il raggiunto e
+`explanation.tradeoffs` spiega la copertura parziale nei limiti dell'utente.
+
+`DayView.workouts[]` aggiunge `kind`, `activity_id`, `energy_estimate`.
+`POST /api/activities/confirm` registra l'attività fatta in un'unica transazione,
+richiede CSRF, è idempotente se già fatta e verifica proprietà e stato (404/409).
+L'orario è una dichiarazione dell'utente, con durata pianificata, non una misura
+Salute; si conserva `timing_provenance: user_confirmation_assumed_planned_duration`.
+Il pulsante «saltata» riusa l'endpoint palestra esistente.
+
+```json
+{"planned_session_id":42}
+```
+
+Risposta: `DayView` con la voce aggiornata:
+
+```json
+{"date":"2026-10-06","workouts":[{"kind":"activity","activity_id":"walking_brisk","planned_session_id":42,"session_id":"activity:walking_brisk","status":"done","minutes":30,"workout_log_id":17,"energy_estimate":{"status":"available","source":"compendium_met_net","net":true,"energy_kcal":{"low":106.4,"central":152,"high":197.6}}}]}
+```
+
+Un'attività esplicitamente saltata entra nel rientro B13 come perdita di dispendio
+netto, non come cibo ingerito. Una voce non ancora confermata non è uno zero:
+
+```json
+{"deviations":[{"date":"2026-10-06","slot":"activity","kind":"activity","planned_session_id":42,"planned_expenditure_kcal":{"min":106.4,"max":197.6},"difference_kcal":{"min":106.4,"max":197.6},"provenance":{"source":"skipped_planned_activity","energy_source":"compendium_met_net","net":true}}]}
+```
