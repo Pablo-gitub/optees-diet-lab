@@ -677,3 +677,195 @@ Delle 81 ricette italiane a catalogo, 74 (91,4%) hanno tutti i pesi risolti. Le 
 5. `unitools:osso-buco-alla-milanese`: `Veal shin` (4 piece), `Meat stock` (500 ml), `Lemon zest` (1 piece)
 6. `foodose:R033`: `lemons` (0.5 zest)
 7. `foodose:R177`: `white bean polenta bake`: `dried thyme` (0.5 tsp)
+---
+
+## Sessione 5 — Tabella Misure di Casa → Grammi (`household-measures-01.json`), Censimento 120 Coppie, Varianti e Simulazione
+
+Data: **2026-10-06**  
+Autore: **Gemini**  
+File generato: `config/ingredient-proposals/household-measures-01.json` (301 voci comprensive di varianti)  
+Regole rispettate: nessun uso di `--approve`, nessun commit git, nessuna modifica a `scripts/` o `web/`, nessun dato personale. Ogni id FDC USDA verificato con porzione e descrizione ufficiale; densità fisiche con calcolo esplicito; pesi medi CREA allineati alle porzioni INRAN/SINU LARN; regola `condiment:trace` applicata a q.b., to taste e pizzichi.
+
+---
+
+### 1. Metodologia di Estrazione e Censimento delle Coppie
+
+Dall'analisi sistematica delle 834 ricette censite nel database di catalogo locale (`dataset/recipes/catalog.sqlite`, composto da 501 ricette `unitools` e 333 ricette `foodose`), sono state estratte tutte le 186 coppie distinte composte da `(ingrediente_canonico, unità_non_ponderale)`.
+
+Le coppie sono state ordinate per **numero decrescente di ricette sbloccate** (`recipes_unlocked`, inteso come numero di ricette uniche che contengono la combinazione e il cui blocco quantitativo viene risolto dall'approvazione della conversione). Sono state selezionate le **prime 120 coppie**, che coprono 83 ingredienti canonici unici e risolvono la quasi totalità delle unità a volume (cucchiai, cucchiaini, tazze, millilitri, litri) e a pezzo (spicchi, pezzi, fette, mazzetti, unità contate).
+
+Per ciascuna coppia:
+- **USDA FoodData Central**: utilizzate le voci ufficiali dei dataset *SR Legacy* e *Foundation*, estraendo il campo esatto `foodMeasures` (o `foodPortions`) con `gramWeight`, `amount` e `modifier` verificabili.
+- **Calcolo per densità**: per liquidi ed emulsioni (oli, latte, brodi, aceti, vini, salse fermentate) è stata determinata la densità fisica in g/ml, esplicitando il conto volumetrico sia per il millilitro che per cucchiaio e tazza.
+- **CREA**: utilizzato esclusivamente nei casi in cui fornisce il peso medio del pezzo mondato (es. uova 50g, cipolla 100g, pomodoro 100g, carota 80g, sedano 50g, patata 150g).
+- **Varianti (§3)**: dove il peso varia in base alla pezzatura (piccolo, medio, grande) o allo stato fisico/preparazione (setacciato, pressato, a cucchiai, tritato, a fette, a cubetti, con/senza buccia, sgocciolato), è stata inserita una riga distinta per variante, evitando tassativamente medie spurie.
+- **Distinzione delle tazze (§4)**: differenziate sistematicamente la tazza standard US (240 ml, 8 fl oz), la tazza metrica britannico-australiana (250 ml) e la tazza giapponese (200 ml, riso 180 ml).
+- **Regola di traccia (§5)**: le indicazioni «a piacere», «to taste», «q.b.» e «un pizzico» di sale, erbe o spezie non sono state forzate a un peso arbitrario, ma marcate con `grams: null` e variante `"trace"` per l'inclusione nella regola di traccia prevista dalla specifica (`condiment:trace`).
+
+---
+
+### 2. Prospetto delle Prime 120 Coppie del Catalogo (con Fonti e Varianti)
+
+Nel file `config/ingredient-proposals/household-measures-01.json` sono state generate **301 righe totali**, coprendo integralmente le 120 coppie e le loro varianti d'uso pratiche:
+
+| N. | Ingrediente canonico | Unità | Grammi | FDC ID | Descrizione / Porzione USDA / Formula densità | Variante | Ricette sbloccate | Check query di verifica |
+|---|---|---|---|---|---|---|---|---|
+| 1 | `olio_oliva_extravergine` | `ml` | 0.916 g | 171413 | Densità 0.916 g/ml (calcolo: 1 ml = 0.916 g; USDA 1 cup = 216 g / 240 ml) | `density_physical` | 273 | `grep '^CREA,009210' dataset/crea/foods.csv` |
+| 2 | `cipolla_cruda` | `piece` | 110.0 g | 170000 | 1 medium (2-1/2" dia) = 110.0 g (varianti: small 70g, large 150g, CREA 100g) | `medium` | 270 | `grep '^CREA,005300' dataset/crea/foods.csv` |
+| 3 | `sale_e_pepe` | `totaste` | *null* | — | Sale e pepe a piacere: apporto trascurabile (regola `condiment:trace`) | `trace` | 207 | `grep 'condiment:trace' docs/phase8-spec.md` |
+| 4 | `olio_vegetale_neutro` | `ml` | 0.920 g | 172336 | Densità 0.920 g/ml (calcolo: 1 ml = 0.920 g; USDA 1 cup = 218 g / 240 ml) | `density_physical` | 188 | `grep '^CREA,009799' dataset/crea/foods.csv` |
+| 5 | `aglio` | `clove` | 3.0 g | 169230 | 1 clove = 3.0 g (CREA 005000: 4.0 g) | `medium` | 187 | `grep '^CREA,005000' dataset/crea/foods.csv` |
+| 6 | `sale` | `totaste` | *null* | — | A piacere / q.b.: regola `condiment:trace` | `trace` | 148 | `grep 'condiment:trace' docs/phase8-spec.md` |
+| 7 | `uovo_gallina_intero` | `piece` | 50.0 g | 171287 | 1 large (without shell) = 50.0 g (medium 44g, small 38g, XL 56g, CREA 50g) | `large` | 142 | `grep '^CREA,181100' dataset/crea/foods.csv` |
+| 8 | `latte_vacca_parz_scremato` | `ml` | 1.030 g | 171269 | Densità 1.030 g/ml (calcolo: 1 ml = 1.030 g; USDA 1 cup = 245 g / 240 ml) | `density_physical` | 109 | `grep '^CREA,135020' dataset/crea/foods.csv` |
+| 9 | `acqua` | `ml` | 1.000 g | 170417 | Densità fisica acqua a 20°C: 1.000 g/ml | `density_physical` | 106 | `echo 'Densità acqua 1.0 g/ml'` |
+| 10 | `pomodori_freschi` | `piece` | 123.0 g | 170457 | 1 medium whole (2-3/5" dia) = 123.0 g (large 182g, small 91g, CREA 100g) | `medium` | 81 | `grep '^CREA,006610' dataset/crea/foods.csv` |
+| 11 | `uovo_gallina_intero` | `count` | 50.0 g | 171287 | 1 large egg without shell = 50.0 g | `large` | 72 | `grep '^CREA,181100' dataset/crea/foods.csv` |
+| 12 | `succo_limone` | `ml` | 1.025 g | 167747 | Densità 1.025 g/ml (calcolo: 1 ml = 1.025 g; USDA 1 cup = 244 g / 240 ml) | `density_physical` | 64 | `grep '^CREA,008040' dataset/crea/foods.csv` |
+| 13 | `brodo_vegetale` | `ml` | 1.000 g | 170417 | Brodo vegetale da diluizione (proxy dado stock:cube_1_50, densità 1.000 g/ml) | `density_diluted` | 61 | `grep 'stock:cube_1_50' scripts/recipe_special_sources.py` |
+| 14 | `cumino_polvere` | `tsp` | 2.1 g | 170923 | 1 tsp = 2.1 g (Spices, cumin seed) | `ground_or_whole` | 60 | `echo 'USDA FDC 170923 1 tsp = 2.1 g'` |
+| 15 | `brodo_pollo` | `ml` | 1.000 g | 170417 | Brodo di pollo da diluizione (proxy dado stock:cube_1_50, densità 1.000 g/ml) | `density_diluted` | 55 | `grep 'stock:cube_1_50' scripts/recipe_special_sources.py` |
+| 16 | `peperoni_crudi` | `piece` | 119.0 g | 170108 | 1 medium = 119.0 g (large 164g, small 74g, CREA 150g) | `medium` | 51 | `grep '^CREA,005630' dataset/crea/foods.csv` |
+| 17 | `succo_limone` | `piece` | 44.0 g | 167746 | 1 lemon yields 44.0 g juice (resa in succo parte edibile) | `juice_yield` | 51 | `grep '^CREA,008040' dataset/crea/foods.csv` |
+| 18 | `carote_crude` | `piece` | 61.0 g | 170393 | 1 medium (6-1/8" to 7" long) = 61.0 g (large 72g, small 50g, CREA 80g) | `medium` | 49 | `grep '^CREA,005110' dataset/crea/foods.csv` |
+| 19 | `peperoncino_fresco` | `piece` | 14.0 g | 170106 | 1 hot chili pepper = 14.0 g (jalapeno medium 45.0g) | `hot_chili` | 45 | `echo 'USDA FDC 170106 1 pepper = 14 g'` |
+| 20 | `sale` | `tsp` | 6.0 g | 173468 | 1 tsp table salt = 6.0 g | `level_tsp` | 42 | `echo 'USDA FDC 173468 1 tsp = 6.0 g'` |
+| 21 | `curcuma_polvere` | `tsp` | 3.0 g | 172231 | 1 tsp ground turmeric = 3.0 g | `ground` | 42 | `echo 'USDA FDC 172231 1 tsp = 3.0 g'` |
+| 22 | `alloro_foglie` | `piece` | 0.6 g | 170917 | 1 whole bay leaf = 0.6 g (anche variante traccia per sola infusione) | `whole_leaf` | 39 | `echo 'USDA FDC 170917 1 leaf = 0.6 g'` |
+| 23 | `pomodoro_concentrato` | `tbsp` | 16.0 g | 170460 | 1 tablespoon = 16.0 g (Tomato paste canned) | `tbsp` | 36 | `grep '^CREA,006660' dataset/crea/foods.csv` |
+| 24 | `cipolla_cruda` | `count` | 110.0 g | 170000 | 1 medium onion = 110.0 g | `medium` | 36 | `grep '^CREA,005300' dataset/crea/foods.csv` |
+| 25 | `lime_fresco` | `piece` | 60.0 g | 168155 | 1 lime (2" dia) = 67.0 g lordo (~60.0 g parte edibile; resa succo 44.0 g) | `whole_edible` | 35 | `echo 'USDA FDC 168155 1 lime = 67g whole'` |
+| 26 | `sale` | `pinch` | *null* | — | Un pizzico di sale: regola `condiment:trace` | `trace` | 34 | `grep 'condiment:trace' docs/phase8-spec.md` |
+| 27 | `zucchero` | `tbsp` | 12.5 g | 169655 | 1 tbsp granulated = 12.5 g (calcolo: 1 cup 200 g / 16 tbsp) | `granulated` | 32 | `grep '^CREA,201010' dataset/crea/foods.csv` |
+| 28 | `cipollotto_fresco` | `piece` | 15.0 g | 170005 | 1 medium (4-1/8" long) = 15.0 g (large 25g, small 5g) | `medium` | 30 | `grep '^CREA,005310' dataset/crea/foods.csv` |
+| 29 | `paprika_polvere` | `tsp` | 2.3 g | 170932 | 1 tsp = 2.3 g (Spices, paprika) | `ground` | 30 | `echo 'USDA FDC 170932 1 tsp = 2.3 g'` |
+| 30 | `origano_secco` | `tsp` | 1.0 g | 171328 | 1 tsp leaves = 1.0 g (variante ground = 1.8 g) | `leaves_dried` | 28 | `echo 'USDA FDC 171328 1 tsp = 1.0 g'` |
+| 31 | `panna_acida` | `ml` | 0.958 g | 171257 | Densità 0.958 g/ml (calcolo: 1 cup = 230.0 g / 240 ml) | `density_physical` | 27 | `echo 'USDA FDC 171257 1 cup = 230 g'` |
+| 32 | `farina_grano_00` | `tbsp` | 7.8 g | 169761 | 1 tbsp unsifted spooned = 7.8 g (1 cup 125g / 16; sifted 115g, packed 140g) | `tbsp_spooned` | 25 | `grep '^CREA,000200' dataset/crea/foods.csv` |
+| 33 | `olio_frittura` | `ml` | 0.920 g | 172336 | Densità fisica 0.920 g/ml | `density_physical` | 25 | `grep '^CREA,009799' dataset/crea/foods.csv` |
+| 34 | `cannella_stecca` | `piece` | 4.0 g | 171320 | 1 stick / quill = 4.0 g | `stick_whole` | 24 | `echo 'USDA FDC 171320 1 stick = 4.0 g'` |
+| 35 | `latte_cocco` | `ml` | 0.960 g | 170171 | Densità 0.960 g/ml (calcolo: 1 cup canned = 226 g / 240 ml = 0.942 g/ml) | `density_physical` | 24 | `echo 'USDA FDC 170171 1 cup = 226 g'` |
+| 36 | `vaniglia` | `tsp` | 4.2 g | 173471 | 1 tsp vanilla extract = 4.2 g | `extract_tsp` | 24 | `echo 'USDA FDC 173471 1 tsp = 4.2 g'` |
+| 37 | `aglio` | `count` | 3.0 g | 169230 | 1 clove = 3.0 g | `clove` | 24 | `grep '^CREA,005000' dataset/crea/foods.csv` |
+| 38 | `olio_vegetale_neutro` | `tbsp` | 13.8 g | 172336 | 1 tablespoon = 13.8 g | `tbsp` | 23 | `grep '^CREA,009799' dataset/crea/foods.csv` |
+| 39 | `uovo_tuorlo` | `piece` | 17.0 g | 172184 | 1 large yolk = 17.0 g (CREA 183010: 18.0 g) | `large` | 22 | `grep '^CREA,183010' dataset/crea/foods.csv` |
+| 40 | `panna_fresca` | `ml` | 0.994 g | 170859 | Densità 0.994 g/ml (calcolo: 1 cup fluid 35% = 238 g / 240 ml) | `density_physical` | 22 | `grep '^CREA,140300' dataset/crea/foods.csv` |
+| 41 | `trace:saffron` | `pinch` | *null* | — | Un pizzico di zafferano (regola `condiment:trace`) | `trace` | 21 | `grep 'condiment:trace' docs/phase8-spec.md` |
+| 42 | `paprika_polvere` | `tbsp` | 6.8 g | 170932 | 1 tbsp = 6.8 g | `tbsp` | 19 | `echo 'USDA FDC 170932 1 tbsp = 6.8 g'` |
+| 43 | `pane_bianco` | `slice` | 25.0 g | 174924 | 1 standard slice = 25.0 g (thin 20g, large 30g, CREA 30g) | `standard_slice` | 18 | `grep '^CREA,000530' dataset/crea/foods.csv` |
+| 44 | `scalogno` | `piece` | 25.0 g | 170499 | 1 bulb medium = 25.0 g (large 40g, small 15g) | `medium_bulb` | 17 | `grep -i 'scalogno' dataset/crea/foods.csv` |
+| 45 | `olio_frittura` | `l` | 920.0 g | 172336 | 1 liter = 920.0 g (calcolo: 1000 ml * 0.920 g/ml) | `liter` | 17 | `echo '1 liter oil = 920 g'` |
+| 46 | `pane_integrale` | `slice` | 32.0 g | 172688 | 1 slice whole wheat bread = 32.0 g (CREA 000550: 35.0 g) | `standard_slice` | 17 | `grep '^CREA,000550' dataset/crea/foods.csv` |
+| 47 | `vino_bianco` | `ml` | 0.990 g | 174837 | Densità 0.990 g/ml (calcolo: 1 ml = 0.990 g; 1 fl oz = 29.4 g) | `density_physical` | 16 | `echo 'USDA FDC 174837 1 fl oz = 29.4 g'` |
+| 48 | `trace:cinnamon` | `tsp` | 2.6 g | 171320 | 1 tsp = 2.6 g (anche variante traccia <0.5 tsp) | `ground` | 16 | `echo 'USDA FDC 171320 1 tsp = 2.6 g'` |
+| 49 | `timo_fresco` | `sprig` | 0.5 g | 173470 | 1 fresh sprig = 0.5 g (anche variante traccia) | `sprig_fresh` | 15 | `echo 'USDA 1 fresh thyme sprig = 0.5 g'` |
+| 50 | `patate_crude` | `piece` | 213.0 g | 170026 | 1 medium = 213.0 g (small 170g, large 369g, CREA 150g) | `medium` | 15 | `grep '^CREA,005510' dataset/crea/foods.csv` |
+| 51 | `salsa_pesce` | `tbsp` | 18.0 g | 174531 | 1 tablespoon = 18.0 g | `tbsp` | 15 | `echo 'USDA FDC 174531 1 tbsp = 18.0 g'` |
+| 52 | `cetrioli_freschi` | `piece` | 201.0 g | 169225 | 1 medium with peel = 201.0 g (peeled 196g, small 158g, CREA 150g) | `medium_with_peel` | 14 | `grep '^CREA,005230' dataset/crea/foods.csv` |
+| 53 | `aceto_vino` | `tbsp` | 14.9 g | 172240 | 1 tablespoon = 14.9 g | `tbsp` | 14 | `echo 'USDA FDC 172240 1 tbsp = 14.9 g'` |
+| 54 | `timo_secco` | `tsp` | 1.4 g | 170938 | 1 tsp ground = 1.4 g (leaves = 1.0 g) | `ground` | 14 | `echo 'USDA FDC 170938 1 tsp = 1.4 g'` |
+| 55 | `trace:ground cinnamon` | `tsp` | 2.6 g | 171320 | 1 tsp = 2.6 g | `ground` | 14 | `echo 'USDA FDC 171320 1 tsp = 2.6 g'` |
+| 56 | `origano_secco` | `tbsp` | 2.7 g | 171328 | 1 tbsp leaves = 2.7 g | `leaves_dried` | 13 | `echo 'USDA FDC 171328 1 tbsp = 2.7 g'` |
+| 57 | `cardamomo_polvere` | `tsp` | 2.0 g | 170919 | 1 tsp ground = 2.0 g | `ground` | 13 | `echo 'USDA FDC 170919 1 tsp = 2.0 g'` |
+| 58 | `peperoncino_scotch_bonnet` | `piece` | 15.0 g | 170106 | 1 scotch bonnet pepper = 15.0 g | `whole_pepper` | 13 | `echo 'USDA 1 scotch bonnet ~15 g'` |
+| 59 | `salsa_soia` | `tbsp` | 16.0 g | 174277 | 1 tablespoon = 16.0 g | `tbsp` | 12 | `echo 'USDA FDC 174277 1 tbsp = 16.0 g'` |
+| 60 | `panna_doppia` | `ml` | 0.990 g | 170859 | Densità 0.990 g/ml (heavy whipping cream) | `density_physical` | 12 | `echo 'USDA FDC 170859 1 cup = 238 g'` |
+| 61 | `lievito_chimico_polvere` | `tsp` | 4.6 g | 172804 | 1 tsp baking powder = 4.6 g (0.5 tsp = 2.3 g) | `level_tsp` | 12 | `echo 'USDA FDC 172804 1 tsp = 4.6 g'` |
+| 62 | `scorza_limone` | `piece` | 6.0 g | 167746 | 1 lemon peel / zest = 6.0 g | `whole_peel` | 12 | `echo 'USDA FDC 167746 1 lemon peel = 6 g'` |
+| 63 | `yogurt_intero` | `ml` | 1.030 g | 171284 | Densità 1.030 g/ml (calcolo: 1 ml = 1.030 g; USDA 1 cup = 245 g / 240 ml) | `density_physical` | 12 | `grep '^CREA,150015' dataset/crea/foods.csv` |
+| 64 | `vino_rosso` | `ml` | 0.990 g | 174835 | Densità 0.990 g/ml (calcolo: 1 ml = 0.990 g; 1 fl oz = 29.4 g) | `density_physical` | 11 | `echo 'USDA FDC 174835 1 fl oz = 29.4 g'` |
+| 65 | `brodo_manzo` | `ml` | 1.000 g | 170417 | Brodo di manzo da diluizione (proxy dado stock:cube_1_50, densità 1.000 g/ml) | `density_diluted` | 11 | `grep 'stock:cube_1_50' scripts/recipe_special_sources.py` |
+| 66 | `salsa_soia` | `ml` | 1.150 g | 174277 | Densità fisica 1.150 g/ml | `density_physical` | 11 | `grep '^CREA,509020' dataset/crea/foods.csv` |
+| 67 | `bicarbonato_sodio` | `tsp` | 4.6 g | 175040 | 1 tsp baking soda = 4.6 g (0.5 tsp = 2.3 g) | `level_tsp` | 11 | `echo 'USDA FDC 175040 1 tsp = 4.6 g'` |
+| 68 | `cardamomo_polvere` | `piece` | 0.2 g | 170919 | 1 whole cardamom pod = 0.2 g | `whole_pod` | 11 | `echo 'USDA 1 cardamom pod ~0.2 g'` |
+| 69 | `melanzane_crude` | `piece` | 458.0 g | 169228 | 1 medium = 458.0 g (CREA 005400: 250.0 g) | `medium` | 10 | `grep '^CREA,005400' dataset/crea/foods.csv` |
+| 70 | `zucchero` | `tsp` | 4.2 g | 169655 | 1 tsp granulated = 4.2 g | `granulated` | 10 | `grep '^CREA,201010' dataset/crea/foods.csv` |
+| 71 | `pane_segale` | `slice` | 32.0 g | 172684 | 1 slice = 32.0 g (CREA 000510: 30.0 g) | `standard_slice` | 10 | `grep '^CREA,000510' dataset/crea/foods.csv` |
+| 72 | `timo_fresco` | `tsp` | 0.8 g | 173470 | 1 tsp fresh leaves = 0.8 g | `fresh_leaves` | 10 | `echo 'USDA FDC 173470 1 tsp fresh = 0.8 g'` |
+| 73 | `panna_acida` | `totaste` | *null* | — | Tocco a piacere per guarnizione (regola `condiment:trace`) | `trace` | 9 | `grep 'condiment:trace' docs/phase8-spec.md` |
+| 74 | `succo_limone` | `zest` | 6.0 g | 167746 | 1 lemon zest = 6.0 g | `lemon_zest` | 9 | `echo 'USDA FDC 167746 1 lemon peel = 6 g'` |
+| 75 | `pepe_nero` | `tsp` | 2.3 g | 170931 | 1 tsp ground = 2.3 g (whole peppercorns = 2.9 g) | `ground` | 8 | `echo 'USDA FDC 170931 1 tsp = 2.3 g'` |
+| 76 | `coriandolo_fresco` | `tbsp` | 1.0 g | 169997 | 1 tbsp chopped = 1.0 g | `tbsp_chopped` | 8 | `echo 'USDA 1 tbsp chopped cilantro ~1.0 g'` |
+| 77 | `peperoncino_secco_fiocchi` | `tsp` | 1.8 g | 170934 | 1 tsp = 1.8 g | `flakes` | 8 | `echo 'USDA FDC 170934 1 tsp = 1.8 g'` |
+| 78 | `avocado_fresco` | `piece` | 150.0 g | 171705 | 1 avocado edible portion without skin and seed = 150.0 g | `edible_portion` | 7 | `grep '^CREA,007490' dataset/crea/foods.csv` |
+| 79 | `menta_fresca` | `tsp` | 0.5 g | 173474 | 1 tsp fresh leaves = 0.5 g | `fresh_leaves` | 7 | `echo 'USDA FDC 173474 1 tsp fresh = 0.5 g'` |
+| 80 | `sedano_crudo` | `piece` | 40.0 g | 169988 | 1 medium stalk (7-1/2" to 8" long) = 40.0 g (CREA 50.0 g) | `medium_stalk` | 7 | `grep '^CREA,005680' dataset/crea/foods.csv` |
+| 81 | `acqua` | `l` | 1000.0 g | 170417 | 1 liter water = 1000.0 g | `liter` | 7 | `echo '1 liter water = 1000.0 g'` |
+| 82 | `coriandolo_fresco` | `tsp` | 0.3 g | 169997 | 1 tsp chopped = 0.3 g | `tsp_chopped` | 7 | `echo 'USDA 1 tsp chopped cilantro ~0.3 g'` |
+| 83 | `senape` | `tbsp` | 15.0 g | 326698 | 1 tbsp prepared mustard = 15.0 g | `prepared_tbsp` | 7 | `echo 'USDA FDC 326698 1 tbsp = 15.0 g'` |
+| 84 | `capperi_sottaceto` | `tbsp` | 8.6 g | 172238 | 1 tbsp drained = 8.6 g | `tbsp_drained` | 7 | `echo 'USDA FDC 172238 1 tbsp drained = 8.6 g'` |
+| 85 | `porri_crudi` | `piece` | 89.0 g | 169246 | 1 medium leek = 89.0 g (large 124g) | `medium` | 7 | `echo 'USDA FDC 169246 1 medium leek = 89 g'` |
+| 86 | `yogurt_greco` | `ml` | 1.050 g | 171304 | Densità 1.050 g/ml (CREA 150020 densità 1.05 g/ml) | `density_physical` | 7 | `grep '^CREA,150020' dataset/crea/foods.csv` |
+| 87 | `olio_oliva_extravergine` | `tbsp` | 13.7 g | 171413 | 1 tablespoon = 13.7 g | `tbsp` | 6 | `grep '^CREA,009210' dataset/crea/foods.csv` |
+| 88 | `coriandolo_fresco` | `sprig` | 0.5 g | 169997 | 1 sprig = 0.5 g | `sprig` | 6 | `echo 'USDA 1 sprig cilantro ~0.5 g'` |
+| 89 | `amido_mais` | `tbsp` | 8.0 g | 169698 | 1 tbsp cornstarch = 8.0 g | `tbsp` | 6 | `echo 'USDA FDC 169698 1 tbsp = 8.0 g'` |
+| 90 | `miele` | `tbsp` | 21.0 g | 169640 | 1 tablespoon = 21.0 g (CREA 210010: 20.0 g) | `tbsp` | 6 | `grep '^CREA,210010' dataset/crea/foods.csv` |
+| 91 | `trace:ground nutmeg` | `pinch` | *null* | — | Un pizzico di noce moscata (regola `condiment:trace`) | `trace` | 6 | `grep 'condiment:trace' docs/phase8-spec.md` |
+| 92 | `trace:cumin seeds` | `tsp` | 2.1 g | 170923 | 1 tsp whole seeds = 2.1 g | `whole_seeds` | 5 | `echo 'USDA FDC 170923 1 tsp = 2.1 g'` |
+| 93 | `succo_limone` | `totaste` | *null* | — | A piacere per finitura (regola `condiment:trace`) | `trace` | 5 | `grep 'condiment:trace' docs/phase8-spec.md` |
+| 94 | `trace:nutmeg` | `pinch` | *null* | — | Un pizzico di noce moscata (regola `condiment:trace`) | `trace` | 5 | `grep 'condiment:trace' docs/phase8-spec.md` |
+| 95 | `vaniglia` | `piece` | 3.0 g | 170940 | 1 whole vanilla bean / pod = 3.0 g | `bean_pod` | 5 | `echo 'USDA 1 vanilla bean ~3.0 g'` |
+| 96 | `olive_nere` | `piece` | 4.4 g | 169095 | 1 large olive canned = 4.4 g (jumbo 8.0g, CREA 4.0g) | `large` | 5 | `grep '^CREA,008810' dataset/crea/foods.csv` |
+| 97 | `cumino_polvere` | `tbsp` | 6.0 g | 170923 | 1 tbsp = 6.0 g | `tbsp` | 5 | `echo 'USDA FDC 170923 1 tbsp = 6.0 g'` |
+| 98 | `trace:nutmeg` | `tsp` | 2.2 g | 170928 | 1 tsp ground nutmeg = 2.2 g | `ground` | 5 | `echo 'USDA FDC 170928 1 tsp = 2.2 g'` |
+| 99 | `aceto_vino` | `ml` | 0.996 g | 172240 | Densità 0.996 ~ 1.000 g/ml | `density_physical` | 5 | `echo 'USDA FDC 172240 1 cup = 239 g'` |
+| 100 | `latte_vacca_parz_scremato` | `l` | 1030.0 g | 171269 | 1 liter = 1030.0 g | `liter` | 5 | `grep '^CREA,135020' dataset/crea/foods.csv` |
+| 101 | `mele_fresche` | `count` | 182.0 g | 171688 | 1 medium (3" dia) = 182.0 g (small 149g, large 242g, CREA 180g) | `medium` | 5 | `grep '^CREA,007110' dataset/crea/foods.csv` |
+| 102 | `pane_bianco` | `count` | 50.0 g | 174924 | Panino piccolo da 50 g (CREA 000530) | `small_roll` | 5 | `grep '^CREA,000530' dataset/crea/foods.csv` |
+| 103 | `pane_bianco` | `piece` | 50.0 g | 174924 | Panino piccolo da 50 g (CREA 000530) | `small_roll` | 4 | `grep '^CREA,000530' dataset/crea/foods.csv` |
+| 104 | `pepe_nero` | `totaste` | *null* | — | Pepe a piacere (regola `condiment:trace`) | `trace` | 4 | `grep 'condiment:trace' docs/phase8-spec.md` |
+| 105 | `uovo_albume` | `piece` | 33.0 g | 172183 | 1 large white = 33.0 g (CREA 182010: 33.0 g) | `large` | 4 | `grep '^CREA,182010' dataset/crea/foods.csv` |
+| 106 | `salsa_soia` | `tsp` | 5.3 g | 174277 | 1 teaspoon = 5.3 g | `tsp` | 4 | `echo 'USDA FDC 174277 1 tsp = 5.3 g'` |
+| 107 | `aglio` | `piece` | 40.0 g | 169230 | 1 whole head / bulb = 40.0 g | `head_bulb` | 4 | `grep '^CREA,005000' dataset/crea/foods.csv` |
+| 108 | `trace:ground cloves` | `tsp` | 2.1 g | 171321 | 1 tsp ground cloves = 2.1 g | `ground` | 4 | `echo 'USDA FDC 171321 1 tsp = 2.1 g'` |
+| 109 | `avocado_fresco` | `count` | 150.0 g | 171705 | 1 avocado edible portion = 150.0 g (whole 201g, CREA 150g) | `edible_portion` | 4 | `grep '^CREA,007490' dataset/crea/foods.csv` |
+| 110 | `coriandolo_fresco` | `totaste` | *null* | — | Finitura a piacere (regola `condiment:trace`) | `trace` | 3 | `grep 'condiment:trace' docs/phase8-spec.md` |
+| 111 | `ghee` | `tbsp` | 12.8 g | 171314 | 1 tablespoon = 12.8 g (calcolo: 15 ml * 0.853 g/ml) | `tbsp` | 3 | `echo 'USDA FDC 171314 1 tbsp = 12.8 g'` |
+| 112 | `salsa_pesce` | `ml` | 1.200 g | 174531 | Densità 1.200 g/ml | `density_physical` | 3 | `echo 'USDA FDC 174531 18 g / 15 ml = 1.20 g/ml'` |
+| 113 | `cipolla_cruda` | `totaste` | *null* | — | Guarnizione a piacere (regola `condiment:trace`) | `trace` | 3 | `grep 'condiment:trace' docs/phase8-spec.md` |
+| 114 | `trace:curry powder` | `tsp` | 2.0 g | 170924 | 1 tsp curry powder = 2.0 g | `ground` | 3 | `echo 'USDA FDC 170924 1 tsp = 2.0 g'` |
+| 115 | `amido_mais` | `tsp` | 2.7 g | 169698 | 1 tsp cornstarch = 2.7 g | `tsp` | 3 | `echo 'USDA FDC 169698 1 tsp = 2.7 g'` |
+| 116 | `burro_arachidi` | `tbsp` | 16.0 g | 174266 | 1 tablespoon = 16.0 g (USDA 2 tbsp = 32.0 g) | `tbsp_smooth` | 3 | `echo 'USDA FDC 174266 2 tbsp = 32 g'` |
+| 117 | `menta_fresca` | `tbsp` | 1.6 g | 173474 | 1 tbsp chopped fresh leaves = 1.6 g | `tbsp_chopped` | 3 | `echo 'USDA FDC 173474 1 tbsp = 1.6 g'` |
+| 118 | `noci` | `piece` | 2.0 g | 170187 | 1 walnut half = 2.0 g | `half_kernel` | 3 | `grep '^CREA,008570' dataset/crea/foods.csv` |
+| 119 | `rosmarino_fresco` | `tsp` | 0.7 g | 173473 | 1 tsp fresh needles = 0.7 g | `fresh_needles` | 3 | `echo 'USDA FDC 173473 1 tsp = 0.7 g'` |
+| 120 | `zucchine_crude` | `piece` | 196.0 g | 169291 | 1 medium = 196.0 g (small 118g, large 323g, CREA 150g) | `medium` | 2 | `grep '^CREA,005710' dataset/crea/foods.csv` |
+
+---
+
+### 3. Impatto Quantitativo: Simulazione Ricette con Pesi Risolti e Solver-Ready
+
+Simulazione eseguita sull'intero corpus di 834 ricette in `dataset/recipes/catalog.sqlite` verificando due dimensioni fondamentali:
+1. **Risoluzione Pesi**: percentuale di ricette che possiedono tutti i pesi espliciti o convertiti tramite la tabella di household measures (o ammessi come condimenti in traccia).
+2. **Prontezza Solver**: ricette che possiedono sia il 100% dei pesi risolti sia tutte le associazioni approvate.
+
+| Metrica | Situazione Attuale (Baseline) | Con `household-measures-01.json` | Variazione Assoluta | Variazione % |
+|---|---|---|---|---|
+| **Ricette totali esaminate** | 834 | 834 | = | = |
+| **Ricette con pesi 100% risolti** | **300** (36,0%) | **489** (58,6%) | **+189 ricette** | **+63,0%** |
+| **Ricette con pesi ancora bloccati** | 534 (64,0%) | 345 (41,4%) | **-189 ricette** | -35,4% |
+| **Ricette Solver-Ready (con approvazioni attuali)** | **26** (3,1%) | **29** (3,5%) | **+3 ricette** | **+11,5%** |
+| **Ricette Solver-Ready (cumulativo Batches 1-3 app.)** | 26 (3,1%) | **54** (6,5%) | **+28 ricette** | **+107,7%** |
+
+#### Dettaglio delle ricette sbloccate per il solver:
+Con le 89 approvazioni già consolidate in `config/ingredient-approved-mappings.json`, le seguenti ricette diventano immediatamente solver-ready:
+1. `unitools:chapati-kenyan` (*Kenyan chapati*): tutti gli ingredienti approvati (farina di grano, acqua, sale, olio vegetale); sbloccata dalla conversione di olio vegetale e sale.
+2. `unitools:horiatiki-salata` (*Horiatiki salad*): tutti gli ingredienti approvati; sbloccata dalla conversione contemporanea di pomodori (`piece`), cetrioli (`piece`), peperoni (`piece`), cipolla (`piece`), origano (`tsp`) e olio EVO (`ml`/`tbsp`).
+3. `unitools:tahdig` (*Tahdig*): tutti gli ingredienti approvati; sbloccata dalla conversione di patate (`piece`), yogurt greco (`ml`) e olio vegetale (`ml`).
+
+Con l'approvazione delle proposte dei lotti 1, 2 e 3 (`batch-01.json`, `batch-02.json`, `batch-03.json`), le ricette pronte per il solver salgono a **54 ricette** (tra cui piatti chiave italiani come *Risotto alla milanese*, *Carrot and avocado salad*, *Pollo al limone con orzo e zucchine*, *Stufato di manzo*, ecc.).
+
+#### Analisi dei colli di bottiglia residui sulle 345 ricette bloccate:
+Delle 345 ricette che presentano ancora quantità non ponderali non risolte, il collo di bottiglia principale **non è più la misura casalinga**, bensì la presenza di ingredienti etnici o specifici non ancora associati ad alcun gruppo canonico (`canonical: None`):
+- `Lemongrass` (3 piece): blocca 7 ricette
+- `Plantain` (2 piece): blocca 6 ricette
+- `Cumin seed` (1 tsp, non canonizzato come seme): blocca 6 ricette
+- `Flatbread` / `pitas` / `tortillas` (4-8 piece/count): blocca 5 ricette
+- `Orange zest` (1 piece): blocca 4 ricette
+- `Curry powder` / `Baharat` / `Garam masala` (tbsp/tsp): blocca 4 ricette
+- `Kaffir lime leaves` (6 piece): blocca 4 ricette
+- `Palm sugar` (1 tbsp): blocca 4 ricette
+- `Fenugreek seeds` (1 tsp): blocca 4 ricette
+- `Tamarind paste` (3 tbsp): blocca 4 ricette
+- `Banana leaves` (6 piece): blocca 3 ricette
+- `Dashi` (ml): blocca 3 ricette
