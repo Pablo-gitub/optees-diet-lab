@@ -136,7 +136,9 @@ async def orchestrate_day(session,config,foods,request=None,history=(),observati
     # Diversity optimizes within the original nutritional/portion constraints.
     # Near-optimal error and preference are soft goals, not feasibility bounds.
     while len(pool)<pool_size:
-        if time.monotonic()-start>=budget:envelope['status']='partial';break
+        if time.monotonic()-start>=budget:
+            searches.append(dict(certified=False,reason='Tempo di calcolo esaurito.'))
+            envelope['status']='partial';break
         previous=existing+pool
         if not any(not c.get('locked') and (not slot or c['meal']==slot) for c in choices):break
         p=copy.deepcopy(problem)

@@ -210,3 +210,7 @@ Verifica finale correzioni B12 → B13 → B11: **254 test verdi** con il comand
 Verifica finale B14 → B15: **263 test verdi** con il comando completo richiesto. B14 e B15 chiusi con commit separati. Il rientro non accetta risultati Optees non verificabili e mantiene la traccia valutabile delle nuove revisioni del piano. Indagine del vecchio vettore non conservato e contratto aggiornati in [handoff rientro](backend-handoff-rebalance.md). Nessuna modifica a `web/static/`.
 
 Verifica backend Fase 8, ordine 8.1 → 8.10 → 8.9: 267, 272 e **281 test verdi**, database temporanei e Optees reale nella suite completa. Commit distinti per i tre passi. Contratto UI con esempi in [api-contract.md](api-contract.md); sovrapposizione massima demo 100% → 59,46%, entrambe le settimane delle diete con tre alternative, vincoli nutrizionali intatti e limiti del calcolo dichiarati nell’[audit](phase8-diversity-audit.md). Nessuna modifica a `web/static/`; 8.3 non implementato in questo turno, anche dopo l’arrivo del catalogo revisionato.
+
+| Punto | Stato | Verifica |
+|---|---|---|
+| B16 | **fatto — limite numerico documentato** | Con i candidati liberi correnti, tre alternative al 10% sono impossibili: limite inferiore 10,8696%. Timeout sempre non certificato, testo UI corretto; verifica su DB demo nuovo e regressioni nella suite completa. |

@@ -349,3 +349,28 @@ POST `/api/plan-sets/{id}/alternatives`, CSRF, `{}` oppure `{"time_limit":30}` (
 ```
 
 Se il budget impedisce la conclusione, il motivo precisa che non è stata trovata un'alternativa entro il tempo disponibile e `certified:false`. 403 senza CSRF, 404 per pool assente/altrui, 400 `unsupported_pool` o `empty_pool`, 409 `plan_set_state_changed`, 422 `overlap_not_verified` per un risultato non conforme. Identità canoniche, categorie escluse, limite del minimax e misure aggregate: [audit 8.9](phase8-diversity-audit.md).
+
+### B16 — fattibilità della varietà e calcolo interrotto
+
+Il pool della settimana libera demo può dichiarare un limite analitico, distinto
+dalla certificazione del solver. La modalità libera attuale usa 3 amidi, 3 verdure,
+7 fonti proteiche e **2 frutti**, non l'intero database. Con un frutto da almeno
+100 g in ognuno dei 14 pasti, fra tre alternative una coppia ha supporti di frutta
+inclusi uno nell'altro: almeno 1.400 g comuni su al massimo 12.880 g totali, quindi
+**10,8696% minimo**. Questo basta a dimostrare che tre settimane sotto il 10%
+sono impossibili anche con identità canoniche più strette e senza limite alle
+ripetizioni. Il limite non viene esposto con porzioni personalizzate, pasti
+bloccati o colazione/spuntini attivi. Non certifica la migliore sovrapposizione.
+
+```json
+{"pool":{"overlap_target":10,"overlap_feasibility":{"status":"impossible_for_three","minimum_alternatives":3,"lower_bound_pct":10.8696,"shared_grams_min":1400,"total_grams_max":12880,"candidate_counts":{"starch":3,"vegetables":3,"protein":7,"fruit":2},"reason":"Solo due frutti candidati, obbligatori in 14 pasti: tre alternative hanno almeno il 10,87% di ingredienti comuni. Il catalogo completo non è ancora usato dalla modalità libera."}}}
+```
+
+Il messaggio delle alternative usa «ingredienti diversi sotto il 90%». Un limite
+di tempo, anche prima del primo tentativo di estensione, **non** prova che non
+esistano alternative; `pool.overlap_searches` contiene sempre una voce non
+certificata quando questa è la causa dell'arresto:
+
+```json
+{"status":"no_more_alternatives","plans":[],"pool":{"overlap_target":10,"overlap_searches":[{"certified":false,"reason":"Tempo di calcolo esaurito."}]}}
+```

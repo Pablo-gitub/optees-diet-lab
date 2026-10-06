@@ -113,7 +113,7 @@ async def minimax_candidate(base,choices,previous,foods,solve,deadline,profile=N
     if r['mathematical_status'] in ('optimal','feasible'):return r,p,dict(threshold=.1,certified=r['mathematical_status']=='optimal',target_feasible=True)
     if r['mathematical_status']!='infeasible':return None,None,dict(certified=False,reason='Tempo di calcolo esaurito senza un’alternativa verificata.')
     low=.1;high=1.;best=None;best_p=None
-    if time.monotonic()>=deadline:return None,None,dict(certified=False,reason='Soglia del 10% non fattibile; tempo insufficiente per minimizzare.')
+    if time.monotonic()>=deadline:return None,None,dict(certified=False,reason='Ingredienti diversi sotto il 90%; tempo insufficiente per minimizzare.')
     r,p=await attempt(high)
     if r['mathematical_status'] not in ('optimal','feasible'):return None,None,dict(certified=r['mathematical_status']=='infeasible',reason='Nessun’altra combinazione fattibile entro i vincoli.')
     best,best_p=r,p;certified=True
@@ -134,5 +134,26 @@ def report(envelope,plans,foods,profile=None,slot=None,existing=()):
         envelope.setdefault('warnings',[]).append(dict(code='canonical_mapping_missing',message='Prodotti o composizioni senza generico verificato sono confrontati conservativamente; la marca non crea diversità.'))
     if pair and max(pair)>10.0001:
         for p in plans:
-            p.setdefault('explanation',{}).setdefault('reasons',[]).append(f"Questa alternativa cambia almeno il {100-p['overlap_pct']:.1f}% degli ingredienti in peso; soglia del 10% non raggiunta entro i vincoli e il budget.")
+            p.setdefault('explanation',{}).setdefault('reasons',[]).append(f"Questa alternativa cambia almeno il {100-p['overlap_pct']:.1f}% degli ingredienti in peso; ingredienti diversi sotto il 90% entro i vincoli e il budget.")
         envelope.setdefault('warnings',[]).append(dict(code='overlap_target_unavailable',message='Sovrapposizione massima minimizzata nei vincoli nutrizionali; certificazione e intervallo nel pool.',overlap_achieved=envelope['pool']['overlap_achieved']))
+
+
+def demo_week_feasibility(blocks):
+    """Pigeonhole lower bound for three weeks, independent of solver status.
+
+    Two fruit identities and a mandatory 100 g fruit at each of 14 meals:
+    one pair has nested fruit supports. At least 1,400 g then overlap,
+    over at most 14*(120+300+250+250) g of non-condiment ingredients.
+    Applies only to the unchanged free demo formulation, without extra slots.
+    """
+    if len(blocks)!=7 or any(b['config']['mode']!='free' or b['config'].get('locked_meals') or b['config'].get('portion_bounds_g') or b['config'].get('daily_meals',{}).get('enabled') for b in blocks):return None
+    from plan_diet_day import FRUIT,STARCH,VEG,PROTEIN,LEGUMES,bounds
+    if len(FRUIT)!=2:return None
+    shared=14*min(bounds(i)[0] for i in FRUIT)
+    total=14*sum(max(bounds(i)[1] for i in group) for group in (STARCH,VEG,PROTEIN+LEGUMES,FRUIT))
+    if shared/total<=.1:return None
+    return dict(status='impossible_for_three',minimum_alternatives=3,
+                lower_bound_pct=round(100*shared/total,4),
+                shared_grams_min=shared,total_grams_max=total,
+                candidate_counts=dict(starch=len(STARCH),vegetables=len(VEG),protein=len(PROTEIN+LEGUMES),fruit=len(FRUIT)),
+                reason='Solo due frutti candidati, obbligatori in 14 pasti: tre alternative hanno almeno il 10,87% di ingredienti comuni. Il catalogo completo non è ancora usato dalla modalità libera.')

@@ -126,6 +126,9 @@ async def generate_week(session,profile,request,make_config,foods,history=(),obs
         for w in target_warnings(targets):
             if w not in warnings:warnings.append(w)
     result=dict(spec_version='orchestration-v2',mode=profile['mode'],week_start=request['week_start'],horizon=dict(days=7),status='ok',warnings=warnings,plans=[],pool=dict(candidates=0,front=0,min_distance=3,diversity_relaxed=[],overlap_target=10,overlap_achieved=None),request_hash=hashlib.sha256(json.dumps(dict(profile=profile,request=request),sort_keys=True).encode()).hexdigest(),seed=request.get('seed',20261004),versions=dict(engine='weekly-milp-v2-gram-overlap',catalog=hashlib.sha256(json.dumps(foods,sort_keys=True).encode()).hexdigest()))
+    from ingredient_overlap import demo_week_feasibility
+    feasibility=demo_week_feasibility(blocks)
+    if feasibility:result['pool']['overlap_feasibility']=feasibility
     first=await optimize_day(session,problem)
     if first['mathematical_status'] not in ('optimal','feasible'):result['status']='infeasible';return result
     reference=decode_week(problem,blocks,foods,first,maximum);pool=[reference];original=problem['objective']['coefficients'];raw=copy.deepcopy(problem);raw.pop('preference_coefficients',None)
@@ -142,7 +145,9 @@ async def generate_week(session,profile,request,make_config,foods,history=(),obs
     minimum=0;structural=False;searches=[]
     while len(pool)<pool_size:
         remaining=budget-(time.monotonic()-start)
-        if remaining<=0:result['status']='partial';break
+        if remaining<=0:
+            searches.append(dict(certified=False,reason='Tempo di calcolo esaurito.'))
+            result['status']='partial';break
         previous=existing+pool;p=copy.deepcopy(problem);p.pop('preference_coefficients',None)
         for prior in previous:
             keys=week_keys(prior);row=[0.]*len(p['variables'])

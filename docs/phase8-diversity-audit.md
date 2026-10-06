@@ -46,3 +46,25 @@ Tutti i piani rispettano i vincoli nutrizionali e le frequenze del modello. Nell
 Il 10% non è raggiunto in queste prove. Le categorie condivise e i pasti invariabili impongono sovrapposizione; il programma la mostra, anziché chiamare diverse alternative che cambiano solo qualche condimento. Una prova esplorativa senza limite temporale sul solve aveva tre alternative libere con massimo 100% e media 99,36%; non è usata come confronto principale, perché i budget non erano uguali.
 
 Test sintetici aggiuntivi: soglia 10% fattibile verso due riferimenti contemporaneamente; limite minimax inevitabile del 50%; marche equivalenti; categoria olio anche con quantità elevate e prodotti preferiti; ingredienti delle ricette; timeout senza falsa certificazione; tre alternative giornata/settimana; pasto con gli altri pasti intatti; estensione dello stesso pool, nessuna scrittura al diario, CSRF e rollback 409.
+
+### B16 — verifica su database nuovo
+
+Profilo predefinito libero, database SQLite temporaneo nuovo, settimana
+2026-10-05, Optees reale, `k=3`, `pool_size=3`, `time_limit=45`.
+La prova finale ha prodotto 2 alternative, sovrapposizione 71,86%, stato
+`partial`; entrambe le ricerche sono non certificate. Il valore dipende dal
+budget e dai test concorrenti: **non è una prova dell'ottimo**. Ordinare i giorni
+intercambiabili non ha dato un beneficio nel confronto ed è stato scartato.
+
+La spiegazione dell'impossibilità richiesta non dipende dal risultato del
+solver: il dominio libero contiene solo 2 frutti (non tutto CREA); ogni settimana
+contiene 14 porzioni di frutta di almeno 100 g. Fra tre supporti non vuoti di due
+identità, due sono inclusi uno nell'altro. Tutta la frutta del supporto minore
+si sovrappone: almeno 1.400 g. La massa non esclusa di ogni settimana è al massimo
+14 × (120 g amido + 300 g verdura + 250 g proteina + 250 g frutta) = 12.880 g.
+La sovrapposizione bidirezionale è quindi almeno **10,8696%**. Identità più strette,
+più tempo e rimozione dei vincoli di frequenza non possono portare tre alternative
+al 10% con questo dominio. Per ottenere il 90% di diversità servirà ampliare
+**i candidati della formulazione**, non soltanto il database o il budget.
+Il backend ora espone questo limite e registra `certified:false` anche quando
+il budget si esaurisce prima del tentativo successivo.

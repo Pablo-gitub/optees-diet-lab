@@ -91,3 +91,21 @@ class IngredientOverlapTests(unittest.TestCase):
         async def fake(problem):return dict(mathematical_status='unknown')
         r,_,certificate=asyncio.run(minimax_candidate(p,choices,[self.plan(('a',100))],foods,fake,time.monotonic()+1))
         self.assertIsNone(r);self.assertFalse(certificate['certified'])
+
+    def test_demo_bound_is_numeric_and_not_claimed_for_custom_portions(self):
+        from ingredient_overlap import demo_week_feasibility
+        blocks=[dict(config=dict(mode='free')) for _ in range(7)]
+        bound=demo_week_feasibility(blocks)
+        self.assertGreater(bound['lower_bound_pct'],10)
+        self.assertEqual(bound['shared_grams_min'],1400)
+        blocks[0]['config']['portion_bounds_g']={'007120':[1,2]}
+        self.assertIsNone(demo_week_feasibility(blocks))
+
+    def test_expired_week_extension_always_contains_uncertified_search(self):
+        async def fake(session,p):return solve(p)
+        profile=week_tests.WeekOrchestrationTests().profile()
+        request=dict(week_start='2026-10-05',k=1,pool_size=1,time_limit=1,_existing_plans=[{}])
+        with patch('plan_diet_day.solve_problem',side_effect=fake),patch('week_orchestration.time',__import__('unittest.mock',fromlist=['Mock']).Mock(monotonic=__import__('unittest.mock',fromlist=['Mock']).Mock(side_effect=[0,2]))):
+            result=asyncio.run(generate_week(None,profile,request,week_tests.make_config,load_foods()))
+        self.assertEqual(result['status'],'no_more_alternatives')
+        self.assertFalse(result['pool']['overlap_searches'][-1]['certified'])
