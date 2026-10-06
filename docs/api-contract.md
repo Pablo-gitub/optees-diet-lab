@@ -657,3 +657,35 @@ conservativa invariata; altri composti con `and`/`&` non diventano tracce.
 Audit locale prima/dopo: 834 ricette; pesi risolti **300 → 300**, pronte
 **26 → 26**. Nessuna conversione nutrizionale è stata approvata in questo turno:
 il nuovo registro è vuoto, in attesa della revisione delle fonti e dei pesi.
+
+### 8.11 — Lista della spesa e report A4
+
+`GET /api/week/2026-10-05/shopping-list?include_all=false` (autenticato):
+solo pasti applicati da oggi in avanti ancora `unknown`; `include_all=true`
+include tutti i pasti del piano della settimana, anche già consumati. Nessuna
+scrittura. 404 `week_not_applied` se non esiste una settimana applicata propria.
+
+```json
+{"week_start":"2026-10-05","status":"ok","scope":"remaining_unconsumed_meals","as_of":"2026-10-06","included_meals":5,"items":[{"canonical_id":"CREA:000800","food":{"source":"CREA","id":"000800"},"name":"Pasta di semola","grams":500,"occurrences":5,"department":"Pasta, riso e cereali","locations":[{"date":"2026-10-07","slot":"lunch"}],"product":{"source":"OFF","id":"8076800195057"},"product_name":"Spaghetti N°5","brand":"Barilla","package_g":500,"packages":1}],"trace_condiments":[{"name":"Sale e pepe","grams":null,"department":"Condimenti in traccia"}],"unresolved":[],"warnings":[],"identity_rule":"Precise CREA id or unambiguous reviewed recipe ingredient"}
+```
+
+Le identità sono specifiche: id CREA oppure associazione non ambigua dei candidati
+revisionati della stessa voce di ricetta; i prodotti preferiti sono ricondotti
+all'id generico dichiarato. Nessun raggruppamento indiscriminato di tutte le
+verdure o tutte le carni. Senza associazione verificata un prodotto conserva
+source+id. Le ricette verificate sono scomposte proporzionalmente al peso
+selezionato; brodo diluito conta solo il dado effettivo, acqua esclusa.
+Reparti assegnati con euristica sul nome; condimenti in traccia separati senza peso.
+Le confezioni sono arrotondate per eccesso solo per `quantity` OFF `g`/`kg`
+singolo (mai ml o multipack ambiguo), altrimenti `package_g`/`packages`: null.
+Un preferito è un suggerimento di acquisto: il piano nutrizionale resta quello
+calcolato. Composizione non verificata: `status: partial`, `unresolved[]` con
+`food`, `grams`, `reason`, senza inventare ingredienti.
+
+`GET /api/week/2026-10-05/report.pdf?include_all=false`: stessi permessi e
+scope della spesa, `application/pdf`, attachment `piano-2026-10-05.pdf`,
+`Cache-Control: no-store`. Documento italiano A4 generato con ReportLab locale:
+copertina/bilancio, sette giornate, pasti e ingredienti delle ricette, nutrienti,
+allenamenti (serie, ripetizioni, carichi, durata), riepilogo e spesa.
+Quantità sconosciute indicate «Non disponibile». Nessun servizio esterno.
+Dipendenza `reportlab` in requirements; font DejaVu Sans di sistema incorporato.

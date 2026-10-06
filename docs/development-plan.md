@@ -166,7 +166,7 @@ Specifica: [phase8-spec.md](phase8-spec.md). Consegna a Gemini a sessioni: [gemi
 | 8.8 | Ingredienti delle ricette → CREA → prodotti: dizionario e proposte a sessioni (preferite per prime), approvazioni verificate | Gemini (proposte) · Claude (approvazione) | L | ricette con tutti gli ingredienti approvati in crescita a ogni sessione; nessun id inesistente | da fare |
 | 8.9 | Alternative davvero diverse: sovrapposizione pesata sui grammi ≤ 10% per ingrediente canonico, condimenti esclusi per categoria; minimo 3 alternative; «Calcola altre alternative»; nelle diete strette massima diversità possibile dichiarata | Codex · Claude (UI) | L | test: coppie di alternative entro la soglia o sovrapposizione minimizzata e mostrata; vincoli nutrizionali mai rilassati | **fatto con limite documentato B16** — backend `6713e3e`, B16 `ee6ba5a`; UI: percentuale di ingredienti cambiati e «Calcola altre alternative». Con i due frutti del dominio demo, tre settimane al 10% sono impossibili (limite 10,8696%); serve ampliare i candidati liberi. Timeout non certificati. |
 | 8.10 | Codice a barre: ricerca nel catalogo locale, registrazione dall'etichetta (per 100 g, 100 ml o per porzione → ricalcolo per 100 g), controllo di coerenza delle kcal, prodotti personali; lettura da fotocamera (HTTPS con `tailscale serve`) o da foto | Codex (API) · Claude (UI, libreria di decodifica locale) | M | scansione → diario in 3 tocchi; prodotto registrato ritrovato alla scansione successiva; GTIN validato | **fatto** — API `fe2216e`; UI «▥ Codice a barre» nella ricerca alimenti: cifre, foto o fotocamera dove il browser legge i codici, registrazione dall'etichetta con avviso di coerenza. Libreria di decodifica per Safari e HTTPS ancora da fare |
-| 8.11 | Supermercati preferiti: prodotto da comprare accanto a ogni alimento generico, «uso sempre questo» porta il prodotto nel solver, lista della spesa settimanale con confezioni | Codex · Claude (UI) · Gemini (proposte di equivalenti) | L | lista della spesa dalla settimana applicata; prodotti nel solver solo se coerenti | da fare |
+| 8.11 | Supermercati preferiti: prodotto da comprare accanto a ogni alimento generico, «uso sempre questo» porta il prodotto nel solver, lista della spesa settimanale con confezioni | Codex · Claude (UI) · Gemini (proposte di equivalenti) | L | lista della spesa dalla settimana applicata; prodotti nel solver solo se coerenti | **backend fatto**, PDF incluso; UI da fare |
 
 ## Fuori da questo piano
 
@@ -231,3 +231,7 @@ heuristici, senza spacciare proxy di volume o MET per efficacia individuale.
 | Punto | Stato | Verifica |
 |---|---|---|
 | Ricette: sblocchi rapidi | **fatto** | Sale/pepe composto con whitelist stretta; approvazioni delle conversioni con fonte/autore e compatibilità; spezie estendibili in config. 834 ricette, pesi risolti 300→300, pronte 26→26; proposte esterne non approvate automaticamente. |
+
+| Punto | Stato | Verifica |
+|---|---|---|
+| 8.11 + report settimanale PDF | **fatto** | Spesa aggregata, ingredienti verificati, consumati esclusi, prodotti preferiti/confezioni/reparti; PDF italiano A4 locale con sette giornate e spesa. Fixture sintetiche e controllo visivo del PDF. |

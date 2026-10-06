@@ -12,7 +12,7 @@ import sys
 import time
 from pathlib import Path
 from fastapi import FastAPI, Request, HTTPException
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -620,6 +620,21 @@ def read_day(request:Request,date:str):
 def read_week(request:Request,start:str):
     user=identity(request)
     with connect() as db:return diary.week_view(db,user['id'],owner_profile(user),start)
+
+
+@app.get('/api/week/{week_start}/shopping-list')
+def read_shopping_list(request:Request,week_start:str,include_all:bool=False):
+    import shopping_list
+    user=identity(request)
+    with connect() as db:return shopping_list.shopping_list(db,user['id'],owner_profile(user),week_start,include_all)
+
+
+@app.get('/api/week/{week_start}/report.pdf')
+def read_week_report(request:Request,week_start:str,include_all:bool=False):
+    import week_report
+    user=identity(request)
+    with connect() as db:content=week_report.render(db,user['id'],owner_profile(user),week_start,include_all)
+    return Response(content,media_type='application/pdf',headers={'Content-Disposition':f'attachment; filename="piano-{week_start}.pdf"','Cache-Control':'no-store'})
 
 
 @app.get('/api/foods/search')
