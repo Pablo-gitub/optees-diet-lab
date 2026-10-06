@@ -3447,3 +3447,12 @@ a.button-link {
   font-weight: 700;
   color: var(--brand-strong);
 }
+.rb-activity-choice {
+  display: grid;
+  gap: 6px;
+  margin: 10px 0;
+}
+.rb-activity {
+  margin: 4px 0 0;
+  color: var(--brand-strong);
+}

@@ -40,6 +40,8 @@ function canRebalance(m, day) {
 async function runRebalancePreview() {
   const r = rebalance;
   const body = r.mode === 'diary' ? { date: r.date, from_diary: true } : { date: r.date, slot: r.slot, ...(r.custom ? { custom: r.custom } : { preset: { id: r.preset, size: r.size } }) };
+  // 8.6: activity only when asked; walking is the default suggestion.
+  if (r.activity && r.activity !== 'none') body.activity = { mode: r.activity, max_minutes_per_day: 45 };
   r.loading = true;
   r.preview = null;
   r.error = null;
@@ -244,7 +246,10 @@ function previewView(r) {
     const restText = restAbs.min > 0.5 ? rangeText(restAbs) : 'fino a ' + fmt0(restAbs.max) + ' kcal';
     if (p.status === 'partial') status.append(element('p', 'Resta uno scarto di ' + restText + ' sulla settimana: va bene così, una settimana non si giudica da un pasto.', 'small'));
   } else status.append(element('p', p.reason || p.explanation || '', 'small'));
+  if (b.correction_activity_kcal > 0.5)
+    status.append(element('p', 'Di cui ' + fmt0(b.correction_diet_kcal) + ' kcal in meno nei pasti e circa ' + fmt0(b.correction_activity_kcal) + ' kcal di movimento in più (stima prudente).', 'small'));
   box.append(status);
+  if (!giving && (r.activity || (p.status !== 'unchanged' && p.status !== 'unavailable'))) box.append(activityChoice(r));
   const days = (p.days || []).filter((d) => Math.abs(d.reduction_kcal) > 0.5 || d.changes?.some((c) => slotChanges(c).length));
   if (days.length) {
     const list = element('div', undefined, 'rb-days');
@@ -254,6 +259,9 @@ function previewView(r) {
       const delta = -d.reduction_kcal;
       top.append(element('strong', parseDate(d.date).toLocaleDateString('it-IT', { weekday: 'short', day: 'numeric' })), element('span', fmt0(d.before_kcal) + ' → ' + fmt0(d.after_kcal) + ' kcal', 'muted'), element('span', (delta > 0 ? '+' : '−') + fmt0(Math.abs(delta)), delta > 0 ? 'rb-add' : 'rb-cut'));
       row.append(top);
+      (d.activities || []).forEach((a) =>
+        row.append(element('p', '🚶 ' + activityLabel(a.activity_id) + ' ' + a.minutes + ' min · circa ' + fmt0(a.energy_kcal?.low) + ' kcal (stima prudente)', 'small rb-activity')),
+      );
       const chips = element('div', undefined, 'diff-chips');
       (d.changes || []).forEach((c) => slotChanges(c).forEach(([text, cls]) => chips.append(element('span', (mealMeta[c.slot]?.[0] || c.slot) + ': ' + text, 'chip ' + cls))));
       if (chips.childElementCount) {
@@ -284,6 +292,34 @@ function previewView(r) {
   keep.onclick = () => ((keep.disabled = true), decideRebalance('keep'));
   actions.append(keep);
   box.append(actions);
+  return box;
+}
+
+const rebalanceActivityModes = [
+  ['none', 'Solo i pasti'],
+  ['walk', '+ una passeggiata'],
+  ['liked', '+ attività che mi piacciono'],
+];
+function activityLabel(id) {
+  return activityNames[id] || String(id).replace(/_/g, ' ');
+}
+function activityChoice(r) {
+  const box = element('div', undefined, 'rb-activity-choice');
+  box.append(element('span', 'Vuoi muoverti un po’ invece di togliere tutto dai pasti?', 'muted small'));
+  const chips = element('div', undefined, 'chips');
+  rebalanceActivityModes.forEach(([mode, text]) => {
+    const b = element('button', text, 'chip-toggle' + ((r.activity || 'none') === mode ? ' on' : ''));
+    b.type = 'button';
+    b.setAttribute('aria-pressed', String((r.activity || 'none') === mode));
+    b.onclick = () => {
+      if ((r.activity || 'none') === mode) return;
+      r.activity = mode;
+      runRebalancePreview();
+    };
+    chips.append(b);
+  });
+  box.append(chips);
+  if (r.activity && r.activity !== 'none') box.append(element('p', 'Al massimo 45 minuti al giorno e metà della correzione: le attività sono facoltative, confermale quando le fai.', 'muted small'));
   return box;
 }
 
