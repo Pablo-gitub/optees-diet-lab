@@ -33,6 +33,7 @@ def family(food_id):
 def arms(plan):
     result=set()
     for s in plan['selections']:
+        if s.get('match_id'):result.add('match:'+s['match_id'])
         if s['meal'] not in ('lunch','dinner'):continue
         f=family(s['food_id'])
         if f:result.add('protein:'+f)

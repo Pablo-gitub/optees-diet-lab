@@ -47,6 +47,8 @@ def weekly_model(profile,request,make_config,foods):
         date=(start+dt.timedelta(days=offset)).isoformat()
         if request.get('_active_dates') is not None and date not in request['_active_dates']:continue
         model_index=len(blocks);config=make_config(profile,(index+offset)%14)
+        config['_match_cards']=copy.deepcopy(profile.get('_match_cards',[]))
+        config['_match_profile']=profile
         config['portion_bounds_g']=request.get('portion_bounds_g',config.get('portion_bounds_g',{}))
         for (lock_date,slot),items in locks.items():
             if lock_date==date:add_lock(config,foods,slot,items,profile)
@@ -124,6 +126,11 @@ def weekly_model(profile,request,make_config,foods):
         recipe_id=c.get('recipe_id') or foods[c['food_id']].get('recipe_id')
         if recipe_id:recipe_choices.setdefault(recipe_id,[]).append(c['y'])
     for recipe_id,ys in recipe_choices.items():sparse_rows.append(({y:1 for y in ys},'<=',recipe_intents.MAX_OCCURRENCES))
+    match_ys={}
+    for c in all_choices:
+        if c.get('match_id'):match_ys.setdefault(c['match_id'],set()).add(c['y'])
+    from meal_matches import POLICY as match_policy
+    for ys in match_ys.values():sparse_rows.append(({y:1 for y in ys},'<=',match_policy['maximum_weekly_occurrences']))
     if intents:
         # Worst-case deviation from the original weekly energy target;
         # fixed interval plates are checked on both ends, never treated as zero.

@@ -75,5 +75,7 @@ def add_choices(config,foods,var,add,choices):
    cost[y]=penalty
    choices.append(dict(meal=meal,combination='personalized_habits',branch_index=option,group=0,food_id=food_id,y=y,q=q,nutrients=values,
     source=food.get('source','CREA'),preferred=penalty==0,units=round(low/food['serving_g']) if food_id.startswith('personal:') else None))
+  from meal_matches import branches as match_branches
+  ys.extend(match_branches(config,foods,meal,var,add,choices))
   add({y:1 for y in ys},'=',1)
  return cost

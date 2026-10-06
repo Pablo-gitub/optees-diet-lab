@@ -1,0 +1,21 @@
+{
+  "version": "meal-matches-v1",
+  "deck_size": 10,
+  "minimum_exploration_fraction": 0.3,
+  "maximum_weekly_occurrences": 2,
+  "ratio_flexibility": 0.3,
+  "preference_bonus": 0.03,
+  "dislike_penalty": 0.03,
+  "question_dislikes": 3,
+  "question_silence_days": 60,
+  "solve_seconds": 4,
+  "deck_seconds": 60,
+  "meal_shares": {
+    "breakfast": 0.15,
+    "morning_snack": 0.1,
+    "lunch": 0.35,
+    "afternoon_snack": 0.05,
+    "dinner": 0.35
+  },
+  "reviewed_typical_pairings": []
+}

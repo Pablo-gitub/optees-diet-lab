@@ -99,6 +99,10 @@ def observations(db,user,profile):
     result={}
     for trial in trials(db,user,profile):
         if trial['reward'] is not None:result.setdefault(trial['context'],[]).extend((a,trial['reward']) for a in trial['arms'])
+    # Stated meal preferences are context only, never untried-plan rewards.
+    from meal_matches import current_votes
+    preferences=[dict(context=r['context'],match_id=k,vote=r['vote']) for k,r in current_votes(db,user).items() if r['vote']!='skip']
+    if preferences:result['_match_preference_context']=preferences
     return result
 
 

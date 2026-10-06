@@ -173,6 +173,8 @@ def formulate(config, foods):
             # One optional condiment group, with a zero lower bound for oil.
         from recipe_intents import add_branches
         branch_vars.extend(add_branches(config,foods,meal,expression,var,add,choices))
+        from meal_matches import branches as match_branches
+        branch_vars.extend(match_branches(config,foods,meal,var,add,choices))
         add({b: 1 for b in branch_vars}, '=', 1)
     preference_cost={}
     if config.get('daily_meals',{}).get('enabled'):
@@ -230,6 +232,8 @@ def formulate(config, foods):
     from recipe_intents import PREFERENCE_BONUS
     for c in choices:
         if c.get('preferred_recipe'):objective[c['y']]=objective.get(c['y'],0)-PREFERENCE_BONUS
+    from meal_matches import penalties as match_penalties
+    match_penalties(config,choices,var,add,objective)
     size = len(variables)
     dense = lambda values: [values.get(i, 0) for i in range(size)]
     problem = dict(
@@ -351,6 +355,7 @@ def decode_result(config, problem, choices, slots, foods, result):
                     principal_protein=c.get('principal_protein',False),
                     principal_food_id=c.get('principal_food_id'),
                     units=int(round(values[problem['variables'][c['portion_index']]['name']])) if c.get('portion_index') is not None else c.get('units'),
+                    match_id=c.get('match_id'),
                     recipe_id=c.get('recipe_id') or food.get('recipe_id'),
                     food=food['name'],
                     grams=grams,

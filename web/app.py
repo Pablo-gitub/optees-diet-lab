@@ -1,6 +1,7 @@
 """Local multi-profile planner. Personal configurations are never served as static files."""
 
 import asyncio
+import copy
 import datetime as dt
 import hashlib
 import hmac
@@ -66,6 +67,8 @@ def owner_profile(user):
         profile['_recipe_runs']={'run:'+str(r['id']):json.loads(r['payload']) for r in db.execute('SELECT id,payload FROM recipe_runs WHERE user_id=?',(user['id'],))}
         import recipe_intents
         recipe_intents.attach(db,user['id'],profile)
+        import meal_matches
+        meal_matches.attach(db,user['id'],profile)
         scheduled={}
         for row in db.execute("SELECT s.* FROM planned_session s JOIN week_plan w ON w.id=s.week_plan_id WHERE w.user_id=? AND w.status='active' AND s.status!='skipped'",(user['id'],)):
             scheduled.setdefault(row['date'],[]).append(dict(session_id=row['session_id'],session=json.loads(row['snapshot'])))
@@ -149,6 +152,8 @@ def initialize():
         recalibration.migrate(db)
         import activity_targets
         activity_targets.migrate(db)
+        import meal_matches
+        meal_matches.migrate(db)
         legacy=db.execute("SELECT id,profile FROM users WHERE username='paolo'").fetchone()
         if legacy and json.loads(legacy['profile']).get('personal_diets'):
             workout_settings.seed_legacy_equipment(db,legacy['id'],ROOT/'data/personal/equipment.json')
@@ -348,6 +353,8 @@ def make_config(profile, day):
     if settings['enabled']:
         base['food_preferences']=profile.get('food_preferences',{})
         base['demo']=settings['targets_demo']
+    base['_match_cards']=copy.deepcopy(profile.get('_match_cards',[]))
+    base['_match_profile']=profile
     return base
 
 
@@ -1267,3 +1274,44 @@ async def decide_activity_targets(identifier:int,decision:str,request:Request):
         fresh=dict(db.execute('SELECT * FROM users WHERE id=?',(user['id'],)).fetchone());profile=owner_profile(fresh)
         report=load_health_report(health_directory(user['id']));measurements=measurement_values(db,user['id'],report=report)
         return activity_targets.decide(db,user['id'],profile,measurements,report,identifier,data,decision,diary.local_today())
+
+
+@app.get('/api/matches/deck')
+async def matches_deck(request:Request,slot:str,day_type:str):
+    import meal_matches
+    user=identity(request);profile=owner_profile(user)
+    diary.valid_slot(slot)
+    if day_type not in ('rest','training'):raise diary.DomainError('Tipo di giornata non valido')
+    async with solver_lock:
+        async with stdio_client(StdioServerParameters(command=optees_command())) as (read,write):
+            async with ClientSession(read,write) as session:
+                await session.initialize()
+                with connect() as db:return await meal_matches.deck(session,db,user['id'],profile,slot,day_type,make_config)
+
+
+@app.post('/api/matches/{match_id}/vote')
+async def match_vote(request:Request,match_id:str):
+    import meal_matches
+    user=identity(request,True)
+    with connect() as db:return meal_matches.vote(db,user['id'],match_id,await request.json())
+
+
+@app.delete('/api/matches/{match_id}/vote')
+def match_undo(request:Request,match_id:str):
+    import meal_matches
+    user=identity(request,True)
+    with connect() as db:return meal_matches.undo(db,user['id'],match_id)
+
+
+@app.get('/api/matches/questions')
+def match_questions(request:Request):
+    import meal_matches
+    user=identity(request)
+    with connect() as db:return meal_matches.questions(db,user['id'],owner_profile(user))
+
+
+@app.post('/api/matches/questions/{generic_id}/answer')
+async def match_answer(request:Request,generic_id:str):
+    import meal_matches
+    user=identity(request,True)
+    with connect() as db:return meal_matches.answer(db,user['id'],owner_profile(user),generic_id,await request.json())

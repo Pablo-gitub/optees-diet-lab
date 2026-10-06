@@ -940,3 +940,54 @@ Soglie, unità, caso succo di limone e audit prima/dopo in
 [ingredient-aromatic-audit.md](ingredient-aromatic-audit.md). Sopra soglia,
 oppure senza conversione approvata quando necessaria, l'ingrediente rimane
 normale; se peso o associazione non sono verificati la ricetta resta in revisione.
+
+### 8.12 — Abbinamenti a scorrimento
+
+`GET /api/matches/deck?slot=lunch&day_type=rest`, autenticato, genera con
+Optees un mazzo di 10 pasti sui target locali del profilo (altrimenti quote
+esplicite configurabili dei target quotidiani del tipo richiesto). Almeno 30%
+di combinazioni mai presentate nel medesimo contesto; nessuna duplicazione
+per riempire il mazzo. `partial`/`unavailable` con `reason` quando schemi,
+vincoli o tempo non consentono il risultato. Non rilassa i target. Gli schemi
+monocomponente preesistenti di colazione/spuntini restano monocomponente;
+non si inventano abbinamenti non permessi per ottenere 2–4 ingredienti.
+
+```json
+{"status":"ok","slot":"lunch","day_type":"rest","cards":[{"id":"HASH_STABILE","slot":"lunch","day_type":"rest","exploration":true,"foods":[{"food":{"source":"CREA","id":"000800"},"generic_id":"000800","name":"Pasta di semola","brand":null,"grams":100,"source_label":"database italiano generico","image":null}],"nutrients":{"kcal":620,"protein_g":35,"fat_g":18,"carbs_available_g":75},"vote":null}],"pool":{"requested":10,"returned":10,"exploration_fraction":0.3,"certified":false}}
+```
+
+Esempio parziale: la scheda contiene tutti gli alimenti e i target verificati.
+OFF locale solo per equivalenti scelti esplicitamente tramite prodotti
+preferiti approvati, con nutrienti coerenti; foto solo se licenza immagine
+esplicita CC BY-SA, URL e attribuzione noti. Altrimenti `image:null` (icona UI).
+
+`POST /api/matches/{id}/vote` con CSRF, `{ "vote":"like" }` (oppure
+`dislike`, `love`, `skip`). `DELETE /api/matches/{id}/vote` con CSRF annulla
+soltanto l'ultima scelta dell'utente; 409 su una scelta precedente, 404 per
+scheda non propria. La cronologia conserva e ripristina il voto precedente.
+
+```json
+{"id":"HASH_STABILE","vote":"love","undo_available":true}
+```
+
+`GET /api/matches/questions`: almeno tre schede distinte attualmente scartate
+contenenti un alimento, nessuna gradita; nessuna esclusione automatica.
+`POST /api/matches/questions/{generic_id}/answer` con CSRF,
+`{"answer":"yes"}` aggiunge l'esclusione CREA al profilo; `no` sospende
+la domanda per 60 giorni. 409 se la domanda non è più valida.
+
+```json
+{"questions":[{"food":{"source":"CREA","id":"121410"},"name":"Merluzzo","question":"Merluzzo non ti piace?","discarded_cards":3}]}
+```
+
+```json
+{"food":{"source":"CREA","id":"121410"},"answer":"no","excluded":false,"silent_until":"2026-12-06"}
+```
+
+I graditi aggiungono rami opzionali al MILP della settimana: love = premio
+morbido doppio, massimo due presenze per scheda, proporzioni ±30% sul totale,
+grammi ricalcolati e arrotondati ai passi del solver. Rispettano esclusioni,
+strutture della dieta e target attuali; gli sgraditi penalizzano la stessa
+combinazione di alimenti principali, senza vietarli singolarmente. I voti
+sono contesto di preferenza separato: non diventano ricompense del bandit
+per settimane non provate. Abbinamenti tipici premiati solo se revisionati.
