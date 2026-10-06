@@ -64,6 +64,10 @@ def fingerprint(db,user,profile):
 
 
 def diary_request(data,today):
+    import rebalance_activity
+    if isinstance(data,dict) and 'activity' in data:
+        option=rebalance_activity.validate(data['activity']);plain={k:v for k,v in data.items() if k!='activity'}
+        return dict(diary_request(plain,today),activity=option)
     if not isinstance(data,dict):raise diary.DomainError('Richiesta non valida')
     if 'from_diary' not in data:return estimate(data,today)
     if set(data)!={'date','from_diary'} or data['from_diary'] is not True:raise diary.DomainError('Richiesta dal diario non valida')
@@ -121,6 +125,8 @@ def deviations(meal,snap):
             estimate=activity.get('energy_estimate') or {};energy=estimate.get('energy_kcal',{})
             if estimate.get('status')!='available' or not all(isinstance(energy.get(k),(int,float)) and not isinstance(energy[k],bool) and math.isfinite(energy[k]) and energy[k]>=0 for k in ('low','high')):
                 reason='Stima energetica mancante per l’attività saltata '+view['date']+'.';continue
+            credit=estimate.get('rebalance_credit_kcal')
+            if isinstance(credit,(int,float)) and math.isfinite(credit) and credit>=0:energy=dict(energy,low=credit,high=credit)
             values.append(dict(date=view['date'],slot='activity',kind='activity',planned_session_id=activity['planned_session_id'],planned_expenditure_kcal=dict(min=energy['low'],max=energy['high']),difference_kcal=dict(min=energy['low'],max=energy['high']),provenance=dict(source='skipped_planned_activity',energy_source=estimate['source'],net=True)))
     optional={k:0. for k in ('min','max')}
     if not meal.get('from_diary'):
@@ -137,7 +143,9 @@ def deviations(meal,snap):
     return values,excess,optional,reason,dish
 
 
-async def preview(session,profile,meal,snap,make_config,foods):
+async def preview(session,profile,meal,snap,make_config,foods,health=None):
+    import rebalance_activity
+    activity_option=rebalance_activity.validate(meal.get("activity"))
     recorded,excess,optional,missing,dish=deviations(meal,snap)
     known=missing is None
     totals=[v['totals']['planned']['kcal'] if v['totals']['planned'] else None for v in snap['views']]
@@ -153,6 +161,9 @@ async def preview(session,profile,meal,snap,make_config,foods):
                 if value is None or value.get('kcal') is None:reference_known=False;continue
                 for k in reference:reference[k]+=value['kcal']
     response=dict(status='unavailable',source='diary' if meal.get('from_diary') else 'meal',estimate=meal,deviations=recorded,budget=dict(planned_week_kcal=sum(totals) if all(isinstance(v,(int,float)) for v in totals) else None,excess_kcal=excess,correction_kcal=0,remaining_excess_kcal=excess.copy()),limits=LIMITS.copy(),days=[],workout=dict(required=False,status='optional',explanation='Nessun allenamento aggiunto automaticamente.'))
+    response['budget'].update(correction_diet_kcal=0,correction_activity_kcal=0)
+    response['limits']['activity']=rebalance_activity.LIMITS.copy()
+    response['workout']['requested_mode']=activity_option['mode']
     response['budget'].update(reference_week_kcal=reference if reference_known else None,reference_scope='consumed_where_known_otherwise_planned',previous_correction_kcal=snap.get('previous_correction',0.))
     if reference_known and known:response['budget']['after_week_kcal']={k:round(reference[k]+optional[k],3) for k in reference}
     def unavailable(reason):
@@ -167,7 +178,7 @@ async def preview(session,profile,meal,snap,make_config,foods):
         response.update(status='unchanged',explanation='Lo scostamento settimanale garantito non supera 100 kcal: il piano resta invariato.');return response
     active=[v for v in snap['views'] if v['date']>diary.local_today().isoformat() and any(m['planned'] and m['state']=='unknown' and not m['planned']['locked'] for m in v['meals'])]
     if not active:return unavailable('Non restano giorni modificabili nella settimana.')
-    by_date={v['date']:v for v in active};configs={};locks=[];prior={}
+    by_date={v['date']:v for v in active};configs={};locks=[];prior={};low_by_date={}
     from day_orchestration import family
     for v in snap['views']:
         if v['date'] in by_date:continue
@@ -180,6 +191,7 @@ async def preview(session,profile,meal,snap,make_config,foods):
         date=view['date'];ctx=snap['context'].get(date,{});energy=ctx.get('progress_forecast',{}).get('energy_scenarios',ctx.get('energy_scenarios',{}))
         low=energy.get('consumption_kcal',{}).get('low')
         if energy.get('status')!='available' or not isinstance(low,(int,float)) or not math.isfinite(low) or low<=0:return unavailable('Manca lo scenario basso del consumo da Salute per '+date+'.')
+        low_by_date[date]=low
         required=set(diary.SLOTS)-({'afternoon_snack'} if not profile['daily_meals']['afternoon_fruit'] else set())
         if not all(m['planned'] for m in view['meals'] if m['slot'] in required):return unavailable('Il piano di '+date+' non copre tutti i pasti previsti dal profilo.')
         index=next((m['planned']['day_index'] for m in view['meals'] if m['planned']),0)
@@ -206,12 +218,15 @@ async def preview(session,profile,meal,snap,make_config,foods):
     from plan_diet_day import solve_problem
     foods=copy.deepcopy(foods);forbidden=excluded_dishes(dish,foods)
     baseline={d:by_date[d]['totals']['planned']['kcal'] for d in by_date}
-    plan=None;stage_used=None
+    plan=None;stage_used=None;activity_choices=[];activity_reasons=[];added_by_date={}
     for stage in ('grams','main_meals','all_meals'):
         try:problem,blocks,choices,maximum,costs=build(profile,request,configuration,foods,active,stage,forbidden)
         except (ValueError,KeyError):continue
         size=len(problem['variables']);rows={date:[0.]*size for date in by_date}
         for choice in choices:rows[choice['date']][choice['q']]+=choice['nutrients'][0]
+        if direction==1:
+            activity_choices,activity_reasons=rebalance_activity.add(problem,active,profile,activity_option,rows,baseline,surplus,low_by_date,health)
+        size=len(problem['variables'])
         total=[sum(row[i] for row in rows.values()) for i in range(size)]
         problem['constraints'].append(dict(coefficients=total,relation='>=' if direction==1 else '<=',rhs=sum(baseline.values())-direction*surplus))
         dates=list(rows)
@@ -231,12 +246,14 @@ async def preview(session,profile,meal,snap,make_config,foods):
             # Within the first feasible level, attain its maximum safe correction,
             # then minimize actual food/portion changes, not calorie intake alone.
             problem['constraints'].append(dict(coefficients=total,relation='<=' if direction==1 else '>=',rhs=intake+direction*.001))
-            problem['objective']['coefficients']=[costs.get(i,0.) for i in range(size)]
+            activity_costs={c['y']:100 for c in activity_choices};activity_costs.update({c['q']:c['step'] for c in activity_choices})
+            problem['objective']['coefficients']=[costs.get(i,0.)+activity_costs.get(i,0.) for i in range(size)]
             phase='solver'
             result=await solve_problem(session,problem)
             phase='result'
             if result.get('mathematical_status')!='optimal':continue
-            values_verified(problem,result)
+            final_values=values_verified(problem,result)
+            added_by_date=rebalance_activity.decode(activity_choices,final_values,profile,health) if direction==1 else {}
             phase='days'
             plan=decode_week(problem,blocks,foods,result,maximum);stage_used=stage;break
         except Exception as error:
@@ -247,7 +264,7 @@ async def preview(session,profile,meal,snap,make_config,foods):
     if plan is None:return unavailable('Non è disponibile una soluzione ottima verificata entro i limiti e il tempo di calcolo.')
     response['change_policy']=dict(version='portion-first-v1',stage=stage_used,portion_fraction=.2,step_g=5,substitution_cost=10000,snack_change_cost=100000,excluded_food_ids=sorted(forbidden))
     try:
-        correction=0
+        correction=0;activity_correction=0;activity_sessions=[]
         for day in plan['days']:
             date=day['date'];before=baseline[date];after=day['nutrients']['kcal'];reduction=before-after
             if direction*reduction<-1e-3 or direction*reduction>200+1e-3:raise diary.DomainError('Limiti non verificati','unsafe_proposal',422)
@@ -255,10 +272,22 @@ async def preview(session,profile,meal,snap,make_config,foods):
             for m in by_date[date]['meals']:
                 selections=[s for s in day['selections'] if s['meal']==m['slot']]
                 if m['planned'] and m['state']=='unknown' and not m['planned']['locked'] and changed(m['planned']['items'],selections):changes.append(dict(slot=m['slot'],before=m['planned']['items'],after=selections))
-            response['days'].append(dict(date=date,before_kcal=before,after_kcal=after,reduction_kcal=round(reduction,3),changes=changes,nutrients=day['nutrients'],constraint_report=day['constraint_report']))
+            activities=added_by_date.get(date,[])
+            added=sum(a['energy_kcal']['low'] for a in activities)
+            if added and after-added<low_by_date[date]-500-1e-3:raise diary.DomainError('Deficit complessivo non verificato','unsafe_proposal',422)
+            for item in activities:
+                stored=copy.deepcopy(item['_session']);stored['energy_estimate']['rebalance_credit_kcal']=item['energy_kcal']['low']
+                activity_sessions.append(dict(date=date,session=stored))
+            activity_correction+=added
+            response['days'].append(dict(activities=[{k:v for k,v in a.items() if not k.startswith('_')} for a in activities],date=date,before_kcal=before,after_kcal=after,reduction_kcal=round(reduction,3),changes=changes,nutrients=day['nutrients'],constraint_report=day['constraint_report']))
             correction+=reduction
-        response['budget'].update(correction_kcal=round(correction,3),remaining_excess_kcal={k:round(v-correction,3) for k,v in excess.items()})
-        if reference_known:response['budget']['after_week_kcal']={k:round(reference[k]+optional[k]-correction,3) for k in reference}
+        food_correction=correction
+        if activity_correction>max(0,food_correction)+1e-3:raise diary.DomainError('Quota attività non verificata','unsafe_proposal',422)
+        correction+=activity_correction
+        response['_activity_sessions']=activity_sessions
+        response['workout'].update(excluded_days=activity_reasons,explanation='Attività facoltative richieste, conteggiate nello scenario basso; confermale quando svolte.' if activity_sessions else 'Nessuna attività aggiunta: '+('scostamento negativo, restituiamo energia tramite il cibo.' if direction==-1 else 'non necessaria o nessuna candidata compatibile con i limiti.'))
+        response['budget'].update(correction_diet_kcal=round(food_correction,3),correction_activity_kcal=round(activity_correction,3),correction_kcal=round(correction,3),remaining_excess_kcal={k:round(v-correction,3) for k,v in excess.items()})
+        if reference_known:response['budget']['after_week_kcal']={k:round(reference[k]+optional[k]-food_correction,3) for k in reference}
         complete=max(abs(v-correction) for v in excess.values())<1
         response.update(status='full' if complete else 'partial' if abs(correction)>1e-3 else 'unchanged',explanation='Rientro completo entro i limiti.' if complete else 'È possibile solo un rientro parziale entro i limiti. Puoi anche lasciare invariato il piano.',_plan=plan)
         return response
@@ -267,7 +296,7 @@ async def preview(session,profile,meal,snap,make_config,foods):
         reason,details=failure(error,stage_used,'safety',problem,result,choices)
         response.update(status='unavailable',days=[],verification=details)
         response['budget'].update(correction_kcal=0,remaining_excess_kcal=excess.copy())
-        response.pop('_plan',None)
+        response.pop('_plan',None);response.pop('_activity_sessions',None)
         if reference_known:response['budget']['after_week_kcal']={k:round(reference[k]+optional[k],3) for k in reference}
         return unavailable(reason)
 
@@ -296,6 +325,11 @@ def decide(db,user,profile,token,proposal,action):
                 applied_slots.extend(applied['applied_slots'])
                 changed.extend(x['date'] for x in applied['applied_slots'])
         evaluation_revisions=bandit.revise_rebalance_applications(db,user,profile,applications,result['_plan']['days'],applied_slots,token)
+        week_row=db.execute("SELECT id FROM week_plan WHERE user_id=? AND week_start=? AND status='active'",(user,proposal['start'])).fetchone()
+        for item in result.get('_activity_sessions',[]):
+            session=item['session']
+            db.execute("INSERT INTO planned_session(week_plan_id,date,session_id,minutes,start_time,status,snapshot) VALUES(?,?,?,?,NULL,'chosen',?)",(week_row['id'],item['date'],session['id'],session['duration_seconds']/60,json.dumps(session)))
+            changed.append(item['date'])
         changed=sorted(set(changed))
     from progress_analysis import invalidate_forecast
     if not from_diary:invalidate_forecast(db,user,meal['date'],'consumed_interval_estimate')

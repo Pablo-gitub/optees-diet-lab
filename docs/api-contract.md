@@ -689,3 +689,38 @@ copertina/bilancio, sette giornate, pasti e ingredienti delle ricette, nutrienti
 allenamenti (serie, ripetizioni, carichi, durata), riepilogo e spesa.
 Quantità sconosciute indicate «Non disponibile». Nessun servizio esterno.
 Dipendenza `reportlab` in requirements; font DejaVu Sans di sistema incorporato.
+
+### 8.6 — Rientro con attività facoltativa
+
+`POST /api/rebalance/preview`, stesso contratto e CSRF del 6.2/B13:
+
+```json
+{"date":"2026-10-05","slot":"dinner","preset":{"id":"pizzeria","size":"medio"},"activity":{"mode":"walk","max_minutes_per_day":45}}
+```
+
+`activity` è facoltativo, default `none`; `liked` usa solo attività gradite
+non escluse nel profilo, `walk` la camminata normale. Durata 5–45 a passi di 5,
+poi minimo/massimo del catalogo e durata personale. Non viene aggiunta palestra.
+Restano applicazione esplicita, anteprima senza scritture e 409 sullo stato
+cambiato; «non compensare» non inserisce sessioni.
+
+Campi aggiunti (numeri illustrativi, non una prescrizione):
+
+```json
+{"status":"partial","budget":{"correction_kcal":280,"correction_diet_kcal":180,"correction_activity_kcal":100,"remaining_excess_kcal":{"min":120,"max":300}},"days":[{"date":"2026-10-07","before_kcal":2000,"after_kcal":1910,"reduction_kcal":90,"activities":[{"activity_id":"walking_moderate","minutes":35,"energy_kcal":{"low":91.47,"central":130.67,"high":169.87},"source":"compendium_met_net"}]}],"limits":{"activity":{"maximum_activity_share":0.5,"maximum_added_minutes_per_day":45,"maximum_added_activities_per_day":1,"energy_scenario":"low"}},"workout":{"required":false,"status":"optional","requested_mode":"walk","explanation":"Attività facoltative richieste, conteggiate nello scenario basso; confermale quando svolte.","excluded_days":[]}}
+```
+
+I giorni mostrano la **riduzione del cibo**; correzione totale = dieta + energia
+bassa aggiuntiva. `after_week_kcal` resta l'energia ingerita, senza sottrarre
+l'attività dal cibo. MILP con durate intere: attività <= riduzione dieta
+(quindi <=50% del totale effettivo), massimo una/giorno; distribuzione totale
+entro 25 kcal, deficit netto massimo 500 kcal, minimi nutrizionali invariati.
+Sessioni intense (attività MET>=6) e palestra di intensità non verificabile
+escluse prudenzialmente; rispettato il numero personale massimo di sessioni.
+Senza peso filtrato/modello energetico verificabile, nessuna attività aggiunta:
+il rientro può usare il solo cibo, motivo in `excluded_days`.
+Nello scostamento negativo si restituisce cibo senza aggiungere dispendio.
+Dopo `apply` le attività sono `chosen`, confermabili via API attività; se saltate,
+B13 ripristina una volta il **credito basso realmente utilizzato**, non lo
+scenario alto. Budget precedente conserva la correzione totale; il limite
+cumulativo del cibo conserva separatamente la riduzione alimentare.

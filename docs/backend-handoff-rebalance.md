@@ -137,3 +137,11 @@ DayView continua a presentare `plan_id` e voto del piano; ogni riferimento in `p
 Il voto precedente resta visibile, ma non costituisce una prova delle nuove porzioni. Il bandit richiede consumi/allenamenti effettivi e una conferma del voto successiva all'ultima revisione, nella data del giorno provato o più tardi; altrimenti `insufficient_data`. L'aderenza si calcola sui **nutrienti ribilanciati**, non sul piano originario, senza duplicare le prove.
 
 Riferimenti estranei, esposizioni già sostituite prima dell'anteprima o vecchi rientri senza una traccia ricostruibile non vengono ricollegati per supposizione. È conservata la valutabilità dei rientri applicati con questa revisione del backend; una precedente indisponibilità dovuta a un vecchio backend non viene trasformata automaticamente in una nuova prova.
+
+### Estensione 8.6
+
+Il campo facoltativo `activity` e i nuovi campi `days[].activities`,
+`budget.correction_diet_kcal`/`correction_activity_kcal` sono descritti con JSON
+in [api-contract.md](api-contract.md), sezione 8.6. Nessuna attività preselezionata.
+L'energia bassa dell'attività è aggiunta al recupero, non sottratta ai nutrienti.
+Applicazione/keep restano le stesse azioni con CSRF e stato monouso.

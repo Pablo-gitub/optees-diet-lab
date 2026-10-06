@@ -965,7 +965,9 @@ async def rebalance_preview(request:Request):
         async with stdio_client(StdioServerParameters(command=optees_command(make_config(profile,0)))) as (read,write):
             async with ClientSession(read,write) as session:
                 await session.initialize()
-                result=await meal_rebalance.preview(session,profile,meal,snapshot,make_config,load_foods())
+                report=load_health_report(health_directory(user['id']))
+                health=health_algorithm_inputs(report) if report else None
+                result=await meal_rebalance.preview(session,profile,meal,snapshot,make_config,load_foods(),health)
     token=secrets.token_urlsafe(24);now=time.time()
     for key in list(rebalance_previews):
         if rebalance_previews[key]['expires']<now:del rebalance_previews[key]
