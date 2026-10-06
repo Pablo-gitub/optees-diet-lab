@@ -214,3 +214,4 @@ Verifica backend Fase 8, ordine 8.1 → 8.10 → 8.9: 267, 272 e **281 test verd
 | Punto | Stato | Verifica |
 |---|---|---|
 | B16 | **fatto — limite numerico documentato** | Con i candidati liberi correnti, tre alternative al 10% sono impossibili: limite inferiore 10,8696%. Timeout sempre non certificato, testo UI corretto; verifica su DB demo nuovo e regressioni nella suite completa. |
+| B17 | **fatto** | GET /api/activities autenticato, catalogo locale revisionato e invariato, nessuna rete; regressione API su database temporaneo. |

@@ -1139,3 +1139,10 @@ async def more_plan_alternatives(set_id:int,request:Request):
             # Payload references in the list and plan detail agree after overlap changes.
             for p in payload['plans']:db.execute('UPDATE plans SET payload=? WHERE id=? AND user_id=?',(json.dumps(p),p['id'],user['id']))
         return dict(status='extended',plan_set_id=set_id,added_plan_ids=[p['id'] for p in additions],plan_set=payload)
+
+
+@app.get('/api/activities')
+def activities_catalog(request:Request):
+    identity(request)
+    from activity_service import catalog
+    return catalog()

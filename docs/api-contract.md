@@ -374,3 +374,15 @@ certificata quando questa è la causa dell'arresto:
 ```json
 {"status":"no_more_alternatives","plans":[],"pool":{"overlap_target":10,"overlap_searches":[{"certified":false,"reason":"Tempo di calcolo esaurito."}]}}
 ```
+
+### B17 — catalogo attività locale
+
+`GET /api/activities` richiede autenticazione (401 senza sessione). Restituisce
+il catalogo revisionato in `config/activity-catalog.json`, senza richieste di
+rete. Tutte le voci hanno `id`, `name_it`, `met`, `duration_minutes`, `goals`,
+codice e fonte Compendium e tipi HealthKit. Il catalogo non è una configurazione
+personale e non impone alcuna attività.
+
+```json
+{"version":"1.0","source":"2024 Adult Compendium of Physical Activities","checked_on":"2026-10-06","activities":[{"id":"walking_slow","name_it":"Camminata lenta","met":2.8,"duration_minutes":{"min":15,"max":90,"step":5},"goals":[{"goal_id":"health","zone":"light"}],"healthkit_types":["HKWorkoutActivityTypeWalking"],"compendium_code":"17152","compendium_url":"https://pacompendium.com/walking","checked_on":"2026-10-06"}]}
+```

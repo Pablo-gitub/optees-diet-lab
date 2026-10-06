@@ -34,6 +34,16 @@ class WebTests(unittest.TestCase):
         self.assertEqual(reply.status_code, 200)
         return client, {'x-csrf-token': reply.json()['csrf']}
 
+    def test_local_activities_catalog_requires_login_and_matches_reviewed_data(self):
+        self.assertEqual(TestClient(self.module.app).get('/api/activities').status_code,401)
+        client,_=self.account('activitycatalog')
+        result=client.get('/api/activities')
+        self.assertEqual(result.status_code,200)
+        expected=json.loads((ROOT/'config/activity-catalog.json').read_text())
+        self.assertEqual(result.json(),expected)
+        for row in result.json()['activities']:
+            self.assertTrue({'id','name_it','met','duration_minutes','goals'}<=set(row))
+
     def test_health_reports_and_import_ownership_are_private(self):
         first,h1=self.account('healthfirst');second,h2=self.account('healthsecond')
         with self.module.connect() as db:owner=db.execute('SELECT id FROM users WHERE username=?',('healthfirst',)).fetchone()['id']
