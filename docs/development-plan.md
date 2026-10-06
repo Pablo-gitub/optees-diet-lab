@@ -251,3 +251,4 @@ rientro anticipato. Cronologia dei test del bandit fissata su date sintetiche.
 | Bug UI fase 8 (2026-10-06) | Stato | Verifica |
 |---|---|---|
 | 1 — Ricette preferite nella settimana congiunta | **fatto** | Riprodotto 400 con R048/R054; snapshot presenti, profilo ricaricato prima del commit SQL. Un solo profilo nella transazione, applicazione/rilettura ed esposizioni bandit verificate. Suite completa: 333 test verdi. |
+| 2 — Conferma di attività future | **fatto** | 409 future_activity prima di qualsiasi scrittura; stato chosen e nessun workout_log, conferma odierna ancora idempotente. Suite completa: 333 test verdi. |

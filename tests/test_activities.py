@@ -73,6 +73,14 @@ class ActivityTests(unittest.TestCase):
                 owner=db.execute("SELECT id FROM users WHERE username='activityconfirmation'").fetchone()['id']
                 week=db.execute("INSERT INTO week_plan(user_id,week_start,mode,status,targets) VALUES(?,?,'free','active','{}')",(owner,today)).lastrowid
                 identifier=db.execute("INSERT INTO planned_session(week_plan_id,date,session_id,minutes,status,snapshot) VALUES(?,?,?,?, 'chosen',?)",(week,today,snapshot['id'],30,json.dumps(snapshot))).lastrowid
+            tomorrow=(dt.date.fromisoformat(today)+dt.timedelta(days=1)).isoformat()
+            with web.module.connect() as db:
+                future=db.execute("INSERT INTO planned_session(week_plan_id,date,session_id,minutes,status,snapshot) VALUES(?,?,?,?, 'chosen',?)",(week,tomorrow,snapshot['id'],30,json.dumps(snapshot))).lastrowid
+            response=client.post('/api/activities/confirm',json=dict(planned_session_id=future),headers=headers)
+            self.assertEqual(response.status_code,409,response.text);self.assertEqual(response.json()['code'],'future_activity')
+            with web.module.connect() as db:
+                self.assertEqual(db.execute('SELECT status FROM planned_session WHERE id=?',(future,)).fetchone()[0],'chosen')
+                self.assertEqual(db.execute('SELECT count(*) FROM workout_log WHERE user_id=?',(owner,)).fetchone()[0],0)
             data=dict(planned_session_id=identifier)
             self.assertEqual(client.post('/api/activities/confirm',json=data).status_code,403)
             stranger,h2=web.account('activitystranger')

@@ -59,6 +59,8 @@ def confirm(db,user,profile,data):
     if not isinstance(data,dict) or set(data)!={'planned_session_id'}:raise DomainError('Indica solo l’attività pianificata da confermare')
     row=workouts.planned(db,user,data['planned_session_id']);session=json.loads(row['snapshot'])
     if session.get('kind')!='activity':raise DomainError('La conferma rapida è riservata alle attività')
+    from diary_service import local_today
+    if dt.date.fromisoformat(row['date'])>local_today():raise DomainError('Non puoi confermare un’attività futura','future_activity',409)
     if row['status']=='done':return workouts.day_view(db,user,profile,row['date'])
     if row['status']!='chosen':raise DomainError('Stato attività cambiato','conflict',409)
     from diary_service import valid_date

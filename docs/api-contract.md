@@ -856,3 +856,16 @@ risposta non cambia. Regressione HTTP: preferite `foodose:R048` e `foodose:R054`
 generazione congiunta, applicazione, rilettura dei pasti ed esposizioni bandit.
 La causa riprodotta era il secondo caricamento del profilo da una connessione
 che non vedeva ancora gli snapshot non committati, non l'assenza nei giorni.
+
+### Correzioni UI fase 8 — conferma di attività future
+
+`POST /api/activities/confirm` accetta soltanto date fino a oggi nel fuso locale.
+Il controllo precede anche il ritorno idempotente e qualsiasi scrittura.
+Con un `planned_session_id` appartenente a domani risponde **409**:
+
+```json
+{"detail":"Non puoi confermare un’attività futura","code":"future_activity"}
+```
+
+La sessione resta `chosen` e non viene creato alcun allenamento eseguito.
+Per oggi e date passate restano validi proprietà, CSRF e idempotenza.
