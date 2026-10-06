@@ -869,3 +869,116 @@ Delle 345 ricette che presentano ancora quantità non ponderali non risolte, il 
 - `Tamarind paste` (3 tbsp): blocca 4 ricette
 - `Banana leaves` (6 piece): blocca 3 ricette
 - `Dashi` (ml): blocca 3 ricette
+---
+
+## Sessione 7 — Tabella di Abbinamenti Tipici Italiani e Mediterranei per 8.12 (`meal-pairings-01.json`)
+
+Data: **2026-10-07**  
+Autore: **Gemini**  
+File generato: `config/ingredient-proposals/meal-pairings-01.json` (51 abbinamenti strutturati)  
+Riferimento specifica: **`docs/phase8-spec.md` §12 («Abbinamenti a scorrimento — 8.12»)**  
+Regole rispettate: nessun uso di `--approve`, nessun commit git, nessuna modifica a `scripts/` o `web/`, nessun dato personale. Nessuna fonte bibliografica inventata: natura della tabella formalizzata esplicitamente come **euristica culinaria italiana e mediterranea**. Ogni alimento cita un ID CREA esistente e verificato in `dataset/crea/foods.csv`.
+
+---
+
+### 1. Obiettivo Culinario e Funzione nel Sistema Optees (§12)
+
+La specifica del passo 8.12 definisce le *schede a scorrimento* come mazzi di pasti calcolati (fatti di alimenti generici CREA o prodotti del supermercato con porzioni espresse in grammi) finalizzati a:
+1. Imparare rapidamente le preferenze dell'utente attraverso interazioni intuitive («Mi piace» / «No» / «Lo adoro» ♥ / «Salta»);
+2. Alimentare il solver Optees come combinazioni gradite dotate di premio morbido (massimo 2 presenze settimanali), conservando i rapporti proporzionali tra gli alimenti entro il $\pm 30\%$;
+3. Evitare la combinazione casuale o combinatoria cieca di alimenti nutrizionalmente compatibili ma gastronomicamente stridenti.
+
+La tabella `meal-pairings-01.json` definisce gli **archetipi di abbinamento armonico** per la cucina italiana e mediterranea, suddivisi per pasto e funzione fisiologica.
+
+---
+
+### 2. Struttura del Catalogo e Categorie
+
+Il catalogo contiene **51 abbinamenti tipici** così distribuiti:
+- **Pranzo e Cena (30 terne/quaderne)**: strutturati rigorosamente secondo lo schema di profilo `carboidrato + proteina + verdura (+ condimento EVO)`. Coprono piatti unici di cereale e legume (pasta e ceci, pasta e fagioli, riso e piselli, orzo e ceci, couscous e ceci), cereale e pesce (riso e gamberi, spaghetti alle vongole, riso e salmone, pasta e sarde, polenta e merluzzo), cereale e carni bianche/magre (riso e pollo al limone, manzo e rucola, tacchino e spinaci), pane e formaggi freschi (pane e ricotta con pomodori, caprese con mozzarella, segale e stracchino con rucola, farro alla greca con feta), cereale e uova (pane e uova in camicia con spinaci, carbonara vegetariana con zucchine, frittata campagnola), patate come tubero amidaceo con pesce/uova (polpo e patate, orata al cartoccio con patate, patate e fagiolini con uova sode), zuppe di stagione (pasta con crema di zucca e ricotta).
+- **Colazione (10 combinazioni)**: declinano gli schemi attuali per pasti dolci e salati equilibrati a lento rilascio (yogurt intero/greco con frutta fresca e frutta secca; porridge di latte e fiocchi d'avena con mela/banana; fette biscottate o pane integrale con ricotta vaccina fresca e fette di pera/fragole; colazione salata con pane di segale, uovo strapazzato e pomodorini all'origano; pane integrale con formaggio spalmabile fresco e noci).
+- **Spuntini (11 combinazioni)**: spezzafame da metà mattina, merenda pomeridiana e spuntino serale pre-bed (mela e noci; banana e mandorle per pre-workout; pera e scaglie di Parmigiano Reggiano DOP; arancia e nocciole; yogurt bianco con mirtilli; yogurt greco 0% con fragole; yogurt greco con noci; pane integrale con ricotta fresca; paninetto con prosciutto cotto sgrassato; pane di segale con bresaola della Valtellina; latte caldo pre-bed con mandorle dolci).
+
+---
+
+### 3. Prospetto Completo dei 51 Abbinamenti
+
+| ID Abbinamento | Pasti ammessi | Tipo | Categorie CREA | Alimenti CREA chiave (ID e nome) | Esempio Piatto Reale | Abbinamenti da Evitare (Anti-pattern) |
+|---|---|:---:|---|---|---|---|
+| `pranzo_cena_pasta_ceci_bietole` | pranzo/cena | terna | Cereali e derivati, Legumi | `000800` Pasta di semola, `004010` Ceci, `005080` Bieta | *Pasta e ceci alla romana con contorno di bietole all'agro* | Dolce o zuccheri semplici con legumi (fermentazione gastrica e incongruenza gustativa) |
+| `pranzo_cena_pasta_fagioli_cavolo` | pranzo/cena | terna | Cereali e derivati, Legumi | `000800` Pasta di semola, `004120` Fagioli, `005190` Cavolo cappuccio | *Pasta e fagioli alla veneta con insalata di cappuccio e cumino* | Dolci o frutta cotta zuccherata a fine pasto immediato |
+| `pranzo_cena_pasta_lenticchie_carote` | pranzo/cena | terna | Cereali e derivati, Legumi | `000800` Pasta di semola, `004505` Lenticchie, `005150` Carote | *Tubetti con ragù vegetale di lenticchie e rondelle di carote* | Dolci e creme da forno nello stesso pasto |
+| `pranzo_cena_riso_piselli_lattuga` | pranzo/cena | terna | Cereali e derivati, Legumi | `000100` Riso, `004700` Piselli, `005410` Lattuga | *Risi e bisi alla veneta con cuore di lattuga all'olio e limone* | Zuccheri raffinati o sciroppi aggiunti |
+| `pranzo_cena_orzo_ceci_zucchine` | pranzo/cena | terna | Cereali e derivati, Legumi | `000090` Orzo perlato, `004010` Ceci, `005730` Zucchine | *Orzotto tiepido ai ceci con dadolata di zucchine e menta* | Salse agrodolci con zucchero |
+| `pranzo_cena_polenta_fagioli_spinaci` | pranzo/cena | terna | Cereali e derivati, Legumi | `000075` Polenta, `004120` Fagioli, `005700` Spinaci | *Polenta calda con stufato di borlotti al pomodoro e spinaci saltati* | Dolci fritti o da pasticceria nello stesso pasto |
+| `pranzo_cena_couscous_ceci_verdure_miste` | pranzo/cena | terna | Cereali e derivati, Legumi | `000045` Couscous, `004010` Ceci, `005730` Zucchine, `005600` Peperoni | *Couscous alla trapanese vegetariano con ceci e caponatina leggera* | Dolci sciroppati arabi o miele denso durante il pasto salato |
+| `pranzo_cena_riso_gamberi_zucchine` | pranzo/cena | terna | Cereali e derivati, Prodotti della pesca | `000100` Riso, `128100` Gamberi, `005730` Zucchine | *Risotto delicato con gamberi e fiori/rondelle di zucchine* | Formaggio parmigiano o pecorino grattugiato sopra i gamberi (copre il sapore minerale e iodato del crostaceo) |
+| `pranzo_cena_pasta_vongole_pomodorini` | pranzo/cena | terna | Cereali e derivati, Prodotti della pesca | `000800` Pasta di semola, `127170` Vongola, `006610` Pomodori | *Spaghetti alle vongole con pomodorini di collina e prezzemolo* | Formaggio grattugiato (parmigiano/grana) sui frutti di mare |
+| `pranzo_cena_riso_salmone_asparagi` | pranzo/cena | terna | Cereali e derivati, Prodotti della pesca | `000100` Riso, `122400` Salmone, `005030` Asparagi di bosco | *Riso al vapore con filetto di salmone alle erbe e punte di asparagi* | Maionese industriale o formaggi fusi |
+| `pranzo_cena_pasta_sarde_finocchi` | pranzo/cena | terna | Cereali e derivati, Prodotti della pesca | `000800` Pasta di semola, `122700` Sarda, `005320` Finocchi | *Pasta con le sarde e finocchietto alla palermitana* | Formaggio vaccino o caprino grattugiato (nella tradizione si usa la 'mollica atturrata') |
+| `pranzo_cena_pasta_tonno_pomodoro` | pranzo/cena | terna | Cereali e derivati, Prodotti della pesca | `000850` Pasta di semola, `123550` Tonno in salamoia, `006610` Pomodori | *Penne integrali con battuto di pomodorini freschi, tonno e origano* | Panna o formaggi spalmabili industriali |
+| `pranzo_cena_polenta_merluzzo_pomodoro` | pranzo/cena | terna | Cereali e derivati, Prodotti della pesca | `000075` Polenta, `121410` Merluzzo o nasello, `006610` Pomodori | *Polenta morbida con tocchetti di merluzzo in umido all'aglio e prezzemolo* | Formaggio grana o parmigiano sopra il merluzzo |
+| `pranzo_cena_orzo_polpo_fagiolini` | pranzo/cena | terna | Cereali e derivati, Prodotti della pesca | `000090` Orzo perlato, `127150` Polpo, `004310` Fagiolini | *Orzo perlato con insalata tiepida di polpo, fagiolini e limone* | Maionese industriale o salse all'aglio eccessivamente pesanti |
+| `pranzo_cena_pasta_calamari_zucchine` | pranzo/cena | terna | Cereali e derivati, Prodotti della pesca | `000800` Pasta di semola, `127100` Calamaro, `005730` Zucchine | *Calamarata campana con calamari scottati e julienne di zucchine* | Formaggi grattugiati sui molluschi |
+| `pranzo_cena_riso_pollo_fagiolini` | pranzo/cena | terna | Cereali e derivati, Carni fresche | `000100` Riso, `106500` Pollo, `004310` Fagiolini | *Bocconcini di petto di pollo al limone ed erbe con riso pilaf e fagiolini* | Salse barbecue o ketchup con sciroppo di glucosio |
+| `pranzo_cena_pane_manzo_rucola` | pranzo/cena | terna | Cereali e derivati, Carni fresche | `000530` Pane bianco, `101160` Bovino adulto o vitellone, `005460` Rucola o Ruchetta | *Straccetti di manzo magro scottati alla piastra su letto di rucola con pane tostato* | Salse industriali dolciastre |
+| `pranzo_cena_pane_tacchino_spinaci` | pranzo/cena | terna | Cereali e derivati, Carni fresche | `000550` Pane di tipo integrale, `106850` Tacchino, `005700` Spinaci | *Tagliata di tacchino al rosmarino con spinacino fresco saltato e pane integrale* | Salse piccanti confezionate dense di zuccheri |
+| `pranzo_cena_couscous_pollo_peperoni` | pranzo/cena | terna | Cereali e derivati, Carni fresche | `000045` Couscous, `106500` Pollo, `005600` Peperoni | *Couscous con pollo alle spezie mediterranee e peperoni stufati* | Aggiunta di formaggi vaccini duri o latticini fusi |
+| `pranzo_cena_pane_ricotta_pomodori` | pranzo/cena | terna | Cereali e derivati, Formaggi e latticini | `000530` Pane bianco, `166820` Ricotta di vacca, `006610` Pomodori | *Bruschetta rustica con crema di ricotta fresca di vacca e dadolata di pomodoro al basilico* | Pesce azzurro o frutti di mare mischiati alla ricotta nello stesso piatto |
+| `pranzo_cena_pane_mozzarella_pomodori` | pranzo/cena | terna | Cereali e derivati, Formaggi e latticini | `000530` Pane bianco, `164820` Mozzarella di vacca, `006610` Pomodori | *Insalata Caprese classica con mozzarella fiordilatte, pomodoro cuore di bue, basilico e pane* | Frutta cotta o zuccherata |
+| `pranzo_cena_pane_stracchino_rucola` | pranzo/cena | terna | Cereali e derivati, Formaggi e latticini | `000510` Pane di segale, `167250` Stracchino, `005460` Rucola o Ruchetta | *Crostini di segale con stracchino morbido, rucola selvatica e gocce di EVO* | Pesce azzurro marinato o sarde |
+| `pranzo_cena_farro_feta_cetrioli` | pranzo/cena | terna | Cereali e derivati, Formaggi e latticini | `000020` Farro perlato, `162000` Feta, `005220` Cetrioli, `006610` Pomodori | *Insalata di farro alla greca con feta, cetrioli croccanti, pomodorini e origano* | Carni rosse o insaccati salati (la feta ha già sufficiente apporto sodico) |
+| `pranzo_cena_pane_uova_spinaci` | pranzo/cena | terna | Cereali e derivati, Uova | `000530` Pane bianco, `181100` Uova di gallina, `005700` Spinaci | *Uova in camicia su crostone di pane casereccio con nido di spinaci al burro/olio* | Abbinamento con carni grasse come pancetta affumicata fritta (per mantenere il profilo salutistico) |
+| `pranzo_cena_pasta_uova_zucchine` | pranzo/cena | terna | Cereali e derivati, Uova | `000800` Pasta di semola, `181100` Uova di gallina, `005730` Zucchine, `166000` Parmigiano Reggiano DOP | *Spaghetti alla carbonara vegetariana con zucchine croccanti e uovo mantecato* | Panna da cucina industriale |
+| `pranzo_cena_pane_frittata_carote` | pranzo/cena | terna | Cereali e derivati, Uova | `000550` Pane di tipo integrale, `181100` Uova di gallina, `005150` Carote | *Frittata campagnola cotta in padella con pane integrale e insalata di carote* | Fritture multiple o cibi unti industriali |
+| `pranzo_cena_patate_polpo_prezzemolo` | pranzo/cena | terna | Verdure e ortaggi, Prodotti della pesca | `006500` Patate, `127150` Polpo, `005410` Lattuga | *Insalata calda di polpo e patate alla ligure con battuto di prezzemolo* | Maionese o salse a base di uova crude industriali |
+| `pranzo_cena_patate_orata_zucchine` | pranzo/cena | terna | Verdure e ortaggi, Prodotti della pesca | `006500` Patate, `121730` Orata d'allevamento, `005730` Zucchine | *Orata al cartoccio su letto di patate a rondelle, zucchine e timo* | Formaggi fusi o panna sopra il pesce |
+| `pranzo_cena_patate_uova_fagiolini` | pranzo/cena | terna | Verdure e ortaggi, Uova | `006500` Patate, `181100` Uova di gallina, `004310` Fagiolini | *Insalata tiepida ligure con patate, fagiolini verdi e spicchi d'uovo sodo* | Salse grasse con grassi idrogenati |
+| `pranzo_cena_pasta_zucca_ricotta` | pranzo/cena | terna | Cereali e derivati, Verdure e ortaggi | `000800` Pasta di semola, `005720` Zucca gialla, `166820` Ricotta di vacca | *Rigatoni con vellutata di zucca gialla al rosmarino e fiocchi di ricotta fresca* | Zucchero aggiunto (la zucca è già naturalmente dolce) |
+| `colazione_yogurt_mela_noci` | colazione | terna | Latte e yogurt, Frutta | `150010` Yogurt, `007120` Mele, `008570` Noci | *Coppa di yogurt bianco intero con carpaccio di mela e gherigli di noce* | Zuccheri raffinati, sciroppi industriali o confetture ad alto tenore di saccarosio |
+| `colazione_yogurt_greco_mirtilli_mandorle` | colazione | terna | Latte e yogurt, Frutta | `150020` Yogurt greco, `007760` Mirtilli, `008540` Mandorle dolci | *Bowl di yogurt greco colato con mirtilli neri freschi e lamelle di mandorla* | Dolciumi industriali glassati |
+| `colazione_yogurt_greco_banana_nocciole` | colazione | terna | Latte e yogurt, Frutta | `150030` Yogurt greco, `007510` Banane, `008550` Nocciole | *Yogurt greco 0% con banana matura a fettine e granella di nocciole Piemonte* | Salse al caramello industriale |
+| `colazione_latte_avena_mela` | colazione | terna | Latte e yogurt, Cereali e derivati | `135020` Latte di vacca, `003030` Fiocchi d'avena, `007120` Mele | *Porridge caldo all'italiana d'avena nel latte con dadolata di mela alla cannella* | Zucchero semolato aggiunto in dosi massicce |
+| `colazione_latte_avena_banana` | colazione | terna | Latte e yogurt, Cereali e derivati | `135020` Latte di vacca, `003030` Fiocchi d'avena, `007510` Banane | *Zuppa fredda o tiepida di latte e avena con rondelle di banana* | Cibi salati piccanti |
+| `colazione_latte_fette_biscottate_pera` | colazione | terna | Latte e yogurt, Cereali e derivati | `135020` Latte di vacca, `001510` Fette biscottate, `007260` Pere | *Colazione classica all'italiana con tazza di latte, fette biscottate integrali e una pera fresca* | Biscotti ricchi di grassi saturi idrogenati |
+| `colazione_pane_ricotta_pere` | colazione | terna | Cereali e derivati, Formaggi e latticini | `000550` Pane di tipo integrale, `166820` Ricotta di vacca, `007260` Pere | *Toast di pane integrale tostato con ricotta fresca vaccina e ventaglio di pere Abate* | Formaggi erborinati o fermentati salati |
+| `colazione_fette_ricotta_fragole` | colazione | terna | Cereali e derivati, Formaggi e latticini | `001500` Fette biscottate, `166820` Ricotta di vacca, `007730` Fragole | *Crostini dolci di fette biscottate con nuvola di ricotta fresca e fragole fresche* | Zucchero semolato raffinato aggiunto a cucchiai |
+| `colazione_pane_segale_uovo_pomodorini` | colazione | terna | Cereali e derivati, Uova | `000510` Pane di segale, `181100` Uova di gallina, `006610` Pomodori | *Colazione salata mediterranea: toast di segale con uovo cremoso e pomodorini all'origano* | Bacon fritto americano o insaccati industriali affumicati ricchi di nitriti |
+| `colazione_pane_cremoso_noci` | colazione | terna | Cereali e derivati, Formaggi e latticini | `000550` Pane di tipo integrale, `162050` Formaggio cremoso spalmabile, `008570` Noci | *Fetta di pane integrale rustico con velo di formaggio spalmabile fresco e gherigli di noce* | Salumi piccanti o salsiccia |
+| `spuntino_mela_noci` | spuntino/merenda | coppia | Frutta, Frutta secca a guscio e semi oleaginosi | `007120` Mele, `008570` Noci | *Spicchi di mela croccante con gherigli di noce* | Dolciumi da distributore automatico o merendine industriali |
+| `spuntino_banana_mandorle` | spuntino/merenda | coppia | Frutta, Frutta secca a guscio e semi oleaginosi | `007510` Banane, `008540` Mandorle dolci | *Banana al naturale con una manciata di mandorle dolci con la buccia* | Barrette energetiche ultra-processate cariche di sciroppo di glucosio |
+| `spuntino_pera_parmigiano` | spuntino/merenda | coppia | Frutta, Formaggi e latticini | `007260` Pere, `166000` Parmigiano Reggiano DOP | *Spicchi di pera William con scaglie sottili di Parmigiano Reggiano stagionato* | Aggiunta di pane bianco raffinato in quantità incontrollata |
+| `spuntino_arancia_nocciole` | spuntino/merenda | coppia | Frutta, Frutta secca a guscio e semi oleaginosi | `008000` Arance, `008550` Nocciole | *Spicchi di arancia bionda succosa con una piccola manciata di nocciole* | Latte vaccino caldo bevuto contemporaneamente (acidità dell'agrume) |
+| `spuntino_yogurt_mirtilli` | spuntino/merenda | coppia | Latte e yogurt, Frutta | `150010` Yogurt, `007760` Mirtilli | *Vasetto di yogurt bianco naturale con una manciata di mirtilli neri freschi* | Yogurt industriale alla frutta con zuccheri e sciroppi aggiunti |
+| `spuntino_yogurt_greco_fragole` | spuntino/merenda | coppia | Latte e yogurt, Frutta | `150030` Yogurt greco, `007730` Fragole | *Coppetta di yogurt greco magro con dadolata di fragole fresche al limone* | Zucchero bianco aggiunto sopra le fragole |
+| `spuntino_yogurt_greco_noci` | spuntino/merenda/spuntino | coppia | Latte e yogurt, Frutta secca a guscio e semi oleaginosi | `150020` Yogurt greco, `008570` Noci | *Coppetta di yogurt greco naturale colato con gherigli di noce dorati* | Miele millefiori in dosi abbondanti (mantenere solo se previsto nei macro) |
+| `spuntino_pane_integrale_ricotta` | spuntino/merenda | coppia | Cereali e derivati, Formaggi e latticini | `000550` Pane di tipo integrale, `166820` Ricotta di vacca | *Bruschetta integrale semplice con ricotta fresca vaccina e pepe nero* | Confetture dense di saccarosio |
+| `spuntino_pane_prosciutto_cotto` | spuntino/merenda | coppia | Cereali e derivati, Carni trasformate e conservate | `000530` Pane bianco, `110411` Prosciutto cotto | *Piccolo panino merenda con fetta di prosciutto cotto scelto sgrassato* | Maionese, salse industriali o burro spalmato |
+| `spuntino_pane_segale_bresaola` | spuntino/merenda | coppia | Cereali e derivati, Carni trasformate e conservate | `000510` Pane di segale, `110020` Bresaola della Valtellina IGP | *Spuntino proteico con crostone di segale, bresaola della Valtellina e gocce di limone* | Formaggi fusi o salse unte |
+| `spuntino_latte_caldo_mandorle` | spuntino/merenda | coppia | Latte e yogurt, Frutta secca a guscio e semi oleaginosi | `135020` Latte di vacca, `008540` Mandorle dolci | *Tazza di latte caldo tiepido prima di coricarsi con 4-5 mandorle dolci* | Biscotti ricchi di zuccheri raffinati e burro |
+
+---
+
+### 4. Analisi degli Anti-Pattern e Abbinamenti da Evitare
+
+La presenza di abbinamenti da evitare (`avoid_pairings`) per ogni combinazione serve al motore di generazione schede di 8.12 per impostare vincoli di esclusione e prevenire allucinazioni combinatorie:
+
+1. **Dolce + Legumi**: categoricamente vietato combinare zuccheri raffinati, miele, confetture o dessert da pasticceria all'interno del pasto a base di legumi (ceci, fagioli, lenticchie). Genera contrasto organolettico sgradevole e accelera processi di fermentazione colica.
+2. **Formaggi stagionati o erborinati su Pesce delicato**: bandito l'uso di formaggi a pasta dura grattugiati (parmigiano, pecorino) o formaggi erborinati/fusi (gorgonzola, provolone) sopra preparazioni delicate di pesce bianco o crostacei (gamberi, vongole, orata, merluzzo). Copre i sentori minerali e iodati e appesantisce la digestione lipidica.
+3. **Frutta fresca acidula con Latte vaccino caldo**: l'interazione diretta tra agrumi/ananas e latte caldo rischia la flocculazione acida delle caseine nello stomaco ed è gastronomicamente disarmonica.
+4. **Sovrapposizione di proteine pesanti concentrate**: evitare l'unione nello stesso piatto quotidiano di carni insaccate con legumi o uova fritte con formaggi stagionati fusi, che causerebbe sovraccarico azotato e digestione rallentata incompatibile con gli obiettivi sportivi e salutistici di Optees.
+5. **Condimenti dolci o sciroppi in pasti salati**: banditi sciroppi di glucosio, salse agrodolci commerciali pesanti e creme industriali nei piatti della tradizione mediterranea.
+
+---
+
+### 5. Indicazioni per Claude (Revisione e Approvazione)
+
+- **Verifica CREA**: tutti i 51 abbinamenti sono composti esclusivamente da ID CREA presenti nel file locale `dataset/crea/foods.csv` (832 alimenti totali).
+- **Integrazione Solver**: le schede possono essere lette direttamente dal generatore di mazzi di 8.12. Quando l'utente esprime preferenza («Mi piace» o ♥), il solver può applicare la ricompensa morbida cercando di soddisfare la triade o la diade assegnando le grammature calcolate sui target nutrizionali di giornata.
+
+### Revisione Claude — Sessione 7 (2026-10-07)
+
+- Id CREA verificati su `dataset/crea/foods.csv`: 67/67 esistenti, nomi coerenti.
+- Rimosse 20 motivazioni sanitarie o digestive non supportate da fonti (es. «frutta acida e latte caldo coagulano nello stomaco», «fermentazione addominale», nitriti, indice glicemico): gli abbinamenti da evitare restano solo come gusto culinario.
+- Sei alimenti hanno un macro vuoto per tracce CREA («tr») non ancora importate come 0: uova, Parmigiano, stracchino, formaggio spalmabile, mela con buccia, finocchi.
+- Approvato come euristica culinaria per 8.12.

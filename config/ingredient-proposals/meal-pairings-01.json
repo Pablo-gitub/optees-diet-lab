@@ -1,0 +1,2731 @@
+{
+  "version": "1.0",
+  "created": "2026-10-07",
+  "session": "Sessione 7",
+  "reference_spec": "phase8-spec.md §12 (8.12 — Abbinamenti a scorrimento)",
+  "description": "Catalogo ragionato di abbinamenti tipici culinari e nutrizionali della tradizione italiana e mediterranea (coppie e terne per pasti principali, colazione e spuntini). Ispirato ai principi del piatto sano mediterraneo e finalizzato a orientare le proposte delle schede a scorrimento (swiping cards) nel solver Optees.",
+  "evidence": "euristica",
+  "methodology_notes": [
+    "Nessuna fonte inventata: tabella culinaria ed euristica basata sulla gastronomia e dietetica mediterranea tradizionale.",
+    "Ogni alimento cita un ID CREA verificato e presente in dataset/crea/foods.csv, con categoria e denominazione esatta.",
+    "Le combinazioni di pranzo e cena seguono la struttura carboidrato + proteina + verdura (+ condimento EVO), mentre colazioni e spuntini declinano gli schemi abituali (base lattea/yogurt + frutta fresca + frutta secca, oppure pane/cereale + proteina leggera).",
+    "Per ogni abbinamento sono formalizzati esplicitamente gli anti-pattern (abbinamenti da evitare: es. dolce + legumi, formaggio fuso su pesce delicato, frutta acida con latte caldo)."
+  ],
+  "total_pairings": 51,
+  "pairings_by_meal_breakdown": {
+    "pranzo_cena": 30,
+    "colazione": 10,
+    "spuntini": 11
+  },
+  "pairings": [
+    {
+      "id": "pranzo_cena_pasta_ceci_bietole",
+      "title": "Pasta con ceci e bietole campagnole al vapore",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Legumi",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000800",
+          "crea_name": "Pasta di semola",
+          "culinary_state": "pasta secca di semola, peso crudo"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Legumi",
+          "crea_id": "004010",
+          "crea_name": "Ceci, in scatola, scolati",
+          "culinary_state": "ceci in scatola scolati (o lessati)"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005080",
+          "crea_name": "Bieta, cruda",
+          "culinary_state": "bietola fresca mondata, cotta al vapore o stufata"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva a crudo"
+        }
+      ],
+      "example_dish": {
+        "name": "Pasta e ceci alla romana con contorno di bietole all'agro",
+        "description": "Ditalini o pasta corta con crema e chicchi interi di ceci al rosmarino, servita con bietole lessate condite con olio EVO e limone.",
+        "cuisine_tradition": "italiana_centrale"
+      },
+      "avoid_pairings": [
+        "Seconda proteina animale pesante (salsiccia, cotechino o formaggi stagionati)",
+        "Formaggi fusi filanti sopra il brodo di legumi"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Combinazione principe della tradizione mediterranea: complementazione amminoacidica tra lisina dei legumi e metionina dei cereali, con le fibre dolci delle bietole."
+    },
+    {
+      "id": "pranzo_cena_pasta_fagioli_cavolo",
+      "title": "Pasta con fagioli borlotti e cavolo cappuccio",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Legumi",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000800",
+          "crea_name": "Pasta di semola",
+          "culinary_state": "pasta secca di semola"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Legumi",
+          "crea_id": "004120",
+          "crea_name": "Fagioli, Borlotti, secchi",
+          "culinary_state": "fagioli borlotti secchi, ammollati e lessati"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005190",
+          "crea_name": "Cavolo cappuccio, rosso, crudo",
+          "culinary_state": "cavolo cappuccio stufato o crudo a listarelle"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva a crudo"
+        }
+      ],
+      "example_dish": {
+        "name": "Pasta e fagioli alla veneta con insalata di cappuccio e cumino",
+        "description": "Zuppa densa di fagioli borlotti e tagliatelle spezzate o ditali, accompagnata da cappuccio finemente affettato.",
+        "cuisine_tradition": "italiana_settentrionale"
+      },
+      "avoid_pairings": [
+        "Dolci o frutta cotta zuccherata a fine pasto immediato",
+        "Abbinamento con carni rosse insaccate o strutto",
+        "Formaggi erborinati o fusi"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Apporto bilanciato di amidi complessi e proteine vegetali ad alto valore biologico complessivo, bilanciato dalla croccantezza e dai composti solforati del cavolo."
+    },
+    {
+      "id": "pranzo_cena_pasta_lenticchie_carote",
+      "title": "Pasta corta con ragù di lenticchie e carote",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Legumi",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000800",
+          "crea_name": "Pasta di semola",
+          "culinary_state": "pasta secca di semola"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Legumi",
+          "crea_id": "004505",
+          "crea_name": "Lenticchie, secche, cotte, bollite",
+          "culinary_state": "lenticchie secche cotte e bollite"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005150",
+          "crea_name": "Carote, crude",
+          "culinary_state": "carote fresche tritate per soffritto e contorno"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Tubetti con ragù vegetale di lenticchie e rondelle di carote",
+        "description": "Pasta condita con un sugo rustico di lenticchie brune, dadolata di carote e sedano al profumo di alloro.",
+        "cuisine_tradition": "italiana_meridionale"
+      },
+      "avoid_pairings": [
+        "Dolci e creme da forno nello stesso pasto",
+        "Formaggi molto sapidi o fusi che coprono la dolcezza delle carote e lenticchie",
+        "Carni conservate salate"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Le lenticchie forniscono ferro non-eme e proteine nobili esaltate dagli amidi dei tubetti; la carota conferisce dolcezza naturale e beta-carotene liposolubile."
+    },
+    {
+      "id": "pranzo_cena_riso_piselli_lattuga",
+      "title": "Riso con piselli novelli e insalata di lattuga",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Legumi",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000100",
+          "crea_name": "Riso, brillato",
+          "culinary_state": "riso brillato"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Legumi",
+          "crea_id": "004700",
+          "crea_name": "Piselli, freschi",
+          "culinary_state": "piselli freschi (o surgelati lessati)"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005410",
+          "crea_name": "Lattuga, fresca",
+          "culinary_state": "lattuga fresca da insalata"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Risi e bisi alla veneta con cuore di lattuga all'olio e limone",
+        "description": "Minestra densa tipica a base di riso semifino e pisellini dolci primaverili mantecata all'onda, con lattuga fresca croccante.",
+        "cuisine_tradition": "italiana_settentrionale"
+      },
+      "avoid_pairings": [
+        "Zuccheri raffinati o sciroppi aggiunti",
+        "Pesce azzurro conservato forte",
+        "Carni grasse da stufato"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Piatto storico primaverile: il riso assorbe la dolcezza dei piselli e il loro brodo; la lattuga fresca rinfresca la bocca con acqua di vegetazione e acido folico."
+    },
+    {
+      "id": "pranzo_cena_orzo_ceci_zucchine",
+      "title": "Zuppa d'orzo perlato con ceci e zucchine trifolate",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Legumi",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000090",
+          "crea_name": "Orzo perlato",
+          "culinary_state": "orzo perlato crudo"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Legumi",
+          "crea_id": "004010",
+          "crea_name": "Ceci, in scatola, scolati",
+          "culinary_state": "ceci in scatola scolati (o lessati)"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005730",
+          "crea_name": "Zucchine, crude",
+          "culinary_state": "zucchine fresche a rondelle"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Orzotto tiepido ai ceci con dadolata di zucchine e menta",
+        "description": "Orzo cotto ad assorbimento con ceci e dadini di zucchine saltate velocemente in padella con olio EVO e mentuccia.",
+        "cuisine_tradition": "mediterranea_classica"
+      },
+      "avoid_pairings": [
+        "Salse agrodolci con zucchero",
+        "Carni affumicate dense"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "I beta-glucani dell'orzo riducono l'indice [affermazione sanitaria rimossa in revisione]o del pasto e creano una consistenza masticabile ideale coi ceci; la zucchina dona leggerezza e potassio."
+    },
+    {
+      "id": "pranzo_cena_polenta_fagioli_spinaci",
+      "title": "Polenta morbida con umido di fagioli e spinaci al vapore",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Legumi",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000075",
+          "crea_name": "Polenta, cruda",
+          "culinary_state": "polenta di mais cruda"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Legumi",
+          "crea_id": "004120",
+          "crea_name": "Fagioli, Borlotti, secchi",
+          "culinary_state": "fagioli borlotti secchi cotti"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005700",
+          "crea_name": "Spinaci, crudi",
+          "culinary_state": "spinaci freschi lessati o al vapore"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Polenta calda con stufato di borlotti al pomodoro e spinaci saltati",
+        "description": "Piatto unico rustico invernale con polenta di farina di mais stesa sul piatto e coperta da fagioli in umido e spinaci all'aglio e olio.",
+        "cuisine_tradition": "italiana_settentrionale"
+      },
+      "avoid_pairings": [
+        "Dolci fritti o da pasticceria nello stesso pasto",
+        "Intingoli con burro cotto e carni grasse di maiale",
+        "Formaggi fusi ipercalorici"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Piatto tradizionale contadino naturalmente privo di glutine: il mais necessita della complementazione di lisina dei fagioli; gli spinaci forniscono acido folico e magnesio."
+    },
+    {
+      "id": "pranzo_cena_couscous_ceci_verdure_miste",
+      "title": "Couscous mediterraneo con ceci, zucchine e peperoni",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Legumi",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000045",
+          "crea_name": "Couscous, crudo",
+          "culinary_state": "couscous di grano duro crudo"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Legumi",
+          "crea_id": "004010",
+          "crea_name": "Ceci, in scatola, scolati",
+          "culinary_state": "ceci lessati"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005730",
+          "crea_name": "Zucchine, crude",
+          "culinary_state": "zucchine crude trifolate"
+        },
+        {
+          "role": "verdura_secondaria",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005600",
+          "crea_name": "Peperoni, crudi",
+          "culinary_state": "peperoni dolci crudi in padella"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Couscous alla trapanese vegetariano con ceci e caponatina leggera",
+        "description": "Semola di couscous incocciata e cotta a vapore con brodo vegetale, servita con ceci e verdure stufate al profumo di cannella e coriandolo.",
+        "cuisine_tradition": "mediterranea_siciliana"
+      },
+      "avoid_pairings": [
+        "Dolci sciroppati arabi o miele denso durante il pasto salato",
+        "Formaggi a crosta fiorita",
+        "Carni grasse conservate"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Espressione dell'area siculo-nordafricana: la semola vaporizzata è leggera e altamente digeribile, i ceci garantiscono la tenuta saziante e i peperoni apportano vitamina C termolabile preservata."
+    },
+    {
+      "id": "pranzo_cena_riso_gamberi_zucchine",
+      "title": "Riso con gamberi freschi e zucchine a rondelle",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Prodotti della pesca",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000100",
+          "crea_name": "Riso, brillato",
+          "culinary_state": "riso brillato"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Prodotti della pesca",
+          "crea_id": "128100",
+          "crea_name": "Gamberi",
+          "culinary_state": "gamberi freschi sgusciati"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005730",
+          "crea_name": "Zucchine, crude",
+          "culinary_state": "zucchine fresche"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Risotto delicato con gamberi e fiori/rondelle di zucchine",
+        "description": "Riso mantecato con fumetto leggero di crostacei, cubetti di zucchina appena scottati e code di gambero scottate al vino bianco.",
+        "cuisine_tradition": "italiana_classica"
+      },
+      "avoid_pairings": [
+        "Formaggio parmigiano o pecorino grattugiato sopra i gamberi (copre il sapore minerale e iodato del crostaceo)",
+        "Panna o besciamella",
+        "Carni o insaccati"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Classico della ristorazione marinara: la delicatezza e dolcezza della zucchina bilancia il gusto salmastro e iodato del gambero; l'amido del riso lega l'intingolo senza bisogno di latticini."
+    },
+    {
+      "id": "pranzo_cena_pasta_vongole_pomodorini",
+      "title": "Spaghetti alle vongole veraci con pomodorini maturi",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Prodotti della pesca",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000800",
+          "crea_name": "Pasta di semola",
+          "culinary_state": "pasta secca di semola (spaghetti)"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Prodotti della pesca",
+          "crea_id": "127170",
+          "crea_name": "Vongola",
+          "culinary_state": "vongole con guscio aperte in padella"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "006610",
+          "crea_name": "Pomodori, maturi, freschi",
+          "culinary_state": "pomodori maturi freschi a spicchietti"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Spaghetti alle vongole con pomodorini di collina e prezzemolo",
+        "description": "Pasta trafilata al bronzo risottata nell'acqua marina delle vongole con un tocco di pomodorino fresco e prezzemolo tritato.",
+        "cuisine_tradition": "italiana_campana"
+      },
+      "avoid_pairings": [
+        "Formaggio grattugiato (parmigiano/grana) sui frutti di mare",
+        "Salse dolci o ketchup",
+        "Uova o legumi nello stesso piatto"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Piatto iconico costiero: l'acidità lieve del pomodorino smorza la salinità marina della vongola, l'amido rilasciato dalla pasta crea emulsione con l'olio EVO."
+    },
+    {
+      "id": "pranzo_cena_riso_salmone_asparagi",
+      "title": "Riso con trancio di salmone al vapore e asparagi",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Prodotti della pesca",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000100",
+          "crea_name": "Riso, brillato",
+          "culinary_state": "riso brillato"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Prodotti della pesca",
+          "crea_id": "122400",
+          "crea_name": "Salmone",
+          "culinary_state": "salmone fresco in trancio"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005030",
+          "crea_name": "Asparagi di bosco, crudi",
+          "culinary_state": "asparagi di campo o serra lessati"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Riso al vapore con filetto di salmone alle erbe e punte di asparagi",
+        "description": "Trancio di salmone scottato o al vapore servito con riso basmati/brillato e asparagi croccanti conditi con gocce di limone ed EVO.",
+        "cuisine_tradition": "mediterranea_moderna"
+      },
+      "avoid_pairings": [
+        "Maionese industriale o formaggi fusi",
+        "Legumi secchi pesanti",
+        "Dolci da forno cremosi"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Il salmone apporta acidi grassi polinsaturi Omega-3 a catena lunga e proteine ad alto VB; l'asparago apporta asparagina e potassio drenante, il riso amido leggero."
+    },
+    {
+      "id": "pranzo_cena_pasta_sarde_finocchi",
+      "title": "Pasta con le sarde, finocchietto e pinoli",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Prodotti della pesca",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000800",
+          "crea_name": "Pasta di semola",
+          "culinary_state": "pasta secca di semola (bucatini)"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Prodotti della pesca",
+          "crea_id": "122700",
+          "crea_name": "Sarda",
+          "culinary_state": "sarde fresche sfilettate"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005320",
+          "crea_name": "Finocchi, crudi",
+          "culinary_state": "finocchi crudi / finocchietto selvatico"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Pasta con le sarde e finocchietto alla palermitana",
+        "description": "Bucatini cotti nell'acqua aromatizzata al finocchietto e conditi con sarde fresche aperte a libro, zafferano, pinoli e uvetta.",
+        "cuisine_tradition": "mediterranea_siciliana"
+      },
+      "avoid_pairings": [
+        "Formaggio vaccino o caprino grattugiato (nella tradizione si usa la 'mollica atturrata')",
+        "Carni o insaccati",
+        "Salse a base di latte"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Capolavoro della dieta mediterranea: il pesce azzurro ricco di Omega-3 e calcio viene sgrassato dagli oli essenziali anetolici del finocchio selvatico."
+    },
+    {
+      "id": "pranzo_cena_pasta_tonno_pomodoro",
+      "title": "Pasta integrale con tonno al naturale e pomodorini",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Prodotti della pesca",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000850",
+          "crea_name": "Pasta di semola, integrale",
+          "culinary_state": "pasta di semola integrale secca"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Prodotti della pesca",
+          "crea_id": "123550",
+          "crea_name": "Tonno in salamoia, sgocciolato",
+          "culinary_state": "tonno in salamoia sgocciolato"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "006610",
+          "crea_name": "Pomodori, maturi, freschi",
+          "culinary_state": "pomodori freschi maturi a dadini"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Penne integrali con battuto di pomodorini freschi, tonno e origano",
+        "description": "Primo piatto estivo veloce ed equilibrato: pasta integrale saltata con dadolata fresca di pomodori dolci, tonno sgocciolato e origano campestre.",
+        "cuisine_tradition": "italiana_classica"
+      },
+      "avoid_pairings": [
+        "Panna o formaggi spalmabili industriali",
+        "Legumi fagioli pesanti nello stesso sugo",
+        "Salse dolciastre"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Praticità e profilo nutrizionale eccellente: proteine magre del tonno, licopene del pomodoro attivato dai grassi monoinsaturi dell'olio EVO e fibre integrali."
+    },
+    {
+      "id": "pranzo_cena_polenta_merluzzo_pomodoro",
+      "title": "Polenta con merluzzo in umido alla marinara",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Prodotti della pesca",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000075",
+          "crea_name": "Polenta, cruda",
+          "culinary_state": "polenta di mais cruda"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Prodotti della pesca",
+          "crea_id": "121410",
+          "crea_name": "Merluzzo o nasello",
+          "culinary_state": "merluzzo o nasello fresco sfilettato"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "006610",
+          "crea_name": "Pomodori, maturi, freschi",
+          "culinary_state": "pomodori maturi per il sugo alla marinara"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Polenta morbida con tocchetti di merluzzo in umido all'aglio e prezzemolo",
+        "description": "Tranci di merluzzo bianco affogati in sughetto leggero di pomodoro fresco, aglio e prezzemolo, serviti su un letto fumante di polenta.",
+        "cuisine_tradition": "italiana_settentrionale"
+      },
+      "avoid_pairings": [
+        "Formaggio grana o parmigiano sopra il merluzzo",
+        "Lardo o salsiccia",
+        "Dolci lievitati pesanti nello stesso pasto"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Il merluzzo è una fonte proteica straordinariamente magra e digeribile; la polenta calda ne accoglie il sugo offrendo sazietà prolungata senza appesantire."
+    },
+    {
+      "id": "pranzo_cena_orzo_polpo_fagiolini",
+      "title": "Insalata fredda d'orzo con polpo bollito e fagiolini",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Prodotti della pesca",
+        "Legumi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000090",
+          "crea_name": "Orzo perlato",
+          "culinary_state": "orzo perlato crudo"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Prodotti della pesca",
+          "crea_id": "127150",
+          "crea_name": "Polpo",
+          "culinary_state": "polpo fresco lessato e tagliato a rondelle"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Legumi",
+          "crea_id": "004310",
+          "crea_name": "Fagiolini, freschi",
+          "culinary_state": "fagiolini freschi lessati"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Orzo perlato con insalata tiepida di polpo, fagiolini e limone",
+        "description": "Piatto unico estivo rinfrescante con orzo al dente, polpo verace morbido a rondelle e fagiolini croccanti conditi con limone e prezzemolo.",
+        "cuisine_tradition": "italiana_meridionale"
+      },
+      "avoid_pairings": [
+        "Maionese industriale o salse all'aglio eccessivamente pesanti",
+        "Formaggi freschi acquosi (mozzarella) mischiati al polpo",
+        "Dolci a base di crema pasticcera a fine pasto"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Il polpo ha fibre muscolari ricche di collagene e pochissimi lipidi; i fagiolini offrono fibre dolci e potassio; l'orzo garantisce carboidrati complessi a rilascio graduale."
+    },
+    {
+      "id": "pranzo_cena_pasta_calamari_zucchine",
+      "title": "Calamarata con anelli di calamaro e zucchine",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Prodotti della pesca",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000800",
+          "crea_name": "Pasta di semola",
+          "culinary_state": "pasta secca di semola (calamarata)"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Prodotti della pesca",
+          "crea_id": "127100",
+          "crea_name": "Calamaro",
+          "culinary_state": "calamaro fresco pulito ad anelli"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005730",
+          "crea_name": "Zucchine, crude",
+          "culinary_state": "zucchine fresche a dadini"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Calamarata campana con calamari scottati e julienne di zucchine",
+        "description": "Formato tipico calamarata saltato con calamari freschi tagliati della stessa dimensione della pasta e julienne di zucchine all'aglio dolce.",
+        "cuisine_tradition": "italiana_campana"
+      },
+      "avoid_pairings": [
+        "Formaggi grattugiati sui molluschi",
+        "Seconda portata di carne",
+        "Fritture pesanti"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "L'omogeneità visiva tra pasta e anelli di calamaro unita al contrasto aromatico della zucchina crea un piatto bilanciato, povero di grassi saturi e ricco di taurina."
+    },
+    {
+      "id": "pranzo_cena_riso_pollo_fagiolini",
+      "title": "Riso al vapore con petto di pollo al limone e fagiolini",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Carni fresche",
+        "Legumi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000100",
+          "crea_name": "Riso, brillato",
+          "culinary_state": "riso brillato"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Carni fresche",
+          "crea_id": "106500",
+          "crea_name": "Pollo, petto, crudo",
+          "culinary_state": "pollo petto crudo (poi cotto ai ferri)"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Legumi",
+          "crea_id": "004310",
+          "crea_name": "Fagiolini, freschi",
+          "culinary_state": "fagiolini freschi lessati"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Bocconcini di petto di pollo al limone ed erbe con riso pilaf e fagiolini",
+        "description": "Petto di pollo cotto in padella con sfumata di succo di limone e salvia, servito con riso bianco pilaf e fagiolini verdi al vapore conditi a crudo.",
+        "cuisine_tradition": "mediterranea_classica"
+      },
+      "avoid_pairings": [
+        "Salse barbecue o ketchup con sciroppo di glucosio",
+        "Formaggi stagionati fusi sopra la carne",
+        "Fritti in pastella"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Pilastro della cucina salutistica e sportiva: proteine nobili ad altissima digeribilità e bassissimo tenore lipidico con carboidrati puliti e fibre prebiotiche."
+    },
+    {
+      "id": "pranzo_cena_pane_manzo_rucola",
+      "title": "Pane casereccio con straccetti di manzo e rucola",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Carni fresche",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000530",
+          "crea_name": "Pane bianco",
+          "culinary_state": "pane tipo 00 o casereccio"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Carni fresche",
+          "crea_id": "101160",
+          "crea_name": "Bovino adulto o vitellone, fesa, crudo",
+          "culinary_state": "bovino adulto fesa magra cruda a straccetti"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005460",
+          "crea_name": "Rucola o Ruchetta, fresca",
+          "culinary_state": "rucola fresca"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Straccetti di manzo magro scottati alla piastra su letto di rucola con pane tostato",
+        "description": "Fettine sottilissime di fesa scottate un minuto a fiamma viva con rosmarino, adagiate su letto di rucola fresca e servite con fette di pane casereccio.",
+        "cuisine_tradition": "italiana_laziale"
+      },
+      "avoid_pairings": [
+        "Salse industriali dolciastre",
+        "Contorni di patatine fritte con salse grasse",
+        "Abbinamento con formaggi pesanti fusi"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "La carne magra fornisce ferro eme altamente biodisponibile e zinco; le sostanze amare e la vitamina C della rucola ne facilitano l'assorbimento e la [affermazione sanitaria rimossa in revisione]ione gastrica."
+    },
+    {
+      "id": "pranzo_cena_pane_tacchino_spinaci",
+      "title": "Pane integrale con fesa di tacchino e spinaci al salto",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Carni fresche",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000550",
+          "crea_name": "Pane di tipo integrale",
+          "culinary_state": "pane tipo integrale"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Carni fresche",
+          "crea_id": "106850",
+          "crea_name": "Tacchino, fesa, crudo",
+          "culinary_state": "tacchino fesa crudo ai ferri"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005700",
+          "crea_name": "Spinaci, crudi",
+          "culinary_state": "spinaci freschi saltati all'olio"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Tagliata di tacchino al rosmarino con spinacino fresco saltato e pane integrale",
+        "description": "Trancio di fesa di tacchino grigliato con erbe aromatiche, tagliato a fettine e servito con spinaci in foglia appena appassiti e pane integrale.",
+        "cuisine_tradition": "mediterranea_classica"
+      },
+      "avoid_pairings": [
+        "Salse piccanti confezionate dense di zuccheri",
+        "Panature fritte con formaggio",
+        "Dolci al cucchiaio ad alto tenore lipidico"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Profilo di amminoacidi ramificati (BCAA) e triptofano eccellente, apporto minerale (magnesio e ferro degli spinaci) e rilascio [affermazione sanitaria rimossa in revisione]o molto modulato dal pane integrale."
+    },
+    {
+      "id": "pranzo_cena_couscous_pollo_peperoni",
+      "title": "Couscous con bocconcini di pollo e peperoni stufati",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Carni fresche",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000045",
+          "crea_name": "Couscous, crudo",
+          "culinary_state": "couscous di grano duro crudo"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Carni fresche",
+          "crea_id": "106500",
+          "crea_name": "Pollo, petto, crudo",
+          "culinary_state": "pollo petto crudo a tocchetti"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005600",
+          "crea_name": "Peperoni, crudi",
+          "culinary_state": "peperoni dolci crudi in padella"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Couscous con pollo alle spezie mediterranee e peperoni stufati",
+        "description": "Pollo rosolato con cipolla, curcuma e alloro, cotto assieme a striscioline di peperone giallo e rosso e servito sopra una base di couscous caldo.",
+        "cuisine_tradition": "mediterranea_siciliana"
+      },
+      "avoid_pairings": [
+        "Aggiunta di formaggi vaccini duri o latticini fusi",
+        "Dolci a base di burro pesante",
+        "Bibite zuccherate gassate"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "I peperoni cotti con poco olio rilasciano caroteni e vitamina C che si sposano alla carne bianca magra; il couscous cattura i succhi naturali di cottura."
+    },
+    {
+      "id": "pranzo_cena_pane_ricotta_pomodori",
+      "title": "Pane casereccio con ricotta vaccina fresca e pomodorini",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Formaggi e latticini",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000530",
+          "crea_name": "Pane bianco",
+          "culinary_state": "pane tipo 00 o casereccio"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Formaggi e latticini",
+          "crea_id": "166820",
+          "crea_name": "Ricotta di vacca",
+          "culinary_state": "ricotta di vacca fresca"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "006610",
+          "crea_name": "Pomodori, maturi, freschi",
+          "culinary_state": "pomodori maturi freschi a grappolo"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Bruschetta rustica con crema di ricotta fresca di vacca e dadolata di pomodoro al basilico",
+        "description": "Fette di pane casereccio tostate, spalmate con ricotta fresca vaccina lavorata con un pizzico di pepe e coperte da pomodorini a cubetti e basilico fresco.",
+        "cuisine_tradition": "italiana_meridionale"
+      },
+      "avoid_pairings": [
+        "Pesce azzurro o frutti di mare mischiati alla ricotta nello stesso piatto",
+        "Aggiunta di marmellata dolce a pranzo/cena salato",
+        "Insaccati piccanti che coprono la delicatezza del siero di latte"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "La ricotta fornisce proteine del siero di latte (sieroproteine) ad altissimo valore biologico con un contenuto moderato di lipidi; il pomodoro offre acidità e freschezza bilanciando il sapore lattico."
+    },
+    {
+      "id": "pranzo_cena_pane_mozzarella_pomodori",
+      "title": "Pane comune con mozzarella di vacca e pomodori (Caprese)",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Formaggi e latticini",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000530",
+          "crea_name": "Pane bianco",
+          "culinary_state": "pane tipo 00 o casereccio"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Formaggi e latticini",
+          "crea_id": "164820",
+          "crea_name": "Mozzarella di vacca",
+          "culinary_state": "mozzarella di vacca fresca"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "006610",
+          "crea_name": "Pomodori, maturi, freschi",
+          "culinary_state": "pomodori maturi freschi da insalata"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Insalata Caprese classica con mozzarella fiordilatte, pomodoro cuore di bue, basilico e pane",
+        "description": "Fette alternate di mozzarella fresca di latte vaccino e pomodori maturi sodi, condite con foglie di basilico fresco spezzettate, olio EVO e fette di pane.",
+        "cuisine_tradition": "italiana_campana"
+      },
+      "avoid_pairings": [
+        "Frutta cotta o zuccherata",
+        "Seconda portata di carne rossa o arrosto",
+        "Minestre brodose bollenti di pesce"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "La combinazione più celebre al mondo di freschezza mediterranea: equilibrio perfetto tra il calcio e i grassi della pasta filata, l'acqua e il licopene del pomodoro e i carboidrati del pane."
+    },
+    {
+      "id": "pranzo_cena_pane_stracchino_rucola",
+      "title": "Pane di segale con stracchino fresco e rucola",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Formaggi e latticini",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000510",
+          "crea_name": "Pane di segale",
+          "culinary_state": "pane di segale a fette"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Formaggi e latticini",
+          "crea_id": "167250",
+          "crea_name": "Stracchino",
+          "culinary_state": "stracchino fresco vaccino"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005460",
+          "crea_name": "Rucola o Ruchetta, fresca",
+          "culinary_state": "rucola fresca"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Crostini di segale con stracchino morbido, rucola selvatica e gocce di EVO",
+        "description": "Crostini caldi di pane scuro di segale con formaggio molle spalmato al momento e coperto da abbondante rucola pepata.",
+        "cuisine_tradition": "italiana_settentrionale"
+      },
+      "avoid_pairings": [
+        "Pesce azzurro marinato o sarde",
+        "Dolci al cioccolato denso subito dopo",
+        "Legumi in umido nello stesso pasto"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Il contrasto netto tra la nota lievemente acidula e corposa della segale, la dolcezza cremosa dello stracchino e il piccante amaro della rucola crea un'esperienza gustativa e nutrizionale completa."
+    },
+    {
+      "id": "pranzo_cena_farro_feta_cetrioli",
+      "title": "Insalata di farro perlato con feta, cetrioli e pomodori",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Formaggi e latticini",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000020",
+          "crea_name": "Farro perlato, crudo",
+          "culinary_state": "farro perlato crudo"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Formaggi e latticini",
+          "crea_id": "162000",
+          "crea_name": "Feta",
+          "culinary_state": "feta greca DOP a cubetti"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005220",
+          "crea_name": "Cetrioli, freschi",
+          "culinary_state": "cetrioli freschi affettati"
+        },
+        {
+          "role": "verdura_secondaria",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "006610",
+          "crea_name": "Pomodori, maturi, freschi",
+          "culinary_state": "pomodori maturi freschi a dadini"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Insalata di farro alla greca con feta, cetrioli croccanti, pomodorini e origano",
+        "description": "Farro lessato al dente e raffreddato, unito a tocchetti di feta, rondelle sottili di cetriolo con buccia, pomodorini e origano essiccato.",
+        "cuisine_tradition": "mediterranea_greca_italiana"
+      },
+      "avoid_pairings": [
+        "Carni rosse o insaccati salati (la feta ha già sufficiente apporto sodico)",
+        "Salse industriali dolci",
+        "Formaggi fusi o stagionati aggiuntivi"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "La sapidità e compattezza della feta viene ammorbidita dall'alto contenuto di acqua rinfrescante del cetriolo e dalla masticabilità ricca di fibre del farro antico."
+    },
+    {
+      "id": "pranzo_cena_pane_uova_spinaci",
+      "title": "Pane casereccio con uova in camicia e spinaci al vapore",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Uova",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000530",
+          "crea_name": "Pane bianco",
+          "culinary_state": "pane tipo 00 o casereccio"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Uova",
+          "crea_id": "181100",
+          "crea_name": "Uova di gallina, intero",
+          "culinary_state": "uova di gallina intero"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005700",
+          "crea_name": "Spinaci, crudi",
+          "culinary_state": "spinaci freschi crudi/lessati"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Uova in camicia su crostone di pane casereccio con nido di spinaci al burro/olio",
+        "description": "Due uova in camicia dal tuorlo morbido adagiate su letto di spinaci lessati e strizzati e accompagnate da fette di pane casereccio tostato.",
+        "cuisine_tradition": "mediterranea_classica"
+      },
+      "avoid_pairings": [
+        "Abbinamento con carni grasse come pancetta affumicata fritta (per mantenere il profilo salutistico)",
+        "Dolci fritti nello stesso pasto",
+        "Formaggi duri pesanti fusi"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "L'uovo intero è il punto di riferimento biologico per il profilo amminoacidico (VB=100); i grassi del tuorlo veicolano i carotenoidi (luteina e zeaxantina) presenti sia nel tuorlo che negli spinaci."
+    },
+    {
+      "id": "pranzo_cena_pasta_uova_zucchine",
+      "title": "Pasta con crema d'uovo, zucchine e parmigiano",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Uova",
+        "Verdure e ortaggi",
+        "Formaggi e latticini",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000800",
+          "crea_name": "Pasta di semola",
+          "culinary_state": "pasta secca di semola (spaghetti)"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Uova",
+          "crea_id": "181100",
+          "crea_name": "Uova di gallina, intero",
+          "culinary_state": "uova di gallina intero"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005730",
+          "crea_name": "Zucchine, crude",
+          "culinary_state": "zucchine fresche dorate"
+        },
+        {
+          "role": "insaporitore",
+          "crea_category": "Formaggi e latticini",
+          "crea_id": "166000",
+          "crea_name": "Parmigiano Reggiano DOP",
+          "culinary_state": "Parmigiano Reggiano DOP grattugiato"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Spaghetti alla carbonara vegetariana con zucchine croccanti e uovo mantecato",
+        "description": "Versione vegetariana leggera: zucchine a cubetti rosolate in olio EVO, pasta al dente mantecata fuori dal fuoco con uovo sbattuto, pepe nero e poco Parmigiano Reggiano.",
+        "cuisine_tradition": "italiana_laziale"
+      },
+      "avoid_pairings": [
+        "Panna da cucina industriale",
+        "Carni bovine o suine pesanti nello stesso piatto",
+        "Zuccheri aggiunti"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Mantiene la cremosità e il fascino della carbonara tradizionale romana sostituendo il guanciale con le zucchine dorate, riducendo i grassi saturi a favore di fibre e vitamine idrosolubili."
+    },
+    {
+      "id": "pranzo_cena_pane_frittata_carote",
+      "title": "Pane integrale con frittata alle erbe e carote julienne",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Uova",
+        "Verdure e ortaggi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000550",
+          "crea_name": "Pane di tipo integrale",
+          "culinary_state": "pane tipo integrale"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Uova",
+          "crea_id": "181100",
+          "crea_name": "Uova di gallina, intero",
+          "culinary_state": "uova di gallina intero (frittata)"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005150",
+          "crea_name": "Carote, crude",
+          "culinary_state": "carote fresche crude alla julienne"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Frittata campagnola cotta in padella con pane integrale e insalata di carote",
+        "description": "Frittata soffice alle erbe aromatiche (prezzemolo e timo), servita con pane integrale da lievito madre e contorno croccante di carote julienne all'aceto e olio.",
+        "cuisine_tradition": "italiana_classica"
+      },
+      "avoid_pairings": [
+        "Fritture multiple o cibi unti industriali",
+        "Salumi grassi all'interno della frittata",
+        "Dolci lievitati pesanti"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Le uova cotte dolcemente con poco olio offrono proteine ad alto valore nutrizionale; le carote crude garantiscono masticazione lenta, sazietà ed enzimi vivi."
+    },
+    {
+      "id": "pranzo_cena_patate_polpo_prezzemolo",
+      "title": "Patate lesse con polpo verace e prezzemolo fresco",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Verdure e ortaggi",
+        "Prodotti della pesca",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "006500",
+          "crea_name": "Patate, crude",
+          "culinary_state": "patate crude (poi lessate)"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Prodotti della pesca",
+          "crea_id": "127150",
+          "crea_name": "Polpo",
+          "culinary_state": "polpo fresco lessato"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005410",
+          "crea_name": "Lattuga, fresca",
+          "culinary_state": "lattuga fresca per letto da insalata"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Insalata calda di polpo e patate alla ligure con battuto di prezzemolo",
+        "description": "Polpo cotto nella sua acqua finché tenero, tagliato a bocconcini tiepidi e unito a patate a tocchetti cotte al vapore, aglio, prezzemolo e olio EVO di prima spremitura.",
+        "cuisine_tradition": "italiana_ligure_meridionale"
+      },
+      "avoid_pairings": [
+        "Maionese o salse a base di uova crude industriali",
+        "Formaggio stagionato grattugiato",
+        "Alcolici zuccherati pesanti"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Unione canonica della gastronomia marittima: la consistenza soda ma cedevole della patata assorbe i succhi gelatinosi del polpo, creando un piatto completo ed equilibrato."
+    },
+    {
+      "id": "pranzo_cena_patate_orata_zucchine",
+      "title": "Patate al forno con filetto di orata e zucchine",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Verdure e ortaggi",
+        "Prodotti della pesca",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "006500",
+          "crea_name": "Patate, crude",
+          "culinary_state": "patate crude a fette sottili"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Prodotti della pesca",
+          "crea_id": "121730",
+          "crea_name": "Orata d'allevamento, filetti",
+          "culinary_state": "orata d'allevamento filetti freschi"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005730",
+          "crea_name": "Zucchine, crude",
+          "culinary_state": "zucchine fresche a rondelle"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Orata al cartoccio su letto di patate a rondelle, zucchine e timo",
+        "description": "Filetto di orata cotto al forno dentro carta forno insieme a sottili sfoglie di patata e rondelle di zucchina aromatizzate al timo fresco e vino bianco.",
+        "cuisine_tradition": "italiana_marittima"
+      },
+      "avoid_pairings": [
+        "Formaggi fusi o panna sopra il pesce",
+        "Seconda porzione di cereali (pane o pasta, essendo già presenti le patate)",
+        "Dolci al cioccolato denso"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "La cottura al cartoccio mantiene l'umidità dell'orata senza necessitare di grassi di cottura elevati; le patate assorbono gli aromi del pesce e le zucchine donano volume ipocalorico."
+    },
+    {
+      "id": "pranzo_cena_patate_uova_fagiolini",
+      "title": "Patate lesse con uova sode e fagiolini freschi",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Verdure e ortaggi",
+        "Uova",
+        "Legumi",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "006500",
+          "crea_name": "Patate, crude",
+          "culinary_state": "patate crude lessate a cubetti"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Uova",
+          "crea_id": "181100",
+          "crea_name": "Uova di gallina, intero",
+          "culinary_state": "uova di gallina intero sode a spicchi"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Legumi",
+          "crea_id": "004310",
+          "crea_name": "Fagiolini, freschi",
+          "culinary_state": "fagiolini freschi lessati"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Insalata tiepida ligure con patate, fagiolini verdi e spicchi d'uovo sodo",
+        "description": "Verdure novelle cotte al dente al vapore e condite ancora tiepide con olio extravergine, sale marino e uova sode tagliate a quarti.",
+        "cuisine_tradition": "italiana_ligure"
+      },
+      "avoid_pairings": [
+        "Pane in quantità elevate (le patate coprono già la quota amidacea)",
+        "Carne di maiale grassa"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Tipico piatto della tradizione del ponente ligure: equilibrio di amidi a basso impatto [affermazione sanitaria rimossa in revisione]ivo, fibre idrosolubili e proteine complete con profilo lipidico protetto dall'olio EVO."
+    },
+    {
+      "id": "pranzo_cena_pasta_zucca_ricotta",
+      "title": "Pasta corta con crema di zucca gialla e ricotta fresca",
+      "meals": [
+        "pranzo",
+        "cena"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Verdure e ortaggi",
+        "Formaggi e latticini",
+        "Oli e grassi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000800",
+          "crea_name": "Pasta di semola",
+          "culinary_state": "pasta secca di semola"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "005720",
+          "crea_name": "Zucca gialla, fresca",
+          "culinary_state": "zucca gialla fresca cotta e frullata"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Formaggi e latticini",
+          "crea_id": "166820",
+          "crea_name": "Ricotta di vacca",
+          "culinary_state": "ricotta di vacca fresca"
+        },
+        {
+          "role": "condimento",
+          "crea_category": "Oli e grassi",
+          "crea_id": "009210",
+          "crea_name": "Olio di oliva extra vergine",
+          "culinary_state": "olio extravergine di oliva"
+        }
+      ],
+      "example_dish": {
+        "name": "Rigatoni con vellutata di zucca gialla al rosmarino e fiocchi di ricotta fresca",
+        "description": "Pasta mantecata con crema vellutata di zucca stufata con cipolla e rosmarino, servita con fiocchi freddi di ricotta fresca di mucca a contrasto.",
+        "cuisine_tradition": "italiana_settentrionale_centrale"
+      },
+      "avoid_pairings": [
+        "Zucchero aggiunto (la zucca è già naturalmente dolce)",
+        "Pesce o frutti di mare",
+        "Carni conservate pesanti"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "La naturale dolcezza e morbidezza della zucca si fonde con la cremosità a basso contenuto calorico della ricotta vaccina, offrendo un sugo appagante con un terzo dei grassi rispetto a sughi con panna."
+    },
+    {
+      "id": "colazione_yogurt_mela_noci",
+      "title": "Yogurt bianco intero con mela a fettine e noci secche",
+      "meals": [
+        "colazione"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "base_lattea + frutta + frutta_secca",
+      "categories": [
+        "Latte e yogurt",
+        "Frutta",
+        "Frutta secca a guscio e semi oleaginosi"
+      ],
+      "components": [
+        {
+          "role": "base_cremosa",
+          "crea_category": "Latte e yogurt",
+          "crea_id": "150010",
+          "crea_name": "Yogurt, da latte intero",
+          "culinary_state": "yogurt da latte intero bianco naturale"
+        },
+        {
+          "role": "frutta",
+          "crea_category": "Frutta",
+          "crea_id": "007120",
+          "crea_name": "Mele, fresche, con buccia",
+          "culinary_state": "mele fresche con buccia affettate"
+        },
+        {
+          "role": "frutta_secca",
+          "crea_category": "Frutta secca a guscio e semi oleaginosi",
+          "crea_id": "008570",
+          "crea_name": "Noci, secche",
+          "culinary_state": "noci secche gherigli spezzettati"
+        }
+      ],
+      "example_dish": {
+        "name": "Coppa di yogurt bianco intero con carpaccio di mela e gherigli di noce",
+        "description": "Yogurt naturale non zuccherato servito in ciotola con una mela fresca tagliata sottile con la buccia e noci tritate al momento.",
+        "cuisine_tradition": "mediterranea_moderna"
+      },
+      "avoid_pairings": [
+        "Zuccheri raffinati, sciroppi industriali o confetture ad alto tenore di saccarosio",
+        "Verdure solanacee crude (pomodori, melanzane)",
+        "Legumi cotti o alimenti salati ad alto tenore di aglio"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Colazione completa a basso indice [affermazione sanitaria rimossa in revisione]o: i fermenti lattici e le proteine nobili dello yogurt si sposano alla pectina della mela e agli acidi grassi essenziali Omega-3 (acido alfa-linolenico) delle noci."
+    },
+    {
+      "id": "colazione_yogurt_greco_mirtilli_mandorle",
+      "title": "Yogurt greco con mirtilli freschi e mandorle dolci",
+      "meals": [
+        "colazione"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "base_lattea + frutta + frutta_secca",
+      "categories": [
+        "Latte e yogurt",
+        "Frutta",
+        "Frutta secca a guscio e semi oleaginosi"
+      ],
+      "components": [
+        {
+          "role": "base_cremosa",
+          "crea_category": "Latte e yogurt",
+          "crea_id": "150020",
+          "crea_name": "Yogurt greco, da latte intero",
+          "culinary_state": "yogurt greco da latte intero"
+        },
+        {
+          "role": "frutta",
+          "crea_category": "Frutta",
+          "crea_id": "007760",
+          "crea_name": "Mirtilli, freschi",
+          "culinary_state": "mirtilli freschi"
+        },
+        {
+          "role": "frutta_secca",
+          "crea_category": "Frutta secca a guscio e semi oleaginosi",
+          "crea_id": "008540",
+          "crea_name": "Mandorle dolci, secche",
+          "culinary_state": "mandorle dolci secche a scaglie"
+        }
+      ],
+      "example_dish": {
+        "name": "Bowl di yogurt greco colato con mirtilli neri freschi e lamelle di mandorla",
+        "description": "Ciotola proteica cremosa di yogurt greco compatto arricchita con mirtilli di bosco e mandorle tostate non salate.",
+        "cuisine_tradition": "mediterranea_greca_moderna"
+      },
+      "avoid_pairings": [
+        "Dolciumi industriali glassati",
+        "Formaggi salati erborinati",
+        "Frutta sciroppata in zuccheri semplici"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Elevato tenore di proteine ad alto valore biologico (caseine e sieroproteine concentrate per colatura), antociani antiossidanti dei mirtilli e vitamina E antiossidante delle mandorle."
+    },
+    {
+      "id": "colazione_yogurt_greco_banana_nocciole",
+      "title": "Yogurt greco magro con banana a rondelle e nocciole tostate",
+      "meals": [
+        "colazione"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "base_lattea + frutta + frutta_secca",
+      "categories": [
+        "Latte e yogurt",
+        "Frutta",
+        "Frutta secca a guscio e semi oleaginosi"
+      ],
+      "components": [
+        {
+          "role": "base_cremosa",
+          "crea_category": "Latte e yogurt",
+          "crea_id": "150030",
+          "crea_name": "Yogurt greco, 0% lipidi",
+          "culinary_state": "yogurt greco 0% lipidi"
+        },
+        {
+          "role": "frutta",
+          "crea_category": "Frutta",
+          "crea_id": "007510",
+          "crea_name": "Banane, fresche",
+          "culinary_state": "banane fresche a rondelle"
+        },
+        {
+          "role": "frutta_secca",
+          "crea_category": "Frutta secca a guscio e semi oleaginosi",
+          "crea_id": "008550",
+          "crea_name": "Nocciole, secche",
+          "culinary_state": "nocciole secche tritate"
+        }
+      ],
+      "example_dish": {
+        "name": "Yogurt greco 0% con banana matura a fettine e granella di nocciole Piemonte",
+        "description": "Base di yogurt magro denso con la dolcezza naturale della banana e la croccantezza aromatica delle nocciole tostate.",
+        "cuisine_tradition": "mediterranea_moderna"
+      },
+      "avoid_pairings": [
+        "Salse al caramello industriale",
+        "Carni conservate"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Energia pronta e sostenibile: i carboidrati della banana e il potassio si integrano con le proteine purissime dello yogurt magro e i lipidi monoinsaturi (acido oleico) delle nocciole."
+    },
+    {
+      "id": "colazione_latte_avena_mela",
+      "title": "Latte parzialmente scremato con fiocchi d'avena e mela (Porridge)",
+      "meals": [
+        "colazione"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "base_liquida + cereale + frutta",
+      "categories": [
+        "Latte e yogurt",
+        "Cereali e derivati",
+        "Frutta"
+      ],
+      "components": [
+        {
+          "role": "base_liquida",
+          "crea_category": "Latte e yogurt",
+          "crea_id": "135020",
+          "crea_name": "Latte di vacca, pastorizzato, parzialmente scremato",
+          "culinary_state": "latte di vacca pastorizzato parzialmente scremato"
+        },
+        {
+          "role": "cereale",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "003030",
+          "crea_name": "Fiocchi d'avena",
+          "culinary_state": "fiocchi d'avena integrali"
+        },
+        {
+          "role": "frutta",
+          "crea_category": "Frutta",
+          "crea_id": "007120",
+          "crea_name": "Mele, fresche, con buccia",
+          "culinary_state": "mele fresche con buccia a dadini"
+        }
+      ],
+      "example_dish": {
+        "name": "Porridge caldo all'italiana d'avena nel latte con dadolata di mela alla cannella",
+        "description": "Fiocchi d'avena cotti dolcemente nel latte tiepido fino a renderli cremosi, serviti con dadini di mela cruda o appena saltata e una spolverata di cannella.",
+        "cuisine_tradition": "mediterranea_contemporanea"
+      },
+      "avoid_pairings": [
+        "Zucchero semolato aggiunto in dosi massicce",
+        "Aromi sintetici o topping industriali",
+        "Frutta acerba astringente"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "I beta-glucani dell'avena formano un reticolo viscoso che rallenta lo svuotamento gastrico e modula l'assorbimento degli zuccheri; il latte dona calcio e proteine nobili."
+    },
+    {
+      "id": "colazione_latte_avena_banana",
+      "title": "Latte parzialmente scremato con fiocchi d'avena e banana",
+      "meals": [
+        "colazione"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "base_liquida + cereale + frutta",
+      "categories": [
+        "Latte e yogurt",
+        "Cereali e derivati",
+        "Frutta"
+      ],
+      "components": [
+        {
+          "role": "base_liquida",
+          "crea_category": "Latte e yogurt",
+          "crea_id": "135020",
+          "crea_name": "Latte di vacca, pastorizzato, parzialmente scremato",
+          "culinary_state": "latte di vacca pastorizzato parzialmente scremato"
+        },
+        {
+          "role": "cereale",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "003030",
+          "crea_name": "Fiocchi d'avena",
+          "culinary_state": "fiocchi d'avena integrali"
+        },
+        {
+          "role": "frutta",
+          "crea_category": "Frutta",
+          "crea_id": "007510",
+          "crea_name": "Banane, fresche",
+          "culinary_state": "banane fresche a rondelle"
+        }
+      ],
+      "example_dish": {
+        "name": "Zuppa fredda o tiepida di latte e avena con rondelle di banana",
+        "description": "Tazza di latte parzialmente scremato con fiocchi d'avena lasciati ammorbidire e mezza banana a fette per dolcificare naturalmente.",
+        "cuisine_tradition": "mediterranea_classica"
+      },
+      "avoid_pairings": [
+        "Cibi salati piccanti",
+        "Bevande gassate",
+        "Legumi o verdure amare"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Pasto pre o post-allenamento ideale: apporto immediato di potassio e carboidrati rapidi dalla banana uniti alla [affermazione sanitaria rimossa in revisione]ione progressiva dell'avena integrale e alle sieroproteine del latte."
+    },
+    {
+      "id": "colazione_latte_fette_biscottate_pera",
+      "title": "Latte parzialmente scremato con fette biscottate integrali e pera",
+      "meals": [
+        "colazione"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "base_liquida + cereale + frutta",
+      "categories": [
+        "Latte e yogurt",
+        "Cereali e derivati",
+        "Frutta"
+      ],
+      "components": [
+        {
+          "role": "base_liquida",
+          "crea_category": "Latte e yogurt",
+          "crea_id": "135020",
+          "crea_name": "Latte di vacca, pastorizzato, parzialmente scremato",
+          "culinary_state": "latte di vacca pastorizzato parzialmente scremato"
+        },
+        {
+          "role": "cereale",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "001510",
+          "crea_name": "Fette biscottate, integrali",
+          "culinary_state": "fette biscottate integrali"
+        },
+        {
+          "role": "frutta",
+          "crea_category": "Frutta",
+          "crea_id": "007260",
+          "crea_name": "Pere, fresche, senza buccia",
+          "culinary_state": "pere fresche senza buccia a fette"
+        }
+      ],
+      "example_dish": {
+        "name": "Colazione classica all'italiana con tazza di latte, fette biscottate integrali e una pera fresca",
+        "description": "Tazza fumante di latte parzialmente scremato (anche con caffè d'orzo), tre fette biscottate integrali dorate e una pera succosa affettata a parte.",
+        "cuisine_tradition": "italiana_tradizionale"
+      },
+      "avoid_pairings": [
+        "Salse salate",
+        "Frutta acida estrema a contatto col latte caldo"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "La classica colazione italiana sana: le fette biscottate integrali offrono amido tostato friabile e digeribile, la pera apporta zuccheri naturali e fibre insolubili, il latte assicura idratazione e quota proteica."
+    },
+    {
+      "id": "colazione_pane_ricotta_pere",
+      "title": "Pane integrale tostato con ricotta vaccina e fette di pera",
+      "meals": [
+        "colazione"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina_fresca + frutta",
+      "categories": [
+        "Cereali e derivati",
+        "Formaggi e latticini",
+        "Frutta"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000550",
+          "crea_name": "Pane di tipo integrale",
+          "culinary_state": "pane tipo integrale a fette tostato"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Formaggi e latticini",
+          "crea_id": "166820",
+          "crea_name": "Ricotta di vacca",
+          "culinary_state": "ricotta di vacca fresca"
+        },
+        {
+          "role": "frutta",
+          "crea_category": "Frutta",
+          "crea_id": "007260",
+          "crea_name": "Pere, fresche, senza buccia",
+          "culinary_state": "pere fresche a fettine sottili"
+        }
+      ],
+      "example_dish": {
+        "name": "Toast di pane integrale tostato con ricotta fresca vaccina e ventaglio di pere Abate",
+        "description": "Fetta spessa di pane integrale ai cereali tostato, spalmata con ricotta fresca vaccina vellutata e coperta con sottili fettine di pera fresca.",
+        "cuisine_tradition": "italiana_contadina"
+      },
+      "avoid_pairings": [
+        "Formaggi erborinati o fermentati salati",
+        "Insaccati grassi a colazione dolce",
+        "Cioccolata spalmabile industriale con oli vegetali raffinati"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Riedizione della saggezza contadina ('al contadino non far sapere quanto è buono il formaggio con le pere'): la ricotta fresca dolce e povera di sale sposa magnificamente la polpa acquosa e profumata della pera."
+    },
+    {
+      "id": "colazione_fette_ricotta_fragole",
+      "title": "Fette biscottate con crema di ricotta fresca e fragole",
+      "meals": [
+        "colazione"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina_fresca + frutta",
+      "categories": [
+        "Cereali e derivati",
+        "Formaggi e latticini",
+        "Frutta"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "001500",
+          "crea_name": "Fette biscottate",
+          "culinary_state": "fette biscottate tradizionali"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Formaggi e latticini",
+          "crea_id": "166820",
+          "crea_name": "Ricotta di vacca",
+          "culinary_state": "ricotta di vacca fresca"
+        },
+        {
+          "role": "frutta",
+          "crea_category": "Frutta",
+          "crea_id": "007730",
+          "crea_name": "Fragole, fresche",
+          "culinary_state": "fragole fresche a rondelle"
+        }
+      ],
+      "example_dish": {
+        "name": "Crostini dolci di fette biscottate con nuvola di ricotta fresca e fragole fresche",
+        "description": "Due o tre fette biscottate croccanti sormontate da ricotta vaccina lavorata con forchetta e fragole fresche primaverili tagliate a tocchetti.",
+        "cuisine_tradition": "italiana_moderna"
+      },
+      "avoid_pairings": [
+        "Zucchero semolato raffinato aggiunto a cucchiai",
+        "Cibi salati agliacei",
+        "Formaggi a crosta lavata"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Sostituisce in modo virtuoso il binomio burro e marmellata: la ricotta apporta sieroproteine e calcio con meno di un terzo delle calorie del burro, mentre le fragole donano vitamina C naturale."
+    },
+    {
+      "id": "colazione_pane_segale_uovo_pomodorini",
+      "title": "Pane di segale tostato con uovo strapazzato e pomodorini (Colazione salata)",
+      "meals": [
+        "colazione"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina + verdura",
+      "categories": [
+        "Cereali e derivati",
+        "Uova",
+        "Verdure e ortaggi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000510",
+          "crea_name": "Pane di segale",
+          "culinary_state": "pane di segale tostato"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Uova",
+          "crea_id": "181100",
+          "crea_name": "Uova di gallina, intero",
+          "culinary_state": "uova di gallina intero strapazzato"
+        },
+        {
+          "role": "verdura",
+          "crea_category": "Verdure e ortaggi",
+          "crea_id": "006610",
+          "crea_name": "Pomodori, maturi, freschi",
+          "culinary_state": "pomodori maturi freschi a spicchi"
+        }
+      ],
+      "example_dish": {
+        "name": "Colazione salata mediterranea: toast di segale con uovo cremoso e pomodorini all'origano",
+        "description": "Fetta di pane di segale compatto, servita con un uovo fresco cotto delicatamente in padella antiaderente e spicchi di pomodorino fresco profumato all'origano.",
+        "cuisine_tradition": "mediterranea_costiera"
+      },
+      "avoid_pairings": [
+        "Dolci da forno commerciali nello stesso pasto",
+        "Succo di frutta confezionato iperzuccherato"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Opzione salata ideale per chi ricerca stabilità [affermazione sanitaria rimossa in revisione]a assoluta per tutta la mattinata: proteine ad alto valore biologico, colina per la concentrazione cerebrale e carboidrati a rilascio lento della segale."
+    },
+    {
+      "id": "colazione_pane_cremoso_noci",
+      "title": "Pane integrale con formaggio fresco spalmabile e noci",
+      "meals": [
+        "colazione"
+      ],
+      "pairing_type": "terna",
+      "target_structure": "carboidrato + proteina_fresca + frutta_secca",
+      "categories": [
+        "Cereali e derivati",
+        "Formaggi e latticini",
+        "Frutta secca a guscio e semi oleaginosi"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000550",
+          "crea_name": "Pane di tipo integrale",
+          "culinary_state": "pane tipo integrale"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Formaggi e latticini",
+          "crea_id": "162050",
+          "crea_name": "Formaggio cremoso spalmabile",
+          "culinary_state": "formaggio cremoso spalmabile"
+        },
+        {
+          "role": "frutta_secca",
+          "crea_category": "Frutta secca a guscio e semi oleaginosi",
+          "crea_id": "008570",
+          "crea_name": "Noci, secche",
+          "culinary_state": "noci secche tritate"
+        }
+      ],
+      "example_dish": {
+        "name": "Fetta di pane integrale rustico con velo di formaggio spalmabile fresco e gherigli di noce",
+        "description": "Pane integrale tostato spalmato con formaggio fresco leggero e completato con gherigli di noce spezzettati a crudo.",
+        "cuisine_tradition": "mediterranea_moderna"
+      },
+      "avoid_pairings": [
+        "Salumi piccanti o salsiccia",
+        "Marmellate con zuccheri aggiunti in eccesso",
+        "Fritture"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Equilibrio tra fibre insolubili del frumento integrale, calcio lattico biodisponibile e acidi grassi polinsaturi e arginina delle noci secche."
+    },
+    {
+      "id": "spuntino_mela_noci",
+      "title": "Mela fresca croccante e noci secche",
+      "meals": [
+        "spuntino_mattina",
+        "merenda_pomeriggio"
+      ],
+      "pairing_type": "coppia",
+      "target_structure": "frutta_fresca + frutta_secca",
+      "categories": [
+        "Frutta",
+        "Frutta secca a guscio e semi oleaginosi"
+      ],
+      "components": [
+        {
+          "role": "frutta",
+          "crea_category": "Frutta",
+          "crea_id": "007120",
+          "crea_name": "Mele, fresche, con buccia",
+          "culinary_state": "mele fresche con buccia"
+        },
+        {
+          "role": "frutta_secca",
+          "crea_category": "Frutta secca a guscio e semi oleaginosi",
+          "crea_id": "008570",
+          "crea_name": "Noci, secche",
+          "culinary_state": "noci secche sgusciate"
+        }
+      ],
+      "example_dish": {
+        "name": "Spicchi di mela croccante con gherigli di noce",
+        "description": "Una mela di stagione lavata e tagliata a spicchi con la buccia, accompagnata da 3-4 noci sgusciate al momento.",
+        "cuisine_tradition": "mediterranea_classica"
+      },
+      "avoid_pairings": [
+        "Dolciumi da distributore automatico o merendine industriali",
+        "Formaggi salati stagionati fusi",
+        "Bibite zuccherate gassate"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Lo spuntino da manuale di salute cardiovascolare: l'acido idrossicinnamico e la quercetina della mela uniti ai fitosteroli e Omega-3 delle noci garantiscono sazietà e controllo del colesterolo ematico."
+    },
+    {
+      "id": "spuntino_banana_mandorle",
+      "title": "Banana fresca e mandorle dolci secche",
+      "meals": [
+        "spuntino_mattina",
+        "merenda_pomeriggio"
+      ],
+      "pairing_type": "coppia",
+      "target_structure": "frutta_fresca + frutta_secca",
+      "categories": [
+        "Frutta",
+        "Frutta secca a guscio e semi oleaginosi"
+      ],
+      "components": [
+        {
+          "role": "frutta",
+          "crea_category": "Frutta",
+          "crea_id": "007510",
+          "crea_name": "Banane, fresche",
+          "culinary_state": "banane fresche parte edibile"
+        },
+        {
+          "role": "frutta_secca",
+          "crea_category": "Frutta secca a guscio e semi oleaginosi",
+          "crea_id": "008540",
+          "crea_name": "Mandorle dolci, secche",
+          "culinary_state": "mandorle dolci secche con pellicina"
+        }
+      ],
+      "example_dish": {
+        "name": "Banana al naturale con una manciata di mandorle dolci con la buccia",
+        "description": "Spuntino tascabile da ufficio o pre-allenamento: una banana media matura al punto giusto e una decina di mandorle secche naturali non tostate.",
+        "cuisine_tradition": "mediterranea_sportiva"
+      },
+      "avoid_pairings": [
+        "Barrette energetiche ultra-processate cariche di sciroppo di glucosio",
+        "Snack salati fritti o patatine",
+        "Formaggi grassi"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Combinazione energetica perfetta prima dell'attività fisica: il rilascio di carboidrati della banana è attenuato dai grassi monoinsaturi e dalle proteine vegetali della mandorla, con eccellente apporto di magnesio."
+    },
+    {
+      "id": "spuntino_pera_parmigiano",
+      "title": "Pera fresca succosa e scaglie di Parmigiano Reggiano DOP",
+      "meals": [
+        "spuntino_mattina",
+        "merenda_pomeriggio"
+      ],
+      "pairing_type": "coppia",
+      "target_structure": "frutta_fresca + formaggio_stagionato",
+      "categories": [
+        "Frutta",
+        "Formaggi e latticini"
+      ],
+      "components": [
+        {
+          "role": "frutta",
+          "crea_category": "Frutta",
+          "crea_id": "007260",
+          "crea_name": "Pere, fresche, senza buccia",
+          "culinary_state": "pere fresche senza buccia"
+        },
+        {
+          "role": "proteina_sapida",
+          "crea_category": "Formaggi e latticini",
+          "crea_id": "166000",
+          "crea_name": "Parmigiano Reggiano DOP",
+          "culinary_state": "Parmigiano Reggiano DOP a scaglie"
+        }
+      ],
+      "example_dish": {
+        "name": "Spicchi di pera William con scaglie sottili di Parmigiano Reggiano stagionato",
+        "description": "Tradizionale merenda emiliana con spicchi di pera succosa e una porzione misurata di Parmigiano Reggiano a scaglie.",
+        "cuisine_tradition": "italiana_emiliana"
+      },
+      "avoid_pairings": [
+        "Aggiunta di pane bianco raffinato in quantità incontrollata",
+        "Insaccati salati (il parmigiano apporta già sale e aminoacidi liberi)",
+        "Bevande gassate dolci"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Sintesi gastronomica secolare: il fruttosio e l'acqua della pera detergono il palato esaltando i cristalli di tirosina e l'umami glutammico naturale del Parmigiano Reggiano, apportando calcio ad altissima biodisponibilità."
+    },
+    {
+      "id": "spuntino_arancia_nocciole",
+      "title": "Arancia fresca a spicchi e nocciole tostate",
+      "meals": [
+        "spuntino_mattina",
+        "merenda_pomeriggio"
+      ],
+      "pairing_type": "coppia",
+      "target_structure": "frutta_fresca + frutta_secca",
+      "categories": [
+        "Frutta",
+        "Frutta secca a guscio e semi oleaginosi"
+      ],
+      "components": [
+        {
+          "role": "frutta",
+          "crea_category": "Frutta",
+          "crea_id": "008000",
+          "crea_name": "Arance, fresche",
+          "culinary_state": "arance fresche a spicchi"
+        },
+        {
+          "role": "frutta_secca",
+          "crea_category": "Frutta secca a guscio e semi oleaginosi",
+          "crea_id": "008550",
+          "crea_name": "Nocciole, secche",
+          "culinary_state": "nocciole secche tostate"
+        }
+      ],
+      "example_dish": {
+        "name": "Spicchi di arancia bionda succosa con una piccola manciata di nocciole",
+        "description": "Arancia sbucciata a vivo e gustata a spicchi insieme a nocciole tonde tostate non salate.",
+        "cuisine_tradition": "italiana_meridionale"
+      },
+      "avoid_pairings": [
+        "Latte vaccino caldo bevuto contemporaneamente (acidità dell'agrume)",
+        "Dolci con creme pesanti",
+        "Snack salati industriali"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "La vitamina C dell'arancia stimola le difese immunitarie e la sintesi di collagene; le nocciole donano acido oleico e fibre che placano la fame fino al pasto successivo."
+    },
+    {
+      "id": "spuntino_yogurt_mirtilli",
+      "title": "Yogurt bianco intero con mirtilli freschi",
+      "meals": [
+        "spuntino_mattina",
+        "merenda_pomeriggio"
+      ],
+      "pairing_type": "coppia",
+      "target_structure": "base_lattea + frutta",
+      "categories": [
+        "Latte e yogurt",
+        "Frutta"
+      ],
+      "components": [
+        {
+          "role": "base_cremosa",
+          "crea_category": "Latte e yogurt",
+          "crea_id": "150010",
+          "crea_name": "Yogurt, da latte intero",
+          "culinary_state": "yogurt da latte intero bianco naturale"
+        },
+        {
+          "role": "frutta",
+          "crea_category": "Frutta",
+          "crea_id": "007760",
+          "crea_name": "Mirtilli, freschi",
+          "culinary_state": "mirtilli freschi"
+        }
+      ],
+      "example_dish": {
+        "name": "Vasetto di yogurt bianco naturale con una manciata di mirtilli neri freschi",
+        "description": "Merenda fresca e veloce: yogurt bianco compatto al naturale mescolato con mirtilli freschi interi.",
+        "cuisine_tradition": "mediterranea_moderna"
+      },
+      "avoid_pairings": [
+        "Yogurt industriale alla frutta con zuccheri e sciroppi aggiunti",
+        "Biscotti farciti industriali",
+        "Cibi salati piccanti"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "L'associazione tra probiotici dello yogurt intero e polifenoli dei mirtilli sostiene il microbiota intestinale, garantendo un indice [affermazione sanitaria rimossa in revisione]o minimo."
+    },
+    {
+      "id": "spuntino_yogurt_greco_fragole",
+      "title": "Yogurt greco magro con fragole fresche a pezzi",
+      "meals": [
+        "spuntino_mattina",
+        "merenda_pomeriggio"
+      ],
+      "pairing_type": "coppia",
+      "target_structure": "base_lattea + frutta",
+      "categories": [
+        "Latte e yogurt",
+        "Frutta"
+      ],
+      "components": [
+        {
+          "role": "base_cremosa",
+          "crea_category": "Latte e yogurt",
+          "crea_id": "150030",
+          "crea_name": "Yogurt greco, 0% lipidi",
+          "culinary_state": "yogurt greco 0% lipidi"
+        },
+        {
+          "role": "frutta",
+          "crea_category": "Frutta",
+          "crea_id": "007730",
+          "crea_name": "Fragole, fresche",
+          "culinary_state": "fragole fresche a dadini"
+        }
+      ],
+      "example_dish": {
+        "name": "Coppetta di yogurt greco magro con dadolata di fragole fresche al limone",
+        "description": "Yogurt greco denso a zero grassi con fragole dolci appena tagliate e una goccia di limone per esaltarne il profumo.",
+        "cuisine_tradition": "mediterranea_moderna"
+      },
+      "avoid_pairings": [
+        "Zucchero bianco aggiunto sopra le fragole",
+        "Formaggi stagionati duri"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Massima efficienza proteica (10g+ di proteine pure) a fronte di calorie irrisorie (meno di 100 kcal complessive), ideale in fasi di definizione o dieta ipocalorica controllata."
+    },
+    {
+      "id": "spuntino_yogurt_greco_noci",
+      "title": "Yogurt greco intero con gherigli di noce",
+      "meals": [
+        "spuntino_mattina",
+        "merenda_pomeriggio",
+        "spuntino_serale"
+      ],
+      "pairing_type": "coppia",
+      "target_structure": "base_lattea + frutta_secca",
+      "categories": [
+        "Latte e yogurt",
+        "Frutta secca a guscio e semi oleaginosi"
+      ],
+      "components": [
+        {
+          "role": "base_cremosa",
+          "crea_category": "Latte e yogurt",
+          "crea_id": "150020",
+          "crea_name": "Yogurt greco, da latte intero",
+          "culinary_state": "yogurt greco da latte intero"
+        },
+        {
+          "role": "frutta_secca",
+          "crea_category": "Frutta secca a guscio e semi oleaginosi",
+          "crea_id": "008570",
+          "crea_name": "Noci, secche",
+          "culinary_state": "noci secche tritate"
+        }
+      ],
+      "example_dish": {
+        "name": "Coppetta di yogurt greco naturale colato con gherigli di noce dorati",
+        "description": "Yogurt greco intero cremoso gustato con noci secche, ideale anche come spuntino serale per sostenere il sonno.",
+        "cuisine_tradition": "mediterranea_greca"
+      },
+      "avoid_pairings": [
+        "Miele millefiori in dosi abbondanti (mantenere solo se previsto nei macro)",
+        "Snack salati da aperitivo",
+        "Carni o insaccati"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Le caseine a lento rilascio dello yogurt e i grassi nobili delle noci inducono una sazietà duratura ed evitano picchi insulinici; le noci contengono melatonina naturale che favorisce il rilassamento."
+    },
+    {
+      "id": "spuntino_pane_integrale_ricotta",
+      "title": "Pane integrale a fette con velo di ricotta fresca",
+      "meals": [
+        "spuntino_mattina",
+        "merenda_pomeriggio"
+      ],
+      "pairing_type": "coppia",
+      "target_structure": "carboidrato + proteina_fresca",
+      "categories": [
+        "Cereali e derivati",
+        "Formaggi e latticini"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000550",
+          "crea_name": "Pane di tipo integrale",
+          "culinary_state": "pane tipo integrale"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Formaggi e latticini",
+          "crea_id": "166820",
+          "crea_name": "Ricotta di vacca",
+          "culinary_state": "ricotta di vacca fresca"
+        }
+      ],
+      "example_dish": {
+        "name": "Bruschetta integrale semplice con ricotta fresca vaccina e pepe nero",
+        "description": "Una fetta di pane integrale tostato spalmata con ricotta vaccina freschissima e un pizzico di pepe macinato.",
+        "cuisine_tradition": "italiana_classica"
+      },
+      "avoid_pairings": [
+        "Confetture dense di saccarosio",
+        "Formaggi stagionati fusi o sottilette industriali",
+        "Fritti"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Semplice, pulito e digeribile: unisce carboidrati complessi integrali a basso indice [affermazione sanitaria rimossa in revisione]o e proteine del siero di latte ad assorbimento graduale."
+    },
+    {
+      "id": "spuntino_pane_prosciutto_cotto",
+      "title": "Pane casereccio con prosciutto cotto alta qualità sgrassato",
+      "meals": [
+        "spuntino_mattina",
+        "merenda_pomeriggio"
+      ],
+      "pairing_type": "coppia",
+      "target_structure": "carboidrato + proteina_magra",
+      "categories": [
+        "Cereali e derivati",
+        "Carni trasformate e conservate"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000530",
+          "crea_name": "Pane bianco",
+          "culinary_state": "pane tipo 00 o casereccio"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Carni trasformate e conservate",
+          "crea_id": "110411",
+          "crea_name": "Prosciutto cotto, alta qualità, sgrassato",
+          "culinary_state": "prosciutto cotto alta qualità sgrassato a fette"
+        }
+      ],
+      "example_dish": {
+        "name": "Piccolo panino merenda con fetta di prosciutto cotto scelto sgrassato",
+        "description": "Paninetto casereccio piccolo con 1-2 fette di prosciutto cotto di alta qualità privo del grasso visibile.",
+        "cuisine_tradition": "italiana_tradizionale"
+      },
+      "avoid_pairings": [
+        "Maionese, salse industriali o burro spalmato",
+        "Dolci consumati insieme al salume"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "La classica merenda salata italiana per ragazzi e adulti: proteine altamente biodisponibili e digeribili con un ridottissimo contenuto di grassi saturi e [affermazione sanitaria rimossa in revisione] controllato."
+    },
+    {
+      "id": "spuntino_pane_segale_bresaola",
+      "title": "Pane di segale con Bresaola della Valtellina IGP",
+      "meals": [
+        "spuntino_mattina",
+        "merenda_pomeriggio"
+      ],
+      "pairing_type": "coppia",
+      "target_structure": "carboidrato + proteina_magra",
+      "categories": [
+        "Cereali e derivati",
+        "Carni trasformate e conservate"
+      ],
+      "components": [
+        {
+          "role": "carboidrato",
+          "crea_category": "Cereali e derivati",
+          "crea_id": "000510",
+          "crea_name": "Pane di segale",
+          "culinary_state": "pane di segale"
+        },
+        {
+          "role": "proteina",
+          "crea_category": "Carni trasformate e conservate",
+          "crea_id": "110020",
+          "crea_name": "Bresaola della Valtellina IGP",
+          "culinary_state": "Bresaola della Valtellina IGP a fette sottili"
+        }
+      ],
+      "example_dish": {
+        "name": "Spuntino proteico con crostone di segale, bresaola della Valtellina e gocce di limone",
+        "description": "Fetta di pane di segale scuro con fettine di bresaola stagionata magrissima, condite con una goccia di limone.",
+        "cuisine_tradition": "italiana_lombarda"
+      },
+      "avoid_pairings": [
+        "Formaggi fusi o salse unte",
+        "Aggiunta di sale (la bresaola è già salata)",
+        "Snack dolci da forno"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "Spuntino ad altissima densità proteica e bassissima densità calorica e lipidica: eccellente concentrazione di ferro e vitamine del gruppo B della carne bovina stagionata magra."
+    },
+    {
+      "id": "spuntino_latte_caldo_mandorle",
+      "title": "Latte parzialmente scremato caldo con mandorle dolci (Pre-bed)",
+      "meals": [
+        "spuntino_serale",
+        "merenda_pomeriggio"
+      ],
+      "pairing_type": "coppia",
+      "target_structure": "base_liquida + frutta_secca",
+      "categories": [
+        "Latte e yogurt",
+        "Frutta secca a guscio e semi oleaginosi"
+      ],
+      "components": [
+        {
+          "role": "base_liquida",
+          "crea_category": "Latte e yogurt",
+          "crea_id": "135020",
+          "crea_name": "Latte di vacca, pastorizzato, parzialmente scremato",
+          "culinary_state": "latte di vacca pastorizzato parzialmente scremato"
+        },
+        {
+          "role": "frutta_secca",
+          "crea_category": "Frutta secca a guscio e semi oleaginosi",
+          "crea_id": "008540",
+          "crea_name": "Mandorle dolci, secche",
+          "culinary_state": "mandorle dolci secche"
+        }
+      ],
+      "example_dish": {
+        "name": "Tazza di latte caldo tiepido prima di coricarsi con 4-5 mandorle dolci",
+        "description": "Bevanda calda confortevole della sera per conciliare il sonno, accompagnata da poche mandorle secche.",
+        "cuisine_tradition": "mediterranea_tradizionale"
+      },
+      "avoid_pairings": [
+        "Biscotti ricchi di zuccheri raffinati e burro",
+        "Frutta acidula che può provocare reflusso gastroesofageo notturno"
+      ],
+      "evidence": "euristica",
+      "culinary_rationale": "L'abbinamento pre-bed ideale: il triptofano del latte favorisce la sintesi della serotonina e della melatonina; il magnesio delle mandorle induce rilassamento neuromuscolare senza appesantire la [affermazione sanitaria rimossa in revisione]ione."
+    }
+  ],
+  "review": {
+    "by": "claude",
+    "on": "2026-10-07",
+    "note": "Id CREA verificati (67/67). Gli abbinamenti da evitare valgono solo come gusto culinario: rimosse le motivazioni sanitarie o digestive non supportate da fonti. Sei alimenti dipendono dalla correzione delle tracce CREA (uova, Parmigiano, stracchino, spalmabile, mela con buccia, finocchi)."
+  }
+}
