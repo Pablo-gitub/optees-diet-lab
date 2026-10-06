@@ -3371,3 +3371,58 @@ label > .chip.todo {
   align-items: baseline;
   gap: 4px 16px;
 }
+
+/* 8.11 — spesa e report */
+.shopping-block {
+  margin-top: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+.shopping-block .meal-actions {
+  flex-wrap: wrap;
+  align-items: center;
+}
+a.button-link {
+  display: inline-block;
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 650;
+  border-radius: 9px;
+  text-decoration: none;
+}
+.shopping-dept {
+  margin: 12px 0 4px;
+  font-size: 13px;
+  color: var(--ink-2);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.shopping-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.shopping-items li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--line);
+}
+.shopping-items li .muted {
+  grid-column: 1 / -1;
+}
+.shopping-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.inline-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}
+.inline-check input {
+  width: auto;
+  margin: 0;
+}

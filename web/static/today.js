@@ -532,6 +532,7 @@ function renderWeek(week) {
       'muted small',
     ),
   );
+  box.append(shoppingBlock(start));
 }
 
 // ---------- Statistiche ----------
