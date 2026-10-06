@@ -157,6 +157,8 @@ async def generate_week(session,profile,data,make_config,foods,health=None,worko
             date=offsets[day];kind=day_types[date];personal=copy.deepcopy(original);personal['mode']=modes[kind];personal['daily_meals']['targets']=copy.deepcopy(data['day_targets'][kind]);dated=approved.get('days',{}).get(date)
             if not explicit_targets and dated and dated['session_signature']==activity_signature(by_date[date]):personal['daily_meals']['targets']=copy.deepcopy(dated['targets'])
             config=make_config(personal,day);config['day_type']=kind
+            config['_timing_profile']=personal
+            config['_timing_sessions']=copy.deepcopy(by_date[date])
             from joint_energy import day_scenarios
             forecast=day_scenarios(health,by_date[date])
             if forecast['status']=='available':config['_energy_low']=forecast['consumption_kcal']['low']

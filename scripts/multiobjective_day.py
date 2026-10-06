@@ -81,6 +81,8 @@ async def solve_strategy(session, problem, config, choices, strategy='balanced',
         result=await solve_problem(session,p)
     if result['mathematical_status'] not in ('optimal','feasible'):
         return result
+    import nutrient_timing
+    result=await nutrient_timing.refine(session,p,result,solve_problem)
     values=values_verified(p,result)
     errors={key:abs(sum(a*b for a,b in zip(row,values))-spec['target'])/spec['target'] for key,spec,row in measures}
     satisfaction={key:1-abs(sum(a*b for a,b in zip(row,values))-spec['target'])/max(spec['target']-spec['min'],spec['max']-spec['target']) if spec['max']>spec['min'] else 1. for key,spec,row in measures}

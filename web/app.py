@@ -53,6 +53,7 @@ def connect():
 
 def profile_defaults(profile):
     profile.setdefault('preferred_cuisines', [])
+    profile.setdefault('meal_timing',dict(mode='auto',meals={}))
     profile.setdefault('daily_meals',daily_defaults(bool(profile.get('food_preferences'))))
     return profile
 
@@ -71,7 +72,7 @@ def owner_profile(user):
         meal_matches.attach(db,user['id'],profile)
         scheduled={}
         for row in db.execute("SELECT s.* FROM planned_session s JOIN week_plan w ON w.id=s.week_plan_id WHERE w.user_id=? AND w.status='active' AND s.status!='skipped'",(user['id'],)):
-            scheduled.setdefault(row['date'],[]).append(dict(session_id=row['session_id'],session=json.loads(row['snapshot'])))
+            scheduled.setdefault(row['date'],[]).append(dict(session_id=row['session_id'],session=json.loads(row['snapshot']),start_time=row['start_time']))
     report=load_health_report(health_directory(user['id']))
     baseline=(report or {}).get('non_workout_consumption_scenarios',(report or {}).get('non_workout_scenarios',{}))
     approved=profile.get('approved_activity_targets',{})
@@ -81,6 +82,7 @@ def owner_profile(user):
     if baseline.get('status')=='available':profile['_energy_baseline_low']=baseline.get('low_kcal')
     from joint_energy import day_scenarios
     energy_inputs=dict(non_workout_consumption_scenarios=baseline,workout_energy_models=(report or {}).get('workout_energy_models',(report or {}).get('workout_forecasts',[])))
+    profile['_timing_sessions_by_date']=scheduled
     profile['_scheduled_energy_by_date']={date:day_scenarios(energy_inputs,sessions) for date,sessions in scheduled.items()}
     return profile
 
@@ -301,6 +303,9 @@ async def update_profile(request: Request):
     ):
         raise HTTPException(400, 'Cucine non valide')
     old['preferred_cuisines'] = list(dict.fromkeys(preferred))
+    if 'meal_timing' in data:
+        import nutrient_timing
+        old['meal_timing']=nutrient_timing.validate(data['meal_timing'])
     if 'goals' in data:
         import personal_goals
         old['goals']=personal_goals.validate(data['goals'])
@@ -355,6 +360,7 @@ def make_config(profile, day):
         base['demo']=settings['targets_demo']
     base['_match_cards']=copy.deepcopy(profile.get('_match_cards',[]))
     base['_match_profile']=profile
+    base['_timing_profile']=profile
     return base
 
 
@@ -375,7 +381,7 @@ def plans(request: Request):
 @app.post('/api/generate')
 async def generate(request: Request):
     user = identity(request, True)
-    profile = json.loads(user['profile'])
+    profile = owner_profile(user)
     data = await request.json()
     day = data.get('day_index', data.get('horizon', {}).get('day_index', 0))
     if isinstance(day, bool) or not isinstance(day, int) or not 0 <= day < 14:
@@ -386,6 +392,7 @@ async def generate(request: Request):
         raise HTTPException(409, 'Calcolo già in corso: riprova fra poco')
     async with solver_lock:
         config = make_config(profile, day)
+        config['_timing_sessions']=profile.get('_timing_sessions_by_date',{}).get(diary.local_today().isoformat(),[])
         if 'mode' in data and data['mode'] != config['mode']:
             raise HTTPException(400, 'Programma diverso dal profilo attivo')
         with connect() as db:

@@ -113,7 +113,7 @@ def resolve_food(ref,profile):
             if mass<=0:raise DomainError('Porzione di ricetta non valida')
             row=dict(name=recipe['title'],**{n:numeric(recipe['nutrients'].get('carbs_g' if n=='carbs_available_g_100g' else n.replace('_100g','')))*100/mass if numeric(recipe['nutrients'].get('carbs_g' if n=='carbs_available_g_100g' else n.replace('_100g',''))) is not None else None for n in NUTRIENTS})
     else:raise DomainError('Alimento non trovato')
-    return dict(food=ref,name=row['name'],brand=brand,source_label='database italiano generico' if source=='CREA' else 'marca' if source=='OFF' else 'etichetta personale' if source=='user_label' else 'ricetta',per_100g={n.replace('_100g',''):numeric(row.get(n)) for n in NUTRIENTS},unit_g=unit,recipe_id=recipe.get('recipe_id') if recipe else None,principal_food_id=recipe.get('principal_food_id') if recipe else None,composition_provenance=row.get('composition_provenance'))
+    return dict(food=ref,name=row['name'],brand=brand,source_label='database italiano generico' if source=='CREA' else 'marca' if source=='OFF' else 'etichetta personale' if source=='user_label' else 'ricetta',per_100g={n.replace('_100g',''):numeric(row.get(n)) for n in NUTRIENTS},fiber_g_100g=numeric(row.get('fiber_g_100g')),unit_g=unit,recipe_id=recipe.get('recipe_id') if recipe else None,principal_food_id=recipe.get('principal_food_id') if recipe else None,composition_provenance=row.get('composition_provenance'))
 
 def quantity(data,food):
     grams=data.get('grams');units=data.get('units')
@@ -182,7 +182,7 @@ def day_view(db,user,profile,date):
     from contextual_bandit import day_evaluation
     evaluation=day_evaluation(db,user,date)
     single=evaluation['plans'][0] if len(evaluation['plans'])==1 else None
-    return dict(plan_id=single['plan_id'] if single else None,rating=single['rating'] if single else None,plan_evaluation=evaluation,date=date,day_type='training' if any(w['status']!='skipped' for w in workouts) else context.get('day_type','unknown'),mode=context.get('mode',week['mode']) if week else profile['mode'],week_plan_id=week['id'] if week else None,targets={k.replace('_100g',''):v for k,v in targets.items()},totals=dict(planned=totals(all_planned) if planned_count else None,eaten=eaten_totals,coverage=dict(logged_slots=logged,planned_slots=planned_count)),meals=meals,workout=workout,workouts=workouts,warnings=[])
+    return dict(meal_timing=context.get('meal_timing'),plan_id=single['plan_id'] if single else None,rating=single['rating'] if single else None,plan_evaluation=evaluation,date=date,day_type='training' if any(w['status']!='skipped' for w in workouts) else context.get('day_type','unknown'),mode=context.get('mode',week['mode']) if week else profile['mode'],week_plan_id=week['id'] if week else None,targets={k.replace('_100g',''):v for k,v in targets.items()},totals=dict(planned=totals(all_planned) if planned_count else None,eaten=eaten_totals,coverage=dict(logged_slots=logged,planned_slots=planned_count)),meals=meals,workout=workout,workouts=workouts,warnings=[])
 
 def diary_mutation(db,user,profile,action,data,entry_id=None):
     entry=None
@@ -287,9 +287,14 @@ def apply_plan(db,user,profile,plan_set,plan,data):
     if scope=='week' and 'targets_by_date' in plan:
         context=json.loads(week['day_context'] or '{}') if week else {}
         for day in plan['days']:
-            date=day['date'];context[date]=dict(targets=day['targets'],mode=day['mode'],day_type=day.get('day_type','unknown'),scope=day.get('scope'))
+            date=day['date'];context[date]=dict(targets=day['targets'],mode=day['mode'],day_type=day.get('day_type','unknown'),scope=day.get('scope'),meal_timing=copy.deepcopy(day.get('meal_timing')))
+            if context[date]['meal_timing'] and any(item['date']==date for item in skipped):context[date]['meal_timing'].update(status='unavailable',reason='Alcuni pasti erano già registrati: distribuzione applicata solo in parte.')
             if plan_set.get('kind')=='joint' and not any(item['date']==date for item in skipped):
                 context[date]['progress_forecast']=dict(valid=True,scope=day.get('scope'),energy_scenarios=day.get('energy_scenarios',{}),planned_kcal=day['nutrients']['kcal'],plan_id=plan.get('id'),energy_balance_target_kcal=plan_set.get('energy_balance_target_kcal'),recorded_at=time.time())
+        db.execute('UPDATE week_plan SET day_context=? WHERE id=?',(json.dumps(context),id))
+    if scope=='day' and plan.get('meal_timing') and not skipped:
+        row=db.execute('SELECT day_context FROM week_plan WHERE id=?',(id,)).fetchone();context=json.loads(row['day_context'] or '{}')
+        context.setdefault(dates[0],{})['meal_timing']=copy.deepcopy(plan['meal_timing'])
         db.execute('UPDATE week_plan SET day_context=? WHERE id=?',(json.dumps(context),id))
     result=day_view(db,user,profile,dates[0]);result.update(skipped_slots=skipped,applied_slots=applied);return result
 

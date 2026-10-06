@@ -153,6 +153,8 @@ def invalidate_forecast(db,user,date,reason='plan_changed'):
     rows=db.execute("SELECT id,day_context FROM week_plan WHERE user_id=? AND status='active' AND week_start<=? AND date(week_start,'+6 days')>=?",(user,date,date)).fetchall()
     for row in rows:
         context=json.loads(row['day_context'] or '{}');forecast=context.get(date,{}).get('progress_forecast')
-        if forecast:
-            forecast.update(valid=False,invalidation_reason=reason)
+        timing=context.get(date,{}).get('meal_timing')
+        if timing and timing.get('status')=='active':timing.update(status='unavailable',reason='Pasti o attività modificati dopo il calcolo: ricalcola la distribuzione.')
+        if forecast or timing:
+            if forecast:forecast.update(valid=False,invalidation_reason=reason)
             db.execute('UPDATE week_plan SET day_context=? WHERE id=?',(json.dumps(context),row['id']))

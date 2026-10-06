@@ -234,6 +234,8 @@ def formulate(config, foods):
         if c.get('preferred_recipe'):objective[c['y']]=objective.get(c['y'],0)-PREFERENCE_BONUS
     from meal_matches import penalties as match_penalties
     match_penalties(config,choices,var,add,objective)
+    import nutrient_timing
+    timing_cost,kcal_rows=nutrient_timing.add_rules(config,foods,choices,slots,var,add)
     size = len(variables)
     dense = lambda values: [values.get(i, 0) for i in range(size)]
     problem = dict(
@@ -244,6 +246,9 @@ def formulate(config, foods):
         solver=dict(time_limit=15),
     )
     if preference_cost:problem['preference_coefficients']=dense(preference_cost)
+    if timing_cost:
+        problem['timing_coefficients']=dense(timing_cost)
+        problem['timing_kcal_rows']=[dense(row) for row in kcal_rows]
     return problem, choices, slots
 
 
@@ -258,7 +263,7 @@ async def solve_problem(session, problem):
     descriptor = await call('get_capability', dict(capability_id='milp.linear'))
     if not descriptor['capability']['available']:
         raise RuntimeError('MILP unavailable')
-    args = dict(capability_id='milp.linear', problem=problem)
+    args = dict(capability_id='milp.linear', problem={k:v for k,v in problem.items() if k in ('version','variables','constraints','objective','solver')})
     validation = await call('validate_problem', args)
     if not validation['validation']['valid']:
         raise ValueError(str(validation))
@@ -292,10 +297,12 @@ async def optimize_day(session,problem):
             result['mathematical_status']='feasible'  # Only the preference optimum was certified.
         else:values_verified(active,result)
         result['preference_penalty']=penalty
-        return result
+        import nutrient_timing
+        return await nutrient_timing.refine(session,active,result,solve_problem)
     result=await solve_problem(session,active)
     if result['mathematical_status'] in ['optimal','feasible']:values_verified(active,result)
-    return result
+    import nutrient_timing
+    return await nutrient_timing.refine(session,active,result,solve_problem)
 
 
 def decode_result(config, problem, choices, slots, foods, result):
@@ -365,6 +372,8 @@ def decode_result(config, problem, choices, slots, foods, result):
             meal_totals[c['meal']]=[a+grams*b for a,b in zip(meal_totals[c['meal']],c['nutrients'])]
         record['nutrients'] = {n.replace('_100g', ''): round(v, 3) for n, v in zip(NUTRIENTS, totals)}
     record['nutrients_by_meal']={meal:{n.replace('_100g',''):round(v,3) for n,v in zip(NUTRIENTS,values)} for meal,values in meal_totals.items()} if record['status'] in ['optimal','feasible'] else {}
+    import nutrient_timing
+    record['meal_timing']=nutrient_timing.report(config,record['selections'],foods,result)
     record['constraint_report'] = None
     if record['status'] in ['optimal', 'feasible']:
         targets = config['daily_meals']['targets'] if config.get('daily_meals', {}).get('enabled') else config['main_meals_targets']

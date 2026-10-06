@@ -19,7 +19,7 @@ def add_lock(config,foods,slot,items,profile):
         ref=item.get('food');food=resolve_food(ref,profile);grams,units=quantity(item,food)
         if any(v is None for v in food['per_100g'].values()):raise DomainError('Nutrienti mancanti nel pasto bloccato: impossibile verificare il bilancio')
         identifier=ref['id'] if ref['source']=='CREA' else ('personal:' if ref['source']=='user_label' else 'locked:'+ref['source']+':')+ref['id']
-        foods[identifier]=dict(name=food['name'],source=ref['source'],source_id=ref['id'],composition_provenance=food.get('composition_provenance'),nutrient_ranges=food.get('nutrient_ranges'),recipe_id=food.get('recipe_id'),principal_food_id=food.get('principal_food_id'),**{n:str(food['per_100g'][n.replace('_100g','')]) for n in NUTRIENTS})
+        foods[identifier]=dict(name=food['name'],source=ref['source'],source_id=ref['id'],composition_provenance=food.get('composition_provenance'),fiber_g_100g=food.get('fiber_g_100g'),nutrient_ranges=food.get('nutrient_ranges'),recipe_id=food.get('recipe_id'),principal_food_id=food.get('principal_food_id'),**{n:str(food['per_100g'][n.replace('_100g','')]) for n in NUTRIENTS})
         fixed.append(dict(food_id=identifier,grams=grams,units=units,source=ref['source'],reference_id=ref['id']))
     config.setdefault('locked_meals',{})[slot]=fixed
 
@@ -49,6 +49,8 @@ def weekly_model(profile,request,make_config,foods):
         model_index=len(blocks);config=make_config(profile,(index+offset)%14)
         config['_match_cards']=copy.deepcopy(profile.get('_match_cards',[]))
         config['_match_profile']=profile
+        config.setdefault('_timing_profile',profile)
+        config.setdefault('_timing_sessions',profile.get('_timing_sessions_by_date',{}).get(date,[]))
         config['portion_bounds_g']=request.get('portion_bounds_g',config.get('portion_bounds_g',{}))
         for (lock_date,slot),items in locks.items():
             if lock_date==date:add_lock(config,foods,slot,items,profile)
@@ -157,6 +159,13 @@ def weekly_model(profile,request,make_config,foods):
                 sparse_rows.extend([(diff,'<=',center-other_center+25),(diff,'>=',center-other_center-25)])
     size=len(variables);dense=lambda r:[r.get(i,0.) for i in range(size)]
     problem=dict(version='1',variables=variables,constraints=[dict(coefficients=dense(row),relation=relation,rhs=rhs) for row,relation,rhs in sparse_rows],objective=dict(sense='min',coefficients=objectives),solver=dict(time_limit=request.get('solve_time_limit',15)))
+    timing={}
+    for block in blocks:
+        for i,v in enumerate(block['problem'].get('timing_coefficients',[])):
+            if v:timing[i+block['shift']]=v
+    if timing:
+        problem['timing_coefficients']=dense(timing)
+        problem['timing_kcal_rows']=[dense({c['q']+b['shift']:c['nutrients'][0] for c in b['choices']}) for b in blocks]
     if any(preferences):problem['preference_coefficients']=preferences
     return problem,blocks,all_choices,maximum
 
@@ -166,6 +175,7 @@ def decode_week(problem,blocks,foods,result,maximum):
     by_name={v['name']:v['value'] for v in result['result']['variables']};days=[]
     for offset,block in enumerate(blocks):
         sub=dict(mathematical_status=result['mathematical_status'],validation=result['validation'],result=dict(variables=[dict(name=v['name'],value=by_name[f'd{offset}_{v["name"]}']) for v in block['problem']['variables']]))
+        if 'timing_optimization' in result:sub['timing_optimization']=copy.deepcopy(result['timing_optimization'])
         day=decode_result(block['config'],block['problem'],block['choices'],block['slots'],foods,sub)
         day={k:v for k,v in day.items() if k not in ('config','result','excluded_for_missing_nutrients','crea_sha256')}
         day_targets=block['config']['daily_meals']['targets'] if block['config'].get('daily_meals',{}).get('enabled') else block['config']['main_meals_targets']
@@ -247,6 +257,12 @@ async def generate_week(session,profile,request,make_config,foods,history=(),obs
         if candidate is None:
             if not certificate.get('certified'):result['status']='partial'
             break
+        import nutrient_timing
+        if p.get('timing_coefficients') and time.monotonic()>=start+budget:
+            candidate['timing_optimization']=dict(status='unavailable',reason='Tempo esaurito: mantenuto il candidato verificato senza redistribuzione.',daily_kcal_unchanged=True)
+        else:
+            if p.get('timing_coefficients'):p['solver']['time_limit']=min(p['solver'].get('time_limit',15),max(.1,start+budget-time.monotonic()))
+            candidate=await nutrient_timing.refine(session,p,candidate,solve_problem)
         values_verified(p,candidate);plan=decode_week(problem,blocks,foods,candidate,maximum)
         actual=max((overlap(amounts(plan,foods,profile),amounts(prior,foods,profile)) for prior in previous),default=0)
         if actual>certificate['threshold']+1e-6:raise DomainError('Sovrapposizione non verificata')

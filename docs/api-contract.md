@@ -991,3 +991,66 @@ strutture della dieta e target attuali; gli sgraditi penalizzano la stessa
 combinazione di alimenti principali, senza vietarli singolarmente. I voti
 sono contesto di preferenza separato: non diventano ricompense del bandit
 per settimane non provate. Abbinamenti tipici premiati solo se revisionati.
+
+### 8.13 — Pasti attorno agli allenamenti
+
+`meal_timing` in GET/PUT `/api/profile` è preservato se omesso nel PUT.
+`mode` = `auto` (default), `explicit`, `off`; `meals` può sostituire gli orari
+predefiniti configurati. Per una richiesta esplicita senza sessione con orario
+si può dichiarare `explicit_session` (inizio e durata); non si indovina l'ora.
+
+```json
+{"meal_timing":{"mode":"auto","meals":{"lunch":{"start_time":"12:30","end_time":"13:00"},"dinner":{"start_time":"19:30","end_time":"20:00"}}}}
+```
+
+```json
+{"meal_timing":{"mode":"explicit","explicit_session":{"start_time":"17:00","duration_minutes":45},"meals":{}}}
+```
+
+`auto` attivo soltanto per sessioni >60 minuti con `start_time`. `off` lo
+spegne, `explicit` consente anche sessioni brevi dichiarate. Senza peso filtrato
+30–300 kg o orari necessari: `unavailable`, motivo leggibile, dieta ordinaria.
+Gli orari predefiniti sono dichiarati `provisional_default`, mai orari osservati.
+
+Nei giorni del piano e in `DayView.meal_timing`:
+
+```json
+{"meal_timing":{"status":"active","parameters_version":"nutrient-timing-v1","parameters_status":"provvisorio","weight_kg":80,"schedule_source":"profile","sessions":[{"session_id":"synthetic-long","before":"lunch","after":"dinner"}],"rules":[{"id":"pre_carbs","slot":"lunch","observed_g":75,"target_g":80,"satisfied":false,"reason":"Quota provvisoria non raggiunta entro i vincoli del piano."}],"daily_kcal_unchanged":true,"explanation":"Distribuzione per comfort e qualità dell’allenamento; obiettivi quotidiani invariati."}}
+```
+
+Esempio parziale, una riga per regola applicabile. Pasti prima: fine fra 1 e 4 h
+prima; dopo: primo inizio entro 2 h dalla fine. Pasti principali con proteine
+per kg filtrato. Grassi/fibre prima sotto la media, carboidrati dopo sopra
+la media (priorità maggiore dopo cardio). Fibre ignote restano `null`, con
+motivo: non vengono stimate a zero. Pasti fuori finestra/registrati e regole
+non soddisfatte sono spiegati; non causano infattibilità.
+
+Secondo passaggio MILP morbido: blocca le kcal effettive di ogni giornata
+sul risultato iniziale e conserva il compromesso nutrizionale; cambia solo
+la distribuzione consentita dalle strutture e dai vincoli locali. Nessun
+incremento di calorie né nutriente o bevanda aggiunti automaticamente.
+Tutte le soglie sono in `config/nutrient-timing.json`, **provvisorio** ISSN;
+fattori della media e pesi obiettivo sono esplicitamente euristici. Fonte:
+[ISSN 2017](https://link.springer.com/article/10.1186/s12970-017-0189-4).
+Oltre 90 minuti il suggerimento 30–60 g/h è soltanto informativo, non nel piano.
+
+Casi senza disponibilità (esempi):
+
+```json
+{"meal_timing":{"status":"inactive","parameters_version":"nutrient-timing-v1","parameters_status":"provvisorio","rules":[],"sessions":[],"daily_kcal_unchanged":true}}
+```
+
+```json
+{"meal_timing":{"status":"unavailable","reason":"Serve un peso filtrato recente tra 30 e 300 kg.","parameters_version":"nutrient-timing-v1","parameters_status":"provvisorio","rules":[],"sessions":[],"daily_kcal_unchanged":true}}
+```
+
+```json
+{"id":"pre_fiber","slot":"lunch","observed_g":null,"target_g":null,"satisfied":null,"reason":"Fibre mancanti in un alimento selezionato: media non valutabile."}
+```
+
+Piano applicato solo in parte o pasti/attività modificati successivamente:
+`meal_timing.status=unavailable` con motivo che invita a ricalcolare. Gli altri
+campi di DayView restano quelli del diario corrente. Una sessione che termina
+il giorno dopo riporta `after_reason`: non si collega automaticamente un pasto
+di un altro giorno. `explicit_session` del profilo è un modello orario per i
+giorni generati, non registra né pianifica un allenamento.

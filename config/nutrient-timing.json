@@ -1,0 +1,55 @@
+{
+  "version": "nutrient-timing-v1",
+  "status": "provvisorio",
+  "source": {
+    "title": "ISSN nutrient timing, Kerksick et al. 2017",
+    "url": "https://link.springer.com/article/10.1186/s12970-017-0189-4",
+    "verified_on": "2026-10-07"
+  },
+  "minimum_session_minutes": 60,
+  "pre_min_hours": 1,
+  "pre_max_hours": 4,
+  "post_max_hours": 2,
+  "pre_carbs_g_per_kg": 1,
+  "post_protein_min_g_per_kg": 0.25,
+  "post_protein_max_g_per_kg": 0.4,
+  "main_protein_min_g_per_kg": 0.25,
+  "pre_fat_mean_factor": 0.9,
+  "pre_fiber_mean_factor": 0.9,
+  "post_carbs_mean_factor": 1.2,
+  "cardio_carbs_priority_multiplier": 2,
+  "soft_weight": 0.02,
+  "during_after_minutes": 90,
+  "during_carbs_g_per_hour": {
+    "min": 30,
+    "max": 60
+  },
+  "default_meals": {
+    "breakfast": {
+      "start_time": "07:30",
+      "end_time": "08:00"
+    },
+    "morning_snack": {
+      "start_time": "10:30",
+      "end_time": "10:45"
+    },
+    "lunch": {
+      "start_time": "13:00",
+      "end_time": "13:30"
+    },
+    "afternoon_snack": {
+      "start_time": "16:30",
+      "end_time": "16:45"
+    },
+    "dinner": {
+      "start_time": "20:00",
+      "end_time": "20:30"
+    }
+  },
+  "notes": [
+    "Valori ISSN operativi provvisori; non dose individuale approvata. Le dosi definitive spettano alla matrice 8.2.",
+    "Limiti grassi/fibre rispetto alla media e fattore carboidrati dopo sono euristiche operative, non soglie cliniche ISSN.",
+    "La finestra 1–4 ore e il valore basso 1 g/kg sono una scelta provvisoria dal range della specifica; ISSN concentra l’evidenza su esercizio lungo/intenso.",
+    "Suggerimento durante solo oltre 90 minuti, mai pianificato automaticamente."
+  ]
+}

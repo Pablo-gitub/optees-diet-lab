@@ -39,7 +39,7 @@ def products(preferences):
   values=[p['kcal_per_serving']/serving*100,label['protein_g']/basis*100,label['fat_g']/basis*100,label['carbs_g']/basis*100]
   if any(not math.isfinite(v) or v<0 for v in values):raise ValueError('Nutrienti etichetta personale non validi')
   result[p['id']]=dict(name=p['name'],source='user_label',source_id=p['id'],serving_g=serving,brand=p.get('brand'),solver_eligible=p.get('solver_eligible',True),
-   kcal_100g=str(values[0]),protein_g_100g=str(values[1]),fat_g_100g=str(values[2]),carbs_available_g_100g=str(values[3]))
+   fiber_g_100g=str(label['fiber_g']/basis*100) if label.get('fiber_g') is not None else '',kcal_100g=str(values[0]),protein_g_100g=str(values[1]),fat_g_100g=str(values[2]),carbs_available_g_100g=str(values[3]))
  return result
 
 

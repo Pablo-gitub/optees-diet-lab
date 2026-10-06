@@ -268,3 +268,19 @@ Ruoli (`role`): `best` | `varied` | `robust` | `preferred` | `explore`.
 ## Aggiornamento 8.9 — diversità in grammi
 
 Il §9 della specifica Fase 8 sostituisce i tagli sul conteggio e la loro riduzione a passi: [identità, minimax e audit](phase8-diversity-audit.md). La regione epsilon di S2 resta un riferimento soft, non un vincolo per escludere alternative nutrizionalmente fattibili. Il pool nasce da un riferimento bilanciato e da ricerche di fattibilità/minimax della sovrapposizione; tutti gli scarti multiobiettivo sono ricalcolati sui nutrienti effettivi. S3/S4/S6 continuano a valutare Pareto, robustezza e feedback. Una terza alternativa fattibile fuori dal fronte campionato è dichiarata. `min_distance` resta solo per compatibilità; UI deve leggere `overlap_pct`, `overlap_target`, `overlap_achieved` e la certificazione della ricerca, senza promettere massima diversità dopo un timeout.
+
+## Estensioni 8.12–8.13
+
+S0 carica i voti degli abbinamenti e gli orari/peso filtrato disponibili. S1
+aggiunge soltanto rami graditi compatibili, con premio morbido, rapporti ±30%
+e limite settimanale due. Le combinazioni scartate hanno una penalità, senza
+esclusioni individuali implicite. I voti delle schede sono contesto S6, mai
+ricompense di piani non provati.
+
+Dopo il compromesso nutrizionale S2, nutrient-timing-v1 applica un secondo
+MILP morbido conservando l’obiettivo iniziale e le kcal effettive di ogni
+giorno. Si attiva automaticamente solo con sessione >60 minuti e orario,
+oppure su richiesta esplicita nel profilo. Regole, provenienza e quote non
+raggiunte accompagnano S7 e il DayView applicato; dati mancanti non valgono
+zero. Dosi configurabili provvisorie in attesa della matrice 8.2. Contratto
+ed esempi in api-contract.md; audit separati per ciascuna estensione.

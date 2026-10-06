@@ -10,7 +10,7 @@ from target_validation import target_warnings
 
 VERSION = 'orchestration-v1'
 ENGINE_VERSION = 'orchestration-v3-gram-overlap'
-SAFE = ['demo','scope','slots','status','selections','nutrients','nutrients_by_meal','daily_policy','diet_note','preference_penalty','preference_changes','constraint_report']
+SAFE = ['meal_timing','demo','scope','slots','status','selections','nutrients','nutrients_by_meal','daily_policy','diet_note','preference_penalty','preference_changes','constraint_report']
 
 
 def active_choices(choices):
