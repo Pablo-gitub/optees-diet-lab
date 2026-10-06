@@ -1,0 +1,4535 @@
+{
+ "source": "USDA FoodData Central SR Legacy 2018-04, archivio locale dataset/usda/",
+ "checked_by": "claude",
+ "entries": [
+  {
+   "index": 0,
+   "canonical": "olio_oliva_extravergine",
+   "unit": "ml",
+   "grams": 0.916,
+   "variant": "density_physical",
+   "fdc_id": 171413,
+   "usda_description": "Oil, olive, salad or cooking",
+   "usda_portions": [
+    "1 tablespoon = 13.5 g",
+    "1 cup = 216 g",
+    "1 tsp = 4.5 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 1,
+   "canonical": "olio_oliva_extravergine",
+   "unit": "tbsp",
+   "grams": 13.7,
+   "variant": "tbsp",
+   "fdc_id": 171413,
+   "usda_description": "Oil, olive, salad or cooking",
+   "usda_portions": [
+    "1 tablespoon = 13.5 g",
+    "1 cup = 216 g",
+    "1 tsp = 4.5 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 2,
+   "canonical": "olio_oliva_extravergine",
+   "unit": "tsp",
+   "grams": 4.6,
+   "variant": "tsp",
+   "fdc_id": 171413,
+   "usda_description": "Oil, olive, salad or cooking",
+   "usda_portions": [
+    "1 tablespoon = 13.5 g",
+    "1 cup = 216 g",
+    "1 tsp = 4.5 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 3,
+   "canonical": "olio_oliva_extravergine",
+   "unit": "cup",
+   "grams": 216.0,
+   "variant": "cup_us_240ml",
+   "fdc_id": 171413,
+   "usda_description": "Oil, olive, salad or cooking",
+   "usda_portions": [
+    "1 tablespoon = 13.5 g",
+    "1 cup = 216 g",
+    "1 tsp = 4.5 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 4,
+   "canonical": "olio_oliva_extravergine",
+   "unit": "cup",
+   "grams": 229.0,
+   "variant": "cup_metric_250ml",
+   "fdc_id": 171413,
+   "usda_description": "Oil, olive, salad or cooking",
+   "usda_portions": [
+    "1 tablespoon = 13.5 g",
+    "1 cup = 216 g",
+    "1 tsp = 4.5 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 5,
+   "canonical": "olio_oliva_extravergine",
+   "unit": "cup",
+   "grams": 183.2,
+   "variant": "cup_japan_200ml",
+   "fdc_id": 171413,
+   "usda_description": "Oil, olive, salad or cooking",
+   "usda_portions": [
+    "1 tablespoon = 13.5 g",
+    "1 cup = 216 g",
+    "1 tsp = 4.5 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 6,
+   "canonical": "cipolla_cruda",
+   "unit": "piece",
+   "grams": 110.0,
+   "variant": "medium",
+   "fdc_id": 170000,
+   "usda_description": "Onions, raw",
+   "usda_portions": [
+    "1 cup, chopped = 160 g",
+    "1 cup, sliced = 115 g",
+    "1 tbsp chopped = 10 g",
+    "1 large = 150 g",
+    "1 slice, large (1/4\" thick) = 38 g",
+    "1 medium (2-1/2\" dia) = 110 g",
+    "1 slice, medium (1/8\" thick) = 14 g",
+    "1 small = 70 g",
+    "1 slice, thin = 9 g",
+    "10 rings = 60 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 7,
+   "canonical": "cipolla_cruda",
+   "unit": "piece",
+   "grams": 70.0,
+   "variant": "small",
+   "fdc_id": 170000,
+   "usda_description": "Onions, raw",
+   "usda_portions": [
+    "1 cup, chopped = 160 g",
+    "1 cup, sliced = 115 g",
+    "1 tbsp chopped = 10 g",
+    "1 large = 150 g",
+    "1 slice, large (1/4\" thick) = 38 g",
+    "1 medium (2-1/2\" dia) = 110 g",
+    "1 slice, medium (1/8\" thick) = 14 g",
+    "1 small = 70 g",
+    "1 slice, thin = 9 g",
+    "10 rings = 60 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 8,
+   "canonical": "cipolla_cruda",
+   "unit": "piece",
+   "grams": 150.0,
+   "variant": "large",
+   "fdc_id": 170000,
+   "usda_description": "Onions, raw",
+   "usda_portions": [
+    "1 cup, chopped = 160 g",
+    "1 cup, sliced = 115 g",
+    "1 tbsp chopped = 10 g",
+    "1 large = 150 g",
+    "1 slice, large (1/4\" thick) = 38 g",
+    "1 medium (2-1/2\" dia) = 110 g",
+    "1 slice, medium (1/8\" thick) = 14 g",
+    "1 small = 70 g",
+    "1 slice, thin = 9 g",
+    "10 rings = 60 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 9,
+   "canonical": "cipolla_cruda",
+   "unit": "piece",
+   "grams": 100.0,
+   "variant": "crea_average",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "approvata"
+  },
+  {
+   "index": 10,
+   "canonical": "cipolla_cruda",
+   "unit": "count",
+   "grams": 110.0,
+   "variant": "medium",
+   "fdc_id": 170000,
+   "usda_description": "Onions, raw",
+   "usda_portions": [
+    "1 cup, chopped = 160 g",
+    "1 cup, sliced = 115 g",
+    "1 tbsp chopped = 10 g",
+    "1 large = 150 g",
+    "1 slice, large (1/4\" thick) = 38 g",
+    "1 medium (2-1/2\" dia) = 110 g",
+    "1 slice, medium (1/8\" thick) = 14 g",
+    "1 small = 70 g",
+    "1 slice, thin = 9 g",
+    "10 rings = 60 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 11,
+   "canonical": "cipolla_cruda",
+   "unit": "totaste",
+   "grams": null,
+   "variant": "trace",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 12,
+   "canonical": "cipolla_cruda",
+   "unit": "cup",
+   "grams": 160.0,
+   "variant": "cup_chopped_us_240ml",
+   "fdc_id": 170000,
+   "usda_description": "Onions, raw",
+   "usda_portions": [
+    "1 cup, chopped = 160 g",
+    "1 cup, sliced = 115 g",
+    "1 tbsp chopped = 10 g",
+    "1 large = 150 g",
+    "1 slice, large (1/4\" thick) = 38 g",
+    "1 medium (2-1/2\" dia) = 110 g",
+    "1 slice, medium (1/8\" thick) = 14 g",
+    "1 small = 70 g",
+    "1 slice, thin = 9 g",
+    "10 rings = 60 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 13,
+   "canonical": "cipolla_cruda",
+   "unit": "cup",
+   "grams": 115.0,
+   "variant": "cup_sliced_us_240ml",
+   "fdc_id": 170000,
+   "usda_description": "Onions, raw",
+   "usda_portions": [
+    "1 cup, chopped = 160 g",
+    "1 cup, sliced = 115 g",
+    "1 tbsp chopped = 10 g",
+    "1 large = 150 g",
+    "1 slice, large (1/4\" thick) = 38 g",
+    "1 medium (2-1/2\" dia) = 110 g",
+    "1 slice, medium (1/8\" thick) = 14 g",
+    "1 small = 70 g",
+    "1 slice, thin = 9 g",
+    "10 rings = 60 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 14,
+   "canonical": "cipolla_cruda",
+   "unit": "slice",
+   "grams": 14.0,
+   "variant": "slice_medium",
+   "fdc_id": 170000,
+   "usda_description": "Onions, raw",
+   "usda_portions": [
+    "1 cup, chopped = 160 g",
+    "1 cup, sliced = 115 g",
+    "1 tbsp chopped = 10 g",
+    "1 large = 150 g",
+    "1 slice, large (1/4\" thick) = 38 g",
+    "1 medium (2-1/2\" dia) = 110 g",
+    "1 slice, medium (1/8\" thick) = 14 g",
+    "1 small = 70 g",
+    "1 slice, thin = 9 g",
+    "10 rings = 60 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 15,
+   "canonical": "cipolla_cruda",
+   "unit": "tbsp",
+   "grams": 10.0,
+   "variant": "tbsp_chopped",
+   "fdc_id": 170000,
+   "usda_description": "Onions, raw",
+   "usda_portions": [
+    "1 cup, chopped = 160 g",
+    "1 cup, sliced = 115 g",
+    "1 tbsp chopped = 10 g",
+    "1 large = 150 g",
+    "1 slice, large (1/4\" thick) = 38 g",
+    "1 medium (2-1/2\" dia) = 110 g",
+    "1 slice, medium (1/8\" thick) = 14 g",
+    "1 small = 70 g",
+    "1 slice, thin = 9 g",
+    "10 rings = 60 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 16,
+   "canonical": "sale_e_pepe",
+   "unit": "totaste",
+   "grams": null,
+   "variant": "trace",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 17,
+   "canonical": "olio_vegetale_neutro",
+   "unit": "ml",
+   "grams": 0.92,
+   "variant": "density_physical",
+   "fdc_id": 172336,
+   "usda_description": "Oil, canola",
+   "usda_portions": [
+    "1 tbsp = 14 g",
+    "1 cup = 218 g",
+    "1 tsp = 4.5 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 18,
+   "canonical": "olio_vegetale_neutro",
+   "unit": "tbsp",
+   "grams": 13.8,
+   "variant": "tbsp",
+   "fdc_id": 172336,
+   "usda_description": "Oil, canola",
+   "usda_portions": [
+    "1 tbsp = 14 g",
+    "1 cup = 218 g",
+    "1 tsp = 4.5 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 19,
+   "canonical": "olio_vegetale_neutro",
+   "unit": "cup",
+   "grams": 218.0,
+   "variant": "cup_us_240ml",
+   "fdc_id": 172336,
+   "usda_description": "Oil, canola",
+   "usda_portions": [
+    "1 tbsp = 14 g",
+    "1 cup = 218 g",
+    "1 tsp = 4.5 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 20,
+   "canonical": "olio_vegetale_neutro",
+   "unit": "cup",
+   "grams": 230.0,
+   "variant": "cup_metric_250ml",
+   "fdc_id": 172336,
+   "usda_description": "Oil, canola",
+   "usda_portions": [
+    "1 tbsp = 14 g",
+    "1 cup = 218 g",
+    "1 tsp = 4.5 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 21,
+   "canonical": "aglio",
+   "unit": "clove",
+   "grams": 3.0,
+   "variant": "medium",
+   "fdc_id": 169230,
+   "usda_description": "Garlic, raw",
+   "usda_portions": [
+    "1 cup = 136 g",
+    "1 tsp = 2.8 g",
+    "1 clove = 3 g",
+    "3 cloves = 9 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 22,
+   "canonical": "aglio",
+   "unit": "clove",
+   "grams": 4.0,
+   "variant": "crea_average",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "approvata"
+  },
+  {
+   "index": 23,
+   "canonical": "aglio",
+   "unit": "count",
+   "grams": 3.0,
+   "variant": "clove",
+   "fdc_id": 169230,
+   "usda_description": "Garlic, raw",
+   "usda_portions": [
+    "1 cup = 136 g",
+    "1 tsp = 2.8 g",
+    "1 clove = 3 g",
+    "3 cloves = 9 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 24,
+   "canonical": "aglio",
+   "unit": "piece",
+   "grams": 40.0,
+   "variant": "head_bulb",
+   "fdc_id": 169230,
+   "usda_description": "Garlic, raw",
+   "usda_portions": [
+    "1 cup = 136 g",
+    "1 tsp = 2.8 g",
+    "1 clove = 3 g",
+    "3 cloves = 9 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 25,
+   "canonical": "aglio",
+   "unit": "tsp",
+   "grams": 2.8,
+   "variant": "tsp_minced",
+   "fdc_id": 169230,
+   "usda_description": "Garlic, raw",
+   "usda_portions": [
+    "1 cup = 136 g",
+    "1 tsp = 2.8 g",
+    "1 clove = 3 g",
+    "3 cloves = 9 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 26,
+   "canonical": "sale",
+   "unit": "totaste",
+   "grams": null,
+   "variant": "trace",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 27,
+   "canonical": "sale",
+   "unit": "pinch",
+   "grams": null,
+   "variant": "trace",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 28,
+   "canonical": "sale",
+   "unit": "tsp",
+   "grams": 6.0,
+   "variant": "level_tsp",
+   "fdc_id": 173468,
+   "usda_description": "Salt, table",
+   "usda_portions": [
+    "1 tsp = 6 g",
+    "1 tbsp = 18 g",
+    "1 cup = 292 g",
+    "1 dash = 0.4 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 29,
+   "canonical": "sale",
+   "unit": "tbsp",
+   "grams": 18.0,
+   "variant": "tbsp",
+   "fdc_id": 173468,
+   "usda_description": "Salt, table",
+   "usda_portions": [
+    "1 tsp = 6 g",
+    "1 tbsp = 18 g",
+    "1 cup = 292 g",
+    "1 dash = 0.4 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 30,
+   "canonical": "uovo_gallina_intero",
+   "unit": "piece",
+   "grams": 50.0,
+   "variant": "large",
+   "fdc_id": 171287,
+   "usda_description": "Egg, whole, raw, fresh",
+   "usda_portions": [
+    "1 large = 50 g",
+    "1 extra large = 56 g",
+    "1 jumbo = 63 g",
+    "1 cup (4.86 large eggs) = 243 g",
+    "1 medium = 44 g",
+    "1 small = 38 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 31,
+   "canonical": "uovo_gallina_intero",
+   "unit": "piece",
+   "grams": 44.0,
+   "variant": "medium",
+   "fdc_id": 171287,
+   "usda_description": "Egg, whole, raw, fresh",
+   "usda_portions": [
+    "1 large = 50 g",
+    "1 extra large = 56 g",
+    "1 jumbo = 63 g",
+    "1 cup (4.86 large eggs) = 243 g",
+    "1 medium = 44 g",
+    "1 small = 38 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 32,
+   "canonical": "uovo_gallina_intero",
+   "unit": "piece",
+   "grams": 38.0,
+   "variant": "small",
+   "fdc_id": 171287,
+   "usda_description": "Egg, whole, raw, fresh",
+   "usda_portions": [
+    "1 large = 50 g",
+    "1 extra large = 56 g",
+    "1 jumbo = 63 g",
+    "1 cup (4.86 large eggs) = 243 g",
+    "1 medium = 44 g",
+    "1 small = 38 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 33,
+   "canonical": "uovo_gallina_intero",
+   "unit": "piece",
+   "grams": 56.0,
+   "variant": "extra_large",
+   "fdc_id": 171287,
+   "usda_description": "Egg, whole, raw, fresh",
+   "usda_portions": [
+    "1 large = 50 g",
+    "1 extra large = 56 g",
+    "1 jumbo = 63 g",
+    "1 cup (4.86 large eggs) = 243 g",
+    "1 medium = 44 g",
+    "1 small = 38 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 34,
+   "canonical": "uovo_gallina_intero",
+   "unit": "piece",
+   "grams": 50.0,
+   "variant": "crea_average",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "senza_fonte_usda"
+  },
+  {
+   "index": 35,
+   "canonical": "uovo_gallina_intero",
+   "unit": "count",
+   "grams": 50.0,
+   "variant": "large",
+   "fdc_id": 171287,
+   "usda_description": "Egg, whole, raw, fresh",
+   "usda_portions": [
+    "1 large = 50 g",
+    "1 extra large = 56 g",
+    "1 jumbo = 63 g",
+    "1 cup (4.86 large eggs) = 243 g",
+    "1 medium = 44 g",
+    "1 small = 38 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 36,
+   "canonical": "latte_vacca_parz_scremato",
+   "unit": "ml",
+   "grams": 1.03,
+   "variant": "density_physical",
+   "fdc_id": 171269,
+   "usda_description": "Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)",
+   "usda_portions": [
+    "1 cup = 245 g",
+    "1 fl oz = 30.6 g",
+    "1 quart = 980 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 37,
+   "canonical": "latte_vacca_parz_scremato",
+   "unit": "l",
+   "grams": 1030.0,
+   "variant": "liter",
+   "fdc_id": 171269,
+   "usda_description": "Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)",
+   "usda_portions": [
+    "1 cup = 245 g",
+    "1 fl oz = 30.6 g",
+    "1 quart = 980 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 38,
+   "canonical": "latte_vacca_parz_scremato",
+   "unit": "cup",
+   "grams": 245.0,
+   "variant": "cup_us_240ml",
+   "fdc_id": 171269,
+   "usda_description": "Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)",
+   "usda_portions": [
+    "1 cup = 245 g",
+    "1 fl oz = 30.6 g",
+    "1 quart = 980 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 39,
+   "canonical": "latte_vacca_parz_scremato",
+   "unit": "cup",
+   "grams": 257.5,
+   "variant": "cup_metric_250ml",
+   "fdc_id": 171269,
+   "usda_description": "Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)",
+   "usda_portions": [
+    "1 cup = 245 g",
+    "1 fl oz = 30.6 g",
+    "1 quart = 980 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 40,
+   "canonical": "latte_vacca_parz_scremato",
+   "unit": "cup",
+   "grams": 206.0,
+   "variant": "cup_japan_200ml",
+   "fdc_id": 171269,
+   "usda_description": "Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)",
+   "usda_portions": [
+    "1 cup = 245 g",
+    "1 fl oz = 30.6 g",
+    "1 quart = 980 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 41,
+   "canonical": "latte_vacca_parz_scremato",
+   "unit": "tbsp",
+   "grams": 15.3,
+   "variant": "tbsp",
+   "fdc_id": 171269,
+   "usda_description": "Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)",
+   "usda_portions": [
+    "1 cup = 245 g",
+    "1 fl oz = 30.6 g",
+    "1 quart = 980 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 42,
+   "canonical": "acqua",
+   "unit": "ml",
+   "grams": 1.0,
+   "variant": "density_physical",
+   "fdc_id": 170417,
+   "usda_description": "Parsnips, raw",
+   "usda_portions": [
+    "1 cup slices = 133 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 43,
+   "canonical": "acqua",
+   "unit": "l",
+   "grams": 1000.0,
+   "variant": "liter",
+   "fdc_id": 170417,
+   "usda_description": "Parsnips, raw",
+   "usda_portions": [
+    "1 cup slices = 133 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 44,
+   "canonical": "acqua",
+   "unit": "cup",
+   "grams": 240.0,
+   "variant": "cup_us_240ml",
+   "fdc_id": 170417,
+   "usda_description": "Parsnips, raw",
+   "usda_portions": [
+    "1 cup slices = 133 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 45,
+   "canonical": "acqua",
+   "unit": "cup",
+   "grams": 250.0,
+   "variant": "cup_metric_250ml",
+   "fdc_id": 170417,
+   "usda_description": "Parsnips, raw",
+   "usda_portions": [
+    "1 cup slices = 133 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 46,
+   "canonical": "acqua",
+   "unit": "cup",
+   "grams": 200.0,
+   "variant": "cup_japan_200ml",
+   "fdc_id": 170417,
+   "usda_description": "Parsnips, raw",
+   "usda_portions": [
+    "1 cup slices = 133 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 47,
+   "canonical": "acqua",
+   "unit": "tbsp",
+   "grams": 15.0,
+   "variant": "tbsp",
+   "fdc_id": 170417,
+   "usda_description": "Parsnips, raw",
+   "usda_portions": [
+    "1 cup slices = 133 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 48,
+   "canonical": "acqua",
+   "unit": "tsp",
+   "grams": 5.0,
+   "variant": "tsp",
+   "fdc_id": 170417,
+   "usda_description": "Parsnips, raw",
+   "usda_portions": [
+    "1 cup slices = 133 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 49,
+   "canonical": "pomodori_freschi",
+   "unit": "piece",
+   "grams": 123.0,
+   "variant": "medium",
+   "fdc_id": 170457,
+   "usda_description": "Tomatoes, red, ripe, raw, year round average",
+   "usda_portions": [
+    "1 cup cherry tomatoes = 149 g",
+    "1 cup, chopped or sliced = 180 g",
+    "1 Italian tomato = 62 g",
+    "1 cherry = 17 g",
+    "1 large whole (3\" dia) = 182 g",
+    "1 medium whole (2-3/5\" dia) = 123 g",
+    "1 slice, medium (1/4\" thick) = 20 g",
+    "1 plum tomato = 62 g",
+    "1 small whole (2-2/5\" dia) = 91 g",
+    "1 slice, thick/large (1/2\" thick) = 27 g",
+    "1 wedge (1/4 of medium tomato) = 31 g",
+    "1 slice, thin/small = 15 g",
+    "1 NLEA serving = 148 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 50,
+   "canonical": "pomodori_freschi",
+   "unit": "piece",
+   "grams": 182.0,
+   "variant": "large",
+   "fdc_id": 170457,
+   "usda_description": "Tomatoes, red, ripe, raw, year round average",
+   "usda_portions": [
+    "1 cup cherry tomatoes = 149 g",
+    "1 cup, chopped or sliced = 180 g",
+    "1 Italian tomato = 62 g",
+    "1 cherry = 17 g",
+    "1 large whole (3\" dia) = 182 g",
+    "1 medium whole (2-3/5\" dia) = 123 g",
+    "1 slice, medium (1/4\" thick) = 20 g",
+    "1 plum tomato = 62 g",
+    "1 small whole (2-2/5\" dia) = 91 g",
+    "1 slice, thick/large (1/2\" thick) = 27 g",
+    "1 wedge (1/4 of medium tomato) = 31 g",
+    "1 slice, thin/small = 15 g",
+    "1 NLEA serving = 148 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 51,
+   "canonical": "pomodori_freschi",
+   "unit": "piece",
+   "grams": 91.0,
+   "variant": "small",
+   "fdc_id": 170457,
+   "usda_description": "Tomatoes, red, ripe, raw, year round average",
+   "usda_portions": [
+    "1 cup cherry tomatoes = 149 g",
+    "1 cup, chopped or sliced = 180 g",
+    "1 Italian tomato = 62 g",
+    "1 cherry = 17 g",
+    "1 large whole (3\" dia) = 182 g",
+    "1 medium whole (2-3/5\" dia) = 123 g",
+    "1 slice, medium (1/4\" thick) = 20 g",
+    "1 plum tomato = 62 g",
+    "1 small whole (2-2/5\" dia) = 91 g",
+    "1 slice, thick/large (1/2\" thick) = 27 g",
+    "1 wedge (1/4 of medium tomato) = 31 g",
+    "1 slice, thin/small = 15 g",
+    "1 NLEA serving = 148 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 52,
+   "canonical": "pomodori_freschi",
+   "unit": "piece",
+   "grams": 17.0,
+   "variant": "cherry",
+   "fdc_id": 170457,
+   "usda_description": "Tomatoes, red, ripe, raw, year round average",
+   "usda_portions": [
+    "1 cup cherry tomatoes = 149 g",
+    "1 cup, chopped or sliced = 180 g",
+    "1 Italian tomato = 62 g",
+    "1 cherry = 17 g",
+    "1 large whole (3\" dia) = 182 g",
+    "1 medium whole (2-3/5\" dia) = 123 g",
+    "1 slice, medium (1/4\" thick) = 20 g",
+    "1 plum tomato = 62 g",
+    "1 small whole (2-2/5\" dia) = 91 g",
+    "1 slice, thick/large (1/2\" thick) = 27 g",
+    "1 wedge (1/4 of medium tomato) = 31 g",
+    "1 slice, thin/small = 15 g",
+    "1 NLEA serving = 148 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 53,
+   "canonical": "pomodori_freschi",
+   "unit": "piece",
+   "grams": 62.0,
+   "variant": "plum_roma",
+   "fdc_id": 170457,
+   "usda_description": "Tomatoes, red, ripe, raw, year round average",
+   "usda_portions": [
+    "1 cup cherry tomatoes = 149 g",
+    "1 cup, chopped or sliced = 180 g",
+    "1 Italian tomato = 62 g",
+    "1 cherry = 17 g",
+    "1 large whole (3\" dia) = 182 g",
+    "1 medium whole (2-3/5\" dia) = 123 g",
+    "1 slice, medium (1/4\" thick) = 20 g",
+    "1 plum tomato = 62 g",
+    "1 small whole (2-2/5\" dia) = 91 g",
+    "1 slice, thick/large (1/2\" thick) = 27 g",
+    "1 wedge (1/4 of medium tomato) = 31 g",
+    "1 slice, thin/small = 15 g",
+    "1 NLEA serving = 148 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 54,
+   "canonical": "pomodori_freschi",
+   "unit": "piece",
+   "grams": 100.0,
+   "variant": "crea_average",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "approvata"
+  },
+  {
+   "index": 55,
+   "canonical": "pomodori_freschi",
+   "unit": "cup",
+   "grams": 180.0,
+   "variant": "cup_chopped_us_240ml",
+   "fdc_id": 170457,
+   "usda_description": "Tomatoes, red, ripe, raw, year round average",
+   "usda_portions": [
+    "1 cup cherry tomatoes = 149 g",
+    "1 cup, chopped or sliced = 180 g",
+    "1 Italian tomato = 62 g",
+    "1 cherry = 17 g",
+    "1 large whole (3\" dia) = 182 g",
+    "1 medium whole (2-3/5\" dia) = 123 g",
+    "1 slice, medium (1/4\" thick) = 20 g",
+    "1 plum tomato = 62 g",
+    "1 small whole (2-2/5\" dia) = 91 g",
+    "1 slice, thick/large (1/2\" thick) = 27 g",
+    "1 wedge (1/4 of medium tomato) = 31 g",
+    "1 slice, thin/small = 15 g",
+    "1 NLEA serving = 148 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 56,
+   "canonical": "pomodori_freschi",
+   "unit": "slice",
+   "grams": 20.0,
+   "variant": "slice_medium",
+   "fdc_id": 170457,
+   "usda_description": "Tomatoes, red, ripe, raw, year round average",
+   "usda_portions": [
+    "1 cup cherry tomatoes = 149 g",
+    "1 cup, chopped or sliced = 180 g",
+    "1 Italian tomato = 62 g",
+    "1 cherry = 17 g",
+    "1 large whole (3\" dia) = 182 g",
+    "1 medium whole (2-3/5\" dia) = 123 g",
+    "1 slice, medium (1/4\" thick) = 20 g",
+    "1 plum tomato = 62 g",
+    "1 small whole (2-2/5\" dia) = 91 g",
+    "1 slice, thick/large (1/2\" thick) = 27 g",
+    "1 wedge (1/4 of medium tomato) = 31 g",
+    "1 slice, thin/small = 15 g",
+    "1 NLEA serving = 148 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 57,
+   "canonical": "succo_limone",
+   "unit": "ml",
+   "grams": 1.025,
+   "variant": "density_physical",
+   "fdc_id": 167747,
+   "usda_description": "Lemon juice, raw",
+   "usda_portions": [
+    "1 cup = 244 g",
+    "1 fl oz = 30.5 g",
+    "1 lemon yields = 48 g",
+    "1 wedge yields = 5.9 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 58,
+   "canonical": "succo_limone",
+   "unit": "piece",
+   "grams": 44.0,
+   "variant": "juice_yield",
+   "fdc_id": 167746,
+   "usda_description": "Lemons, raw, without peel",
+   "usda_portions": [
+    "1 cup, sections = 212 g",
+    "1 fruit (2-1/8\" dia) = 58 g",
+    "1 fruit (2-3/8\" dia) = 84 g",
+    "1 wedge or slice (1/8 of one 2-1/8\" dia lemon) = 7 g",
+    "1 NLEA serving = 58 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 59,
+   "canonical": "succo_limone",
+   "unit": "zest",
+   "grams": 6.0,
+   "variant": "lemon_zest",
+   "fdc_id": 167746,
+   "usda_description": "Lemons, raw, without peel",
+   "usda_portions": [
+    "1 cup, sections = 212 g",
+    "1 fruit (2-1/8\" dia) = 58 g",
+    "1 fruit (2-3/8\" dia) = 84 g",
+    "1 wedge or slice (1/8 of one 2-1/8\" dia lemon) = 7 g",
+    "1 NLEA serving = 58 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 60,
+   "canonical": "succo_limone",
+   "unit": "totaste",
+   "grams": null,
+   "variant": "trace",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 61,
+   "canonical": "succo_limone",
+   "unit": "tbsp",
+   "grams": 15.2,
+   "variant": "tbsp",
+   "fdc_id": 167747,
+   "usda_description": "Lemon juice, raw",
+   "usda_portions": [
+    "1 cup = 244 g",
+    "1 fl oz = 30.5 g",
+    "1 lemon yields = 48 g",
+    "1 wedge yields = 5.9 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 62,
+   "canonical": "succo_limone",
+   "unit": "tsp",
+   "grams": 5.1,
+   "variant": "tsp",
+   "fdc_id": 167747,
+   "usda_description": "Lemon juice, raw",
+   "usda_portions": [
+    "1 cup = 244 g",
+    "1 fl oz = 30.5 g",
+    "1 lemon yields = 48 g",
+    "1 wedge yields = 5.9 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 63,
+   "canonical": "brodo_vegetale",
+   "unit": "ml",
+   "grams": 1.0,
+   "variant": "density_diluted",
+   "fdc_id": 170417,
+   "usda_description": "Parsnips, raw",
+   "usda_portions": [
+    "1 cup slices = 133 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 64,
+   "canonical": "brodo_vegetale",
+   "unit": "l",
+   "grams": 1000.0,
+   "variant": "liter",
+   "fdc_id": 170417,
+   "usda_description": "Parsnips, raw",
+   "usda_portions": [
+    "1 cup slices = 133 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 65,
+   "canonical": "brodo_vegetale",
+   "unit": "cup",
+   "grams": 240.0,
+   "variant": "cup_us_240ml",
+   "fdc_id": 170417,
+   "usda_description": "Parsnips, raw",
+   "usda_portions": [
+    "1 cup slices = 133 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 66,
+   "canonical": "cumino_polvere",
+   "unit": "tsp",
+   "grams": 2.1,
+   "variant": "ground_or_whole",
+   "fdc_id": 170923,
+   "usda_description": "Spices, cumin seed",
+   "usda_portions": [
+    "1 tsp, whole = 2.1 g",
+    "1 tbsp, whole = 6 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 67,
+   "canonical": "cumino_polvere",
+   "unit": "tbsp",
+   "grams": 6.0,
+   "variant": "tbsp",
+   "fdc_id": 170923,
+   "usda_description": "Spices, cumin seed",
+   "usda_portions": [
+    "1 tsp, whole = 2.1 g",
+    "1 tbsp, whole = 6 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 68,
+   "canonical": "brodo_pollo",
+   "unit": "ml",
+   "grams": 1.0,
+   "variant": "density_diluted",
+   "fdc_id": 170417,
+   "usda_description": "Parsnips, raw",
+   "usda_portions": [
+    "1 cup slices = 133 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 69,
+   "canonical": "brodo_pollo",
+   "unit": "l",
+   "grams": 1000.0,
+   "variant": "liter",
+   "fdc_id": 170417,
+   "usda_description": "Parsnips, raw",
+   "usda_portions": [
+    "1 cup slices = 133 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 70,
+   "canonical": "brodo_pollo",
+   "unit": "cup",
+   "grams": 240.0,
+   "variant": "cup_us_240ml",
+   "fdc_id": 170417,
+   "usda_description": "Parsnips, raw",
+   "usda_portions": [
+    "1 cup slices = 133 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 71,
+   "canonical": "peperoni_crudi",
+   "unit": "piece",
+   "grams": 119.0,
+   "variant": "medium",
+   "fdc_id": 170108,
+   "usda_description": "Peppers, sweet, red, raw",
+   "usda_portions": [
+    "1 cup, chopped = 149 g",
+    "1 cup, sliced = 92 g",
+    "1 tablespoon = 9.3 g",
+    "1 large (2-1/4 per pound, approx 3-3/4\" long, 3\" dia.) = 164 g",
+    "1 medium (approx 2-3/4\" long, 2-1/2 dia.) = 119 g",
+    "1 small = 74 g",
+    "1 ring (3\" dia., 1/4\" thick) = 10 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 72,
+   "canonical": "peperoni_crudi",
+   "unit": "piece",
+   "grams": 164.0,
+   "variant": "large",
+   "fdc_id": 170108,
+   "usda_description": "Peppers, sweet, red, raw",
+   "usda_portions": [
+    "1 cup, chopped = 149 g",
+    "1 cup, sliced = 92 g",
+    "1 tablespoon = 9.3 g",
+    "1 large (2-1/4 per pound, approx 3-3/4\" long, 3\" dia.) = 164 g",
+    "1 medium (approx 2-3/4\" long, 2-1/2 dia.) = 119 g",
+    "1 small = 74 g",
+    "1 ring (3\" dia., 1/4\" thick) = 10 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 73,
+   "canonical": "peperoni_crudi",
+   "unit": "piece",
+   "grams": 74.0,
+   "variant": "small",
+   "fdc_id": 170108,
+   "usda_description": "Peppers, sweet, red, raw",
+   "usda_portions": [
+    "1 cup, chopped = 149 g",
+    "1 cup, sliced = 92 g",
+    "1 tablespoon = 9.3 g",
+    "1 large (2-1/4 per pound, approx 3-3/4\" long, 3\" dia.) = 164 g",
+    "1 medium (approx 2-3/4\" long, 2-1/2 dia.) = 119 g",
+    "1 small = 74 g",
+    "1 ring (3\" dia., 1/4\" thick) = 10 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 74,
+   "canonical": "peperoni_crudi",
+   "unit": "piece",
+   "grams": 150.0,
+   "variant": "crea_average",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "approvata"
+  },
+  {
+   "index": 75,
+   "canonical": "peperoni_crudi",
+   "unit": "cup",
+   "grams": 149.0,
+   "variant": "cup_chopped_us_240ml",
+   "fdc_id": 170108,
+   "usda_description": "Peppers, sweet, red, raw",
+   "usda_portions": [
+    "1 cup, chopped = 149 g",
+    "1 cup, sliced = 92 g",
+    "1 tablespoon = 9.3 g",
+    "1 large (2-1/4 per pound, approx 3-3/4\" long, 3\" dia.) = 164 g",
+    "1 medium (approx 2-3/4\" long, 2-1/2 dia.) = 119 g",
+    "1 small = 74 g",
+    "1 ring (3\" dia., 1/4\" thick) = 10 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 76,
+   "canonical": "peperoni_crudi",
+   "unit": "cup",
+   "grams": 92.0,
+   "variant": "cup_sliced_us_240ml",
+   "fdc_id": 170108,
+   "usda_description": "Peppers, sweet, red, raw",
+   "usda_portions": [
+    "1 cup, chopped = 149 g",
+    "1 cup, sliced = 92 g",
+    "1 tablespoon = 9.3 g",
+    "1 large (2-1/4 per pound, approx 3-3/4\" long, 3\" dia.) = 164 g",
+    "1 medium (approx 2-3/4\" long, 2-1/2 dia.) = 119 g",
+    "1 small = 74 g",
+    "1 ring (3\" dia., 1/4\" thick) = 10 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 77,
+   "canonical": "carote_crude",
+   "unit": "piece",
+   "grams": 61.0,
+   "variant": "medium",
+   "fdc_id": 170393,
+   "usda_description": "Carrots, raw",
+   "usda_portions": [
+    "1 cup chopped = 128 g",
+    "1 cup grated = 110 g",
+    "1 cup strips or slices = 122 g",
+    "1 large (7-1/4\" to 8-/1/2\" long) = 72 g",
+    "1 medium = 61 g",
+    "1 small (5-1/2\" long) = 50 g",
+    "1 slice = 3 g",
+    "1 strip large (3\" long) = 7 g",
+    "1 strip medium = 4 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 78,
+   "canonical": "carote_crude",
+   "unit": "piece",
+   "grams": 72.0,
+   "variant": "large",
+   "fdc_id": 170393,
+   "usda_description": "Carrots, raw",
+   "usda_portions": [
+    "1 cup chopped = 128 g",
+    "1 cup grated = 110 g",
+    "1 cup strips or slices = 122 g",
+    "1 large (7-1/4\" to 8-/1/2\" long) = 72 g",
+    "1 medium = 61 g",
+    "1 small (5-1/2\" long) = 50 g",
+    "1 slice = 3 g",
+    "1 strip large (3\" long) = 7 g",
+    "1 strip medium = 4 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 79,
+   "canonical": "carote_crude",
+   "unit": "piece",
+   "grams": 50.0,
+   "variant": "small",
+   "fdc_id": 170393,
+   "usda_description": "Carrots, raw",
+   "usda_portions": [
+    "1 cup chopped = 128 g",
+    "1 cup grated = 110 g",
+    "1 cup strips or slices = 122 g",
+    "1 large (7-1/4\" to 8-/1/2\" long) = 72 g",
+    "1 medium = 61 g",
+    "1 small (5-1/2\" long) = 50 g",
+    "1 slice = 3 g",
+    "1 strip large (3\" long) = 7 g",
+    "1 strip medium = 4 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 80,
+   "canonical": "carote_crude",
+   "unit": "piece",
+   "grams": 80.0,
+   "variant": "crea_average",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "approvata"
+  },
+  {
+   "index": 81,
+   "canonical": "carote_crude",
+   "unit": "cup",
+   "grams": 128.0,
+   "variant": "cup_chopped_us_240ml",
+   "fdc_id": 170393,
+   "usda_description": "Carrots, raw",
+   "usda_portions": [
+    "1 cup chopped = 128 g",
+    "1 cup grated = 110 g",
+    "1 cup strips or slices = 122 g",
+    "1 large (7-1/4\" to 8-/1/2\" long) = 72 g",
+    "1 medium = 61 g",
+    "1 small (5-1/2\" long) = 50 g",
+    "1 slice = 3 g",
+    "1 strip large (3\" long) = 7 g",
+    "1 strip medium = 4 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 82,
+   "canonical": "carote_crude",
+   "unit": "cup",
+   "grams": 110.0,
+   "variant": "cup_grated_us_240ml",
+   "fdc_id": 170393,
+   "usda_description": "Carrots, raw",
+   "usda_portions": [
+    "1 cup chopped = 128 g",
+    "1 cup grated = 110 g",
+    "1 cup strips or slices = 122 g",
+    "1 large (7-1/4\" to 8-/1/2\" long) = 72 g",
+    "1 medium = 61 g",
+    "1 small (5-1/2\" long) = 50 g",
+    "1 slice = 3 g",
+    "1 strip large (3\" long) = 7 g",
+    "1 strip medium = 4 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 83,
+   "canonical": "peperoncino_fresco",
+   "unit": "piece",
+   "grams": 14.0,
+   "variant": "hot_chili",
+   "fdc_id": 170106,
+   "usda_description": "Peppers, hot chili, red, raw",
+   "usda_portions": [
+    "1 pepper = 45 g",
+    "0.5 cup, chopped or diced = 75 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 84,
+   "canonical": "peperoncino_fresco",
+   "unit": "piece",
+   "grams": 45.0,
+   "variant": "jalapeno",
+   "fdc_id": 170106,
+   "usda_description": "Peppers, hot chili, red, raw",
+   "usda_portions": [
+    "1 pepper = 45 g",
+    "0.5 cup, chopped or diced = 75 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 85,
+   "canonical": "curcuma_polvere",
+   "unit": "tsp",
+   "grams": 3.0,
+   "variant": "ground",
+   "fdc_id": 172231,
+   "usda_description": "Spices, turmeric, ground",
+   "usda_portions": [
+    "1 tsp = 3 g",
+    "1 tbsp = 9.4 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 86,
+   "canonical": "curcuma_polvere",
+   "unit": "tbsp",
+   "grams": 9.4,
+   "variant": "tbsp",
+   "fdc_id": 172231,
+   "usda_description": "Spices, turmeric, ground",
+   "usda_portions": [
+    "1 tsp = 3 g",
+    "1 tbsp = 9.4 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 87,
+   "canonical": "alloro_foglie",
+   "unit": "piece",
+   "grams": 0.6,
+   "variant": "whole_leaf",
+   "fdc_id": 170917,
+   "usda_description": "Spices, bay leaf",
+   "usda_portions": [
+    "1 tsp, crumbled = 0.6 g",
+    "1 tbsp, crumbled = 1.8 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 88,
+   "canonical": "alloro_foglie",
+   "unit": "piece",
+   "grams": null,
+   "variant": "trace",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 89,
+   "canonical": "pomodoro_concentrato",
+   "unit": "tbsp",
+   "grams": 16.0,
+   "variant": "tbsp",
+   "fdc_id": 170460,
+   "usda_description": "Tomato products, canned, puree, without salt added",
+   "usda_portions": [
+    "1 cup = 250 g",
+    "1 can (29 oz) (401 x 411) = 822 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 90,
+   "canonical": "pomodoro_concentrato",
+   "unit": "tsp",
+   "grams": 5.3,
+   "variant": "tsp",
+   "fdc_id": 170460,
+   "usda_description": "Tomato products, canned, puree, without salt added",
+   "usda_portions": [
+    "1 cup = 250 g",
+    "1 can (29 oz) (401 x 411) = 822 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 91,
+   "canonical": "pomodoro_concentrato",
+   "unit": "can",
+   "grams": 170.0,
+   "variant": "can_6oz",
+   "fdc_id": 170460,
+   "usda_description": "Tomato products, canned, puree, without salt added",
+   "usda_portions": [
+    "1 cup = 250 g",
+    "1 can (29 oz) (401 x 411) = 822 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 92,
+   "canonical": "lime_fresco",
+   "unit": "piece",
+   "grams": 60.0,
+   "variant": "whole_edible",
+   "fdc_id": 168155,
+   "usda_description": "Limes, raw",
+   "usda_portions": [
+    "1 fruit (2\" dia) = 67 g",
+    "1 NLEA serving = 67 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 93,
+   "canonical": "lime_fresco",
+   "unit": "piece",
+   "grams": 44.0,
+   "variant": "juice_yield",
+   "fdc_id": 168156,
+   "usda_description": "Lime juice, raw",
+   "usda_portions": [
+    "1 cup = 242 g",
+    "1 fl oz = 30.8 g",
+    "1 lime yields = 44 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 94,
+   "canonical": "lime_fresco",
+   "unit": "totaste",
+   "grams": null,
+   "variant": "trace",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 95,
+   "canonical": "lime_fresco",
+   "unit": "tbsp",
+   "grams": 15.4,
+   "variant": "tbsp",
+   "fdc_id": 168156,
+   "usda_description": "Lime juice, raw",
+   "usda_portions": [
+    "1 cup = 242 g",
+    "1 fl oz = 30.8 g",
+    "1 lime yields = 44 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 96,
+   "canonical": "zucchero",
+   "unit": "tbsp",
+   "grams": 12.5,
+   "variant": "granulated",
+   "fdc_id": 169655,
+   "usda_description": "Sugars, granulated",
+   "usda_portions": [
+    "1 serving packet = 2.8 g",
+    "1 tsp = 4.2 g",
+    "1 cup = 200 g",
+    "1 serving 1 cube = 2.3 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 97,
+   "canonical": "zucchero",
+   "unit": "tsp",
+   "grams": 4.2,
+   "variant": "granulated",
+   "fdc_id": 169655,
+   "usda_description": "Sugars, granulated",
+   "usda_portions": [
+    "1 serving packet = 2.8 g",
+    "1 tsp = 4.2 g",
+    "1 cup = 200 g",
+    "1 serving 1 cube = 2.3 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 98,
+   "canonical": "zucchero",
+   "unit": "cup",
+   "grams": 200.0,
+   "variant": "cup_granulated_us_240ml",
+   "fdc_id": 169655,
+   "usda_description": "Sugars, granulated",
+   "usda_portions": [
+    "1 serving packet = 2.8 g",
+    "1 tsp = 4.2 g",
+    "1 cup = 200 g",
+    "1 serving 1 cube = 2.3 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 99,
+   "canonical": "zucchero",
+   "unit": "cup",
+   "grams": 208.0,
+   "variant": "cup_granulated_metric_250ml",
+   "fdc_id": 169655,
+   "usda_description": "Sugars, granulated",
+   "usda_portions": [
+    "1 serving packet = 2.8 g",
+    "1 tsp = 4.2 g",
+    "1 cup = 200 g",
+    "1 serving 1 cube = 2.3 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 100,
+   "canonical": "zucchero",
+   "unit": "cup",
+   "grams": 220.0,
+   "variant": "cup_brown_packed_us_240ml",
+   "fdc_id": 168833,
+   "usda_description": "Sugars, brown",
+   "usda_portions": [
+    "1 tsp unpacked = 3 g",
+    "1 cup packed = 220 g",
+    "1 cup unpacked = 145 g",
+    "1 tsp packed = 4.6 g",
+    "1 tsp brownulated = 3.2 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 101,
+   "canonical": "zucchero",
+   "unit": "cup",
+   "grams": 145.0,
+   "variant": "cup_brown_unpacked_us_240ml",
+   "fdc_id": 168833,
+   "usda_description": "Sugars, brown",
+   "usda_portions": [
+    "1 tsp unpacked = 3 g",
+    "1 cup packed = 220 g",
+    "1 cup unpacked = 145 g",
+    "1 tsp packed = 4.6 g",
+    "1 tsp brownulated = 3.2 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 102,
+   "canonical": "cipollotto_fresco",
+   "unit": "piece",
+   "grams": 15.0,
+   "variant": "medium",
+   "fdc_id": 170005,
+   "usda_description": "Onions, spring or scallions (includes tops and bulb), raw",
+   "usda_portions": [
+    "1 cup, chopped = 100 g",
+    "1 tbsp chopped = 6 g",
+    "1 large = 25 g",
+    "1 medium (4-1/8\" long) = 15 g",
+    "1 small (3\" long) = 5 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 103,
+   "canonical": "cipollotto_fresco",
+   "unit": "piece",
+   "grams": 25.0,
+   "variant": "large",
+   "fdc_id": 170005,
+   "usda_description": "Onions, spring or scallions (includes tops and bulb), raw",
+   "usda_portions": [
+    "1 cup, chopped = 100 g",
+    "1 tbsp chopped = 6 g",
+    "1 large = 25 g",
+    "1 medium (4-1/8\" long) = 15 g",
+    "1 small (3\" long) = 5 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 104,
+   "canonical": "cipollotto_fresco",
+   "unit": "piece",
+   "grams": 5.0,
+   "variant": "small",
+   "fdc_id": 170005,
+   "usda_description": "Onions, spring or scallions (includes tops and bulb), raw",
+   "usda_portions": [
+    "1 cup, chopped = 100 g",
+    "1 tbsp chopped = 6 g",
+    "1 large = 25 g",
+    "1 medium (4-1/8\" long) = 15 g",
+    "1 small (3\" long) = 5 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 105,
+   "canonical": "cipollotto_fresco",
+   "unit": "tbsp",
+   "grams": 6.0,
+   "variant": "tbsp_chopped",
+   "fdc_id": 170005,
+   "usda_description": "Onions, spring or scallions (includes tops and bulb), raw",
+   "usda_portions": [
+    "1 cup, chopped = 100 g",
+    "1 tbsp chopped = 6 g",
+    "1 large = 25 g",
+    "1 medium (4-1/8\" long) = 15 g",
+    "1 small (3\" long) = 5 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 106,
+   "canonical": "paprika_polvere",
+   "unit": "tsp",
+   "grams": 2.3,
+   "variant": "ground",
+   "fdc_id": 170932,
+   "usda_description": "Spices, pepper, red or cayenne",
+   "usda_portions": [
+    "1 tsp = 1.8 g",
+    "1 tbsp = 5.3 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 107,
+   "canonical": "paprika_polvere",
+   "unit": "tbsp",
+   "grams": 6.8,
+   "variant": "tbsp",
+   "fdc_id": 170932,
+   "usda_description": "Spices, pepper, red or cayenne",
+   "usda_portions": [
+    "1 tsp = 1.8 g",
+    "1 tbsp = 5.3 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 108,
+   "canonical": "origano_secco",
+   "unit": "tsp",
+   "grams": 1.0,
+   "variant": "leaves_dried",
+   "fdc_id": 171328,
+   "usda_description": "Spices, oregano, dried",
+   "usda_portions": [
+    "1 tsp, leaves = 1 g",
+    "1 tsp, ground = 1.8 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 109,
+   "canonical": "origano_secco",
+   "unit": "tsp",
+   "grams": 1.8,
+   "variant": "ground",
+   "fdc_id": 171328,
+   "usda_description": "Spices, oregano, dried",
+   "usda_portions": [
+    "1 tsp, leaves = 1 g",
+    "1 tsp, ground = 1.8 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 110,
+   "canonical": "origano_secco",
+   "unit": "tbsp",
+   "grams": 2.7,
+   "variant": "leaves_dried",
+   "fdc_id": 171328,
+   "usda_description": "Spices, oregano, dried",
+   "usda_portions": [
+    "1 tsp, leaves = 1 g",
+    "1 tsp, ground = 1.8 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 111,
+   "canonical": "panna_acida",
+   "unit": "ml",
+   "grams": 0.958,
+   "variant": "density_physical",
+   "fdc_id": 171257,
+   "usda_description": "Cream, sour, cultured",
+   "usda_portions": [
+    "1 tbsp = 12 g",
+    "1 cup = 230 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 112,
+   "canonical": "panna_acida",
+   "unit": "totaste",
+   "grams": null,
+   "variant": "trace",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 113,
+   "canonical": "panna_acida",
+   "unit": "tbsp",
+   "grams": 12.0,
+   "variant": "tbsp",
+   "fdc_id": 171257,
+   "usda_description": "Cream, sour, cultured",
+   "usda_portions": [
+    "1 tbsp = 12 g",
+    "1 cup = 230 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 114,
+   "canonical": "panna_acida",
+   "unit": "cup",
+   "grams": 230.0,
+   "variant": "cup_us_240ml",
+   "fdc_id": 171257,
+   "usda_description": "Cream, sour, cultured",
+   "usda_portions": [
+    "1 tbsp = 12 g",
+    "1 cup = 230 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 115,
+   "canonical": "farina_grano_00",
+   "unit": "tbsp",
+   "grams": 7.8,
+   "variant": "tbsp_spooned",
+   "fdc_id": 169761,
+   "usda_description": "Wheat flour, white, all-purpose, unenriched",
+   "usda_portions": [
+    "1 cup = 125 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 116,
+   "canonical": "farina_grano_00",
+   "unit": "cup",
+   "grams": 125.0,
+   "variant": "cup_unsifted_spooned_us_240ml",
+   "fdc_id": 169761,
+   "usda_description": "Wheat flour, white, all-purpose, unenriched",
+   "usda_portions": [
+    "1 cup = 125 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 117,
+   "canonical": "farina_grano_00",
+   "unit": "cup",
+   "grams": 115.0,
+   "variant": "cup_sifted_us_240ml",
+   "fdc_id": 169761,
+   "usda_description": "Wheat flour, white, all-purpose, unenriched",
+   "usda_portions": [
+    "1 cup = 125 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 118,
+   "canonical": "farina_grano_00",
+   "unit": "cup",
+   "grams": 140.0,
+   "variant": "cup_packed_us_240ml",
+   "fdc_id": 169761,
+   "usda_description": "Wheat flour, white, all-purpose, unenriched",
+   "usda_portions": [
+    "1 cup = 125 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 119,
+   "canonical": "farina_grano_00",
+   "unit": "cup",
+   "grams": 130.0,
+   "variant": "cup_metric_250ml",
+   "fdc_id": 169761,
+   "usda_description": "Wheat flour, white, all-purpose, unenriched",
+   "usda_portions": [
+    "1 cup = 125 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 120,
+   "canonical": "farina_grano_00",
+   "unit": "cup",
+   "grams": 104.0,
+   "variant": "cup_japan_200ml",
+   "fdc_id": 169761,
+   "usda_description": "Wheat flour, white, all-purpose, unenriched",
+   "usda_portions": [
+    "1 cup = 125 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 121,
+   "canonical": "olio_frittura",
+   "unit": "ml",
+   "grams": 0.92,
+   "variant": "density_physical",
+   "fdc_id": 172336,
+   "usda_description": "Oil, canola",
+   "usda_portions": [
+    "1 tbsp = 14 g",
+    "1 cup = 218 g",
+    "1 tsp = 4.5 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 122,
+   "canonical": "olio_frittura",
+   "unit": "l",
+   "grams": 920.0,
+   "variant": "liter",
+   "fdc_id": 172336,
+   "usda_description": "Oil, canola",
+   "usda_portions": [
+    "1 tbsp = 14 g",
+    "1 cup = 218 g",
+    "1 tsp = 4.5 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 123,
+   "canonical": "olio_frittura",
+   "unit": "tbsp",
+   "grams": 13.8,
+   "variant": "tbsp",
+   "fdc_id": 172336,
+   "usda_description": "Oil, canola",
+   "usda_portions": [
+    "1 tbsp = 14 g",
+    "1 cup = 218 g",
+    "1 tsp = 4.5 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 124,
+   "canonical": "cannella_stecca",
+   "unit": "piece",
+   "grams": 4.0,
+   "variant": "stick_whole",
+   "fdc_id": 171320,
+   "usda_description": "Spices, cinnamon, ground",
+   "usda_portions": [
+    "1 tsp = 2.6 g",
+    "1 tbsp = 7.8 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 125,
+   "canonical": "latte_cocco",
+   "unit": "ml",
+   "grams": 0.96,
+   "variant": "density_physical",
+   "fdc_id": 170171,
+   "usda_description": "Nuts, coconut cream, canned, sweetened",
+   "usda_portions": [
+    "1 tbsp = 19 g",
+    "1 cup = 296 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 126,
+   "canonical": "latte_cocco",
+   "unit": "cup",
+   "grams": 226.0,
+   "variant": "cup_canned_us_240ml",
+   "fdc_id": 170171,
+   "usda_description": "Nuts, coconut cream, canned, sweetened",
+   "usda_portions": [
+    "1 tbsp = 19 g",
+    "1 cup = 296 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 127,
+   "canonical": "latte_cocco",
+   "unit": "tbsp",
+   "grams": 14.1,
+   "variant": "tbsp_canned",
+   "fdc_id": 170171,
+   "usda_description": "Nuts, coconut cream, canned, sweetened",
+   "usda_portions": [
+    "1 tbsp = 19 g",
+    "1 cup = 296 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 128,
+   "canonical": "vaniglia",
+   "unit": "tsp",
+   "grams": 4.2,
+   "variant": "extract_tsp",
+   "fdc_id": 173471,
+   "usda_description": "Vanilla extract",
+   "usda_portions": [
+    "1 tsp = 4.2 g",
+    "1 tbsp = 13 g",
+    "1 cup = 208 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 129,
+   "canonical": "vaniglia",
+   "unit": "piece",
+   "grams": 3.0,
+   "variant": "bean_pod",
+   "fdc_id": 170940,
+   "usda_description": "Babyfood, peas, dices, toddler",
+   "usda_portions": [
+    "1 oz = 28.35 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 130,
+   "canonical": "uovo_tuorlo",
+   "unit": "piece",
+   "grams": 17.0,
+   "variant": "large",
+   "fdc_id": 172184,
+   "usda_description": "Egg, yolk, raw, fresh",
+   "usda_portions": [
+    "1 large = 17 g",
+    "1 cup = 243 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 131,
+   "canonical": "uovo_tuorlo",
+   "unit": "piece",
+   "grams": 18.0,
+   "variant": "crea_average",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "senza_fonte_usda"
+  },
+  {
+   "index": 132,
+   "canonical": "uovo_tuorlo",
+   "unit": "cup",
+   "grams": 243.0,
+   "variant": "cup_us_240ml",
+   "fdc_id": 172184,
+   "usda_description": "Egg, yolk, raw, fresh",
+   "usda_portions": [
+    "1 large = 17 g",
+    "1 cup = 243 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 133,
+   "canonical": "panna_fresca",
+   "unit": "ml",
+   "grams": 0.994,
+   "variant": "density_physical",
+   "fdc_id": 170859,
+   "usda_description": "Cream, fluid, heavy whipping",
+   "usda_portions": [
+    "1 cup, whipped = 120 g",
+    "1 cup, fluid (yields 2 cups whipped) = 238 g",
+    "1 tbsp = 15 g",
+    "1 fl oz = 29.8 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 134,
+   "canonical": "panna_fresca",
+   "unit": "tbsp",
+   "grams": 15.0,
+   "variant": "tbsp",
+   "fdc_id": 170859,
+   "usda_description": "Cream, fluid, heavy whipping",
+   "usda_portions": [
+    "1 cup, whipped = 120 g",
+    "1 cup, fluid (yields 2 cups whipped) = 238 g",
+    "1 tbsp = 15 g",
+    "1 fl oz = 29.8 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 135,
+   "canonical": "panna_fresca",
+   "unit": "cup",
+   "grams": 238.0,
+   "variant": "cup_us_240ml",
+   "fdc_id": 170859,
+   "usda_description": "Cream, fluid, heavy whipping",
+   "usda_portions": [
+    "1 cup, whipped = 120 g",
+    "1 cup, fluid (yields 2 cups whipped) = 238 g",
+    "1 tbsp = 15 g",
+    "1 fl oz = 29.8 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 136,
+   "canonical": "trace:saffron",
+   "unit": "pinch",
+   "grams": null,
+   "variant": "trace",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 137,
+   "canonical": "pane_bianco",
+   "unit": "slice",
+   "grams": 25.0,
+   "variant": "standard_slice",
+   "fdc_id": 174924,
+   "usda_description": "Bread, white, commercially prepared (includes soft bread crumbs)",
+   "usda_portions": [
+    "1 slice = 29 g",
+    "1 oz = 28.35 g",
+    "1 cup, crumbs = 45 g",
+    "1 cup, cubes = 35 g",
+    "1 slice, large = 30 g",
+    "1 slice = 25 g",
+    "1 slice crust not eaten = 12 g",
+    "1 slice, thin = 20 g",
+    "1 slice thin, crust not eaten = 9 g",
+    "1 slice, very thin = 15 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 138,
+   "canonical": "pane_bianco",
+   "unit": "slice",
+   "grams": 20.0,
+   "variant": "thin_slice",
+   "fdc_id": 174924,
+   "usda_description": "Bread, white, commercially prepared (includes soft bread crumbs)",
+   "usda_portions": [
+    "1 slice = 29 g",
+    "1 oz = 28.35 g",
+    "1 cup, crumbs = 45 g",
+    "1 cup, cubes = 35 g",
+    "1 slice, large = 30 g",
+    "1 slice = 25 g",
+    "1 slice crust not eaten = 12 g",
+    "1 slice, thin = 20 g",
+    "1 slice thin, crust not eaten = 9 g",
+    "1 slice, very thin = 15 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 139,
+   "canonical": "pane_bianco",
+   "unit": "slice",
+   "grams": 30.0,
+   "variant": "large_slice",
+   "fdc_id": 174924,
+   "usda_description": "Bread, white, commercially prepared (includes soft bread crumbs)",
+   "usda_portions": [
+    "1 slice = 29 g",
+    "1 oz = 28.35 g",
+    "1 cup, crumbs = 45 g",
+    "1 cup, cubes = 35 g",
+    "1 slice, large = 30 g",
+    "1 slice = 25 g",
+    "1 slice crust not eaten = 12 g",
+    "1 slice, thin = 20 g",
+    "1 slice thin, crust not eaten = 9 g",
+    "1 slice, very thin = 15 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 140,
+   "canonical": "pane_bianco",
+   "unit": "count",
+   "grams": 50.0,
+   "variant": "small_roll",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "senza_fonte_usda"
+  },
+  {
+   "index": 141,
+   "canonical": "pane_bianco",
+   "unit": "piece",
+   "grams": 50.0,
+   "variant": "small_roll",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "senza_fonte_usda"
+  },
+  {
+   "index": 142,
+   "canonical": "scalogno",
+   "unit": "piece",
+   "grams": 25.0,
+   "variant": "medium_bulb",
+   "fdc_id": 170499,
+   "usda_description": "Shallots, raw",
+   "usda_portions": [
+    "1 tbsp chopped = 10 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 143,
+   "canonical": "scalogno",
+   "unit": "piece",
+   "grams": 40.0,
+   "variant": "large_bulb",
+   "fdc_id": 170499,
+   "usda_description": "Shallots, raw",
+   "usda_portions": [
+    "1 tbsp chopped = 10 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 144,
+   "canonical": "scalogno",
+   "unit": "piece",
+   "grams": 15.0,
+   "variant": "small_bulb",
+   "fdc_id": 170499,
+   "usda_description": "Shallots, raw",
+   "usda_portions": [
+    "1 tbsp chopped = 10 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 145,
+   "canonical": "scalogno",
+   "unit": "tbsp",
+   "grams": 10.0,
+   "variant": "tbsp_chopped",
+   "fdc_id": 170499,
+   "usda_description": "Shallots, raw",
+   "usda_portions": [
+    "1 tbsp chopped = 10 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 146,
+   "canonical": "pane_integrale",
+   "unit": "slice",
+   "grams": 32.0,
+   "variant": "standard_slice",
+   "fdc_id": 172688,
+   "usda_description": "Bread, whole-wheat, commercially prepared",
+   "usda_portions": [
+    "1 slice = 32 g",
+    "1 oz = 28.35 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 147,
+   "canonical": "pane_integrale",
+   "unit": "slice",
+   "grams": 35.0,
+   "variant": "crea_average",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "approvata"
+  },
+  {
+   "index": 148,
+   "canonical": "vino_bianco",
+   "unit": "ml",
+   "grams": 0.99,
+   "variant": "density_physical",
+   "fdc_id": 174837,
+   "usda_description": "Alcoholic beverage, wine, table, white",
+   "usda_portions": [
+    "1 fl oz = 29.4 g",
+    "1 serving (5 fl oz) = 147 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 149,
+   "canonical": "vino_bianco",
+   "unit": "tbsp",
+   "grams": 14.9,
+   "variant": "tbsp",
+   "fdc_id": 174837,
+   "usda_description": "Alcoholic beverage, wine, table, white",
+   "usda_portions": [
+    "1 fl oz = 29.4 g",
+    "1 serving (5 fl oz) = 147 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 150,
+   "canonical": "vino_bianco",
+   "unit": "cup",
+   "grams": 238.0,
+   "variant": "cup_us_240ml",
+   "fdc_id": 174837,
+   "usda_description": "Alcoholic beverage, wine, table, white",
+   "usda_portions": [
+    "1 fl oz = 29.4 g",
+    "1 serving (5 fl oz) = 147 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 151,
+   "canonical": "trace:cinnamon",
+   "unit": "tsp",
+   "grams": 2.6,
+   "variant": "ground",
+   "fdc_id": 171320,
+   "usda_description": "Spices, cinnamon, ground",
+   "usda_portions": [
+    "1 tsp = 2.6 g",
+    "1 tbsp = 7.8 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 152,
+   "canonical": "trace:cinnamon",
+   "unit": "tsp",
+   "grams": null,
+   "variant": "trace",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 153,
+   "canonical": "timo_fresco",
+   "unit": "sprig",
+   "grams": 0.5,
+   "variant": "sprig_fresh",
+   "fdc_id": 173470,
+   "usda_description": "Thyme, fresh",
+   "usda_portions": [
+    "1 tsp = 0.8 g",
+    "0.5 tsp = 0.4 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 154,
+   "canonical": "timo_fresco",
+   "unit": "tsp",
+   "grams": 0.8,
+   "variant": "fresh_leaves",
+   "fdc_id": 173470,
+   "usda_description": "Thyme, fresh",
+   "usda_portions": [
+    "1 tsp = 0.8 g",
+    "0.5 tsp = 0.4 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 155,
+   "canonical": "timo_fresco",
+   "unit": "sprig",
+   "grams": null,
+   "variant": "trace",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 156,
+   "canonical": "patate_crude",
+   "unit": "piece",
+   "grams": 213.0,
+   "variant": "medium",
+   "fdc_id": 170026,
+   "usda_description": "Potatoes, flesh and skin, raw",
+   "usda_portions": [
+    "0.5 cup, diced = 75 g",
+    "1 Potato large (3\" to 4-1/4\" dia) = 369 g",
+    "1 Potato medium (2-1/4\" to 3-1/4\" dia) = 213 g",
+    "1 Potato small (1-3/4\" to 2-1/2\" dia) = 170 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 157,
+   "canonical": "patate_crude",
+   "unit": "piece",
+   "grams": 170.0,
+   "variant": "small",
+   "fdc_id": 170026,
+   "usda_description": "Potatoes, flesh and skin, raw",
+   "usda_portions": [
+    "0.5 cup, diced = 75 g",
+    "1 Potato large (3\" to 4-1/4\" dia) = 369 g",
+    "1 Potato medium (2-1/4\" to 3-1/4\" dia) = 213 g",
+    "1 Potato small (1-3/4\" to 2-1/2\" dia) = 170 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 158,
+   "canonical": "patate_crude",
+   "unit": "piece",
+   "grams": 369.0,
+   "variant": "large",
+   "fdc_id": 170026,
+   "usda_description": "Potatoes, flesh and skin, raw",
+   "usda_portions": [
+    "0.5 cup, diced = 75 g",
+    "1 Potato large (3\" to 4-1/4\" dia) = 369 g",
+    "1 Potato medium (2-1/4\" to 3-1/4\" dia) = 213 g",
+    "1 Potato small (1-3/4\" to 2-1/2\" dia) = 170 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 159,
+   "canonical": "patate_crude",
+   "unit": "piece",
+   "grams": 150.0,
+   "variant": "crea_average",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "approvata"
+  },
+  {
+   "index": 160,
+   "canonical": "patate_crude",
+   "unit": "cup",
+   "grams": 150.0,
+   "variant": "cup_diced_us_240ml",
+   "fdc_id": 170026,
+   "usda_description": "Potatoes, flesh and skin, raw",
+   "usda_portions": [
+    "0.5 cup, diced = 75 g",
+    "1 Potato large (3\" to 4-1/4\" dia) = 369 g",
+    "1 Potato medium (2-1/4\" to 3-1/4\" dia) = 213 g",
+    "1 Potato small (1-3/4\" to 2-1/2\" dia) = 170 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 161,
+   "canonical": "salsa_pesce",
+   "unit": "tbsp",
+   "grams": 18.0,
+   "variant": "tbsp",
+   "fdc_id": 174531,
+   "usda_description": "Sauce, fish, ready-to-serve",
+   "usda_portions": [
+    "1 tbsp = 18 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 162,
+   "canonical": "salsa_pesce",
+   "unit": "ml",
+   "grams": 1.2,
+   "variant": "density_physical",
+   "fdc_id": 174531,
+   "usda_description": "Sauce, fish, ready-to-serve",
+   "usda_portions": [
+    "1 tbsp = 18 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 163,
+   "canonical": "salsa_pesce",
+   "unit": "tsp",
+   "grams": 6.0,
+   "variant": "tsp",
+   "fdc_id": 174531,
+   "usda_description": "Sauce, fish, ready-to-serve",
+   "usda_portions": [
+    "1 tbsp = 18 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 164,
+   "canonical": "cetrioli_freschi",
+   "unit": "piece",
+   "grams": 201.0,
+   "variant": "medium_with_peel",
+   "fdc_id": 169225,
+   "usda_description": "Cucumber, peeled, raw",
+   "usda_portions": [
+    "1 cup, pared, chopped = 133 g",
+    "1 cup, sliced = 119 g",
+    "1 large (8-1/4\" long) = 280 g",
+    "1 medium = 201 g",
+    "1 slice = 7 g",
+    "1 small (6-3/8\" long) = 158 g",
+    "1 stick (4\" long) = 9 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 165,
+   "canonical": "cetrioli_freschi",
+   "unit": "piece",
+   "grams": 196.0,
+   "variant": "medium_peeled",
+   "fdc_id": 169225,
+   "usda_description": "Cucumber, peeled, raw",
+   "usda_portions": [
+    "1 cup, pared, chopped = 133 g",
+    "1 cup, sliced = 119 g",
+    "1 large (8-1/4\" long) = 280 g",
+    "1 medium = 201 g",
+    "1 slice = 7 g",
+    "1 small (6-3/8\" long) = 158 g",
+    "1 stick (4\" long) = 9 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 166,
+   "canonical": "cetrioli_freschi",
+   "unit": "piece",
+   "grams": 158.0,
+   "variant": "small",
+   "fdc_id": 169225,
+   "usda_description": "Cucumber, peeled, raw",
+   "usda_portions": [
+    "1 cup, pared, chopped = 133 g",
+    "1 cup, sliced = 119 g",
+    "1 large (8-1/4\" long) = 280 g",
+    "1 medium = 201 g",
+    "1 slice = 7 g",
+    "1 small (6-3/8\" long) = 158 g",
+    "1 stick (4\" long) = 9 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 167,
+   "canonical": "cetrioli_freschi",
+   "unit": "piece",
+   "grams": 150.0,
+   "variant": "crea_average",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "senza_fonte_usda"
+  },
+  {
+   "index": 168,
+   "canonical": "cetrioli_freschi",
+   "unit": "cup",
+   "grams": 104.0,
+   "variant": "cup_sliced_us_240ml",
+   "fdc_id": 169225,
+   "usda_description": "Cucumber, peeled, raw",
+   "usda_portions": [
+    "1 cup, pared, chopped = 133 g",
+    "1 cup, sliced = 119 g",
+    "1 large (8-1/4\" long) = 280 g",
+    "1 medium = 201 g",
+    "1 slice = 7 g",
+    "1 small (6-3/8\" long) = 158 g",
+    "1 stick (4\" long) = 9 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 169,
+   "canonical": "aceto_vino",
+   "unit": "tbsp",
+   "grams": 14.9,
+   "variant": "tbsp",
+   "fdc_id": 172240,
+   "usda_description": "Vinegar, red wine",
+   "usda_portions": [
+    "1 tbsp = 14.9 g",
+    "1 cup = 239 g",
+    "1 tsp = 5 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 170,
+   "canonical": "aceto_vino",
+   "unit": "ml",
+   "grams": 0.996,
+   "variant": "density_physical",
+   "fdc_id": 172240,
+   "usda_description": "Vinegar, red wine",
+   "usda_portions": [
+    "1 tbsp = 14.9 g",
+    "1 cup = 239 g",
+    "1 tsp = 5 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 171,
+   "canonical": "aceto_vino",
+   "unit": "tsp",
+   "grams": 5.0,
+   "variant": "tsp",
+   "fdc_id": 172240,
+   "usda_description": "Vinegar, red wine",
+   "usda_portions": [
+    "1 tbsp = 14.9 g",
+    "1 cup = 239 g",
+    "1 tsp = 5 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 172,
+   "canonical": "timo_secco",
+   "unit": "tsp",
+   "grams": 1.4,
+   "variant": "ground",
+   "fdc_id": 170938,
+   "usda_description": "Spices, thyme, dried",
+   "usda_portions": [
+    "1 tsp, leaves = 1 g",
+    "1 tbsp, leaves = 2.7 g",
+    "1 tsp, ground = 1.4 g",
+    "1 tbsp, ground = 4.3 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 173,
+   "canonical": "timo_secco",
+   "unit": "tsp",
+   "grams": 1.0,
+   "variant": "leaves",
+   "fdc_id": 170938,
+   "usda_description": "Spices, thyme, dried",
+   "usda_portions": [
+    "1 tsp, leaves = 1 g",
+    "1 tbsp, leaves = 2.7 g",
+    "1 tsp, ground = 1.4 g",
+    "1 tbsp, ground = 4.3 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 174,
+   "canonical": "timo_secco",
+   "unit": "tbsp",
+   "grams": 4.3,
+   "variant": "tbsp",
+   "fdc_id": 170938,
+   "usda_description": "Spices, thyme, dried",
+   "usda_portions": [
+    "1 tsp, leaves = 1 g",
+    "1 tbsp, leaves = 2.7 g",
+    "1 tsp, ground = 1.4 g",
+    "1 tbsp, ground = 4.3 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 175,
+   "canonical": "trace:ground cinnamon",
+   "unit": "tsp",
+   "grams": 2.6,
+   "variant": "ground",
+   "fdc_id": 171320,
+   "usda_description": "Spices, cinnamon, ground",
+   "usda_portions": [
+    "1 tsp = 2.6 g",
+    "1 tbsp = 7.8 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 176,
+   "canonical": "cardamomo_polvere",
+   "unit": "tsp",
+   "grams": 2.0,
+   "variant": "ground",
+   "fdc_id": 170919,
+   "usda_description": "Spices, cardamom",
+   "usda_portions": [
+    "1 tsp, ground = 2 g",
+    "1 tbsp, ground = 5.8 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 177,
+   "canonical": "cardamomo_polvere",
+   "unit": "piece",
+   "grams": 0.2,
+   "variant": "whole_pod",
+   "fdc_id": 170919,
+   "usda_description": "Spices, cardamom",
+   "usda_portions": [
+    "1 tsp, ground = 2 g",
+    "1 tbsp, ground = 5.8 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 178,
+   "canonical": "cardamomo_polvere",
+   "unit": "tbsp",
+   "grams": 5.8,
+   "variant": "tbsp",
+   "fdc_id": 170919,
+   "usda_description": "Spices, cardamom",
+   "usda_portions": [
+    "1 tsp, ground = 2 g",
+    "1 tbsp, ground = 5.8 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 179,
+   "canonical": "peperoncino_scotch_bonnet",
+   "unit": "piece",
+   "grams": 15.0,
+   "variant": "whole_pepper",
+   "fdc_id": 170106,
+   "usda_description": "Peppers, hot chili, red, raw",
+   "usda_portions": [
+    "1 pepper = 45 g",
+    "0.5 cup, chopped or diced = 75 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 180,
+   "canonical": "salsa_soia",
+   "unit": "tbsp",
+   "grams": 16.0,
+   "variant": "tbsp",
+   "fdc_id": 174277,
+   "usda_description": "Soy sauce made from soy and wheat (shoyu)",
+   "usda_portions": [
+    "1 tbsp = 16 g",
+    "1 tsp = 5.3 g",
+    "1 cup = 255 g",
+    "1 individual packet = 8.9 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 181,
+   "canonical": "salsa_soia",
+   "unit": "ml",
+   "grams": 1.15,
+   "variant": "density_physical",
+   "fdc_id": 174277,
+   "usda_description": "Soy sauce made from soy and wheat (shoyu)",
+   "usda_portions": [
+    "1 tbsp = 16 g",
+    "1 tsp = 5.3 g",
+    "1 cup = 255 g",
+    "1 individual packet = 8.9 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 182,
+   "canonical": "salsa_soia",
+   "unit": "tsp",
+   "grams": 5.3,
+   "variant": "tsp",
+   "fdc_id": 174277,
+   "usda_description": "Soy sauce made from soy and wheat (shoyu)",
+   "usda_portions": [
+    "1 tbsp = 16 g",
+    "1 tsp = 5.3 g",
+    "1 cup = 255 g",
+    "1 individual packet = 8.9 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 183,
+   "canonical": "salsa_soia",
+   "unit": "cup",
+   "grams": 255.0,
+   "variant": "cup_us_240ml",
+   "fdc_id": 174277,
+   "usda_description": "Soy sauce made from soy and wheat (shoyu)",
+   "usda_portions": [
+    "1 tbsp = 16 g",
+    "1 tsp = 5.3 g",
+    "1 cup = 255 g",
+    "1 individual packet = 8.9 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 184,
+   "canonical": "panna_doppia",
+   "unit": "ml",
+   "grams": 0.99,
+   "variant": "density_physical",
+   "fdc_id": 170859,
+   "usda_description": "Cream, fluid, heavy whipping",
+   "usda_portions": [
+    "1 cup, whipped = 120 g",
+    "1 cup, fluid (yields 2 cups whipped) = 238 g",
+    "1 tbsp = 15 g",
+    "1 fl oz = 29.8 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 185,
+   "canonical": "panna_doppia",
+   "unit": "tbsp",
+   "grams": 15.0,
+   "variant": "tbsp",
+   "fdc_id": 170859,
+   "usda_description": "Cream, fluid, heavy whipping",
+   "usda_portions": [
+    "1 cup, whipped = 120 g",
+    "1 cup, fluid (yields 2 cups whipped) = 238 g",
+    "1 tbsp = 15 g",
+    "1 fl oz = 29.8 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 186,
+   "canonical": "panna_doppia",
+   "unit": "cup",
+   "grams": 238.0,
+   "variant": "cup_us_240ml",
+   "fdc_id": 170859,
+   "usda_description": "Cream, fluid, heavy whipping",
+   "usda_portions": [
+    "1 cup, whipped = 120 g",
+    "1 cup, fluid (yields 2 cups whipped) = 238 g",
+    "1 tbsp = 15 g",
+    "1 fl oz = 29.8 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 187,
+   "canonical": "lievito_chimico_polvere",
+   "unit": "tsp",
+   "grams": 4.6,
+   "variant": "level_tsp",
+   "fdc_id": 172804,
+   "usda_description": "Leavening agents, baking powder, double-acting, straight phosphate",
+   "usda_portions": [
+    "1 tsp = 4.6 g",
+    "0.5 tsp = 2.3 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 188,
+   "canonical": "lievito_chimico_polvere",
+   "unit": "tsp",
+   "grams": 4.6,
+   "variant": "half_tsp",
+   "fdc_id": 172804,
+   "usda_description": "Leavening agents, baking powder, double-acting, straight phosphate",
+   "usda_portions": [
+    "1 tsp = 4.6 g",
+    "0.5 tsp = 2.3 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 189,
+   "canonical": "scorza_limone",
+   "unit": "piece",
+   "grams": 6.0,
+   "variant": "whole_peel",
+   "fdc_id": 167746,
+   "usda_description": "Lemons, raw, without peel",
+   "usda_portions": [
+    "1 cup, sections = 212 g",
+    "1 fruit (2-1/8\" dia) = 58 g",
+    "1 fruit (2-3/8\" dia) = 84 g",
+    "1 wedge or slice (1/8 of one 2-1/8\" dia lemon) = 7 g",
+    "1 NLEA serving = 58 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 190,
+   "canonical": "scorza_limone",
+   "unit": "tbsp",
+   "grams": 6.0,
+   "variant": "tbsp_zest",
+   "fdc_id": 167746,
+   "usda_description": "Lemons, raw, without peel",
+   "usda_portions": [
+    "1 cup, sections = 212 g",
+    "1 fruit (2-1/8\" dia) = 58 g",
+    "1 fruit (2-3/8\" dia) = 84 g",
+    "1 wedge or slice (1/8 of one 2-1/8\" dia lemon) = 7 g",
+    "1 NLEA serving = 58 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 191,
+   "canonical": "scorza_limone",
+   "unit": "tsp",
+   "grams": 2.0,
+   "variant": "tsp_zest",
+   "fdc_id": 167746,
+   "usda_description": "Lemons, raw, without peel",
+   "usda_portions": [
+    "1 cup, sections = 212 g",
+    "1 fruit (2-1/8\" dia) = 58 g",
+    "1 fruit (2-3/8\" dia) = 84 g",
+    "1 wedge or slice (1/8 of one 2-1/8\" dia lemon) = 7 g",
+    "1 NLEA serving = 58 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 192,
+   "canonical": "yogurt_intero",
+   "unit": "ml",
+   "grams": 1.03,
+   "variant": "density_physical",
+   "fdc_id": 171284,
+   "usda_description": "Yogurt, plain, whole milk",
+   "usda_portions": [
+    "1 container (6 oz) = 170 g",
+    "1 container (8 oz) = 227 g",
+    "0.5 container (4 oz) = 113 g",
+    "1 cup (8 fl oz) = 245 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 193,
+   "canonical": "yogurt_intero",
+   "unit": "tbsp",
+   "grams": 15.3,
+   "variant": "tbsp",
+   "fdc_id": 171284,
+   "usda_description": "Yogurt, plain, whole milk",
+   "usda_portions": [
+    "1 container (6 oz) = 170 g",
+    "1 container (8 oz) = 227 g",
+    "0.5 container (4 oz) = 113 g",
+    "1 cup (8 fl oz) = 245 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 194,
+   "canonical": "yogurt_intero",
+   "unit": "cup",
+   "grams": 245.0,
+   "variant": "cup_us_240ml",
+   "fdc_id": 171284,
+   "usda_description": "Yogurt, plain, whole milk",
+   "usda_portions": [
+    "1 container (6 oz) = 170 g",
+    "1 container (8 oz) = 227 g",
+    "0.5 container (4 oz) = 113 g",
+    "1 cup (8 fl oz) = 245 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 195,
+   "canonical": "vino_rosso",
+   "unit": "ml",
+   "grams": 0.99,
+   "variant": "density_physical",
+   "fdc_id": 174835,
+   "usda_description": "Alcoholic Beverage, wine, table, red, Pinot Noir",
+   "usda_portions": [
+    "1 fl oz = 29.4 g",
+    "1 serving (5 fl oz) = 147 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 196,
+   "canonical": "vino_rosso",
+   "unit": "tbsp",
+   "grams": 14.9,
+   "variant": "tbsp",
+   "fdc_id": 174835,
+   "usda_description": "Alcoholic Beverage, wine, table, red, Pinot Noir",
+   "usda_portions": [
+    "1 fl oz = 29.4 g",
+    "1 serving (5 fl oz) = 147 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 197,
+   "canonical": "vino_rosso",
+   "unit": "cup",
+   "grams": 238.0,
+   "variant": "cup_us_240ml",
+   "fdc_id": 174835,
+   "usda_description": "Alcoholic Beverage, wine, table, red, Pinot Noir",
+   "usda_portions": [
+    "1 fl oz = 29.4 g",
+    "1 serving (5 fl oz) = 147 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 198,
+   "canonical": "brodo_manzo",
+   "unit": "ml",
+   "grams": 1.0,
+   "variant": "density_diluted",
+   "fdc_id": 170417,
+   "usda_description": "Parsnips, raw",
+   "usda_portions": [
+    "1 cup slices = 133 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 199,
+   "canonical": "brodo_manzo",
+   "unit": "l",
+   "grams": 1000.0,
+   "variant": "liter",
+   "fdc_id": 170417,
+   "usda_description": "Parsnips, raw",
+   "usda_portions": [
+    "1 cup slices = 133 g"
+   ],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 200,
+   "canonical": "brodo_manzo",
+   "unit": "cup",
+   "grams": 240.0,
+   "variant": "cup_us_240ml",
+   "fdc_id": 170417,
+   "usda_description": "Parsnips, raw",
+   "usda_portions": [
+    "1 cup slices = 133 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 201,
+   "canonical": "bicarbonato_sodio",
+   "unit": "tsp",
+   "grams": 4.6,
+   "variant": "level_tsp",
+   "fdc_id": 175040,
+   "usda_description": "Leavening agents, baking soda",
+   "usda_portions": [
+    "1 tsp = 4.6 g",
+    "0.5 tsp = 2.3 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 202,
+   "canonical": "bicarbonato_sodio",
+   "unit": "tsp",
+   "grams": 4.6,
+   "variant": "half_tsp",
+   "fdc_id": 175040,
+   "usda_description": "Leavening agents, baking soda",
+   "usda_portions": [
+    "1 tsp = 4.6 g",
+    "0.5 tsp = 2.3 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 203,
+   "canonical": "melanzane_crude",
+   "unit": "piece",
+   "grams": 458.0,
+   "variant": "medium",
+   "fdc_id": 169228,
+   "usda_description": "Eggplant, raw",
+   "usda_portions": [
+    "1 cup, cubes = 82 g",
+    "1 eggplant, peeled (yield from 1-1/4 lb) = 458 g",
+    "1 eggplant, unpeeled (approx 1-1/4 lb) = 548 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 204,
+   "canonical": "melanzane_crude",
+   "unit": "piece",
+   "grams": 250.0,
+   "variant": "crea_average",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "senza_fonte_usda"
+  },
+  {
+   "index": 205,
+   "canonical": "melanzane_crude",
+   "unit": "cup",
+   "grams": 82.0,
+   "variant": "cup_cubes_us_240ml",
+   "fdc_id": 169228,
+   "usda_description": "Eggplant, raw",
+   "usda_portions": [
+    "1 cup, cubes = 82 g",
+    "1 eggplant, peeled (yield from 1-1/4 lb) = 458 g",
+    "1 eggplant, unpeeled (approx 1-1/4 lb) = 548 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 206,
+   "canonical": "pane_segale",
+   "unit": "slice",
+   "grams": 32.0,
+   "variant": "standard_slice",
+   "fdc_id": 172684,
+   "usda_description": "Bread, rye",
+   "usda_portions": [
+    "1 oz = 28.35 g",
+    "1 slice, regular = 32 g",
+    "1 slice, snack-size = 7 g",
+    "1 slice, thin = 25 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 207,
+   "canonical": "pane_segale",
+   "unit": "slice",
+   "grams": 30.0,
+   "variant": "crea_average",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "approvata"
+  },
+  {
+   "index": 208,
+   "canonical": "pepe_nero",
+   "unit": "tsp",
+   "grams": 2.3,
+   "variant": "ground",
+   "fdc_id": 170931,
+   "usda_description": "Spices, pepper, black",
+   "usda_portions": [
+    "1 tsp, ground = 2.3 g",
+    "1 tbsp, ground = 6.9 g",
+    "1 tsp, whole = 2.9 g",
+    "1 dash = 0.1 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 209,
+   "canonical": "pepe_nero",
+   "unit": "tsp",
+   "grams": 2.9,
+   "variant": "whole_peppercorns",
+   "fdc_id": 170931,
+   "usda_description": "Spices, pepper, black",
+   "usda_portions": [
+    "1 tsp, ground = 2.3 g",
+    "1 tbsp, ground = 6.9 g",
+    "1 tsp, whole = 2.9 g",
+    "1 dash = 0.1 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 210,
+   "canonical": "pepe_nero",
+   "unit": "totaste",
+   "grams": null,
+   "variant": "trace",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 211,
+   "canonical": "pepe_nero",
+   "unit": "tbsp",
+   "grams": 6.9,
+   "variant": "tbsp",
+   "fdc_id": 170931,
+   "usda_description": "Spices, pepper, black",
+   "usda_portions": [
+    "1 tsp, ground = 2.3 g",
+    "1 tbsp, ground = 6.9 g",
+    "1 tsp, whole = 2.9 g",
+    "1 dash = 0.1 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 212,
+   "canonical": "coriandolo_fresco",
+   "unit": "tbsp",
+   "grams": 1.0,
+   "variant": "tbsp_chopped",
+   "fdc_id": 169997,
+   "usda_description": "Coriander (cilantro) leaves, raw",
+   "usda_portions": [
+    "0.25 cup = 4 g",
+    "9 sprigs = 20 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 213,
+   "canonical": "coriandolo_fresco",
+   "unit": "tsp",
+   "grams": 0.3,
+   "variant": "tsp_chopped",
+   "fdc_id": 169997,
+   "usda_description": "Coriander (cilantro) leaves, raw",
+   "usda_portions": [
+    "0.25 cup = 4 g",
+    "9 sprigs = 20 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 214,
+   "canonical": "coriandolo_fresco",
+   "unit": "sprig",
+   "grams": 0.5,
+   "variant": "sprig",
+   "fdc_id": 169997,
+   "usda_description": "Coriander (cilantro) leaves, raw",
+   "usda_portions": [
+    "0.25 cup = 4 g",
+    "9 sprigs = 20 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 215,
+   "canonical": "coriandolo_fresco",
+   "unit": "totaste",
+   "grams": null,
+   "variant": "trace",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 216,
+   "canonical": "coriandolo_fresco",
+   "unit": "cup",
+   "grams": 16.0,
+   "variant": "cup_chopped_us_240ml",
+   "fdc_id": 169997,
+   "usda_description": "Coriander (cilantro) leaves, raw",
+   "usda_portions": [
+    "0.25 cup = 4 g",
+    "9 sprigs = 20 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 217,
+   "canonical": "peperoncino_secco_fiocchi",
+   "unit": "tsp",
+   "grams": 1.8,
+   "variant": "flakes",
+   "fdc_id": 170934,
+   "usda_description": "Spices, saffron",
+   "usda_portions": [
+    "1 tsp = 0.7 g",
+    "1 tbsp = 2.1 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 218,
+   "canonical": "peperoncino_secco_fiocchi",
+   "unit": "tbsp",
+   "grams": 5.3,
+   "variant": "tbsp",
+   "fdc_id": 170934,
+   "usda_description": "Spices, saffron",
+   "usda_portions": [
+    "1 tsp = 0.7 g",
+    "1 tbsp = 2.1 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 219,
+   "canonical": "avocado_fresco",
+   "unit": "piece",
+   "grams": 150.0,
+   "variant": "edible_portion",
+   "fdc_id": 171705,
+   "usda_description": "Avocados, raw, all commercial varieties",
+   "usda_portions": [
+    "1 cup, cubes = 150 g",
+    "1 cup, pureed = 230 g",
+    "1 cup, sliced = 146 g",
+    "1 avocado, NS as to Florida or California = 201 g",
+    "1 NLEA Serving = 50 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 220,
+   "canonical": "avocado_fresco",
+   "unit": "piece",
+   "grams": 201.0,
+   "variant": "whole_with_skin_seed",
+   "fdc_id": 171705,
+   "usda_description": "Avocados, raw, all commercial varieties",
+   "usda_portions": [
+    "1 cup, cubes = 150 g",
+    "1 cup, pureed = 230 g",
+    "1 cup, sliced = 146 g",
+    "1 avocado, NS as to Florida or California = 201 g",
+    "1 NLEA Serving = 50 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 221,
+   "canonical": "avocado_fresco",
+   "unit": "count",
+   "grams": 150.0,
+   "variant": "edible_portion",
+   "fdc_id": 171705,
+   "usda_description": "Avocados, raw, all commercial varieties",
+   "usda_portions": [
+    "1 cup, cubes = 150 g",
+    "1 cup, pureed = 230 g",
+    "1 cup, sliced = 146 g",
+    "1 avocado, NS as to Florida or California = 201 g",
+    "1 NLEA Serving = 50 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 222,
+   "canonical": "avocado_fresco",
+   "unit": "cup",
+   "grams": 150.0,
+   "variant": "cup_cubes_us_240ml",
+   "fdc_id": 171705,
+   "usda_description": "Avocados, raw, all commercial varieties",
+   "usda_portions": [
+    "1 cup, cubes = 150 g",
+    "1 cup, pureed = 230 g",
+    "1 cup, sliced = 146 g",
+    "1 avocado, NS as to Florida or California = 201 g",
+    "1 NLEA Serving = 50 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 223,
+   "canonical": "avocado_fresco",
+   "unit": "cup",
+   "grams": 146.0,
+   "variant": "cup_sliced_us_240ml",
+   "fdc_id": 171705,
+   "usda_description": "Avocados, raw, all commercial varieties",
+   "usda_portions": [
+    "1 cup, cubes = 150 g",
+    "1 cup, pureed = 230 g",
+    "1 cup, sliced = 146 g",
+    "1 avocado, NS as to Florida or California = 201 g",
+    "1 NLEA Serving = 50 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 224,
+   "canonical": "menta_fresca",
+   "unit": "tsp",
+   "grams": 0.5,
+   "variant": "fresh_leaves",
+   "fdc_id": 173474,
+   "usda_description": "Peppermint, fresh",
+   "usda_portions": [
+    "2 leaves = 0.1 g",
+    "2 tbsp = 3.2 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 225,
+   "canonical": "menta_fresca",
+   "unit": "tbsp",
+   "grams": 1.6,
+   "variant": "tbsp_chopped",
+   "fdc_id": 173474,
+   "usda_description": "Peppermint, fresh",
+   "usda_portions": [
+    "2 leaves = 0.1 g",
+    "2 tbsp = 3.2 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 226,
+   "canonical": "menta_fresca",
+   "unit": "sprig",
+   "grams": 1.5,
+   "variant": "sprig",
+   "fdc_id": 173474,
+   "usda_description": "Peppermint, fresh",
+   "usda_portions": [
+    "2 leaves = 0.1 g",
+    "2 tbsp = 3.2 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 227,
+   "canonical": "sedano_crudo",
+   "unit": "piece",
+   "grams": 40.0,
+   "variant": "medium_stalk",
+   "fdc_id": 169988,
+   "usda_description": "Celery, raw",
+   "usda_portions": [
+    "1 cup chopped = 101 g",
+    "1 NLEA serving = 110 g",
+    "1 tbsp = 7.5 g",
+    "1 stalk, large (11\"-12\" long) = 64 g",
+    "1 stalk, medium (7-1/2\" - 8\" long) = 40 g",
+    "1 stalk, small (5\" long) = 17 g",
+    "1 strip (4\" long) = 4 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 228,
+   "canonical": "sedano_crudo",
+   "unit": "piece",
+   "grams": 64.0,
+   "variant": "large_stalk",
+   "fdc_id": 169988,
+   "usda_description": "Celery, raw",
+   "usda_portions": [
+    "1 cup chopped = 101 g",
+    "1 NLEA serving = 110 g",
+    "1 tbsp = 7.5 g",
+    "1 stalk, large (11\"-12\" long) = 64 g",
+    "1 stalk, medium (7-1/2\" - 8\" long) = 40 g",
+    "1 stalk, small (5\" long) = 17 g",
+    "1 strip (4\" long) = 4 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 229,
+   "canonical": "sedano_crudo",
+   "unit": "piece",
+   "grams": 17.0,
+   "variant": "small_stalk",
+   "fdc_id": 169988,
+   "usda_description": "Celery, raw",
+   "usda_portions": [
+    "1 cup chopped = 101 g",
+    "1 NLEA serving = 110 g",
+    "1 tbsp = 7.5 g",
+    "1 stalk, large (11\"-12\" long) = 64 g",
+    "1 stalk, medium (7-1/2\" - 8\" long) = 40 g",
+    "1 stalk, small (5\" long) = 17 g",
+    "1 strip (4\" long) = 4 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 230,
+   "canonical": "sedano_crudo",
+   "unit": "piece",
+   "grams": 50.0,
+   "variant": "crea_average",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "senza_fonte_usda"
+  },
+  {
+   "index": 231,
+   "canonical": "sedano_crudo",
+   "unit": "cup",
+   "grams": 101.0,
+   "variant": "cup_chopped_us_240ml",
+   "fdc_id": 169988,
+   "usda_description": "Celery, raw",
+   "usda_portions": [
+    "1 cup chopped = 101 g",
+    "1 NLEA serving = 110 g",
+    "1 tbsp = 7.5 g",
+    "1 stalk, large (11\"-12\" long) = 64 g",
+    "1 stalk, medium (7-1/2\" - 8\" long) = 40 g",
+    "1 stalk, small (5\" long) = 17 g",
+    "1 strip (4\" long) = 4 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 232,
+   "canonical": "sedano_crudo",
+   "unit": "tbsp",
+   "grams": 7.5,
+   "variant": "tbsp_chopped",
+   "fdc_id": 169988,
+   "usda_description": "Celery, raw",
+   "usda_portions": [
+    "1 cup chopped = 101 g",
+    "1 NLEA serving = 110 g",
+    "1 tbsp = 7.5 g",
+    "1 stalk, large (11\"-12\" long) = 64 g",
+    "1 stalk, medium (7-1/2\" - 8\" long) = 40 g",
+    "1 stalk, small (5\" long) = 17 g",
+    "1 strip (4\" long) = 4 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 233,
+   "canonical": "senape",
+   "unit": "tbsp",
+   "grams": 15.0,
+   "variant": "prepared_tbsp",
+   "fdc_id": 326698,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "fdc_id_non_in_sr_legacy"
+  },
+  {
+   "index": 234,
+   "canonical": "senape",
+   "unit": "tsp",
+   "grams": 5.0,
+   "variant": "prepared_tsp",
+   "fdc_id": 326698,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "fdc_id_non_in_sr_legacy"
+  },
+  {
+   "index": 235,
+   "canonical": "capperi_sottaceto",
+   "unit": "tbsp",
+   "grams": 8.6,
+   "variant": "tbsp_drained",
+   "fdc_id": 172238,
+   "usda_description": "Capers, canned",
+   "usda_portions": [
+    "1 tbsp, drained = 8.6 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 236,
+   "canonical": "capperi_sottaceto",
+   "unit": "tsp",
+   "grams": 2.9,
+   "variant": "tsp_drained",
+   "fdc_id": 172238,
+   "usda_description": "Capers, canned",
+   "usda_portions": [
+    "1 tbsp, drained = 8.6 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 237,
+   "canonical": "porri_crudi",
+   "unit": "piece",
+   "grams": 89.0,
+   "variant": "medium",
+   "fdc_id": 169246,
+   "usda_description": "Leeks, (bulb and lower leaf-portion), raw",
+   "usda_portions": [
+    "1 cup = 89 g",
+    "1 leek = 89 g",
+    "1 slice = 6 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 238,
+   "canonical": "porri_crudi",
+   "unit": "piece",
+   "grams": 124.0,
+   "variant": "large",
+   "fdc_id": 169246,
+   "usda_description": "Leeks, (bulb and lower leaf-portion), raw",
+   "usda_portions": [
+    "1 cup = 89 g",
+    "1 leek = 89 g",
+    "1 slice = 6 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 239,
+   "canonical": "porri_crudi",
+   "unit": "cup",
+   "grams": 89.0,
+   "variant": "cup_chopped_us_240ml",
+   "fdc_id": 169246,
+   "usda_description": "Leeks, (bulb and lower leaf-portion), raw",
+   "usda_portions": [
+    "1 cup = 89 g",
+    "1 leek = 89 g",
+    "1 slice = 6 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 240,
+   "canonical": "yogurt_greco",
+   "unit": "ml",
+   "grams": 1.05,
+   "variant": "density_physical",
+   "fdc_id": 171304,
+   "usda_description": "Yogurt, Greek, plain, whole milk",
+   "usda_portions": [],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 241,
+   "canonical": "yogurt_greco",
+   "unit": "tbsp",
+   "grams": 15.0,
+   "variant": "tbsp",
+   "fdc_id": 171304,
+   "usda_description": "Yogurt, Greek, plain, whole milk",
+   "usda_portions": [],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 242,
+   "canonical": "yogurt_greco",
+   "unit": "cup",
+   "grams": 250.0,
+   "variant": "cup_us_240ml",
+   "fdc_id": 171304,
+   "usda_description": "Yogurt, Greek, plain, whole milk",
+   "usda_portions": [],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 243,
+   "canonical": "amido_mais",
+   "unit": "tbsp",
+   "grams": 8.0,
+   "variant": "tbsp",
+   "fdc_id": 169698,
+   "usda_description": "Cornstarch",
+   "usda_portions": [
+    "1 cup = 128 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 244,
+   "canonical": "amido_mais",
+   "unit": "tsp",
+   "grams": 2.7,
+   "variant": "tsp",
+   "fdc_id": 169698,
+   "usda_description": "Cornstarch",
+   "usda_portions": [
+    "1 cup = 128 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 245,
+   "canonical": "amido_mais",
+   "unit": "cup",
+   "grams": 128.0,
+   "variant": "cup_us_240ml",
+   "fdc_id": 169698,
+   "usda_description": "Cornstarch",
+   "usda_portions": [
+    "1 cup = 128 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 246,
+   "canonical": "miele",
+   "unit": "tbsp",
+   "grams": 21.0,
+   "variant": "tbsp",
+   "fdc_id": 169640,
+   "usda_description": "Honey",
+   "usda_portions": [
+    "1 cup = 339 g",
+    "1 tbsp = 21 g",
+    "1 packet (0.5 oz) = 14 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 247,
+   "canonical": "miele",
+   "unit": "tbsp",
+   "grams": 20.0,
+   "variant": "crea_average",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "approvata"
+  },
+  {
+   "index": 248,
+   "canonical": "miele",
+   "unit": "tsp",
+   "grams": 7.0,
+   "variant": "tsp",
+   "fdc_id": 169640,
+   "usda_description": "Honey",
+   "usda_portions": [
+    "1 cup = 339 g",
+    "1 tbsp = 21 g",
+    "1 packet (0.5 oz) = 14 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 249,
+   "canonical": "miele",
+   "unit": "cup",
+   "grams": 339.0,
+   "variant": "cup_us_240ml",
+   "fdc_id": 169640,
+   "usda_description": "Honey",
+   "usda_portions": [
+    "1 cup = 339 g",
+    "1 tbsp = 21 g",
+    "1 packet (0.5 oz) = 14 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 250,
+   "canonical": "trace:ground nutmeg",
+   "unit": "pinch",
+   "grams": null,
+   "variant": "trace",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 251,
+   "canonical": "trace:cumin seeds",
+   "unit": "tsp",
+   "grams": 2.1,
+   "variant": "whole_seeds",
+   "fdc_id": 170923,
+   "usda_description": "Spices, cumin seed",
+   "usda_portions": [
+    "1 tsp, whole = 2.1 g",
+    "1 tbsp, whole = 6 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 252,
+   "canonical": "trace:nutmeg",
+   "unit": "pinch",
+   "grams": null,
+   "variant": "trace",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 253,
+   "canonical": "trace:nutmeg",
+   "unit": "tsp",
+   "grams": 2.2,
+   "variant": "ground",
+   "fdc_id": 170928,
+   "usda_description": "Spices, marjoram, dried",
+   "usda_portions": [
+    "1 tsp = 0.6 g",
+    "1 tbsp = 1.7 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 254,
+   "canonical": "olive_nere",
+   "unit": "piece",
+   "grams": 4.4,
+   "variant": "large",
+   "fdc_id": 169095,
+   "usda_description": "Olives, ripe, canned (jumbo-super colossal)",
+   "usda_portions": [
+    "1 super colossal = 15 g",
+    "1 jumbo = 8.3 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 255,
+   "canonical": "olive_nere",
+   "unit": "piece",
+   "grams": 8.0,
+   "variant": "jumbo",
+   "fdc_id": 169095,
+   "usda_description": "Olives, ripe, canned (jumbo-super colossal)",
+   "usda_portions": [
+    "1 super colossal = 15 g",
+    "1 jumbo = 8.3 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 256,
+   "canonical": "olive_nere",
+   "unit": "piece",
+   "grams": 4.0,
+   "variant": "crea_average",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "senza_fonte_usda"
+  },
+  {
+   "index": 257,
+   "canonical": "mele_fresche",
+   "unit": "count",
+   "grams": 182.0,
+   "variant": "medium",
+   "fdc_id": 171688,
+   "usda_description": "Apples, raw, with skin (Includes foods for USDA's Food Distribution Program)",
+   "usda_portions": [
+    "1 cup, quartered or chopped = 125 g",
+    "1 cup slices = 109 g",
+    "1 large (3-1/4\" dia) = 223 g",
+    "1 medium (3\" dia) = 182 g",
+    "1 small (2-3/4\" dia) = 149 g",
+    "1 extra small (2-1/2\" dia) = 101 g",
+    "1 NLEA serving = 242 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 258,
+   "canonical": "mele_fresche",
+   "unit": "count",
+   "grams": 149.0,
+   "variant": "small",
+   "fdc_id": 171688,
+   "usda_description": "Apples, raw, with skin (Includes foods for USDA's Food Distribution Program)",
+   "usda_portions": [
+    "1 cup, quartered or chopped = 125 g",
+    "1 cup slices = 109 g",
+    "1 large (3-1/4\" dia) = 223 g",
+    "1 medium (3\" dia) = 182 g",
+    "1 small (2-3/4\" dia) = 149 g",
+    "1 extra small (2-1/2\" dia) = 101 g",
+    "1 NLEA serving = 242 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 259,
+   "canonical": "mele_fresche",
+   "unit": "count",
+   "grams": 242.0,
+   "variant": "large",
+   "fdc_id": 171688,
+   "usda_description": "Apples, raw, with skin (Includes foods for USDA's Food Distribution Program)",
+   "usda_portions": [
+    "1 cup, quartered or chopped = 125 g",
+    "1 cup slices = 109 g",
+    "1 large (3-1/4\" dia) = 223 g",
+    "1 medium (3\" dia) = 182 g",
+    "1 small (2-3/4\" dia) = 149 g",
+    "1 extra small (2-1/2\" dia) = 101 g",
+    "1 NLEA serving = 242 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 260,
+   "canonical": "mele_fresche",
+   "unit": "count",
+   "grams": 180.0,
+   "variant": "crea_average",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "approvata"
+  },
+  {
+   "index": 261,
+   "canonical": "mele_fresche",
+   "unit": "cup",
+   "grams": 109.0,
+   "variant": "cup_slices_us_240ml",
+   "fdc_id": 171688,
+   "usda_description": "Apples, raw, with skin (Includes foods for USDA's Food Distribution Program)",
+   "usda_portions": [
+    "1 cup, quartered or chopped = 125 g",
+    "1 cup slices = 109 g",
+    "1 large (3-1/4\" dia) = 223 g",
+    "1 medium (3\" dia) = 182 g",
+    "1 small (2-3/4\" dia) = 149 g",
+    "1 extra small (2-1/2\" dia) = 101 g",
+    "1 NLEA serving = 242 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 262,
+   "canonical": "uovo_albume",
+   "unit": "piece",
+   "grams": 33.0,
+   "variant": "large",
+   "fdc_id": 172183,
+   "usda_description": "Egg, white, raw, fresh",
+   "usda_portions": [
+    "1 large = 33 g",
+    "1 cup = 243 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 263,
+   "canonical": "uovo_albume",
+   "unit": "piece",
+   "grams": 33.0,
+   "variant": "crea_average",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "senza_fonte_usda"
+  },
+  {
+   "index": 264,
+   "canonical": "uovo_albume",
+   "unit": "cup",
+   "grams": 243.0,
+   "variant": "cup_us_240ml",
+   "fdc_id": 172183,
+   "usda_description": "Egg, white, raw, fresh",
+   "usda_portions": [
+    "1 large = 33 g",
+    "1 cup = 243 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 265,
+   "canonical": "trace:ground cloves",
+   "unit": "tsp",
+   "grams": 2.1,
+   "variant": "ground",
+   "fdc_id": 171321,
+   "usda_description": "Spices, cloves, ground",
+   "usda_portions": [
+    "1 tsp = 2.1 g",
+    "1 tbsp = 6.5 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 266,
+   "canonical": "ghee",
+   "unit": "tbsp",
+   "grams": 12.8,
+   "variant": "tbsp",
+   "fdc_id": 171314,
+   "usda_description": "Butter, Clarified butter (ghee)",
+   "usda_portions": [],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 267,
+   "canonical": "ghee",
+   "unit": "tsp",
+   "grams": 4.3,
+   "variant": "tsp",
+   "fdc_id": 171314,
+   "usda_description": "Butter, Clarified butter (ghee)",
+   "usda_portions": [],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 268,
+   "canonical": "ghee",
+   "unit": "cup",
+   "grams": 205.0,
+   "variant": "cup_us_240ml",
+   "fdc_id": 171314,
+   "usda_description": "Butter, Clarified butter (ghee)",
+   "usda_portions": [],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 269,
+   "canonical": "trace:curry powder",
+   "unit": "tsp",
+   "grams": 2.0,
+   "variant": "ground",
+   "fdc_id": 170924,
+   "usda_description": "Spices, curry powder",
+   "usda_portions": [
+    "1 tsp = 2 g",
+    "1 tbsp = 6.3 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 270,
+   "canonical": "trace:curry powder",
+   "unit": "tbsp",
+   "grams": 6.3,
+   "variant": "tbsp",
+   "fdc_id": 170924,
+   "usda_description": "Spices, curry powder",
+   "usda_portions": [
+    "1 tsp = 2 g",
+    "1 tbsp = 6.3 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 271,
+   "canonical": "burro_arachidi",
+   "unit": "tbsp",
+   "grams": 16.0,
+   "variant": "tbsp_smooth",
+   "fdc_id": 174266,
+   "usda_description": "Peanut butter, smooth style, with salt (Includes foods for USDA's Food Distribution Program)",
+   "usda_portions": [
+    "2 tbsp = 32 g",
+    "1 cup = 258 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 272,
+   "canonical": "burro_arachidi",
+   "unit": "cup",
+   "grams": 258.0,
+   "variant": "cup_us_240ml",
+   "fdc_id": 174266,
+   "usda_description": "Peanut butter, smooth style, with salt (Includes foods for USDA's Food Distribution Program)",
+   "usda_portions": [
+    "2 tbsp = 32 g",
+    "1 cup = 258 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 273,
+   "canonical": "noci",
+   "unit": "piece",
+   "grams": 2.0,
+   "variant": "half_kernel",
+   "fdc_id": 170187,
+   "usda_description": "Nuts, walnuts, english",
+   "usda_portions": [
+    "1 cup, chopped = 117 g",
+    "1 cup, ground = 80 g",
+    "1 cup, in shell, edible yield (7 nuts) = 28 g",
+    "1 cup shelled (50 halves) = 100 g",
+    "1 cup pieces or chips = 120 g",
+    "1 oz (14 halves) = 28.35 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 274,
+   "canonical": "noci",
+   "unit": "cup",
+   "grams": 100.0,
+   "variant": "cup_halves_us_240ml",
+   "fdc_id": 170187,
+   "usda_description": "Nuts, walnuts, english",
+   "usda_portions": [
+    "1 cup, chopped = 117 g",
+    "1 cup, ground = 80 g",
+    "1 cup, in shell, edible yield (7 nuts) = 28 g",
+    "1 cup shelled (50 halves) = 100 g",
+    "1 cup pieces or chips = 120 g",
+    "1 oz (14 halves) = 28.35 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 275,
+   "canonical": "noci",
+   "unit": "cup",
+   "grams": 117.0,
+   "variant": "cup_chopped_us_240ml",
+   "fdc_id": 170187,
+   "usda_description": "Nuts, walnuts, english",
+   "usda_portions": [
+    "1 cup, chopped = 117 g",
+    "1 cup, ground = 80 g",
+    "1 cup, in shell, edible yield (7 nuts) = 28 g",
+    "1 cup shelled (50 halves) = 100 g",
+    "1 cup pieces or chips = 120 g",
+    "1 oz (14 halves) = 28.35 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 276,
+   "canonical": "rosmarino_fresco",
+   "unit": "tsp",
+   "grams": 0.7,
+   "variant": "fresh_needles",
+   "fdc_id": 173473,
+   "usda_description": "Rosemary, fresh",
+   "usda_portions": [
+    "1 tsp = 0.7 g",
+    "1 tbsp = 1.7 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 277,
+   "canonical": "rosmarino_fresco",
+   "unit": "sprig",
+   "grams": 1.0,
+   "variant": "sprig_fresh",
+   "fdc_id": 173473,
+   "usda_description": "Rosemary, fresh",
+   "usda_portions": [
+    "1 tsp = 0.7 g",
+    "1 tbsp = 1.7 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 278,
+   "canonical": "rosmarino_fresco",
+   "unit": "sprig",
+   "grams": null,
+   "variant": "trace",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 279,
+   "canonical": "rosmarino_fresco",
+   "unit": "tbsp",
+   "grams": 1.7,
+   "variant": "tbsp_needles",
+   "fdc_id": 173473,
+   "usda_description": "Rosemary, fresh",
+   "usda_portions": [
+    "1 tsp = 0.7 g",
+    "1 tbsp = 1.7 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 280,
+   "canonical": "zucchine_crude",
+   "unit": "piece",
+   "grams": 196.0,
+   "variant": "medium",
+   "fdc_id": 169291,
+   "usda_description": "Squash, summer, zucchini, includes skin, raw",
+   "usda_portions": [
+    "1 cup, chopped = 124 g",
+    "1 cup, sliced = 113 g",
+    "1 large = 323 g",
+    "1 medium = 196 g",
+    "1 slice = 9.9 g",
+    "1 small = 118 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 281,
+   "canonical": "zucchine_crude",
+   "unit": "piece",
+   "grams": 118.0,
+   "variant": "small",
+   "fdc_id": 169291,
+   "usda_description": "Squash, summer, zucchini, includes skin, raw",
+   "usda_portions": [
+    "1 cup, chopped = 124 g",
+    "1 cup, sliced = 113 g",
+    "1 large = 323 g",
+    "1 medium = 196 g",
+    "1 slice = 9.9 g",
+    "1 small = 118 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 282,
+   "canonical": "zucchine_crude",
+   "unit": "piece",
+   "grams": 323.0,
+   "variant": "large",
+   "fdc_id": 169291,
+   "usda_description": "Squash, summer, zucchini, includes skin, raw",
+   "usda_portions": [
+    "1 cup, chopped = 124 g",
+    "1 cup, sliced = 113 g",
+    "1 large = 323 g",
+    "1 medium = 196 g",
+    "1 slice = 9.9 g",
+    "1 small = 118 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 283,
+   "canonical": "zucchine_crude",
+   "unit": "piece",
+   "grams": 150.0,
+   "variant": "crea_average",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "approvata"
+  },
+  {
+   "index": 284,
+   "canonical": "zucchine_crude",
+   "unit": "cup",
+   "grams": 113.0,
+   "variant": "cup_sliced_us_240ml",
+   "fdc_id": 169291,
+   "usda_description": "Squash, summer, zucchini, includes skin, raw",
+   "usda_portions": [
+    "1 cup, chopped = 124 g",
+    "1 cup, sliced = 113 g",
+    "1 large = 323 g",
+    "1 medium = 196 g",
+    "1 slice = 9.9 g",
+    "1 small = 118 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 285,
+   "canonical": "zucchine_crude",
+   "unit": "slice",
+   "grams": 9.9,
+   "variant": "slice",
+   "fdc_id": 169291,
+   "usda_description": "Squash, summer, zucchini, includes skin, raw",
+   "usda_portions": [
+    "1 cup, chopped = 124 g",
+    "1 cup, sliced = 113 g",
+    "1 large = 323 g",
+    "1 medium = 196 g",
+    "1 slice = 9.9 g",
+    "1 small = 118 g"
+   ],
+   "verdict": "approvata"
+  },
+  {
+   "index": 286,
+   "canonical": "feta",
+   "unit": "totaste",
+   "grams": null,
+   "variant": "trace",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 287,
+   "canonical": "semi_sesamo",
+   "unit": "totaste",
+   "grams": null,
+   "variant": "trace",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 288,
+   "canonical": "semi_sesamo",
+   "unit": "tbsp",
+   "grams": 9.0,
+   "variant": "tbsp",
+   "fdc_id": 170150,
+   "usda_description": "Seeds, sesame seeds, whole, dried",
+   "usda_portions": [
+    "1 cup = 144 g",
+    "1 tbsp = 9 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 289,
+   "canonical": "semi_sesamo",
+   "unit": "tsp",
+   "grams": 3.0,
+   "variant": "tsp",
+   "fdc_id": 170150,
+   "usda_description": "Seeds, sesame seeds, whole, dried",
+   "usda_portions": [
+    "1 cup = 144 g",
+    "1 tbsp = 9 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 290,
+   "canonical": "prezzemolo_fresco",
+   "unit": "sprig",
+   "grams": 1.0,
+   "variant": "sprig",
+   "fdc_id": 170416,
+   "usda_description": "Parsley, fresh",
+   "usda_portions": [
+    "1 cup chopped = 60 g",
+    "1 tbsp = 3.8 g",
+    "10 sprigs = 10 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 291,
+   "canonical": "prezzemolo_fresco",
+   "unit": "sprig",
+   "grams": null,
+   "variant": "trace",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "non_verificata_qui (densità o traccia)"
+  },
+  {
+   "index": 292,
+   "canonical": "prezzemolo_fresco",
+   "unit": "tbsp",
+   "grams": 3.8,
+   "variant": "tbsp_chopped",
+   "fdc_id": 170416,
+   "usda_description": "Parsley, fresh",
+   "usda_portions": [
+    "1 cup chopped = 60 g",
+    "1 tbsp = 3.8 g",
+    "10 sprigs = 10 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 293,
+   "canonical": "prezzemolo_fresco",
+   "unit": "cup",
+   "grams": 60.0,
+   "variant": "cup_chopped_us_240ml",
+   "fdc_id": 170416,
+   "usda_description": "Parsley, fresh",
+   "usda_portions": [
+    "1 cup chopped = 60 g",
+    "1 tbsp = 3.8 g",
+    "10 sprigs = 10 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 294,
+   "canonical": "finocchi_crudi",
+   "unit": "tbsp",
+   "grams": 5.8,
+   "variant": "tbsp_seeds",
+   "fdc_id": 171323,
+   "usda_description": "Spices, fennel seed",
+   "usda_portions": [
+    "1 tsp, whole = 2 g",
+    "1 tbsp, whole = 5.8 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 295,
+   "canonical": "finocchi_crudi",
+   "unit": "tsp",
+   "grams": 1.9,
+   "variant": "tsp_seeds",
+   "fdc_id": 171323,
+   "usda_description": "Spices, fennel seed",
+   "usda_portions": [
+    "1 tsp, whole = 2 g",
+    "1 tbsp, whole = 5.8 g"
+   ],
+   "verdict": "valore_coerente_da_rivedere (unità, stato o canonico non approvato)"
+  },
+  {
+   "index": 296,
+   "canonical": "finocchi_crudi",
+   "unit": "piece",
+   "grams": 234.0,
+   "variant": "medium_bulb",
+   "fdc_id": 2747655,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "fdc_id_non_in_sr_legacy"
+  },
+  {
+   "index": 297,
+   "canonical": "finocchi_crudi",
+   "unit": "piece",
+   "grams": 200.0,
+   "variant": "crea_average",
+   "fdc_id": null,
+   "usda_description": null,
+   "usda_portions": [],
+   "verdict": "senza_fonte_usda"
+  },
+  {
+   "index": 298,
+   "canonical": "gamberi_sgusciati",
+   "unit": "piece",
+   "grams": 15.0,
+   "variant": "large_shrimp",
+   "fdc_id": 175179,
+   "usda_description": "Crustaceans, shrimp, raw",
+   "usda_portions": [
+    "3 oz = 85 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 299,
+   "canonical": "gamberi_sgusciati",
+   "unit": "piece",
+   "grams": 10.0,
+   "variant": "medium_shrimp",
+   "fdc_id": 175179,
+   "usda_description": "Crustaceans, shrimp, raw",
+   "usda_portions": [
+    "3 oz = 85 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  },
+  {
+   "index": 300,
+   "canonical": "gamberi_sgusciati",
+   "unit": "piece",
+   "grams": 22.0,
+   "variant": "jumbo_shrimp",
+   "fdc_id": 175179,
+   "usda_description": "Crustaceans, shrimp, raw",
+   "usda_portions": [
+    "3 oz = 85 g"
+   ],
+   "verdict": "valore_non_trovato_nella_voce_citata"
+  }
+ ]
+}
