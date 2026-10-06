@@ -3426,3 +3426,24 @@ a.button-link {
   width: auto;
   margin: 0;
 }
+.targets-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.targets-table th,
+.targets-table td {
+  padding: 5px 6px;
+  text-align: right;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.targets-table th:first-child,
+.targets-table td:first-child {
+  text-align: left;
+}
+.targets-table td.changed {
+  font-weight: 700;
+  color: var(--brand-strong);
+}

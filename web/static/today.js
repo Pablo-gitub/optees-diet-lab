@@ -937,15 +937,28 @@ async function saveProfilePatch(patch) {
   });
   Object.assign(profile, patch);
 }
+// Order-independent comparison of {type: {nutrient: {min, target, max}}}.
+function sameTargets(a, b) {
+  const flat = (t) =>
+    JSON.stringify(
+      Object.entries(t || {})
+        .flatMap(([type, v]) => Object.entries(v || {}).flatMap(([k, r]) => ['min', 'target', 'max'].map((p) => [type, k, p, r?.[p] ?? null])))
+        .sort((x, y) => String(x).localeCompare(String(y))),
+    );
+  return flat(a) === flat(b);
+}
 async function jointRequest() {
   const day_targets = readJointTargets();
   const energy_balance_target_kcal = readBalance();
-  if (JSON.stringify(day_targets) !== JSON.stringify(profile.day_type_targets) || energy_balance_target_kcal !== profile.energy_balance_target_kcal)
+  const edited = !sameTargets(day_targets, profile.day_type_targets);
+  if (edited || energy_balance_target_kcal !== profile.energy_balance_target_kcal)
     await saveProfilePatch({ day_type_targets: day_targets, energy_balance_target_kcal });
   jointSave({ targets: undefined, balance: undefined });
+  // Unchanged targets are omitted so the server can use the per-date targets approved from activity (8.5).
+  const approvedPerDate = !edited && profile.approved_activity_targets;
   return {
     week_start: $('week-start').value,
-    day_targets,
+    ...(approvedPerDate ? {} : { day_targets }),
     energy_balance_target_kcal,
     workout: { ...readAvailability($('joint-availability')), demo: true },
   };

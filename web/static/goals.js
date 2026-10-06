@@ -279,7 +279,7 @@ function renderGoals(open) {
       }, (data) => api('goals/strength-anchors', 'PUT', { anchors: data })),
     );
 
-  panel.append(energyProposalBlock());
+  panel.append(energyProposalBlock(), dayTargetsBlock());
   const missing = goals.missing || [];
   if (missing.length) {
     const box = element('details', undefined, 'goal-missing');
@@ -350,6 +350,113 @@ function energyProposalCard(p, out) {
       }
     };
     bar.append(b);
+  });
+  card.append(bar);
+  return card;
+}
+
+// 8.5 — target quotidiani proposti dall'attività della settimana.
+function dayTargetsBlock() {
+  const box = element('div', undefined, 'goal-energy');
+  box.append(
+    element('h3', 'Target del giorno dall’attività'),
+    element('p', 'Calorie di ogni giorno = base senza allenamenti + energia prudente di allenamenti e attività + bilancio approvato. Proteine costanti per kg, grassi protetti, i carboidrati assorbono la differenza.', 'muted small'),
+  );
+  const today = isoDate(new Date());
+  const week = element('select');
+  week.setAttribute('aria-label', 'Settimana');
+  [
+    [mondayOf(today), 'Questa settimana'],
+    [addDays(mondayOf(today), 7), 'Prossima settimana'],
+  ].forEach(([v, t]) => {
+    const o = element('option', t + ' (' + shortDate(v) + ')');
+    o.value = v;
+    week.append(o);
+  });
+  const base = numberInput('', 1000, 6000, 10);
+  base.placeholder = 'automatica';
+  const row = element('div', undefined, 'goal-grid');
+  row.append(goalsField('Settimana', week), goalsField('Base senza allenamenti (kcal)', base, 'Facoltativa: vuota usa Salute o la stima dal profilo'));
+  const out = element('div');
+  const ask = element('button', 'Calcola la proposta', 'secondary small');
+  ask.type = 'button';
+  ask.onclick = async () => {
+    ask.disabled = true;
+    out.replaceChildren(element('p', 'Calcolo…', 'muted small'));
+    const body = { week_start: week.value };
+    if (base.value !== '') body.estimated_non_workout_kcal = Number(base.value);
+    try {
+      const r = await api('goals/day-targets/proposal', 'POST', body);
+      out.replaceChildren(r.status === 'available' ? dayTargetsCard(r.proposal, out) : element('p', r.reason || 'Proposta non disponibile.', 'notice'));
+    } catch (e) {
+      out.replaceChildren(element('p', e.message, 'error'));
+    } finally {
+      ask.disabled = false;
+    }
+  };
+  box.append(row, ask, out);
+  return box;
+}
+
+function dayTargetsCard(p, out) {
+  const card = element('article', undefined, 'card proposal-card');
+  const b = p.baseline || {};
+  const facts = [];
+  facts.push('Base ' + fmt0(b.central_kcal) + ' kcal (' + (b.source === 'user_declared_non_workout_estimate' ? 'dichiarata da te' : b.source === 'current_target_minus_approved_balance_estimate' ? 'stimata dal profilo, non misurata' : 'da Salute') + ')');
+  facts.push('bilancio approvato ' + (p.energy_balance_target_kcal > 0 ? '+' : '') + fmt0(p.energy_balance_target_kcal) + ' kcal');
+  if (p.weight) facts.push('peso filtrato ' + fmt1(p.weight.value_kg) + ' kg (' + parseDate(p.weight.date).toLocaleDateString('it-IT') + ')');
+  const pr = p.parameters || {};
+  if (pr.protein_g_per_kg) facts.push('proteine ' + fmt1(pr.protein_g_per_kg) + ' g/kg, come già scelto');
+  card.append(element('p', facts.join(' · ')));
+  const table = element('table', undefined, 'targets-table');
+  const head = element('tr');
+  ['Giorno', 'Attività', 'Ora', 'Richiesto', 'Proposto', 'P · C · G'].forEach((h) => head.append(element('th', h)));
+  table.append(head);
+  let limited = false;
+  (p.days || []).forEach((d) => {
+    const tr = element('tr');
+    const t = d.targets || {};
+    const prev = d.before?.kcal_100g?.target ?? d.proposed_kcal - (d.delta_kcal || 0);
+    if (d.limited) limited = true;
+    tr.append(
+      element('td', parseDate(d.date).toLocaleDateString('it-IT', { weekday: 'short', day: 'numeric' })),
+      element('td', d.net_activity_low_kcal ? '+' + fmt0(d.net_activity_low_kcal) : '—'),
+      element('td', fmt0(prev)),
+      element('td', fmt0(d.requested_kcal)),
+      element('td', fmt0(d.proposed_kcal) + (d.limited ? ' *' : ''), d.delta_kcal ? 'changed' : ''),
+      element('td', [t.protein_g_100g, t.carbs_available_g_100g, t.fat_g_100g].map((x) => fmt0(x?.target)).join(' · ')),
+    );
+    table.append(tr);
+  });
+  const wrap = element('div', undefined, 'table-scroll');
+  wrap.append(table);
+  card.append(wrap);
+  if (limited) card.append(element('p', '* Variazione limitata a ' + fmt0(pr.maximum_weekly_change_kcal || 100) + ' kcal o 5% a settimana: il resto arriverà gradualmente.', 'muted small'));
+  const ul = element('ul', undefined, 'reasons');
+  (p.reasoning || []).forEach((r) => ul.append(element('li', r)));
+  [...new Set([b.uncertainty, ...(p.uncertainty || [])].filter(Boolean))].forEach((r) => ul.append(element('li', r, 'tradeoff')));
+  card.append(ul);
+  const bar = element('div', undefined, 'meal-actions');
+  [
+    ['approve', 'Usa i valori proposti', 'primary small'],
+    ['reject', 'Mantieni i valori attuali', 'ghost small'],
+  ].forEach(([decision, text, cls]) => {
+    const btn = element('button', text, cls);
+    btn.type = 'button';
+    btn.onclick = async () => {
+      bar.querySelectorAll('button').forEach((x) => (x.disabled = true));
+      try {
+        const r = await api('goals/day-targets/proposal/' + p.id + '/' + decision, 'POST', { state_token: p.state_token });
+        if (r.targets_changed) {
+          profile = (await api('profile')).profile;
+          planningReady = false;
+        }
+        out.replaceChildren(element('p', r.targets_changed ? 'Target aggiornati. Rigenera il piano della settimana per applicarli: pasti e allenamenti già applicati non cambiano.' : 'Proposta scartata, nulla è cambiato.', 'notice'));
+      } catch (e) {
+        out.replaceChildren(element('p', e.status === 409 ? 'Dati, programma o profilo sono cambiati: ricalcola la proposta.' : e.message, 'error'));
+      }
+    };
+    bar.append(btn);
   });
   card.append(bar);
   return card;
