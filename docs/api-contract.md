@@ -724,3 +724,124 @@ Dopo `apply` le attività sono `chosen`, confermabili via API attività; se salt
 B13 ripristina una volta il **credito basso realmente utilizzato**, non lo
 scenario alto. Budget precedente conserva la correzione totale; il limite
 cumulativo del cibo conserva separatamente la riduzione alimentare.
+
+### 8.7 — Piatti bloccati e ricette preferite
+
+Tutte le letture richiedono autenticazione; PUT/DELETE richiedono CSRF. Dati per
+utente nel DB locale, indipendenti da PUT /api/profile.
+
+`PUT /api/recipes/demo:pasta-pomodoro/preferred`:
+
+```json
+{"preferred":true}
+```
+
+Risposta (anche per `false`):
+
+```json
+{"recipe_id":"demo:pasta-pomodoro","preferred":true}
+```
+
+`GET /api/recipes/preferences`:
+
+```json
+{"recipes":[{"recipe_id":"demo:pasta-pomodoro","title":"Pasta al pomodoro","preferred":true,"solver_status":"ready","reason":null},{"recipe_id":"unitools:example","title":"Ricetta da verificare","preferred":true,"solver_status":"unavailable","reason":"Ricetta non ancora pronta per il solver"}],"review_queue":[{"recipe_id":"unitools:example","title":"Ricetta da verificare","preferred":true,"solver_status":"unavailable","reason":"Ricetta non ancora pronta per il solver","priority":"preferred_first","ingredients":["Ingrediente da verificare"]}],"limits":{"max_occurrences_per_week":2,"max_portions":3,"objective_bonus":0.02}}
+```
+
+`review_queue` contiene le preferite sospese, presenti anche in `recipes`. Il catalogo
+`GET /api/recipes` aggiunge `preferred` a ogni ricetta; il filtro `preferred`
+preesistente resta relativo alle cucine. Esporta questa risposta localmente e
+passa `--recipe-preferences-file file.json` al matcher: i canonici non approvati
+delle ricette in `review_queue` vanno prima per `preferred_recipe_priority:true`,
+poi resta l'ordine di frequenza. Nessuna approvazione o invio automatico a Gemini.
+404 `recipe_not_found` per id inesistente; una ricetta non pronta può comunque
+ricevere il cuore, ma entra solo nella coda di revisione.
+
+`PUT /api/week/2026-10-05/locked-dishes`, uno di questi corpi:
+
+```json
+{"date":"2026-10-08","slot":"dinner","recipe":{"id":"demo:pasta-pomodoro","portions":1}}
+```
+
+```json
+{"date":"2026-10-08","slot":"dinner","preset":{"id":"pizzeria","size":"medio"}}
+```
+
+```json
+{"date":"2026-10-08","slot":"dinner","custom":{"kcal":{"min":500,"max":600},"protein_g":{"min":25,"max":35},"fat_g":{"min":10,"max":20},"carbs_available_g":{"min":50,"max":65}}}
+```
+
+Risposte:
+
+```json
+{"week_start":"2026-10-05","locked_dish":{"date":"2026-10-08","slot":"dinner","kind":"recipe","recipe":{"id":"demo:pasta-pomodoro","portions":1},"title":"Pasta al pomodoro"},"effect":"next_generation_only"}
+```
+
+```json
+{"week_start":"2026-10-05","locked_dish":{"date":"2026-10-08","slot":"dinner","kind":"estimate","title":"Piatto stimato","food_id":"f0a123456789abcdef0123456","nutrients":{"kcal":{"min":500,"max":600},"protein_g":{"min":25,"max":35},"fat_g":{"min":10,"max":20},"carbs_available_g":{"min":50,"max":65}},"provenance":{"source":"user_estimate","description":"Intervallo dichiarato dall’utente"}},"effect":"next_generation_only"}
+```
+
+`GET /api/week/2026-10-05/locked-dishes`:
+
+```json
+{"week_start":"2026-10-05","locked_dishes":[{"week_start":"2026-10-05","date":"2026-10-08","slot":"dinner","kind":"recipe","recipe":{"id":"demo:pasta-pomodoro","portions":1},"title":"Pasta al pomodoro"}]}
+```
+
+`DELETE /api/week/2026-10-05/locked-dishes/2026-10-08/dinner`:
+
+```json
+{"week_start":"2026-10-05","date":"2026-10-08","slot":"dinner","deleted":true,"effect":"next_generation_only"}
+```
+
+Sono ammessi solo pranzo/cena futuri, dentro la settimana, porzioni intere 1–3
+e peso totale <=3000 g. Preset senza valori rifiutati, mai zero. Un piatto
+registrato nel diario non si può cambiare (409 `slot_already_logged`). Salvataggio
+e cancellazione non sostituiscono i pasti applicati; liberano un eventuale
+blocco futuro ancora non consumato per permettere la successiva rigenerazione.
+
+`POST /api/plans/week` e `/api/plans/joint-week` usano automaticamente le
+intenzioni salvate. Accettano anche `locked_dishes:[...]` con gli stessi corpi
+(di sola generazione, non persistiti come intenzioni). I blocchi alimentari
+`locked` e i pasti già registrati restano protetti; duplicati espliciti rifiutati.
+Le preferite sono rami facoltativi del MILP con premio morbido, porzioni intere
+e max 2 presenze/settimana (parametri in `config/recipe-week-policy.json`).
+Nutrienti ricalcolati sui candidati approvati per ingrediente, prodotti di marca
+revisionati prima del generico. Nessun ingrediente non approvato entra nel modello.
+La massa di riferimento viene normalizzata al passo di 5 g (max 2,5 g), conservando
+le proporzioni e **ricalcolando** i nutrienti sui pesi effettivi normalizzati.
+La ricetta è completabile con contorni/alimenti; nelle diete personali entrano
+solo rami semantici verificati, con complementi obbligatori quando richiesti.
+Le stime senza ingredienti non certificano gli abbinamenti delle diete personali:
+`dish_compatibility_unavailable`, scegliere ricetta verificata o modalità libera.
+
+Piani nuovi, campi aggiuntivi:
+
+```json
+{"recipe_preferences":[{"recipe_id":"demo:pasta-pomodoro","inserted":true,"reason":null},{"recipe_id":"unitools:example","inserted":false,"reason":"Ricetta non ancora pronta per il solver"}],"constraint_report":{"recipe_frequencies":{"demo:pasta-pomodoro":2}},"anticipatory_rebalance":{"status":"partial","target_week_kcal":12600,"planned_week_kcal":{"min":12550,"max":12650},"worst_deviation_kcal":50,"limits":{"maximum_energy_deficit_kcal":500,"maximum_daily_target_adjustment_kcal":200,"maximum_spread_kcal":25},"explanation":"Bilancio settimanale ottimizzato senza rilassare i minimi: scostamento residuo mostrato anche quando un rientro completo non entra nei limiti."},"days":[{"date":"2026-10-08","locked_slots":["dinner"],"selections":[{"meal":"dinner","source":"recipe","reference_id":"approved:demo:pasta-pomodoro:hash","recipe_id":"demo:pasta-pomodoro","units":1,"grams":245}],"nutrient_ranges":{"kcal":{"min":1750,"max":1850}}}]}
+```
+
+Il rientro anticipato protegge i minimi e il deficit giornaliero 500 kcal,
+limita la variazione rispetto al target a ±200 kcal, distribuisce la correzione
+sui giorni senza piatti scelti entro 25 kcal; ottimizza lo scostamento energetico
+settimanale peggiore sugli estremi delle stime. In giornata intera serve una
+base energetica bassa recente da Salute o una stima approvata (8.5), comprensiva
+delle sessioni nella generazione congiunta, senza doppio conteggio.
+Il blocco richiede target personali confermati per la giornata intera, altrimenti
+`full_day_targets_required`. Senza base: job fallito `energy_scenario_unavailable`; vincoli incompatibili:
+`infeasible`, nessuna soluzione o rilassamento automatico. Il residuo viene
+mostrato; la mancata selezione di una preferita non prova impossibilità.
+
+Dopo applicazione, composizione/marca/nutrienti restano in snapshot per utente:
+cambiare preferiti non riscrive il piano. DayView `planned.nutrient_ranges`
+contiene gli intervalli (null se tutto esatto); `nutrition_basis` è
+`interval_midpoint` oppure `verified_food_values`. I totali puntuali preesistenti
+sono **valori centrali** quando c'è una stima. Il PDF esplicita gli intervalli;
+la spesa di un piatto stimato resta `partial`, con motivo in `unresolved`.
+Confermare uno di questi piatti conserva `consumed_estimate`/`eaten_range` e
+`eaten.kcal:null`; conferma idempotente, niente finti grammi consumati o zero.
+
+Il rientro con attività aggiorna anche gli scenari energetici dei giorni
+modificati: una seconda anteprima mantiene il deficit massimo includendo il
+dispendio già aggiunto. Il rientro anticipato della sola dieta considera le
+sessioni già pianificate; se il loro dispendio non è verificabile richiede la
+generazione congiunta/configurazione energetica invece di ignorarlo.

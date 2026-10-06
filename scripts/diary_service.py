@@ -1,3 +1,4 @@
+import copy
 """Owner-scoped planned meals, consumed meals and manual measurements."""
 import datetime as dt
 import json
@@ -47,6 +48,8 @@ def migrate(db):
     rebalance_migrate(db)
     from workout_service import migrate as workout_migrate
     workout_migrate(db)
+    from recipe_intents import migrate as intent_migrate
+    intent_migrate(db)
 
 def local_today():return dt.datetime.now(ZoneInfo('Europe/Rome')).date()
 
@@ -79,7 +82,7 @@ def numeric(value):
 
 def resolve_food(ref,profile):
     if not isinstance(ref,dict) or set(ref)!= {'source','id'} or not isinstance(ref['id'],str):raise DomainError('Riferimento alimento non valido')
-    source,identifier=ref['source'],ref['id'];unit=None;brand=None
+    source,identifier=ref['source'],ref['id'];unit=None;brand=None;recipe=None
     if source=='CREA':
         row=crea().get(identifier)
         if not row or identifier.startswith('recipe:'):raise DomainError('Alimento non trovato')
@@ -94,16 +97,22 @@ def resolve_food(ref,profile):
         row=products(profile.get('food_preferences',{})).get(identifier)
         if not row:raise DomainError('Etichetta personale non trovata')
         unit=row['serving_g'];brand=row.get('brand')
+    elif source=='dish_estimate':
+        dish=profile.get('_dish_estimates',{}).get(identifier)
+        if not dish:raise DomainError('Piatto stimato non trovato')
+        row=dict(name=dish['title'],**{n:sum(dish['nutrients'][n.replace('_100g','')].values())/2 for n in NUTRIENTS})
+        return dict(food=ref,name=row['name'],brand=None,source_label='stima a intervallo',unit_g=None,composition_provenance=None,nutrient_ranges=copy.deepcopy(dish['nutrients']),per_100g={n.replace('_100g',''):row[n] for n in NUTRIENTS})
     elif source=='recipe':
         if identifier=='vegetable_puree':row=crea()['recipe:vegetable_puree']
         else:
             recipe=profile.get('_recipe_runs',{}).get(identifier)
             if not recipe or recipe.get('status') not in ('optimal','feasible'):raise DomainError('Porzione di ricetta non trovata')
+            unit=recipe.get('unit_g')
             mass=sum(s['grams'] for s in recipe['selections'])
             if mass<=0:raise DomainError('Porzione di ricetta non valida')
             row=dict(name=recipe['title'],**{n:numeric(recipe['nutrients'].get('carbs_g' if n=='carbs_available_g_100g' else n.replace('_100g','')))*100/mass if numeric(recipe['nutrients'].get('carbs_g' if n=='carbs_available_g_100g' else n.replace('_100g',''))) is not None else None for n in NUTRIENTS})
     else:raise DomainError('Alimento non trovato')
-    return dict(food=ref,name=row['name'],brand=brand,source_label='database italiano generico' if source=='CREA' else 'marca' if source=='OFF' else 'etichetta personale' if source=='user_label' else 'ricetta',per_100g={n.replace('_100g',''):numeric(row.get(n)) for n in NUTRIENTS},unit_g=unit,composition_provenance=row.get('composition_provenance'))
+    return dict(food=ref,name=row['name'],brand=brand,source_label='database italiano generico' if source=='CREA' else 'marca' if source=='OFF' else 'etichetta personale' if source=='user_label' else 'ricetta',per_100g={n.replace('_100g',''):numeric(row.get(n)) for n in NUTRIENTS},unit_g=unit,recipe_id=recipe.get('recipe_id') if recipe else None,principal_food_id=recipe.get('principal_food_id') if recipe else None,composition_provenance=row.get('composition_provenance'))
 
 def quantity(data,food):
     grams=data.get('grams');units=data.get('units')
@@ -149,6 +158,16 @@ def day_view(db,user,profile,date):
         consumed=json.loads(estimated['payload']) if estimated else None
         meals.append(dict(consumed_estimate=consumed,eaten_range=consumed['nutrients'] if consumed else None,slot=slot,state=st,planned=dict(planned_meal_id=p['id'],role=p['role'],day_index=p['day_index'],status=p['status'],locked=bool(p['locked']),items=planned_items,**totals(planned_items)) if p else None,eaten=dict(items=eaten_items,**totals(eaten_items)) if st!='unknown' else None,actions=actions))
     for meal in meals:
+        if meal['planned']:
+            ranges={k:dict(min=0.,max=0.) for k in KEYS};uncertain=False
+            for item in meal['planned']['items']:
+                food=resolve_food(item['food'],profile);estimate=food.get('nutrient_ranges');uncertain|=bool(estimate)
+                for k in KEYS:
+                    for side in ('min','max'):
+                        value=estimate[k][side]*item['grams']/100 if estimate else item.get(k)
+                        ranges[k][side]=None if value is None or ranges[k][side] is None else ranges[k][side]+value
+            meal['planned']['nutrient_ranges']=ranges if uncertain else None
+            meal['planned']['nutrition_basis']='interval_midpoint' if uncertain else 'verified_food_values'
         if meal['consumed_estimate'] and meal['eaten'] is not None:meal['eaten'].update({key:None for key in KEYS})
     targets=json.loads(week['targets']) if week else (profile.get('daily_meals',{}).get('targets') if profile.get('daily_meals',{}).get('enabled') else profile['targets'])
     context=json.loads(week['day_context'] or '{}').get(date,{}) if week else {}
@@ -172,11 +191,22 @@ def diary_mutation(db,user,profile,action,data,entry_id=None):
         date,slot=entry['date'],entry['slot']
     else:date,slot=data.get('date'),data.get('slot')
     valid_date(date,True);valid_slot(slot);p=planned(db,user,date,slot);st=state(db,user,date,slot)
+    interval_row=db.execute('SELECT payload FROM consumed_estimate WHERE user_id=? AND date=? AND slot=?',(user,date,slot)).fetchone()
+    if action=='confirm' and st=='as_planned' and interval_row and json.loads(interval_row['payload']).get('provenance',{}).get('registration')=='planned_dish_estimate':return day_view(db,user,profile,date)
     if db.execute('SELECT 1 FROM consumed_estimate WHERE user_id=? AND date=? AND slot=?',(user,date,slot)).fetchone() and action not in ('skip','reset'):raise DomainError('Questo pasto ha una stima a intervallo: azzera prima di modificarlo','estimated_slot',409)
     if action=='confirm':
         if not p:raise DomainError('Pasto pianificato non trovato','not_found',404)
         if st=='as_planned':return day_view(db,user,profile,date)
         if st!='unknown':raise DomainError('Pasto già registrato','slot_already_logged',409)
+        estimates=[profile.get('_dish_estimates',{}).get(item['food']['id']) for item in json.loads(p['items']) if item['food']['source']=='dish_estimate']
+        if estimates:
+            meal=next(m for m in day_view(db,user,profile,date)['meals'] if m['slot']==slot)
+            if not meal['planned'].get('nutrient_ranges'):raise DomainError('Intervallo del piatto non disponibile')
+            payload=dict(date=date,slot=slot,nutrients=meal['planned']['nutrient_ranges'],provenance=dict(estimates[0]['provenance'],registration='planned_dish_estimate'))
+            db.execute('INSERT INTO consumed_estimate VALUES(?,?,?,?,?)',(user,date,slot,json.dumps(payload),time.time()));set_state(db,user,date,slot,'as_planned')
+            from progress_analysis import invalidate_forecast
+            invalidate_forecast(db,user,date,'consumed_interval_estimate')
+            return day_view(db,user,profile,date)
         for item in json.loads(p['items']):
             food=resolve_food(item['food'],profile);grams,units=quantity(item,food)
             db.execute('INSERT INTO diary_entry(user_id,date,slot,food,grams,units,origin,planned_meal_id,created,updated) VALUES(?,?,?,?,?,?,?,?,?,?)',(user,date,slot,json.dumps(item['food']),grams,units,'planned',p['id'],time.time(),time.time()))
@@ -185,10 +215,13 @@ def diary_mutation(db,user,profile,action,data,entry_id=None):
         db.execute('DELETE FROM consumed_estimate WHERE user_id=? AND date=? AND slot=?',(user,date,slot))
         db.execute('DELETE FROM diary_entry WHERE user_id=? AND date=? AND slot=?',(user,date,slot));set_state(db,user,date,slot,'skipped' if action=='skip' else 'unknown')
     elif action=='add':
-        ref=data.get('food');food=resolve_food(ref,profile);grams,units=quantity(data,food)
+        ref=data.get('food');food=resolve_food(ref,profile)
+        if food.get('nutrient_ranges'):raise DomainError('Una stima a intervallo si registra confermando il piatto pianificato, non aggiungendo grammi fittizi','interval_food_unsupported')
+        grams,units=quantity(data,food)
         db.execute('INSERT INTO diary_entry(user_id,date,slot,food,grams,units,origin,planned_meal_id,created,updated) VALUES(?,?,?,?,?,?,?,?,?,?)',(user,date,slot,json.dumps(ref),grams,units,'added',p['id'] if p else None,time.time(),time.time()));set_state(db,user,date,slot,'modified' if p else 'unplanned')
     elif action=='edit':
         food=resolve_food(json.loads(entry['food']),profile);values=dict(data)
+        if food.get('nutrient_ranges'):raise DomainError('Una stima a intervallo non si modifica come alimento pesato','interval_food_unsupported')
         if 'grams' not in values and 'units' not in values:raise DomainError('Quantità mancante')
         grams,units=quantity(values,food)
         db.execute('UPDATE diary_entry SET grams=?,units=?,updated=? WHERE id=? AND user_id=?',(grams,units,time.time(),entry_id,user));set_state(db,user,date,slot,'modified' if p else 'unplanned')
@@ -211,11 +244,13 @@ def week_view(db,user,profile,start):
     return dict(week_start=start,plan_status=week['status'] if week else None,days=days,budget=dict(kcal_target=sum(v['targets']['kcal']['target'] for v in views),kcal_planned=sum_known(planned_values),kcal_eaten=sum_known(eaten_values) if eaten_values else None,kcal_remaining_planned=sum_known(remaining) if week else None,complete_days=sum(v['totals']['coverage']['planned_slots']>0 and v['totals']['coverage']['logged_slots']==v['totals']['coverage']['planned_slots'] for v in views)),workouts=workout_counts(db,user,start))
 
 def apply_plan(db,user,profile,plan_set,plan,data):
+    from recipe_intents import persist_snapshots
     scope=data.get('scope')
     if isinstance(data.get('plan_id'),bool) or not isinstance(data.get('plan_id'),int):raise DomainError('Identificativo piano non valido')
     if plan_set.get('slot') and (scope!='meal' or data.get('date')!=plan_set.get('date') or data.get('slot')!=plan_set['slot']):raise DomainError('Alternativa riferita a un altro pasto')
     start=plan_set.get('week_start',data.get('date'));valid_date(start)
     if scope not in ('week','day','meal'):raise DomainError('Ambito non valido')
+    persist_snapshots(db,user,profile,plan)
     dates=[(dt.date.fromisoformat(start)+dt.timedelta(days=i)).isoformat() for i in range(7)] if scope=='week' else [valid_date(data.get('date'))]
     if scope=='meal':valid_slot(data.get('slot'))
     if scope=='week' and len(plan.get('days',[]))!=7:raise DomainError('Piano non settimanale')
@@ -244,7 +279,7 @@ def apply_plan(db,user,profile,plan_set,plan,data):
                 elif identifier.startswith('recipe:'):source='recipe';identifier=identifier.split(':',1)[1]
                 item=dict(food=dict(source=source,id=identifier),grams=s['grams'],units=s.get('units'))
                 quantity(item,resolve_food(item['food'],profile));items.append(item)
-            db.execute("INSERT INTO planned_meal(week_plan_id,date,slot,items,role,status,locked,day_index) VALUES(?,?,?,?,?,'chosen',?,?) ON CONFLICT(week_plan_id,date,slot) DO UPDATE SET items=excluded.items,role=excluded.role,status='chosen',day_index=excluded.day_index",(id,date,slot,json.dumps(items),plan.get('role','best'),int(slot in day.get('locked_slots',[])),day.get('day_index',0)));applied.append(dict(date=date,slot=slot))
+            db.execute("INSERT INTO planned_meal(week_plan_id,date,slot,items,role,status,locked,day_index) VALUES(?,?,?,?,?,'chosen',?,?) ON CONFLICT(week_plan_id,date,slot) DO UPDATE SET items=excluded.items,role=excluded.role,status='chosen',day_index=excluded.day_index,locked=excluded.locked",(id,date,slot,json.dumps(items),plan.get('role','best'),int(slot in day.get('locked_slots',[])),day.get('day_index',0)));applied.append(dict(date=date,slot=slot))
     if plan_set.get('kind')!='joint':
         from progress_analysis import invalidate_forecast
         for date in {item['date'] for item in applied}:invalidate_forecast(db,user,date)

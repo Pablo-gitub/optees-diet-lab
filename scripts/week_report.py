@@ -55,14 +55,17 @@ def render(db,user,profile,start,include_all=False,today=None):
             if not meal['planned']:line('Nessun pasto pianificato.');continue
             rows=[['Alimento','Quantità']]
             for item in meal['planned']['items']:
-                rows.append([item['name'],number(item['grams'])+' g'])
+                rows.append([item['name'],'Stima a intervallo' if item['food']['source']=='dish_estimate' else number(item['grams'])+' g'])
                 if item['food']['source']=='recipe':
                     recipe=profile.get('_recipe_runs',{}).get(item['food']['id'])
                     if recipe:
                         mass=sum(part['grams'] for part in recipe['selections'])
                         rows.extend([['  '+(part.get('food') or part['ingredient']),number(part['grams']*item['grams']/mass)+' g'] for part in recipe['selections']])
                         rows.extend([['  '+part['name'],'in traccia'] for part in recipe.get('trace_condiments',[])])
-            table(rows,[365,125]);line('Stato del diario: '+{'unknown':'da registrare','as_planned':'consumato come previsto','modified':'consumato con modifiche','skipped':'saltato'}.get(meal['state'],meal['state']))
+            table(rows,[365,125])
+            interval=meal['planned'].get('nutrient_ranges')
+            if interval:line('Stima: '+' | '.join(LABELS[k]+': '+number(interval[k]['min'])+' – '+number(interval[k]['max']) for k in LABELS))
+            line('Stato del diario: '+{'unknown':'da registrare','as_planned':'consumato come previsto','modified':'consumato con modifiche','skipped':'saltato'}.get(meal['state'],meal['state']))
         heading('Obiettivi e nutrienti della giornata')
         line('Obiettivi: '+' | '.join(LABELS.get(k,k)+': '+number(v['target']) for k,v in view['targets'].items()))
         totals=view['totals']['planned'] or {}
@@ -72,7 +75,7 @@ def render(db,user,profile,start,include_all=False,today=None):
         if not rows:line('Nessuna sessione pianificata.')
         for row in rows:
             session=json.loads(row['snapshot']);line(session['name']+' — '+number(session['duration_seconds']/60)+' minuti'+(' — ore '+row['start_time'] if row['start_time'] else ''))
-            for exercise in session.get('exercises',[]):
+            for exercise in (session.get('exercises',[]) if session.get('kind')!='activity' else []):
                 sets=exercise.get('sets',[])
                 if isinstance(sets,list):
                     specs=[]

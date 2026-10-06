@@ -95,8 +95,13 @@ def formulate(config, foods):
             if any(not math.isfinite(v) or v<0 for v in values):raise ValueError('Nutrienti bloccati non validi')
             y=var(f'locked_y{len(choices)}',0,1,'B');q=var(f'locked_q{len(choices)}',0,3000)
             add({y:1},'=',1);add({q:1},'=',grams)
-            choices.append(dict(meal=meal,combination='locked',branch_index=0,group=0,food_id=food_id,y=y,q=q,nutrients=values,source=item['source'],reference_id=item['reference_id'],units=item.get('units'),locked=True,locked_grams=grams))
+            choices.append(dict(meal=meal,combination='locked',branch_index=0,group=0,food_id=food_id,y=y,q=q,nutrients=values,source=item['source'],reference_id=item['reference_id'],units=item.get('units'),recipe_id=food.get('recipe_id'),principal_food_id=food.get('principal_food_id'),locked=True,locked_grams=grams))
     for meal, expression in slots.items():
+        if meal in config.get('_locked_recipe_by_slot',{}):
+            from recipe_intents import add_branches
+            branches=add_branches(config,foods,meal,expression,var,add,choices)
+            if not branches:raise ValueError('Nessun ramo verificato per completare la ricetta bloccata')
+            add({b:1 for b in branches},'=',1);continue
         if meal in config.get('locked_meals',{}):
             fixed_meal(meal);continue
         letters = expression.split(' oppure ')
@@ -166,6 +171,8 @@ def formulate(config, foods):
                     )
                 add({**{y: 1 for y in selected}, branch: -1}, '=', 0)
             # One optional condiment group, with a zero lower bound for oil.
+        from recipe_intents import add_branches
+        branch_vars.extend(add_branches(config,foods,meal,expression,var,add,choices))
         add({b: 1 for b in branch_vars}, '=', 1)
     preference_cost={}
     if config.get('daily_meals',{}).get('enabled'):
@@ -189,8 +196,11 @@ def formulate(config, foods):
                 raise ValueError('Invalid local bounds')
             n = NUTRIENTS.index(nutrient)
             total = {c['q']: c['nutrients'][n] for c in choices if c['meal'] == meal}
-            add(total, '>=', low)
-            add(total, '<=', high)
+            uncertainty=[c for c in choices if c['meal']==meal and foods[c['food_id']].get('nutrient_ranges')]
+            lo_delta=sum((foods[c['food_id']]['nutrient_ranges'][nutrient.replace('_100g','')]['min']/100-c['nutrients'][n])*c['locked_grams'] for c in uncertainty)
+            hi_delta=sum((foods[c['food_id']]['nutrient_ranges'][nutrient.replace('_100g','')]['max']/100-c['nutrients'][n])*c['locked_grams'] for c in uncertainty)
+            add(total, '>=', low-lo_delta)
+            add(total, '<=', high-hi_delta)
     objective = {}
     global_targets=config['daily_meals']['targets'] if config.get('daily_meals',{}).get('enabled') else config['main_meals_targets']
     for n, nutrient in enumerate(NUTRIENTS):
@@ -208,12 +218,18 @@ def formulate(config, foods):
         ):
             raise ValueError(f'Invalid target: {nutrient}')
         total = {c['q']: c['nutrients'][n] for c in choices}
-        add(total, '>=', low)
-        add(total, '<=', high)
+        uncertainty=[c for c in choices if foods[c['food_id']].get('nutrient_ranges')]
+        lo_delta=sum((foods[c['food_id']]['nutrient_ranges'][nutrient.replace('_100g','')]['min']/100-c['nutrients'][n])*c['locked_grams'] for c in uncertainty)
+        hi_delta=sum((foods[c['food_id']]['nutrient_ranges'][nutrient.replace('_100g','')]['max']/100-c['nutrients'][n])*c['locked_grams'] for c in uncertainty)
+        add(total, '>=', low-lo_delta)
+        add(total, '<=', high-hi_delta)
         deviation = var(f'dev{n}', 0, max(target - low, high - target))
         add({**total, deviation: -1}, '<=', target)
         add({**{i: -v for i, v in total.items()}, deviation: -1}, '<=', -target)
         objective[deviation] = 1 / target
+    from recipe_intents import PREFERENCE_BONUS
+    for c in choices:
+        if c.get('preferred_recipe'):objective[c['y']]=objective.get(c['y'],0)-PREFERENCE_BONUS
     size = len(variables)
     dense = lambda values: [values.get(i, 0) for i in range(size)]
     problem = dict(
@@ -333,7 +349,9 @@ def decode_result(config, problem, choices, slots, foods, result):
                     locked=c.get('locked',False),
                     diversity_eligible=c.get('diversity_eligible',False),
                     principal_protein=c.get('principal_protein',False),
-                    units=c.get('units'),
+                    principal_food_id=c.get('principal_food_id'),
+                    units=int(round(values[problem['variables'][c['portion_index']]['name']])) if c.get('portion_index') is not None else c.get('units'),
+                    recipe_id=c.get('recipe_id') or food.get('recipe_id'),
                     food=food['name'],
                     grams=grams,
                 )
@@ -350,15 +368,21 @@ def decode_result(config, problem, choices, slots, foods, result):
             (meal, bounds, meal_totals[meal]) for meal, bounds in config.get('meal_targets', {}).items()
         ]:
             for nutrient, spec in bounds.items():
-                actual = actuals[NUTRIENTS.index(nutrient)]
+                n=NUTRIENTS.index(nutrient);actual = actuals[n]
+                uncertainty=[c for c in choices if (meal=='day' or c['meal']==meal) and foods[c['food_id']].get('nutrient_ranges')]
+                raw=[(foods[c['food_id']]['nutrient_ranges'][nutrient.replace('_100g','')],values[problem['variables'][c['q']]['name']],c['nutrients'][n]) for c in uncertainty]
+                actual_min=actual+sum((interval['min']/100-mid)*grams for interval,grams,mid in raw)
+                actual_max=actual+sum((interval['max']/100-mid)*grams for interval,grams,mid in raw)
                 tolerance = 1e-6 * max(1, abs(spec['min']), abs(spec['max']))
                 checks.append(dict(meal=meal, nutrient=nutrient.replace('_100g', ''),
-                                   actual=actual, min=spec['min'], max=spec['max'],
+                                   actual=actual, actual_min=actual_min,actual_max=actual_max,min=spec['min'], max=spec['max'],
                                    target=spec.get('target'),
-                                   respected=spec['min'] - tolerance <= actual <= spec['max'] + tolerance))
+                                   respected=spec['min'] - tolerance <= actual_min and actual_max <= spec['max'] + tolerance))
         record['constraint_report'] = dict(verified=True, all_respected=all(c['respected'] for c in checks),
                                            checks=checks, quantities_verified=True,
                                            diet_scope='modeled_choices', rounding_note='Quantità intere verificate nel modello: passi di 5 g o confezioni intere.')
+    if record['status'] in ('optimal','feasible'):
+        record['nutrient_ranges']={c['nutrient']:dict(min=round(c['actual_min'],3),max=round(c['actual_max'],3)) for c in record['constraint_report']['checks'] if c['meal']=='day'}
     record['daily_policy']='personalized_habits' if config.get('daily_meals',{}).get('enabled') else None
     record['preference_penalty']=result.get('preference_penalty')
     record['preference_changes']=[]

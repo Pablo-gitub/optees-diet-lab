@@ -64,6 +64,8 @@ def shopping_list(db,user,profile,start,include_all=False,today=None):
     def add(ref,grams,location,name=None,depth=0):
         if depth>8:raise diary.DomainError('Ricetta ricorsiva non risolvibile')
         source={'Open Food Facts':'OFF'}.get(ref['source'],ref['source']);ref=dict(source=source,id=ref['id'])
+        if source=='dish_estimate':
+            unresolved.append(dict(food=ref,grams=None,reason='Piatto stimato senza composizione: inserisci gli ingredienti da acquistare.'));return
         if source=='water':return
         if source=='condiment':trace(name or 'Condimento in traccia');return
         if source=='stock':

@@ -819,7 +819,7 @@ def process_recipes(
     return processed
 
 
-def build_review_queue(processed_recipes: list) -> list:
+def build_review_queue(processed_recipes: list, priority_recipe_ids=()) -> list:
     """Organize pending and completed ingredient reviews grouped by canonical ingredient."""
     groups = collections.defaultdict(
         lambda: {
@@ -892,7 +892,10 @@ def build_review_queue(processed_recipes: list) -> list:
             }
         )
 
-    queue.sort(key=lambda x: (-x['occurrences'], x['canonical_name']))
+    priority_recipe_ids=set(priority_recipe_ids)
+    for item in queue:
+        item['preferred_recipe_priority']=item['primary_status']!='approved' and any(r['recipe_id'] in priority_recipe_ids for r in groups[item['canonical_id']]['recipes'])
+    queue.sort(key=lambda x: (not x['preferred_recipe_priority'],-x['occurrences'], x['canonical_name']))
     return queue
 
 
@@ -1121,6 +1124,7 @@ def main():
     parser.add_argument('--conversions-file',type=Path,default=DEFAULT_CONVERSIONS)
     parser.add_argument('--conversion-source',type=str)
     parser.add_argument('--conversion-by',type=str)
+    parser.add_argument('--recipe-preferences-file',type=Path,help='JSON esportato da GET /api/recipes/preferences: ingredienti delle preferite sospese prima')
     args = parser.parse_args()
     if args.approve_conversion:
         try:approve_conversion(*args.approve_conversion,args.conversion_source,args.conversion_by,args.conversions_file,args.approved_file)
@@ -1147,7 +1151,13 @@ def main():
         conversions_path=args.conversions_file,
     )
 
-    review_queue = build_review_queue(processed)
+    priority=[]
+    if args.recipe_preferences_file:
+        data=json.loads(args.recipe_preferences_file.read_text())
+        if not isinstance(data,dict) or not isinstance(data.get('review_queue'),list):parser.error('File preferenze: serve review_queue[]')
+        priority=[r.get('recipe_id') for r in data['review_queue'] if isinstance(r,dict)]
+        if any(not isinstance(i,str) for i in priority):parser.error('recipe_id non valido nella coda preferite')
+    review_queue = build_review_queue(processed,priority)
     report = build_report(processed, review_queue)
 
     if args.report:

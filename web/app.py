@@ -64,6 +64,21 @@ def owner_profile(user):
         weight=progress_analysis.weight_series(measurement_values(db,user['id']),diary.local_today())
         if weight['status']=='available':profile['_filtered_weight_kg']=weight['daily_points'][-1]['filtered_kg']
         profile['_recipe_runs']={'run:'+str(r['id']):json.loads(r['payload']) for r in db.execute('SELECT id,payload FROM recipe_runs WHERE user_id=?',(user['id'],))}
+        import recipe_intents
+        recipe_intents.attach(db,user['id'],profile)
+        scheduled={}
+        for row in db.execute("SELECT s.* FROM planned_session s JOIN week_plan w ON w.id=s.week_plan_id WHERE w.user_id=? AND w.status='active' AND s.status!='skipped'",(user['id'],)):
+            scheduled.setdefault(row['date'],[]).append(dict(session_id=row['session_id'],session=json.loads(row['snapshot'])))
+    report=load_health_report(health_directory(user['id']))
+    baseline=(report or {}).get('non_workout_consumption_scenarios',(report or {}).get('non_workout_scenarios',{}))
+    approved=profile.get('approved_activity_targets',{})
+    if baseline.get('status')!='available' and approved:
+        from activity_targets import context_key
+        if approved.get('context_key')==context_key(profile) and 0<=(diary.local_today()-dt.date.fromisoformat(approved['approved_on'])).days<=14:baseline=approved.get('baseline',{})
+    if baseline.get('status')=='available':profile['_energy_baseline_low']=baseline.get('low_kcal')
+    from joint_energy import day_scenarios
+    energy_inputs=dict(non_workout_consumption_scenarios=baseline,workout_energy_models=(report or {}).get('workout_energy_models',(report or {}).get('workout_forecasts',[])))
+    profile['_scheduled_energy_by_date']={date:day_scenarios(energy_inputs,sessions) for date,sessions in scheduled.items()}
     return profile
 
 
@@ -517,15 +532,56 @@ def recipes(request: Request, q: str = '', cuisine: str = '', preferred: bool = 
         found.sort(key=lambda r: (r[0] not in images, fold(titles_it.get(r[0], r[1])), r[0]))
         page = [r[0] for r in found[offset : offset + 30]]
         payloads = dict(db.execute('SELECT id, payload FROM recipes WHERE id IN (' + ','.join('?' * len(page)) + ')', page).fetchall()) if page else {}
+    with connect() as local:hearts={r[0] for r in local.execute('SELECT recipe_id FROM recipe_preference WHERE user_id=? AND preferred=1',(user['id'],))}
     recipe_list = []
     for rid in page:
         rec = json.loads(payloads[rid])
         rec['title_it'] = titles_it.get(rid, rec['title'])
+        rec['preferred']=rid in hearts
         img = images.get(rid)
         if img:
             rec['illustrative_image'] = img
         recipe_list.append(rec)
     return {'total': len(found), 'recipes': recipe_list}
+
+
+@app.get('/api/recipes/preferences')
+def recipe_preferences(request:Request):
+    import recipe_intents
+    user=identity(request)
+    return recipe_intents.preferences(owner_profile(user))
+
+
+@app.put('/api/recipes/{recipe_id}/preferred')
+async def prefer_recipe(request:Request,recipe_id:str):
+    import recipe_intents
+    user=identity(request,True)
+    with connect() as db:return recipe_intents.set_preferred(db,user['id'],recipe_id,await request.json())
+
+
+@app.get('/api/week/{week_start}/locked-dishes')
+def get_locked_dishes(request:Request,week_start:str):
+    user=identity(request);diary.valid_date(week_start)
+    return dict(week_start=week_start,locked_dishes=[d for d in owner_profile(user)['_locked_dishes'] if d['week_start']==week_start])
+
+
+@app.put('/api/week/{week_start}/locked-dishes')
+async def put_locked_dish(request:Request,week_start:str):
+    import recipe_intents
+    user=identity(request,True);profile=owner_profile(user)
+    with connect() as db:return recipe_intents.put_lock(db,user['id'],profile,week_start,await request.json())
+
+
+@app.delete('/api/week/{week_start}/locked-dishes/{date}/{slot}')
+def delete_locked_dish(request:Request,week_start:str,date:str,slot:str):
+    user=identity(request,True);diary.valid_date(week_start);diary.valid_date(date);diary.valid_slot(slot)
+    with connect() as db:
+        previous=db.execute('SELECT 1 FROM locked_dish WHERE user_id=? AND week_start=? AND date=? AND slot=?',(user['id'],week_start,date,slot)).fetchone()
+        if previous and date>diary.local_today().isoformat() and diary.state(db,user['id'],date,slot)=='unknown':
+            planned=diary.planned(db,user['id'],date,slot)
+            if planned:db.execute('UPDATE planned_meal SET locked=0 WHERE id=?',(planned['id'],))
+        db.execute('DELETE FROM locked_dish WHERE user_id=? AND week_start=? AND date=? AND slot=?',(user['id'],week_start,date,slot))
+    return dict(week_start=week_start,date=date,slot=slot,deleted=True,effect='next_generation_only')
 
 
 @app.get('/api/recipe-solver')
@@ -860,6 +916,9 @@ async def enqueue_planning(request,kind):
         profile['mode']=mode
         if not isinstance(data.get('locked',[]),list):raise diary.DomainError('Blocchi non validi')
         if kind=='joint':joint.validate_request(profile,data)
+        if data.get('locked_dishes'):
+            import recipe_intents
+            recipe_intents.prepare(profile,data)
     else:
         diary.valid_date(data.get('date'));diary.valid_slot(data.get('slot'))
         with connect() as db:

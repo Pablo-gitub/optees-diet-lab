@@ -41,13 +41,18 @@ class WeekReportTests(unittest.TestCase):
         profile={'food_preferences':{'preferred_products':{'000800':dict(source='OFF',id='synthetic-product')}}}
         self.assertEqual(shopping_list.canonical_ref(dict(source='OFF',id='synthetic-product'),profile)[0],'CREA:000800')
     def test_pdf_and_owner_endpoints(self):
+        workout=dict(id='synthetic-workout',name='Allenamento sintetico',duration_seconds=1800,demo=False,pending_configuration=[],exercises=[dict(source_id='synthetic-squat',name='Squat sintetico',sets=3,repetitions=8,load_kg=20)])
+        from activity_service import catalog,snapshot
+        activity=snapshot(next(a for a in catalog()['activities'] if a['id']=='walking_moderate'),20,80)
+        with self.web.connect() as db:
+            for session,date in [(workout,'2026-10-07'),(activity,'2026-10-08')]:db.execute("INSERT INTO planned_session(week_plan_id,date,session_id,minutes,status,snapshot) VALUES(?,?,?,?,'chosen',?)",(self.week,date,session['id'],session['duration_seconds']/60,json.dumps(session)))
         with patch.object(self.web,'owner_profile',return_value=self.profile),patch.object(shopping_list.diary,'local_today',return_value=self.today):
             response=self.client.get('/api/week/'+self.start+'/shopping-list');self.assertEqual(response.status_code,200)
             pdf=self.client.get('/api/week/'+self.start+'/report.pdf');self.assertEqual(pdf.status_code,200);self.assertEqual(pdf.headers['content-type'],'application/pdf');self.assertTrue(pdf.content.startswith(b'%PDF'))
             import subprocess
             path=Path(self.temp.name)/'report.pdf';path.write_bytes(pdf.content)
             text=subprocess.check_output(['pdftotext',str(path),'-'],text=True)
-            self.assertIn('Lista',text);self.assertIn('Pasta sintetica',text);self.assertIn('Passata',text)
+            self.assertIn('Lista',text);self.assertIn('Pasta sintetica',text);self.assertIn('Passata',text);self.assertIn('Squat sintetico',text);self.assertIn('3 serie',text);self.assertIn('20,0 kg',text);self.assertIn('Camminata normale',text)
             info=subprocess.check_output(['pdfinfo',str(path)],text=True)
             self.assertIn('A4',info)
             Path('/tmp/synthetic-week-report.pdf').write_bytes(pdf.content)

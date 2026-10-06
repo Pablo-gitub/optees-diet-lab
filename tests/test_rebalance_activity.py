@@ -25,8 +25,11 @@ class RebalanceActivityTests(RebalanceAPI):
             self.assertEqual(db.execute('SELECT count(*) FROM planned_session WHERE week_plan_id IN (SELECT id FROM week_plan WHERE user_id='+str(self.user)+')').fetchone()[0],0)
             rebalance.decide(db,self.user,self.profile,'activity-apply',proposal,'apply')
             rows=db.execute('SELECT * FROM planned_session WHERE week_plan_id IN (SELECT id FROM week_plan WHERE user_id=?)',(self.user,)).fetchall();self.assertTrue(rows)
+            context=json.loads(db.execute('SELECT day_context FROM week_plan WHERE id=?',(rows[0]['week_plan_id'],)).fetchone()[0])
             for row in rows:
                 session=json.loads(row['snapshot']);self.assertEqual(session['kind'],'activity');self.assertEqual(row['status'],'chosen');self.assertIn('rebalance_credit_kcal',session['energy_estimate'])
+                scenarios=context[row['date']]['progress_forecast']['energy_scenarios']['consumption_kcal']
+                self.assertAlmostEqual(scenarios['low'],1900+session['energy_estimate']['energy_kcal']['low'])
             self.assertRaises(self.app.diary.DomainError,rebalance.decide,db,self.user,self.profile,'activity-apply',proposal,'apply')
     def test_activity_keep_none_missing_weight_and_intense(self):
         self.assertFalse(self.proposal()['result'].get('_activity_sessions'))

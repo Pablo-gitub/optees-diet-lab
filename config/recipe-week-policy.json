@@ -1,0 +1,7 @@
+{
+  "version": "recipe-week-policy-v1",
+  "max_occurrences_per_week": 2,
+  "max_portions": 3,
+  "objective_bonus": 0.02,
+  "note": "Euristiche locali: preferenza morbida, frequenza massima rigida; non una prescrizione."
+}

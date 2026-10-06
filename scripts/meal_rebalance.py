@@ -325,11 +325,19 @@ def decide(db,user,profile,token,proposal,action):
                 applied_slots.extend(applied['applied_slots'])
                 changed.extend(x['date'] for x in applied['applied_slots'])
         evaluation_revisions=bandit.revise_rebalance_applications(db,user,profile,applications,result['_plan']['days'],applied_slots,token)
-        week_row=db.execute("SELECT id FROM week_plan WHERE user_id=? AND week_start=? AND status='active'",(user,proposal['start'])).fetchone()
+        week_row=db.execute("SELECT * FROM week_plan WHERE user_id=? AND week_start=? AND status='active'",(user,proposal['start'])).fetchone()
+        contexts=json.loads(week_row['day_context'] or '{}')
         for item in result.get('_activity_sessions',[]):
             session=item['session']
             db.execute("INSERT INTO planned_session(week_plan_id,date,session_id,minutes,start_time,status,snapshot) VALUES(?,?,?,?,NULL,'chosen',?)",(week_row['id'],item['date'],session['id'],session['duration_seconds']/60,json.dumps(session)))
+            context=contexts.setdefault(item['date'],{})
+            for container in [context,context.get('progress_forecast',{})]:
+                forecast=container.get('energy_scenarios',{})
+                if forecast.get('status')=='available':
+                    for scenario,extra in session['energy_estimate']['energy_kcal'].items():forecast['consumption_kcal'][scenario]+=extra
+            context.setdefault('rebalance_activity_additions',[]).append(dict(preview_id=token,activity_id=session['activity_id'],energy_kcal=session['energy_estimate']['energy_kcal']))
             changed.append(item['date'])
+        if result.get('_activity_sessions'):db.execute('UPDATE week_plan SET day_context=? WHERE id=?',(json.dumps(contexts),week_row['id']))
         changed=sorted(set(changed))
     from progress_analysis import invalidate_forecast
     if not from_diary:invalidate_forecast(db,user,meal['date'],'consumed_interval_estimate')

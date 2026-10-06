@@ -156,8 +156,12 @@ async def generate_week(session,profile,data,make_config,foods,health=None,worko
         def config_for_day(original,day):
             date=offsets[day];kind=day_types[date];personal=copy.deepcopy(original);personal['mode']=modes[kind];personal['daily_meals']['targets']=copy.deepcopy(data['day_targets'][kind]);dated=approved.get('days',{}).get(date)
             if not explicit_targets and dated and dated['session_signature']==activity_signature(by_date[date]):personal['daily_meals']['targets']=copy.deepcopy(dated['targets'])
-            config=make_config(personal,day);config['day_type']=kind;return config
-        diet_request=dict(data.get('diet',{}),week_start=start,day_index=index,locked=data.get('locked',[]))
+            config=make_config(personal,day);config['day_type']=kind
+            from joint_energy import day_scenarios
+            forecast=day_scenarios(health,by_date[date])
+            if forecast['status']=='available':config['_energy_low']=forecast['consumption_kcal']['low']
+            return config
+        diet_request=dict(data.get('diet',{}),week_start=start,day_index=index,locked=data.get('locked',[]),locked_dishes=data.get('locked_dishes',[]))
         diet_request.setdefault('pool_size',4);diet_request.setdefault('k',min(4,diet_request['pool_size']))
         diet_set=await diet_engine.generate_week(session,profile,diet_request,config_for_day,foods,history,observations)
         for warning in diet_set['warnings']:
