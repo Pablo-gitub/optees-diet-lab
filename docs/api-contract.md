@@ -845,3 +845,14 @@ modificati: una seconda anteprima mantiene il deficit massimo includendo il
 dispendio già aggiunto. Il rientro anticipato della sola dieta considera le
 sessioni già pianificate; se il loro dispendio non è verificabile richiede la
 generazione congiunta/configurazione energetica invece di ignorarlo.
+
+### Correzioni UI fase 8 — applicazione delle ricette preferite (2026-10-06)
+
+`POST /api/plan-sets/{id}/apply` conserva lo stesso profilo per applicazione e
+registrazione dell'esposizione al bandit, nella stessa transazione. Gli snapshot
+`approved:…` già presenti nei giorni vengono persistiti prima di risolvere le
+porzioni; non vengono ricostruiti da un catalogo successivo. Il contratto della
+risposta non cambia. Regressione HTTP: preferite `foodose:R048` e `foodose:R054`,
+generazione congiunta, applicazione, rilettura dei pasti ed esposizioni bandit.
+La causa riprodotta era il secondo caricamento del profilo da una connessione
+che non vedeva ancora gli snapshot non committati, non l'assenza nei giorni.

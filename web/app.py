@@ -829,9 +829,12 @@ async def apply_plan_set(set_id:int,request:Request):
     plan_set=read_plan_set(set_id,request)
     plan=next((p for p in plan_set['plans'] if p.get('id')==data.get('plan_id')),None)
     if not plan:raise diary.DomainError('Alternativa non trovata','not_found',404)
+    profile=owner_profile(user)
     with connect() as db:
-        result=(joint.apply_week if plan_set.get('kind')=='joint' else workouts.apply_week if plan_set.get('kind')=='workout' else diary.apply_plan)(db,user['id'],owner_profile(user),plan_set,plan,data)
-        if result['applied_slots']:bandit.record_application(db,user['id'],owner_profile(user),plan,result)
+        result=(joint.apply_week if plan_set.get('kind')=='joint' else workouts.apply_week if plan_set.get('kind')=='workout' else diary.apply_plan)(db,user['id'],profile,plan_set,plan,data)
+        # Keep the transaction-local recipe/dish snapshots populated by apply.
+        # Reloading via another connection cannot see these uncommitted rows.
+        if result['applied_slots']:bandit.record_application(db,user['id'],profile,plan,result)
         if result['applied_slots']:db.execute('UPDATE plans SET selected=1 WHERE id=? AND user_id=?',(plan['id'],user['id']))
         return result
 

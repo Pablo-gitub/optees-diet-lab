@@ -247,3 +247,7 @@ Verifiche ulteriori: report con esercizi/carichi e attività; scenari energetici
 aggiornati dopo il rientro e sessioni già pianificate considerate prima del
 rientro anticipato. Cronologia dei test del bandit fissata su date sintetiche.
 `web/static/` non modificato; proposte/dizionario esterni al lavoro restano fuori.
+
+| Bug UI fase 8 (2026-10-06) | Stato | Verifica |
+|---|---|---|
+| 1 — Ricette preferite nella settimana congiunta | **fatto** | Riprodotto 400 con R048/R054; snapshot presenti, profilo ricaricato prima del commit SQL. Un solo profilo nella transazione, applicazione/rilettura ed esposizioni bandit verificate. Suite completa: 333 test verdi. |

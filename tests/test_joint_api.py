@@ -14,9 +14,9 @@ class JointAPI(diary_tests.DiaryTests):
         self.profile['daily_meals']=personal['daily_meals']
         self.assertEqual(self.client.put('/api/profile',json=self.profile,headers=self.headers).status_code,200)
         self.assertEqual(self.client.patch('/api/workouts/config',json=personal['_workout_settings'],headers=self.headers).status_code,200)
-    def generate(self,client):
+    def generate(self,client,timeout=30):
         response=client.post('/api/plans/joint-week',json=self.data,headers=self.headers);self.assertEqual(response.status_code,202,response.text)
-        deadline=time.monotonic()+30
+        deadline=time.monotonic()+timeout
         while time.monotonic()<deadline:
             job=client.get('/api/jobs/'+response.json()['job_id']).json()
             if job['state'] in ('done','failed'):break
@@ -62,6 +62,40 @@ class JointAPI(diary_tests.DiaryTests):
             self.assertEqual(response.status_code,200,response.text)
             view=client.get('/api/day',params=dict(date=self.date)).json();self.assertEqual(len(view['workouts']),2)
             self.assertTrue(all(w['planned_session_id'] is None for w in view['workouts']))
+    def test_preferred_recipe_snapshots_survive_joint_week_apply(self):
+        for recipe in ('foodose:R048','foodose:R054'):
+            response=self.client.put('/api/recipes/'+recipe+'/preferred',json={'preferred':True},headers=self.headers)
+            self.assertEqual(response.status_code,200,response.text)
+        from scipy.optimize import milp as scipy_milp
+        def bounded(*args,**kwargs):return scipy_milp(*args,**dict(kwargs,options={'time_limit':8,'mip_rel_gap':.001}))
+        base_config=self.make_config
+        def config(personal,index):
+            value=base_config(personal,index)
+            # Require real recipe portions in this fixture: an application test
+            # must not pass merely because the soft favorites were unselected.
+            offset=(index-self.data.get('day_index',dt.date.fromisoformat(self.date).weekday()))%14
+            if offset in (0,1):value['_locked_recipe_by_slot']={'lunch':dict(id=('foodose:R048','foodose:R054')[offset],portions=1)}
+            return value
+        async def fake(session,p):
+            with patch('test_recipe_solver.milp',side_effect=bounded):return solve(p)
+
+        with TestClient(self.app.app) as client,patch.object(self.app,'make_config',side_effect=config),patch('plan_diet_day.solve_problem',side_effect=fake):
+            client.cookies.update(self.client.cookies);result=self.generate(client,timeout=120);plan=result['plans'][0]
+            selected=[(d,s) for d in plan['days'] for s in d['selections'] if s.get('source')=='recipe']
+            self.assertEqual({s['recipe_id'] for _,s in selected},{'foodose:R048','foodose:R054'})
+            for day,selection in selected:self.assertIn(selection['reference_id'],day['_recipe_snapshots'])
+            applied=client.post('/api/plan-sets/'+result['run_id']+'/apply',json=dict(plan_id=plan['id'],scope='week'),headers=self.headers)
+            self.assertEqual(applied.status_code,200,applied.text)
+            with self.app.connect() as db:
+                self.assertGreater(db.execute('SELECT count(*) FROM bandit_exposure WHERE user_id=? AND plan_id=?',(self.user,plan['id'])).fetchone()[0],0)
+                stored={r['id'] for r in db.execute('SELECT id FROM planned_food_snapshot WHERE user_id=? AND source=?',(self.user,'recipe'))}
+            for day,selection in selected:
+                self.assertIn(selection['reference_id'],stored)
+                view=client.get('/api/day',params={'date':day['date']})
+                self.assertEqual(view.status_code,200,view.text)
+                items=[i for m in view.json()['meals'] if m['planned'] for i in m['planned']['items']]
+                self.assertTrue(any(i['food']['id']==selection['reference_id'] for i in items))
+
     def test_csrf_invalid_request_and_owner_scope(self):
         self.assertEqual(self.client.post('/api/plans/joint-week',json=self.data).status_code,403)
         self.assertEqual(self.client.post('/api/plans/joint-week',json=dict(self.data,day_targets={}),headers=self.headers).status_code,400)
