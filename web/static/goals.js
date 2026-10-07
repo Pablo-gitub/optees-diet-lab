@@ -42,45 +42,9 @@ let goals = null;
 const fmt1 = (v) => (Math.round(v * 10) / 10).toLocaleString('it-IT');
 
 async function loadGoals() {
-  loadBodyData().catch(() => {});
+  renderSetup().catch((e) => message(e.message));
   goals = await api('goals');
   renderGoals();
-}
-
-// Dati corporei e consumo da Apple Salute, in cima al profilo: la base su cui si calcolano gli obiettivi.
-async function loadBodyData() {
-  const box = $('body-data');
-  if (!box) return;
-  const r = await api('health');
-  box.replaceChildren(element('h2', 'I tuoi dati'));
-  if (!r.imported) {
-    box.append(element('p', 'Nessun dato da Apple Salute: importa l’esportazione in Progressi. Senza, gli obiettivi restano stime dal profilo.', 'notice'));
-    return;
-  }
-  const rep = r.report;
-  const m = rep.measures || {};
-  const tiles = element('div', undefined, 'body-tiles');
-  const tile = (label, v, digits = 1) => {
-    const t = element('div', undefined, 'stat-tile');
-    t.append(element('span', label, 'stat-label'));
-    if (!v || v.value == null) t.append(element('strong', '—', 'stat-value'), element('span', 'non disponibile', 'stat-note'));
-    else t.append(element('strong', Number(v.value).toLocaleString('it-IT', { maximumFractionDigits: digits }) + ' ' + v.unit, 'stat-value'), element('span', parseDate(v.date).toLocaleDateString('it-IT') + (v.age_days > 30 ? ' · da aggiornare' : ''), 'stat-note'));
-    tiles.append(t);
-  };
-  tile('Peso', m.weight);
-  tile('Altezza', m.height, 0);
-  tile('Grasso corporeo', m.body_fat);
-  const sc = rep.scenarios || {};
-  const t = element('div', undefined, 'stat-tile');
-  t.append(element('span', 'Consumo medio (28 giorni)', 'stat-label'));
-  if (sc.status === 'available') t.append(element('strong', fmt0(sc.central_kcal) + ' kcal', 'stat-value'), element('span', 'giorni tipici ' + fmt0(sc.low_kcal) + '–' + fmt0(sc.high_kcal), 'stat-note'));
-  else t.append(element('strong', '—', 'stat-value'), element('span', 'dati insufficienti o vecchi', 'stat-note'));
-  tiles.append(t);
-  box.append(tiles);
-  const w = (rep.windows || []).find((x) => x.days === 28) || rep.windows?.[0];
-  if (w?.mean_daily_estimated_kcal != null)
-    box.append(element('p', 'Ultimi ' + w.days + ' giorni utilizzabili (' + w.valid_days + '): a riposo ' + fmt0(w.mean_resting_kcal) + ' + attive ' + fmt0(w.mean_active_kcal) + ' kcal al giorno, fino al ' + parseDate(w.end_date).toLocaleDateString('it-IT') + '. Stime di Apple Salute, non misure del metabolismo.', 'muted small'));
-  box.append(element('p', 'Gli obiettivi del giorno si calcolano da qui: «Bilancio calorico dall’obiettivo» e «Target del giorno dall’attività» qui sotto. Dettagli completi in Progressi.', 'muted small'));
 }
 
 function goalsField(label, input, hint) {
@@ -151,7 +115,7 @@ function goalsBlock(title, intro, build, save) {
 function renderGoals(open) {
   const panel = $('goals-panel');
   if (!panel || !goals) return;
-  panel.replaceChildren(element('h2', 'Obiettivi e intervista'), element('p', 'Ogni domanda si può saltare: un dato che manca resta mancante e il sistema lo dice, senza inventarlo.', 'muted'));
+  panel.replaceChildren(element('h2', 'Le tue risposte'), element('p', 'Ogni domanda si può saltare.', 'muted small'));
   const b = goals.body,
     a = goals.activity,
     d = goals.activity_defaults || {};
@@ -316,7 +280,7 @@ function renderGoals(open) {
       }, (data) => api('goals/strength-anchors', 'PUT', { anchors: data })),
     );
 
-  panel.append(energyProposalBlock(), dayTargetsBlock(), mealTimingBlock());
+  panel.append(mealTimingBlock());
   const missing = goals.missing || [];
   if (missing.length) {
     const box = element('details', undefined, 'goal-missing');
@@ -436,7 +400,7 @@ function dayTargetsBlock() {
 }
 
 function dayTargetsCard(p, out) {
-  const card = element('article', undefined, 'card proposal-card');
+  const card = element('article', undefined, 'setup-proposal');
   const b = p.baseline || {};
   const facts = [];
   facts.push('Base ' + fmt0(b.central_kcal) + ' kcal (' + (b.source === 'user_declared_non_workout_estimate' ? 'dichiarata da te' : b.source === 'current_target_minus_approved_balance_estimate' ? 'stimata dal profilo, non misurata' : 'da Salute') + ')');
@@ -444,7 +408,16 @@ function dayTargetsCard(p, out) {
   if (p.weight) facts.push('peso filtrato ' + fmt1(p.weight.value_kg) + ' kg (' + parseDate(p.weight.date).toLocaleDateString('it-IT') + ')');
   const pr = p.parameters || {};
   if (pr.protein_g_per_kg) facts.push('proteine ' + fmt1(pr.protein_g_per_kg) + ' g/kg, come già scelto');
-  card.append(element('p', facts.join(' · ')));
+  const rest = (p.days || []).filter((d) => d.day_type !== 'training');
+  const train = (p.days || []).filter((d) => d.day_type === 'training');
+  const avg = (xs) => (xs.length ? xs.reduce((t, d) => t + d.proposed_kcal, 0) / xs.length : null);
+  const summary = element('div', undefined, 'setup-facts');
+  if (rest.length) summary.append(setupFact('Giorno di riposo', fmt0(avg(rest)) + ' kcal', rest.length + (rest.length === 1 ? ' giorno' : ' giorni')));
+  if (train.length) summary.append(setupFact('Giorno di attività', fmt0(avg(train)) + ' kcal', train.length + (train.length === 1 ? ' giorno' : ' giorni')));
+  card.append(summary);
+  const details = element('details', undefined, 'setup-details');
+  details.append(element('summary', 'Dettagli giorno per giorno'));
+  details.append(element('p', facts.join(' · '), 'muted small'));
   const table = element('table', undefined, 'targets-table');
   const head = element('tr');
   ['Giorno', 'Attività', 'Ora', 'Richiesto', 'Proposto', 'P · C · G'].forEach((h) => head.append(element('th', h)));
@@ -467,16 +440,17 @@ function dayTargetsCard(p, out) {
   });
   const wrap = element('div', undefined, 'table-scroll');
   wrap.append(table);
-  card.append(wrap);
-  if (limited) card.append(element('p', '* Variazione limitata a ' + fmt0(pr.maximum_weekly_change_kcal || 100) + ' kcal o 5% a settimana: il resto arriverà gradualmente.', 'muted small'));
+  details.append(wrap);
+  if (limited) details.append(element('p', '* Variazione limitata a ' + fmt0(pr.maximum_weekly_change_kcal || 100) + ' kcal o 5% a settimana: il resto arriverà gradualmente.', 'muted small'));
   const ul = element('ul', undefined, 'reasons');
   (p.reasoning || []).forEach((r) => ul.append(element('li', r)));
   [...new Set([b.uncertainty, ...(p.uncertainty || [])].filter(Boolean))].forEach((r) => ul.append(element('li', r, 'tradeoff')));
-  card.append(ul);
+  details.append(ul);
+  card.append(details);
   const bar = element('div', undefined, 'meal-actions');
   [
-    ['approve', 'Usa i valori proposti', 'primary small'],
-    ['reject', 'Mantieni i valori attuali', 'ghost small'],
+    ['approve', 'Usa questi valori', 'primary small'],
+    ['reject', 'Non ora', 'ghost small'],
   ].forEach(([decision, text, cls]) => {
     const btn = element('button', text, cls);
     btn.type = 'button';
@@ -488,7 +462,8 @@ function dayTargetsCard(p, out) {
           profile = (await api('profile')).profile;
           planningReady = false;
         }
-        out.replaceChildren(element('p', r.targets_changed ? 'Target aggiornati. Rigenera il piano della settimana per applicarli: pasti e allenamenti già applicati non cambiano.' : 'Proposta scartata, nulla è cambiato.', 'notice'));
+        message(r.targets_changed ? 'Calorie salvate: valgono dal prossimo piano che generi.' : 'Proposta scartata, nulla è cambiato.');
+        renderSetup();
       } catch (e) {
         out.replaceChildren(element('p', e.status === 409 ? 'Dati, programma o profilo sono cambiati: ricalcola la proposta.' : e.message, 'error'));
       }

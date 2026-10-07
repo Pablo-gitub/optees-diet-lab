@@ -3670,3 +3670,129 @@ a.button-link {
   gap: 10px;
   margin: 8px 0;
 }
+
+/* Profilo guidato */
+.setup {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.setup > h2 {
+  margin: 0;
+}
+.setup > p {
+  margin: -6px 0 4px;
+}
+.setup-step {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px 18px;
+  display: grid;
+  gap: 10px;
+}
+.setup-step.done {
+  border-color: var(--brand-soft);
+}
+.setup-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.setup-head h3 {
+  margin: 0;
+  font-size: 17px;
+}
+.setup-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 14px;
+  background: var(--surface-3);
+  color: var(--ink-2);
+  flex: none;
+}
+.setup-step.done .setup-num {
+  background: var(--brand);
+  color: var(--brand-ink);
+}
+.setup-body {
+  display: grid;
+  gap: 10px;
+  padding-left: 40px;
+}
+.setup-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.setup-fact {
+  display: grid;
+  gap: 2px;
+}
+.setup-fact strong {
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+}
+.setup-hint {
+  margin: 0;
+  color: var(--ink-2);
+}
+.setup-current {
+  margin: 0;
+  font-weight: 600;
+}
+.setup-inline {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.setup-inline input {
+  width: 110px;
+}
+.setup-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-start;
+}
+.setup-row .goal-field > span {
+  display: block;
+  margin-bottom: 6px;
+}
+.setup-row .goal-field {
+  min-width: 160px;
+}
+.setup-proposal {
+  display: grid;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--brand-softer);
+}
+.setup-body > .primary,
+.setup-body > .secondary {
+  justify-self: start;
+}
+.advanced-settings > summary {
+  cursor: pointer;
+  padding: 14px 4px;
+  font-weight: 650;
+  font-size: 16px;
+}
+.advanced-settings > summary .muted {
+  font-weight: 400;
+  margin-left: 6px;
+}
+@media (max-width: 600px) {
+  .setup-body {
+    padding-left: 0;
+  }
+  .setup-facts {
+    gap: 16px;
+  }
+}

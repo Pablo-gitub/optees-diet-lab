@@ -16,6 +16,7 @@
     <script src="/static/shopping.js" defer></script>
     <script src="/static/locked.js" defer></script>
     <script src="/static/matches.js" defer></script>
+    <script src="/static/setup.js" defer></script>
   </head>
   <body>
     <section id="login" class="login">
@@ -273,7 +274,9 @@
         </section>
 
         <section id="profile" hidden>
-          <div id="body-data" class="panel"></div>
+          <div id="setup-panel" class="setup"></div>
+          <details id="advanced-settings" class="advanced-settings">
+            <summary>Impostazioni avanzate <span class="muted small">attività, allenamento, carichi, pasti, cucine, esclusioni</span></summary>
           <div id="goals-panel" class="panel"></div>
           <form id="profile-form">
             <div class="panel">
@@ -355,6 +358,7 @@
               <button class="primary">Salva configurazione</button>
             </div>
           </form>
+          </details>
         </section>
 
         <section id="recipes" hidden>
