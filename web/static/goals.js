@@ -42,8 +42,45 @@ let goals = null;
 const fmt1 = (v) => (Math.round(v * 10) / 10).toLocaleString('it-IT');
 
 async function loadGoals() {
+  loadBodyData().catch(() => {});
   goals = await api('goals');
   renderGoals();
+}
+
+// Dati corporei e consumo da Apple Salute, in cima al profilo: la base su cui si calcolano gli obiettivi.
+async function loadBodyData() {
+  const box = $('body-data');
+  if (!box) return;
+  const r = await api('health');
+  box.replaceChildren(element('h2', 'I tuoi dati'));
+  if (!r.imported) {
+    box.append(element('p', 'Nessun dato da Apple Salute: importa l’esportazione in Progressi. Senza, gli obiettivi restano stime dal profilo.', 'notice'));
+    return;
+  }
+  const rep = r.report;
+  const m = rep.measures || {};
+  const tiles = element('div', undefined, 'body-tiles');
+  const tile = (label, v, digits = 1) => {
+    const t = element('div', undefined, 'stat-tile');
+    t.append(element('span', label, 'stat-label'));
+    if (!v || v.value == null) t.append(element('strong', '—', 'stat-value'), element('span', 'non disponibile', 'stat-note'));
+    else t.append(element('strong', Number(v.value).toLocaleString('it-IT', { maximumFractionDigits: digits }) + ' ' + v.unit, 'stat-value'), element('span', parseDate(v.date).toLocaleDateString('it-IT') + (v.age_days > 30 ? ' · da aggiornare' : ''), 'stat-note'));
+    tiles.append(t);
+  };
+  tile('Peso', m.weight);
+  tile('Altezza', m.height, 0);
+  tile('Grasso corporeo', m.body_fat);
+  const sc = rep.scenarios || {};
+  const t = element('div', undefined, 'stat-tile');
+  t.append(element('span', 'Consumo medio (28 giorni)', 'stat-label'));
+  if (sc.status === 'available') t.append(element('strong', fmt0(sc.central_kcal) + ' kcal', 'stat-value'), element('span', 'giorni tipici ' + fmt0(sc.low_kcal) + '–' + fmt0(sc.high_kcal), 'stat-note'));
+  else t.append(element('strong', '—', 'stat-value'), element('span', 'dati insufficienti o vecchi', 'stat-note'));
+  tiles.append(t);
+  box.append(tiles);
+  const w = (rep.windows || []).find((x) => x.days === 28) || rep.windows?.[0];
+  if (w?.mean_daily_estimated_kcal != null)
+    box.append(element('p', 'Ultimi ' + w.days + ' giorni utilizzabili (' + w.valid_days + '): a riposo ' + fmt0(w.mean_resting_kcal) + ' + attive ' + fmt0(w.mean_active_kcal) + ' kcal al giorno, fino al ' + parseDate(w.end_date).toLocaleDateString('it-IT') + '. Stime di Apple Salute, non misure del metabolismo.', 'muted small'));
+  box.append(element('p', 'Gli obiettivi del giorno si calcolano da qui: «Bilancio calorico dall’obiettivo» e «Target del giorno dall’attività» qui sotto. Dettagli completi in Progressi.', 'muted small'));
 }
 
 function goalsField(label, input, hint) {
