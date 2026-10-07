@@ -137,11 +137,11 @@ async def generate_week(session,profile,data,make_config,foods,health=None,worko
     if approved and approved.get('context_key')!=approved_context_key(profile):
         result['warnings'].append(dict(code='activity_targets_profile_changed',message='Profilo modificato dopo l’approvazione: target specifici per data e base stimata non riutilizzati.'))
         approved={}
-    if (health or {}).get('non_workout_consumption_scenarios',{}).get('status')!='available' and approved.get('baseline',{}).get('status')=='available' and approved['baseline'].get('source') in ('user_declared_non_workout_estimate','current_target_minus_approved_balance_estimate'):
-        age=(__import__('diary_service').local_today()-dt.date.fromisoformat(approved['approved_on'])).days
-        if 0<=age<=14:
-            health=dict(health or {},non_workout_consumption_scenarios=copy.deepcopy(approved['baseline']))
-            result['warnings'].append(dict(code='estimated_non_workout_baseline',message='Base energetica stimata e approvata; non misurata da Salute.'))
+    from activity_targets import approved_baseline
+    fallback=approved_baseline(profile)
+    if (health or {}).get('non_workout_consumption_scenarios',{}).get('status')!='available' and fallback is not None:
+        health=dict(health or {},non_workout_consumption_scenarios=fallback)
+        result['warnings'].append(dict(code='estimated_non_workout_baseline',message='Base energetica stimata e approvata; non misurata da Salute.'))
     from activity_targets import session_energy,signature as activity_signature
     for workout in workout_set['plans']:
         for item in workout['workout_sessions']:

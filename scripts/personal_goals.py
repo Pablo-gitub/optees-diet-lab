@@ -52,7 +52,10 @@ def validate_block(block,data,today=None):
     if block=='strength_anchors':return anchors(data,today)
     if not isinstance(data,dict):raise DomainError('Blocco obiettivi non valido')
     if block=='body':
-        if set(data)-{'target_weight_kg','target_body_fat_pct','target_date','pace','pace_pct_per_week','circumferences'}:raise DomainError('Campi corpo non validi')
+        if set(data)-{'target_weight_kg','target_body_fat_pct','target_date','pace','pace_pct_per_week','circumferences','height_cm','age_years','sex','activity_factor'}:raise DomainError('Campi corpo non validi')
+        for key,low,high in (('height_cm',100,250),('age_years',18,120),('activity_factor',1,2.5)):
+            if data.get(key) is not None:numeric(data[key],low,high,key)
+        if data.get('sex') not in (None,'male','female'):raise DomainError('Sesso per la formula: male oppure female')
         for key,low,high in (('target_weight_kg',30,300),('target_body_fat_pct',3,60)):
             if data.get(key) is not None:numeric(data[key],low,high,key)
         if data.get('target_date') is not None:

@@ -1054,3 +1054,44 @@ campi di DayView restano quelli del diario corrente. Una sessione che termina
 il giorno dopo riporta `after_reason`: non si collega automaticamente un pasto
 di un altro giorno. `explicit_session` del profilo è un modello orario per i
 giorni generati, non registra né pianifica un allenamento.
+
+### Base energetica senza Salute — Mifflin–St Jeor
+
+Campi facoltativi GET/PUT `/api/profile`, dentro `goals.body`:
+`height_cm` (100–250), `age_years` (18–120), `sex` (`male`/`female`,
+coefficiente dell’equazione), `activity_factor` (1–2,5, dichiarato dall’utente).
+Non hanno default. Il peso proviene dalle pesate: filtro corrente, pesata
+non più vecchia di 14 giorni; mai dal peso obiettivo o da un valore demo.
+
+```json
+{"goals":{"body":{"height_cm":180,"age_years":40,"sex":"male","activity_factor":1.2}}}
+```
+
+La proposta 8.5 usa prima gli scenari Salute validi; in loro assenza la formula
+`(10*peso_kg + 6.25*altezza_cm - 5*eta + coefficiente) * activity_factor`,
+coefficiente +5 / −161. La base non dipende dai target alimentari né dal
+bilancio desiderato. Il fattore descrive attività abituale **senza** le sessioni
+aggiuntive conteggiate separatamente, evitando il doppio conteggio.
+
+```json
+{"baseline":{"status":"available","source":"mifflin_st_jeor","provenance":"stima da formula","resting_kcal":1730,"central_kcal":2076,"low_kcal":1868.4,"high_kcal":2283.6,"inputs":{"weight_kg":80,"weight_basis":"filtered","height_cm":180,"age_years":40,"sex":"male","activity_factor":1.2},"reference":{"url":"https://pubmed.ncbi.nlm.nih.gov/2305711/","title":"Mifflin–St Jeor 1990","checked_on":"2026-10-07"},"uncertainty":"±10% dichiarato come intervallo di sensibilità, non intervallo di confidenza."}}
+```
+
+```json
+{"status":"unavailable","reason":"Per stimare la base servono peso filtrato recente e dati personali dichiarati.","missing":["weight","goals.body.height_cm","goals.body.age_years","goals.body.activity_factor","goals.body.sex"]}
+```
+
+`weight` indica la pesata da inserire tramite il check-in/misure già esistente.
+`missing` contiene solo i campi effettivamente assenti o non validi.
+Le vecchie basi `current_target_minus_approved_balance_estimate` non vengono
+riutilizzate, nemmeno nel congiunto o nel rientro. Basi da formula approvate
+sono riusabili solo con input invariati e approvazione recente. La stima manuale
+esplicita `estimated_non_workout_kcal` resta compatibile e identificata come
+`user_declared_non_workout_estimate`; nessuna stima viene ricavata dai demo.
+I target cambiano esclusivamente dopo approvazione, entro i limiti esistenti.
+Fonte primaria: [Mifflin et al. 1990](https://pubmed.ncbi.nlm.nih.gov/2305711/).
+
+**Handoff UI:** per source=mifflin_st_jeor mostrare «stima da formula»,
+fonte, intervallo e fattore dichiarato. Non usare il ramo generico «da Salute»
+per le sorgenti sconosciute. Collegare i quattro campi facoltativi e i percorsi
+missing[] al profilo/check-in; web/static/ non è stato modificato da questo passo.

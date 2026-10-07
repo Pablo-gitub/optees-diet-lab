@@ -28,7 +28,7 @@ class ActivityTargetTests(unittest.TestCase):
         today=self.app.diary.local_today();self.today=today;self.start=(today-dt.timedelta(days=today.weekday())).isoformat()
         target=dict(kcal_100g=dict(min=1400,target=1800,max=3000),protein_g_100g=dict(min=45,target=120,max=200),fat_g_100g=dict(min=25,target=50,max=100),carbs_available_g_100g=dict(min=90,target=217.5,max=400))
         daily=defaults(False);daily.update(enabled=True,targets=target,targets_demo=False)
-        response=self.client.put('/api/profile',json=dict(mode='free',daily_meals=daily,energy_balance_target_kcal=0),headers=self.headers);self.assertEqual(response.status_code,200,response.text)
+        response=self.client.put('/api/profile',json=dict(mode='free',daily_meals=daily,energy_balance_target_kcal=0,goals={'body':{'height_cm':180,'age_years':40,'sex':'male','activity_factor':1.2}}),headers=self.headers);self.assertEqual(response.status_code,200,response.text)
         with self.app.connect() as db:
             self.user=db.execute('SELECT id FROM users WHERE username=?',(name,)).fetchone()[0]
             db.execute("INSERT INTO measurement(user_id,date,kind,value,unit,source) VALUES(?,?,'weight',80,'kg','manual')",(self.user,today.isoformat()))
@@ -43,9 +43,9 @@ class ActivityTargetTests(unittest.TestCase):
         return self.client.post(f"/api/goals/day-targets/proposal/{proposal['id']}/{action}",json=dict(state_token=proposal['state_token'],**extra),headers=self.headers)
     def test_proposal_formula_macros_limits_and_no_automatic_changes(self):
         before=self.profile();proposal=self.proposal()['proposal'];self.assertEqual(self.profile(),before)
-        self.assertEqual(proposal['baseline']['source'],'current_target_minus_approved_balance_estimate')
+        self.assertEqual(proposal['baseline']['source'],'mifflin_st_jeor')
         active=next(d for d in proposal['days'] if d['day_type']=='training')
-        self.assertAlmostEqual(active['requested_kcal'],1906.4)
+        self.assertAlmostEqual(active['requested_kcal'],2182.4)
         self.assertEqual(active['proposed_kcal'],1890)
         self.assertEqual({d['targets']['protein_g_100g']['target'] for d in proposal['days']},{120})
         self.assertEqual(active['targets']['carbs_available_g_100g']['target'],240)
@@ -75,7 +75,7 @@ class ActivityTargetTests(unittest.TestCase):
         self.assertEqual(self.client.post('/api/goals/day-targets/proposal',json=dict(week_start=self.start)).status_code,403)
         self.assertEqual(TestClient(self.app.app).post('/api/goals/day-targets/proposal',json=dict(week_start=self.start)).status_code,401)
         with self.app.connect() as db:db.execute('DELETE FROM measurement WHERE user_id=?',(self.user,))
-        result=self.proposal();self.assertEqual(result['status'],'insufficient_data');self.assertEqual(result['missing'],['weight'])
+        result=self.proposal();self.assertEqual(result['status'],'unavailable');self.assertEqual(result['missing'],['weight'])
         with self.app.connect() as db:self.assertEqual(db.execute('SELECT count(*) FROM activity_target_proposal WHERE user_id=?',(self.user,)).fetchone()[0],0)
     def test_limits_extreme_budgets_and_protected_macro_infeasibility(self):
         profile=self.profile();measurements=[dict(kind='weight',unit='kg',value=80,source='manual',date=self.today.isoformat())]
@@ -152,3 +152,33 @@ class ActivityTargetTests(unittest.TestCase):
             old=profile['daily_meals']['targets'];data['day_targets']=dict(rest=copy.deepcopy(old),training=copy.deepcopy(old))
             asyncio.run(joint.generate_week(None,profile,data,self.app.make_config,load_foods()))
             self.assertEqual(captured[self.today.isoformat()]['daily_meals']['targets']['kcal_100g']['target'],1800)
+
+    def test_formula_independent_of_demo_and_missing_fields(self):
+        profile=self.profile();profile['_filtered_weight_kg']=80
+        a=activity_targets.baseline(profile,None);self.assertEqual(a['central_kcal'],2076);self.assertAlmostEqual(a['low_kcal'],1868.4);self.assertAlmostEqual(a['high_kcal'],2283.6)
+        profile['daily_meals']['targets']['kcal_100g']['target']=999;profile['energy_balance_target_kcal']=-1000
+        self.assertEqual(activity_targets.baseline(profile,None),a)
+        profile['goals']['body']['sex']='female';self.assertAlmostEqual(activity_targets.baseline(profile,None)['central_kcal'],1876.8)
+        profile.pop('_filtered_weight_kg');profile['goals']={}
+        result=activity_targets.baseline(profile,None);self.assertEqual(result['status'],'unavailable');self.assertEqual(set(result['missing']),{'weight','goals.body.height_cm','goals.body.age_years','goals.body.sex','goals.body.activity_factor'})
+    def test_health_wins_and_circular_legacy_is_never_reused(self):
+        profile=self.profile();profile['_filtered_weight_kg']=80
+        health={'non_workout_consumption_scenarios':dict(status='available',source='health',low_kcal=1800,central_kcal=2000,high_kcal=2200)}
+        self.assertEqual(activity_targets.baseline(profile,health),health['non_workout_consumption_scenarios'])
+        profile['approved_activity_targets']=dict(context_key=activity_targets.context_key(profile),approved_on=self.today.isoformat(),baseline=dict(health['non_workout_consumption_scenarios'],source='current_target_minus_approved_balance_estimate'))
+        self.assertIsNone(activity_targets.approved_baseline(profile));self.assertEqual(activity_targets.baseline(profile,None)['source'],'mifflin_st_jeor')
+    def test_demographic_validation(self):
+        import personal_goals
+        for key,value in [('age_years',True),('height_cm',99),('sex','unknown'),('activity_factor',0),('activity_factor',float('nan'))]:
+            with self.assertRaises(ValueError):personal_goals.validate({'body':{key:value}})
+
+    def test_formula_uses_filtered_weight_and_reports_all_missing_in_api(self):
+        profile=self.profile();measurements=[dict(kind='weight',unit='kg',source='manual',date=(self.today-dt.timedelta(days=i)).isoformat(),value=80+i) for i in range(3)]
+        p=activity_targets.build(profile,measurements,None,self.start,[],None,self.today)
+        filtered=activity_targets.analysis.weight_series(measurements,self.today)['daily_points'][-1]['filtered_kg']
+        self.assertAlmostEqual(p['baseline']['inputs']['weight_kg'],filtered)
+        self.assertNotEqual(filtered,80)
+        with self.app.connect() as db:
+            db.execute('DELETE FROM measurement WHERE user_id=?',(self.user,))
+            stored=json.loads(db.execute('SELECT profile FROM users WHERE id=?',(self.user,)).fetchone()[0]);stored['goals']={};db.execute('UPDATE users SET profile=? WHERE id=?',(json.dumps(stored),self.user))
+        result=self.proposal();self.assertEqual(result['status'],'unavailable');self.assertEqual(len(result['missing']),5)

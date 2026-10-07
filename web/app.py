@@ -77,8 +77,8 @@ def owner_profile(user):
     baseline=(report or {}).get('non_workout_consumption_scenarios',(report or {}).get('non_workout_scenarios',{}))
     approved=profile.get('approved_activity_targets',{})
     if baseline.get('status')!='available' and approved:
-        from activity_targets import context_key
-        if approved.get('context_key')==context_key(profile) and 0<=(diary.local_today()-dt.date.fromisoformat(approved['approved_on'])).days<=14:baseline=approved.get('baseline',{})
+        from activity_targets import approved_baseline
+        baseline=approved_baseline(profile) or baseline
     if baseline.get('status')=='available':profile['_energy_baseline_low']=baseline.get('low_kcal')
     from joint_energy import day_scenarios
     energy_inputs=dict(non_workout_consumption_scenarios=baseline,workout_energy_models=(report or {}).get('workout_energy_models',(report or {}).get('workout_forecasts',[])))

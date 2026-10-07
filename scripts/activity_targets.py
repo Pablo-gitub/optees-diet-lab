@@ -12,7 +12,7 @@ import progress_recalibration as calibration
 import activity_service
 from joint_energy import finite,SCENARIOS,ACTIVITIES
 ROOT=Path(__file__).resolve().parents[1]
-VERSION='activity-targets-v1'
+VERSION='activity-targets-v2-mifflin'
 
 
 def migrate(db):
@@ -76,14 +76,36 @@ def approved_baseline(profile):
     """Only an explicit, current approval; never infer an unapproved base."""
     approved=profile.get('approved_activity_targets',{})
     value=approved.get('baseline',{})
-    if approved.get('context_key')!=context_key(profile) or value.get('source') not in ('user_declared_non_workout_estimate','current_target_minus_approved_balance_estimate'):return None
+    if approved.get('context_key')!=context_key(profile) or value.get('source') not in ('user_declared_non_workout_estimate','mifflin_st_jeor'):return None
     try:
         from diary_service import local_today
         age=(local_today()-dt.date.fromisoformat(approved['approved_on'])).days
     except (KeyError,TypeError,ValueError):return None
     if not 0<=age<=14 or value.get('status')!='available' or not all(finite(value.get(s+'_kcal')) for s in SCENARIOS):return None
     if not 1000<=value['central_kcal']<=6000 or not value['low_kcal']<=value['central_kcal']<=value['high_kcal']:return None
+    if value.get('source')=='mifflin_st_jeor':
+        current=formula_baseline(profile)
+        if current.get('status')!='available' or current.get('inputs')!=value.get('inputs'):return None
     return copy.deepcopy(value)
+
+
+def formula_baseline(profile):
+    body=profile.get('goals',{}).get('body',{})
+    kg=profile.get('_filtered_weight_kg');missing=[]
+    if not finite(kg) or not 30<=kg<=300:missing.append('weight')
+    for key,lo,hi in (('height_cm',100,250),('age_years',18,120),('activity_factor',1,2.5)):
+        if not finite(body.get(key)) or not lo<=body[key]<=hi:missing.append('goals.body.'+key)
+    if body.get('sex') not in ('male','female'):missing.append('goals.body.sex')
+    if missing:return dict(status='unavailable',reason='Per stimare la base servono peso filtrato recente e dati personali dichiarati.',missing=missing)
+    rest=10*kg+6.25*body['height_cm']-5*body['age_years']+(5 if body['sex']=='male' else -161)
+    central=rest*body['activity_factor']
+    if not 1000<=central<=6000:return dict(status='unavailable',reason='Stima da formula fuori dai limiti 1000–6000 kcal.',missing=[])
+    return dict(status='available',source='mifflin_st_jeor',provenance='stima da formula',low_kcal=.9*central,central_kcal=central,high_kcal=1.1*central,
+                resting_kcal=rest,inputs=dict(weight_kg=kg,weight_basis='filtered',**{k:body[k] for k in ('height_cm','age_years','sex','activity_factor')}),
+                formula='(10 × kg + 6.25 × cm − 5 × anni + coefficiente sesso) × fattore attività',
+                reference=dict(url='https://pubmed.ncbi.nlm.nih.gov/2305711/',title='Mifflin–St Jeor 1990',checked_on='2026-10-07'),
+                uncertainty='±10% dichiarato come intervallo di sensibilità, non intervallo di confidenza.',
+                assumption='Fattore dichiarato per attività abituale senza le sessioni aggiuntive pianificate; queste sono conteggiate separatamente al netto del riposo.')
 
 
 def baseline(profile,health,override=None):
@@ -92,22 +114,25 @@ def baseline(profile,health,override=None):
         return copy.deepcopy(value)
     approved=approved_baseline(profile) if override is None else None
     if approved is not None:return approved
+    if override is None:return formula_baseline(profile)
     if override is not None:
         if not finite(override) or not 1000<=override<=6000:raise DomainError('Stima della base fuori dall’intervallo 1000–6000 kcal')
         central=override;source='user_declared_non_workout_estimate'
-    else:
-        rest=profile.get('day_type_targets',{}).get('rest',profile['daily_meals']['targets'])
-        central=rest['kcal_100g']['target']-profile['energy_balance_target_kcal'];source='current_target_minus_approved_balance_estimate'
     if not finite(central) or not 1000<=central<=6000:return analysis.unavailable('Base stimata fuori dai limiti: occorre una stima esplicita o Salute valida.')
     return dict(status='available',source=source,low_kcal=max(1000,.8*central),central_kcal=central,high_kcal=min(6000,1.2*central),uncertainty='Base non misurata; ±20% è un intervallo di sensibilità euristico, non un intervallo di confidenza.')
 
 
 def build(profile,measurements,health,start,sessions,override,today):
+    weight=analysis.weight_series(measurements,today)
+    profile=copy.deepcopy(profile)
+    profile.pop('_filtered_weight_kg',None)
+    if weight['status']=='available':profile['_filtered_weight_kg']=weight['daily_points'][-1]['filtered_kg']
+    base=baseline(profile,health,override)
+    if base['status']!='available':return base
     if not profile.get('daily_meals',{}).get('enabled'):return analysis.unavailable('Attiva il bilancio completo di colazione e spuntini.',missing=['daily_meals.enabled'])
     balance=profile.get('energy_balance_target_kcal')
     if not analysis.number(balance):return analysis.unavailable('Manca un bilancio calorico esplicitamente approvato.',missing=['energy_balance_target_kcal'])
     if not -1000<=balance<=1000:return analysis.unavailable('Bilancio approvato fuori dai limiti ±1000 kcal.')
-    weight=analysis.weight_series(measurements,today)
     if weight['status']!='available':return analysis.unavailable('Serve una pesata recente per il peso filtrato.',missing=['weight'])
     kg=weight['daily_points'][-1]['filtered_kg']
     if not 30<=kg<=300:return analysis.unavailable('Peso filtrato fuori dai limiti 30–300 kg.')
@@ -116,8 +141,6 @@ def build(profile,measurements,health,start,sessions,override,today):
     try:
         for targets in [original,*groups.values()]:calibration.safe_targets(targets)
     except ValueError as exc:return analysis.unavailable(str(exc))
-    base=baseline(profile,health,override)
-    if base['status']!='available':return base
     prior=profile.get('activity_target_parameters',{})
     ratio=prior.get('protein_g_per_kg',max([original['protein_g_100g']['target']]+[g['protein_g_100g']['target'] for g in groups.values()])/kg)
     protein=round(kg*ratio,3);fat=max(25,original['fat_g_100g']['target'],*[g['fat_g_100g']['min'] for g in groups.values()]);days=[]
