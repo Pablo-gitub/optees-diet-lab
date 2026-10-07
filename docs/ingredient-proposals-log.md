@@ -982,3 +982,7 @@ La presenza di abbinamenti da evitare (`avoid_pairings`) per ogni combinazione s
 - Rimosse 20 motivazioni sanitarie o digestive non supportate da fonti (es. «frutta acida e latte caldo coagulano nello stomaco», «fermentazione addominale», nitriti, indice glicemico): gli abbinamenti da evitare restano solo come gusto culinario.
 - Sei alimenti hanno un macro vuoto per tracce CREA («tr») non ancora importate come 0: uova, Parmigiano, stracchino, formaggio spalmabile, mela con buccia, finocchi.
 - Approvato come euristica culinaria per 8.12.
+
+### Integrazione backend degli abbinamenti tipici — 2026-10-07
+
+Integrato `config/meal-typical-pairings.json` (51 abbinamenti), derivato dalla proposta Gemini e dalla revisione documentata sopra in «Revisione Claude — Sessione 7». La provenienza della revisione è un riferimento a questo registro, non un'etichetta di approvazione attribuita a Claude nel catalogo. Le categorie sono euristiche di ordinamento; il titolo è ammesso solo con identità esatta degli ingredienti principali. Non sono applicati vincoli sanitari dagli anti-pattern culinari.

@@ -123,3 +123,49 @@ class MatchTests(unittest.TestCase):
         with self.web.connect() as db,patch('plan_diet_day.solve_problem',side_effect=fake):result=asyncio.run(matches.deck(None,db,self.user,self.profile,'breakfast','rest',self.web.make_config))
         self.assertIn(result['status'],('partial','unavailable'));self.assertTrue(result['reason'])
         for card in result['cards']:self.assertEqual([f['generic_id'] for f in card['foods']],['007510'])
+
+
+class TypicalPairingsTests(unittest.TestCase):
+    def setUp(self):matches.clear_typical_pairings_cache()
+    def tearDown(self):matches.clear_typical_pairings_cache()
+    def test_loading_and_explicit_cache_invalidation(self):
+        pairings=matches.load_typical_pairings()
+        self.assertEqual(len(pairings),51)
+        self.assertTrue(all(p['reviewed'] and p['foods'] and p['slots'] for p in pairings))
+        pairings.clear();self.assertEqual(len(matches.load_typical_pairings()),51)
+        with patch.dict(matches.POLICY,typical_pairings_file='missing.json'):
+            matches.clear_typical_pairings_cache()
+            with self.assertRaisesRegex(matches.DomainError,'Catalogo.*missing.json'):matches.load_typical_pairings()
+    def test_malformed_catalog_is_explicit(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path=Path(directory)/'bad.json'
+            for content in ('{', '{}', '{"pairings":[{}]}'):
+                path.write_text(content);matches.clear_typical_pairings_cache()
+                with patch.dict(matches.POLICY,typical_pairings_file=str(path)):
+                    with self.assertRaisesRegex(matches.DomainError,'Catalogo'):matches.load_typical_pairings()
+    def test_exact_category_extra_food_and_weights(self):
+        foods=load_foods();pairings=matches.load_typical_pairings()
+        p=next(p for p in pairings if 'lenticchie' in p['id'])
+        level,entry=matches.match_typical(p['foods'],'lunch',foods,[p])
+        self.assertEqual(level,2);self.assertTrue(matches.typical_metadata(level,entry)['typical_dish'])
+        key=['000600','004250','005700']
+        # Same categories, different ingredient identities: no invented dish name.
+        category_foods={i:{'category':c} for i,c in zip(key,['Cereali e derivati','Legumi','Verdure e ortaggi'])}
+        level,entry=matches.match_typical(key,'lunch',category_foods,[p])
+        self.assertEqual(level,1);self.assertEqual(matches.typical_metadata(level,entry),{})
+        level,entry=matches.match_typical(p['foods']+['106500'],'lunch',foods,[p])
+        self.assertNotEqual(level,2);self.assertEqual(matches.typical_metadata(level,entry),{})
+        with patch.dict(matches.POLICY,typical_exact_weight=7,typical_category_weight=.4):
+            self.assertEqual(matches.typical_priority(2),-7);self.assertEqual(matches.typical_priority(1),-.4)
+    def test_free_breakfast_and_snacks_only(self):
+        from daily_meals import defaults
+        foods=load_foods();base=dict(mode='free',daily_meals=defaults())
+        base['daily_meals']['enabled']=True;base['daily_meals']['afternoon_fruit']=True
+        for slot in ('breakfast','morning_snack','afternoon_snack'):
+            free=matches.structures(base,slot,foods)
+            personal=matches.structures(dict(base,mode='sedentary'),slot,foods)
+            self.assertTrue(any(len(s)>1 for s in free),slot)
+            self.assertTrue(all(len(s)==1 for s in personal),slot)
+            typical=next(p for p in matches.load_typical_pairings() if slot in p['slots'])
+            self.assertIn([[f] for f in typical['foods']],free)
+            self.assertNotIn([[f] for f in typical['foods']],personal)

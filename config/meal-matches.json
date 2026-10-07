@@ -17,5 +17,8 @@
     "afternoon_snack": 0.05,
     "dinner": 0.35
   },
+  "typical_pairings_file": "config/meal-typical-pairings.json",
+  "typical_exact_weight": 2.0,
+  "typical_category_weight": 1.0,
   "reviewed_typical_pairings": []
 }

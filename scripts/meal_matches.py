@@ -14,6 +14,77 @@ from plan_recipe import values_verified
 ROOT=Path(__file__).resolve().parents[1]
 POLICY=json.loads((ROOT/'config/meal-matches.json').read_text())
 
+MEAL_SLOT_MAP = {
+    'pranzo': 'lunch',
+    'cena': 'dinner',
+    'colazione': 'breakfast',
+    'spuntino_mattina': 'morning_snack',
+    'merenda_pomeriggio': 'afternoon_snack',
+    'spuntino_serale': 'afternoon_snack',
+}
+
+_TYPICAL_CACHE = None
+
+def clear_typical_pairings_cache():
+    global _TYPICAL_CACHE
+    _TYPICAL_CACHE = None
+
+
+def load_typical_pairings():
+    global _TYPICAL_CACHE
+    if _TYPICAL_CACHE is not None:
+        return copy.deepcopy(_TYPICAL_CACHE)
+    pairings = [copy.deepcopy(p) for p in POLICY.get('reviewed_typical_pairings', []) if p.get('reviewed') is True]
+    ref_file = POLICY.get('typical_pairings_file')
+    if ref_file:
+        path = ROOT / ref_file
+        try:
+            data = json.loads(path.read_text(encoding='utf-8'))
+            if not isinstance(data, dict) or not isinstance(data.get('pairings'), list):
+                raise ValueError('pairings deve essere una lista')
+            for p in data['pairings']:
+                if not isinstance(p, dict) or not isinstance(p.get('components'), list) or not isinstance(p.get('meals'), list):
+                    raise ValueError('abbinamento senza components/meals validi')
+                foods = [c['crea_id'] for c in p['components'] if c.get('role') != 'condimento']
+                if not p.get('id') or not foods or not all(isinstance(f,str) for f in foods):
+                    raise ValueError('id e alimenti CREA obbligatori')
+                slots = [MEAL_SLOT_MAP[m] for m in p['meals'] if m in MEAL_SLOT_MAP]
+                categories=p.get('categories', [])
+                if not slots or not isinstance(categories,list) or not all(isinstance(c,str) for c in categories):
+                    raise ValueError('pasti o categorie non validi')
+                dish=p.get('example_dish', {})
+                if not isinstance(dish,dict):raise ValueError('example_dish deve essere un oggetto')
+                pairings.append(dict(id=p['id'],title=p.get('title'),slots=slots,foods=foods,
+                    categories=categories,example_dish=dish.get('name') or p.get('title'),reviewed=True))
+        except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
+            raise DomainError(f'Catalogo degli abbinamenti tipici non disponibile ({ref_file}): {exc}') from exc
+    _TYPICAL_CACHE = pairings
+    return copy.deepcopy(pairings)
+
+
+def match_typical(key, slot, foods, pairings):
+    key_set=set(key)
+    eligible=[p for p in pairings if p.get('reviewed') is True and slot in p.get('slots', [])]
+    for p in eligible:
+        if set(p.get('foods', []))-set(OIL)==key_set:return 2,p
+    categories={foods[i]['category'] for i in key if i in foods}
+    ranked=[]
+    for p in eligible:
+        main=set(p.get('categories', []))-{'Oli e grassi'}
+        if main and main<=categories:ranked.append(p)
+    if ranked:return 1,max(ranked,key=lambda p:len(set(p.get('foods',[]))&key_set))
+    return 0,None
+
+
+def typical_priority(level):
+    return -float(POLICY.get('typical_exact_weight',2)) if level==2 else -float(POLICY.get('typical_category_weight',1)) if level==1 else 0
+
+
+def typical_metadata(level, pairing):
+    if level!=2 or not pairing:return {}
+    return dict(typical_dish=pairing.get('example_dish') or pairing.get('title'),
+        typical_pairing_id=pairing.get('id'),typical_match_level=level)
+
 
 def migrate(db):
     db.executescript('''CREATE TABLE IF NOT EXISTS meal_match(user_id INTEGER,id TEXT,slot TEXT,day_type TEXT,context TEXT,combination TEXT,payload TEXT,created REAL,PRIMARY KEY(user_id,id));
@@ -111,7 +182,13 @@ def structures(config,slot,foods):
     def var(*args):variables.append(args);return len(variables)-1
     plain=copy.deepcopy(config);plain.pop('_match_cards',None)
     add_choices(plain,foods,var,lambda *args:None,choices)
-    return [[[c['food_id']]] for c in choices if c['meal']==slot]
+    habits=[[[c['food_id']]] for c in choices if c['meal']==slot]
+    if config.get('mode')=='free':
+        typical=load_typical_pairings()
+        slot_typical=[p for p in typical if slot in p.get('slots',[])]
+        extra=[[[f] for f in p['foods']] for p in slot_typical if p.get('foods')]
+        return habits+extra
+    return habits
 
 
 def image_for(label):
@@ -189,14 +266,17 @@ async def deck(session,db,user,profile,slot,kind,make_config):
     seen={tuple(json.loads(r[0])) for r in db.execute('SELECT combination FROM meal_match WHERE user_id=? AND context=?',(user,context))}
     votes=current_votes(db,user);liked={tuple(json.loads(r['payload'])['combination']) for r in votes.values() if r['vote'] in ('like','love')}
     ordered=list(candidates)
+    typical_pairings=load_typical_pairings()
+
     cards=[];novel=[];familiar=[];tested=0;started=time.monotonic();certified=True
     while ordered:
         selected=novel+familiar
         def priority(key):
             phase=(key in seen) if len(novel)<3 else (0 if key in liked else 1)
             overlap=max((len(set(key)&set(c['combination'])) for c in selected),default=0)
-            typical=any(p.get('reviewed') is True and set(p.get('foods',[]))<=set(key) for p in POLICY['reviewed_typical_pairings'])
-            return (phase,overlap,not typical,key)
+            lvl,p=match_typical(key,slot,foods,typical_pairings)
+            typical_score=typical_priority(lvl)
+            return (phase,overlap,typical_score,key)
         key=min(ordered,key=priority);ordered.remove(key)
         if time.monotonic()-started>POLICY['deck_seconds']:certified=False;break
         items=copy.deepcopy(candidates[key]);p=model(items,target);tested+=1
@@ -208,6 +288,8 @@ async def deck(session,db,user,profile,slot,kind,make_config):
         values=values_verified(p,result)
         for i,item in enumerate(items):item['grams']=int(round(values[i]*item.pop('_step')))
         public=dict(slot=slot,day_type=kind,mode=personal['mode'],targets=target,foods=items,combination=list(key),nutrients={n.replace('_100g',''):round(sum(i['grams']*i['per_100g'][n.replace('_100g','')]/100 for i in items),3) for n in NUTRIENTS})
+        lvl,tp=match_typical(key,slot,foods,typical_pairings)
+        public.update(typical_metadata(lvl,tp))
         public['id']=hashlib.sha256(json.dumps(public,sort_keys=True).encode()).hexdigest()[:32];public['exploration']=key not in seen
         public['optimization']=dict(engine='optees.milp.linear',status=result['mathematical_status'],validation='verified')
         (novel if public['exploration'] else familiar).append(public)

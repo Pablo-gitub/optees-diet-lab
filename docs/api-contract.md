@@ -1095,3 +1095,15 @@ Fonte primaria: [Mifflin et al. 1990](https://pubmed.ncbi.nlm.nih.gov/2305711/).
 fonte, intervallo e fattore dichiarato. Non usare il ramo generico «da Salute»
 per le sorgenti sconosciute. Collegare i quattro campi facoltativi e i percorsi
 missing[] al profilo/check-in; web/static/ non è stato modificato da questo passo.
+
+### 8.12 — Abbinamenti tipici rivisti
+
+`typical_dish`, `typical_pairing_id` e `typical_match_level: 2` sono presenti soltanto quando la combinazione di ingredienti canonici coincide esattamente con quella del catalogo (oli esclusi come nel campo `combination`). Prodotti di marca equivalenti mantengono l'identità canonica; ingredienti aggiuntivi impediscono il nome del piatto. Esempio di scheda con corrispondenza solo per categorie:
+
+```json
+{"combination":["000600","004250","005700"],"slot":"lunch","day_type":"rest"}
+```
+
+Questa scheda non espone alcun campo `typical_*`: le categorie influenzano soltanto l'ordinamento, mediante `typical_category_weight`. L'identità esatta usa `typical_exact_weight`. I nomi sono suggerimenti culinari, non attestazioni della preparazione della ricetta.
+
+Catalogo configurato assente o malformato: errore di dominio con motivo italiano `Catalogo degli abbinamenti tipici non disponibile (...)`, senza ignorare il problema. Le strutture tipiche per colazione/spuntini si aggiungono soltanto in modalità `free`, con i pasti del profilo attivi; le diete personali conservano le proprie strutture.
