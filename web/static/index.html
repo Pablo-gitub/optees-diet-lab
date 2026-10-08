@@ -17,6 +17,10 @@
     <script src="/static/locked.js" defer></script>
     <script src="/static/matches.js" defer></script>
     <script src="/static/setup.js" defer></script>
+    <script src="/static/taste-setup.js" defer></script>
+    <script src="/static/meal-editor.js" defer></script>
+    <script src="/static/week-planning.js" defer></script>
+    <script src="/static/progress-dashboard.js" defer></script>
   </head>
   <body>
     <section id="login" class="login">
@@ -62,7 +66,7 @@
           </button>
           <button class="nav" data-page="planning">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="3" /><path d="M16 2v4M8 2v4M3 10h18M8 15h2M14 15h2" /></svg>
-            <span>Piano</span>
+            <span>Settimana</span>
           </button>
           <button class="nav" data-page="workout">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7v10M3 9v6M18 7v10M21 9v6M6 12h12" /></svg>
@@ -70,7 +74,7 @@
           </button>
           <button class="nav" data-page="recipes">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 13.9A4 4 0 0 1 7.3 6a5 5 0 0 1 9.4 0A4 4 0 0 1 18 13.9V21H6z" /><path d="M6 17h12" /></svg>
-            <span>Ricette</span>
+            <span>Cucina</span>
           </button>
           <button class="nav" data-page="matches">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="12" height="16" rx="2" transform="rotate(-8 11 11)" /><path d="M12 9.5c.8-1.6 3.5-1.3 3.5.7 0 1.6-2 2.8-3.5 4-1.5-1.2-3.5-2.4-3.5-4 0-2 2.7-2.3 3.5-.7z" /></svg>
@@ -107,7 +111,10 @@
           </div>
         </header>
 
+        <section id="meal-editor" hidden aria-labelledby="meal-editor-heading"></section>
         <section id="home">
+          <div id="taste-invite" class="panel compact" hidden></div>
+          <div id="home-load-error" class="panel compact" role="alert" hidden></div>
           <div class="day-head">
             <button id="day-prev" type="button" class="icon-button" aria-label="Giorno precedente">‹</button>
             <div class="day-title">
@@ -123,12 +130,11 @@
             <button type="button" class="primary" data-goto="planning">Pianifica la settimana</button>
           </div>
           <div class="today-grid">
+            <div id="day-next-action" class="panel compact" hidden></div>
+            <div id="day-workout" class="panel compact"></div>
             <div id="day-meals" class="meal-list"></div>
-            <div class="today-side">
-              <div id="day-progress" class="panel compact"></div>
-              <div id="day-workout" class="panel compact"></div>
-              <div id="day-rating" class="panel compact" hidden></div>
-            </div>
+            <div id="day-progress" class="panel compact"></div>
+            <div id="day-rating" class="panel compact" hidden></div>
           </div>
 
           <div class="section-head"><h2>Settimana</h2><span id="week-range" class="muted"></span></div>
@@ -144,39 +150,57 @@
         </section>
 
         <section id="planning" hidden>
+          <p id="planning-milestone" class="notice"></p>
+          <div class="section-head"><h2 id="planning-heading">La tua settimana</h2><label>Settimana<select id="week-start" aria-label="Settimana da pianificare"></select></label></div>
+          <div id="active-week" aria-live="polite"></div>
+          <div id="week-review" class="panel" hidden aria-live="polite"></div>
           <div class="segmented" role="tablist" aria-label="Pianificazione">
             <button type="button" class="seg active" role="tab" aria-selected="true" data-plan-tab="week">Settimana</button>
             <button type="button" class="seg" role="tab" aria-selected="false" data-plan-tab="day">Esplora una giornata</button>
           </div>
 
           <div data-plan-panel="week">
-            <div class="control-card">
+            <details id="week-config" class="control-card">
+              <summary>Prepara una nuova bozza</summary>
+              <p class="muted small">I parametri qui sotto valgono per questa proposta. Gli obiettivi permanenti si modificano nel Profilo.</p>
+              <div id="week-target-source" class="notice"></div>
               <div class="controls">
                 <label id="week-mode-label">Programma<select id="week-mode"></select></label>
-                <label>Settimana<select id="week-start"></select></label>
-                <span></span>
-                <button id="week-generate" type="button" class="primary">Genera la settimana</button>
+                <label>Ambito<select id="week-kind"><option value="week">Solo alimentazione</option><option value="joint">Alimentazione e allenamento</option><option value="workout">Solo allenamento</option></select></label>
+                <label id="week-alternatives-label">Cerca fino a<select id="week-alternatives"><option value="1">1 proposta · confronto rapido</option><option value="3">3 proposte</option><option value="4" selected>4 proposte · confronto più ampio</option></select></label>
               </div>
-              <label class="switch-row"><input type="checkbox" id="week-joint" /> <span><strong>Pianifica anche l’allenamento</strong> Dieta e palestra calcolate insieme: nei giorni di allenamento valgono obiettivi diversi.</span></label>
+              <label class="switch-row" hidden><input type="checkbox" id="week-joint" /> <span><strong>Pianifica anche l’allenamento</strong> Dieta e palestra calcolate insieme: nei giorni di allenamento valgono obiettivi diversi.</span></label>
               <div id="joint-options" class="joint-options" hidden>
                 <div class="joint-block">
                   <h3>Minuti per l’allenamento</h3>
                   <p class="muted small">Riscaldamento e recuperi compresi; 0 = nessun allenamento quel giorno.</p>
                   <div id="joint-availability" class="availability"></div>
                 </div>
+                <details class="joint-block">
+                  <summary>Limiti di attività della bozza</summary>
+                  <p class="muted small">Questi limiti valgono per il calcolo. Per il cardio scegli un’attività extra o configura l’attrezzatura in Allenamento.</p>
+                  <div class="workout-draft-limits">
+                    <label>Sessioni · minimo<input data-workout-param="sessions_min" type="number" value="3" min="0" max="14" step="1" /></label>
+                    <label>Sessioni · massimo<input data-workout-param="sessions_max" type="number" value="4" min="0" max="14" step="1" /></label>
+                    <label>Sessioni di forza · minimo<input data-workout-param="strength_sessions_min" type="number" value="1" min="0" max="14" step="1" /></label>
+                    <label>Sessioni di forza · massimo<input data-workout-param="strength_sessions_max" type="number" value="2" min="0" max="14" step="1" /></label>
+                    <label>Cardio · minimo minuti<input data-workout-param="cardio_minutes_min" type="number" value="40" min="0" max="10080" step="1" /></label>
+                    <label>Settimana · massimo minuti<input data-workout-param="weekly_minutes_max" type="number" value="110" min="0" max="10080" step="1" /></label>
+                  </div>
+                </details>
                 <div class="joint-block">
                   <h3>Altre attività</h3>
                   <p class="muted small">Camminate, bici, nuoto… Optees le distribuisce nei minuti disponibili, insieme o al posto della palestra. Nessuna scelta = quelle che ti piacciono nel profilo.</p>
                   <div id="joint-activities"></div>
                 </div>
-                <div class="joint-block">
-                  <h3>Obiettivi della giornata intera</h3>
+                <div class="joint-block" data-joint-only>
+                  <h3>Obiettivi della bozza · giornata intera</h3>
                   <p id="joint-modes-note" class="muted small"></p>
                   <div id="joint-targets" class="target-grid"></div>
                   <label class="check small-check"><input type="checkbox" id="joint-ranges" /> Mostra e modifica gli intervalli ammessi (minimo–massimo)</label>
                 </div>
-                <div class="joint-block">
-                  <h3>Bilancio calorico</h3>
+                <div class="joint-block" data-joint-only>
+                  <h3>Bilancio calorico della bozza</h3>
                   <div class="balance-row">
                     <select id="joint-balance" aria-label="Bilancio calorico">
                       <option value="">Non indicato</option>
@@ -188,12 +212,14 @@
                     </select>
                     <label id="joint-balance-custom-wrap" class="inline-label" hidden>kcal al giorno<input id="joint-balance-custom" type="number" step="50" min="-1000" max="1000" /></label>
                   </div>
-                  <p class="muted small">Serve a valutare quanto ogni settimana regge se consumi più o meno del solito (dati Apple Salute) e alla ricalibrazione del lunedì. Senza bilancio queste valutazioni non vengono fatte.</p>
+                  <p class="muted small">Serve al confronto degli scenari di questa proposta, quando sono disponibili dati Salute sufficienti. Non modifica il bilancio salvato nel Profilo.</p>
                 </div>
               </div>
               <div id="week-locked" class="joint-block locked-block"></div>
               <p class="hint"><span id="week-hint">Optees propone 7 giorni completi rispettando la dieta, le porzioni e le ripetizioni. I pasti già registrati restano bloccati.</span></p>
-            </div>
+              <button id="week-generate" type="button" class="primary">Genera bozza</button>
+            </details>
+            <div id="week-draft-context"></div>
             <div id="week-job" class="job" hidden></div>
             <div id="week-warnings"></div>
             <div id="week-robustness"></div>
@@ -246,14 +272,14 @@
             <div class="section-head"><h2>Sessioni della settimana</h2><span id="wk-range" class="muted"></span></div>
             <div id="wk-sessions" class="session-list"></div>
             <div class="panel">
-              <h2>Genera la settimana di allenamento</h2>
+              <h2>Pianifica gli allenamenti in Settimana</h2>
               <p class="muted">
                 Minuti disponibili per ogni giorno, riscaldamento e recuperi compresi (0 = non disponibile). Optees sceglie
                 le sessioni rispettando tempo, recupero e attrezzatura.
               </p>
               <label class="inline-label">Settimana<select id="wk-week-start"></select></label>
-              <div id="wk-availability" class="availability"></div>
-              <button id="wk-generate" type="button" class="primary">Genera la settimana</button>
+              <div id="wk-availability" class="availability" hidden></div>
+              <button id="wk-generate" type="button" class="primary">Apri pianificazione</button>
               <div id="wk-job" class="job" hidden></div>
               <div id="wk-warnings"></div>
               <div id="wk-plans" class="cards"></div>
@@ -273,11 +299,19 @@
           </div>
         </section>
 
+        <section id="taste-onboarding" hidden aria-labelledby="taste-heading"></section>
         <section id="profile" hidden>
-          <div id="setup-panel" class="setup"></div>
+          <div id="taste-summary" class="panel"></div>
+          <div id="profile-shortcuts" class="panel"></div>
+          <details id="profile-milestones" class="panel"><summary>Traguardi in ordine</summary><div id="milestone-editor"></div></details>
+          <details id="profile-objectives" class="panel">
+            <summary>Obiettivi personali e calorie</summary>
+            <div id="setup-panel" class="setup"></div>
+            <div id="goals-panel" class="panel"></div>
+
+          </details>
           <details id="advanced-settings" class="advanced-settings">
             <summary>Impostazioni avanzate <span class="muted small">attività, allenamento, carichi, pasti, cucine, esclusioni</span></summary>
-          <div id="goals-panel" class="panel"></div>
           <form id="profile-form">
             <div class="panel">
               <h2>Chi sei</h2>
@@ -286,15 +320,15 @@
                 <label>Nome visualizzato<input id="display-name" maxlength="80" /></label>
                 <label>Programma iniziale<select id="profile-mode"></select></label>
               </div>
-              <label>Abitudini e preferenze<textarea id="preferences" rows="3" maxlength="2000"></textarea></label>
+              <label>Nota personale<textarea id="preferences" rows="3" maxlength="2000"></textarea></label>
               <p class="muted">
-                Note personali. Le scelte della dieta sono vincoli; le preferenze servono a ordinare le soluzioni ammesse.
+                Note personali come promemoria: non sono interpretate dal pianificatore. Le esclusioni per codice alimento sono vincoli espliciti.
               </p>
             </div>
 
             <div class="panel">
               <h2>Le cucine che preferisco</h2>
-              <p class="muted">Tocca per selezionare. Nessuna selezione = nessuna preferenza; i vincoli della dieta restano prioritari.</p>
+              <p class="muted">Queste scelte filtrano il catalogo delle ricette; non ordinano le soluzioni del pianificatore. Nessuna selezione = tutte le cucine.</p>
               <div id="cuisine-preferences" class="chips"></div>
             </div>
 
@@ -362,6 +396,7 @@
         </section>
 
         <section id="recipes" hidden>
+          <div class="panel compact"><h2>Dal piatto alla settimana</h2><p>Le ricette consultabili possono avere ingredienti ancora da verificare. Le ricette pronte possono essere fissate in un pasto prima di generare la settimana.</p><div class="actions"><button type="button" class="secondary" data-goto="planning">Scegli un pasto in Settimana</button><button type="button" class="ghost" data-goto="matches">Affina gli abbinamenti</button><button type="button" class="ghost" data-goto="profile">Gusti e abitudini</button></div></div>
           <div class="segmented" role="tablist" aria-label="Strumenti ricette">
             <button type="button" class="seg active" role="tab" aria-selected="true" data-recipe-tab="catalog">Catalogo</button>
             <button type="button" class="seg" role="tab" aria-selected="false" data-recipe-tab="diet">Compatibili con la dieta</button>
@@ -380,8 +415,7 @@
             </div>
             <label class="check"><input type="checkbox" id="only-preferred" /> Mostra solo le mie cucine preferite</label>
             <p class="hint">
-              <span>Nutrienti <strong>dichiarati dalla fonte</strong>, ancora da ricalcolare sugli alimenti scelti. Le ricette
-              non entrano ancora nel solver della dieta.</span>
+              <span>Nutrienti <strong>dichiarati dalla fonte</strong>, ancora da ricalcolare sugli alimenti scelti. Solo le ricette indicate come pronte possono entrare nel piano; la loro composizione viene ricalcolata sugli alimenti verificati.</span>
             </p>
             <div class="section-head"><h2>Ricette</h2><span id="recipe-count" class="muted"></span></div>
             <div id="recipe-list" class="cards"></div>
@@ -485,6 +519,8 @@
         </section>
 
         <section id="progress" hidden>
+          <div class="panel"><div class="section-head"><h2>Energia prevista e registrata</h2><label>Prima data del periodo<input id="energy-start" type="date" required /></label></div><div id="energy-content" aria-live="polite"></div></div>
+          <div class="panel"><div class="section-head"><h2>I tuoi traguardi</h2><button type="button" class="ghost" data-goto="profile">Modifica nel Profilo</button></div><div id="milestone-progress"></div></div>
           <div class="stat-tiles" id="progress-tiles"></div>
           <div class="panel checkin-panel">
             <div class="section-head"><h2>Check-in del lunedì</h2><span id="checkin-date" class="muted"></span></div>
@@ -500,7 +536,7 @@
           </div>
           <div class="panel">
             <div class="section-head chart-head">
-              <h2>Peso reale e atteso</h2>
+              <h2>Peso registrato e atteso</h2>
               <div class="segmented small-seg" role="tablist" aria-label="Periodo">
                 <button type="button" class="seg" data-progress-weeks="4">4 sett.</button>
                 <button type="button" class="seg active" data-progress-weeks="8">8 sett.</button>

@@ -62,7 +62,9 @@ function niceStep(span) {
   const raw = span / 4;
   return [0.2, 0.5, 1, 2, 5, 10].find((s) => s >= raw) || 10;
 }
+let progressChartData = null;
 function renderWeightChart(data) {
+  progressChartData = data;
   const box = $('weight-chart');
   const note = $('weight-chart-note');
   box.replaceChildren();
@@ -91,7 +93,9 @@ function renderWeightChart(data) {
     box.append(element('p', 'Nessuna pesata nelle ultime ' + progressWeeks + ' settimane: inizia con il check-in del lunedì.', 'empty-inline muted'));
     return;
   }
+  const activeGoal = typeof milestoneData !== 'undefined' && milestoneData?.active?.metric === 'weight_kg' ? milestoneData.active.target : null;
   const values = daily.flatMap((p) => [p.value, p.filtered_kg]).concat(segments.flatMap((s) => s.points.flatMap((p) => [p.low_kg, p.high_kg])));
+  if(activeGoal != null) values.push(activeGoal);
   let lo = Math.min(...values),
     hi = Math.max(...values);
   const pad = Math.max(0.4, (hi - lo) * 0.12);
@@ -132,6 +136,7 @@ function renderWeightChart(data) {
       chart.append(label);
     }
   }
+  if(activeGoal != null){chart.append(svg('line',{x1:L,x2:W-R,y1:y(activeGoal),y2:y(activeGoal),'stroke-dasharray':'3 3'},'milestone-line'));const targetLabel=svg('text',{x:L+4,y:y(activeGoal)-6},'axis-label');targetLabel.textContent='Traguardo attivo '+kgText(activeGoal)+' kg';chart.append(targetLabel);}
   // Expected weight: one band per week, never joined across weeks without a forecast.
   segments.forEach((s) => {
     const upper = s.points.map((p) => x(p.date) + ',' + y(p.high_kg));

@@ -25,6 +25,7 @@ from optees_command import optees_command
 from daily_meals import defaults as daily_defaults, validate as validate_daily
 from target_validation import profile_target_warnings
 from multiobjective_day import solve_strategy, nondominated, choose_arm, STRATEGIES
+import taste_onboarding
 import diary_service as diary
 import workout_service as workouts
 import workout_configuration as workout_settings
@@ -55,6 +56,7 @@ def profile_defaults(profile):
     profile.setdefault('preferred_cuisines', [])
     profile.setdefault('meal_timing',dict(mode='auto',meals={}))
     profile.setdefault('daily_meals',daily_defaults(bool(profile.get('food_preferences'))))
+    profile.setdefault('taste_onboarding',taste_onboarding.state(profile))
     return profile
 
 
@@ -62,6 +64,9 @@ def owner_profile(user):
     profile=profile_defaults(json.loads(user['profile']))
     with connect() as db:
         profile['_workout_settings']=workout_settings.read(db,user['id'])
+        import progress_dashboard
+        sequence=progress_dashboard.sequence(db,user['id'],profile)
+        profile['_active_milestone']=dict(revision=sequence['revision'],definition=progress_dashboard.contract.active_definition({k:sequence[k] for k in ('version','items')}))
         import progress_analysis
         weight=progress_analysis.weight_series(measurement_values(db,user['id']),diary.local_today())
         if weight['status']=='available':profile['_filtered_weight_kg']=weight['daily_points'][-1]['filtered_kg']
@@ -219,6 +224,7 @@ async def register(request: Request):
         raise HTTPException(400, 'Nome: 3–40 lettere/numeri; password: almeno 10 caratteri')
     profile = defaults()
     profile['display_name'] = username
+    profile['taste_onboarding'] = taste_onboarding.state(profile, new=True)
     salt = secrets.token_hex(16)
     try:
         with connect() as db:
@@ -282,14 +288,21 @@ def logout(request: Request):
 def profile(request: Request):
     user = identity(request)
     data = profile_defaults(json.loads(user['profile']))
-    return {'profile': data, 'csrf': user['csrf'], 'warnings': profile_target_warnings(data)}
+    foods = load_foods()
+    codes = set(data['excluded_crea_ids']) | set(data['taste_onboarding']['draft']['excluded_crea_ids'])
+    names = {code: foods.get(code, {}).get('name', code) for code in codes}
+    return {'profile': data, 'user_id':user['id'], 'csrf': user['csrf'], 'warnings': profile_target_warnings(data), 'taste_food_names': names}
 
 
 @app.put('/api/profile')
 async def update_profile(request: Request):
     user = identity(request, True)
-    old = json.loads(user['profile'])
     data = await request.json()
+    with connect() as db:
+        original = db.execute('SELECT profile FROM users WHERE id=?', (user['id'],)).fetchone()['profile']
+    old = json.loads(original)
+    if 'taste_revision' in data and (type(data['taste_revision']) is not int or data['taste_revision'] != taste_onboarding.state(old)['revision']):
+        raise HTTPException(409, 'Le preferenze sono cambiate: ricarica il Profilo prima di salvare.')
     mode = data.get('mode', 'free')
     if mode not in (['free', 'sedentary', 'training'] if old['personal_diets'] else ['free']):
         raise HTTPException(400, 'Dieta personale non disponibile per questo profilo')
@@ -336,9 +349,37 @@ async def update_profile(request: Request):
         warnings = profile_target_warnings(old)
     except (ValueError, KeyError, TypeError) as e:
         raise HTTPException(400, str(e))
+    taste_onboarding.profile_changed(old)
     with connect() as db:
-        db.execute('UPDATE users SET profile=? WHERE id=?', (json.dumps(old), user['id']))
+        changed = db.execute('UPDATE users SET profile=? WHERE id=? AND profile=?', (json.dumps(old), user['id'], original))
+        if not changed.rowcount:
+            raise HTTPException(409, 'Il Profilo è cambiato durante il salvataggio. Ricarica prima di riprovare.')
     return {'ok': True, 'warnings': warnings}
+
+
+@app.put('/api/profile/tastes')
+async def update_tastes(request: Request):
+    user = identity(request, True)
+    payload = await request.json()
+    with sqlite3.connect(ROOT / 'dataset/recipes/catalog.sqlite') as catalog:
+        cuisines = {r[0] for r in catalog.execute('SELECT DISTINCT cuisine_id FROM recipes')}
+    foods = load_foods()
+    with connect() as db:
+        db.execute('BEGIN IMMEDIATE')
+        row = db.execute('SELECT profile FROM users WHERE id=?', (user['id'],)).fetchone()
+        old = json.loads(row['profile'])
+        try:
+            updated = taste_onboarding.transition(old, payload, cuisines, set(foods))
+            if payload['action'] == 'complete':
+                # Reject impossible enabled breakfast/snack choices before committing.
+                formulate(make_config(updated, 0), foods)
+        except RuntimeError as exc:
+            raise HTTPException(409, str(exc))
+        except (ValueError, KeyError, TypeError) as exc:
+            raise HTTPException(400, str(exc))
+        db.execute('UPDATE users SET profile=? WHERE id=?', (json.dumps(updated), user['id']))
+    codes = set(updated.get('excluded_crea_ids', [])) | set(updated['taste_onboarding']['draft']['excluded_crea_ids'])
+    return {'profile': profile_defaults(updated), 'ok': True, 'taste_food_names': {code: foods.get(code, {}).get('name', code) for code in codes}}
 
 
 def make_config(profile, day):
@@ -383,6 +424,10 @@ async def generate(request: Request):
     user = identity(request, True)
     profile = owner_profile(user)
     data = await request.json()
+    if not isinstance(data,dict):raise diary.DomainError('Corpo della richiesta non valido')
+    mode=data.get('mode',profile['mode'])
+    if mode not in (('free','sedentary','training') if profile['personal_diets'] else ('free',)):raise diary.DomainError('Programma non disponibile')
+    profile['mode']=mode
     day = data.get('day_index', data.get('horizon', {}).get('day_index', 0))
     if isinstance(day, bool) or not isinstance(day, int) or not 0 <= day < 14:
         raise HTTPException(400, 'Giorno non valido')
@@ -547,11 +592,18 @@ def recipes(request: Request, q: str = '', cuisine: str = '', preferred: bool = 
         page = [r[0] for r in found[offset : offset + 30]]
         payloads = dict(db.execute('SELECT id, payload FROM recipes WHERE id IN (' + ','.join('?' * len(page)) + ')', page).fetchall()) if page else {}
     with connect() as local:hearts={r[0] for r in local.execute('SELECT recipe_id FROM recipe_preference WHERE user_id=? AND preferred=1',(user['id'],))}
+    import recipe_intents
+    ready_ids={r['id'] for r in recipe_templates()}
+    recipe_profile=owner_profile(user)
     recipe_list = []
     for rid in page:
         rec = json.loads(payloads[rid])
         rec['title_it'] = titles_it.get(rid, rec['title'])
         rec['preferred']=rid in hearts
+        rec['solver_status']='catalog_only'
+        if rid in ready_ids:
+            try:recipe_intents.materialize(rid,recipe_profile);rec['solver_status']='ready'
+            except diary.DomainError as error:rec['solver_status']='unavailable';rec['solver_reason']=str(error)
         img = images.get(rid)
         if img:
             rec['illustrative_image'] = img
@@ -720,6 +772,29 @@ async def mutate_diary(request,action,entry_id=None):
     with connect() as db:return diary.diary_mutation(db,user['id'],owner_profile(user),action,data,entry_id)
 
 
+@app.get('/api/diary/draft')
+def get_meal_draft(request:Request,date:str,slot:str):
+    import meal_drafts
+    user=identity(request)
+    with connect() as db:
+        db.execute('BEGIN IMMEDIATE')
+        return meal_drafts.get(db,user['id'],owner_profile(user),date,slot)
+
+async def change_meal_draft(request,action):
+    import meal_drafts
+    user=identity(request,True);data=await request.json()
+    with connect() as db:
+        db.execute('BEGIN IMMEDIATE')
+        fresh=db.execute('SELECT * FROM users WHERE id=?',(user['id'],)).fetchone()
+        return meal_drafts.change(db,user['id'],owner_profile(fresh),data,action)
+
+@app.put('/api/diary/draft')
+async def save_meal_draft(request:Request):return await change_meal_draft(request,'save')
+@app.post('/api/diary/draft/commit')
+async def commit_meal_draft(request:Request):return await change_meal_draft(request,'commit')
+@app.post('/api/diary/draft/discard')
+async def discard_meal_draft(request:Request):return await change_meal_draft(request,'discard')
+
 @app.post('/api/diary/confirm')
 async def confirm_meal(request:Request):return await mutate_diary(request,'confirm')
 @app.post('/api/diary/entries')
@@ -733,6 +808,14 @@ async def skip_meal(request:Request):return await mutate_diary(request,'skip')
 @app.post('/api/diary/reset')
 async def reset_meal(request:Request):return await mutate_diary(request,'reset')
 
+
+@app.post('/api/workouts/{log_id}/rest/skip')
+def skip_workout_rest(log_id:int,request:Request):
+    user=identity(request,True)
+    with connect() as db:
+        workouts.own_log(db,user['id'],log_id)
+        db.execute('UPDATE workout_log SET rest_until=NULL WHERE id=? AND user_id=?',(log_id,user['id']))
+        return workouts.read_log(db,user['id'],log_id)
 
 @app.post('/api/measurements')
 async def manual_measurement(request:Request):
@@ -831,26 +914,79 @@ async def reject_recalibration(proposal_id:int,request:Request):return await dec
 @app.get('/api/plan-sets/{set_id}')
 def read_plan_set(set_id:int,request:Request):
     user=identity(request)
-    with connect() as db:row=db.execute('SELECT payload FROM plan_set WHERE id=? AND user_id=?',(set_id,user['id'])).fetchone()
+    with connect() as db:
+        row=db.execute('SELECT payload FROM plan_set WHERE id=? AND user_id=?',(set_id,user['id'])).fetchone()
+        if not row:raise diary.DomainError('Piano non trovato','not_found',404)
+        payload=json.loads(row['payload'])
+        applied=list({json.loads(r['result'])['request']['plan_id'] for r in db.execute('SELECT result FROM plan_application WHERE user_id=? AND set_id=?',(user['id'],set_id))})
+        if applied:payload['applied_plan_ids']=applied
+    return payload
+
+
+def own_candidate(db,user,set_id,data):
+    diary.integer(data.get('plan_id'),1,2**63-1)
+    row=db.execute('SELECT * FROM plan_set WHERE id=? AND user_id=?',(set_id,user)).fetchone()
     if not row:raise diary.DomainError('Piano non trovato','not_found',404)
-    return json.loads(row['payload'])
+    payload=json.loads(row['payload'])
+    plan=next((p for p in payload.get('plans',[]) if p.get('id')==data.get('plan_id')),None)
+    if not plan:raise diary.DomainError('Alternativa non trovata','not_found',404)
+    return payload,plan
+
+
+@app.post('/api/plan-sets/{set_id}/review')
+async def review_plan_set(set_id:int,request:Request):
+    import planning_review
+    user=identity(request,True);data=await request.json()
+    if not isinstance(data,dict):raise diary.DomainError('Corpo della richiesta non valido')
+    with connect() as db:
+        db.execute('BEGIN IMMEDIATE')
+        payload,plan=own_candidate(db,user['id'],set_id,data)
+        fresh=db.execute('SELECT * FROM users WHERE id=?',(user['id'],)).fetchone()
+        return planning_review.review(db,user['id'],owner_profile(fresh),payload,plan,data)
 
 
 @app.post('/api/plan-sets/{set_id}/apply')
 async def apply_plan_set(set_id:int,request:Request):
+    import planning_review
     user=identity(request,True);data=await request.json()
     if not isinstance(data,dict):raise diary.DomainError('Corpo della richiesta non valido')
-    plan_set=read_plan_set(set_id,request)
-    plan=next((p for p in plan_set['plans'] if p.get('id')==data.get('plan_id')),None)
-    if not plan:raise diary.DomainError('Alternativa non trovata','not_found',404)
-    profile=owner_profile(user)
     with connect() as db:
+        db.execute('BEGIN IMMEDIATE')
+        plan_set,plan=own_candidate(db,user['id'],set_id,data)
+        token=data.get('review_token')
+        if token is not None:
+            if not isinstance(token,str) or len(token)!=64:raise diary.DomainError('Riepilogo non valido')
+            receipt=db.execute('SELECT result FROM plan_application WHERE user_id=? AND set_id=? AND review_token=?',(user['id'],set_id,token)).fetchone()
+            if receipt:
+                stored=json.loads(receipt['result'])
+                key={k:data.get(k) for k in ('plan_id','scope','date','slot')}
+                if stored['request']!=key:raise diary.DomainError('Riepilogo riferito a un’altra proposta','planning_state_changed',409)
+                return stored['response']
+        fresh=db.execute('SELECT * FROM users WHERE id=?',(user['id'],)).fetchone();profile=owner_profile(fresh)
+        if token is not None or (plan_set.get('review_state') and plan_set.get('kind')!='workout'):
+            reviewed=planning_review.review(db,user['id'],profile,plan_set,plan,data)
+            if token is not None and token!=reviewed['review_token']:raise diary.DomainError('Il piano o il diario è cambiato dopo il riepilogo. Rivedi la proposta.','planning_state_changed',409)
+        import progress_dashboard
+        snapshot_start=plan_set.get('week_start') or data.get('date')
+        if snapshot_start:progress_dashboard.capture(db,user['id'],profile,snapshot_start,'before_application')
         result=(joint.apply_week if plan_set.get('kind')=='joint' else workouts.apply_week if plan_set.get('kind')=='workout' else diary.apply_plan)(db,user['id'],profile,plan_set,plan,data)
-        # Keep the transaction-local recipe/dish snapshots populated by apply.
-        # Reloading via another connection cannot see these uncommitted rows.
+        if snapshot_start and result['applied_slots']:progress_dashboard.capture(db,user['id'],profile,snapshot_start,'application')
         if result['applied_slots']:bandit.record_application(db,user['id'],profile,plan,result)
         if result['applied_slots']:db.execute('UPDATE plans SET selected=1 WHERE id=? AND user_id=?',(plan['id'],user['id']))
+        if token is not None:db.execute('INSERT INTO plan_application VALUES(?,?,?,?)',(user['id'],set_id,token,json.dumps(dict(request={k:data.get(k) for k in ('plan_id','scope','date','slot')},response=result))))
         return result
+
+
+@app.get('/api/planning/recent')
+def recent_planning(request:Request):
+    user=identity(request)
+    with connect() as db:
+        jobs=[dict(r) for r in db.execute("SELECT id,kind,state,result_ref,error,created FROM job WHERE user_id=? AND kind IN ('week','joint','workout') ORDER BY created DESC LIMIT 8",(user['id'],))]
+        sets=[]
+        for r in db.execute('SELECT id,created,payload,input FROM plan_set WHERE user_id=? ORDER BY id DESC LIMIT 15',(user['id'],)):
+            payload=json.loads(r['payload']);original=json.loads(r['input'])
+            if payload.get('week_start'):sets.append(dict(id=r['id'],created=r['created'],week_start=payload['week_start'],kind=payload.get('kind','week'),request=original.get('request',{}),source=dict(targets_demo=(original.get('profile',{}).get('daily_meals',{}).get('targets_demo',True) if original.get('profile',{}).get('daily_meals',{}).get('enabled') else original.get('profile',{}).get('targets_demo',True)),approved_on=original.get('profile',{}).get('approved_activity_targets',{}).get('approved_on'))))
+    return dict(jobs=jobs,sets=sets)
 
 
 planning_tasks={}
@@ -863,13 +999,15 @@ def read_job(job_id:str,request:Request):
     return dict(state=row['state'],progress=row['progress'],result=dict(plan_set_id=row['result_ref']) if row['result_ref'] else None,error=json.loads(row['error']) if row['error'] else None)
 
 
-async def planning_job(job_id,user_id,profile,data,kind):
+async def planning_job(job_id,user_id,profile,data,kind,review_state=None):
     try:
         from week_orchestration import generate_week,generate_meal_alternatives
         async with solver_lock:
             with connect() as db:db.execute("UPDATE job SET state='running',progress=.1 WHERE id=?",(job_id,))
             with connect() as db:
-                if kind=='workout':configuration=None
+                if kind=='workout':
+                    configuration=None
+                    workout_locks=joint.locked_workouts(db,user_id,data['week_start'])
                 elif kind=='meal':configuration=generate_meal_alternatives(db,user_id,profile,data,make_config)
                 else:
                     configuration=None
@@ -897,7 +1035,7 @@ async def planning_job(job_id,user_id,profile,data,kind):
                         with connect() as db:observations=bandit.observations(db,user_id,profile)
                         result=await joint.generate_week(session,profile,data,make_config,load_foods(),health,workout_locks,observations)
                         result['state_hash']=joint_state
-                    elif kind=='workout':result=await workouts.generate_week(session,profile,data)
+                    elif kind=='workout':result=await workouts.generate_week(session,profile,data,workout_locks)
                     elif kind=='week':
                         with connect() as db:
                             observations=bandit.observations(db,user_id,profile)
@@ -911,6 +1049,7 @@ async def planning_job(job_id,user_id,profile,data,kind):
             with connect() as db:
                 set_id=db.execute('INSERT INTO plan_set(user_id,created,payload,input) VALUES(?,?,?,?)',(user_id,time.time(),'{}',json.dumps(dict(profile=profile,request=data,kind=kind)))).lastrowid
                 result['run_id']=str(set_id)
+                result['review_state']=review_state
                 for p in result['plans']:
                     p['id']=db.execute('INSERT INTO plans(user_id,created,payload) VALUES(?,?,?)',(user_id,time.time(),json.dumps(p))).lastrowid
                 db.execute('UPDATE plan_set SET payload=? WHERE id=?',(json.dumps(result),set_id))
@@ -923,29 +1062,35 @@ async def planning_job(job_id,user_id,profile,data,kind):
 
 
 async def enqueue_planning(request,kind):
-    user=identity(request,True);profile=owner_profile(user);data=await request.json()
+    import planning_review
+    user=identity(request,True);data=await request.json()
     if not isinstance(data,dict):raise diary.DomainError('Corpo della richiesta non valido')
-    if kind=='workout':workouts.week_config(data)
-    elif kind in ('week','joint'):
-        diary.valid_date(data.get('week_start'))
-        mode=data.get('mode',profile['mode'])
-        if mode not in (('free','sedentary','training') if profile['personal_diets'] else ('free',)):raise diary.DomainError('Programma non disponibile')
-        profile['mode']=mode
-        if not isinstance(data.get('locked',[]),list):raise diary.DomainError('Blocchi non validi')
-        if kind=='joint':joint.validate_request(profile,data)
-        if data.get('locked_dishes'):
-            import recipe_intents
-            recipe_intents.prepare(profile,data)
-    else:
-        diary.valid_date(data.get('date'));diary.valid_slot(data.get('slot'))
-        with connect() as db:
+    with connect() as db:
+        # Snapshot profile, protections and job creation in one transaction.
+        db.execute('BEGIN IMMEDIATE')
+        fresh=db.execute('SELECT * FROM users WHERE id=?',(user['id'],)).fetchone();profile=owner_profile(fresh)
+        import progress_dashboard
+        profile,data=progress_dashboard.solver_adapter(db,user['id'],profile,data,kind)
+        if kind=='workout':workouts.week_config(data)
+        elif kind in ('week','joint'):
+            diary.valid_date(data.get('week_start'))
+            mode=data.get('mode',profile['mode'])
+            if mode not in (('free','sedentary','training') if profile['personal_diets'] else ('free',)):raise diary.DomainError('Programma non disponibile')
+            profile['mode']=mode
+            if not isinstance(data.get('locked',[]),list):raise diary.DomainError('Blocchi non validi')
+            if kind=='joint':joint.validate_request(profile,data)
+            if data.get('locked_dishes'):
+                import recipe_intents
+                recipe_intents.prepare(profile,data)
+        else:
+            diary.valid_date(data.get('date'));diary.valid_slot(data.get('slot'))
             if diary.state(db,user['id'],data['date'],data['slot'])!='unknown':raise diary.DomainError('Pasto già registrato','slot_already_logged',409)
             p=diary.planned(db,user['id'],data['date'],data['slot'])
             if p and p['locked']:raise diary.DomainError('Pasto bloccato','slot_locked',409)
-    with connect() as db:
+        review_state=planning_review.state(db,user['id'],data.get('week_start',data.get('date'))) if kind in ('week','joint','workout') else None
         if db.execute("SELECT 1 FROM job WHERE user_id=? AND state IN ('queued','running')",(user['id'],)).fetchone():raise diary.DomainError('Calcolo già in corso','job_running',409)
         job_id=secrets.token_hex(16);db.execute("INSERT INTO job VALUES(?,?,?,'queued',0,NULL,NULL,?)",(job_id,user['id'],kind,time.time()))
-    task=asyncio.create_task(planning_job(job_id,user['id'],profile,data,kind));planning_tasks[job_id]=task
+    task=asyncio.create_task(planning_job(job_id,user['id'],profile,data,kind,review_state));planning_tasks[job_id]=task
     return JSONResponse(dict(job_id=job_id),status_code=202)
 
 
@@ -1030,6 +1175,24 @@ def rebalance_presets(request:Request):
     identity(request)
     return meal_rebalance.catalog()
 
+@app.post('/api/rebalance/register')
+async def register_outside_meal(request:Request):
+    import meal_rebalance
+    from progress_analysis import invalidate_forecast
+    user=identity(request,True)
+    meal=meal_rebalance.estimate(await request.json(),diary.local_today())
+    with connect() as db:
+        db.execute('BEGIN IMMEDIATE')
+        existing=db.execute('SELECT payload FROM consumed_estimate WHERE user_id=? AND date=? AND slot=?',(user['id'],meal['date'],meal['slot'])).fetchone()
+        if existing:
+            if json.loads(existing['payload'])!=meal:raise diary.DomainError('Pasto già registrato','slot_already_logged',409)
+        else:
+            if diary.state(db,user['id'],meal['date'],meal['slot'])!='unknown':raise diary.DomainError('Pasto già registrato','slot_already_logged',409)
+            db.execute('INSERT INTO consumed_estimate VALUES(?,?,?,?,?)',(user['id'],meal['date'],meal['slot'],json.dumps(meal),time.time()))
+            diary.set_state(db,user['id'],meal['date'],meal['slot'],'modified' if diary.planned(db,user['id'],meal['date'],meal['slot']) else 'unplanned')
+            invalidate_forecast(db,user['id'],meal['date'],'consumed_interval_estimate')
+        return diary.day_view(db,user['id'],owner_profile(user),meal['date'])
+
 @app.post('/api/rebalance/preview')
 async def rebalance_preview(request:Request):
     import meal_rebalance
@@ -1059,7 +1222,11 @@ async def rebalance_decide(request,preview_id,action):
     with connect() as db:
         db.execute('BEGIN IMMEDIATE')
         fresh=dict(db.execute('SELECT * FROM users WHERE id=?',(user['id'],)).fetchone())
-        result=meal_rebalance.decide(db,user['id'],owner_profile(fresh),preview_id,proposal,action)
+        import progress_dashboard
+        personal=owner_profile(fresh)
+        progress_dashboard.capture(db,user['id'],personal,proposal['start'],'before_rebalance')
+        result=meal_rebalance.decide(db,user['id'],personal,preview_id,proposal,action)
+        progress_dashboard.capture(db,user['id'],personal,proposal['start'],'rebalance')
     # Retain token until expiry so repeated actions return a conflict, not duplicate writes.
     return result
 
@@ -1114,7 +1281,12 @@ async def goals_energy_proposal(request:Request):
         db.execute('BEGIN IMMEDIATE')
         fresh=dict(db.execute('SELECT * FROM users WHERE id=?',(user['id'],)).fetchone());profile=owner_profile(fresh)
         report=load_health_report(health_directory(user['id']));values=measurement_values(db,user['id'],report=report)
-        return personal_goals.propose(db,user['id'],profile,values,report,diary.local_today())
+        import progress_dashboard
+        result=personal_goals.propose(db,user['id'],progress_dashboard.goal_profile(profile),values,report,diary.local_today())
+        if result.get('proposal'):
+            result['proposal']['milestone']=profile.get('_active_milestone')
+            db.execute('UPDATE goal_energy_proposal SET payload=? WHERE id=? AND user_id=?',(json.dumps(result['proposal']),result['proposal']['id'],user['id']))
+        return result
 
 @app.post('/api/goals/energy-proposal/{identifier}/{decision}')
 async def goals_energy_decide(identifier:int,decision:str,request:Request):
@@ -1125,7 +1297,8 @@ async def goals_energy_decide(identifier:int,decision:str,request:Request):
         db.execute('BEGIN IMMEDIATE')
         fresh=dict(db.execute('SELECT * FROM users WHERE id=?',(user['id'],)).fetchone());profile=owner_profile(fresh)
         report=load_health_report(health_directory(user['id']));values=measurement_values(db,user['id'],report=report)
-        return personal_goals.decide(db,user['id'],profile,values,report,identifier,data,decision)
+        import progress_dashboard
+        return personal_goals.decide(db,user['id'],progress_dashboard.goal_profile(profile),values,report,identifier,data,decision)
 
 
 @app.get('/api/foods/barcode/{code}')
@@ -1322,3 +1495,36 @@ async def match_answer(request:Request,generic_id:str):
     import meal_matches
     user=identity(request,True)
     with connect() as db:return meal_matches.answer(db,user['id'],owner_profile(user),generic_id,await request.json())
+
+
+@app.get('/api/progress/energy')
+def progress_energy(request:Request,start:str):
+    import progress_dashboard
+    user=identity(request);profile=owner_profile(user)
+    with connect() as db:return progress_dashboard.energy_view(db,user['id'],profile,start,load_health_report(health_directory(user['id'])),diary.local_today())
+
+@app.get('/api/progress/milestones')
+def progress_milestones(request:Request):
+    import progress_dashboard
+    user=identity(request);profile=owner_profile(user)
+    with connect() as db:return progress_dashboard.milestones_view(db,user['id'],profile,measurement_values(db,user['id']),diary.local_today())
+
+@app.put('/api/progress/milestones')
+async def update_milestones(request:Request):
+    import progress_dashboard
+    user=identity(request,True);data=await request.json()
+    if not isinstance(data,dict):raise diary.DomainError('Richiesta non valida')
+    with connect() as db:
+        db.execute('BEGIN IMMEDIATE')
+        fresh=db.execute('SELECT * FROM users WHERE id=?',(user['id'],)).fetchone()
+        return progress_dashboard.save_sequence(db,user['id'],owner_profile(fresh),data)
+
+@app.post('/api/progress/milestones/decide')
+async def decide_milestone(request:Request):
+    import progress_dashboard
+    user=identity(request,True);data=await request.json()
+    if not isinstance(data,dict):raise diary.DomainError('Richiesta non valida')
+    with connect() as db:
+        db.execute('BEGIN IMMEDIATE')
+        fresh=db.execute('SELECT * FROM users WHERE id=?',(user['id'],)).fetchone()
+        return progress_dashboard.decide(db,user['id'],owner_profile(fresh),measurement_values(db,user['id']),diary.local_today(),data)

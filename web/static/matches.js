@@ -71,7 +71,14 @@ function matchCard(c) {
   card.setAttribute('aria-label', 'Proposta ' + (matchState.index + 1) + ' di ' + matchState.cards.length);
   const head = element('div', undefined, 'match-head');
   head.append(element('span', (matchState.index + 1) + ' / ' + matchState.cards.length, 'muted small'));
-  if (c.exploration) head.append(element('span', 'Novità', 'chip'));
+  const chips = element('div', undefined, 'match-head-chips');
+  if (c.exploration) chips.append(element('span', 'Novità', 'chip'));
+  if (c.typical_dish) {
+    const chip = element('span', '🍽 ' + c.typical_dish, 'chip match-typical-chip');
+    chip.title = c.typical_dish;
+    chips.append(chip);
+  }
+  head.append(chips);
   card.append(head);
   const list = element('ul', undefined, 'match-foods');
   c.foods.forEach((f) => {

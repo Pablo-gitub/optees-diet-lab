@@ -3556,6 +3556,20 @@ a.button-link {
   align-items: center;
   margin-bottom: 8px;
 }
+.match-head-chips {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 75%;
+}
+.match-typical-chip {
+  background: var(--brand-soft);
+  color: var(--brand);
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .match-foods {
   list-style: none;
   margin: 0;
@@ -3796,3 +3810,91 @@ a.button-link {
     gap: 16px;
   }
 }
+
+/* Optional account-owned preference setup; reuses the existing tokens. */
+.taste-panel { max-width: 720px; margin-inline: auto; }
+.taste-cuisines { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; max-height: 320px; overflow: auto; padding: 8px; }
+.taste-results { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 12px; }
+#taste-error { color: var(--bad); white-space: pre-wrap; }
+#taste-exclusions { display: flex; flex-wrap: wrap; gap: 8px; }
+@media (max-width: 480px) { .taste-cuisines { grid-template-columns: 1fr; } .taste-panel .actions { display: flex; flex-direction: column; } }
+.meal-draft-row { display:flex; flex-wrap:wrap; align-items:end; gap:10px; padding-block:14px; border-bottom:1px solid var(--line); }
+.meal-draft-row label { flex:1 1 200px; }
+.meal-draft-row .food-search { flex-basis:100%; }
+#meal-draft-error { color:var(--bad); }
+.registered-meal { border:1px solid var(--line); border-radius:var(--radius); background:var(--surface); }
+.registered-meal > summary { padding:16px; font-weight:600; cursor:pointer; }
+#day-next-action { border-top:3px solid var(--brand); }
+/* Task order stays identical in the DOM and in the mobile layout. */
+.today-grid { grid-template-areas:"focus activity" "meals energy" "meals rating"; }
+.today-grid.no-next { grid-template-areas:"meals activity" "meals energy" "meals rating"; }
+#day-next-action { grid-area:focus; }
+#day-workout { grid-area:activity; }
+#day-meals { grid-area:meals; }
+#day-progress { grid-area:energy; }
+#day-rating { grid-area:rating; }
+@media(max-width:1000px) {
+ .today-grid { grid-template-columns:minmax(0,1fr); grid-template-areas:"focus" "activity" "meals" "energy" "rating"; }
+ .today-grid.no-next { grid-template-areas:"activity" "meals" "energy" "rating"; }
+}
+
+/* Phase 4: active calendar precedes configuration and candidates. */
+#planning > .section-head { align-items: center; flex-wrap: wrap; gap: 16px; }
+#planning > .section-head label { min-width: 220px; }
+.active-week-panel { margin: 16px 0 24px; padding: 24px; }
+.planning-calendar { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 10px; margin: 20px 0; }
+.calendar-day { min-width: 0; padding: 14px 12px; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius); display: flex; flex-direction: column; gap: 10px; }
+.calendar-day h3 { font-size: 14px; text-transform: capitalize; margin: 0; }
+.calendar-day > button { margin-top: auto; }
+.calendar-meal { display: grid; gap: 3px; font-size: 12px; overflow-wrap: anywhere; }
+.calendar-meal > span { color: var(--ink-2); }
+.calendar-state { color: var(--brand); font-weight: 600; }
+.calendar-workout { border-top: 1px solid var(--line); padding-top: 8px; font-size: 12px; }
+#week-config { margin-bottom: 24px; }
+#week-config > summary { font-size: 18px; font-weight: 650; cursor: pointer; padding: 4px 0; }
+#week-config > .controls { margin-top: 20px; }
+#week-review { padding: 24px; margin: 20px 0; border: 2px solid var(--brand); scroll-margin-top: 16px; }
+#week-review li { margin: 8px 0; overflow-wrap: anywhere; }
+#week-review .meal-actions { margin-top: 20px; }
+#week-draft-context { margin: 24px 0 16px; }
+.candidate-detail { margin: 16px 0; }
+.candidate-detail > summary { cursor: pointer; font-weight: 600; }
+.comparison-scroll { overflow-x: auto; margin: 16px 0; }
+.week-comparison-table { width: 100%; border-collapse: collapse; min-width: 440px; background: var(--surface); }
+.week-comparison-table th,.week-comparison-table td { padding: 12px; border-bottom: 1px solid var(--line); text-align: left; font-size: 13px; }
+.week-comparison-table th { font-weight: 600; }
+#week-config [hidden] { display: none !important; }
+@media(max-width:1200px) { .planning-calendar { grid-template-columns: repeat(4,minmax(0,1fr)); } }
+@media(max-width:700px) { .planning-calendar { grid-template-columns: repeat(2,minmax(0,1fr)); } .active-week-panel,#week-review { padding: 16px; } #week-config .controls { display: grid; grid-template-columns: 1fr; } #week-config .controls > span { display: none; } #week-config .target-grid { grid-template-columns: minmax(76px,1fr) minmax(0,1fr) minmax(0,1fr); } #week-config .target-grid input { min-width: 0; } }
+.workout-draft-limits { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; margin-top: 16px; }
+@media(max-width:700px) { .workout-draft-limits { grid-template-columns: repeat(2,minmax(0,1fr)); } .workout-draft-limits label { font-size: 12px; } }
+main:has(#planning:not([hidden])) { min-width: 0; }
+#week-config .controls { grid-template-columns: repeat(3,minmax(0,1fr)); }
+#week-config label,#week-config select,#week-config .tg-cell,#week-config .joint-block { min-width: 0; max-width: 100%; }
+#week-config .balance-row { flex-wrap: wrap; }
+#week-config .balance-row select { width: 100%; min-width: 0; }
+@media(max-width:700px) { #week-config .controls { grid-template-columns: minmax(0,1fr); } #planning > .section-head label { width: 100%; min-width: 0; } }
+#week-target-source { display: block; }
+#week-target-source::before { display: none; }
+#week-target-source p { margin: 6px 0; }
+#week-target-source button { margin: 6px 8px 0 0; }
+
+/* Phase 5: energy and milestones */
+.energy-charts {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.25rem;margin:1rem 0;}
+.energy-chart {min-width:0;}
+.energy-intake {stroke:var(--accent,#267454);fill:var(--accent,#267454);stroke-width:2;}
+.energy-expenditure {stroke:var(--ink);fill:var(--ink);stroke-width:2;}
+.energy-interval {opacity:.5;stroke-width:5;}
+.energy-days {display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1rem;}
+.energy-day-detail:empty {display:none;}
+.energy-day-detail {border-left:3px solid var(--accent,#267454);padding:1rem;margin:1rem 0;}
+.milestone-card {padding:1rem 0;border-bottom:1px solid var(--line);}
+.milestone-card.active {border-left:3px solid var(--accent,#267454);padding-left:1rem;}
+.milestone-edit-row {display:grid;grid-template-columns:1.5rem minmax(100px,2fr) minmax(70px,1fr) minmax(90px,1fr) minmax(130px,1fr) auto auto;gap:.5rem;align-items:center;margin:1rem 0;}
+.milestone-edit-row>* {min-width:0;max-width:100%;}
+#energy-content {min-width:0;}
+#energy-content details {overflow-x:auto;}
+#milestone-editor>button {margin:.5rem .5rem .5rem 0;}
+@media(max-width:700px){.energy-charts {grid-template-columns:minmax(0,1fr);}.milestone-edit-row {grid-template-columns:1.5rem minmax(0,1fr) minmax(0,1fr);}.milestone-edit-row input[type=date] {grid-column:2/-1;}#progress .section-head {flex-wrap:wrap;gap:1rem;}#progress,#profile {min-width:0;}}
+
+.milestone-line {stroke:var(--accent);stroke-width:1.5;}

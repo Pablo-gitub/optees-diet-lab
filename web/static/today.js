@@ -20,8 +20,6 @@ const stateMeta = {
 const modeNames = { sedentary: 'Dieta sedentaria', training: 'Dieta palestra', free: 'Algoritmo libero' };
 let homeDate = isoDate(new Date());
 let currentDay = null;
-let editSlot = null;
-let swapEntry = null;
 const mealAlternatives = {};
 
 async function waitJob(jobId, onTick) {
@@ -29,7 +27,7 @@ async function waitJob(jobId, onTick) {
   while (Date.now() - started < 240000) {
     const job = await api('jobs/' + jobId);
     if (job.state === 'done') return job;
-    if (job.state === 'failed') throw Error(job.error?.detail || 'Calcolo non riuscito');
+    if (job.state === 'failed') {const error=Error(job.error?.detail || 'Calcolo non riuscito');error.jobFailed=true;throw error;}
     if (onTick) onTick(Math.round((Date.now() - started) / 1000));
     await new Promise((r) => setTimeout(r, 1500));
   }
@@ -38,14 +36,18 @@ async function waitJob(jobId, onTick) {
 
 // ---------- Oggi ----------
 async function loadHome() {
-  const [day, week, stats] = await Promise.all([
-    api('day?date=' + homeDate),
-    api('week?start=' + mondayOf(homeDate)),
-    api('stats/summary'),
-  ]);
+  const requestedDate=homeDate;
+  let day;try{day=await api('day?date='+requestedDate);$('home-load-error').hidden=true;}catch(e){const error=$('home-load-error');error.hidden=false;error.replaceChildren(element('p','Giornata '+requestedDate+' non disponibile: '+e.message));const retry=element('button','Riprova','secondary');retry.type='button';retry.onclick=()=>loadHome();error.append(retry);return;}
+  if(requestedDate!==homeDate)return;
   renderDay(day);
-  renderWeek(week);
-  renderStats($('stats-tiles'), stats, week);
+  if(!$('home').hidden&&!mealRouteRestoring)history.replaceState(null,'','#oggi?data='+requestedDate);
+  const results = await Promise.allSettled([api('week?start=' + mondayOf(homeDate)),api('stats/summary')]);
+  if(requestedDate!==homeDate)return;
+  const week=results[0].status==='fulfilled'?results[0].value:null;
+  if(week)renderWeek(week);
+  else {$('week-strip').replaceChildren();$('week-rebalance').replaceChildren();$('week-range').textContent='Non disponibile';$('week-budget').replaceChildren(element('p','Settimana non disponibile. Il diario resta utilizzabile.','notice'));}
+  if(results[1].status==='fulfilled'&&week)renderStats($('stats-tiles'),results[1].value,week);
+  else $('stats-tiles').replaceChildren(element('p','Statistiche non disponibili. Riprova aprendo Oggi.','muted'));
   // Names of out-of-plan presets come from the catalog: load it only when a meal needs it.
   if (!rebalanceCatalog && day.meals.some((m) => m.consumed_estimate))
     api('rebalance/presets')
@@ -60,11 +62,14 @@ async function refreshWeek() {
   }
 }
 async function mutate(path, method, body) {
+  if(['diary/confirm','diary/skip','diary/reset'].includes(path)&&body?.revision===undefined){const meal=currentDay?.date===body.date?currentDay.meals.find(m=>m.slot===body.slot):null;if(meal)body={...body,revision:meal.revision};}
   try {
     renderDay(await api(path, method, body));
+    $('home-load-error').hidden=true;
     refreshWeek();
   } catch (e) {
-    message(e.message);
+    const box=$('home-load-error');box.hidden=false;box.replaceChildren(element('p','Operazione non riuscita: '+e.message));
+    if(path!=='diary/entries'){const retry=element('button','Riprova','secondary');retry.type='button';retry.onclick=()=>e.code==='meal_conflict'?loadHome():mutate(path,method,body);box.append(retry);}
   }
 }
 
@@ -76,12 +81,13 @@ function renderDay(day) {
   const sub = [modeNames[day.mode] || day.mode];
   if (day.day_type === 'training') sub.push('giornata di allenamento');
   if (day.day_type === 'rest') sub.push('giornata di riposo');
-  if (cov.planned_slots) sub.push(cov.logged_slots + '/' + cov.planned_slots + ' pasti registrati');
+  if (cov.planned_slots) sub.push(day.meals.filter(m=>m.planned&&m.state!=='unknown').length + '/' + cov.planned_slots + ' pasti del piano registrati');
   $('day-sub').textContent = sub.join(' · ');
   $('day-today').hidden = day.date === today;
   const hasPlan = day.meals.some((m) => m.planned);
   $('day-empty').hidden = hasPlan || day.meals.some((m) => m.state !== 'unknown');
-  $('day-meals').replaceChildren(...day.meals.map((m) => mealCard(m, day)));
+  const next=day.meals.find(m=>m.state==='unknown');const focus=$('day-next-action');focus.hidden=!next||day.date>today;focus.closest('.today-grid').classList.toggle('no-next',focus.hidden);focus.replaceChildren();if(!focus.hidden){focus.append(element('h3',mealMeta[next.slot][0]+' · da registrare'),element('p','Puoi registrare tutti i pasti in qualsiasi ordine.','muted small'));const interval=next.planned?.nutrient_ranges;const act=element('button',interval?'Registra la stima prevista':next.planned?'Modifica prima di registrare':'Aggiungi un pasto','primary small');act.type='button';act.onclick=()=>interval?mutate('diary/confirm','POST',{date:day.date,slot:next.slot}):openMealEditor(day,next.slot);focus.append(act);}
+  $('day-meals').replaceChildren(...day.meals.map(m=>{const card=mealCard(m,day);if(m.state==='unknown')return card;const details=element('details',undefined,'registered-meal');details.dataset.mealSlot=m.slot;details.append(element('summary',mealMeta[m.slot][0]+' · '+(m.consumed_estimate?'Stima registrata · '+rangeText(m.eaten_range?.kcal):stateMeta[m.state][0]+' · '+kcalText(m.eaten?.kcal))),card);return details;}));
   renderDayProgress(day);
   renderWorkout(day);
   renderDayRating(day);
@@ -126,72 +132,12 @@ function renderDayRating(day) {
   box.append(element('p', plans.length > 1 ? 'Ogni voto vale per tutti i giorni del piano a cui appartiene.' : 'Il voto vale per tutti i giorni di questo piano e aiuta Optees a proporti piani simili.', 'muted small'));
 }
 
-function itemRow(item, editable) {
-  const row = element('div', undefined, 'meal-item');
-  const name = element('span', item.name || item.food?.id, 'item-name');
-  if (item.source_label && item.food?.source !== 'CREA') name.append(element('span', item.source_label, 'src' + (item.food?.source === 'user_label' ? ' src-user' : ' src-brand')));
-  row.append(name);
-  if (editable) {
-    const input = element('input', undefined, 'qty-input');
-    const usesUnits = item.units != null;
-    input.type = 'number';
-    input.min = usesUnits ? 1 : 1;
-    input.step = usesUnits ? 1 : 5;
-    input.value = usesUnits ? item.units : item.grams;
-    input.setAttribute('aria-label', 'Quantità di ' + (item.name || 'alimento'));
-    input.onchange = () => {
-      const value = Math.round(Number(input.value));
-      if (!value) return;
-      mutate('diary/entries/' + item.id, 'PATCH', usesUnits ? { units: value } : { grams: value });
-    };
-    const unit = element('span', usesUnits ? 'conf.' : 'g', 'muted');
-    const remove = element('button', '✕', 'icon-button small remove');
-    remove.type = 'button';
-    remove.title = 'Togli';
-    remove.setAttribute('aria-label', 'Togli ' + (item.name || 'alimento'));
-    remove.onclick = () => mutate('diary/entries/' + item.id, 'DELETE');
-    const swap = element('button', '⇄', 'icon-button small swap');
-    swap.type = 'button';
-    swap.title = 'Sostituisci con un altro alimento';
-    swap.setAttribute('aria-label', 'Sostituisci ' + (item.name || 'alimento'));
-    swap.onclick = () => {
-      swapEntry = swapEntry === item.id ? null : item.id;
-      renderDay(currentDay);
-    };
-    const qty = element('span', undefined, 'item-edit');
-    qty.append(input, unit, swap, remove);
-    row.append(qty);
-  } else {
-    row.append(element('span', fmt0(item.grams) + ' g' + (item.units ? ' · ' + item.units + ' conf.' : ''), 'item-qty'));
-  }
+function itemRow(item) {
+  const row=element('div',undefined,'meal-item');
+  const name=element('span',item.name||item.food?.id,'item-name');
+  if(item.source_label&&item.food?.source!=='CREA')name.append(element('span',item.source_label,'src'+(item.food?.source==='user_label'?' src-user':' src-brand')));
+  row.append(name,element('span',fmt0(item.grams)+' g'+(item.units?' · '+item.units+' conf.':''),'item-qty'));
   return row;
-}
-
-// Replace one diary item keeping its quantity: add the new food first, then remove the old one.
-function swapBox(item, day, slot) {
-  const box = element('div', undefined, 'swap-box');
-  const search = foodSearch(
-    day,
-    slot,
-    async (f) => {
-      try {
-        await api('diary/entries', 'POST', { date: day.date, slot, food: f.food, ...(f.unit_g ? { units: item.units || 1 } : { grams: item.grams || 100 }) });
-        swapEntry = null;
-        renderDay(await api('diary/entries/' + item.id, 'DELETE'));
-        refreshWeek();
-        message((item.name || 'Alimento') + ' sostituito con ' + f.name);
-      } catch (e) {
-        message(e.message);
-      }
-    },
-    'Sostituisci ' + String(item.name || 'alimento').split(',')[0] + ' con…',
-  );
-  const cancel = element('button', 'Annulla', 'ghost small');
-  cancel.type = 'button';
-  cancel.onclick = () => ((swapEntry = null), renderDay(currentDay));
-  box.append(search, cancel);
-  setTimeout(() => search.querySelector('input')?.focus(), 0);
-  return box;
 }
 
 function foodSearch(day, slot, onPick, placeholder) {
@@ -199,7 +145,7 @@ function foodSearch(day, slot, onPick, placeholder) {
   const input = element('input');
   input.type = 'search';
   input.placeholder = placeholder || 'Aggiungi un alimento: es. yogurt, mela, ricotta…';
-  input.setAttribute('aria-label', 'Cerca un alimento da aggiungere');
+  input.setAttribute('aria-label', placeholder || 'Cerca un alimento da aggiungere');
   const results = element('div', undefined, 'food-results');
   let timer = null;
   input.oninput = () => {
@@ -210,13 +156,14 @@ function foodSearch(day, slot, onPick, placeholder) {
       try {
         // Foods with complete values first: unknown values would leave the day total incomplete.
         const foods = (await api('foods/search?q=' + encodeURIComponent(q) + '&limit=12')).sort((a, b) => (a.per_100g.kcal == null) - (b.per_100g.kcal == null)).slice(0, 8);
+        if(q!==input.value.trim())return;
         results.replaceChildren(
           ...foods.map((f) => {
             const b = element('button', undefined, 'food-result');
             b.type = 'button';
             b.append(element('strong', f.name), element('span', [f.brand, f.source_label, f.per_100g.kcal != null ? fmt0(f.per_100g.kcal) + ' kcal/100 g' : 'senza valori nutrizionali: il totale resterà incompleto'].filter(Boolean).join(' · '), 'muted'));
             if (f.per_100g.kcal == null) b.classList.add('incomplete');
-            b.onclick = () => (onPick ? onPick(f) : mutate('diary/entries', 'POST', { date: day.date, slot, food: f.food, ...(f.unit_g ? { units: 1 } : { grams: 100 }) }));
+            b.onclick = () => (onPick ? onPick(f) : openMealEditor(day,slot));
             return b;
           }),
         );
@@ -232,7 +179,7 @@ function foodSearch(day, slot, onPick, placeholder) {
   let scanBox = null;
   scan.onclick = () => {
     if (scanBox) return (scanBox.remove(), (scanBox = null));
-    scanBox = barcodeBox((f, grams) => (onPick ? onPick(f) : mutate('diary/entries', 'POST', { date: day.date, slot, food: f.food, grams })));
+    scanBox = barcodeBox((f, grams) => (onPick ? onPick(f,grams) : openMealEditor(day,slot)));
     box.append(scanBox);
     scanBox.querySelector('input').focus();
   };
@@ -246,6 +193,7 @@ function mealCard(m, day) {
   const meta = mealMeta[m.slot] || [m.slot, '•'];
   const state = m.consumed_estimate ? ['Fuori programma', 'state-extra'] : stateMeta[m.state] || [m.state, ''];
   const card = element('article', undefined, 'meal-card ' + state[1]);
+  card.dataset.mealSlot=m.slot;
   const head = element('div', undefined, 'meal-head');
   head.append(element('span', meta[1], 'meal-icon'), element('h3', meta[0]), element('span', state[0], 'chip state-chip'));
   // 8.13: meals shifted around a long workout (comfort, same daily kcal).
@@ -262,7 +210,6 @@ function mealCard(m, day) {
   head.append(element('span', m.consumed_estimate ? '≈ ' + rangeText(m.eaten_range?.kcal) : kcalText(kcal), 'meal-kcal'));
   card.append(head);
 
-  const editing = editSlot === m.slot && m.state !== 'skipped' && (m.state !== 'unknown' || !m.planned);
   const list = element('div', undefined, 'meal-items');
   const items = m.eaten ? m.eaten.items : m.planned ? m.planned.items : [];
   const est = m.consumed_estimate;
@@ -273,12 +220,8 @@ function mealCard(m, day) {
   } else if (m.state === 'skipped') list.append(element('p', 'Pasto saltato: conta come zero calorie.', 'muted'));
   else if (!items.length) list.append(element('p', m.planned ? 'Nessun alimento' : 'Niente di previsto per questo pasto.', 'muted'));
   else
-    items.forEach((i) => {
-      list.append(itemRow(i, editing));
-      if (editing && swapEntry === i.id) list.append(swapBox(i, day, m.slot));
-    });
+    items.forEach(i=>list.append(itemRow(i)));
   card.append(list);
-  if (editing) card.append(foodSearch(day, m.slot));
   if (m.state === 'modified' && m.planned) {
     const planned = element('details', undefined, 'planned-ref');
     planned.append(element('summary', 'Previsto: ' + kcalText(m.planned.kcal)));
@@ -294,19 +237,15 @@ function mealCard(m, day) {
     b.onclick = fn;
     actions.append(b);
   };
-  const has = (a) => m.actions.includes(a) && !(m.consumed_estimate && a === 'edit');
-  if (editing) add('Fine', 'primary small', () => ((editSlot = null), (swapEntry = null), renderDay(currentDay)));
-  else {
+  const has = (a) => m.actions.includes(a) && !((m.consumed_estimate||m.planned?.nutrient_ranges) && a === 'edit');
+  {
     if (has('confirm')) add('✓ Come previsto', 'primary small', () => mutate('diary/confirm', 'POST', { date: day.date, slot: m.slot }));
     if (has('edit'))
-      add(m.state === 'unknown' && !m.planned ? '+ Aggiungi' : '✎ Modifica', 'secondary small', async () => {
-        editSlot = m.slot;
-        if (m.state === 'unknown' && m.planned) await mutate('diary/confirm', 'POST', { date: day.date, slot: m.slot });
-        else renderDay(currentDay);
-      }, m.state === 'unknown' && m.planned ? 'Registra il previsto e poi modificalo' : undefined);
+      add(m.state === 'unknown' && !m.planned ? '+ Aggiungi' : '✎ Modifica', 'secondary small', () => openMealEditor(day, m.slot), 'Prepara una bozza senza cambiare il diario');
     if (has('alternatives')) add('⇄ Alternative', 'ghost small', () => startAlternatives(m.slot), 'Altre soluzioni ottime per questo pasto, a parità del resto della giornata');
     if (canRebalance(m, day) && !(rebalance && rebalance.date === day.date && rebalance.slot === m.slot)) add('Fuori programma', 'ghost small', () => openRebalance(m, day), 'Pizza, cena fuori, aperitivo… registralo e scegli se rientrare nei prossimi giorni');
     if (has('skip')) add('Salta', 'ghost small', () => mutate('diary/skip', 'POST', { date: day.date, slot: m.slot }));
+    if(m.consumed_estimate&&day.date>=mondayOf(isoDate(new Date()))&&day.date<=isoDate(new Date()))add('Valuta rientro futuro','secondary small',()=>evaluateRecordedRebalance(day.date));
     if (has('reset')) add('Annulla registrazione', 'ghost small', () => mutate('diary/reset', 'POST', { date: day.date, slot: m.slot }));
   }
   card.append(actions);
@@ -429,7 +368,9 @@ function renderDayProgress(day) {
   const box = $('day-progress');
   const eaten = day.totals.eaten || {};
   const planned = day.totals.planned || {};
-  box.replaceChildren(element('h3', 'Bilancio della giornata'));
+  box.replaceChildren(element('h3', 'Energia e nutrienti'));
+  box.append(element('p',day.target_scope==='full_day_planned_meals'?'Obiettivi del piano dell’intera giornata.':day.target_scope==='main_meals'?'Obiettivi per pranzo e cena; il diario registra anche gli altri pasti.':'Obiettivi del piano applicato; verifica quali pasti comprende.','muted small'));
+  if(day.meals.some(m=>m.state==='unknown'))box.append(element('p','Giornata incompleta: il consumato non rappresenta il totale definitivo.','muted small'));
   const legend = element('p', undefined, 'meter-legend muted');
   legend.append(element('span', 'consumato', 'lg-eaten'), element('span', 'previsto', 'lg-planned'), element('span', 'bersaglio', 'lg-target'));
   box.append(legend);
@@ -552,7 +493,7 @@ function renderWeek(week) {
       b.append(dots, element('span', d.kcal_eaten != null ? fmt0(d.kcal_eaten) + ' kcal' : d.kcal_planned != null ? fmt0(d.kcal_planned) + ' prev.' : '—', 'wd-kcal'));
       b.onclick = () => {
         homeDate = d.date;
-        editSlot = null;
+        history.pushState(null,'','#oggi?data='+homeDate);
         loadHome().catch((e) => message(e.message));
       };
       return b;
@@ -633,35 +574,20 @@ function showPlanTab(tab) {
   document.querySelectorAll('[data-plan-panel]').forEach((p) => (p.hidden = p.dataset.planPanel !== tab));
 }
 document.querySelectorAll('[data-plan-tab]').forEach((b) => (b.onclick = () => showPlanTab(b.dataset.planTab)));
-function preparePlanning() {
+async function preparePlanning() {
   if (!profile) return;
-  fillModes('week-mode');
-  const thisMonday = mondayOf(isoDate(new Date()));
-  const select = $('week-start');
   if (!planningReady) {
-    select.replaceChildren(
-      ...[
-        [thisMonday, 'Questa settimana · dal ' + shortDate(thisMonday)],
-        [addDays(thisMonday, 7), 'Prossima settimana · dal ' + shortDate(addDays(thisMonday, 7))],
-      ].map(([value, label]) => {
-        const o = element('option', label);
-        o.value = value;
-        return o;
-      }),
-    );
-    select.onchange = () => {
-      availabilityInputs($('joint-availability'), select.value);
-      renderLockedDishes();
-    };
-    $('week-joint').checked = !!jointSaved().enabled;
-    planningReady = true;
+    fillModes('week-mode');
+    const start=mondayOf(isoDate(new Date()));
+    $('week-start').replaceChildren(...[start,addDays(start,7)].map((date,i)=>{const o=element('option',(i?'Prossima settimana':'Questa settimana')+' · dal '+shortDate(date));o.value=date;return o;}));
+    $('week-start').onchange=()=>changePlanningWeek();
+    setBalance(profile.energy_balance_target_kcal);
+    renderJointTargets();availabilityInputs($('joint-availability'),start);
+    planningReady=true;
   }
-  renderLockedDishes();
-  // Balance and day-type targets live in the profile (used by the Monday recalibration too).
-  setBalance(profile.energy_balance_target_kcal !== undefined ? profile.energy_balance_target_kcal : jointSaved().balance);
-  renderJointTargets();
-  availabilityInputs($('joint-availability'), select.value);
-  syncJointMode();
+  syncJointMode();renderLockedDishes();
+  await loadPlanningWeek();
+  await resumePlanning();
 }
 
 // ---------- Piano: settimana congiunta dieta + palestra (passo 4.3) ----------
@@ -676,14 +602,14 @@ const scenarioNames = { low: 'Se consumi meno del solito', central: 'Se consumi 
 const sessionTitles = {};
 function jointSaved() {
   try {
-    return JSON.parse(localStorage.getItem('diet-joint-settings') || '{}') || {};
+    return JSON.parse(localStorage.getItem('diet-joint-settings:'+($('user-name')?.textContent||'')) || '{}') || {};
   } catch {
     return {};
   }
 }
 function jointSave(patch) {
   try {
-    localStorage.setItem('diet-joint-settings', JSON.stringify({ ...jointSaved(), ...patch }));
+    localStorage.setItem('diet-joint-settings:'+($('user-name')?.textContent||''), JSON.stringify({ ...jointSaved(), ...patch }));
   } catch {}
 }
 function setBalance(value) {
@@ -711,16 +637,14 @@ $('week-joint').onchange = () => {
 };
 $('joint-ranges').onchange = () => $('joint-targets').classList.toggle('show-ranges', $('joint-ranges').checked);
 function syncJointMode() {
-  const on = $('week-joint').checked;
-  $('joint-options').hidden = !on;
-  if (on) renderJointActivities();
-  $('week-mode-label').hidden = on;
-  $('week-hint').textContent = on
-    ? 'Optees combina più schede di allenamento con la dieta di 7 giorni e verifica ogni combinazione. Pasti e allenamenti già registrati restano bloccati. Obiettivi e bilancio scelti vengono salvati nel profilo. Il calcolo può richiedere un paio di minuti.'
-    : 'Optees propone 7 giorni completi rispettando la dieta, le porzioni e le ripetizioni. I pasti già registrati restano bloccati.';
-  $('joint-modes-note').textContent = profile?.personal_diets
-    ? 'Nei giorni di riposo vale la dieta sedentaria, in quelli di allenamento la dieta palestra. Qui scegli gli obiettivi dell’intera giornata, colazione e spuntini compresi.'
-    : 'Obiettivi dell’intera giornata, colazione e spuntini compresi. Nei giorni di allenamento puoi alzare calorie e carboidrati.';
+  const kind=$('week-kind').value,on=kind==='joint';
+  $('week-joint').checked=on;$('joint-options').hidden=kind==='week';
+  document.querySelectorAll('[data-joint-only]').forEach(b=>b.hidden=!on);
+  if(kind!=='week')renderJointActivities();
+  $('week-mode-label').hidden=kind!=='week';$('week-alternatives-label').hidden=kind==='workout';$('week-locked').hidden=kind==='workout';
+  $('week-hint').textContent=kind==='joint'?'Dieta e allenamento vengono calcolati insieme. Registrazioni e sessioni avviate restano protette. Il calcolo può richiedere alcuni minuti.':kind==='workout'?'Prepara solo gli allenamenti: il piano alimentare rimane invariato. Le sessioni già avviate sono protette.':'Prepara sette giorni di alimentazione: gli allenamenti rimangono invariati. I pasti registrati e bloccati sono protetti.';
+  $('joint-modes-note').textContent='Questi valori valgono per la bozza, con colazione e spuntini. Non vengono salvati nel Profilo.';
+  renderPlanningSource();
 }
 function renderJointTargets() {
   const base = profile.daily_meals?.targets || {};
@@ -882,9 +806,11 @@ function jointDayRow(d) {
 function weekPlanCard(p, set, scale) {
   const joint = set.kind === 'joint';
   const card = element('article', undefined, 'card week-plan' + (joint ? ' joint-plan' : ''));
+  card.dataset.planId=p.id;
   const header = element('div', undefined, 'card-header');
   const tags = element('span', undefined, 'card-tags');
   tags.append(element('span', p.status === 'optimal' ? 'Ottimo certificato' : 'Verificata', 'tag'));
+  if(set.applied_plan_ids?.includes(p.id))tags.append(element('span','Applicata in precedenza','tag is-selected'));
   if (joint && p.demo) tags.append(element('span', 'Allenamento dimostrativo', 'tag tag-warn'));
   header.append(roleBadge(p.role), tags);
   card.append(header);
@@ -902,7 +828,12 @@ function weekPlanCard(p, set, scale) {
     }
     if (p.status === 'partial') ex.append(element('p', 'Soluzione verificata; ottimo non certificato entro il tempo di calcolo.', 'muted small'));
     card.append(ex);
-  } else card.append(explanationBlock(p));
+  } else {
+    card.append(element('p',p.explanation?.headline||'Proposta verificata nel pool calcolato','headline'));
+    const changes=(p.diff?.days||[]).reduce((n,d)=>n+(d.added?.length||0)+(d.removed?.length||0)+(d.changed?.length||0),0);
+    if(changes)card.append(element('p',changes+' differenze negli alimenti rispetto al migliore.','muted small'));
+    const why=element('details',undefined,'candidate-detail');why.append(element('summary','Differenze e verifica dei vincoli'),explanationBlock(p));card.append(why);
+  }
   const days = p.days || [];
   const avg = days.length ? days.reduce((a, d) => a + (d.nutrients?.kcal || 0), 0) / days.length : null;
   const hero = element('div', undefined, 'plan-hero');
@@ -943,29 +874,12 @@ function weekPlanCard(p, set, scale) {
     row.append(element('strong', parseDate(d.date).toLocaleDateString('it-IT', { weekday: 'short', day: 'numeric' })), element('span', main || '—', 'wp-foods'), element('span', kcalText(d.nutrients?.kcal), 'wp-kcal'));
     list.append(row);
   });
-  card.append(list);
+  const detail=element('details',undefined,'candidate-detail');detail.append(element('summary','Dettaglio dei 7 giorni'),list);card.append(detail);if(typeof candidateEnergy==='function')card.append(candidateEnergy(p));
+  const compare=element('button','Confronta','secondary');compare.type='button';compare.onclick=()=>toggleWeekCompare(p,set,compare);card.append(compare);
   const apply = element('button', joint ? 'Usa dieta e allenamenti' : 'Usa questa settimana', 'primary card-cta');
   apply.type = 'button';
-  apply.onclick = async () => {
-    apply.disabled = true;
-    try {
-      const r = await api('plan-sets/' + set.run_id + '/apply', 'POST', { plan_id: p.id, scope: 'week' });
-      const applied = r.applied_slots?.length || 0,
-        skipped = r.skipped_slots?.length || 0;
-      const sessions = (r.applied_slots || []).filter((x) => x.session_id).length;
-      message(
-        joint
-          ? 'Settimana pianificata: ' + (applied - sessions) + ' pasti e ' + sessions + (sessions === 1 ? ' allenamento' : ' allenamenti') + (skipped ? ' · ' + skipped + ' già registrati lasciati invariati' : '')
-          : 'Settimana pianificata: ' + applied + ' pasti' + (skipped ? ', ' + skipped + ' già registrati lasciati invariati' : ''),
-      );
-      const today = isoDate(new Date());
-      homeDate = mondayOf(today) === set.week_start ? today : set.week_start;
-      document.querySelector('.nav[data-page="home"]').click();
-    } catch (e) {
-      message(e.status === 409 ? 'Qualcosa è cambiato dopo il calcolo (pasti registrati o configurazione): genera di nuovo la settimana.' : e.message);
-      apply.disabled = false;
-    }
-  };
+  apply.textContent='Rivedi e applica';
+  apply.onclick = () => openPlanReview(p,set);
   card.append(apply);
   return card;
 }
@@ -1018,83 +932,19 @@ async function jointRequest() {
   const day_targets = readJointTargets();
   const energy_balance_target_kcal = readBalance();
   const edited = !sameTargets(day_targets, profile.day_type_targets);
-  if (edited || energy_balance_target_kcal !== profile.energy_balance_target_kcal)
-    await saveProfilePatch({ day_type_targets: day_targets, energy_balance_target_kcal });
-  jointSave({ targets: undefined, balance: undefined });
-  // Unchanged targets are omitted so the server can use the per-date targets approved from activity (8.5).
   const approvedPerDate = !edited && profile.approved_activity_targets;
   return {
     week_start: $('week-start').value,
     ...(approvedPerDate ? {} : { day_targets }),
     energy_balance_target_kcal,
-    workout: { ...readAvailability($('joint-availability')), ...(jointActivities?.length ? { activities: jointActivities } : {}), demo: true },
+    k:Number($('week-alternatives').value),diet:{k:Number($('week-alternatives').value),pool_size:Number($('week-alternatives').value)},
+    workout: { ...readAvailability($('joint-availability')), ...readWorkoutDraftLimits(), ...(jointActivities?.length ? { activities: jointActivities } : {}), demo: true },
   };
 }
-$('week-generate').onclick = async () => {
-  const button = $('week-generate');
-  const box = $('week-job');
-  const joint = $('week-joint').checked;
-  let body;
-  try {
-    body = joint ? await jointRequest() : { week_start: $('week-start').value, mode: $('week-mode').value };
-  } catch (e) {
-    return message(e.message);
-  }
-  button.disabled = true;
-  $('week-plans').replaceChildren();
-  $('week-warnings').replaceChildren();
-  $('week-robustness').replaceChildren();
-  box.hidden = false;
-  const label = joint ? 'Optees sta combinando dieta e allenamento…' : 'Optees sta componendo la settimana…';
-  const text = element('p', label, 'job-text');
-  box.replaceChildren(element('div', undefined, 'progress-indeterminate'), text);
-  try {
-    const { job_id } = await api(joint ? 'plans/joint-week' : 'plans/week', 'POST', body);
-    const job = await waitJob(job_id, (s) => (text.textContent = label + ' ' + s + ' s'));
-    const set = await api('plan-sets/' + job.result.plan_set_id);
-    set.week_start = set.week_start || $('week-start').value;
-    if (joint) {
-      set.energy_balance_target_kcal = body.energy_balance_target_kcal;
-      set.plans.forEach((p) => (p.workout_sessions || []).forEach((s) => (sessionTitles[s.session_id] = s.session?.title || s.session?.name || s.session_id)));
-    }
-    // Robustness gets its own plain-language summary instead of the raw backend warnings.
-    const robustAvailable = set.robust_selection && set.robust_selection.status !== 'unavailable';
-    renderWarnings(
-      $('week-warnings'),
-      (set.warnings || [])
-        .filter((w) => w.code !== 'robustness_unavailable' && (w.code !== 'robust_role_omitted' || robustAvailable))
-        .map((w) => (w.code === 'robust_role_omitted' ? { message: 'Nessuna combinazione abbastanza diversa da proporre come «Più robusto»: la più stabile coincide con una di quelle mostrate.' } : w)),
-    );
-    if (joint) robustnessSummary(set);
-    const scale = Math.max(1, ...set.plans.map((p) => p.robustness?.max_loss_kcal || 0));
-    const show = (s) => {
-      s.week_start = s.week_start || set.week_start;
-      $('week-plans').replaceChildren(...s.plans.map((p) => weekPlanCard(p, s, scale)));
-      // Joint pools need their own generation: the extension endpoint supports diet pools only.
-      if (!joint && s.plans.length) $('week-plans').append(moreAlternativesButton(s, show));
-    };
-    show(set);
-    if (set.plans.length === 1) $('week-warnings').append(element('p', 'Con questi vincoli Optees ha trovato una sola proposta valida per la settimana.', 'notice'));
-    if (!set.plans.length) $('week-warnings').append(element('p', joint ? 'Nessuna combinazione rispetta tempi, obiettivi e vincoli: aumenta i minuti disponibili o allarga gli intervalli.' : 'Nessuna settimana rispetta i vincoli.', 'error'));
-  } catch (e) {
-    const box = $('week-warnings');
-    box.replaceChildren(element('p', e.message, 'error'));
-    if (/colazione e spuntini/i.test(e.message)) {
-      const go = element('button', 'Apri il profilo', 'secondary small');
-      go.type = 'button';
-      go.dataset.goto = 'profile';
-      box.append(go);
-    }
-  } finally {
-    box.hidden = true;
-    button.disabled = false;
-  }
-};
-
 // ---------- Navigazione ----------
-$('day-prev').onclick = () => ((homeDate = addDays(homeDate, -1)), (editSlot = null), loadHome().catch((e) => message(e.message)));
-$('day-next').onclick = () => ((homeDate = addDays(homeDate, 1)), (editSlot = null), loadHome().catch((e) => message(e.message)));
-$('day-today').onclick = () => ((homeDate = isoDate(new Date())), (editSlot = null), loadHome().catch((e) => message(e.message)));
+$('day-prev').onclick = () => {homeDate=addDays(homeDate, -1);history.pushState(null,'','#oggi?data='+homeDate);loadHome().catch(e=>message(e.message));};
+$('day-next').onclick = () => {homeDate=addDays(homeDate, 1);history.pushState(null,'','#oggi?data='+homeDate);loadHome().catch(e=>message(e.message));};
+$('day-today').onclick = () => {homeDate=isoDate(new Date());history.pushState(null,'','#oggi?data='+homeDate);loadHome().catch(e=>message(e.message));};
 document.addEventListener('click', (e) => {
   const target = e.target.closest('[data-goto]');
   if (!target) return;

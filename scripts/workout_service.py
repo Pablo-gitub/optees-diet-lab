@@ -4,6 +4,7 @@ import hashlib
 import datetime as dt
 import json
 import math
+import time
 from pathlib import Path
 from zoneinfo import ZoneInfo
 from build_workout_catalog import REVIEWED
@@ -25,6 +26,7 @@ def migrate(db):
     INSERT OR IGNORE INTO schema_migration VALUES(2,strftime('%s','now'));
     ''')
 
+    if 'rest_until' not in {r[1] for r in db.execute('PRAGMA table_info(workout_log)')}:db.execute('ALTER TABLE workout_log ADD COLUMN rest_until REAL')
     if 'rpe' not in {r[1] for r in db.execute('PRAGMA table_info(set_log)')}:db.execute('ALTER TABLE set_log ADD COLUMN rpe REAL')
     sql=db.execute("SELECT sql FROM sqlite_master WHERE type='table' AND name='planned_session'").fetchone()[0]
     if 'UNIQUE(week_plan_id,date)' in sql:
@@ -279,12 +281,17 @@ def mutation(db,user,profile,action,data,log_id=None):
             set_rpe=finite(data.get('rpe'),'RPE della serie',0,10,True)
             if set_rpe is not None:rir=max(0,min(4,10-set_rpe))
             if reps is None and seconds is None:raise DomainError('Indica ripetizioni o secondi eseguiti')
+            already_saved=db.execute('SELECT 1 FROM set_log WHERE workout_log_id=? AND exercise_id=? AND set_no=?',(log_id,exercise,series)).fetchone()
             db.execute('INSERT INTO set_log(workout_log_id,exercise_id,set_no,reps,kg,seconds,rir,rpe) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(workout_log_id,exercise_id,set_no) DO UPDATE SET reps=excluded.reps,kg=excluded.kg,seconds=excluded.seconds,rir=excluded.rir,rpe=excluded.rpe',(log_id,exercise,series,reps,kg,seconds,rir,set_rpe))
+            session=json.loads(log['snapshot']);definition=next(e for e in session['exercises'] if e['source_id']==exercise)
+            rest=definition.get('rest_seconds_between_sets') or session.get('parameters',{}).get('rest_seconds') or session.get('parameters',{}).get('round_rest_seconds') or 0
+            count=definition.get('sets') or definition.get('rounds') or session.get('parameters',{}).get('rounds') or 1
+            if not already_saved:db.execute('UPDATE workout_log SET rest_until=? WHERE id=?',(time.time()+rest if rest and series<count else None,log_id))
         elif action=='finish':
             rpe=finite(data.get('rpe'),'RPE',0,10,True);notes=data.get('notes')
             if notes is not None and (not isinstance(notes,str) or len(notes)>2000):raise DomainError('Note non valide')
             if not log['ended']:
-                db.execute('UPDATE workout_log SET ended=?,rpe=?,notes=? WHERE id=?',(now(),rpe,notes,log_id))
+                db.execute('UPDATE workout_log SET ended=?,rpe=?,notes=?,rest_until=NULL WHERE id=?',(now(),rpe,notes,log_id))
                 if log['planned_session_id']:db.execute("UPDATE planned_session SET status='done' WHERE id=?",(log['planned_session_id'],))
     view=day_view(db,user,profile,date)
     if log_id is not None:view['workout_log_id']=log_id

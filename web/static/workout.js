@@ -89,7 +89,7 @@ function availabilityInputs(box, start) {
   const defaults = [40, 0, 40, 0, 40, 30, 0];
   let saved = null;
   try {
-    saved = JSON.parse(localStorage.getItem('diet-workout-availability') || 'null');
+    saved = JSON.parse(localStorage.getItem('diet-workout-availability:'+window.planningOwner) || 'null');
   } catch {}
   box.replaceChildren(
     ...defaults.map((d, i) => {
@@ -109,8 +109,9 @@ function availabilityInputs(box, start) {
 }
 function readAvailability(box) {
   const inputs = [...box.querySelectorAll('input')];
+  for(const input of inputs)if(input.value===''||!input.checkValidity())throw Error('Minuti disponibili: indica un valore da 0 a 240, a passi di 5, per ogni giorno.');
   try {
-    localStorage.setItem('diet-workout-availability', JSON.stringify(inputs.map((i) => Number(i.value) || 0)));
+    localStorage.setItem('diet-workout-availability:'+window.planningOwner, JSON.stringify(inputs.map((i) => Number(i.value) || 0)));
   } catch {}
   const days = Object.fromEntries(inputs.map((i) => [i.dataset.date, Math.max(0, Math.round(Number(i.value) || 0))]));
   return { days, excluded_days: Object.keys(days).filter((d) => !days[d]) };
@@ -125,7 +126,7 @@ async function loadWorkoutConfig() {
   banner.replaceChildren();
   if (missing) {
     const n = element('div', undefined, 'notice warn');
-    const text = element('span', 'Mancano ' + missing + ' informazioni (livello, attrezzi, carichi, varianti): finché non le completi le sessioni restano bozze dimostrative. ');
+    const text = element('span', 'Nella configurazione salvata mancano ' + missing + ' informazioni (livello, attrezzi, carichi, varianti). Compila e salva per aggiornare il conteggio; finché mancano le sessioni restano bozze dimostrative. ');
     const go = element('button', 'Completa la configurazione', 'secondary small');
     go.type = 'button';
     go.onclick = () => showWorkoutTab('config');
@@ -213,7 +214,8 @@ async function loadWorkoutCatalog() {
 
 // ---------- Settimana: generazione ----------
 function workoutPlanCard(p, set) {
-  const card = element('article', undefined, 'card');
+  const card = element('article', undefined, 'card');card.dataset.planId=p.id;
+  if(set.applied_plan_ids?.includes(p.id))card.append(element('span','Applicata in precedenza','tag is-selected'));
   const head = element('div', undefined, 'card-header');
   head.append(roleBadge(p.role), element('span', minutesText(p.weekly_minutes) + ' a settimana', 'tag'));
   card.append(head, explanationBlock(p));
@@ -223,53 +225,21 @@ function workoutPlanCard(p, set) {
     row.append(element('strong', parseDate(s.date).toLocaleDateString('it-IT', { weekday: 'short', day: 'numeric' })), element('span', s.session?.title || s.session?.name || s.session_id, 'wp-foods'), element('span', minutesText(s.minutes), 'wp-kcal'));
     list.append(row);
   });
-  card.append(list);
+  const details=element('details');details.append(element('summary','Dettaglio delle sessioni'),list);card.append(details);
+  card.append(weekButton('Confronta',e=>toggleWeekCompare(p,set,e?.currentTarget||card.querySelector('button'))));
   const apply = element('button', 'Usa questa settimana', 'primary card-cta');
   apply.type = 'button';
-  apply.onclick = async () => {
-    apply.disabled = true;
-    try {
-      const r = await api('plan-sets/' + set.run_id + '/apply', 'POST', { plan_id: p.id, scope: 'week' });
-      message('Allenamenti pianificati: ' + (r.applied_slots?.length || 0) + (r.skipped_slots?.length ? ' · ' + r.skipped_slots.length + ' già avviati lasciati invariati' : ''));
-      $('wk-plans').replaceChildren();
-      await loadWorkoutWeek();
-    } catch (e) {
-      message(e.message);
-      apply.disabled = false;
-    }
-  };
+  apply.textContent='Rivedi e applica';
+  apply.onclick=()=>openPlanReview(p,set);
   card.append(apply);
   return card;
 }
 
 $('wk-generate').onclick = async () => {
-  const button = $('wk-generate');
-  const availability = readAvailability($('wk-availability'));
-  button.disabled = true;
-  $('wk-plans').replaceChildren();
-  $('wk-warnings').replaceChildren();
-  const box = $('wk-job');
-  box.hidden = false;
-  const text = element('p', 'Optees sta componendo la settimana di allenamento…', 'job-text');
-  box.replaceChildren(element('div', undefined, 'progress-indeterminate'), text);
-  try {
-    const { job_id } = await api('workouts/week', 'POST', {
-      week_start: $('wk-week-start').value,
-      ...availability,
-      demo: true,
-    });
-    const job = await waitJob(job_id, (s) => (text.textContent = 'Optees sta componendo la settimana di allenamento… ' + s + ' s'));
-    const set = await api('plan-sets/' + job.result.plan_set_id);
-    renderWarnings($('wk-warnings'), set.warnings);
-    if (set.require_personal_configuration || set.demo) $('wk-warnings').append(element('p', 'Sessioni dimostrative: completa la configurazione per carichi e varianti personali.', 'notice'));
-    $('wk-plans').replaceChildren(...set.plans.map((p) => workoutPlanCard(p, set)));
-    if (!set.plans.length) $('wk-warnings').append(element('p', 'Nessuna settimana rispetta questi tempi: aumenta i minuti disponibili.', 'error'));
-  } catch (e) {
-    $('wk-warnings').replaceChildren(element('p', e.message, 'error'));
-  } finally {
-    box.hidden = true;
-    button.disabled = false;
-  }
+  await document.querySelector('[data-page="planning"]').onclick();
+  selectPlanningDate($('wk-week-start').value);$('week-kind').value='workout';
+  availabilityInputs($('joint-availability'),$('week-start').value);syncJointMode();
+  $('week-config').open=true;await loadPlanningWeek();$('week-config').scrollIntoView({block:'start'});
 };
 
 // ---------- Sessione ----------
@@ -279,10 +249,11 @@ function openDayWorkout(w) {
   if (w.workout_log_id) return openWorkoutLog(w.workout_log_id);
 }
 async function openWorkoutLog(logId) {
-  document.querySelector('.nav[data-page="workout"]').classList.contains('active') || document.querySelector('.nav[data-page="workout"]').click();
+  if(!document.querySelector('.nav[data-page="workout"]').classList.contains('active'))await document.querySelector('.nav[data-page="workout"]').onclick();
   try {
     const log = await api('workouts/logs/' + logId);
     wkCurrent = { planned: log.planned_session_id ? { id: log.planned_session_id } : null, session: log.session, date: log.date, status: log.ended ? 'done' : 'in_progress', log };
+    if(!mealRouteRestoring)history.pushState(null,'','#sessione?log='+log.id+'&data='+log.date);
     renderSession();
     showWorkoutTab('session');
     window.scrollTo({ top: 0 });
@@ -291,12 +262,13 @@ async function openWorkoutLog(logId) {
   }
 }
 async function openPlannedWorkout(plannedId) {
-  document.querySelector('.nav[data-page="workout"]').classList.contains('active') || document.querySelector('.nav[data-page="workout"]').click();
+  if(!document.querySelector('.nav[data-page="workout"]').classList.contains('active'))await document.querySelector('.nav[data-page="workout"]').onclick();
   try {
     const planned = await api('workouts/planned/' + plannedId);
     const day = await api('day?date=' + planned.date);
     const logId = (day.workouts || [day.workout]).find((x) => x?.planned_session_id === plannedId)?.workout_log_id || null;
     wkCurrent = { planned, session: planned.session, date: planned.date, status: planned.status, log: logId ? await api('workouts/logs/' + logId) : null };
+    if(!mealRouteRestoring)history.pushState(null,'','#sessione?'+(logId?'log='+logId:'piano='+plannedId)+'&data='+planned.date);
     renderSession();
     showWorkoutTab('session');
     window.scrollTo({ top: 0 });
@@ -317,7 +289,8 @@ async function startWorkout(body) {
     const r = await api('workouts/start', 'POST', body);
     const log = await api('workouts/logs/' + r.workout_log_id);
     wkCurrent = { planned: body.planned_session_id ? { id: body.planned_session_id } : null, session: log.session, date: log.date, status: 'in_progress', log };
-    document.querySelector('.nav[data-page="workout"]').classList.contains('active') || document.querySelector('.nav[data-page="workout"]').click();
+    if(!document.querySelector('.nav[data-page="workout"]').classList.contains('active'))await document.querySelector('.nav[data-page="workout"]').onclick();
+    if(!mealRouteRestoring)history.pushState(null,'','#sessione?log='+log.id+'&data='+log.date);
     renderSession();
     showWorkoutTab('session');
     window.scrollTo({ top: 0 });
@@ -415,8 +388,7 @@ function setRow(e, n, session) {
         await api('workouts/' + log.id + '/sets', 'POST', body);
         wkCurrent.log = await api('workouts/logs/' + log.id);
         renderSession();
-        const rest = e.rest_seconds_between_sets || session.parameters?.rest_seconds || session.parameters?.round_rest_seconds;
-        if (rest && n < setCount(e, session)) startRestTimer(rest);
+        // The server stores the deadline; renderSession restores it after reload.
       } catch (err) {
         message(err.message);
       }
@@ -473,12 +445,15 @@ function renderSession() {
     return;
   }
   const { session, log } = wkCurrent;
+  if(log&&!log.ended&&log.rest_until>Date.now()/1000)startRestTimer(0,log.rest_until*1000);else stopRestTimer();
+  const back=element('button','Torna alla giornata','secondary small');back.type='button';back.onclick=async()=>{homeDate=wkCurrent.date;await document.querySelector('[data-page="home"]').onclick();};box.append(back);
   const status = log ? (log.ended ? 'done' : 'in_progress') : wkCurrent.status;
   const st = status === 'preview' ? ['Anteprima', ''] : workoutStatus[status] || [status, ''];
   const head = element('div', undefined, 'panel session-head');
   const titleRow = element('div', undefined, 'card-header');
   titleRow.append(element('h2', session.title || session.name), element('span', st[0], 'chip state-chip ' + st[1]));
   head.append(titleRow);
+  if(log)head.append(element('p','Serie registrate: '+log.sets.length+' / '+session.exercises.reduce((n,e)=>n+setCount(e,session),0),'muted'));
   head.append(element('p', [longDate(wkCurrent.date), minutesText(session.duration_minutes_assumed), intensityText(session.intensity)].filter(Boolean).join(' · '), 'muted'));
   if (session.demo) head.append(element('p', 'Bozza dimostrativa: tempi, serie e intensità sono ipotesi da adattare a te, non una prescrizione.', 'notice warn'));
   const atStart = log?.configuration_at_start;
@@ -537,7 +512,8 @@ function renderSession() {
     const notes = element('textarea');
     notes.rows = 2;
     notes.placeholder = 'Note facoltative: sensazioni, dolori, carichi da cambiare…';
-    const finish = element('button', 'Concludi l’allenamento', 'primary');
+    const expectedSets=session.exercises.reduce((n,e)=>n+setCount(e,session),0);
+    const finish = element('button', log.sets.length<expectedSets?'Concludi sessione parziale ('+log.sets.length+'/'+expectedSets+' serie)':'Concludi l’allenamento', 'primary');
     finish.type = 'button';
     finish.onclick = async () => {
       try {
@@ -569,17 +545,18 @@ function renderSession() {
 
 // ---------- Timer di recupero ----------
 let restInterval = null;
-function startRestTimer(seconds) {
+function startRestTimer(seconds,deadline=Date.now()+seconds*1000) {
   stopRestTimer();
   const box = $('rest-timer');
-  let left = seconds;
+
   const label = element('span');
   const skip = element('button', 'Salta', 'ghost small');
   skip.type = 'button';
-  skip.onclick = stopRestTimer;
+  skip.onclick = async()=>{try{if(wkCurrent?.log)wkCurrent.log=await api('workouts/'+wkCurrent.log.id+'/rest/skip','POST',{});stopRestTimer();}catch(e){message(e.message);}};
   box.replaceChildren(element('span', 'Recupero', 'muted'), label, skip);
   box.hidden = false;
   const tick = () => {
+    const left=Math.max(0,Math.ceil((deadline-Date.now())/1000));
     label.textContent = clock(left);
     if (left <= 0) {
       stopRestTimer();
@@ -588,7 +565,7 @@ function startRestTimer(seconds) {
       } catch {}
       message('Recupero finito: prossima serie');
     }
-    left -= 1;
+
   };
   tick();
   restInterval = setInterval(tick, 1000);
@@ -670,7 +647,7 @@ function renderWorkoutConfig() {
   const loadExercises = [...new Set([...Object.keys(s.starting_loads_kg || {}), ...wkConfig.missing_fields.filter((m) => m.field.startsWith('starting_loads_kg.')).map((m) => m.field.split('.')[1])])];
   const grid = element('div', undefined, 'grid');
   loadExercises.forEach((ex) => {
-    const l = element('label', 'Partenza · ' + (exerciseNames[ex] || ex) + ' ');
+    const l = element('label', 'Partenza · ' + (exerciseNames[ex] || ex) + ' (kg per manubrio) ');
     if (todo('starting_loads_kg.' + ex)) l.append(todo('starting_loads_kg.' + ex));
     const i = element('input');
     i.type = 'number';
@@ -709,7 +686,20 @@ function renderWorkoutConfig() {
 
   const bar = element('div', undefined, 'save-bar');
   const required = wkConfig.missing_fields.filter((m) => !m.optional).length;
-  bar.append(element('p', required ? (required === 1 ? 'Manca 1 informazione.' : 'Mancano ' + required + ' informazioni.') : 'Configurazione completa.', 'muted'));
+  const status = element('p', required ? 'Configurazione salvata: ' + required + ' informazioni ancora da completare. Compila e salva per aggiornare il conteggio.' : 'Configurazione salvata completa.', 'muted');
+  status.id = 'wk-config-status';
+  status.setAttribute('role', 'status');
+  bar.append(status);
+  const feedback = element('p', '', 'notice warn');
+  feedback.id = 'wk-config-feedback';
+  feedback.setAttribute('role', 'alert');
+  feedback.hidden = true;
+  bar.append(feedback);
+  form.oninput = () => {
+    status.textContent = 'Modifiche non salvate. Il conteggio riguarda la configurazione salvata.';
+    feedback.hidden = true;
+    form.querySelectorAll('[aria-invalid]').forEach(i => { i.removeAttribute('aria-invalid'); i.removeAttribute('aria-describedby'); });
+  };
   const save = element('button', 'Salva configurazione', 'primary');
   bar.append(save);
   form.append(bar);
@@ -717,7 +707,25 @@ function renderWorkoutConfig() {
 
 $('wk-config-form').onsubmit = async (e) => {
   e.preventDefault();
+  const form = $('wk-config-form');
+  const feedback = $('wk-config-feedback');
+  const fail = (text, input) => {
+    feedback.textContent = text;
+    feedback.hidden = false;
+    if (input) {
+      input.setAttribute('aria-invalid', 'true');
+      input.setAttribute('aria-describedby', feedback.id);
+      input.parentElement.append(feedback);
+      input.focus();
+    }
+  };
   const s = wkConfig.settings;
+  const loadText = $('cfg-loads').value.trim();
+  // Commas separate weights; decimal values use a point, as in the example.
+  if (loadText && loadText.split(/[,;\s]+/).some(x => x && (!Number.isFinite(Number(x)) || Number(x) <= 0 || Number(x) > 1000))) {
+    fail('Inserisci pesi positivi separati da virgola; per i decimali usa il punto (es. 2.5, 4, 6).', $('cfg-loads'));
+    return;
+  }
   const loads = $('cfg-loads')
     .value.split(/[,;\s]+/)
     .map((x) => Number(x.replace(',', '.')))
@@ -727,6 +735,11 @@ $('wk-config-form').onsubmit = async (e) => {
     if (i.value === '') delete starting[i.dataset.startLoad];
     else starting[i.dataset.startLoad] = Number(i.value);
   });
+  const invalidLoad = [...form.querySelectorAll('[data-start-load]')].find(i => i.value !== '' && !loads.includes(Number(i.value)));
+  if (invalidLoad) {
+    fail('Il carico di partenza di ' + (exerciseNames[invalidLoad.dataset.startLoad] || invalidLoad.dataset.startLoad) + ' è per singolo manubrio e deve essere fra i pesi disponibili (' + loads.join(', ') + ' kg). Correggi il carico oppure aggiungi il peso disponibile.', invalidLoad);
+    return;
+  }
   const variants = { ...(s.variants || {}) };
   document.querySelectorAll('[data-variant]').forEach((sel) => {
     const ex = sel.dataset.variant;
@@ -743,14 +756,25 @@ $('wk-config-form').onsubmit = async (e) => {
     starting_loads_kg: starting,
     variants,
   };
+  const save = form.querySelector('button');
+  save.disabled = true;
+  feedback.hidden = true;
+  $('wk-config-status').textContent = 'Salvataggio in corso…';
   try {
     const r = await api('workouts/config', 'PATCH', body);
     wkConfig = r.workout_configuration;
-    await loadWorkoutConfig();
+    const missing = wkConfig.missing_fields.filter(m => !m.optional).length;
+    $('wk-config-count').hidden = !missing;
+    $('wk-config-count').textContent = missing;
     renderWorkoutConfig();
+    // Refresh the banner without discarding a successful response if a read fails.
+    loadWorkoutConfig().catch(() => {});
     message('Configurazione salvata');
     loadWorkoutCatalog();
   } catch (err) {
-    message(err.message);
+    fail(err.message === 'Failed to fetch' ? 'Connessione interrotta. I valori sono ancora qui: riprova a salvare.' : err.message);
+    $('wk-config-status').textContent = 'Salvataggio non riuscito. Le modifiche sono ancora nel modulo.';
+  } finally {
+    save.disabled = false;
   }
 };

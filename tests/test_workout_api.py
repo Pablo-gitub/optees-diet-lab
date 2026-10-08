@@ -25,6 +25,16 @@ class WorkoutAPI(diary_tests.DiaryTests):
     def begin(self,identifier):
         return self.client.post('/api/workouts/start',json=dict(planned_session_id=identifier,session_id='hypertrophy_basic',date=self.date),headers=self.headers)
 
+    def test_rest_deadline_survives_read_and_skip_is_persistent(self):
+        identifier=self.seed();response=self.begin(identifier);self.assertEqual(response.status_code,200,response.text)
+        log=response.json()['workout_log_id'];body=dict(exercise_id='bodyweight-squat',set_no=1,reps=10)
+        self.assertEqual(self.client.post(f'/api/workouts/{log}/sets',json=body,headers=self.headers).status_code,200)
+        first=self.client.get(f'/api/workouts/logs/{log}').json()['rest_until'];self.assertGreater(first,time.time())
+        self.client.post(f'/api/workouts/{log}/sets',json=body,headers=self.headers)
+        self.assertEqual(self.client.get(f'/api/workouts/logs/{log}').json()['rest_until'],first)
+        self.assertEqual(self.client.post(f'/api/workouts/{log}/rest/skip',json={},headers=self.headers).status_code,200)
+        self.assertIsNone(self.client.get(f'/api/workouts/logs/{log}').json()['rest_until'])
+
     def test_start_sets_finish_are_owned_separate_idempotent_and_snapshotted(self):
         identifier=self.seed();before=self.client.get('/api/day',params=dict(date=self.date)).json()
         self.assertEqual(before['workout']['status'],'chosen');self.assertIsNone(before['totals']['eaten'])

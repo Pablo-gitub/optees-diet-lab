@@ -119,13 +119,15 @@ async function load() {
   recipeSolverData = null;
   const data = await api('profile');
   csrf = data.csrf;
+  window.planningOwner=data.user_id;
   profile = data.profile;
+  tasteFoodNames = data.taste_food_names || {};
   $('login').hidden = true;
   $('workspace').hidden = false;
   $('user-name').textContent = profile.display_name;
   $('user-initial').textContent = (profile.display_name || '?').trim().charAt(0);
   $('display-name').value = profile.display_name;
-  $('preferences').value = profile.preference_note.replace('Preferenze registrate, non ancora applicate ai calcoli.','Preferenze di colazione e spuntini applicate quando il bilancio giornaliero è attivo.');
+  $('preferences').value = profile.preference_note;
   $('demo').checked = profile.targets_demo;
   $('exclusions').value = profile.excluded_crea_ids.join(', ');
   fillModes('profile-mode');
@@ -133,6 +135,8 @@ async function load() {
   targetFields();
   dailyFields();
   await loadCuisines();
+  renderTasteSettings();
+  if (profile.taste_onboarding.welcome) openTasteSetup();
   await loadPlans();
   await loadHome();
 }
@@ -263,7 +267,7 @@ const roleMeta = {
   explore: ['Da provare', '✦'],
 };
 function roleBadge(role) {
-  const meta = roleMeta[role] || [role, '•'];
+  const meta = roleMeta[role] || [String(role).replace(/^alternative_/, 'Alternativa '), '•'];
   const badge = element('span', undefined, 'role-badge role-' + role);
   badge.append(element('span', meta[1], 'role-icon'), document.createTextNode(meta[0]));
   return badge;
@@ -455,6 +459,7 @@ async function save() {
       }
     }
   await api('profile', 'PUT', {
+    taste_revision: profile.taste_onboarding.revision,
     display_name: $('display-name').value,
     mode: $('profile-mode').value,
     preference_note: $('preferences').value,
@@ -476,7 +481,7 @@ $('login-form').onsubmit = async (e) => {
     const data = await api('login', 'POST', { username: $('username').value, password: $('password').value });
     csrf = data.csrf;
     $('password').value = '';
-    await load();
+    const requestedHash=location.hash;await load();await restoreAppRoute(requestedHash);
   } catch (e) {
     message(e.message);
   }
@@ -491,6 +496,7 @@ $('register').onclick = async () => {
 };
 $('logout').onclick = async () => {
   try {
+    if (!await leaveTasteSetup() || !await leaveMealEditor()) return;
     await api('logout', 'POST', {});
     location.reload();
   } catch (e) {
@@ -513,12 +519,7 @@ $('generate').onclick = async () => {
   button.disabled = true;
   button.textContent = 'Optees sta calcolando…';
   try {
-    if (profile.mode !== $('planning-mode').value) {
-      await api('profile', 'PUT', { ...profile, mode: $('planning-mode').value });
-      profile.mode = $('planning-mode').value;
-      $('profile-mode').value = profile.mode;
-    }
-    const r = await api('generate', 'POST', { day_index: Number($('day').value) });
+    const r = await api('generate', 'POST', { day_index: Number($('day').value), mode: $('planning-mode').value });
     renderWarnings($('plan-warnings'), r.warnings);
     await loadPlans();
     const n = (r.plans || []).length || r.count;
@@ -532,7 +533,7 @@ $('generate').onclick = async () => {
 };
 const pageMeta = {
   home: ['Diario', 'Oggi', 'Pasti e attività della giornata, la settimana e i progressi.'],
-  planning: ['Dalle possibilità al piano', 'Piano', 'Genera la settimana e confronta le alternative proposte.'],
+  planning: ['Pianificazione', 'Settimana', 'Il calendario attivo, le proposte e la lista della spesa.'],
   workout: ['Palestra', 'Allenamento', 'Sessioni della settimana, esecuzione e registro delle serie.'],
   progress: ['Andamento', 'Progressi', 'Misure, statistiche e dati importati da Apple Salute.'],
   matches: ['Gusti', 'Abbinamenti', 'Pasti calcolati sui tuoi obiettivi: scorri a destra se ti piace, a sinistra se no.'],
@@ -541,8 +542,11 @@ const pageMeta = {
 };
 document.querySelectorAll('[data-page]').forEach(
   (button) =>
-    (button.onclick = () => {
+    (button.onclick = async () => {
+      if (!await leaveTasteSetup() || !await leaveMealEditor()) return;
       const page = button.dataset.page;
+      $('taste-onboarding').hidden = true;
+      $('meal-editor').hidden = true;
       ['home', 'planning', 'workout', 'recipes', 'matches', 'progress', 'profile'].forEach((id) => ($(id).hidden = id !== page));
       document.querySelectorAll('[data-page]').forEach((b) => b.classList.toggle('active', b === button));
       const meta = pageMeta[page];
@@ -550,8 +554,8 @@ document.querySelectorAll('[data-page]').forEach(
       $('page-title').textContent = meta[1];
       $('page-subtitle').textContent = meta[2];
       window.scrollTo({ top: 0 });
-      if (page === 'home') loadHome().catch((e) => message(e.message));
-      if (page === 'planning') preparePlanning();
+      if (page === 'home') await loadHome().catch((e) => message(e.message));
+      if (page === 'planning') await preparePlanning();
       if (page === 'workout') loadWorkout().catch((e) => message(e.message));
       if (page === 'progress') Promise.all([loadProgress(), loadHealth()]).catch((e) => message(e.message));
       if (page === 'recipes') Promise.all([loadRecipes(), loadRecipeSolver()]).catch((e) => message(e.message));
@@ -565,7 +569,7 @@ for (let i = 0; i < 14; i++) {
   option.value = i;
   $('day').append(option);
 }
-load().catch(() => {});
+document.addEventListener('DOMContentLoaded', () => {const initialHash=location.hash;load().then(()=>restoreAppRoute(initialHash)).catch(() => {});});
 
 const cuisineLabels = {
   'afghan': 'Afghana',
@@ -782,6 +786,8 @@ async function loadRecipes() {
     const head = element('div', undefined, 'recipe-head');
     head.append(element('h3', title), heartButton(r));
     body.append(head);
+    body.append(element('p',r.solver_status==='ready'?'Pronta per un pasto della settimana':r.solver_status==='unavailable'?'Da verificare: '+r.solver_reason:'Consultabile · ingredienti non ancora pronti per il piano','muted small'));
+    if(r.solver_status==='ready')body.append(recipeWeekAction(r));
     body.append(element('p', (cuisineLabels[r.cuisine_id] || r.cuisine) + (title !== r.title ? ' · ' + r.title : ''), 'muted'));
     const n = r.declared_nutrition;
     const facts = element('div', undefined, 'recipe-facts');
@@ -808,7 +814,7 @@ async function loadRecipes() {
     if (r.source_url.startsWith('https://')) link.href = r.source_url;
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
-    body.append(link, element('p', 'Abbinamento ingredienti da verificare.', 'muted small'));
+    body.append(link, element('p', 'Compatibilità con il pasto del tuo programma da verificare.', 'muted small'));
     card.append(body);
     $('recipe-list').append(card);
   });

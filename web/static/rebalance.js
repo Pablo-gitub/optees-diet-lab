@@ -16,6 +16,7 @@ function rerenderRebalance() {
 }
 
 async function openRebalance(m, day) {
+  $('message').hidden=true;
   rebalance = { mode: 'meal', date: day.date, slot: m.slot, preset: null, size: 'medio', custom: null, preview: null, loading: false };
   renderWeekRebalance();
   try {
@@ -39,6 +40,7 @@ function canRebalance(m, day) {
 
 async function runRebalancePreview() {
   const r = rebalance;
+  if(r.mode==='meal'){r.preview=null;rerenderRebalance();return;}
   const body = r.mode === 'diary' ? { date: r.date, from_diary: true } : { date: r.date, slot: r.slot, ...(r.custom ? { custom: r.custom } : { preset: { id: r.preset, size: r.size } }) };
   // 8.6: activity only when asked; walking is the default suggestion.
   if (r.activity && r.activity !== 'none') body.activity = { mode: r.activity, max_minutes_per_day: 45 };
@@ -151,10 +153,12 @@ function customForm(r) {
     input.placeholder = hint;
     input.inputMode = 'decimal';
     input.required = true;
+    if(r.custom?.[key])input.value=r.custom[key].min+'-'+r.custom[key].max;
+    input.oninput=()=>{r.custom=null;};
     l.append(input);
     form.append(l);
   });
-  const go = element('button', 'Calcola l’impatto', 'primary');
+  const go = element('button', 'Prepara questa stima', 'primary');
   form.append(go);
   form.onsubmit = (e) => {
     e.preventDefault();
@@ -377,7 +381,7 @@ function rebalancePanel(m, day) {
   close.setAttribute('aria-label', 'Chiudi');
   close.onclick = closeRebalance;
   head.append(close);
-  panel.append(head, element('p', 'Capita. Scegli cosa hai mangiato: Optees stima un intervallo e ti mostra come rientrare nei prossimi giorni, se vuoi.', 'muted small'));
+  panel.append(head, element('p', 'Capita. Scegli cosa hai mangiato: la registrazione conserva un intervallo. Dopo potrai scegliere se valutare un rientro nei giorni futuri.', 'muted small'));
   panel.append(presetPicker(r));
   if (r.preset && r.preset !== 'custom') panel.append(sizePicker(r));
   if (r.preset === 'custom' && !r.preview && !r.loading) panel.append(customForm(r));
@@ -387,6 +391,12 @@ function rebalancePanel(m, day) {
     panel.append(job);
   }
   if (r.error) panel.append(element('p', r.error, 'error'));
+  if(r.preset&&r.preset!=='custom'||r.custom){const record=element('button','Registra pasto stimato','primary');record.type='button';record.onclick=async()=>{record.disabled=true;try{const result=await api('rebalance/register','POST',{date:r.date,slot:r.slot,...(r.custom?{custom:r.custom}:{preset:{id:r.preset,size:r.size}})});rebalance=null;renderDay(result);refreshWeek();message('Pasto stimato registrato · piano futuro invariato');}catch(e){r.error=e.message;rerenderRebalance();}};panel.append(record,element('p','La registrazione non modifica i giorni futuri. Potrai valutare il rientro separatamente.','muted small'));}
   if (r.preview) panel.append(previewView(r));
   return panel;
+}
+
+function evaluateRecordedRebalance(date){
+  if(!currentDay.week_plan_id)return message('Nessun piano attivo da ribilanciare. Il pasto resta registrato.');
+  rebalance={mode:'diary',date,preview:null,loading:false};renderDay(currentDay);runRebalancePreview();
 }
