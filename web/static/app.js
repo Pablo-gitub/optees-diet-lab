@@ -548,7 +548,14 @@ document.querySelectorAll('[data-page]').forEach(
       $('taste-onboarding').hidden = true;
       $('meal-editor').hidden = true;
       ['home', 'planning', 'workout', 'recipes', 'matches', 'progress', 'profile'].forEach((id) => ($(id).hidden = id !== page));
-      document.querySelectorAll('[data-page]').forEach((b) => b.classList.toggle('active', b === button));
+      closeUserMenu();
+      document.querySelectorAll('[data-page]').forEach((b) => {
+        const current = b.dataset.page === page;
+        b.classList.toggle('active', current);
+        if (current) b.setAttribute('aria-current', 'page');
+        else b.removeAttribute('aria-current');
+      });
+      $('user-menu-button').classList.toggle('active', ['profile', 'progress', 'matches'].includes(page));
       const meta = pageMeta[page];
       $('page-eyebrow').textContent = meta[0];
       $('page-title').textContent = meta[1];
@@ -1212,11 +1219,53 @@ function applyTheme(theme) {
 try {
   applyTheme(localStorage.getItem('diet-theme'));
 } catch {}
+const currentTheme = () => document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+const syncThemeSwitch = () => $('theme-toggle').setAttribute('aria-checked', String(currentTheme() === 'dark'));
+syncThemeSwitch();
 $('theme-toggle').onclick = () => {
-  const current = document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  const next = current === 'dark' ? 'light' : 'dark';
+  const next = currentTheme() === 'dark' ? 'light' : 'dark';
   applyTheme(next);
+  syncThemeSwitch();
   try {
     localStorage.setItem('diet-theme', next);
   } catch {}
 };
+
+// Personal menu behind the avatar: profile, progress, tastes, settings (theme), logout.
+const userMenuItems = () => [...$('user-menu').querySelectorAll('[role^="menuitem"]')];
+function openUserMenu(focusLast = false) {
+  $('user-menu').hidden = false;
+  $('user-menu-button').setAttribute('aria-expanded', 'true');
+  const items = userMenuItems();
+  (focusLast ? items[items.length - 1] : items[0]).focus();
+}
+function closeUserMenu(returnFocus = false) {
+  if ($('user-menu').hidden) return;
+  $('user-menu').hidden = true;
+  $('user-menu-button').setAttribute('aria-expanded', 'false');
+  if (returnFocus) $('user-menu-button').focus();
+}
+$('user-menu-button').onclick = () => ($('user-menu').hidden ? openUserMenu() : closeUserMenu());
+$('user-menu-button').onkeydown = (e) => {
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    e.preventDefault();
+    openUserMenu(e.key === 'ArrowUp');
+  }
+};
+$('user-menu').onkeydown = (e) => {
+  const items = userMenuItems();
+  const i = items.indexOf(document.activeElement);
+  if (e.key === 'Escape') {
+    e.preventDefault();
+    closeUserMenu(true);
+  } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    e.preventDefault();
+    items[(i + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length].focus();
+  } else if (e.key === 'Home' || e.key === 'End') {
+    e.preventDefault();
+    items[e.key === 'Home' ? 0 : items.length - 1].focus();
+  } else if (e.key === 'Tab') closeUserMenu();
+};
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.user-menu')) closeUserMenu();
+});

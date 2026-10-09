@@ -948,6 +948,6 @@ $('day-today').onclick = () => {homeDate=isoDate(new Date());history.pushState(n
 document.addEventListener('click', (e) => {
   const target = e.target.closest('[data-goto]');
   if (!target) return;
-  document.querySelector('.nav[data-page="' + target.dataset.goto + '"]').click();
+  document.querySelector('[data-page="' + target.dataset.goto + '"]').click();
   if (target.dataset.goto === 'planning') showPlanTab('week');
 });
