@@ -77,7 +77,7 @@ Codice esistente (nomi verificati):
 
 <!-- Codex aggiorna questo valore con il commit che contiene i test rossi -->
 ```
-DA-AGGIORNARE
+3a34903a722c8014920746140c0d9ad37e00a99a
 ```
 
 ## File consentiti
@@ -118,3 +118,18 @@ Scrivere `tests/test_presumed_meals.py` coprendo **ogni** criterio di accettazio
 ## Revisione
 
 <!-- compilata da Codex: esito, correzioni; commit di Claude -->
+
+## Ambiguità e conflitti rilevati da Codex (test rossi)
+
+- `confirm-all`: manca la risposta per un pasto dentro la finestra che non è presunto ma non è nemmeno registrato (mai pianificato, bozza aperta, sole righe `diary_entry`, piano non attivo). I test non assegnano uno status a questi casi. L’isolamento richiede comunque che un altro utente non possa confermare il pasto del proprietario.
+- Non sono specificati duplicati, lista vuota, slot inesistente, date malformate e contenuto dettagliato di `confirmed`/`skipped` oltre alla coppia data/slot. Non vengono introdotte regole per questi input.
+- «Nessuna GET … cruscotto scrive»: i test coprono `/api/progress/energy`, pertinente al saldo. Se si intende anche `/api/progress/milestones`, il codice attuale persiste proiezioni in lettura; serve chiarire il perimetro anziché estenderlo implicitamente.
+- Applicazione del piano: il criterio vieta di cambiare i presunti passati, mentre `apply_plan` oggi protegge registrati, voci del diario e slot bloccati, non gli `unknown` dei giorni passati. Il test rende esplicito il requisito di conservazione senza scegliere un nuovo codice di errore o una struttura `skipped`.
+- «Suite completa verde» è il criterio finale dell’implementazione e non può essere soddisfatto nella consegna dei test deliberatamente rossi. Non viene aggiunto un test che esegue ricorsivamente la suite. La verifica finale resta all’esecutore/revisore.
+- `GEMINI.md` vieta i commit e le modifiche ai test protetti per il ruolo esecutore Gemini; l’incarico esplicito del proprietario autorizza Codex a scrivere questi test e committarli, aggiornando solo «Base» e queste note nella scheda. Nessun file di implementazione modificato.
+
+### Verifica dei test rossi
+
+Commit dei soli test: `3a34903a722c8014920746140c0d9ad37e00a99a`.
+18 test in `tests/test_presumed_meals.py`, con database temporaneo distinto per test, `diary_service.local_today` fissato al 10 ottobre 2026 e alimenti sintetici. Bootstrap del proprietario evitato per non caricare le preferenze personali.
+Comando della scheda: 62 test eseguiti, 28 failure di asserzione (incluse le sotto-prove) tutte in `test_presumed_meals`, nessun errore di esecuzione; i 44 test preesistenti passano. Cause: campi presunti mancanti, endpoint pending/confirm-all assenti (404), conteggi settimanali non aggiornati, saldo senza presunti e applicazione che sovrascrive gli unknown passati. Nessuna funzionalità implementata.
