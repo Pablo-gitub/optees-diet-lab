@@ -133,3 +133,11 @@ Scrivere `tests/test_presumed_meals.py` coprendo **ogni** criterio di accettazio
 Commit dei soli test: `3a34903a722c8014920746140c0d9ad37e00a99a`.
 18 test in `tests/test_presumed_meals.py`, con database temporaneo distinto per test, `diary_service.local_today` fissato al 10 ottobre 2026 e alimenti sintetici. Bootstrap del proprietario evitato per non caricare le preferenze personali.
 Comando della scheda: 62 test eseguiti, 28 failure di asserzione (incluse le sotto-prove) tutte in `test_presumed_meals`, nessun errore di esecuzione; i 44 test preesistenti passano. Cause: campi presunti mancanti, endpoint pending/confirm-all assenti (404), conteggi settimanali non aggiornati, saldo senza presunti e applicazione che sovrascrive gli unknown passati. Nessuna funzionalità implementata.
+
+### Decisioni di Claude sulle ambiguità (vincolanti per l'implementazione)
+
+1. **`confirm-all`, pasto nella finestra non presunto e non registrato** (mai pianificato, bozza aperta, sole righe `diary_entry`, piano non attivo): nessun errore, nessuna modifica; finisce in `skipped` con `reason: "not_presumed"`. Un pasto già registrato va in `skipped` con `reason: "already_logged"`. Elementi di `confirmed`: `{date, slot}`; di `skipped`: `{date, slot, reason}`.
+2. **Input:** duplicati della stessa coppia (data, slot) contati una volta; lista vuota → 200 con `confirmed: []`, `skipped: []`; slot inesistente o data malformata → 422 e nessuna modifica (come le date fuori finestra); corpo senza `meals` → 422.
+3. **GET senza scritture:** perimetro = giorno, settimana, `pending`, `/api/progress/energy`. `/api/progress/milestones` che salva proiezioni in lettura è fuori da questa scheda: non va toccato; lo registro come lacuna separata.
+4. **Applicazione di un piano / rientro:** le date passate con pasti presunti non vengono sovrascritte; vengono saltate in silenzio come gli slot già protetti oggi da `apply_plan`, senza nuovo codice di errore.
+5. **Suite completa verde:** criterio finale dell'implementazione (Gemini) e della revisione, non dei test rossi.
