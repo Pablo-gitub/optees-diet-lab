@@ -3,6 +3,7 @@ import json
 import os
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 from fastapi.testclient import TestClient
 
@@ -187,10 +188,12 @@ class WebTests(unittest.TestCase):
         profile['preferred_cuisines'] = ['italian', 'chinese']
         self.assertEqual(first.put('/api/profile', json=profile, headers=h1).status_code, 200)
         self.assertEqual(second.get('/api/profile').json()['profile']['preferred_cuisines'], [])
-        self.assertEqual(first.get('/api/recipes?preferred=true').json()['total'], 87)
+        self.assertEqual(first.get('/api/recipes?preferred=true&ready_only=false').json()['total'], 87)
+        self.assertTrue(all(r['solver_status'] == 'ready' for r in first.get('/api/recipes?preferred=true').json()['recipes']))
         self.assertEqual(second.get('/api/recipes?preferred=true').json()['total'], 0)
         china = first.get('/api/recipes?cuisine=chinese').json()
-        self.assertEqual(china['total'], 6)
+        self.assertEqual(first.get('/api/recipes?cuisine=chinese&ready_only=false').json()['total'], 6)
+        self.assertTrue(all(r['solver_status'] == 'ready' for r in china['recipes']))
         self.assertTrue(all(r['cuisine'] == 'Chinese' for r in china['recipes']))
         self.assertEqual(first.get('/api/recipes?q=%25').json()['total'], 0)
         self.assertEqual(first.get('/api/recipes?offset=-1').status_code, 400)
@@ -258,7 +261,7 @@ class WebTests(unittest.TestCase):
 
     def test_recipe_catalog_uses_italian_titles_and_photos_first(self):
         client, _ = self.account('italiantitles')
-        found = client.get('/api/recipes?q=polpette%20di%20tacchino').json()
+        found = client.get('/api/recipes?q=polpette%20di%20tacchino&ready_only=false').json()
         self.assertGreater(found['total'], 0)
         self.assertTrue(all('tacchino' in r['title_it'].lower() for r in found['recipes']))
         self.assertNotIn('tacchino', found['recipes'][0]['title'].lower())
@@ -266,6 +269,58 @@ class WebTests(unittest.TestCase):
         flags = [bool(r.get('illustrative_image')) for r in first]
         self.assertEqual(flags, sorted(flags, reverse=True))
         self.assertTrue(flags[0])
+
+    def test_ready_catalog_filters_before_count_and_pagination(self):
+        client, _ = self.account('readycatalog')
+        with self.module.sqlite3.connect(ROOT / 'dataset/recipes/catalog.sqlite') as db:
+            ids = [r[0] for r in db.execute('SELECT id FROM recipes ORDER BY id LIMIT 40')]
+        available = {rid: {'solver_status': 'ready' if i < 35 else 'unavailable',
+                           'solver_reason': None if i < 35 else 'Esclusione personale'}
+                     for i, rid in enumerate(ids)}
+        with patch.object(self.module, 'catalog_availability', return_value=available):
+            first = client.get('/api/recipes').json()
+            second = client.get('/api/recipes?offset=30').json()
+            self.assertEqual(first['total'], 35)
+            self.assertEqual(second['total'], 35)
+            self.assertEqual(len(first['recipes']), 30)
+            self.assertEqual(len(second['recipes']), 5)
+            returned = first['recipes'] + second['recipes']
+            self.assertEqual({r['id'] for r in returned}, set(ids[:35]))
+            self.assertTrue(all(r['solver_status'] == 'ready' for r in returned))
+            for row in returned[:3]:
+                query = client.get('/api/recipes', params={'q': row['title'], 'cuisine': row['cuisine_id']}).json()
+                self.assertIn(row['id'], {r['id'] for r in query['recipes']})
+                self.assertTrue(all(r['solver_status'] == 'ready' for r in query['recipes']))
+            cuisines = client.get('/api/cuisines').json()
+            self.assertEqual(sum(c['count'] for c in cuisines), 35)
+        with patch.object(self.module, 'catalog_availability', return_value={}):
+            self.assertEqual(client.get('/api/recipes').json(), {'total': 0, 'recipes': []})
+            self.assertEqual(client.get('/api/cuisines').json(), [])
+
+    def test_unusable_favorites_remain_saved_with_reason_and_are_private(self):
+        from diary_service import DomainError
+        first, headers = self.account('unusablefavorites')
+        second, _ = self.account('otherfavorites')
+        with self.module.connect() as db:
+            owner = db.execute('SELECT id FROM users WHERE username=?', ('unusablefavorites',)).fetchone()['id']
+            with self.module.sqlite3.connect(ROOT / 'dataset/recipes/catalog.sqlite') as catalog:
+                reviewed = {r['id'] for r in self.module.recipe_templates()}
+                catalog_only = next(r[0] for r in catalog.execute('SELECT id FROM recipes') if r[0] not in reviewed)
+            for rid in ['foodose:R315', catalog_only]:
+                db.execute('INSERT INTO recipe_preference VALUES(?,?,1,0)', (owner, rid))
+        with patch('recipe_intents.materialize', side_effect=DomainError('Ricetta contiene un alimento escluso')):
+            result = first.get('/api/recipes/preferences').json()
+            rows = {r['recipe_id']: r for r in result['recipes']}
+            self.assertEqual(rows['foodose:R315']['solver_status'], 'unavailable')
+            self.assertEqual(rows[catalog_only]['solver_status'], 'catalog_only')
+            self.assertTrue(all(r['preferred'] and r['solver_reason'] and r['reason'] == r['solver_reason'] for r in rows.values()))
+            self.assertEqual(len(result['review_queue']), 2)
+            self.assertEqual(first.get('/api/recipes').json()['total'], 0)
+            self.assertEqual(second.get('/api/recipes/preferences').json()['recipes'], [])
+        # Reading availability never deletes or changes the saved preferences.
+        with self.module.connect() as db:
+            self.assertEqual(db.execute('SELECT COUNT(*) FROM recipe_preference WHERE user_id=? AND preferred=1', (owner,)).fetchone()[0], 2)
+        self.assertEqual(TestClient(self.module.app).get('/api/recipes/preferences').status_code, 401)
 
     def test_personal_files_are_not_served(self):
         client = TestClient(self.module.app)

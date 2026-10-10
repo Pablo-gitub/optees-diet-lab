@@ -2,11 +2,12 @@ import copy
 import json
 import sys
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
-from recipe_diet_compatibility import assess, meal_options, classify, match_branch
+from recipe_diet_compatibility import assess, meal_options, classify, match_branch, solver_availability, catalog_availability
 
 
 def recipe(*groups):
@@ -34,6 +35,29 @@ def branch(*roles):
 
 
 class CompatibilityTests(unittest.TestCase):
+    def test_solver_availability_is_independent_of_meal_compatibility(self):
+        from diary_service import DomainError
+        with patch('recipe_intents.materialize') as materialize:
+            result = solver_availability('unreviewed', {}, {'reviewed'})
+            self.assertEqual(result['solver_status'], 'catalog_only')
+            self.assertTrue(result['solver_reason'])
+            materialize.assert_not_called()
+            self.assertEqual(solver_availability('reviewed', {}, {'reviewed'}),
+                             {'solver_status': 'ready', 'solver_reason': None})
+            materialize.side_effect = DomainError('Alimento escluso')
+            self.assertEqual(solver_availability('reviewed', {}, {'reviewed'}),
+                             {'solver_status': 'unavailable', 'solver_reason': 'Alimento escluso'})
+
+    def test_catalog_availability_is_owner_specific_and_does_not_hide_unexpected_errors(self):
+        from diary_service import DomainError
+        def materialize(identifier, profile):
+            if profile.get('excluded'): raise DomainError('Esclusione personale')
+        with patch('recipe_diet_compatibility.templates', return_value=[{'id': 'reviewed'}]), patch('recipe_intents.materialize', side_effect=materialize):
+            self.assertEqual(catalog_availability({})['reviewed']['solver_status'], 'ready')
+            self.assertEqual(catalog_availability({'excluded': True})['reviewed']['solver_status'], 'unavailable')
+        with patch('recipe_intents.materialize', side_effect=RuntimeError('failure')):
+            with self.assertRaises(RuntimeError): solver_availability('reviewed', {}, {'reviewed'})
+
     def check(self, groups, branches):
         r = recipe(*groups)
         mapping = {'foods': {'test:' + str(i): g for i, g in enumerate(groups)}}

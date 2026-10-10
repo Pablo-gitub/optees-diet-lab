@@ -131,8 +131,8 @@ class RecipeImagesTests(unittest.TestCase):
             login_res = client.post('/api/login', json={'username': 'testuser', 'password': 'testpassword123'})
             self.assertEqual(login_res.status_code, 200)
 
-            # Query recipes
-            resp = client.get('/api/recipes?q=carbonara')
+            # Query recipes (ready_only=false to query entire catalog including catalog_only recipes)
+            resp = client.get('/api/recipes?q=carbonara&ready_only=false')
             self.assertEqual(resp.status_code, 200)
             data = resp.json()
             self.assertGreater(data['total'], 0)

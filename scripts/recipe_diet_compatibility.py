@@ -16,6 +16,27 @@ LABELS = {
 }
 
 
+def solver_availability(recipe_id, profile, reviewed_ids=None):
+    """Planning readiness, distinct from structural meal/diet compatibility."""
+    from diary_service import DomainError
+    from recipe_intents import materialize
+
+    reviewed_ids = {r['id'] for r in templates()} if reviewed_ids is None else reviewed_ids
+    if recipe_id not in reviewed_ids:
+        return dict(solver_status='catalog_only', solver_reason='Ingredienti e composizione non ancora verificati per il piano')
+    try:
+        materialize(recipe_id, profile)
+    except DomainError as error:
+        return dict(solver_status='unavailable', solver_reason=str(error))
+    return dict(solver_status='ready', solver_reason=None)
+
+
+def catalog_availability(profile):
+    """Evaluate only reviewed templates, once per request and for this owner."""
+    reviewed_ids = {r['id'] for r in templates()}
+    return {identifier: solver_availability(identifier, profile, reviewed_ids) for identifier in reviewed_ids}
+
+
 def classify(recipe, groups):
     ingredients = []
     for ingredient in recipe['ingredients']:

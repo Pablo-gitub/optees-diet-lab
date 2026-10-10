@@ -40,3 +40,14 @@ Per ogni nuovo bug registrare: schermata, passi, input, atteso, ottenuto, persis
 - [Roadmap UX](ux-redesign-roadmap.md)
 - [Perimetro e limiti della fase 5](ux-phase5-implementation.md)
 - Codice: web/static/index.html, web/static/style.css, web/static/workout.js, scripts/workout_configuration.py, scripts/workout_sessions.py.
+
+## Tappa 1 · Contratto backend del catalogo (10 ottobre 2026)
+
+FOOD-01: parte backend corretta, integrazione e verifica UI ancora da completare.
+
+- `GET /api/recipes`: `ready_only=true` per default; ricerca, cucina e cucine preferite operano sul sottoinsieme pronto per il profilo. Filtro prima di conteggio e paginazione. `ready_only=false` consente una consultazione esplicita del catalogo completo.
+- `GET /api/cuisines`: opzioni e conteggi delle sole ricette pronte per il profilo.
+- `GET /api/recipes/preferences`: preferiti conservati, compresi quelli `catalog_only` o `unavailable`, con `solver_reason` e il precedente campo `reason` coerenti. Nessuna scrittura durante la lettura.
+- `preferred=true` continua a indicare le cucine preferite, non le singole ricette salvate.
+- Disponibilità solver distinta dalla compatibilità strutturale con i pasti: nessuna modifica agli stati `compatible`, `needs_complements`, `needs_review`.
+- Verifica: 29 test passati fra `test_recipe_diet_compatibility` e `test_web`, inclusi paginazione, ricerca, filtri, conteggi, motivi, isolamento dei preferiti e conservazione nel database temporaneo. Verifica browser e suite completa della tappa ancora da eseguire insieme all’interfaccia.

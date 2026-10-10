@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 from plan_diet_day import NUTRIENTS, load_foods, formulate, solve_problem, decode_result, optimize_day
 from plan_recipe import templates as recipe_templates, formulate_recipe, optimize_recipe
-from recipe_diet_compatibility import meal_options
+from recipe_diet_compatibility import meal_options, solver_availability, catalog_availability
 from optees_command import optees_command
 from daily_meals import defaults as daily_defaults, validate as validate_daily
 from target_validation import profile_target_warnings
@@ -548,16 +548,20 @@ async def health_import(request: Request):
 
 @app.get('/api/cuisines')
 def cuisines(request: Request):
-    identity(request)
+    user = identity(request)
+    available = catalog_availability(owner_profile(user))
+    ready = [rid for rid, value in available.items() if value['solver_status'] == 'ready']
+    if not ready:
+        return []
     with sqlite3.connect(ROOT / 'dataset/recipes/catalog.sqlite') as db:
         return [
             {'id': r[0], 'name': r[1], 'count': r[2]}
-            for r in db.execute('SELECT cuisine_id,cuisine,COUNT(*) FROM recipes GROUP BY cuisine_id ORDER BY cuisine')
+            for r in db.execute('SELECT cuisine_id,cuisine,COUNT(*) FROM recipes WHERE id IN (' + ','.join('?' for _ in ready) + ') GROUP BY cuisine_id ORDER BY cuisine', ready)
         ]
 
 
 @app.get('/api/recipes')
-def recipes(request: Request, q: str = '', cuisine: str = '', preferred: bool = False, offset: int = 0):
+def recipes(request: Request, q: str = '', cuisine: str = '', preferred: bool = False, offset: int = 0, ready_only: bool = True):
     user = identity(request)
     profile = json.loads(user['profile'])
     if len(q) > 100 or len(cuisine) > 80 or not 0 <= offset <= 10000:
@@ -565,8 +569,16 @@ def recipes(request: Request, q: str = '', cuisine: str = '', preferred: bool = 
     from import_recipes import fold
 
     titles_it = load_recipe_titles_it()
+    recipe_profile = owner_profile(user)
+    availability = catalog_availability(recipe_profile)
     clauses = []
     args = []
+    if ready_only:
+        ready = [rid for rid, value in availability.items() if value['solver_status'] == 'ready']
+        if not ready:
+            return {'total': 0, 'recipes': []}
+        clauses.append('id IN (' + ','.join('?' for _ in ready) + ')')
+        args.extend(ready)
     if q:
         # Match the original catalog text or the Italian title overlay.
         needle = fold(q)
@@ -592,18 +604,12 @@ def recipes(request: Request, q: str = '', cuisine: str = '', preferred: bool = 
         page = [r[0] for r in found[offset : offset + 30]]
         payloads = dict(db.execute('SELECT id, payload FROM recipes WHERE id IN (' + ','.join('?' * len(page)) + ')', page).fetchall()) if page else {}
     with connect() as local:hearts={r[0] for r in local.execute('SELECT recipe_id FROM recipe_preference WHERE user_id=? AND preferred=1',(user['id'],))}
-    import recipe_intents
-    ready_ids={r['id'] for r in recipe_templates()}
-    recipe_profile=owner_profile(user)
     recipe_list = []
     for rid in page:
         rec = json.loads(payloads[rid])
         rec['title_it'] = titles_it.get(rid, rec['title'])
         rec['preferred']=rid in hearts
-        rec['solver_status']='catalog_only'
-        if rid in ready_ids:
-            try:recipe_intents.materialize(rid,recipe_profile);rec['solver_status']='ready'
-            except diary.DomainError as error:rec['solver_status']='unavailable';rec['solver_reason']=str(error)
+        rec.update(availability.get(rid) or solver_availability(rid, recipe_profile, set(availability)))
         img = images.get(rid)
         if img:
             rec['illustrative_image'] = img
@@ -615,7 +621,13 @@ def recipes(request: Request, q: str = '', cuisine: str = '', preferred: bool = 
 def recipe_preferences(request:Request):
     import recipe_intents
     user=identity(request)
-    return recipe_intents.preferences(owner_profile(user))
+    profile = owner_profile(user)
+    result = recipe_intents.preferences(profile)
+    availability = catalog_availability(profile)
+    for row in result['recipes'] + result['review_queue']:
+        row.update(availability.get(row['recipe_id']) or solver_availability(row['recipe_id'], profile, set(availability)))
+        row['reason'] = row['solver_reason']
+    return result
 
 
 @app.put('/api/recipes/{recipe_id}/preferred')
