@@ -1,4 +1,4 @@
-# Piano operativo del redesign · Optees Diet Lab (v2.3)
+# Piano operativo del redesign · Optees Diet Lab (v2.4)
 
 9 ottobre 2026 · Bozza di Gemini dalla [guida dei requisiti v2.1](guida-requisiti-optees-diet.md), rivista da Claude sul codice attuale. Si innesta sulle fasi 0–5 ([roadmap UX](ux-redesign-roadmap.md), [registro lacune](registro-lacune.md)): niente va riprogettato se esiste già. Ogni tappa indica chi fa cosa.
 
@@ -31,7 +31,8 @@ Gemini è l'esecutore principale; Claude e Codex intervengono nei punti delicati
 
 | Decisione | Stato |
 |---|---|
-| Stato `presunto` per i pasti non toccati | Da confermare |
+| Stato `presunto` per i pasti non toccati | **Confermato 10/10**: vale come confermato nei conti; promemoria solo per giorni passati, ultimi 7 giorni; correzioni ricalcolano le stime |
+| Correzione dopo il check-in del lunedì | **Confermato 10/10**: si chiede se ricalibrare i giorni successivi; con «No» i dati corretti restano solo come memoria per le settimane seguenti |
 | Lettore audio dopo attrezzatura e carichi | Da confermare |
 | HTTPS con `tailscale serve` (necessario solo per la fotocamera, tappa 6) | Da confermare: modifica di configurazione persistente |
 
@@ -87,14 +88,10 @@ Chiude UX-01, UX-02, UX-03, FOOD-01.
 
 Assegnazione: Claude scrive la regola nella scheda; Codex i test rossi (presunto calcolato in lettura, nessuna scrittura nelle GET, bilancio e check-in); Gemini implementa backend e distintivo in `today.js`; Codex e Claude rivedono.
 
-**Codex** (`diary_service.py`, `progress_dashboard.py`)
-- `presunto` è **calcolato in lettura**, non scritto da un aggancio: un pasto di un giorno passato ancora pianificato e non toccato viene restituito come `presumed`. Nessuna scrittura durante le GET; nessun conflitto con bozze e revisioni.
-- Il diario restituisce `logged_slots` e `presumed_slots` separati.
-- Regola del bilancio scritta nel contratto: il saldo del giorno si calcola anche con pasti presunti, marcato «con N pasti presunti»; il check-in del lunedì riporta la quota di presunti e non ricalibra se superano una soglia da definire.
-- Test: `test_diary_service`, `test_progress_dashboard`, `test_progress_recalibration`.
-
-**Claude** (`today.js`)
-- Distintivo «presunto» sui pasti passati non toccati; «Salta» e «Modifica / Ho mangiato altro» a un tocco, con l'editor delle bozze esistente.
+Schede:
+- [T-001](tasks/T-001-pasti-presunti-backend.md) · backend: presunto calcolato in lettura (nessuna scrittura nelle GET), vale come confermato in totali e saldo, `GET /api/diary/pending` (ultimi 7 giorni, solo passati), `POST /api/diary/confirm-all`. Test rossi Codex, implementazione Gemini.
+- T-002 · interfaccia: banner piccolo e unico in Oggi «Hai N pasti da confermare» con tendina per giorno; per ogni pasto «Conferma» o apertura del giorno nel calendario; «Conferma tutti»; chiudibile, ricompare solo con nuovi pasti; distintivo «presunto». Gemini, revisione Claude.
+- T-003 · check-in: se la settimana chiusa ha pasti da confermare, passo «Prima di calcolare: N pasti da confermare» (Conferma tutti / Rivedi / Calcola comunque, che li tratta come confermati). Correzione di un pasto già considerato da un check-in: proposta «Vuoi ricalibrare i giorni successivi?»; con «No» nessuna modifica ai target, i dati corretti entrano nella memoria per i calcoli delle settimane seguenti. Nessuna riscrittura automatica di ricalibrazioni già applicate. Test rossi e parte delicata Codex.
 
 **Fatto quando**: un giorno lasciato invariato appare presunto il giorno dopo, il check-in lo distingue, nessun dato cambia aprendo una pagina.
 
