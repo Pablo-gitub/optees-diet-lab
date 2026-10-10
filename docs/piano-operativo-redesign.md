@@ -1,11 +1,28 @@
-# Piano operativo del redesign · Optees Diet Lab (v2.2)
+# Piano operativo del redesign · Optees Diet Lab (v2.3)
 
 9 ottobre 2026 · Bozza di Gemini dalla [guida dei requisiti v2.1](guida-requisiti-optees-diet.md), rivista da Claude sul codice attuale. Si innesta sulle fasi 0–5 ([roadmap UX](ux-redesign-roadmap.md), [registro lacune](registro-lacune.md)): niente va riprogettato se esiste già. Ogni tappa indica chi fa cosa.
 
 ## Regole di lavoro
 
-- **Ruoli**: Codex motore, backend, API e test Python (`scripts/`, `web/app.py`, `tests/`); Claude interfaccia (`web/static/`), revisione e commit; Gemini dati lunghi e ripetitivi (`config/`, `docs/`), senza commit né approvazioni.
-- Ordine dentro ogni tappa: contratto API di Codex → interfaccia di Claude → verifica insieme.
+Gemini è l'esecutore principale; Claude e Codex intervengono nei punti delicati. Regole complete per Gemini in [GEMINI.md](../GEMINI.md).
+
+**Flusso di ogni compito**
+
+1. **Scheda** in `docs/tasks/T-NNN-*.md` dal [modello](tasks/TEMPLATE.md): obiettivo, contratto, criteri di accettazione, commit di base, elenco chiuso dei file consentiti, test protetti, comando di test. Un comportamento per scheda.
+2. **Test rossi** scritti da Codex (logica, edge case, permessi, migrazioni, cose che non devono cambiare) o da Claude (comportamento dell'interfaccia). Gemini può aggiungere test semplici, mai modificare quelli protetti.
+3. **Implementazione** di Gemini finché i test passano, solo nei file consentiti.
+4. **Controllo automatico**: `python scripts/check_task.py docs/tasks/<scheda>.md` verifica perimetro, test protetti invariati rispetto alla base, comando di test verde.
+5. **Revisione**: Codex per il backend, Claude per l'interfaccia (anche visiva nel browser). Correzioni piccole le fa il revisore; altrimenti la scheda torna a Gemini con il motivo.
+6. **Commit** di Claude, solo dopo revisione e suite completa verde.
+
+**Chi fa cosa**
+
+| Ruolo | Compiti |
+|---|---|
+| Gemini | Implementazione delle schede; dati lunghi (reparti, catalogo, esercizi, media); test semplici aggiuntivi |
+| Codex | Test rossi del backend; parti delicate: formulazione del solver, regole di bilancio e check-in, migrazioni su dati reali, sicurezza e permessi; revisione backend |
+| Claude | Schede e specifiche; test rossi dell'interfaccia; pagine più delicate e revisione visiva; script di controllo; commit |
+
 - Test con il comando del progetto, mai sul database personale:
   `set -a; . ./.env; set +a; PYTHONPATH=scripts:tests:. ${DIET_PYTHON:-python} -m unittest discover -s tests`
 - Ogni tappa chiude con suite verde, prova in browser a 360/390 px e desktop, voce aggiornata nel registro lacune.
@@ -68,6 +85,8 @@ Chiude UX-01, UX-02, UX-03, FOOD-01.
 
 ## 2 · Diario a zero attrito
 
+Assegnazione: Claude scrive la regola nella scheda; Codex i test rossi (presunto calcolato in lettura, nessuna scrittura nelle GET, bilancio e check-in); Gemini implementa backend e distintivo in `today.js`; Codex e Claude rivedono.
+
 **Codex** (`diary_service.py`, `progress_dashboard.py`)
 - `presunto` è **calcolato in lettura**, non scritto da un aggancio: un pasto di un giorno passato ancora pianificato e non toccato viene restituito come `presumed`. Nessuna scrittura durante le GET; nessun conflitto con bozze e revisioni.
 - Il diario restituisce `logged_slots` e `presumed_slots` separati.
@@ -81,6 +100,8 @@ Chiude UX-01, UX-02, UX-03, FOOD-01.
 
 ## 3 · Verifica varietà e sgarro a tre opzioni
 
+Assegnazione: la misura della varietà e la diagnosi del solver restano a Codex; le tre opzioni dello sgarro vanno a Gemini dopo i test rossi di Codex; schede di scelta a Gemini con revisione di Claude.
+
 **Codex**
 - Misura su profili sintetici simili alle diete reali (con banana e barrette): diversità ottenuta, quante volte scatta il rilassamento, perché. Rapporto in `docs/`. Si interviene sul solver solo se la misura mostra un problema.
 - Sgarro in `meal_rebalance.py`: tre scenari confrontabili. Oggi (pasti rimanenti, con minimo per pasto); attività (riusa `rebalance_activity`, sempre proposta, mai imposta); giorni successivi (2–3 giorni). Ognuno con l'effetto sulla settimana.
@@ -92,6 +113,8 @@ Chiude UX-01, UX-02, UX-03, FOOD-01.
 **Fatto quando**: tre alternative visibilmente diverse sulle diete di prova, o motivo dichiarato quando non è possibile.
 
 ## 4 · Attrezzatura reale, carichi, lettore audio
+
+Assegnazione: Codex scrive i test rossi di inventario, carichi componibili e migrazione; Gemini implementa modello, catalogo esercizi e lettore; la migrazione dei dati esistenti la rivede Codex prima del commit.
 
 Chiude WORK-02, WORK-03, WORK-04.
 
@@ -109,6 +132,8 @@ Chiude WORK-02, WORK-03, WORK-04.
 
 ## 5 · Pasto composto
 
+Assegnazione: formulazione nel solver a Codex (parte delicata); Gemini prepara l'insieme dei complementi e la scheda pasto dopo la specifica.
+
 **Prima**: specifica breve di Claude + Codex in `docs/` — complementi ammessi per pasto, passi di porzione (es. 150/200/250 g), interazione con piatti fissati (8.7), preferiti e diete personali, cosa succede se non c'è soluzione.
 
 **Codex** (`plan_diet_day.py`, `week_orchestration.py`)
@@ -120,6 +145,8 @@ Chiude WORK-02, WORK-03, WORK-04.
 **Fatto quando**: una ricetta preferita (es. lasagne) entra nella settimana con porzione realistica e i vincoli rispettati.
 
 ## 6 · Spesa per reparto, caricamento Salute, codice a barre
+
+Assegnazione: Gemini tabella dei reparti, spesa, ripiego ZXing e interfaccia; Codex scrive i test di sicurezza del caricamento Salute e decide il legame abbinamenti–bandit.
 
 **Gemini**: tabella alimento → reparto per gli alimenti del catalogo, con fonte; revisione di Claude.
 
