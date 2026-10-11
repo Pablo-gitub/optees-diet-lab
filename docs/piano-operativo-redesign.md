@@ -99,6 +99,9 @@ Schede:
 
 ## 3 · Verifica varietà e sgarro a tre opzioni
 
+Schede:
+- [T-007](tasks/T-007-diagnosi-varieta.md) · diagnosi della varietà: scomposizione della sovrapposizione per categoria, limite teorico con i candidati attuali, classifica delle leve (più candidati, identità più fini, ricette, colazioni/spuntini) con effetto misurato. Codex, nessuna modifica di produzione.
+
 Assegnazione: la misura della varietà e la diagnosi del solver restano a Codex; le tre opzioni dello sgarro vanno a Gemini dopo i test rossi di Codex; schede di scelta a Gemini con revisione di Claude.
 
 **Codex**
