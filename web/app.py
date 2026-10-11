@@ -912,11 +912,47 @@ async def monday_check_in(request:Request):
             v=diary.day_view(db,user['id'],profile,curr.isoformat(),as_of=day)
             presumed_count+=sum(1 for m in v['meals'] if m.get('presumed'))
             curr+=dt.timedelta(days=1)
+        recalibration.save_checkin_reference(db,user['id'],date,measurement['value'],profile)
         return dict(status='done',presumed_meals=presumed_count,date=date,analysis=analysis,previous_week=analysis['weeks'][-2],recalibration=proposal)
 
 
 def health_updating(user_id):
     return (health_directory(user_id)/'health.importing.sqlite').exists() or (health_job.get('user_id')==user_id and health_task is not None and not health_task.done())
+
+
+@app.get('/api/progress/check-in/review')
+def check_in_review_status(request:Request):
+    user=identity(request);profile=owner_profile(user)
+    with connect() as db:return recalibration.checkin_review_status(db,user['id'],profile,diary.local_today())
+
+
+@app.post('/api/progress/check-in/review/dismiss')
+async def dismiss_check_in_review(request:Request):
+    user=identity(request,True);data=await request.json()
+    if not isinstance(data,dict) or 'checkin_date' not in data or not isinstance(data['checkin_date'],str):raise diary.DomainError('Richiesta non valida')
+    checkin_date=data['checkin_date'];profile=owner_profile(user)
+    with connect() as db:return recalibration.dismiss_checkin_review(db,user['id'],checkin_date,profile,diary.local_today())
+
+
+@app.post('/api/progress/check-in/review/recalculate')
+async def recalculate_check_in_review(request:Request):
+    user=identity(request,True);data=await request.json()
+    if not isinstance(data,dict) or 'checkin_date' not in data or not isinstance(data['checkin_date'],str):raise diary.DomainError('Richiesta non valida')
+    checkin_date=data['checkin_date']
+    if health_updating(user['id']):raise diary.DomainError('Importazione Salute in corso; riprova quando è conclusa','health_import_running',409)
+    profile=owner_profile(user)
+    with connect() as db:
+        db.execute('BEGIN IMMEDIATE')
+        profile=owner_profile(db.execute('SELECT * FROM users WHERE id=?',(user['id'],)).fetchone())
+        row=db.execute("SELECT * FROM checkin_reference WHERE user_id=? ORDER BY checkin_date DESC LIMIT 1",(user['id'],)).fetchone()
+        if not row or row['checkin_date']!=checkin_date:raise diary.DomainError('Data di check-in non corrispondente all’ultimo check-in recente','checkin_mismatch',409)
+        checkin_day=dt.date.fromisoformat(row['checkin_date']);age=(diary.local_today()-checkin_day).days
+        if not 0<=age<recalibration.SAFETY['proposal_expiry_days']:raise diary.DomainError('Check-in scaduto o non recente','checkin_expired',409)
+        report=load_health_report(health_directory(user['id']));values=measurement_values(db,user['id'],report=report)
+        db.execute("UPDATE recalibration_proposal SET state='superseded',decided=? WHERE user_id=? AND state='pending'",(time.time(),user['id']))
+        proposal=recalibration.make_proposal(db,user['id'],profile,report,values,checkin_day,diary.local_today(),allowed_checkin_date=checkin_date,checkin_weight=row['weight_kg'])
+        recalibration.save_checkin_reference(db,user['id'],checkin_date,row['weight_kg'],profile)
+        return proposal
 
 
 @app.get('/api/progress/recalibrations')
