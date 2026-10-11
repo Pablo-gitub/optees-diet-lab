@@ -84,8 +84,24 @@ set -a; . ./.env; set +a; PYTHONPATH=scripts:tests:. ${DIET_PYTHON:-python} -m u
 
 ## Resoconto
 
-<!-- Codex -->
+### Codex · 12 ottobre 2026
+
+- File modificati: `docs/variety-diagnosis.md`, `scripts/diagnose_variety.py`, `docs/tasks/T-007-diagnosi-varieta.md`. Nessun file di produzione modificato; audit precedente invariato; nessun commit.
+- Test protetti: 25/25 passano, invariati rispetto alla Base.
+- Esperimenti: 23 pool verificati; tutte le scomposizioni per categoria e pasto sommano alla sovrapposizione direzionale prima dell’arrotondamento.
+- Test aggiunti: nessuno (non consentiti dalla scheda); lo script verifica le soluzioni con `values_verified` e la somma dei contributi delle scomposizioni.
+- Suite completa: **494 test in 408,693 s, OK**.
+- `check_task`: **ESITO: pronto per revisione**, verifica conclusiva: 25 test in 48,454 s, OK.
+- Budget diagnostico: 5 s per solve MILP/LP e 60 s per ricerca delle alternative, dopo il riferimento; wall time effettivo e certificati presenti negli output e nel rapporto. Distinte misure fattibili, certificazione minimax locale, limiti teorici e stime. La sola prova del libero ampliato chiude il divario globale grazie al limite esterno coincidente con la terna fattibile.
+- Decisioni prese: regole/calendari sedentaria/palestra sintetici, con autorizzazione esplicita del proprietario, perché quelli dell’audit storico sono sotto `data/personal/`. Non sono presentati come risultati sulle diete reali. Il proprietario ha autorizzato separatamente le letture automatiche della sola suite; tali dati non entrano nella diagnosi. Nessun database o dato personale letto dalla diagnosi; controllo ricette CREA-only, nessun OFF SQLite né download.
+- Esito: nel dominio libero effettivo manca un nutriente a mele/uova, quindi resta un solo frutto e sei fonti proteiche. Sovrapposizione inevitabile almeno 52,51% nel libero a porzioni fisse; ampliando frutti/verdure/amidi, pool e limite raggiungono 25,48%. Nei quattro sostituti l’ampliamento produce 58,51–63,43%; il 10% resta sotto i limiti inferiori a banana unica. Raccomandazione: dominio effettivo più ampio, fonti proteiche/abitudini variabili, più riferimenti di ricerca. Budget e tipo di certificazione dei numeri sono dettagliati nel rapporto.
+- Dubbi o blocchi: nessun blocco operativo. Limite sostanziale: non si può diagnosticare la scomposizione o il minimo delle diete reali senza input pubblici/sanitizzati; quattro ricette CREA-only non rappresentano l’intero catalogo ready. Effetto combinato delle leve non misurato. La prova continua è stata sostituita con griglia intera da 1 g perché il decoder rifiuta quantità non intere; nessuna modifica alla produzione.
+Stato: pronto per revisione
 
 ## Revisione
 
-<!-- Claude -->
+### Claude · 12 ottobre 2026 · Accettata
+
+Rapporto completo rispetto alle cinque domande: scomposizione per categoria e per pasto con somma verificata, limiti inferiori dimostrati (libera 52,51%; sostituti 22–25%), 18 esperimenti a un intervento, inventario delle leve con costo, raccomandazione ordinata. Nessun dato personale (sostituti sintetici dichiarati), nessuna modifica di produzione, `check_task` pronto, suite 494 OK.
+
+Punto da portare subito al proprietario: mele e uova sono **escluse dal solver** perché un nutriente è vuoto nel CSV CREA (le «tracce» `tr` già rilevate in precedenza); è la leva più economica per allargare il dominio.
