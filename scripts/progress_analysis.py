@@ -53,7 +53,7 @@ def contexts(db,user,start):
 
 
 def week_analysis(db,user,profile,start,as_of):
-    diary.valid_date(start);views=[diary.day_view(db,user,profile,d) for d in days(start)];context=contexts(db,user,start)
+    diary.valid_date(start);views=[diary.day_view(db,user,profile,d,include_presumed=False) for d in days(start)];context=contexts(db,user,start)
     complete=[];full=[];adherent=0;denominator=0;missing=[]
     past=[v for v in views if v['date']<as_of.isoformat()]
     for v in past:

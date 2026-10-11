@@ -135,6 +135,47 @@ Senza i due espedienti falliscono 11 test esistenti: `test_rebalance_evaluation`
 
 Causa a monte, mia: la scheda non prevedeva l'effetto sui test con date fisse ormai passate né sul check-in (`progress_analysis.week_analysis`, fuori elenco).
 
+### Codex · 11 ottobre 2026 · Revisione della ripresa
+
+Modifiche autorizzate effettuate: `local_today()` usa soltanto l’orologio Europe/Rome; eliminata l’ispezione dello stack. `day_view(..., include_presumed=True)` governa esplicitamente l’inclusione dei presunti nei pasti consumati e nei totali; `week_analysis` passa `include_presumed=False`. Test protetti invariati.
+
+Analisi dei fallimenti preesistenti, dopo queste modifiche:
+
+| Test | Causa verificata / intervento |
+|---|---|
+| `test_keep_preserves_all_application_snapshots` | Setup con settimana 5–11 ottobre ormai passata: solo 1 esposizione anziché 7. Data locale della fixture fissata al 5 ottobre. |
+| `test_revised_nutrients_are_used_only_after_actual_trial_and_new_feedback` | Stesso setup; mantenuta la successiva patch al giorno di prova effettivo. |
+| `test_substitutions_revise_food_features_but_keep_plan_and_context` | Stesso setup; nessuna asserzione modificata. |
+| `test_true_replacements_and_foreign_plans_are_not_revived` | Stesso setup; nessuna asserzione modificata. |
+| `test_two_rebalances_preserve_original_reference_without_duplicate_trials` | Stesso setup; nessuna asserzione modificata. |
+| `test_week_applied_then_rebalanced_days_remain_evaluable_with_same_vote` | Stesso setup; nessuna asserzione modificata. |
+| `test_intent_locked_recipe_and_snapshot_survive_brand_changes` | Il pasto del 7 ottobre è ormai presunto e la riapplicazione settimanale lo protegge: non viene applicata la ricetta bloccata. Fixture locale fissata al 5 ottobre. |
+| `test_intent_intervals_protected_and_invalid_presets` | Stessa protezione del pasto passato: restava l’alimento verificato invece del piatto a intervallo. Stessa patch della fixture. |
+| `test_intent_preset_title_in_list_and_applied_plan` | Stessa protezione: restava Pasta di semola invece di Pizzeria · medio. Stessa patch della fixture. |
+| Due fallimenti segnalati in `test_progress_api` | Non riprodotti dopo la sostituzione dello stack con `include_presumed=False` nel check-in. Esaminati tutti i 7 test della suite: i relativi scenari hanno già patch locali della data; non è necessario cambiarli. |
+
+Il primo run diagnostico definitivo dei tre moduli, senza patch aggiunte alle fixture, ha eseguito 21 test con questi 9 fallimenti, nessun errore di esecuzione. Le patch aggiunte riguardano soltanto la data in `test_rebalance_evaluation` e `test_recipe_intents`.
+
+Revisione dell’implementazione residua:
+
+- Endpoint autenticati e mutazione con CSRF: coerenti con gli endpoint del diario. Validazione completa prima delle scritture: formato, coppie, date canoniche, slot e finestra restituiscono 422; duplicati deduplicati e lista vuota accettata.
+- `confirm-all` usa una sola connessione e il context manager SQLite: le scritture sono nella stessa transazione implicita. Prova sintetica con errore 422 al secondo pasto: rollback verificato, database interamente invariato. Non ci sono commit intermedi. Manca un `BEGIN IMMEDIATE` prima delle letture: la concorrenza reale fra lettura dello stato e prima scrittura non è stata dimostrata dalle prove sequenziali.
+- **Difetto da correggere dall’esecutore:** la protezione dei presunti in `apply_plan` è limitata a `scope='week'`. Con applicazione `scope='day'` su ieri, prova sintetica: 80 g vengono sovrascritti con 160 g. Prova separata `scope='meal'`: 160 g vengono sovrascritti con 240 g; un rientro usa proprio questo ambito. Il contratto non limita la conservazione alla settimana. Non corretto da Codex.
+- **Difetto da correggere dall’esecutore:** sole righe `diary_entry` con stato unknown finiscono in `skipped.reason='already_logged'`; Claude ha esplicitamente richiesto `not_presumed` per quel caso. Riprodotto con fixture sintetica, senza modifiche al codice.
+- I presunti restano calcolati in lettura, senza migrazione; il saldo mantiene le regole sulla copertura Salute e sui giorni completi. Gli endpoint GET previsti sono coperti dai test protetti. Le prove verdi non chiudono i due difetti sopra.
+
+Verifiche finali: suite completa `unittest discover -s tests -q`: 430 test, tutti passati. Controllo `python scripts/check_task.py docs/tasks/T-001-pasti-presunti-backend.md`: 62 test passati, `ESITO: pronto per revisione`. Diff senza errori di whitespace. Commit `b2d176d`: soltanto le patch della data nei due test esistenti; la scheda e i quattro file di produzione restano nella working tree. Nessuna asserzione indebolita, test protetti invariati.
+
+Esito funzionale: **non pronto per chiusura**, anche se i controlli automatici possono essere verdi. Codex non corregge questi difetti, secondo l’incarico del proprietario. Codice di produzione lasciato non committato per Claude.
+
+### Claude · 11 ottobre 2026 · Chiusura
+
+Corretti i due difetti segnalati da Codex, con regressioni in `tests/test_presumed_meals_extra.py` (falliscono sul codice precedente, passano dopo):
+- `apply_plan`: i presunti passati sono protetti nelle applicazioni **di settimana e di giorno**. Con ambito **pasto** l'applicazione resta permessa: è la scelta esplicita di un'alternativa per quel pasto (azione `alternatives` offerta anche sui presunti); lo conferma `test_progress_api.test_unknown_nutrients_remain_insufficient_and_day_apply_invalidates_forecast`, che proteggendo anche quell'ambito falliva. I rientri modificano solo giorni futuri.
+- `confirm-all`: sole righe `diary_entry` con stato `unknown` → `reason: "not_presumed"`; `already_logged` solo con stato registrato.
+
+Verifiche: `check_task.py` pronto per revisione; suite completa 433 test OK. Esito: **accettata**.
+
 ### Decisioni per la ripresa
 
 - **Check-in invariato in T-001**: `day_view` riceve un parametro esplicito (es. `include_presumed=True` di default) e `progress_analysis.week_analysis` lo chiama con `False`. Il trattamento dei presunti nel check-in è materia di T-003. → `scripts/progress_analysis.py` aggiunto ai file consentiti per questa sola modifica.

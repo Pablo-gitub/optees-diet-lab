@@ -165,14 +165,15 @@ def interval(meal,key):
 def energy_days(db,user,profile,start,report,as_of):
     contexts=analysis.contexts(db,user,start);health={p['date']:p for p in (report or {}).get('daily',[])};result=[]
     for date in analysis.days(start):
-        view=diary.day_view(db,user,profile,date);forecast=contexts.get(date,{}).get('progress_forecast',{});planned=[interval(m,'planned') for m in view['meals'] if m['planned']];logged=[m for m in view['meals'] if m['state']!='unknown'];actual=[interval(m,'eaten') for m in logged]
+        view=diary.day_view(db,user,profile,date);forecast=contexts.get(date,{}).get('progress_forecast',{});planned=[interval(m,'planned') for m in view['meals'] if m['planned']];logged=[m for m in view['meals'] if m['state']!='unknown'];actual=[interval(m,'eaten') for m in view['meals'] if m['state']!='unknown' or m.get('presumed')]
         def summed(values):return dict(min=sum(v['min'] for v in values),max=sum(v['max'] for v in values)) if values and all(v and analysis.number(v.get('min')) and analysis.number(v.get('max')) for v in values) else None
-        h=health.get(date,{});full=view['target_scope']=='full_day_planned_meals';complete=full and all(m['state']!='unknown' for m in view['meals']);consumption=forecast.get('energy_scenarios',{})
+        h=health.get(date,{});full=view['target_scope']=='full_day_planned_meals';complete=full and all(m['state']!='unknown' or m.get('presumed') for m in view['meals']);consumption=forecast.get('energy_scenarios',{})
         expected=consumption.get('consumption_kcal') if forecast.get('valid') and consumption.get('status')=='available' else None
         if expected and any(not analysis.number(expected.get(key)) for key in ('low','central','high')):expected=None
         usable=bool(analysis.number(h.get('total_estimated_kcal')) and h.get('usable_for_baseline') and date<as_of.isoformat());intake=summed(actual) if date<=as_of.isoformat() else None;balance=None
         if complete and usable and intake:balance=dict(min=intake['min']-h['total_estimated_kcal'],max=intake['max']-h['total_estimated_kcal'])
-        result.append(dict(date=date,scope=view['target_scope'],planned_intake=summed(planned),planned_expenditure=expected,forecast_recorded_at=forecast.get('recorded_at'),forecast_basis=consumption,registered_intake=intake,health_expenditure=h.get('total_estimated_kcal') if h and date<=as_of.isoformat() else None,health_complete=usable,health_coverage=h.get('resting_coverage_fraction'),logged_slots=len(logged),diary_complete=complete,balance=balance))
+        presumed_slots=view['totals']['coverage'].get('presumed_slots',0) if view.get('totals') and view['totals'].get('coverage') else sum(bool(m.get('presumed')) for m in view['meals'])
+        result.append(dict(date=date,scope=view['target_scope'],planned_intake=summed(planned),planned_expenditure=expected,forecast_recorded_at=forecast.get('recorded_at'),forecast_basis=consumption,registered_intake=intake,health_expenditure=h.get('total_estimated_kcal') if h and date<=as_of.isoformat() else None,health_complete=usable,health_coverage=h.get('resting_coverage_fraction'),logged_slots=len(logged),presumed_slots=presumed_slots,diary_complete=complete,balance=balance))
     return result
 
 

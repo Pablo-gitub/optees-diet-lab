@@ -57,7 +57,9 @@ def migrate(db):
     from recipe_intents import migrate as intent_migrate
     intent_migrate(db)
 
-def local_today():return dt.datetime.now(ZoneInfo('Europe/Rome')).date()
+def local_today():
+    return dt.datetime.now(ZoneInfo('Europe/Rome')).date()
+
 
 def valid_date(value,consumed=False):
     try:
@@ -152,18 +154,32 @@ def set_state(db,user,date,slot,new):
     p=planned(db,user,date,slot)
     if p:db.execute('UPDATE planned_meal SET status=? WHERE id=?',('chosen' if new=='unknown' else 'skipped' if new=='skipped' else 'done',p['id']))
 
-def day_view(db,user,profile,date):
+def is_presumed(db,user,date,slot,p=None):
+    if date>=local_today().isoformat():return False
+    if state(db,user,date,slot)!='unknown':return False
+    if p is None:p=planned(db,user,date,slot)
+    if not p:return False
+    if db.execute('SELECT 1 FROM diary_entry WHERE user_id=? AND date=? AND slot=?',(user,date,slot)).fetchone():return False
+    if db.execute('SELECT 1 FROM consumed_estimate WHERE user_id=? AND date=? AND slot=?',(user,date,slot)).fetchone():return False
+    if db.execute("SELECT 1 FROM meal_draft WHERE user_id=? AND date=? AND slot=? AND status='draft'",(user,date,slot)).fetchone():return False
+    return True
+
+def day_view(db,user,profile,date,include_presumed=True):
     valid_date(date);meals=[];all_planned=[];all_eaten=[];logged=0;planned_count=0
     week=db.execute("SELECT * FROM week_plan WHERE user_id=? AND status='active' AND week_start<=? AND date(week_start,'+6 days')>=?",(user,date,date)).fetchone()
     for slot in SLOTS:
         p=planned(db,user,date,slot);st=state(db,user,date,slot);entries=db.execute('SELECT id,food,grams,units,origin FROM diary_entry WHERE user_id=? AND date=? AND slot=? ORDER BY id',(user,date,slot)).fetchall()
         planned_items=enriched(json.loads(p['items']),profile) if p else [];eaten_items=enriched([dict(r,food=json.loads(r['food'])) for r in entries],profile)
         if p:planned_count+=1;all_planned.extend(planned_items)
-        if st!='unknown':logged+=bool(p);all_eaten.extend(eaten_items)
-        actions=['edit','reset'] if st!='unknown' else ['edit','skip']+(['confirm','alternatives'] if p and not p['locked'] else ['confirm'] if p else [])
+        has_draft=bool(db.execute("SELECT 1 FROM meal_draft WHERE user_id=? AND date=? AND slot=? AND status='draft'",(user,date,slot)).fetchone())
         estimated=db.execute('SELECT payload FROM consumed_estimate WHERE user_id=? AND date=? AND slot=?',(user,date,slot)).fetchone()
         consumed=json.loads(estimated['payload']) if estimated else None
-        meals.append(dict(consumed_estimate=consumed,eaten_range=consumed['nutrients'] if consumed else None,slot=slot,state=st,planned=dict(planned_meal_id=p['id'],role=p['role'],day_index=p['day_index'],status=p['status'],locked=bool(p['locked']),items=planned_items,**totals(planned_items)) if p else None,eaten=dict(items=eaten_items,**totals(eaten_items)) if st!='unknown' else None,actions=actions))
+        presumed=bool(date<local_today().isoformat() and p and st=='unknown' and not entries and not has_draft and not consumed)
+        if st!='unknown':logged+=bool(p);all_eaten.extend(eaten_items)
+        elif presumed and include_presumed:all_eaten.extend(planned_items)
+        actions=['edit','reset'] if st!='unknown' else ['edit','skip']+(['confirm','alternatives'] if p and not p['locked'] else ['confirm'] if p else [])
+        eaten_val=(dict(items=planned_items,**totals(planned_items)) if include_presumed else None) if presumed else (dict(items=eaten_items,**totals(eaten_items)) if st!='unknown' else None)
+        meals.append(dict(consumed_estimate=consumed,eaten_range=consumed['nutrients'] if consumed else None,slot=slot,state=st,presumed=presumed,planned=dict(planned_meal_id=p['id'],role=p['role'],day_index=p['day_index'],status=p['status'],locked=bool(p['locked']),items=planned_items,**totals(planned_items)) if p else None,eaten=eaten_val,actions=actions))
     import meal_drafts
     for meal in meals:
         meal['revision']=meal_drafts.fingerprint(db,user,date,meal['slot'],profile)
@@ -181,7 +197,7 @@ def day_view(db,user,profile,date):
     targets=json.loads(week['targets']) if week else (profile.get('daily_meals',{}).get('targets') if profile.get('daily_meals',{}).get('enabled') else profile['targets'])
     context=json.loads(week['day_context'] or '{}').get(date,{}) if week else {}
     targets=context.get('targets',targets)
-    any_logged=any(m['state']!='unknown' for m in meals)
+    any_logged=any(m['state']!='unknown' or (include_presumed and m['presumed']) for m in meals)
     from workout_service import day_workouts
     workouts=day_workouts(db,user,date)
     workout=max(workouts,key=lambda x:(x["workout_log_id"] or 0,x["planned_session_id"] or 0)) if workouts else None
@@ -190,7 +206,8 @@ def day_view(db,user,profile,date):
     from contextual_bandit import day_evaluation
     evaluation=day_evaluation(db,user,date)
     single=evaluation['plans'][0] if len(evaluation['plans'])==1 else None
-    return dict(target_scope=context.get('scope') or ('full_day_planned_meals' if not week and profile.get('daily_meals',{}).get('enabled') else 'main_meals' if not week else 'unspecified_plan'),meal_timing=context.get('meal_timing'),plan_id=single['plan_id'] if single else None,rating=single['rating'] if single else None,plan_evaluation=evaluation,date=date,day_type='training' if any(w['status']!='skipped' for w in workouts) else context.get('day_type','unknown'),mode=context.get('mode',week['mode']) if week else profile['mode'],week_plan_id=week['id'] if week else None,targets={k.replace('_100g',''):v for k,v in targets.items()},totals=dict(planned=totals(all_planned) if planned_count else None,eaten=eaten_totals,coverage=dict(logged_slots=logged,planned_slots=planned_count)),meals=meals,workout=workout,workouts=workouts,warnings=[])
+    presumed_slots=sum(bool(m['presumed']) for m in meals)
+    return dict(target_scope=context.get('scope') or ('full_day_planned_meals' if not week and profile.get('daily_meals',{}).get('enabled') else 'main_meals' if not week else 'unspecified_plan'),meal_timing=context.get('meal_timing'),plan_id=single['plan_id'] if single else None,rating=single['rating'] if single else None,plan_evaluation=evaluation,date=date,day_type='training' if any(w['status']!='skipped' for w in workouts) else context.get('day_type','unknown'),mode=context.get('mode',week['mode']) if week else profile['mode'],week_plan_id=week['id'] if week else None,targets={k.replace('_100g',''):v for k,v in targets.items()},totals=dict(planned=totals(all_planned) if planned_count else None,eaten=eaten_totals,coverage=dict(logged_slots=logged,presumed_slots=presumed_slots,planned_slots=planned_count)),meals=meals,workout=workout,workouts=workouts,warnings=[])
 
 def diary_mutation(db,user,profile,action,data,entry_id=None):
     entry=None
@@ -250,7 +267,7 @@ def week_view(db,user,profile,start):
     def sum_known(values):return None if any(x is None for x in values) else round(sum(values),3)
     planned_values=[v['totals']['planned']['kcal'] if v['totals']['planned'] else None for v in views]
     eaten_values=[v['totals']['eaten']['kcal'] for v in views if v['totals']['eaten'] is not None]
-    remaining=[m['planned']['kcal'] for v in views for m in v['meals'] if m['planned'] and m['state']=='unknown']
+    remaining=[m['planned']['kcal'] for v in views for m in v['meals'] if m['planned'] and m['state']=='unknown' and not m.get('presumed')]
     days=[dict(date=v['date'],day_type=v['day_type'],meals=[dict(slot=m['slot'],state=m['state']) for m in v['meals']],workout=v['workout']['status'] if v['workout'] else None,kcal_planned=planned_values[i],kcal_eaten=v['totals']['eaten']['kcal'] if v['totals']['eaten'] else None,coverage=v['totals']['coverage']['logged_slots']/v['totals']['coverage']['planned_slots'] if v['totals']['coverage']['planned_slots'] else None) for i,v in enumerate(views)]
     week=db.execute("SELECT * FROM week_plan WHERE user_id=? AND week_start=? AND status='active'",(user,start)).fetchone()
     from workout_service import counts as workout_counts
@@ -281,7 +298,7 @@ def apply_plan(db,user,profile,plan_set,plan,data):
         for slot in SLOTS:
             if scope=='meal' and slot!=data['slot']:continue
             p=planned(db,user,date,slot)
-            if state(db,user,date,slot)!='unknown' or db.execute('SELECT 1 FROM diary_entry WHERE user_id=? AND date=? AND slot=?',(user,date,slot)).fetchone() or p and p['locked']:
+            if state(db,user,date,slot)!='unknown' or db.execute('SELECT 1 FROM diary_entry WHERE user_id=? AND date=? AND slot=?',(user,date,slot)).fetchone() or (p and p['locked']) or (scope!='meal' and is_presumed(db,user,date,slot,p)):
                 skipped.append(dict(date=date,slot=slot,reason='slot_locked' if p and p['locked'] else 'slot_already_logged'));continue
             selections=[s for s in day['selections'] if s['meal']==slot]
             if not selections:continue
@@ -363,3 +380,55 @@ def add_measurement(db,user,data):
     if unit!=expected or isinstance(value,bool) or not isinstance(value,(int,float)) or not math.isfinite(value) or not low<=value<=high:raise DomainError('Valore o unità della misura non validi')
     db.execute('INSERT INTO measurement(user_id,date,kind,value,unit,source) VALUES(?,?,?,?,?,?)',(user,date,kind,value,unit,'manual'))
     return date
+
+def pending_presumed(db,user,profile):
+    today=local_today();from_date=today-dt.timedelta(days=7);to_date=today-dt.timedelta(days=1)
+    days=[];total_count=0;current=to_date
+    while current>=from_date:
+        d_str=current.isoformat();v=day_view(db,user,profile,d_str)
+        presumed_meals=[m for m in v['meals'] if m.get('presumed')]
+        if presumed_meals:
+            meals_data=[]
+            for m in presumed_meals:
+                total_count+=1
+                meals_data.append(dict(slot=m['slot'],kcal=m['planned']['kcal'],items=[dict(name=i['name'],grams=i['grams']) for i in m['planned']['items']]))
+            days.append(dict(date=d_str,meals=meals_data))
+        current-=dt.timedelta(days=1)
+    return dict(**{'from':from_date.isoformat(),'to':to_date.isoformat()},count=total_count,days=days)
+
+def confirm_all_presumed(db,user,profile,data):
+    if not isinstance(data,dict) or 'meals' not in data or not isinstance(data['meals'],list):
+        raise DomainError('Formato richiesta non valido',status=422)
+    today=local_today();from_date=today-dt.timedelta(days=7);to_date=today-dt.timedelta(days=1)
+    unique_meals=[];seen=set()
+    for item in data['meals']:
+        if not isinstance(item,dict) or 'date' not in item or 'slot' not in item:
+            raise DomainError('Pasto non valido',status=422)
+        d_str,slot=item['date'],item['slot']
+        if not isinstance(d_str,str) or not isinstance(slot,str):
+            raise DomainError('Pasto non valido',status=422)
+        try:
+            d_val=dt.date.fromisoformat(d_str)
+            if d_str!=d_val.isoformat():raise ValueError()
+        except (ValueError,TypeError):
+            raise DomainError('Data non valida',status=422)
+        if slot not in SLOTS:
+            raise DomainError('Slot non valido',status=422)
+        if d_val<from_date or d_val>to_date:
+            raise DomainError('Data fuori finestra consentita',status=422)
+        key=(d_str,slot)
+        if key not in seen:
+            seen.add(key)
+            unique_meals.append((d_str,slot))
+    confirmed=[];skipped=[]
+    for d_str,slot in unique_meals:
+        if is_presumed(db,user,d_str,slot):
+            diary_mutation(db,user,profile,'confirm',dict(date=d_str,slot=slot))
+            confirmed.append(dict(date=d_str,slot=slot))
+        else:
+            if state(db,user,d_str,slot)!='unknown':
+                reason='already_logged'
+            else:
+                reason='not_presumed'
+            skipped.append(dict(date=d_str,slot=slot,reason=reason))
+    return dict(confirmed=confirmed,skipped=skipped,pending=pending_presumed(db,user,profile))

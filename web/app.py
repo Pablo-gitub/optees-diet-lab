@@ -819,6 +819,14 @@ async def delete_diary_entry(entry_id:int,request:Request):return await mutate_d
 async def skip_meal(request:Request):return await mutate_diary(request,'skip')
 @app.post('/api/diary/reset')
 async def reset_meal(request:Request):return await mutate_diary(request,'reset')
+@app.get('/api/diary/pending')
+def diary_pending(request:Request):
+    user=identity(request)
+    with connect() as db:return diary.pending_presumed(db,user['id'],owner_profile(user))
+@app.post('/api/diary/confirm-all')
+async def diary_confirm_all(request:Request):
+    user=identity(request,True);data=await request.json()
+    with connect() as db:return diary.confirm_all_presumed(db,user['id'],owner_profile(user),data)
 
 
 @app.post('/api/workouts/{log_id}/rest/skip')
