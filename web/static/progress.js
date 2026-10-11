@@ -26,6 +26,7 @@ async function loadProgress() {
   if (!$('measure-date').value) $('measure-date').value = isoDate(new Date());
   const checkin = mondayOf(isoDate(new Date()));
   $('checkin-date').textContent = longDate(checkin);
+  if (typeof loadCheckinReview === 'function') loadCheckinReview().catch(() => {});
   const [stats, measures, progress, history] = await Promise.all([api('stats/summary'), api('measurements'), api('stats/progress?weeks=' + progressWeeks), api('progress/recalibrations')]);
   renderStats($('progress-tiles'), stats);
   renderMeasures(measures);

@@ -4313,3 +4313,86 @@ main:has(#planning:not([hidden])) { min-width: 0; }
     width: 100%;
   }
 }
+
+/* Ricalibrazione dopo correzione del diario (T-006) */
+#checkin-review-hint {
+  margin: 0 0 16px;
+}
+.checkin-review-hint-banner {
+  margin: 0;
+}
+.checkin-review-hint-bar {
+  padding: 0 8px 0 16px;
+}
+.checkin-review-open-btn {
+  min-height: 48px;
+  min-width: 48px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.checkin-review-panel {
+  margin-top: 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px;
+  color: var(--ink);
+}
+.checkin-review-panel h3 {
+  margin: 0 0 10px;
+  font-size: 15px;
+  color: var(--ink);
+  line-height: 1.4;
+}
+.checkin-review-desc {
+  margin: 0 0 14px;
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+.checkin-review-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.checkin-review-actions > button {
+  min-height: 48px;
+  min-width: 48px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.checkin-review-error {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: var(--bad-soft);
+  color: var(--bad);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+}
+.checkin-review-error button {
+  min-height: 48px;
+  min-width: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+}
+@media (max-width: 480px) {
+  .checkin-review-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .checkin-review-hint-bar {
+    padding: 8px 12px;
+    flex-wrap: wrap;
+  }
+}

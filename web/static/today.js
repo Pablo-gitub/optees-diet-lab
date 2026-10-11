@@ -54,6 +54,7 @@ async function loadHome() {
       .then((c) => ((rebalanceCatalog = c), renderDay(currentDay)))
       .catch(() => {});
   if (typeof loadPendingBanner === 'function') loadPendingBanner().catch(() => {});
+  if (typeof loadCheckinReviewHint === 'function') loadCheckinReviewHint().catch(() => {});
 }
 async function refreshWeek() {
   try {

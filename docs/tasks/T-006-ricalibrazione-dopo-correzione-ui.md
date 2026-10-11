@@ -110,9 +110,24 @@ Oggi, sotto il banner dei pasti da confermare:
 ```
 
 ## Resoconto Gemini
-
-<!-- compilato da Gemini secondo GEMINI.md -->
+- File modificati: web/static/checkin-review.js, web/static/index.html, web/static/progress.js, web/static/style.css, web/static/today.js
+- Test protetti: 3/3 passano
+- Test aggiunti: nessuno
+- Suite completa: Ran 494 tests in 341.040s … OK
+- check_task: ESITO: pronto per revisione
+- Decisioni prese: nessuna oltre a quanto indicato nella scheda
+- Dubbi o blocchi: nessuno
+Stato: pronto per revisione
 
 ## Revisione
 
-<!-- Claude -->
+### Claude · 11 ottobre 2026 · Esito: accettata con una correzione
+
+Codice nel perimetro, nomi esistenti, colori da variabili, errori isolati. Prova nel browser (database temporaneo, 14 giorni pianificati, check-in del 5/10):
+- dopo il check-in `review` → `corrected:false`; saltato un pasto del 2/10 → riga in Oggi e riquadro in Progressi «…check-in di lunedì 5 ottobre»;
+- **No** → riquadro e riga nascosti, ancora nascosti dopo ricaricamento (`dismissed:true`); nuova correzione → ricompaiono;
+- **Sì, ricalibra** → blocco esistente con il motivo («Servono target personali… non demo» nel profilo di prova);
+- errore simulato di `review` → Progressi e Oggi caricati normalmente;
+- 360 px: pulsanti 48 px, nessuno scorrimento orizzontale.
+
+Correzione di Claude (`checkin-review.js`): «Apri» scorreva e dava il focus prima che la pagina Progressi fosse mostrata e caricata, quindi il riquadro finiva fuori vista. Ora attende il cambio di pagina e `loadProgress()`, poi porta il riquadro al centro e il focus su «Sì, ricalibra».

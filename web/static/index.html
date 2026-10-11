@@ -11,6 +11,7 @@
     <script src="/static/pending.js" defer></script>
     <script src="/static/workout.js" defer></script>
     <script src="/static/progress.js" defer></script>
+    <script src="/static/checkin-review.js" defer></script>
     <script src="/static/rebalance.js" defer></script>
     <script src="/static/barcode.js" defer></script>
     <script src="/static/goals.js" defer></script>
@@ -119,6 +120,7 @@
           <div id="taste-invite" class="panel compact" hidden></div>
           <div id="home-load-error" class="panel compact" role="alert" hidden></div>
           <div id="pending-meals" hidden></div>
+          <div id="checkin-review-hint" hidden></div>
           <p class="home-progress-link"><button type="button" class="link-button" data-goto="progress">Vedi i progressi →</button></p>
           <div class="day-head">
             <button id="day-prev" type="button" class="icon-button" aria-label="Giorno precedente">‹</button>
@@ -537,6 +539,7 @@
               <label>Peso (kg)<input id="checkin-weight" type="number" step="0.1" min="30" max="300" inputmode="decimal" required /></label>
               <button class="primary">Fai il check-in</button>
             </form>
+            <div id="checkin-review" hidden></div>
             <div id="checkin-result"></div>
           </div>
           <div class="panel">
