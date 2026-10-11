@@ -236,25 +236,144 @@ $('checkin-form').onsubmit = async (e) => {
   e.preventDefault();
   const button = e.target.querySelector('button');
   button.disabled = true;
-  const box = $('checkin-result');
   try {
-    const r = await api('progress/check-in', 'POST', { date: mondayOf(isoDate(new Date())), weight_kg: Number($('checkin-weight').value) });
-    $('checkin-weight').value = '';
-    box.replaceChildren(checkinSummary(r), recalibrationBlock(r.recalibration));
-    message('Check-in registrato');
-    await loadProgress();
+    const weightVal = Number($('checkin-weight').value);
+    const r = await api('progress/check-in', 'POST', { date: mondayOf(isoDate(new Date())), weight_kg: weightVal, presumed: 'ask' });
+    await handleCheckinResponse(r);
   } catch (err) {
     message(err.message);
   } finally {
     button.disabled = false;
   }
 };
+
+async function handleCheckinResponse(r) {
+  const box = $('checkin-result');
+  if (r.status === 'needs_confirmation') {
+    box.replaceChildren(renderCheckinPendingPrompt(r));
+  } else {
+    $('checkin-weight').value = '';
+    box.replaceChildren(checkinSummary(r), recalibrationBlock(r.recalibration));
+    message('Check-in registrato');
+    await loadProgress();
+  }
+}
+
+function renderCheckinPendingPrompt(r) {
+  const panel = element('div', undefined, 'panel checkin-pending-prompt');
+  const count = r.pending?.count || 0;
+  const headingText = count === 1
+    ? 'Prima di calcolare: hai 1 pasto da confermare della settimana scorsa'
+    : 'Prima di calcolare: hai ' + count + ' pasti da confermare della settimana scorsa';
+  panel.append(element('h3', headingText));
+
+  const actions = element('div', undefined, 'checkin-pending-actions');
+
+  const confirmAllBtn = element('button', 'Conferma tutti', 'primary small');
+  confirmAllBtn.type = 'button';
+
+  const reviewBtn = element('button', 'Rivedi', 'secondary small');
+  reviewBtn.type = 'button';
+
+  const calcWrap = element('div', undefined, 'checkin-calc-wrap');
+  const calcAnywayBtn = element('button', 'Calcola comunque', 'ghost small');
+  calcAnywayBtn.type = 'button';
+  const helpText = element('p', 'I pasti non confermati contano come mangiati da piano.', 'muted small');
+  calcWrap.append(calcAnywayBtn, helpText);
+
+  actions.append(confirmAllBtn, reviewBtn, calcWrap);
+  panel.append(actions);
+
+  const errorBox = element('div', undefined, 'checkin-pending-error');
+  errorBox.hidden = true;
+  panel.append(errorBox);
+
+  const setBusy = (busy) => {
+    panel.querySelectorAll('button').forEach((b) => (b.disabled = busy));
+    $('checkin-form').querySelectorAll('button, input').forEach((el) => (el.disabled = busy));
+  };
+
+  const showError = (msg, retryFn) => {
+    errorBox.replaceChildren();
+    errorBox.append(element('p', 'Operazione non riuscita: ' + msg, 'error small'));
+    if (retryFn) {
+      const retryBtn = element('button', 'Riprova', 'secondary small');
+      retryBtn.type = 'button';
+      retryBtn.onclick = () => retryFn();
+      errorBox.append(retryBtn);
+    }
+    errorBox.hidden = false;
+  };
+
+  confirmAllBtn.onclick = async () => {
+    setBusy(true);
+    errorBox.hidden = true;
+    errorBox.replaceChildren();
+    try {
+      const meals = [];
+      for (const d of (r.pending?.days || [])) {
+        for (const m of (d.meals || [])) {
+          meals.push({ date: d.date, slot: m.slot });
+        }
+      }
+      for (const m of meals) {
+        await api('diary/confirm', 'POST', m);
+      }
+      const res = await api('progress/check-in', 'POST', {
+        date: r.date || mondayOf(isoDate(new Date())),
+        weight_kg: Number($('checkin-weight').value),
+        presumed: 'ask',
+      });
+      await handleCheckinResponse(res);
+    } catch (err) {
+      showError(err.message, confirmAllBtn.onclick);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  reviewBtn.onclick = async () => {
+    const targetDate = r.pending?.days?.[0]?.date || r.pending?.to || isoDate(new Date());
+    homeDate = targetDate;
+    history.pushState(null, '', '#oggi?data=' + homeDate);
+    const homeBtn = document.querySelector('[data-page="home"]');
+    if (homeBtn) homeBtn.click();
+    else await loadHome();
+  };
+
+  calcAnywayBtn.onclick = async () => {
+    setBusy(true);
+    errorBox.hidden = true;
+    errorBox.replaceChildren();
+    try {
+      const res = await api('progress/check-in', 'POST', {
+        date: r.date || mondayOf(isoDate(new Date())),
+        weight_kg: Number($('checkin-weight').value),
+        presumed: 'count',
+      });
+      await handleCheckinResponse(res);
+    } catch (err) {
+      showError(err.message, calcAnywayBtn.onclick);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return panel;
+}
+
 function checkinSummary(r) {
   const w = r.previous_week;
   const box = element('div', undefined, 'checkin-summary');
   if (!w) return box;
   box.append(element('h3', 'La settimana appena conclusa'));
   box.append(weekCard(w, r.date));
+  if (r.presumed_meals && r.presumed_meals > 0) {
+    const text = r.presumed_meals === 1
+      ? 'Calcolo con 1 pasto presunto come da piano.'
+      : 'Calcolo con ' + r.presumed_meals + ' pasti presunti come da piano.';
+    box.append(element('p', text, 'muted small checkin-presumed-note'));
+  }
   return box;
 }
 function recalibrationBlock(rec) {

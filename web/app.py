@@ -888,17 +888,31 @@ def stats_summary(request:Request):
 async def monday_check_in(request:Request):
     import progress_analysis
     user=identity(request,True);data=await request.json()
-    if not isinstance(data,dict) or set(data)-{'date','weight_kg'}:raise diary.DomainError('Check-in non valido')
+    if not isinstance(data,dict) or set(data)-{'date','weight_kg','presumed'}:raise diary.DomainError('Check-in non valido')
     date=diary.valid_date(data.get('date'));day=dt.date.fromisoformat(date)
     if day.weekday()!=0 or day>diary.local_today():raise diary.DomainError('Il check-in richiede una data di lunedì non futura')
+    measurement=dict(date=date,kind='weight',value=data.get('weight_kg'),unit='kg')
+    diary.validate_measurement(measurement)
+    presumed=data.get('presumed','ask')
+    if presumed not in ('ask','count'):
+        raise diary.DomainError('Parametro presumed non valido',status=422)
     profile=owner_profile(user)
     with connect() as db:
-        diary.add_measurement(db,user['id'],dict(date=date,kind='weight',value=data.get('weight_kg'),unit='kg'))
+        if presumed=='ask':
+            pending=diary.pending_presumed(db,user['id'],profile,as_of=day)
+            if pending['count']>0:
+                return dict(status='needs_confirmation',date=date,pending=pending)
+        diary.add_measurement(db,user['id'],measurement)
         report=load_health_report(health_directory(user['id']))
         values=measurement_values(db,user['id'],report=report)
         analysis=progress_analysis.progress(db,user['id'],profile,values,day,weeks=3)
         proposal=recalibration.make_proposal(db,user['id'],profile,report,values,day,diary.local_today()) if not health_updating(user['id']) else dict(status='insufficient_data',reason='Importazione Salute in corso; riprova quando è conclusa.')
-        return dict(date=date,analysis=analysis,previous_week=analysis['weeks'][-2],recalibration=proposal)
+        start_14=day-dt.timedelta(days=14);curr=start_14;presumed_count=0
+        while curr<day:
+            v=diary.day_view(db,user['id'],profile,curr.isoformat(),as_of=day)
+            presumed_count+=sum(1 for m in v['meals'] if m.get('presumed'))
+            curr+=dt.timedelta(days=1)
+        return dict(status='done',presumed_meals=presumed_count,date=date,analysis=analysis,previous_week=analysis['weeks'][-2],recalibration=proposal)
 
 
 def health_updating(user_id):

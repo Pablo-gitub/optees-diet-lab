@@ -154,8 +154,9 @@ def set_state(db,user,date,slot,new):
     p=planned(db,user,date,slot)
     if p:db.execute('UPDATE planned_meal SET status=? WHERE id=?',('chosen' if new=='unknown' else 'skipped' if new=='skipped' else 'done',p['id']))
 
-def is_presumed(db,user,date,slot,p=None):
-    if date>=local_today().isoformat():return False
+def is_presumed(db,user,date,slot,p=None,as_of=None):
+    ref=as_of.isoformat() if isinstance(as_of,dt.date) else as_of if isinstance(as_of,str) else local_today().isoformat()
+    if date>=ref:return False
     if state(db,user,date,slot)!='unknown':return False
     if p is None:p=planned(db,user,date,slot)
     if not p:return False
@@ -164,7 +165,7 @@ def is_presumed(db,user,date,slot,p=None):
     if db.execute("SELECT 1 FROM meal_draft WHERE user_id=? AND date=? AND slot=? AND status='draft'",(user,date,slot)).fetchone():return False
     return True
 
-def day_view(db,user,profile,date,include_presumed=True):
+def day_view(db,user,profile,date,include_presumed=True,as_of=None):
     valid_date(date);meals=[];all_planned=[];all_eaten=[];logged=0;planned_count=0
     week=db.execute("SELECT * FROM week_plan WHERE user_id=? AND status='active' AND week_start<=? AND date(week_start,'+6 days')>=?",(user,date,date)).fetchone()
     for slot in SLOTS:
@@ -174,7 +175,8 @@ def day_view(db,user,profile,date,include_presumed=True):
         has_draft=bool(db.execute("SELECT 1 FROM meal_draft WHERE user_id=? AND date=? AND slot=? AND status='draft'",(user,date,slot)).fetchone())
         estimated=db.execute('SELECT payload FROM consumed_estimate WHERE user_id=? AND date=? AND slot=?',(user,date,slot)).fetchone()
         consumed=json.loads(estimated['payload']) if estimated else None
-        presumed=bool(date<local_today().isoformat() and p and st=='unknown' and not entries and not has_draft and not consumed)
+        ref=as_of.isoformat() if isinstance(as_of,dt.date) else as_of if isinstance(as_of,str) else local_today().isoformat()
+        presumed=bool(date<ref and p and st=='unknown' and not entries and not has_draft and not consumed)
         if st!='unknown':logged+=bool(p);all_eaten.extend(eaten_items)
         elif presumed and include_presumed:all_eaten.extend(planned_items)
         actions=['edit','reset'] if st!='unknown' else ['edit','skip']+(['confirm','alternatives'] if p and not p['locked'] else ['confirm'] if p else [])
@@ -372,20 +374,25 @@ def search_foods(db,user,profile,q,limit):
         return relevance,not complete,source_priority[item['food']['source']],fresh_priority,name,item['food']['id']
     return sorted(result,key=ranking)[:limit]
 
-def add_measurement(db,user,data):
+def validate_measurement(data):
     date=valid_date(data.get('date'),True);kind=data.get('kind');unit=data.get('unit');value=data.get('value')
     definitions={'weight':('kg',1,500),'waist':('cm',10,300),**{k:('cm',10,300) for k in ('hip','chest','arm','thigh')},'height':('cm',30,250),'body_fat':('%',0,100)}
     if kind not in definitions:raise DomainError('Misura non supportata')
     expected,low,high=definitions[kind]
     if unit!=expected or isinstance(value,bool) or not isinstance(value,(int,float)) or not math.isfinite(value) or not low<=value<=high:raise DomainError('Valore o unità della misura non validi')
+    return date,kind,unit,value
+
+def add_measurement(db,user,data):
+    date,kind,unit,value=validate_measurement(data)
     db.execute('INSERT INTO measurement(user_id,date,kind,value,unit,source) VALUES(?,?,?,?,?,?)',(user,date,kind,value,unit,'manual'))
     return date
 
-def pending_presumed(db,user,profile):
-    today=local_today();from_date=today-dt.timedelta(days=7);to_date=today-dt.timedelta(days=1)
+def pending_presumed(db,user,profile,as_of=None):
+    ref_date=as_of if isinstance(as_of,dt.date) else dt.date.fromisoformat(as_of) if isinstance(as_of,str) else local_today()
+    from_date=ref_date-dt.timedelta(days=7);to_date=ref_date-dt.timedelta(days=1)
     days=[];total_count=0;current=to_date
     while current>=from_date:
-        d_str=current.isoformat();v=day_view(db,user,profile,d_str)
+        d_str=current.isoformat();v=day_view(db,user,profile,d_str,as_of=ref_date)
         presumed_meals=[m for m in v['meals'] if m.get('presumed')]
         if presumed_meals:
             meals_data=[]

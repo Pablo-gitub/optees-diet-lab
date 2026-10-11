@@ -4252,3 +4252,64 @@ main:has(#planning:not([hidden])) { min-width: 0; }
   }
 }
 
+/* Check-in con pasti presunti (T-003) */
+.checkin-pending-prompt {
+  margin-top: 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px;
+}
+.checkin-pending-prompt h3 {
+  margin: 0 0 14px;
+  font-size: 15px;
+}
+.checkin-pending-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.checkin-pending-actions > button,
+.checkin-calc-wrap > button {
+  min-height: 48px;
+  min-width: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.checkin-calc-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.checkin-calc-wrap p {
+  margin: 0;
+  font-size: 12px;
+}
+.checkin-pending-error {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: var(--bad-soft);
+  color: var(--bad);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.checkin-pending-error p {
+  margin: 0;
+}
+.checkin-presumed-note {
+  margin-top: 10px;
+}
+@media (max-width: 480px) {
+  .checkin-pending-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .checkin-calc-wrap {
+    width: 100%;
+  }
+}

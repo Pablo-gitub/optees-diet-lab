@@ -106,12 +106,49 @@ Scrivere `tests/test_checkin_presumed.py` coprendo i criteri di backend (tutti t
 5. Soglie, formule e campi di copertura invariati; il confronto della proposta ignora solo ID e token: confermato.
 
 ## Resoconto Gemini
-
-<!-- compilato da Gemini secondo GEMINI.md -->
+- File modificati: scripts/diary_service.py, scripts/progress_analysis.py, web/app.py, web/static/progress.js, web/static/style.css
+- Test protetti: 20/20 passano
+- Test aggiunti: nessuno
+- Suite completa: Ran 446 tests in 314.895s … OK
+- check_task: ESITO: pronto per revisione
+- Decisioni prese:
+  - In diary_service.py (is_presumed, day_view, pending_presumed) è stato introdotto il parametro opzionale as_of=None (con fallback a local_today()) per supportare finestre relative alla data del check-in, anche retroattivo.
+  - In progress.js, l'azione «Rivedi» imposta homeDate alla data del giorno più recente tra i pasti da confermare e passa alla schermata Oggi con #oggi?data=..., visualizzando il banner di T-002.
+- Dubbi o blocchi: nessuno
+Stato: pronto per revisione
 
 ## Revisione
 
-<!-- Codex (backend), Claude (interfaccia e commit) -->
+### Claude · 11 ottobre 2026 · Interfaccia: accettata
+
+Perimetro rispettato, nessun codice che riconosce i test (`check_task.py` pulito). Prova nel browser con database temporaneo (oggi 11/10, check-in del 5/10, pasti presunti nella settimana 28/9–4/10):
+- invio con presunti → «Prima di calcolare: hai 3 pasti da confermare della settimana scorsa», peso rimasto nel campo, nessuna pesata salvata;
+- **Rivedi** → `#oggi?data=2026-10-04`, pasto «Presunto · come previsto»;
+- **Conferma tutti** → pasti `as_planned`, check-in completato, una sola pesata salvata, campo svuotato;
+- **Calcola comunque** (2 nuovi presunti) → «Calcolo con 2 pasti presunti come da piano.», i pasti restano presunti;
+- 360 px: pulsanti 254×48, nessuno scorrimento orizzontale.
+
+Backend: osservazione minore, la validazione del peso in `monday_check_in` duplica i limiti di `add_measurement` (identici, 1–500 kg). Revisione del backend a Codex.
+
+### Claude · 11 ottobre 2026 · Chiusura
+
+Accettata. Riga vuota finale in `style.css` rimossa. Il difetto sui piatti a intervallo è un caso raro (pasti fuori fissati in anticipo) e preesistente nella rappresentazione di T-001: registrato come **DIARY-01** nel registro lacune, da correggere in una scheda dedicata a Codex prima della T-004. Suite completa 450 test OK (Codex), `check_task` pronto.
+
+### Codex · 11 ottobre 2026 · Revisione backend
+
+- Contratto e decisioni di Claude rispettati: `ask` predefinito, `count` esplicito, parametro non valido 422; date e pesi non validi restano 400. Autenticazione, CSRF e isolamento restano quelli del diario.
+- `as_of` opzionale in `is_presumed`, `day_view` e `pending_presumed` conserva il default di oggi e permette la finestra del check-in retroattivo. Correzione minore di Codex: inoltrato `as_of` anche da `week_analysis` e nel conteggio finale dei presunti, per mantenere una sola data di riferimento invece di tornare implicitamente all’orologio locale.
+- `presumed_meals` conta i soli pasti ancora presunti nelle date `[check-in −14, check-in −1]`, incluse entrambe le estremità; non include il giorno del check-in né il quindicesimo giorno precedente. Le conferme della settimana recente non eliminano dal conteggio i presunti della settimana più vecchia.
+- Nessuna scrittura prima della scelta `ask` con presunti: validazione, profilo e lettura dell’elenco precedono `add_measurement` e la creazione della proposta. Verificato anche con quattordici giorni e dati Salute/peso altrimenti idonei alla ricalibrazione: snapshot del database invariato.
+- Validazione duplicata del peso rimossa: estratta `diary.validate_measurement`, funzione senza scritture condivisa con `add_measurement`. Il check-in la usa prima della scelta; l’inserimento resta in `add_measurement` dopo la scelta. Nessuna scrittura temporanea o rollback usato per validare; limiti, tipi e status invariati. La seconda validazione durante l’inserimento è intenzionale, senza duplicare le regole.
+- `progress_recalibration.py` non modificato: soglie, formule, copertura Salute, limiti, cooldown e approvazione restano invariati. La proposta con presunti coincide con quella dei medesimi pasti confermati, esclusi ID/token; verifica protetta mantenuta.
+- Aggiunti quattro test in `tests/test_checkin_presumed_extra.py`: riferimento esplicito dell’analisi anche con orologio successivo, finestre e riferimenti data/stringa, `ask` senza scritture con dati idonei, validazione condivisa senza scritture. Test protetti invariati. La verifica mirata ha eseguito 17 test, tutti passati.
+- **Difetto funzionale residuo, non corretto:** equivalenza presunti/confermati incompleta per i `dish_estimate` a intervallo. Prova con 14 giorni sintetici idonei, peso costante, Salute completa e un pranzo pianificato a intervallo: `make_proposal` con presunti restituisce `available`; dopo la conferma degli stessi pasti restituisce `insufficient_data`. `day_view` per il presunto usa i nutrienti centrali del piano, mentre la conferma del piatto crea `consumed_estimate` e rende indisponibili i nutrienti puntuali. Ne deriva una proposta che il ramo confermato impedisce. L’origine è nel trattamento degli intervalli già presente in T-001, ora usato dalla ricalibrazione. Occorre decidere come preservare la medesima prudenza e rappresentazione dell’incertezza per il presunto; Codex non modifica soglie, formule o questa logica. La suite verde non dimostra questo caso.
+- Revisione UI di Claude conservata; Codex non ha modificato i file frontend. Il controllo diff segnala soltanto una riga vuota finale già presente nelle modifiche di Gemini a `style.css`, lasciata al revisore UI.
+
+Verifiche finali: suite completa **450 test in 320,706 s, OK**; `check_task.py` **53 test, OK**, sintassi JavaScript valida e **ESITO: pronto per revisione**. Diff dei file backend, test aggiuntivi e scheda senza errori di whitespace. Test protetti invariati. Il difetto sui piatti a intervallo rimane segnalato per decisione/correzione dell’esecutore prima della chiusura funzionale, nonostante l’esito automatico verde.
+
+Codice e test aggiuntivi lasciati nella working tree; nessun commit eseguito da Codex in questa revisione.
 
 ## Note di Codex · test rossi e dubbi (11 ottobre 2026)
 

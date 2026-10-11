@@ -52,8 +52,8 @@ def contexts(db,user,start):
     return result
 
 
-def week_analysis(db,user,profile,start,as_of):
-    diary.valid_date(start);views=[diary.day_view(db,user,profile,d,include_presumed=False) for d in days(start)];context=contexts(db,user,start)
+def week_analysis(db,user,profile,start,as_of,include_presumed=True):
+    diary.valid_date(start);views=[diary.day_view(db,user,profile,d,include_presumed=include_presumed,as_of=as_of) for d in days(start)];context=contexts(db,user,start)
     complete=[];full=[];adherent=0;denominator=0;missing=[]
     past=[v for v in views if v['date']<as_of.isoformat()]
     for v in past:
@@ -64,7 +64,7 @@ def week_analysis(db,user,profile,start,as_of):
         for m in planned:
             denominator+=1
             expected=m['planned']['kcal'];actual=m['eaten']['kcal']
-            adherent+=m['state']=='as_planned' or abs(actual-expected)<=PARAMETERS['meal_kcal_tolerance_fraction']*expected
+            adherent+=m['state']=='as_planned' or m.get('presumed') or abs(actual-expected)<=PARAMETERS['meal_kcal_tolerance_fraction']*expected
         c=context.get(v['date'],{})
         full_scope=c.get('scope')=='full_day_planned_meals' or len(planned)==5
         if full_scope and v['totals']['eaten'] is not None and all(number(n) for n in v['totals']['eaten'].values()):full.append(v)
