@@ -134,37 +134,30 @@ class RecalibrationCorrectionTests(checkin_base.CheckinPresumedTests):
                                        headers=self.headers)
         self.assertEqual(approve_res.status_code, 200, approve_res.text)
 
-        # Correzione: dati chiedono ancora -100 (nessun margine residuo negativo perché cap cumulata è 100)
+        # Piccola correzione reale (-9 kcal), entro la soglia giornaliera del 10%.
         with self.app.connect() as db:
-            # Salto di un pasto riduce ulteriormente l'intake
-            self.app.diary.diary_mutation(db, self.user, self.profile, 'skip', dict(date=self.date(1), slot='breakfast'))
+            entry=db.execute('SELECT id FROM diary_entry WHERE user_id=? AND date=? AND slot=?',
+                             (self.user,self.date(1),'breakfast')).fetchone()
+            self.app.diary.diary_mutation(db,self.user,self.profile,'edit',dict(grams=78),entry_id=entry['id'])
 
         recalc_res = self.client.post('/api/progress/check-in/review/recalculate', json=dict(checkin_date=self.date(0)), headers=self.headers)
         self.assertEqual(recalc_res.status_code, 200, recalc_res.text)
-        recalc_data = recalc_res.json()
-        # Spazio residuo per riduzione è 0: status no_adjustment oppure applied_delta_kcal = 0
-        if recalc_data.get('status') == 'available':
-            self.assertGreaterEqual(recalc_data['proposal']['applied_delta_kcal'], 0)
-            self.assertEqual(recalc_data['proposal']['allowed_delta_kcal']['min'], 0)
-        else:
-            self.assertEqual(recalc_data.get('status'), 'no_adjustment')
+        self.assertEqual(recalc_res.json()['status'], 'no_adjustment')
+        with self.app.connect() as db:
+            current=json.loads(db.execute('SELECT profile FROM users WHERE id=?',(self.user,)).fetchone()[0])
+        self.assertEqual(current['daily_meals']['targets']['kcal_100g']['target'],1900)
 
-        # Ora modifica con dati che chiedono invece +30 kcal rispetto al nuovo target (1900):
-        # Aggiorniamo health report baseline a un valore che porta desired a +30
-        # Target 1900, bilancio 0. Se estimate = 1930 -> desired = +30.
-        # Estimate = 0.75 * baseline + 0.25 * inferred. Con slope ~0, intake ~1930, baseline ~1930 -> desired = +30.
-        with patch.object(self.app, 'load_health_report', side_effect=lambda *a: dict(
-                version='synthetic-checkin', measures={}, weight_history=[],
-                scenarios=dict(status='available'),
-                daily=[dict(date=self.date(ago), usable_for_baseline=True, total_estimated_kcal=1930) for ago in range(1, 15)])):
-            # Imposta le calorie dei pasti confermati a circa 1930
-            recalc_res2 = self.client.post('/api/progress/check-in/review/recalculate', json=dict(checkin_date=self.date(0)), headers=self.headers)
-            self.assertEqual(recalc_res2.status_code, 200, recalc_res2.text)
-            recalc_data2 = recalc_res2.json()
-            if recalc_data2.get('status') == 'available':
-                self.assertEqual(recalc_data2['proposal']['applied_delta_kcal'], 30)
-                # Cumulata: -100 + 30 = -70 kcal
-                self.assertEqual(recalc_data2['proposal'].get('cumulative_delta_kcal'), -70)
+        # Intake medio = 1800 - 9/14; stima desiderata 1930, dunque +30.
+        baseline=(1930-.25*(1800-9/14))/.75
+        for day in self.report['daily']:day['total_estimated_kcal']=baseline
+        recalc_res2 = self.client.post('/api/progress/check-in/review/recalculate', json=dict(checkin_date=self.date(0)), headers=self.headers)
+        self.assertEqual(recalc_res2.status_code, 200, recalc_res2.text)
+        recalc_data2 = recalc_res2.json()
+        self.assertEqual(recalc_data2['status'],'available',recalc_data2)
+        self.assertEqual(recalc_data2['proposal']['applied_delta_kcal'],30)
+        self.assertEqual(recalc_data2['proposal']['allowed_delta_kcal']['min'],0)
+        self.assertEqual(recalc_data2['proposal']['cumulative_delta_kcal'],-70)
+        self.assertEqual(recalc_data2['proposal']['chained_from'],prop_id_1)
 
     def test_cooldown_allowed_for_same_checkin_blocked_for_different(self):
         self.seed_days(range(1, 15), confirmed=True)
@@ -181,35 +174,36 @@ class RecalibrationCorrectionTests(checkin_base.CheckinPresumedTests):
                                     headers=self.headers)
         self.assertEqual(appr_res.status_code, 200)
 
-        # Correzione pasto per attivare ricalibrazione
         with self.app.connect() as db:
-            self.app.diary.diary_mutation(db, self.user, self.profile, 'skip', dict(date=self.date(1), slot='breakfast'))
-
+            entry=db.execute('SELECT id FROM diary_entry WHERE user_id=? AND date=? AND slot=?',
+                             (self.user,self.date(1),'breakfast')).fetchone()
+            self.app.diary.diary_mutation(db,self.user,self.profile,'edit',dict(grams=78),entry_id=entry['id'])
+        for day in self.report['daily']:day['total_estimated_kcal']=1750
         recalc_res = self.client.post('/api/progress/check-in/review/recalculate', json=dict(checkin_date=self.date(0)), headers=self.headers)
-        self.assertEqual(recalc_res.status_code, 200)
+        self.assertEqual(recalc_res.status_code,200,recalc_res.text)
+        self.assertEqual(recalc_res.json()['status'],'available',recalc_res.text)
+        chained=recalc_res.json()['proposal']
+        self.assertEqual(chained['chained_from'],prop_id_1)
+        appr_chained = self.client.post(f"/api/progress/recalibrations/{chained['id']}/approve",
+                                       json=dict(state_token=chained['state_token'],reason='chained'),headers=self.headers)
+        self.assertEqual(appr_chained.status_code,200,appr_chained.text)
 
-        # Se la ricalibrazione ha generato una proposta (o forzando una proposta con lo stesso checkin_date),
-        # l'approvazione deve essere consentita anche entro 7 giorni
-        if recalc_res.json().get('status') == 'available':
-            prop_id_chained = recalc_res.json()['proposal']['id']
-            appr_chained = self.client.post(f'/api/progress/recalibrations/{prop_id_chained}/approve',
-                                            json=dict(state_token=recalc_res.json()['proposal']['state_token'], reason='chained'),
-                                            headers=self.headers)
-            self.assertEqual(appr_chained.status_code, 200, appr_chained.text)
-
-        # Con checkin_date diverso (es. altra settimana creata a mano), il cooldown blocca con 409
+        # Proposta corrente valida, ma approvazione recente di un altro check-in.
+        # Si isola il cooldown senza costruire una proposta già scaduta.
+        for day in self.report['daily']:day['total_estimated_kcal']=2300
+        pending=self.client.post('/api/progress/check-in/review/recalculate',
+                                json=dict(checkin_date=self.date(0)),headers=self.headers)
+        self.assertEqual(pending.status_code,200,pending.text)
+        self.assertEqual(pending.json()['status'],'available',pending.text)
+        proposal=pending.json()['proposal']
         with self.app.connect() as db:
-            token = 'other_checkin_token'
-            diff_id = db.execute(
-                "INSERT INTO recalibration_proposal(user_id,checkin_date,created,state,fingerprint,payload) VALUES(?,?,?,'pending',?,?)",
-                (self.user, self.date(7), TODAY.isoformat(), token, json.dumps(dict(changes=dict(daily=dict(before=self.profile['targets'], after=self.profile['targets'], delta_kcal=50)))))
-            ).lastrowid
-            with patch.object(recalibration, 'fingerprint', return_value=token):
-                diff_appr = self.client.post(f'/api/progress/recalibrations/{diff_id}/approve',
-                                             json=dict(state_token=token, reason='diff'),
-                                             headers=self.headers)
-                self.assertEqual(diff_appr.status_code, 409)
-                self.assertIn('recalibration_cooldown', diff_appr.text)
+            db.execute('UPDATE recalibration_proposal SET checkin_date=? WHERE id=?',
+                       (self.date(7),prop_id_1))
+        # La transazione precedente è chiusa prima della chiamata HTTP.
+        blocked=self.client.post(f"/api/progress/recalibrations/{proposal['id']}/approve",
+                                 json=dict(state_token=proposal['state_token']),headers=self.headers)
+        self.assertEqual(blocked.status_code,409,blocked.text)
+        self.assertEqual(blocked.json()['code'],'recalibration_cooldown')
 
     def test_history_shows_chaining_and_fingerprint_invalidation(self):
         self.seed_days(range(1, 15), confirmed=True)
