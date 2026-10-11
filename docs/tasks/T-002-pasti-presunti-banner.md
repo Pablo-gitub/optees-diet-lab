@@ -132,8 +132,32 @@ Stile: superficie `--surface-2` con bordo `--line`, punto colorato `--warn` a si
 
 ## Resoconto Gemini
 
-<!-- compilato da Gemini secondo GEMINI.md -->
+- File modificati: web/static/index.html, web/static/style.css, web/static/today.js, web/static/pending.js
+- Test protetti: 39/39 passano
+- Test aggiunti: nessuno
+- Suite completa: Ran 433 tests in 306.684s … OK
+- check_task: ESITO: pronto per revisione
+- Decisioni prese:
+  - Agganciato loadPendingBanner() anche al termine positivo di mutate() in today.js, così che la conferma o salto di un pasto effettuata direttamente dalla giornata aggiorni subito anche il banner.
+  - Al click sul nome del pasto nella tendina di pending.js, se l'elemento di destinazione è un details.registered-meal, viene impostato card.open = true per mostrare immediatamente la scheda aperta oltre a portarla in vista e focalizzarla.
+- Dubbi o blocchi: nessuno
+Stato: pronto per revisione
 
 ## Revisione
 
-<!-- compilata da Claude: esito, correzioni, commit -->
+### Claude · 11 ottobre 2026 · Esito: accettata con una correzione di stile
+
+Codice: perimetro rispettato, nomi verificati esistenti (`longDate`, `shortDate`, `fmt0`, `addDays`, `isoDate`, `mealMeta`, `currentDay`), colori solo da variabili, errori del banner isolati dalla giornata. Il commento iniziale cita un inesistente «api-contract.md §1» (innocuo, corretto).
+
+Prova nel browser (database temporaneo, 4 pasti passati + 1 di oggi + 1 di 9 giorni fa):
+- banner «Hai 3 pasti da confermare»: esclusi oggi e il pasto di 9 giorni fa; gruppi «Ieri» / «Giovedì 8 ottobre»;
+- Conferma singola → «2 pasti», confermato dopo ricarica; nome del pasto → `#oggi?data=2026-10-10`, scheda aperta, «Presunto · come previsto · 317 kcal», distintivo «Presunto»;
+- Conferma tutti → banner assente anche dopo ricarica; il pasto diventa «Come previsto»;
+- ✕ → nascosto dopo ricarica; un pasto nuovo lo fa ricomparire («1 pasto»);
+- errore simulato di `/api/diary/pending` → giornata caricata, nessun errore mostrato;
+- Escape chiude la tendina e riporta il focus sul pulsante; pulsanti 48 px; nessuno scorrimento orizzontale a 360/390 px; tema chiaro e scuro.
+
+Correzione di Claude (`style.css`): su telefono ogni pasto occupava quattro righe con «Conferma» isolato; ora nome e kcal su una riga, alimenti sotto, «Conferma» a destra.
+
+Nota: nei giorni passati un pasto **non pianificato** resta «da registrare» (corretto: non c'è nulla da presumere).
+

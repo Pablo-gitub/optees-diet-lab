@@ -4055,3 +4055,200 @@ main:has(#planning:not([hidden])) { min-width: 0; }
     transition: none;
   }
 }
+
+/* T-002: banner pasti da confermare e pasto presunto */
+#pending-meals {
+  margin: 12px 0 16px;
+}
+.pending-banner {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--ink);
+  overflow: hidden;
+}
+.pending-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 48px;
+  padding: 0 4px 0 16px;
+}
+.pending-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  flex: 1;
+  min-height: 48px;
+}
+.pending-dot {
+  color: var(--warn);
+  font-size: 13px;
+  line-height: 1;
+  flex: none;
+}
+.pending-summary {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.pending-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: none;
+}
+.pending-toggle,
+.pending-dismiss {
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--ink-2);
+  font-size: 16px;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s var(--ease), color 0.15s var(--ease);
+}
+.pending-toggle:hover,
+.pending-dismiss:hover {
+  background: var(--surface-3);
+  color: var(--ink);
+}
+.pending-toggle:focus-visible,
+.pending-dismiss:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: -2px;
+}
+.pending-dropdown {
+  border-top: 1px solid var(--line);
+  padding: 14px 16px 16px;
+}
+.pending-day-group {
+  margin-bottom: 14px;
+}
+.pending-day-group:last-of-type {
+  margin-bottom: 8px;
+}
+.pending-day-title {
+  color: var(--ink-3);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.pending-meal-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+.pending-day-group .pending-meal-row:last-child {
+  border-bottom: none;
+}
+.pending-meal-info {
+  display: flex;
+  align-items: baseline;
+  column-gap: 6px;
+  flex-wrap: wrap;
+  flex: 1;
+  min-width: 0;
+}
+.pending-meal-name {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--brand);
+  cursor: pointer;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+}
+.pending-meal-name:hover {
+  color: var(--brand-strong);
+}
+.pending-meal-name:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+.pending-meal-meta {
+  font-size: 13px;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.pending-meal-foods {
+  flex-basis: 100%;
+  font-size: 13px;
+  color: var(--ink-3);
+  overflow-wrap: anywhere;
+}
+.pending-meal-action {
+  flex: none;
+}
+.pending-confirm-btn,
+.pending-confirm-all-btn {
+  min-height: 48px;
+  min-width: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.pending-footer {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+}
+.pending-notice-box {
+  margin-top: 8px;
+  text-align: right;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.pending-error-box {
+  padding: 10px 16px;
+  background: var(--bad-soft);
+  color: var(--bad);
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+}
+.pending-error-box p {
+  margin: 0;
+  font-size: 13px;
+}
+
+/* Stile neutro del pasto presunto nella scheda (T-002 §9) */
+.state-presumed .state-chip {
+  background: var(--surface-3);
+  color: var(--ink-2);
+  border: 1px solid var(--line);
+}
+
+@media (max-width: 480px) {
+  .pending-dropdown {
+    padding: 10px 12px 12px;
+  }
+  .pending-confirm-btn {
+    padding: 0 14px;
+  }
+}
+

@@ -53,6 +53,7 @@ async function loadHome() {
     api('rebalance/presets')
       .then((c) => ((rebalanceCatalog = c), renderDay(currentDay)))
       .catch(() => {});
+  if (typeof loadPendingBanner === 'function') loadPendingBanner().catch(() => {});
 }
 async function refreshWeek() {
   try {
@@ -67,6 +68,7 @@ async function mutate(path, method, body) {
     renderDay(await api(path, method, body));
     $('home-load-error').hidden=true;
     refreshWeek();
+    if (typeof loadPendingBanner === 'function') loadPendingBanner().catch(() => {});
   } catch (e) {
     const box=$('home-load-error');box.hidden=false;box.replaceChildren(element('p','Operazione non riuscita: '+e.message));
     if(path!=='diary/entries'){const retry=element('button','Riprova','secondary');retry.type='button';retry.onclick=()=>e.code==='meal_conflict'?loadHome():mutate(path,method,body);box.append(retry);}
@@ -86,8 +88,8 @@ function renderDay(day) {
   $('day-today').hidden = day.date === today;
   const hasPlan = day.meals.some((m) => m.planned);
   $('day-empty').hidden = hasPlan || day.meals.some((m) => m.state !== 'unknown');
-  const next=day.meals.find(m=>m.state==='unknown');const focus=$('day-next-action');focus.hidden=!next||day.date>today;focus.closest('.today-grid').classList.toggle('no-next',focus.hidden);focus.replaceChildren();if(!focus.hidden){focus.append(element('h3',mealMeta[next.slot][0]+' · da registrare'),element('p','Puoi registrare tutti i pasti in qualsiasi ordine.','muted small'));const interval=next.planned?.nutrient_ranges;const act=element('button',interval?'Registra la stima prevista':next.planned?'Modifica prima di registrare':'Aggiungi un pasto','primary small');act.type='button';act.onclick=()=>interval?mutate('diary/confirm','POST',{date:day.date,slot:next.slot}):openMealEditor(day,next.slot);focus.append(act);}
-  $('day-meals').replaceChildren(...day.meals.map(m=>{const card=mealCard(m,day);if(m.state==='unknown')return card;const details=element('details',undefined,'registered-meal');details.dataset.mealSlot=m.slot;details.append(element('summary',mealMeta[m.slot][0]+' · '+(m.consumed_estimate?'Stima registrata · '+rangeText(m.eaten_range?.kcal):stateMeta[m.state][0]+' · '+kcalText(m.eaten?.kcal))),card);return details;}));
+  const next=day.meals.find(m=>m.state==='unknown'&&!m.presumed);const focus=$('day-next-action');focus.hidden=!next||day.date>today;focus.closest('.today-grid').classList.toggle('no-next',focus.hidden);focus.replaceChildren();if(!focus.hidden){focus.append(element('h3',mealMeta[next.slot][0]+' · da registrare'),element('p','Puoi registrare tutti i pasti in qualsiasi ordine.','muted small'));const interval=next.planned?.nutrient_ranges;const act=element('button',interval?'Registra la stima prevista':next.planned?'Modifica prima di registrare':'Aggiungi un pasto','primary small');act.type='button';act.onclick=()=>interval?mutate('diary/confirm','POST',{date:day.date,slot:next.slot}):openMealEditor(day,next.slot);focus.append(act);}
+  $('day-meals').replaceChildren(...day.meals.map(m=>{const card=mealCard(m,day);if(m.state==='unknown'&&!m.presumed)return card;const details=element('details',undefined,'registered-meal');details.dataset.mealSlot=m.slot;details.append(element('summary',m.presumed?mealMeta[m.slot][0]+' · Presunto · come previsto · '+kcalText(m.eaten?.kcal):mealMeta[m.slot][0]+' · '+(m.consumed_estimate?'Stima registrata · '+rangeText(m.eaten_range?.kcal):stateMeta[m.state][0]+' · '+kcalText(m.eaten?.kcal))),card);return details;}));
   renderDayProgress(day);
   renderWorkout(day);
   renderDayRating(day);
@@ -191,7 +193,7 @@ function foodSearch(day, slot, onPick, placeholder) {
 
 function mealCard(m, day) {
   const meta = mealMeta[m.slot] || [m.slot, '•'];
-  const state = m.consumed_estimate ? ['Fuori programma', 'state-extra'] : stateMeta[m.state] || [m.state, ''];
+  const state = m.consumed_estimate ? ['Fuori programma', 'state-extra'] : m.presumed ? ['Presunto', 'state-presumed'] : stateMeta[m.state] || [m.state, ''];
   const card = element('article', undefined, 'meal-card ' + state[1]);
   card.dataset.mealSlot=m.slot;
   const head = element('div', undefined, 'meal-head');
@@ -370,7 +372,7 @@ function renderDayProgress(day) {
   const planned = day.totals.planned || {};
   box.replaceChildren(element('h3', 'Energia e nutrienti'));
   box.append(element('p',day.target_scope==='full_day_planned_meals'?'Obiettivi del piano dell’intera giornata.':day.target_scope==='main_meals'?'Obiettivi per pranzo e cena; il diario registra anche gli altri pasti.':'Obiettivi del piano applicato; verifica quali pasti comprende.','muted small'));
-  if(day.meals.some(m=>m.state==='unknown'))box.append(element('p','Giornata incompleta: il consumato non rappresenta il totale definitivo.','muted small'));
+  if(day.meals.some(m=>m.state==='unknown'&&!m.presumed))box.append(element('p','Giornata incompleta: il consumato non rappresenta il totale definitivo.','muted small'));
   const legend = element('p', undefined, 'meter-legend muted');
   legend.append(element('span', 'consumato', 'lg-eaten'), element('span', 'previsto', 'lg-planned'), element('span', 'bersaglio', 'lg-target'));
   box.append(legend);
