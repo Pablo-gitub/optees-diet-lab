@@ -26,11 +26,11 @@ Stato attuale (nomi verificati):
 1. Si calcola l'elenco dei presunti della **settimana appena chiusa**: date da `date − 7` a `date − 1`, stessa definizione di `is_presumed` (senza dipendere da `local_today()` per la finestra: conta la data del check-in).
 2. Con `presumed:"ask"` e almeno un presunto in quella settimana → risposta **200** `{"status":"needs_confirmation","date":…,"pending":{"from","to","count","days":[…]}}` (stessa forma di `GET /api/diary/pending`) e **nessuna scrittura**: la pesata non viene salvata, nessuna proposta creata.
 3. Con `presumed:"count"`, oppure senza presunti → comportamento attuale (pesata, analisi, proposta) con i presunti contati come confermati; la risposta aggiunge `"status":"done"` e `"presumed_meals": N` = numero di pasti presunti nei 14 giorni usati dalla ricalibrazione (0 se nessuno).
-4. Validazioni di `date` e `weight_kg` invariate e eseguite **prima** del passo 2 (un peso non valido dà 422 anche se ci sono presunti).
+4. Validazioni di `date` e `weight_kg` invariate (400 come oggi) ed eseguite **prima** del passo 2: un peso non valido dà 400 anche se ci sono presunti, senza scritture.
 
 **Interfaccia (`progress.js`).**
 5. Invio del check-in: se la risposta è `needs_confirmation`, il campo peso **conserva il valore** e sotto il modulo compare un riquadro: «Prima di calcolare: hai N pasti da confermare della settimana scorsa» con tre azioni:
-   - **Conferma tutti** → `POST /api/diary/confirm-all` con i pasti di `pending`, poi reinvia il check-in con `presumed:"ask"` (ora senza presunti → calcolo);
+   - **Conferma tutti** → conferma uno per uno i pasti di `pending` con `POST /api/diary/confirm` (`{date, slot}`), poi reinvia il check-in con `presumed:"ask"` (ora senza presunti → calcolo). Non usare `confirm-all`: la sua finestra è relativa a oggi, quella del check-in alla data del check-in;
    - **Rivedi** → porta a Oggi sul giorno più recente dell'elenco (`homeDate`, `#oggi?data=…`, `loadHome()`), dove c'è il banner di T-002;
    - **Calcola comunque** → reinvia con `presumed:"count"`; testo di aiuto breve: «I pasti non confermati contano come mangiati da piano».
 6. Con `status:"done"` il comportamento attuale resta identico; se `presumed_meals > 0` una riga discreta sotto il riepilogo: «Calcolo con N pasti presunti come da piano».
@@ -44,7 +44,7 @@ Stato attuale (nomi verificati):
 - [ ] `presumed:"count"` → pesata salvata, `status:"done"`, `presumed_meals` = N, analisi con i presunti come confermati.
 - [ ] Dopo `confirm-all` dei pasti della settimana, check-in con `"ask"` → `status:"done"`, `presumed_meals` = 0 per quella settimana.
 - [ ] Ricalibrazione: due settimane con i pasti presunti (altrimenti idonee) producono la stessa proposta che producono gli stessi pasti confermati.
-- [ ] `presumed` non valido → 422; peso non valido con presunti presenti → 422 e nessuna scrittura.
+- [ ] `presumed` non valido → 422; peso non valido con presunti presenti → 400 e nessuna scrittura.
 - [ ] Autenticazione, CSRF e isolamento fra utenti invariati.
 - [ ] Interfaccia: i tre percorsi del punto 5 funzionano nel browser; il peso resta nel campo; nessuno scorrimento orizzontale a 360/390 px.
 - [ ] Suite completa verde.
@@ -59,7 +59,7 @@ Stato attuale (nomi verificati):
 
 <!-- Codex aggiorna questo valore con il commit che contiene i test rossi -->
 ```
-964fac26f0555cc3eba3b7cf953f13ee16b30fb2
+443445d44b48e5e5daed500a1196c4f41f3e2ac4
 ```
 
 ## File consentiti
@@ -77,6 +77,7 @@ web/static/style.css
 <!-- scritti da Codex prima che Gemini inizi -->
 ```
 tests/test_checkin_presumed.py
+tests/test_progress_api.py
 ```
 
 ## Test aggiuntivi consentiti
@@ -95,6 +96,14 @@ node --check web/static/progress.js
 ## Istruzioni per Codex (test rossi)
 
 Scrivere `tests/test_checkin_presumed.py` coprendo i criteri di backend (tutti tranne quello d'interfaccia), con database temporaneo, data controllata e dati sintetici, senza caricare preferenze personali. Verificare che falliscano per funzionalità assente. **Prima di committare**, eseguire la suite completa con `include_presumed=True` come default di `week_analysis` (modifica locale, da non committare) ed elencare qui sotto quali test esistenti cambierebbero esito e perché: se dipendono solo da date di prova ormai passate, fissare la data nei test (commit separato, come in T-001); se il nuovo comportamento sembra sbagliato, scriverlo qui e non correggerlo. Committare i soli test e aggiornare «Base».
+
+## Decisioni di Claude sulle note di Codex (vincolanti)
+
+1. **Peso non valido:** resta **400** come oggi (coerente con la data); il test protetto è stato aggiornato. `presumed` non valido, campo nuovo: 422.
+2. **«presumed_meals = 0 per quella settimana»:** si riferisce alla settimana confermata; i presunti della settimana più vecchia nei 14 giorni restano contati. Lettura di Codex confermata.
+3. **Check-in in un giorno diverso dal lunedì / retroattivo:** la UI conferma i pasti di `pending` con `POST /api/diary/confirm` uno per uno (nessun limite di finestra), non con `confirm-all`, che resta invariato. Nessuna modifica a T-001.
+4. **Test legacy `test_partial_diary_missing_nutrients_and_main_meals_are_not_full_days`:** il cambio è voluto (decisione del proprietario: presunti contano come confermati). Aggiornato da Claude: con il default la settimana è `available`; con `include_presumed=False` resta `insufficient_data`. Ora è anch'esso protetto.
+5. Soglie, formule e campi di copertura invariati; il confronto della proposta ignora solo ID e token: confermato.
 
 ## Resoconto Gemini
 
