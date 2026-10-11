@@ -44,7 +44,10 @@ class ProgressAPI(base.DiaryTests):
     def test_partial_diary_missing_nutrients_and_main_meals_are_not_full_days(self):
         with patch.object(self.app.diary,'local_today',return_value=self.today):
             self.seed_week(complete=4)
-            with self.app.connect() as db:week=progress.week_analysis(db,self.user,self.profile,self.start,self.today)
+            # Untouched past days are presumed (T-003) and count as followed; without presumed meals the week stays partial.
+            with self.app.connect() as db:presumed=progress.week_analysis(db,self.user,self.profile,self.start,self.today)
+            self.assertEqual(presumed['diet']['status'],'available')
+            with self.app.connect() as db:week=progress.week_analysis(db,self.user,self.profile,self.start,self.today,include_presumed=False)
             self.assertEqual(week['diet']['status'],'insufficient_data');self.assertIsNone(week['diet']['value']);self.assertIn('reason',week['diet'])
             self.assertIsNone(week['kcal_average']['eaten_avg'])
             later='2026-09-07';self.seed_week(later,full=False)

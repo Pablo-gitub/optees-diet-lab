@@ -190,7 +190,8 @@ class CheckinPresumedTests(base.PresumedMealsTests):
         for weight in (None, True, '80', 0, -1, 501):
             with self.subTest(weight=weight):
                 before = self.snapshot(); response = self.checkin(weight=weight)
-                self.assertEqual(response.status_code, 422, response.text)
+                # Existing weight validation keeps its 400 (decision of 11 Oct); it must run before the prompt.
+                self.assertEqual(response.status_code, 400, response.text)
                 self.assertEqual(before, self.snapshot())
 
     def test_date_validation_authentication_and_csrf_remain_unchanged(self):
