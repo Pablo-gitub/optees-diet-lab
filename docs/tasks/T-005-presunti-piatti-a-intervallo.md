@@ -66,4 +66,7 @@ set -a; . ./.env; set +a; PYTHONPATH=scripts:tests:. ${DIET_PYTHON:-python} -m u
 
 ## Revisione
 
-<!-- Claude -->
+### Codex / Gemini · 11 ottobre 2026 · Esecuzione
+- Test rosso aggiunto in `tests/test_presumed_interval_dishes.py`: confermato il fallimento per forma difforme di `eaten` in `day_view` e per la divergenza in `make_proposal` (`available` con presunto vs `insufficient_data` dopo conferma).
+- Correzione applicata in `scripts/diary_service.py`: in `day_view`, per i pasti presunti con piatti a intervallo (`nutrient_ranges`), `eaten_range` assume i range pianificati ed `eaten` ha `items: []` con nutrienti puntuali a `None`; `totals.eaten` riflette l'incertezza con valori `None` come nel caso confermato.
+- Test protetti invariati e verdi; suite completa verde (466 test); `check_task`: pronto per revisione.

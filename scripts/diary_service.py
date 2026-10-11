@@ -195,7 +195,10 @@ def day_view(db,user,profile,date,include_presumed=True,as_of=None):
                         ranges[k][side]=None if value is None or ranges[k][side] is None else ranges[k][side]+value
             meal['planned']['nutrient_ranges']=ranges if uncertain else None
             meal['planned']['nutrition_basis']='interval_midpoint' if uncertain else 'verified_food_values'
-        if meal['consumed_estimate'] and meal['eaten'] is not None:meal['eaten'].update({key:None for key in KEYS})
+        if meal['planned'] and meal['presumed'] and include_presumed and meal['planned'].get('nutrient_ranges'):
+            meal['eaten_range']=copy.deepcopy(meal['planned']['nutrient_ranges'])
+            meal['eaten']=dict(items=[],**{key:None for key in KEYS})
+        elif meal['consumed_estimate'] and meal['eaten'] is not None:meal['eaten'].update({key:None for key in KEYS})
     targets=json.loads(week['targets']) if week else (profile.get('daily_meals',{}).get('targets') if profile.get('daily_meals',{}).get('enabled') else profile['targets'])
     context=json.loads(week['day_context'] or '{}').get(date,{}) if week else {}
     targets=context.get('targets',targets)
@@ -204,7 +207,7 @@ def day_view(db,user,profile,date,include_presumed=True,as_of=None):
     workouts=day_workouts(db,user,date)
     workout=max(workouts,key=lambda x:(x["workout_log_id"] or 0,x["planned_session_id"] or 0)) if workouts else None
     eaten_totals=totals(all_eaten) if any_logged else None
-    if eaten_totals is not None and any(m['consumed_estimate'] for m in meals):eaten_totals.update({key:None for key in KEYS})
+    if eaten_totals is not None and any(m['consumed_estimate'] or (m['presumed'] and include_presumed and m.get('eaten_range')) for m in meals):eaten_totals.update({key:None for key in KEYS})
     from contextual_bandit import day_evaluation
     evaluation=day_evaluation(db,user,date)
     single=evaluation['plans'][0] if len(evaluation['plans'])==1 else None
