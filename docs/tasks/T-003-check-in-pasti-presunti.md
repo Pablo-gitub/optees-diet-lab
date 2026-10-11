@@ -59,7 +59,7 @@ Stato attuale (nomi verificati):
 
 <!-- Codex aggiorna questo valore con il commit che contiene i test rossi -->
 ```
-DA-AGGIORNARE
+964fac26f0555cc3eba3b7cf953f13ee16b30fb2
 ```
 
 ## File consentiti
@@ -103,3 +103,30 @@ Scrivere `tests/test_checkin_presumed.py` coprendo i criteri di backend (tutti t
 ## Revisione
 
 <!-- Codex (backend), Claude (interfaccia e commit) -->
+
+## Note di Codex · test rossi e dubbi (11 ottobre 2026)
+
+- Il criterio sul singolo giorno «completo e aderente» va letto insieme alle soglie invariate: con un solo giorno completo la copertura deve includerlo, ma il valore aggregato di aderenza resta indisponibile sotto cinque giorni. I test coprono sia un giorno sia sette giorni presunti; non riducono la soglia.
+- Conflitto concreto: «validazioni di weight_kg invariate» contro il requisito esplicito «peso non valido → 422». L’endpoint attuale e `add_measurement` restituiscono 400. Il test richiede il 422 esplicitamente indicato dalla scheda, senza modificare il codice; serve confermare l’intenzione di cambiare lo status. Le validazioni della data restano testate con i 400 attuali.
+- Il criterio «presumed_meals = 0 per quella settimana» dopo confirm-all non significa zero per tutti i quattordici giorni se la settimana più vecchia contiene ancora presunti. Il test con zero non ha presunti nella settimana precedente; un altro test controlla esplicitamente i presunti da 8 a 14 giorni fa.
+- Check-in retroattivo: la finestra di conferma è legata alla data del check-in; confirm-all di T-001 accetta invece solo gli ultimi sette giorni rispetto a oggi. Per il percorso UI «Conferma tutti» su un check-in retroattivo serve una decisione: non estendo implicitamente T-001. Il test backend verifica la finestra retroattiva e non presume una modifica di confirm-all.
+- La scheda non specifica ulteriori campi di copertura o modifiche a formule e soglie. I test usano quelli esistenti (`complete_days`, `complete_dates`, `assessed_meals`, `kcal_average`) e confrontano la proposta di ricalibrazione rimuovendo soltanto ID e token, che cambiano legittimamente quando si conferma il diario.
+- La suite completa verde è il criterio finale dell’implementazione; i test rossi non eseguono ricorsivamente la suite. La UI non è oggetto di questa consegna.
+
+### Verifica preliminare dei nuovi test
+
+13 test backend con database temporaneo per caso, data locale controllata al 12 ottobre 2026, bootstrap personale evitato e nutrienti/Salute sintetici. Con il codice originale falliscono per analisi senza presunti, parametro/risposta di check-in mancanti, assenza del passo senza scritture e status di errore non conformi. Nessun errore di esecuzione; il ramo di controllo con quattordici giorni confermati produce una proposta `available`.
+
+### Esperimento sull’intera suite
+
+Modifica temporanea limitata a `week_analysis(..., include_presumed=True)` e inoltro del parametro a `day_view`; nessun cambiamento a check-in o ricalibrazione. Suite preesistente completa eseguita **prima dei commit e prima dell’aggiunta dei nuovi test alla discovery**: 433 test in 315,244 s, un solo fallimento, nessun errore. I restanti 432 passano.
+
+| Test esistente che cambia esito | Motivo e decisione |
+|---|---|
+| `test_progress_api.ProgressAPI.test_partial_diary_missing_nutrients_and_main_meals_are_not_full_days` | Con data già patchata al 21 settembre 2026, `seed_week(complete=4)` lascia tre giorni della settimana 14–20 settembre pianificati e non toccati. Con il default True diventano presunti: `diet.status` passa da `insufficient_data` ad `available`. L’asserzione del test conserva il vecchio contratto. Non dipende dal calendario reale; nessuna patch di data o modifica dell’asserzione effettuata. La nuova risposta è coerente con T-003; serve una decisione esplicita sull’aggiornamento del test legacy (o sull’uso di `include_presumed=False` per quello scenario). |
+
+La verifica mirata di `test_progress_api` e `test_recalibration_api` ha eseguito 16 test, con lo stesso unico fallimento. Nessun altro test esistente cambia esito. Nessun caso richiede una correzione delle date, quindi non c’è un commit separato sui test esistenti. Nessun difetto aggiuntivo di comportamento individuato dall’esperimento; restano i conflitti di contratto sopra.
+
+Il codice di produzione originale è stato ripristinato integralmente prima dei commit: nessun diff in `scripts/progress_analysis.py`. Verifica finale dei nuovi test sul codice originale: 13 test, 24 failure di asserzione includendo le sotto-prove, nessun errore di esecuzione. Nessuna funzionalità implementata.
+
+Commit dei soli nuovi test: `964fac26f0555cc3eba3b7cf953f13ee16b30fb2` (Base). Confermato inoltre che il test legacy indicato torna verde con il codice originale (1 test, OK).
