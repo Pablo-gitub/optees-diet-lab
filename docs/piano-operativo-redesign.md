@@ -33,6 +33,7 @@ Gemini è l'esecutore principale; Claude e Codex intervengono nei punti delicati
 |---|---|
 | Stato `presunto` per i pasti non toccati | **Confermato 10/10**: vale come confermato nei conti; promemoria solo per giorni passati, ultimi 7 giorni; correzioni ricalcolano le stime |
 | Correzione dopo il check-in del lunedì | **Confermato 10/10**: si chiede se ricalibrare i giorni successivi; con «No» i dati corretti restano solo come memoria per le settimane seguenti |
+| Spuntini e frutto pomeridiano | **Confermato 12/10**: la banana era un esempio; alternanza con altri frutti e anche crackers, yogurt e simili |
 | Lettore audio dopo attrezzatura e carichi | Da confermare |
 | HTTPS con `tailscale serve` (necessario solo per la fotocamera, tappa 6) | Da confermare: modifica di configurazione persistente |
 
@@ -101,6 +102,9 @@ Schede:
 
 Schede:
 - [T-007](tasks/T-007-diagnosi-varieta.md) · diagnosi della varietà: scomposizione della sovrapposizione per categoria, limite teorico con i candidati attuali, classifica delle leve (più candidati, identità più fini, ricette, colazioni/spuntini) con effetto misurato. Codex, nessuna modifica di produzione.
+- [T-008](tasks/T-008-tracce-crea.md) · tracce CREA («tr») = 0 dichiarato: tornano utilizzabili mele, uova e altri. Codex.
+- [T-009](tasks/T-009-spuntini-variabili.md) · spuntini e colazione da un insieme di opzioni (frutti, yogurt, crackers…), non solo banana; massimo N volte a settimana per opzione. Decisione del proprietario 12/10. Test rossi Codex, dati e codice Gemini.
+- T-010 · pranzo e cena: più frutti, verdure, amidi e almeno 3 fonti proteiche tra i candidati (dati Gemini, test Codex); ricerca da più punti di partenza (Codex).
 
 Assegnazione: la misura della varietà e la diagnosi del solver restano a Codex; le tre opzioni dello sgarro vanno a Gemini dopo i test rossi di Codex; schede di scelta a Gemini con revisione di Claude.
 
