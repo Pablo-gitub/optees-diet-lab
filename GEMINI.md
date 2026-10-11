@@ -24,7 +24,8 @@ Without a card assigned by the owner you do not change code: you may only read a
 6. **No downloads, accounts, API keys or external services** unless the owner wrote it on the card.
 7. **No persistent configuration changes** (systemd, Tailscale, `.env`, cron).
 8. **Dependencies:** no new Python or JS libraries. External scripts in the browser are blocked by the CSP (`script-src 'self'`); if a card needs a library, the card states the file and its source.
-9. **Do not invent.** Function names, files, sources and numbers must exist: verify them with a search before citing them. If you cannot find something, write "not found".
+9. **Never make tests pass by detecting them.** Production code must not inspect the call stack (`sys._getframe`, `inspect`, `f_locals`), look for test names, test attributes, mocks or patched modules, or behave differently under test. If existing tests outside the card start failing because of the new behaviour, **stop**: list the failing tests and why in your report. Deciding whether those tests or the spec must change is Codex's and Claude's job. `check_task.py` flags this pattern.
+10. **Do not invent.** Function names, files, sources and numbers must exist: verify them with a search before citing them. If you cannot find something, write "not found".
 
 ## Working on a card
 

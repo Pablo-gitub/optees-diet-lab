@@ -76,6 +76,18 @@ def main(argv):
                     not re.search(r'\bskip(Test|If|Unless)?\b', git('show', base + ':' + path).stdout):
                 problems.append('Test protetto con skip aggiunto: ' + path)
 
+    # Production code must not detect or special-case the test harness (stack inspection, test names, mocks).
+    suspicious = re.compile(r'sys\._getframe|inspect\.(stack|currentframe)|\.f_locals|\.f_back|f_code\.co_name|\bunittest\b|\bmock\b|sys\.modules|PYTEST|_in_test')
+    if base and not any(p.startswith('Base') for p in problems):
+        for path in changed_paths():
+            if path.startswith('tests/') or path == card_rel or path == 'scripts/check_task.py' or not path.endswith(('.py', '.js')):
+                continue
+            tracked = not git('ls-files', '--error-unmatch', path).returncode
+            added = [l[1:] for l in git('diff', '-U0', base, '--', path).stdout.splitlines() if l.startswith('+') and not l.startswith('+++')] if tracked else (ROOT / path).read_text().splitlines()
+            hits = sorted({m.group(0) for line in added for m in [suspicious.search(line)] if m})
+            if hits:
+                problems.append('Codice sospetto in %s (riconoscimento dei test?): %s' % (path, ', '.join(hits)))
+
     if '--no-tests' not in argv and command:
         print('Eseguo:', ' && '.join(command))
         result = subprocess.run(' && '.join(command), cwd=ROOT, shell=True, executable='/bin/bash')
