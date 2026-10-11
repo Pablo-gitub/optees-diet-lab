@@ -13,6 +13,8 @@ class RebalanceEvaluation(base.RebalanceAPI):
         # actual trial Tuesday. Wall-clock evening must not invert these events.
         clock=patch('contextual_bandit.time.time',return_value=dt.datetime(2026,10,5,12,tzinfo=ZoneInfo('Europe/Rome')).timestamp())
         clock.start();self.addCleanup(clock.stop)
+        today_patch=patch.object(self.app.diary,'local_today',return_value=dt.date(2026,10,5))
+        today_patch.start();self.addCleanup(today_patch.stop)
         super().setUp();self.plan.update(status='optimal',mode='free',role='varied',workout_sessions=[])
         with self.app.connect() as db:
             self.original_id=db.execute('INSERT INTO plans(user_id,created,payload) VALUES(?,0,?)',(self.user,json.dumps(self.plan))).lastrowid

@@ -11,6 +11,9 @@ import recipe_intents
 
 class RecipeIntentTests(RebalanceAPI):
     def setUp(self):
+        # Keep the synthetic planning week current, independent of wall-clock time.
+        today_patch=patch.object(self.app.diary,'local_today',return_value=dt.date(2026,10,5))
+        today_patch.start();self.addCleanup(today_patch.stop)
         super().setUp();self.profile['_energy_baseline_low']=1900
     def model(self,request=None,profile=None):
         profile=profile or self.profile;foods=load_foods()
