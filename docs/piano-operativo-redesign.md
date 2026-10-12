@@ -103,6 +103,7 @@ Schede:
 Schede:
 - [T-007](tasks/T-007-diagnosi-varieta.md) · diagnosi della varietà: scomposizione della sovrapposizione per categoria, limite teorico con i candidati attuali, classifica delle leve (più candidati, identità più fini, ricette, colazioni/spuntini) con effetto misurato. Codex, nessuna modifica di produzione.
 - [T-008](tasks/T-008-tracce-crea.md) · tracce CREA («tr») = 0 dichiarato: tornano utilizzabili mele, uova e altri. Codex.
+- [T-011](tasks/T-011-arresto-obiettivo-quasi-zero.md) · arresto rapido quando il piano giornaliero è già ottimo (scostamento ≤ ε): fase di fattibilità prima del solve, adattatori di test con limite di tempo. Prerequisito per chiudere T-008. Codex. Il caso settimanale (gap relativo) passa dall'estensione `mip_abs_gap`/`mip_gap` di Optees.
 - [T-009](tasks/T-009-spuntini-variabili.md) · spuntini e colazione da un insieme di opzioni (frutti, yogurt, crackers…), non solo banana; massimo N volte a settimana per opzione. Decisione del proprietario 12/10. Test rossi Codex, dati e codice Gemini.
 - T-010 · pranzo e cena: più frutti, verdure, amidi e almeno 3 fonti proteiche tra i candidati (dati Gemini, test Codex); ricerca da più punti di partenza (Codex).
 
