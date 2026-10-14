@@ -1,10 +1,14 @@
+import asyncio
 import importlib.util
 import json
+import math
 import unittest
 from unittest.mock import patch
 from pathlib import Path
 import numpy as np
-from scipy.optimize import milp, Bounds, LinearConstraint
+from types import SimpleNamespace
+from test_recipe_solver import solve as solve_milp
+from plan_recipe import values_verified
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location('diet', ROOT / 'scripts/plan_diet_day.py')
@@ -19,14 +23,19 @@ class DietTests(unittest.TestCase):
 
     def solve(self):
         problem, choices, slots = diet.formulate(self.config, self.foods)
-        rows = problem['constraints']
-        lower = [r['rhs'] if r['relation'] in ['>=', '='] else -np.inf for r in rows]
-        upper = [r['rhs'] if r['relation'] in ['<=', '='] else np.inf for r in rows]
-        result = milp(
-            np.array(problem['objective']['coefficients']),
-            integrality=[v['integrality'] != 'C' for v in problem['variables']],
-            bounds=Bounds([v['lb'] for v in problem['variables']], [v['ub'] for v in problem['variables']]),
-            constraints=LinearConstraint([r['coefficients'] for r in rows], lower, upper),
+        async def adapter(session, candidate):
+            return solve_milp(candidate)
+
+        with patch.object(diet, 'solve_problem', side_effect=adapter):
+            outcome = asyncio.run(diet.optimize_day(None, problem))
+        status = outcome['mathematical_status']
+        values = (values_verified(problem, outcome)
+                  if status in ('optimal', 'feasible') else None)
+        # Preserve the SciPy interface used by the assertions. Feasible is not success.
+        result = SimpleNamespace(
+            success=status == 'optimal',
+            status={'optimal': 0, 'feasible': 1, 'infeasible': 2}.get(status, 4),
+            x=None if values is None else np.asarray(values),
         )
         return result, choices, slots
 
@@ -40,7 +49,14 @@ class DietTests(unittest.TestCase):
                 self.assertEqual(sum(c['meal'] == meal and c['group'] == group for c in chosen), 1)
         self.assertFalse(any(c['food_id'] in diet.PROTEIN for c in choices if c['meal'] == 'lunch'))
         self.assertFalse(any(c['food_id'] == '006515' for c in choices if c['meal'] == 'lunch' and c['group'] == 1))
-        self.assertFalse(any(c['food_id'] in ['007120', '181100'] for c in choices))
+        for candidate in choices:
+            food = self.foods[candidate['food_id']]
+            for nutrient in diet.NUTRIENTS:
+                with self.subTest(food_id=candidate['food_id'], nutrient=nutrient):
+                    self.assertNotIn(food[nutrient], ('', None))
+                    value = float(food[nutrient])
+                    self.assertTrue(math.isfinite(value))
+                    self.assertGreaterEqual(value, 0)
 
     def test_exclusions_can_make_problem_infeasible_without_relaxing(self):
         self.config['excluded_crea_ids'] = diet.STARCH

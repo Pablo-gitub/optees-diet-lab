@@ -158,7 +158,7 @@ def weekly_model(profile,request,make_config,foods):
                 diff={k:row.get(k,0)-other.get(k,0) for k in set(row)|set(other)}
                 sparse_rows.extend([(diff,'<=',center-other_center+25),(diff,'>=',center-other_center-25)])
     size=len(variables);dense=lambda r:[r.get(i,0.) for i in range(size)]
-    problem=dict(version='1',variables=variables,constraints=[dict(coefficients=dense(row),relation=relation,rhs=rhs) for row,relation,rhs in sparse_rows],objective=dict(sense='min',coefficients=objectives),solver=dict(time_limit=request.get('solve_time_limit',15)))
+    problem=dict(version='1',variables=variables,constraints=[dict(coefficients=dense(row),relation=relation,rhs=rhs) for row,relation,rhs in sparse_rows],objective=dict(sense='min',coefficients=objectives),solver=dict(time_limit=request.get('solve_time_limit',15),mip_gap=0.05))
     timing={}
     for block in blocks:
         for i,v in enumerate(block['problem'].get('timing_coefficients',[])):

@@ -117,7 +117,9 @@ async def refine(session,problem,result,solver):
     pad=lambda row:row+[0]*(size-len(row))
     old_objective=p['objective']['coefficients'][:]
     old_value=sum(a*b for a,b in zip(old_objective,values))
-    p['constraints'].append(dict(coefficients=old_objective,relation='<=' if p['objective']['sense']=='min' else '>=',rhs=old_value+(1e-7 if p['objective']['sense']=='min' else -1e-7)))
+    certified=result.get('optimality')=='within_absolute_tolerance'
+    bound=min(old_value+1e-7,result['absolute_tolerance']) if certified else old_value+(1e-7 if p['objective']['sense']=='min' else -1e-7)
+    p['constraints'].append(dict(coefficients=old_objective,relation='<=' if p['objective']['sense']=='min' else '>=',rhs=bound))
     energy=[]
     for raw in p['timing_kcal_rows']:
         row=pad(raw);value=sum(a*b for a,b in zip(row,values));energy.append(value)
@@ -127,6 +129,10 @@ async def refine(session,problem,result,solver):
         improved=await solver(session,p)
         if improved['mathematical_status'] not in ('optimal','feasible'):raise ValueError('Nessuna redistribuzione verificata')
         values_verified(p,improved)
+        if certified:
+            deviation=sum(c*x for c,x in zip(old_objective,values_verified(p,improved)))
+            if not 0<=deviation<=result['absolute_tolerance']:raise ValueError('Scostamento oltre la soglia certificata')
+            improved.update(mathematical_status='optimal',optimality=result['optimality'],absolute_tolerance=result['absolute_tolerance'],nutritional_deviation=deviation)
     except (ValueError,RuntimeError,TimeoutError,KeyError,TypeError) as exc:
         fallback=copy.deepcopy(result);fallback['timing_optimization']=dict(status='unavailable',reason='Redistribuzione non verificata: mantenuto il piano iniziale.',daily_kcal=energy);return fallback
     for field in ('preference_penalty','optimization'):

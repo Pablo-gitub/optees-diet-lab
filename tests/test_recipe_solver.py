@@ -23,9 +23,13 @@ def solve(problem):
         integrality=np.array([int(v['integrality'] != 'C') for v in problem['variables']]),
         bounds=Bounds([v['lb'] for v in problem['variables']], [v['ub'] for v in problem['variables']]),
         constraints=LinearConstraint(np.array([r['coefficients'] for r in rows]), lo, hi),
+        options=dict(time_limit=problem.get('solver', {}).get('time_limit', 15),
+                     mip_rel_gap=problem.get('solver', {}).get('mip_gap', 0)),
     )
     return {
-        'mathematical_status': 'optimal' if result.success else 'infeasible',
+        'mathematical_status': ('optimal' if result.success else
+                               'feasible' if result.status == 1 and result.x is not None else
+                               'infeasible' if result.status == 2 else 'not_solved'),
         'validation': {'status': 'verified'},
         'result': {
             'variables': []

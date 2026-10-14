@@ -279,6 +279,44 @@ async def solve_problem(session, problem):
     return (await call('get_job_result', dict(job_id=job_id)))['result']
 
 
+ABSOLUTE_NUTRITION_TOLERANCE = 1e-3
+NUTRITION_PROBE_SECONDS = 3
+
+
+async def solve_nutrition(session, problem):
+    """Certify a relative nutritional deviation budget; mixed objectives stay unchanged."""
+    import copy
+    from plan_recipe import values_verified
+    coefficients = problem['objective']['coefficients']
+    pure = problem['objective']['sense'] == 'min' and any(coefficients) and all(
+        c == 0 or (c > 0 and v['lb'] >= 0 and v['name'].startswith('dev')
+                   and v['name'][3:].isdigit())
+        for c, v in zip(coefficients, problem['variables'])
+    )
+    if pure:
+        probe = copy.deepcopy(problem)
+        probe['constraints'].append(dict(coefficients=coefficients[:], relation='<=',
+                                         # Leave room for floating-point arithmetic; the certificate stays strict.
+                                         rhs=ABSOLUTE_NUTRITION_TOLERANCE * (1 - 1e-6)))
+        probe['objective']['coefficients'] = [0.] * len(coefficients)
+        probe['solver']['time_limit'] = min(problem['solver']['time_limit'], NUTRITION_PROBE_SECONDS)
+        try:
+            result = await solve_problem(session, probe)
+            if result['mathematical_status'] in ('optimal', 'feasible'):
+                values = values_verified(probe, result)
+                deviation = sum(c*x for c,x in zip(coefficients, values))
+                if 0 <= deviation <= ABSOLUTE_NUTRITION_TOLERANCE:
+                    result = copy.deepcopy(result)
+                    result.update(mathematical_status='optimal',
+                                  optimality='within_absolute_tolerance',
+                                  absolute_tolerance=ABSOLUTE_NUTRITION_TOLERANCE,
+                                  nutritional_deviation=deviation)
+                    return result
+        except (TimeoutError, ValueError):
+            pass
+    return await solve_problem(session, problem)
+
+
 async def optimize_day(session,problem):
     import copy
     from plan_recipe import values_verified
@@ -291,7 +329,7 @@ async def optimize_day(session,problem):
         values=values_verified(active,first);penalty=sum(c*x for c,x in zip(preference,values))
         active['constraints'].append(dict(coefficients=preference,relation='<=',rhs=penalty+1e-7))
         active['objective']['coefficients']=nutrient_objective
-        result=await solve_problem(session,active)
+        result=await solve_nutrition(session,active)
         if result['mathematical_status'] not in ['optimal','feasible']:
             result=first
             result['mathematical_status']='feasible'  # Only the preference optimum was certified.
@@ -299,7 +337,7 @@ async def optimize_day(session,problem):
         result['preference_penalty']=penalty
         import nutrient_timing
         return await nutrient_timing.refine(session,active,result,solve_problem)
-    result=await solve_problem(session,active)
+    result=await solve_nutrition(session,active)
     if result['mathematical_status'] in ['optimal','feasible']:values_verified(active,result)
     import nutrient_timing
     return await nutrient_timing.refine(session,active,result,solve_problem)
