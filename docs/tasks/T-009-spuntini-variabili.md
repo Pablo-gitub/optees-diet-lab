@@ -40,7 +40,7 @@ Pranzo e cena (T-010); interfaccia del Profilo per scegliere le opzioni (scheda 
 
 <!-- Codex aggiorna con il commit dei test rossi -->
 ```
-DA-AGGIORNARE
+659bc9a1399d366c810b68054e818e3951edcb5a
 ```
 
 ## File consentiti
@@ -76,3 +76,33 @@ Scrivere `tests/test_snack_options.py` sui criteri, con un file di opzioni sinte
 ## Resoconto Gemini
 
 ## Revisione
+
+### Test rossi di Codex · 12 ottobre 2026
+
+- Dieci metodi in `tests/test_snack_options.py`, con file temporaneo e dodici alimenti sintetici (6 frutti, 3 latticini, 3 cereali/cracker), vettori completi e porzioni sintetiche dichiarate. Nessun download, nessun catalogo personale. Le regole dello scenario sostitutivo sono scritte nella directory temporanea.
+- Il file viene reindirizzato nelle letture `Path` e `daily_meals` ricaricato: il contratto vale anche se il futuro caricamento avviene all'import. Il modello e la decodifica ricevono lo stesso catalogo copiato, compresi i prodotti preferiti sintetici.
+- Coperti: scelta unica, limiti e griglia 5 g, pasti ammessi, esclusioni, nutrienti incompleti, preferiti/penalità, limiti banana, interruttore pomeridiano, frequenza predefinita 3 e configurata 2, ripiego con avviso, sovrapposizione prima/dopo in libera e sostituto sintetico. La quantità 32 g dei crackers confezionati è conservata.
+- Verifica completa del file committato (incluso default di N): 10 test in 214,671 s, `FAILED (failures=10)`, senza errori di esecuzione; 9 metodi rossi (la misura ha due sottocasi falliti), compatibilità dei limiti banana verde. Il successivo controllo della frequenza senza chiave esplicita (default 3) fallisce anch'esso per la sola banana, in 1,236 s. I fallimenti riguardano opzioni assenti, assenza di varietà e limite settimanale; non import o fixture.
+- Misura sui piani attuali: libera prima/dopo 73,66% / 73,66%; sostituto sedentario prima/dopo 73,66% / 73,66%. Tre alternative, massimo della sovrapposizione canonica fra coppie, controllato contro il report del generatore. File ignorato dal codice attuale: nessun beneficio futuro dedotto. Budget dichiarato del generatore 120 s per richiesta; l'adattatore SciPy dei test esistenti risolve esattamente senza limite per singola chiamata. Questi valori certificano soltanto la misura dei piani prodotti, non il minimo globale della sovrapposizione.
+
+### Decisioni e perimetro
+
+Conferma del proprietario: «Sì, conserva le porzioni preferite e segnala il perimetro settimanale». La griglia di 5 g vale per le opzioni del catalogo; i preferiti mantengono la porzione confezionata esistente.
+
+Il formato JSON non è definito nei dettagli dalla scheda. I test propongono un oggetto `{version, max_occurrences_per_meal, options}` e voci `{source, id, name, group, meals, portion_min_g, portion_max_g, portion_source}`. Sono nomi di contratto proposti, da recepire nella specifica dei dati prima dell'implementazione, non un formato già presente nel repository. Il default di N è verificato omettendo la relativa chiave.
+
+La costruzione del problema congiunto e gli avvisi sono in `scripts/week_orchestration.py`, fuori dai file consentiti. Il limite settimanale e il suo ripiego non si possono affidare alla sola formulazione giornaliera. Occorre estendere esplicitamente il perimetro prima dell'implementazione; qui nessun file di produzione T-009 è stato modificato.
+
+### Effetto sui test esistenti
+
+Analisi statica, senza prototipo di produzione T-009:
+
+- `DailyMealsTests.test_hard_bounds_can_override_preference` pretende esattamente banana come ripiego: con altri alimenti poveri di grassi potrebbe cambiare esito pur rispettando il vincolo. Test protetto invariato; la decisione su questa aspettativa precede l'implementazione.
+- `test_whole_day_totals_and_discrete_personal_products` e `test_optional_second_bar_is_not_available_without_permission`: porzioni 35/32 g e permesso per seconda barretta restano obbligatori. Le penalità giornaliere devono continuare a favorire i preferiti. La relazione fra preferito quotidiano e limite settimanale va specificata prima dell'estensione settimanale: i nuovi test con preferiti sono giornalieri, quelli settimanali senza preferiti.
+- `test_unplanned_afternoon_is_explicit_and_adds_no_food`, esclusioni, target duri e assenza di etichette personali altrui devono rimanere validi.
+- `IngredientOverlapTests` e `WeekOrchestrationTests` confrontano in più punti il report con la misura effettiva, senza richiedere i vecchi grammi. Le misure possono cambiare; budget, numero di alternative e fattibilità vanno rivalutati dopo l'implementazione. Nessuna soglia aggiunta nei test nuovi.
+- Nessuna correzione di date necessaria per questo contratto; nessun test esistente modificato.
+
+Commit dei soli test: `659bc9a1399d366c810b68054e818e3951edcb5a`. Scheda e Base aggiornate nella working tree; nessuna implementazione T-009.
+
+Verifica esistente durante la fase T-008: 58 test completati verdi; suite interrotta durante `DailyMealsTests.test_daily_targets_do_not_reuse_main_meal_targets` per tempi di soluzione, dopo esaurimento del budget del controllo protetto T-008. Nessuna suite verde dichiarata; questo esito riguarda il catalogo ampliato T-008, senza implementazione T-009 e senza i test nuovi nella scoperta iniziale.
