@@ -27,6 +27,8 @@ MACROS = {
 
 def number(value):
     value = value.strip().replace('\xa0', '').replace(',', '.')
+    if value.casefold() == 'tr':
+        return 0.0
     return float(value) if re.fullmatch(r'\d+(?:\.\d+)?', value) else None
 
 
@@ -85,6 +87,7 @@ def parse_food(html, code):
                 'unit': values[1],
                 'value_100g_raw': values[2],
                 'value_100g': number(values[2]),
+                **({'value_100g_provenance': 'tracce (tr) nel CREA'} if values[2].strip().casefold() == 'tr' else {}),
                 'min_raw': values[3],
                 'max_raw': values[4],
                 'value_serving_raw': values[5],
@@ -108,6 +111,7 @@ def parse_food(html, code):
     by_name = {n['name']: n for n in nutrients}
     for field, label in MACROS.items():
         food[field] = by_name.get(label, {}).get('value_100g')
+    food['trace_nutrients'] = [field for field, label in MACROS.items() if by_name.get(label, {}).get('value_100g_provenance')]
     return food
 
 
@@ -130,6 +134,10 @@ def main():
     if not links:
         raise RuntimeError('No food links found')
     selected = list(links.items())[: args.limit]
+    if args.offline:
+        missing_pages = [code + '.html' for code, _ in selected if not (RAW / (code + '.html')).exists()]
+        if missing_pages:
+            raise FileNotFoundError('Cache mancante; import interrotto senza modificare il dataset: ' + ', '.join(missing_pages))
     foods, errors = [], []
 
     def load(item):
@@ -145,9 +153,11 @@ def main():
                 errors.append({'source_id': jobs[job], 'error': str(exc)})
             if count % 50 == 0 or count == len(selected):
                 print(f'{count}/{len(selected)} sheets; errors={len(errors)}', flush=True)
+    if errors:
+        raise RuntimeError('Import interrotto senza modificare il dataset: ' + json.dumps(errors, ensure_ascii=False))
     foods.sort(key=lambda f: f['source_id'])
     (ROOT / 'foods.json').write_text(json.dumps(foods, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    fields = ['source', 'source_id', 'name', 'category', 'serving_raw', 'edible_portion_raw', *MACROS, 'source_url']
+    fields = ['source', 'source_id', 'name', 'category', 'serving_raw', 'edible_portion_raw', *MACROS, 'trace_nutrients', 'source_url']
     with (ROOT / 'foods.csv').open('w', newline='', encoding='utf-8') as stream:
         writer = csv.DictWriter(stream, fieldnames=fields)
         writer.writeheader()
@@ -158,6 +168,7 @@ def main():
                 serving_raw=food['metadata'].get('Porzione'),
                 edible_portion_raw=food['metadata'].get('Parte Edibile'),
             )
+            row['trace_nutrients'] = json.dumps(food['trace_nutrients'])
             writer.writerow(row)
     missing = {k: sum(f[k] is None for f in foods) for k in MACROS}
     essential = ('kcal_100g', 'protein_g_100g', 'fat_g_100g', 'carbs_available_g_100g')
@@ -173,6 +184,8 @@ def main():
         'complete': not errors and len(foods) == len(links),
         'errors': errors,
         'missing_or_symbolic_macros': missing,
+        'trace_policy': 'Solo il simbolo tr diventa 0, con provenienza tracce (tr) nel CREA; assenze e altri simboli restano mancanti',
+        'trace_macros': {field: sum(field in f['trace_nutrients'] for f in foods) for field in MACROS},
         'foods_with_numeric_essential_macros': sum(all(f[k] is not None for k in essential) for f in foods),
         'sha256': {n: hashlib.sha256((ROOT / n).read_bytes()).hexdigest() for n in ('foods.csv', 'foods.json')},
     }
