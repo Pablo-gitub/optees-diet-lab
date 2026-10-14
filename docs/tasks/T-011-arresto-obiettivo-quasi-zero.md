@@ -40,7 +40,7 @@ Con i test SciPy/HiGHS senza limite di tempo il primo problema non termina (0,7 
 ## Base
 
 ```
-659bc9a1399d366c810b68054e818e3951edcb5a
+93befa334575270019c9134838cf5d7d8077c6b7
 ```
 
 ## File consentiti
@@ -274,3 +274,11 @@ Restano i rossi T-009, l'estensione multiobjective fuori perimetro e le
 sovrapposizioni della working tree; il checker rileverà inoltre la modifica
 autorizzata del test protetto contro Base finché il revisore non la salva e
 aggiorna la base pertinente. Nessun commit, nessun aggiornamento Base.
+
+### Salvataggio autorizzato · 15 ottobre 2026
+
+Il proprietario ha autorizzato i commit di tutti i cambiamenti. T-008: 7d83382;
+T-011: daf9065; annotazioni T-009: 93befa3. Base aggiornata a 93befa3 per
+proteggere la versione salvata dei test, comprese le modifiche esplicitamente
+autorizzate dell’adattatore e dell’asserzione di test_diet_day. Le annotazioni
+precedenti descrivono lo stato storico e non costituiscono una suite verde.

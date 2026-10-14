@@ -32,7 +32,7 @@ Gli alimenti CREA con un nutriente indicato come **tracce** nella pagina sorgent
 ## Base
 
 ```
-6894e823f3cf807c648aab6321fe7f2e9a850dd8
+93befa334575270019c9134838cf5d7d8077c6b7
 ```
 
 ## File consentiti
@@ -148,3 +148,11 @@ bound, gap e certificazione entro ε nella Revisione T-011. Gruppo limitato:
 illimitato del test protetto test_diet_day e i rossi T-009. check_task T-008
 con test fermato a 120 s (uscita 124); --no-tests stampa ESITO: non pronto
 (8 problemi), tutti perimetri sovrapposti. Nessun dato modificato né commit.
+
+### Salvataggio autorizzato · 15 ottobre 2026
+
+Il proprietario ha autorizzato i commit di tutti i cambiamenti. T-008: 7d83382;
+T-011: daf9065; annotazioni T-009: 93befa3. Base aggiornata a 93befa3 per
+proteggere la versione salvata dei test, comprese le modifiche esplicitamente
+autorizzate dell’adattatore e dell’asserzione di test_diet_day. Le annotazioni
+precedenti descrivono lo stato storico e non costituiscono una suite verde.
