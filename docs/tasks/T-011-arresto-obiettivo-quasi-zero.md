@@ -282,3 +282,12 @@ T-011: daf9065; annotazioni T-009: 93befa3. Base aggiornata a 93befa3 per
 proteggere la versione salvata dei test, comprese le modifiche esplicitamente
 autorizzate dell’adattatore e dell’asserzione di test_diet_day. Le annotazioni
 precedenti descrivono lo stato storico e non costituiscono una suite verde.
+
+### Verifica dopo il salvataggio · 15 ottobre 2026
+
+check_task T-011: Ran 38 tests in 6.414s — OK; ESITO: pronto per revisione.
+Controllo eseguito sulla working tree pulita dopo c8909a4, prima della
+preparazione T-012. Gruppo congiunto import CREA, ingredient_overlap,
+diet_day, near_zero_objective, daily_meals e recipe_solver: 52 test in
+61,251 s, OK. Suite completa non ripetuta: i test rossi T-009 restano
+un blocco noto e non sono stati saltati o modificati.
