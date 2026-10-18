@@ -55,3 +55,18 @@ Gestione dei target nutrizionali e configurazione delle abitudini relative ai ci
 - L'importazione atomica su database SQLite locale è gestita da [`scripts/apple_health.py:import_zip`](scripts/apple_health.py).
 - I dati biometrici (peso, grasso corporeo, dispendio a riposo e attivo) vengono usati solo con copertura sufficiente: giornate coperte per almeno 20 ore su 24 ([`scripts/apple_health.py:summarize`](scripts/apple_health.py)), almeno 7 giornate utili su 28 e dati non più vecchi di 14 giorni ([`scripts/health_inputs.py:refresh_report`](scripts/health_inputs.py)).
 - Per la procedura passo per passo, consultare la [Guida all'aggiornamento Apple Salute / Withings (`docs/apple-health-import.md`)](docs/apple-health-import.md).
+
+## Dati di terzi e licenze
+
+Il codice e la documentazione del progetto sono sotto licenza MIT (`LICENSE`). I dati di terzi mantengono le proprie condizioni:
+
+- **CREA, tabelle di composizione degli alimenti** — nessuna licenza aperta identificata: le tabelle derivate (`dataset/crea/foods.csv`, `foods.json`) **non sono incluse**. Si rigenerano in locale con `scripts/import_crea.py` a partire dalle schede pubbliche del sito CREA (vedi `dataset/crea/README.md`), citando la fonte. Senza queste tabelle il solver e la suite di test non sono utilizzabili.
+- **foodose** — CC BY 4.0, attribuzione in `dataset/recipes/README.md`.
+- **UniTools recipes** — CC BY-SA 4.0 (`dataset/recipes/unitools/LICENSE`): i dati derivati restano CC BY-SA 4.0.
+- **Free Exercise DB** — Unlicense (`dataset/free_exercise_db/LICENSE.md`); immagini degli esercizi in `web/static/media`.
+- **RepDB** — uso con attribuzione; redistribuzione come dataset vietata: i file originali non sono inclusi.
+- **Open Food Facts** — ODbL; i dati scaricati non sono inclusi, solo manifest e documentazione.
+- **USDA FoodData Central SR Legacy** — pubblico dominio; l'archivio non è incluso.
+- **Immagini illustrative delle ricette** — Wikimedia Commons, autore e licenza per immagine in `config/recipe-images.json`.
+
+Il progetto è un caso di studio personale: non è un dispositivo medico e non fornisce consigli clinici.

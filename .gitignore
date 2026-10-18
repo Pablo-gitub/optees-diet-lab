@@ -11,3 +11,6 @@ dataset/open_food_facts/raw_italy.jsonl.gz
 dataset/open_food_facts/products.jsonl
 dataset/open_food_facts/*.tmp
 dataset/usda/
+# CREA derived tables: no open licence, regenerate locally (see README)
+dataset/crea/foods.csv
+dataset/crea/foods.json
