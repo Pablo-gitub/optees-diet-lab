@@ -71,7 +71,7 @@ L'interfaccia ha due lingue, italiano (predefinito) e inglese, scelte dal menu d
 ## Base
 
 ```
-DA COMPILARE AL COMMIT
+c8adc3e0f87e747565b3e2dc0f9a11a164a83a43
 ```
 
 ## File consentiti
